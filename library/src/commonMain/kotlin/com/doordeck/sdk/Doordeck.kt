@@ -1,0 +1,22 @@
+package com.doordeck.sdk
+
+import com.doordeck.sdk.api.AccountResource
+import com.doordeck.sdk.api.LockOperationsResource
+import com.doordeck.sdk.api.PlatformResource
+import com.doordeck.sdk.api.SitesResource
+import com.doordeck.sdk.api.TilesResource
+import com.doordeck.sdk.api.model.ApiEnvironment
+import kotlin.js.JsExport
+
+@JsExport
+interface Doordeck {
+
+    fun account(): AccountResource
+    fun sites(): SitesResource
+    fun tiles(): TilesResource
+    fun lockOperations(): LockOperationsResource
+    fun platform(): PlatformResource
+
+    val apiEnvironment: ApiEnvironment
+    val token: String
+}
