@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 
 val JSON = Json {
+    encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
 }

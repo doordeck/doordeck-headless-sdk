@@ -26,10 +26,7 @@ interface LockOperationsResource {
     fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
     fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
     fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
-    fun unlock(operationHeader: OperationHeaderRequest,
-               lockOperation: LockOperationRequest,
-               operationBody: OperationBodyRequest
-    )
+    fun unlock(x5c: Array<String>, lockId: String, locked: Boolean, privateKey: ByteArray)
     fun shareALock(lockId: String) // TODO
     fun revokeAccessToALock(lockId: String) // TODO
     fun updateSecureSettings(lockId: String) // TODO

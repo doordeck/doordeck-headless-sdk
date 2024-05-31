@@ -40,6 +40,7 @@ kotlin {
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
+                optIn("kotlin.ExperimentalUnsignedTypes")
             }
         }
 
@@ -51,7 +52,9 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.koin.compose)
-                implementation("com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings:0.9.2")
+                implementation(libs.libsodium.bindings)
+                implementation(libs.uuid.generator)
+                implementation(libs.kotlinx.datetime)
             }
         }
         val commonTest by getting {

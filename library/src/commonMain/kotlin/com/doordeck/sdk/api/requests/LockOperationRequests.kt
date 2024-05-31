@@ -13,14 +13,15 @@ class OperationHeaderRequest(
 
 @JsExport
 @Serializable
-class OperationBodyRequest(
+class LockOperationBodyRequest(
     val iss: String,
     val sub: String,
     val nbf: String,
     val iat: String,
     val exp: String,
+    val jti: String? = null,
     val operation: OperationRequest
-)
+): OperationBodyRequest()
 
 @JsExport
 @Serializable
@@ -28,6 +29,10 @@ class LockOperationRequest(
     val type: String = "MUTATE_LOCK",
     val locked: Boolean
 ): OperationRequest()
+
+@JsExport
+@Serializable
+sealed class OperationBodyRequest
 
 @JsExport
 @Serializable

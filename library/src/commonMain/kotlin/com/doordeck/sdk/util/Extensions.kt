@@ -1,7 +1,9 @@
 package com.doordeck.sdk.util
 
+import com.doordeck.sdk.JSON
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.encodeToString
 
 fun HttpRequestBuilder.addRequestHeaders(
     headers: Map<String, ContentType> = mapOf(HttpHeaders.ContentType to ContentType.Application.Json),
@@ -14,3 +16,6 @@ fun HttpRequestBuilder.addRequestHeaders(
         }
     }
 }
+
+inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
+

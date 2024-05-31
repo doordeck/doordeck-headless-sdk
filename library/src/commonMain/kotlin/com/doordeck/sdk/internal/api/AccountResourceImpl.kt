@@ -9,12 +9,15 @@ import com.doordeck.sdk.api.responses.LoginResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.UserDetailsResponse
+import com.doordeck.sdk.internal.api.Params.VERIFY_EMAIL_CODE_PARAM
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.addRequestHeaders
+import com.doordeck.sdk.util.encodeKeyToBase64
+import com.doordeck.sdk.util.encodeToBase64
+import com.doordeck.sdk.util.signWithPrivateKey
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.util.*
 
 class AccountResourceImpl(
     private val httpClient: HttpClient
@@ -39,30 +42,37 @@ class AccountResourceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun registerEphemeralKey(ephemeralKey: ByteArray): RegisterEphemeralKeyResponse = runBlocking {
+    override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse = runBlocking {
+        val publicKeyEncoded =  publicKey.encodeKeyToBase64()
         httpClient.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
-            setBody(RegisterEphemeralKeyRequest(ephemeralKey.encodeBase64()))
+            setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
         }.body()
     }
 
-    override fun registerEphemeralKeyWithSecondaryAuthentication(ephemeralKey: ByteArray): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = runBlocking {
+    override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = runBlocking {
+        val publicKeyEncoded =  publicKey.encodeKeyToBase64()
         httpClient.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
-            setBody(RegisterEphemeralKeyWithSecondaryAuthenticationResponse(ephemeralKey.encodeBase64()))
+            setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
         }.body()
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse  = runBlocking {
-        // TODO Sign the code
+        val codeSignature = code.signWithPrivateKey(privateKey).encodeToBase64()
         httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
-            setBody(VerifyEphemeralKeyRegistrationRequest(verificationSignature = code))
+            setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body()
     }
 
-    override fun verifyEmail() {
-        TODO("Not yet implemented")
+    override fun verifyEmail(code: String) {
+        runBlocking {
+            httpClient.put(Paths.getVerifyEmailPath()) {
+                addRequestHeaders()
+                parameter(VERIFY_EMAIL_CODE_PARAM, code)
+            }
+        }
     }
 
     override fun reverifyEmail() {

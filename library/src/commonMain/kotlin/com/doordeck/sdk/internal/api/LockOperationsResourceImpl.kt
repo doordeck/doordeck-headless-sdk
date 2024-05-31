@@ -1,8 +1,9 @@
 package com.doordeck.sdk.internal.api
 
+import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.api.LockOperationsResource
+import com.doordeck.sdk.api.requests.LockOperationBodyRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
-import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.LockResponse
@@ -12,9 +13,14 @@ import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.addRequestHeaders
+import com.doordeck.sdk.util.encodeToBase64UrlString
+import com.doordeck.sdk.util.signWithPrivateKey
+import com.doordeck.sdk.util.toJson
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import kotlinx.datetime.Clock
+import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsResourceImpl(
     private val httpClient: HttpClient
@@ -74,14 +80,25 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
-    override fun unlock(
-        operationHeader: OperationHeaderRequest,
-        lockOperation: LockOperationRequest,
-        operationBody: OperationBodyRequest
-    ): Unit = runBlocking {
+    override fun unlock(x5c: Array<String>, lockId: String, locked: Boolean, privateKey: ByteArray, ): Unit = runBlocking {
+        val operationHeader =  OperationHeaderRequest(x5c = x5c)
+        val lockOperation = LockOperationRequest(locked = locked)
+        val operationBody = LockOperationBodyRequest(
+            iss = "",// TODO UserId extracted from the token?
+            sub = lockId,
+            nbf = Clock.System.now().epochSeconds.toString(),
+            iat = Clock.System.now().epochSeconds.toString(),
+            exp = (Clock.System.now() + 1.minutes).toString(),
+            jti = uuid4().toString(),
+            operation = lockOperation
+        )
+        val headerB64 = operationHeader.toJson().encodeToByteArray().encodeToBase64UrlString()
+        val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(privateKey).encodeToBase64UrlString()
+        val body = "$headerB64.$bodyB64.$signatureB64"
         httpClient.post(Paths.getUnlockPath(operationBody.sub)) {
-            addRequestHeaders()
-            setBody("")
+            addRequestHeaders() // TODO content-type should be application/jwt
+            setBody(body)
         }.body()
     }
 

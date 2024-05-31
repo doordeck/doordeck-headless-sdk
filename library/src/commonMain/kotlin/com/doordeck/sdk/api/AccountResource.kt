@@ -13,10 +13,10 @@ interface AccountResource {
     fun registration() // TODO
     fun refreshToken() // TODO
     fun logout() // TODO
-    fun registerEphemeralKey(ephemeralKey: ByteArray): RegisterEphemeralKeyResponse
-    fun registerEphemeralKeyWithSecondaryAuthentication(ephemeralKey: ByteArray): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
-    fun verifyEmail() // TODO
+    fun verifyEmail(code: String)
     fun reverifyEmail() // TODO
     fun changePassword() // TODO
     fun getUserDetails(): UserDetailsResponse

@@ -6,11 +6,18 @@ import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.internal.api.SitesResourceImpl
 import com.doordeck.sdk.internal.api.TilesResourceImpl
+import com.ionspin.kotlin.crypto.LibsodiumInitializer
 
 class DoordeckImpl(
     override val apiEnvironment: ApiEnvironment,
     override val token: String
 ): Doordeck {
+
+    init {
+        runBlocking {
+            LibsodiumInitializer.initialize()
+        }
+    }
 
     private val httpClient = createHttpClient(apiEnvironment, token)
 

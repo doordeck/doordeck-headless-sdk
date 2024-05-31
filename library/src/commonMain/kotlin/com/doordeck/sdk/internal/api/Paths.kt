@@ -30,8 +30,8 @@ object Paths {
     // Lock Operations
     fun getAllLocksPath() = "/device"
     fun getASingleLockPath(lockId: String) = "/device/$lockId"
-    fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log" // add start/end as params - ?start=0000&end=0000"
-    fun getAuditForAUserPath(lockId: String) = "/user/$lockId/log" // add start/end as params - ?start=0000&end=0000"
+    fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
+    fun getAuditForAUserPath(lockId: String) = "/user/$lockId/log"
     fun getUsersForALockPath(lockId: String) = "/device/$lockId/users"
     fun getLocksForAUserPath(userId: String) = "/user/$userId"
     fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"
