@@ -1,8 +1,6 @@
 package com.doordeck.sdk.api
 
-import com.doordeck.sdk.api.requests.LockOperationRequest
-import com.doordeck.sdk.api.requests.OperationBodyRequest
-import com.doordeck.sdk.api.requests.OperationHeaderRequest
+import com.doordeck.sdk.api.model.UserRole
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -26,9 +24,11 @@ interface LockOperationsResource {
     fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
     fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
     fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
-    fun unlock(userId: String, x5c: Array<String>, lockId: String, locked: Boolean, privateKey: ByteArray,
-               trackId: String? = null)
-    fun shareALock(lockId: String) // TODO
+    fun lock(userId: String, x5c: Array<String>, lockId: String, privateKey: ByteArray, trackId: String? = null)
+    fun unlock(userId: String, x5c: Array<String>, lockId: String, privateKey: ByteArray, trackId: String? = null)
+    fun shareALock(userId: String, x5c: Array<String>, lockId: String, targetUserId: String,
+                   targetUserRole: UserRole, targetUserPublicKey: ByteArray, privateKey: ByteArray,
+                   start: Int? = null, end: Int? = null, trackId: String? = null)
     fun revokeAccessToALock(lockId: String) // TODO
     fun updateSecureSettings(lockId: String) // TODO
     fun getPinnedLocks(): Array<LockResponse>

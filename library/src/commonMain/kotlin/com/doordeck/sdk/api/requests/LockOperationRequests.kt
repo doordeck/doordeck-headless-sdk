@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.requests
 
+import com.doordeck.sdk.api.model.UserRole
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -14,7 +15,7 @@ class OperationHeaderRequest(
 
 @JsExport
 @Serializable
-class LockOperationBodyRequest(
+class OperationBodyRequest(
     val iss: String,
     val sub: String,
     val nbf: Int,
@@ -22,7 +23,7 @@ class LockOperationBodyRequest(
     val exp: Int,
     val jti: String? = null,
     val operation: OperationRequest
-): OperationBodyRequest
+)
 
 @JsExport
 @Serializable
@@ -33,7 +34,15 @@ class LockOperationRequest(
 
 @JsExport
 @Serializable
-sealed interface OperationBodyRequest
+class ShareLockOperationRequest(
+    val type: String = "ADD_USER",
+    val user: String,
+    val publicKey: String,
+    val role: UserRole? = null,
+    val start: Int? = null,
+    val end: Int? = null
+): OperationRequest
+
 
 @JsExport
 @Serializable
