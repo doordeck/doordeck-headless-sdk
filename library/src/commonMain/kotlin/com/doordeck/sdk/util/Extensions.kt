@@ -1,6 +1,7 @@
 package com.doordeck.sdk.util
 
 import com.doordeck.sdk.JSON
+import com.doordeck.sdk.internal.api.ApiVersion
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
@@ -11,12 +12,12 @@ private val DEFAULT_SIGNED_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to "a
 fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     headers: Map<String, String> = if (signedRequest) DEFAULT_SIGNED_REQUEST_HEADERS else DEFAULT_REQUEST_HEADERS,
-    version: Int? = null,
+    apiVersion: ApiVersion? = null,
 ) {
     headers {
         headers.map { append(it.key, it.value) }
-        if (version != null) {
-            append(HttpHeaders.Accept, "application/vnd.doordeck.api-v$version+json")
+        if (apiVersion != null) {
+            append(HttpHeaders.Accept, "application/vnd.doordeck.api-v${apiVersion.version}+json")
         }
     }
 }

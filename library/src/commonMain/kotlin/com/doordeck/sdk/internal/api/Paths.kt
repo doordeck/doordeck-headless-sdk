@@ -23,8 +23,8 @@ object Paths {
 
     // Tiles
     fun getLocksBelongingToTilePath(tileId: String) = "/tile/$tileId"
-    fun getAssociateTileWithLockPath(tileId: String, deviceId: String) = "/device/$deviceId/tile/$tileId"
-    fun getDisassociateTileFromLockPath(tileId: String, deviceId: String) = "/device/$deviceId/tile/$tileId"
+    fun getAssociateTileWithLockPath(tileId: String, lockId: String) = "/device/$lockId/tile/$tileId"
+    fun getDisassociateTileFromLockPath(tileId: String, lockId: String) = "/device/$lockId/tile/$tileId"
     fun getAssociateMultipleLocksToASingleTilePath(tileId: String) = "/tile/$tileId"
 
     // Lock Operations

@@ -24,7 +24,7 @@ class AccountResourceImpl(
 
     override fun login(email: String, password: String): LoginResponse = runBlocking {
         httpClient.post(Paths.getLoginPath()) {
-            addRequestHeaders(version = 2)
+            addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.body()
     }
