@@ -5,9 +5,13 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 
+private val DEFAULT_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to ContentType.Application.Json.toString())
+private val DEFAULT_SIGNED_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to "application/jwt")
+
 fun HttpRequestBuilder.addRequestHeaders(
-    headers: Map<String, ContentType> = mapOf(HttpHeaders.ContentType to ContentType.Application.Json),
-    version: Int? = null
+    signedRequest: Boolean = false,
+    headers: Map<String, String> = if (signedRequest) DEFAULT_SIGNED_REQUEST_HEADERS else DEFAULT_REQUEST_HEADERS,
+    version: Int? = null,
 ) {
     headers {
         headers.map { append(it.key, it.value) }
@@ -18,4 +22,3 @@ fun HttpRequestBuilder.addRequestHeaders(
 }
 
 inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
-

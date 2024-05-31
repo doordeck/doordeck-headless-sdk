@@ -1,9 +1,9 @@
 package com.doordeck.sdk.internal.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.requests.LockOperationBodyRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
+import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.LockResponse
@@ -80,24 +80,21 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
-    override fun unlock(x5c: Array<String>, lockId: String, locked: Boolean, privateKey: ByteArray, ): Unit = runBlocking {
-        val operationHeader =  OperationHeaderRequest(x5c = x5c)
-        val lockOperation = LockOperationRequest(locked = locked)
+    override fun unlock(userId: String, x5c: Array<String>, lockId: String, locked: Boolean, privateKey: ByteArray,
+                        trackId: String?): Unit = runBlocking {
+        val operationHeader = OperationHeaderRequest(x5c = x5c)
         val operationBody = LockOperationBodyRequest(
-            iss = "",// TODO UserId extracted from the token?
+            iss = userId,
             sub = lockId,
-            nbf = Clock.System.now().epochSeconds.toString(),
-            iat = Clock.System.now().epochSeconds.toString(),
-            exp = (Clock.System.now() + 1.minutes).toString(),
-            jti = uuid4().toString(),
-            operation = lockOperation
+            nbf = Clock.System.now().epochSeconds.toInt(),
+            iat = Clock.System.now().epochSeconds.toInt(),
+            exp = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+            jti = trackId,
+            operation = LockOperationRequest(locked = locked)
         )
-        val headerB64 = operationHeader.toJson().encodeToByteArray().encodeToBase64UrlString()
-        val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
-        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(privateKey).encodeToBase64UrlString()
-        val body = "$headerB64.$bodyB64.$signatureB64"
+        val body = signRequest(operationHeader, operationBody, privateKey)
         httpClient.post(Paths.getUnlockPath(operationBody.sub)) {
-            addRequestHeaders() // TODO content-type should be application/jwt
+            addRequestHeaders(true)
             setBody(body)
         }.body()
     }
@@ -120,5 +117,13 @@ class LockOperationsResourceImpl(
 
     override fun getShareableLocks(): Array<ShareableLockResponse> = runBlocking {
         httpClient.get(Paths.getShareableLocksPath()).body()
+    }
+
+    private fun signRequest(operationHeaderRequest: OperationHeaderRequest, operationBodyRequest: OperationBodyRequest,
+                            privateKey: ByteArray): String {
+        val headerB64 = operationHeaderRequest.toJson().encodeToByteArray().encodeToBase64UrlString()
+        val bodyB64 = operationBodyRequest.toJson().encodeToByteArray().encodeToBase64UrlString()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(privateKey).encodeToBase64UrlString()
+        return "$headerB64.$bodyB64.$signatureB64"
     }
 }

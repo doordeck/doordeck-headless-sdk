@@ -13,7 +13,6 @@ import com.doordeck.sdk.internal.api.Params.VERIFY_EMAIL_CODE_PARAM
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.addRequestHeaders
 import com.doordeck.sdk.util.encodeKeyToBase64
-import com.doordeck.sdk.util.encodeToBase64
 import com.doordeck.sdk.util.signWithPrivateKey
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -39,7 +38,9 @@ class AccountResourceImpl(
     }
 
     override fun logout() {
-        TODO("Not yet implemented")
+        runBlocking {
+            httpClient.post(Paths.getLogoutPath())
+        }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse = runBlocking {
@@ -59,7 +60,7 @@ class AccountResourceImpl(
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse  = runBlocking {
-        val codeSignature = code.signWithPrivateKey(privateKey).encodeToBase64()
+        val codeSignature = code.signWithPrivateKey(privateKey).encodeKeyToBase64()
         httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))

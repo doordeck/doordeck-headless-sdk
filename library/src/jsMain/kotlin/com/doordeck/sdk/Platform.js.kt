@@ -6,3 +6,5 @@ import kotlinx.coroutines.promise
 
 actual fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T =
     GlobalScope.promise { block() }.asDynamic()
+
+actual fun getPlatform(): PlatformType = PlatformType.JS

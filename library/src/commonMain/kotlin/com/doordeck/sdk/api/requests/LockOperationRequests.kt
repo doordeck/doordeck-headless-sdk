@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.requests
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -16,27 +17,27 @@ class OperationHeaderRequest(
 class LockOperationBodyRequest(
     val iss: String,
     val sub: String,
-    val nbf: String,
-    val iat: String,
-    val exp: String,
+    val nbf: Int,
+    val iat: Int,
+    val exp: Int,
     val jti: String? = null,
     val operation: OperationRequest
-): OperationBodyRequest()
+): OperationBodyRequest
 
 @JsExport
 @Serializable
 class LockOperationRequest(
     val type: String = "MUTATE_LOCK",
     val locked: Boolean
-): OperationRequest()
+): OperationRequest
 
 @JsExport
 @Serializable
-sealed class OperationBodyRequest
+sealed interface OperationBodyRequest
 
 @JsExport
 @Serializable
-sealed class OperationRequest
+sealed interface OperationRequest
 
 @JsExport
 @Serializable

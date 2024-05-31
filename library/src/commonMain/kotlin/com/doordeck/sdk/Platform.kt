@@ -9,10 +9,18 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.json.Json
 
+enum class PlatformType {
+    JVM,
+    ANDROID,
+    IOS,
+    JS
+}
+
 val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
+    classDiscriminator = "classType"
 }
 
 fun createHttpClient(
@@ -22,6 +30,9 @@ fun createHttpClient(
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
+        }
+        install(UserAgent) {
+            agent = "Doordeck SDK - ${getPlatform()} Platform"
         }
         defaultRequest {
             url {
@@ -35,3 +46,5 @@ fun createHttpClient(
 }
 
 expect fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T
+
+expect fun getPlatform(): PlatformType

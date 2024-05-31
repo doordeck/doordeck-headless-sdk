@@ -12,7 +12,7 @@ interface AccountResource {
     fun login(email: String, password: String): LoginResponse
     fun registration() // TODO
     fun refreshToken() // TODO
-    fun logout() // TODO
+    fun logout()
     fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
     fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
