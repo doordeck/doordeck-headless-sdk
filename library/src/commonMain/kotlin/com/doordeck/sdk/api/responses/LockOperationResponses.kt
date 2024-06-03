@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.responses
 
+import com.doordeck.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -11,7 +12,7 @@ class LockResponse(
     val colour: String? = null,
     val start: String? = null,
     val end: String? = null,
-    val role: String,
+    val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
@@ -66,7 +67,7 @@ class UserLockResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val role: String,
+    val role: UserRole,
     val start: Double? = null,
     val end: Double? = null
 )
@@ -80,7 +81,7 @@ class LockUserResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val role: String,
+    val role: UserRole,
     val start: Double? = null,
     val end: Double? = null,
     val devices: Array<LockUserDetailsResponse>
@@ -92,7 +93,31 @@ class LockUserResponse(
 @Serializable
 class LockUserDetailsResponse(
     val deviceId: String,
-    val role: String,
+    val role: UserRole,
     val start: Double? = null,
     val end: Double? = null
+)
+
+@JsExport
+@Serializable
+class UserAuditResponse(
+    val deviceId: String,
+    val timestamp: Int,
+    val type: String,
+    val issuer: UserAuditIssuerResponse,
+    val subject: UserAuditSubjectResponse,
+    val rejected: Boolean
+)
+
+@JsExport
+@Serializable
+class UserAuditIssuerResponse(
+    val userId: String
+)
+
+@JsExport
+@Serializable
+class UserAuditSubjectResponse(
+    val userId: String,
+    val email: String
 )

@@ -1,9 +1,15 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
+import com.doordeck.sdk.api.responses.TokenResponse
+import com.doordeck.sdk.internal.api.Paths
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
@@ -23,24 +29,32 @@ val JSON = Json {
     classDiscriminator = "classType"
 }
 
-fun createHttpClient(
-    apiEnvironment: ApiEnvironment,
-    token: String
-): HttpClient {
+fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): HttpClient {
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
         }
-        install(UserAgent) {
-            agent = "Doordeck SDK - ${getPlatform()} Platform"
+        install(Auth) {
+            bearer {
+                loadTokens {
+                    BearerTokens(token, refreshToken)
+                }
+                refreshTokens {
+                    val refreshTokens: TokenResponse = client.put(Paths.getRefreshTokenPath()) {
+                        headers {
+                            append(HttpHeaders.ContentType, ContentType.Application.Json)
+                            append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                        }
+                    }.body()
+                    BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                }
+            }
         }
         defaultRequest {
             url {
                 host = apiEnvironment.host
                 protocol = URLProtocol.HTTPS
             }
-            // TODO Build the token-refresh around ktor?
-            headers.append(HttpHeaders.Authorization, "Bearer $token")
         }
     }
 }

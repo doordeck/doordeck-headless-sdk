@@ -9,7 +9,7 @@ class JsPlatformTest {
     @Test
     fun testPlatformJsEngine() {
         // Given
-        val client = createHttpClient(ApiEnvironment.DEV, "")
+        val client = createHttpClient(ApiEnvironment.DEV, "", "")
 
         // When
         assertTrue { client.engine.getScopeName().value.contains("JsClient", true) }

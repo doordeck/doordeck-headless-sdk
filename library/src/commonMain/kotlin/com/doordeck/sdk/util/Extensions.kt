@@ -9,7 +9,7 @@ import kotlinx.serialization.encodeToString
 private val DEFAULT_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to ContentType.Application.Json.toString())
 private val DEFAULT_SIGNED_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to "application/jwt")
 
-fun HttpRequestBuilder.addRequestHeaders(
+internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     headers: Map<String, String> = if (signedRequest) DEFAULT_SIGNED_REQUEST_HEADERS else DEFAULT_REQUEST_HEADERS,
     apiVersion: ApiVersion? = null,

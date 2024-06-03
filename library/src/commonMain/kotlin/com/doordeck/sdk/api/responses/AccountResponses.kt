@@ -1,11 +1,12 @@
 package com.doordeck.sdk.api.responses
 
+import com.doordeck.sdk.api.model.TwoFactorMethod
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class LoginResponse(
+class TokenResponse(
     val authToken: String,
     val refreshToken: String
 )
@@ -29,5 +30,5 @@ class RegisterEphemeralKeyResponse(
 @JsExport
 @Serializable
 class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
-    val method: String
+    val method: TwoFactorMethod
 )

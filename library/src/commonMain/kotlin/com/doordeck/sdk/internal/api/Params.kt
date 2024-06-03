@@ -1,6 +1,9 @@
 package com.doordeck.sdk.internal.api
 
 object Params {
-    // Verify Email
-    const val VERIFY_EMAIL_CODE_PARAM = "code"
+
+    const val CODE = "code"
+    const val METHOD = "method"
+    const val START = "start"
+    const val END = "end"
 }

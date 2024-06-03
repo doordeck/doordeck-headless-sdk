@@ -1,7 +1,6 @@
 package com.doordeck.sdk.api.requests
 
 import com.doordeck.sdk.api.model.UserRole
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -43,6 +42,30 @@ class ShareLockOperationRequest(
     val end: Int? = null
 ): OperationRequest
 
+@JsExport
+@Serializable
+class RevokeAccessToALockOperationRequest(
+    val type: String = "REMOVE_USER",
+    val users: Array<String>
+): OperationRequest
+
+@JsExport
+@Serializable
+class UpdateSecureSettingsOperationRequest(
+    val type: String = "MUTATE_SETTING",
+    val unlockDuration: Int? = null,
+    val unlockBetween: UnlockBetweenSettingRequest? = null
+): OperationRequest
+
+@JsExport
+@Serializable
+class UnlockBetweenSettingRequest(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: String,
+    val exceptions: Array<String>
+)
 
 @JsExport
 @Serializable
@@ -56,4 +79,11 @@ class UserPublicKeyRequest(
     val localKey: String? = null,
     val foreignKey: String? = null,
     val identity: String? = null
+)
+
+@JsExport
+@Serializable
+class PairWithNewLockRequest(
+    val key: String,
+    val name: String
 )

@@ -8,24 +8,26 @@ import kotlin.io.encoding.Base64
 import kotlin.js.JsExport
 
 @JsExport
-class KeyPair(
-    val private: ByteArray,
-    val public: ByteArray
-)
+object Crypto {
 
-@JsExport
-fun generateKeyPair(): KeyPair {
-    val keyPair = Signature.keypair()
-    return KeyPair(keyPair.secretKey.toByteArray(), keyPair.publicKey.toByteArray())
+    class KeyPair(
+        val private: ByteArray,
+        val public: ByteArray
+    )
+
+    fun generateKeyPair(): KeyPair {
+        val keyPair = Signature.keypair()
+        return KeyPair(keyPair.secretKey.toByteArray(), keyPair.publicKey.toByteArray())
+    }
+
+    fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = Signature.detached(
+        message = toByteArray().toUByteArray(),
+        secretKey = privateKey.toUByteArray()
+    ).toByteArray()
+
+    fun String.decodeBase64ToKey(): ByteArray = LibsodiumUtil.fromBase64(this, Base64Variants.ORIGINAL).toByteArray()
+
+    fun ByteArray.encodeKeyToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)
 }
 
 internal fun ByteArray.encodeToBase64UrlString() = Base64.UrlSafe.encode(this)
-internal fun ByteArray.encodeToBase64() = Base64.Mime.encode(this)
-
-@JsExport
-fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = Signature.detached(
-    message = toByteArray().toUByteArray(),
-    secretKey = privateKey.toUByteArray()
-).toByteArray()
-
-internal fun ByteArray.encodeKeyToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)

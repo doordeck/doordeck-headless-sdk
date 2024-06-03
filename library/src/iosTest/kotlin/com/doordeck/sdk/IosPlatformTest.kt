@@ -10,7 +10,7 @@ class IosPlatformTest {
     @Test
     fun `test platform engine`() {
         // Given
-        val client = createHttpClient(ApiEnvironment.DEV, "")
+        val client = createHttpClient(ApiEnvironment.DEV, "", "")
 
         // When
         assertTrue { client.engine.getScopeName().value.contains("Darwin", true) }

@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.responses
 
+import com.doordeck.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -23,7 +24,7 @@ class SiteLocksResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
-    val role: String,
+    val role: UserRole,
     val settings: SiteLockSettingsResponse
 )
 

@@ -6,18 +6,24 @@ import com.doordeck.sdk.api.requests.LockOperationRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.OperationRequest
+import com.doordeck.sdk.api.requests.PairWithNewLockRequest
+import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
+import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
+import com.doordeck.sdk.api.responses.UserAuditResponse
 import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
+import com.doordeck.sdk.internal.api.Params.END
+import com.doordeck.sdk.internal.api.Params.START
 import com.doordeck.sdk.runBlocking
+import com.doordeck.sdk.util.Crypto.encodeKeyToBase64
+import com.doordeck.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.sdk.util.addRequestHeaders
-import com.doordeck.sdk.util.encodeKeyToBase64
 import com.doordeck.sdk.util.encodeToBase64UrlString
-import com.doordeck.sdk.util.signWithPrivateKey
 import com.doordeck.sdk.util.toJson
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -37,8 +43,11 @@ class LockOperationsResourceImpl(
         httpClient.get(Paths.getASingleLockPath(lockId)).body()
     }
 
-    override fun getAuditForAUser(lockId: String, start: Int, end: Int) {
-        TODO("Not yet implemented")
+    override fun getAuditForAUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> = runBlocking {
+        httpClient.get(Paths.getAuditForAUserPath(lockId)) {
+            parameter(START, start)
+            parameter(END, start)
+        }.body()
     }
 
     override fun getUsersForALock(lockId: String): Array<UserLockResponse> = runBlocking {
@@ -53,8 +62,13 @@ class LockOperationsResourceImpl(
         TODO("Not yet implemented")
     }
 
-    override fun pairWithNewLock() {
-        TODO("Not yet implemented")
+    override fun pairWithNewLock(key: String, name: String) {
+        runBlocking {
+            httpClient.post(Paths.getPairWithNewLockPath()) {
+                addRequestHeaders()
+                setBody(PairWithNewLockRequest(key, name))
+            }
+        }
     }
 
     override fun getADoordeckUserPublicKey(userEmail: String) {
@@ -107,6 +121,23 @@ class LockOperationsResourceImpl(
         performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
     }
 
+    override fun revokeAccessToALock(userId: String, x5c: Array<String>, lockId: String, users: Array<String>,
+                                     privateKey: ByteArray, trackId: String?) {
+        val operationRequest = RevokeAccessToALockOperationRequest(users = users)
+        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+    }
+
+    override fun removeSecureSettings(userId: String, x5c: Array<String>, lockId: String,
+                                      privateKey: ByteArray, trackId: String?) {
+        val operationRequest = UpdateSecureSettingsOperationRequest()
+        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+    }
+
+    override fun updateSecureSettings(lockId: String) {
+        val operationRequest = UpdateSecureSettingsOperationRequest()
+        TODO("Not yet implemented")
+    }
+
     private fun performOperation(userId: String, x5c: Array<String>, lockId: String, operationRequest: OperationRequest,
                                  privateKey: ByteArray, trackId: String?): Unit = runBlocking {
         val operationHeader = OperationHeaderRequest(x5c = x5c)
@@ -127,14 +158,6 @@ class LockOperationsResourceImpl(
             addRequestHeaders(true)
             setBody(body)
         }.body()
-    }
-
-    override fun revokeAccessToALock(lockId: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun updateSecureSettings(lockId: String) {
-        TODO("Not yet implemented")
     }
 
     override fun getPinnedLocks(): Array<LockResponse> = runBlocking {
