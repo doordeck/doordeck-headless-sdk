@@ -34,9 +34,6 @@ jobs:
         arguments: ${{ matrix.target }}
 
     - name: Build
-      run: ./gradlew build
-      env:
-        USERNAME: ${{ secrets.GH_PACKAGES_USERNAME }}
-        TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: ${{ matrix.target }}
