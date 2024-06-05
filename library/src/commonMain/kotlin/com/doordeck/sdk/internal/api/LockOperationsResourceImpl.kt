@@ -19,6 +19,7 @@ import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.sdk.internal.api.Params.END
 import com.doordeck.sdk.internal.api.Params.START
+import com.doordeck.sdk.internal.api.Params.VISITOR
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Crypto.encodeKeyToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey
@@ -71,8 +72,11 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun getADoordeckUserPublicKey(userEmail: String) {
-        TODO("Not yet implemented")
+    override fun getADoordeckUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse = runBlocking {
+        httpClient.post(Paths.getADoordeckUserPublickKeyPath(userEmail)) {
+            addRequestHeaders()
+            parameter(VISITOR, visitor)
+        }.body()
     }
 
     override fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse =

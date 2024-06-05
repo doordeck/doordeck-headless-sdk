@@ -12,6 +12,14 @@ class LoginRequest(
 
 @JsExport
 @Serializable
+class RegisterRequest(
+    val email: String,
+    val password: String,
+    val displayName: String? = null
+)
+
+@JsExport
+@Serializable
 class RegisterEphemeralKeyRequest(
     val ephemeralKey: String
 )
@@ -26,4 +34,11 @@ class VerifyEphemeralKeyRegistrationRequest(
 @Serializable
 class UpdateUserDetailsRequest(
     val displayName: String
+)
+
+@JsExport
+@Serializable
+class ChangePasswordRequest(
+    val oldPassword: String,
+    val newPassword: String
 )

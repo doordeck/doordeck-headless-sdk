@@ -2,8 +2,10 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.AccountResource
 import com.doordeck.sdk.api.model.TwoFactorMethod
+import com.doordeck.sdk.api.requests.ChangePasswordRequest
 import com.doordeck.sdk.api.requests.LoginRequest
 import com.doordeck.sdk.api.requests.RegisterEphemeralKeyRequest
+import com.doordeck.sdk.api.requests.RegisterRequest
 import com.doordeck.sdk.api.requests.UpdateUserDetailsRequest
 import com.doordeck.sdk.api.requests.VerifyEphemeralKeyRegistrationRequest
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
@@ -11,6 +13,7 @@ import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthentic
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.api.responses.UserDetailsResponse
 import com.doordeck.sdk.internal.api.Params.CODE
+import com.doordeck.sdk.internal.api.Params.FORCE
 import com.doordeck.sdk.internal.api.Params.METHOD
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Crypto.encodeKeyToBase64
@@ -31,8 +34,16 @@ class AccountResourceImpl(
         }.body()
     }
 
-    override fun registration() {
-        TODO("Not yet implemented")
+    override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse = runBlocking {
+        httpClient.post(Paths.getRegistrationPath()) {
+            addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
+            setBody(RegisterRequest(
+                email = email,
+                password = password,
+                displayName = displayName
+            ))
+            parameter(FORCE, force)
+        }.body()
     }
 
     override fun refreshToken(): TokenResponse = runBlocking {
@@ -82,11 +93,21 @@ class AccountResourceImpl(
     }
 
     override fun reverifyEmail() {
-        TODO("Not yet implemented")
+        runBlocking {
+            httpClient.post(Paths.getReverifyEmailPath())
+        }
     }
 
-    override fun changePassword() {
-        TODO("Not yet implemented")
+    override fun changePassword(oldPassword: String, newPassword: String) {
+        runBlocking {
+            httpClient.post(Paths.getChangePasswordPath()) {
+                addRequestHeaders()
+                setBody(ChangePasswordRequest(
+                    oldPassword = oldPassword,
+                    newPassword = newPassword
+                ))
+            }
+        }
     }
 
     override fun getUserDetails(): UserDetailsResponse = runBlocking {
@@ -103,6 +124,8 @@ class AccountResourceImpl(
     }
 
     override fun deleteAccount() {
-        TODO("Not yet implemented")
+        runBlocking {
+            httpClient.delete(Paths.getDeleteAccountPath())
+        }
     }
 }

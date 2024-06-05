@@ -64,7 +64,7 @@ class UnlockBetweenSettingRequest(
     val end: String,
     val timezone: String,
     val days: String,
-    val exceptions: Array<String>
+    val exceptions: Array<String>? = null
 )
 
 @JsExport

@@ -36,7 +36,7 @@ object Paths {
     fun getLocksForAUserPath(userId: String) = "/user/$userId"
     fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"
     fun getPairWithNewLockPath() = "/device"
-    fun getDoordeckUserPublickKeyPath(email: String) = "/share/invite/$email"
+    fun getADoordeckUserPublickKeyPath(email: String) = "/share/invite/$email"
     fun getUserPublicKeyPath() = "/directory/query"
     // TODO Merge all the next ones
     fun getUnlockPath(lockId: String) = "/device/$lockId/execute"

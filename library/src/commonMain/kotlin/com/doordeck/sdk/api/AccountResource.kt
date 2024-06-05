@@ -11,16 +11,16 @@ import kotlin.js.JsExport
 interface AccountResource {
 
     fun login(email: String, password: String): TokenResponse
-    fun registration() // TODO
+    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
     fun refreshToken(): TokenResponse
     fun logout()
     fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
     fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
     fun verifyEmail(code: String)
-    fun reverifyEmail() // TODO
-    fun changePassword() // TODO
+    fun reverifyEmail()
+    fun changePassword(oldPassword: String, newPassword: String)
     fun getUserDetails(): UserDetailsResponse
     fun updateUserDetails(displayName: String)
-    fun deleteAccount() // TODO
+    fun deleteAccount()
 }

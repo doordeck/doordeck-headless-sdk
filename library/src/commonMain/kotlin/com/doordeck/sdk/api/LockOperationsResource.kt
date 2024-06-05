@@ -19,7 +19,7 @@ interface LockOperationsResource {
     fun getLocksForAUser(userId: String): LockUserResponse
     fun updateLockProperties(lockId: String) // TODO
     fun pairWithNewLock(key: String, name: String)
-    fun getADoordeckUserPublicKey(userEmail: String) // TODO
+    fun getADoordeckUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
     fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
     fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
     fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
