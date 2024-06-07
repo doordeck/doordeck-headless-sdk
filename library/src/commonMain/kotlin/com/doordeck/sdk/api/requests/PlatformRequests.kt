@@ -1,9 +1,7 @@
 package com.doordeck.sdk.api.requests
 
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 class CreateApplicationRequest(
     val name: String,
@@ -16,7 +14,6 @@ class CreateApplicationRequest(
     val logoUrl: String? = null
 )
 
-@JsExport
 @Serializable
 class EmailPreferencesRequest(
     val senderEmail: String? = null,
@@ -26,7 +23,6 @@ class EmailPreferencesRequest(
     val callToAction: CallToActionRequest? = null
 )
 
-@JsExport
 @Serializable
 class CallToActionRequest(
     val actionTarget: String,

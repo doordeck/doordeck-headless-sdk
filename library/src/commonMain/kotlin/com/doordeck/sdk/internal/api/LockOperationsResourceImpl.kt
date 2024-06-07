@@ -1,7 +1,7 @@
 package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.LockOperationsResource
-import com.doordeck.sdk.api.model.UserRole
+import com.doordeck.sdk.api.model.LockOperations
 import com.doordeck.sdk.api.requests.LockOperationRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
@@ -9,6 +9,7 @@ import com.doordeck.sdk.api.requests.OperationRequest
 import com.doordeck.sdk.api.requests.PairWithNewLockRequest
 import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
+import com.doordeck.sdk.api.requests.UnlockBetweenSettingRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.LockResponse
@@ -29,8 +30,6 @@ import com.doordeck.sdk.util.toJson
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsResourceImpl(
     private val httpClient: HttpClient
@@ -101,64 +100,69 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
-    override fun lock(userId: String, x5c: Array<String>, lockId: String, privateKey: ByteArray, trackId: String?) {
+    override fun lock(lockOperation: LockOperations.LockOperation) {
         val operationRequest = LockOperationRequest(locked = true)
-        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+        performOperation(lockOperation.baseOperation, operationRequest)
     }
 
-    override fun unlock(userId: String, x5c: Array<String>, lockId: String, privateKey: ByteArray,
-                        trackId: String?): Unit = runBlocking {
+    override fun unlock(unlockOperation: LockOperations.UnlockOperation): Unit = runBlocking {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+        performOperation(unlockOperation.baseOperation, operationRequest)
     }
 
-    override fun shareALock(userId: String, x5c: Array<String>, lockId: String, targetUserId: String,
-                            targetUserRole: UserRole, targetUserPublicKey: ByteArray, privateKey: ByteArray,
-                            start: Int?, end: Int?, trackId: String?): Unit = runBlocking {
+    override fun shareALock(shareALockOperation: LockOperations.ShareALockOperation): Unit = runBlocking {
         val operationRequest = ShareLockOperationRequest(
-            user = targetUserId,
-            publicKey = targetUserPublicKey.encodeKeyToBase64(),
-            role = targetUserRole,
-            start = start,
-            end = end
+            user = shareALockOperation.targetUserId,
+            publicKey = shareALockOperation.targetUserPublicKey.encodeKeyToBase64(),
+            role = shareALockOperation.targetUserRole,
+            start = shareALockOperation.start,
+            end = shareALockOperation.end
         )
-        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+        performOperation(shareALockOperation.baseOperation, operationRequest)
     }
 
-    override fun revokeAccessToALock(userId: String, x5c: Array<String>, lockId: String, users: Array<String>,
-                                     privateKey: ByteArray, trackId: String?) {
-        val operationRequest = RevokeAccessToALockOperationRequest(users = users)
-        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+    override fun revokeAccessToALock(revokeAccessToALockOperation: LockOperations.RevokeAccessToALockOperation) {
+        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToALockOperation.users)
+        performOperation(revokeAccessToALockOperation.baseOperation, operationRequest)
     }
 
-    override fun removeSecureSettings(userId: String, x5c: Array<String>, lockId: String,
-                                      privateKey: ByteArray, trackId: String?) {
+    override fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation) {
         val operationRequest = UpdateSecureSettingsOperationRequest()
-        performOperation(userId, x5c, lockId, operationRequest, privateKey, trackId)
+        performOperation(removeSecureSettingsOperation.baseOperation, operationRequest)
     }
 
-    override fun updateSecureSettings(lockId: String) {
-        val operationRequest = UpdateSecureSettingsOperationRequest()
-        TODO("Not yet implemented")
+    override fun updateSecureSettings(updateSecureSettingsOperation: LockOperations.UpdateSecureSettingsOperation) {
+        val operationRequest = UpdateSecureSettingsOperationRequest(
+            unlockDuration = updateSecureSettingsOperation.unlockDuration,
+            unlockBetween = updateSecureSettingsOperation.unlockBetween?.let {
+                UnlockBetweenSettingRequest(
+                    start = it.start,
+                    end = it.end,
+                    timezone = it.timezone,
+                    days = it.days,
+                    exceptions = it.exceptions
+                )
+            }
+        )
+        performOperation(updateSecureSettingsOperation.baseOperation, operationRequest)
     }
 
-    private fun performOperation(userId: String, x5c: Array<String>, lockId: String, operationRequest: OperationRequest,
-                                 privateKey: ByteArray, trackId: String?): Unit = runBlocking {
-        val operationHeader = OperationHeaderRequest(x5c = x5c)
+    private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest): Unit = runBlocking {
+        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
         val operationBody = OperationBodyRequest(
-            iss = userId,
-            sub = lockId,
-            nbf = Clock.System.now().epochSeconds.toInt(), // TODO Move to func param
-            iat = Clock.System.now().epochSeconds.toInt(), // TODO Move to func param
-            exp = (Clock.System.now() + 1.minutes).epochSeconds.toInt(), // TODO Move to func param
-            jti = trackId,
+            iss = baseOperation.userId,
+            sub = baseOperation.lockId,
+            nbf = baseOperation.notBefore,
+            iat = baseOperation.issuedAt,
+            exp = baseOperation.expiresAt,
+            jti = baseOperation.trackId,
             operation = operationRequest
         )
         val headerB64 = operationHeader.toJson().encodeToByteArray().encodeToBase64UrlString()
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
-        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(privateKey).encodeToBase64UrlString()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeToBase64UrlString()
         val body = "$headerB64.$bodyB64.$signatureB64"
-        httpClient.post(Paths.getOperationPath(lockId)) {
+        httpClient.post(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }.body()

@@ -29,7 +29,7 @@ val JSON = Json {
     classDiscriminator = "classType"
 }
 
-fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): HttpClient {
+fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken: String?): HttpClient {
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
@@ -37,16 +37,19 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
         install(Auth) {
             bearer {
                 loadTokens {
-                    BearerTokens(token, refreshToken)
+                    BearerTokens(token, refreshToken ?: "")
                 }
-                refreshTokens {
-                    val refreshTokens: TokenResponse = client.put(Paths.getRefreshTokenPath()) {
-                        headers {
-                            append(HttpHeaders.ContentType, ContentType.Application.Json)
-                            append(HttpHeaders.Authorization, "Bearer $refreshToken")
-                        }
-                    }.body()
-                    BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                // Automatically refresh the auth token if a refresh token has been provided during the initialization
+                if (refreshToken != null) {
+                    refreshTokens {
+                        val refreshTokens: TokenResponse = client.put(Paths.getRefreshTokenPath()) {
+                            headers {
+                                append(HttpHeaders.ContentType, ContentType.Application.Json)
+                                append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                            }
+                        }.body()
+                        BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                    }
                 }
             }
         }

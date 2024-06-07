@@ -19,5 +19,5 @@ interface Doordeck {
 
     val apiEnvironment: ApiEnvironment
     val token: String
-    val refreshToken: String
+    val refreshToken: String?
 }
