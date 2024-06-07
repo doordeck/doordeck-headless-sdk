@@ -2,15 +2,20 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.model.LockOperations
+import com.doordeck.sdk.api.requests.LocationRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
+import com.doordeck.sdk.api.requests.LockSettingsRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.OperationRequest
 import com.doordeck.sdk.api.requests.PairWithNewLockRequest
 import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
+import com.doordeck.sdk.api.requests.TimeRequest
 import com.doordeck.sdk.api.requests.UnlockBetweenSettingRequest
+import com.doordeck.sdk.api.requests.UpdateLockPropertiesRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
+import com.doordeck.sdk.api.requests.UsageRequirementsRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
@@ -58,8 +63,45 @@ class LockOperationsResourceImpl(
         httpClient.get(Paths.getLocksForAUserPath(userId)).body()
     }
 
-    override fun updateLockProperties(lockId: String) {
-        TODO("Not yet implemented")
+    override fun updateLockProperties(lockId: String, lockProperties: LockOperations.LockProperties) {
+        runBlocking {
+            httpClient.put(Paths.getUpdateLockPropertiesPath(lockId)) {
+                addRequestHeaders()
+                setBody(UpdateLockPropertiesRequest(
+                    name = lockProperties.name,
+                    favourite = lockProperties.favourite,
+                    colour = lockProperties.colour,
+                    settings = lockProperties.settings?.let { settings ->
+                        LockSettingsRequest(
+                            defaultName = settings.defaultName,
+                            permittedAddress = settings.permittedAddress,
+                            delay = settings.delay,
+                            usageRequirements = settings.usageRequirements?.let { usageRequirements ->
+                                UsageRequirementsRequest(
+                                    time = usageRequirements.time?.let { time ->
+                                        TimeRequest(
+                                            start = time.start,
+                                            end = time.end,
+                                            timezone = time.timezone,
+                                            days = time.days
+                                        )
+                                    },
+                                    location = usageRequirements.location?.let { location ->
+                                        LocationRequest(
+                                            latitude = location.latitude,
+                                            longitude = location.longitude,
+                                            enabled = location.enabled,
+                                            radius = location.radius,
+                                            accuracy = location.accuracy
+                                        )
+                                    }
+                                )
+                            }
+                        )
+                    }
+                ))
+            }
+        }
     }
 
     override fun pairWithNewLock(key: String, name: String) {

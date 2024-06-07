@@ -17,7 +17,7 @@ interface LockOperationsResource {
     fun getAuditForAUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse>
     fun getUsersForALock(lockId: String): Array<UserLockResponse>
     fun getLocksForAUser(userId: String): LockUserResponse
-    fun updateLockProperties(lockId: String) // TODO
+    fun updateLockProperties(lockId: String, lockProperties: LockOperations.LockProperties)
     fun pairWithNewLock(key: String, name: String)
     fun getADoordeckUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
     fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse

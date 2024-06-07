@@ -7,7 +7,41 @@ import kotlin.time.Duration.Companion.minutes
 @JsExport
 object LockOperations {
 
-    data class UnlockBetween(
+    class LockProperties(
+        val name: String? = null,
+        val favourite: Boolean? = null,
+        val colour: String? = null,
+        val settings: LockSettings? = null
+    )
+
+    class LockSettings(
+        val defaultName: String? = null,
+        val permittedAddress: Array<String>? = null,
+        val delay: Int? = null,
+        val usageRequirements: UsageRequirements? = null
+    )
+
+    class UsageRequirements(
+        val time: TimeRequirement? = null,
+        val location: LocationRequirement? = null
+    )
+
+    class TimeRequirement(
+        val start: String,
+        val end: String,
+        val timezone: String,
+        val days: Array<String>
+    )
+
+    class LocationRequirement(
+        val latitude: Double,
+        val longitude: Double,
+        val enabled: Boolean? = null,
+        val radius: Int? = null,
+        val accuracy: Int? = null
+    )
+
+    class UnlockBetween(
         val start: String,
         val end: String,
         val timezone: String,

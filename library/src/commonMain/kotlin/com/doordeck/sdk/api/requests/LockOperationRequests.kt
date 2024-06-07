@@ -76,3 +76,42 @@ class PairWithNewLockRequest(
     val key: String,
     val name: String
 )
+
+@Serializable
+class UpdateLockPropertiesRequest(
+    val name: String? = null,
+    val favourite: Boolean? = null,
+    val colour: String? = null,
+    val settings: LockSettingsRequest? = null
+)
+
+@Serializable
+class LockSettingsRequest(
+    val defaultName: String? = null,
+    val permittedAddress: Array<String>? = null,
+    val delay: Int? = null,
+    val usageRequirements: UsageRequirementsRequest? = null
+)
+
+@Serializable
+class UsageRequirementsRequest(
+    val time: TimeRequest? = null,
+    val location: LocationRequest? = null
+)
+
+@Serializable
+class TimeRequest(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>
+)
+
+@Serializable
+class LocationRequest(
+    val latitude: Double,
+    val longitude: Double,
+    val enabled: Boolean? = null,
+    val radius: Int? = null,
+    val accuracy: Int? = null
+)
