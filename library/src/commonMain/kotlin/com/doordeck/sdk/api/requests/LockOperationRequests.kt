@@ -95,12 +95,12 @@ class LockSettingsRequest(
 
 @Serializable
 class UsageRequirementsRequest(
-    val time: TimeRequest? = null,
-    val location: LocationRequest? = null
+    val time: TimeRequirementRequest? = null,
+    val location: LocationRequirementRequest? = null
 )
 
 @Serializable
-class TimeRequest(
+class TimeRequirementRequest(
     val start: String,
     val end: String,
     val timezone: String,
@@ -108,7 +108,7 @@ class TimeRequest(
 )
 
 @Serializable
-class LocationRequest(
+class LocationRequirementRequest(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean? = null,

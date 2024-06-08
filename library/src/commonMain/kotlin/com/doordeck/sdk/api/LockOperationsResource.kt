@@ -1,6 +1,7 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.model.LockOperations
+import com.doordeck.sdk.api.responses.LockAuditTrail
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -14,6 +15,7 @@ interface LockOperationsResource {
 
     fun getAllLocks(): Array<LockResponse>
     fun getSingleLock(lockId: String): LockResponse
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail>
     fun getAuditForAUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse>
     fun getUsersForALock(lockId: String): Array<UserLockResponse>
     fun getLocksForAUser(userId: String): LockUserResponse

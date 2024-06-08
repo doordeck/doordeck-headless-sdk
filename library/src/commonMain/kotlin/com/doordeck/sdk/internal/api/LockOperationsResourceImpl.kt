@@ -2,7 +2,7 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.requests.LocationRequest
+import com.doordeck.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
 import com.doordeck.sdk.api.requests.LockSettingsRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
@@ -11,12 +11,13 @@ import com.doordeck.sdk.api.requests.OperationRequest
 import com.doordeck.sdk.api.requests.PairWithNewLockRequest
 import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
-import com.doordeck.sdk.api.requests.TimeRequest
+import com.doordeck.sdk.api.requests.TimeRequirementRequest
 import com.doordeck.sdk.api.requests.UnlockBetweenSettingRequest
 import com.doordeck.sdk.api.requests.UpdateLockPropertiesRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.sdk.api.requests.UsageRequirementsRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
+import com.doordeck.sdk.api.responses.LockAuditTrail
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -46,6 +47,14 @@ class LockOperationsResourceImpl(
 
     override fun getSingleLock(lockId: String): LockResponse = runBlocking {
         httpClient.get(Paths.getASingleLockPath(lockId)).body()
+    }
+
+    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail> = runBlocking {
+        httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
+            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
+            parameter(START, start)
+            parameter(END, end)
+        }.body()
     }
 
     override fun getAuditForAUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> = runBlocking {
@@ -79,7 +88,7 @@ class LockOperationsResourceImpl(
                             usageRequirements = settings.usageRequirements?.let { usageRequirements ->
                                 UsageRequirementsRequest(
                                     time = usageRequirements.time?.let { time ->
-                                        TimeRequest(
+                                        TimeRequirementRequest(
                                             start = time.start,
                                             end = time.end,
                                             timezone = time.timezone,
@@ -87,7 +96,7 @@ class LockOperationsResourceImpl(
                                         )
                                     },
                                     location = usageRequirements.location?.let { location ->
-                                        LocationRequest(
+                                        LocationRequirementRequest(
                                             latitude = location.latitude,
                                             longitude = location.longitude,
                                             enabled = location.enabled,

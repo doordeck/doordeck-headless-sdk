@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.responses
 
+import com.doordeck.sdk.api.model.AuditEvent
 import com.doordeck.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -103,7 +104,7 @@ class LockUserDetailsResponse(
 class UserAuditResponse(
     val deviceId: String,
     val timestamp: Int,
-    val type: String,
+    val type: AuditEvent,
     val issuer: UserAuditIssuerResponse,
     val subject: UserAuditSubjectResponse,
     val rejected: Boolean
@@ -120,4 +121,15 @@ class UserAuditIssuerResponse(
 class UserAuditSubjectResponse(
     val userId: String,
     val email: String
+)
+
+@JsExport
+@Serializable
+class LockAuditTrail(
+    val timestamp: Int,
+    val type: AuditEvent,
+    val user: String? = null,
+    val email: String? = null,
+    val displayName: String? = null,
+    val message: String
 )

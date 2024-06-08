@@ -29,3 +29,33 @@ class CallToActionRequest(
     val headline: String,
     val actionTest: String
 )
+
+@Serializable
+class AddAuthIssuerRequest(
+    val url: String
+)
+
+@Serializable
+class DeleteAuthIssuerRequest(
+    val url: String
+)
+
+@Serializable
+class AddCorsDomainRequest(
+    val url: String
+)
+
+@Serializable
+class RemoveCorsDomainRequest(
+    val url: String
+)
+
+@Serializable
+class AddApplicationOwnerRequest(
+    val userId: String
+)
+
+@Serializable
+class RemoveApplicationOwnerRequest(
+    val userId: String
+)
