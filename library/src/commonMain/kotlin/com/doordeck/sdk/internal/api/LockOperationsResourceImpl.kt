@@ -8,7 +8,6 @@ import com.doordeck.sdk.api.requests.LockSettingsRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.OperationRequest
-import com.doordeck.sdk.api.requests.PairWithNewLockRequest
 import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
 import com.doordeck.sdk.api.requests.TimeRequirementRequest
@@ -46,7 +45,9 @@ class LockOperationsResourceImpl(
     }
 
     override fun getSingleLock(lockId: String): LockResponse = runBlocking {
-        httpClient.get(Paths.getASingleLockPath(lockId)).body()
+        httpClient.get(Paths.getSingleLockPath(lockId)){
+            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)
+        }.body()
     }
 
     override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail> = runBlocking {
@@ -57,19 +58,19 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
-    override fun getAuditForAUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> = runBlocking {
-        httpClient.get(Paths.getAuditForAUserPath(lockId)) {
+    override fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> = runBlocking {
+        httpClient.get(Paths.getAuditForUserPath(lockId)) {
             parameter(START, start)
             parameter(END, start)
         }.body()
     }
 
-    override fun getUsersForALock(lockId: String): Array<UserLockResponse> = runBlocking {
-        httpClient.get(Paths.getUsersForALockPath(lockId)).body()
+    override fun getUsersForLock(lockId: String): Array<UserLockResponse> = runBlocking {
+        httpClient.get(Paths.getUsersForLockPath(lockId)).body()
     }
 
-    override fun getLocksForAUser(userId: String): LockUserResponse = runBlocking {
-        httpClient.get(Paths.getLocksForAUserPath(userId)).body()
+    override fun getLocksForUser(userId: String): LockUserResponse = runBlocking {
+        httpClient.get(Paths.getLocksForUserPath(userId)).body()
     }
 
     override fun updateLockProperties(lockId: String, lockProperties: LockOperations.LockProperties) {
@@ -113,17 +114,8 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun pairWithNewLock(key: String, name: String) {
-        runBlocking {
-            httpClient.post(Paths.getPairWithNewLockPath()) {
-                addRequestHeaders()
-                setBody(PairWithNewLockRequest(key, name))
-            }
-        }
-    }
-
-    override fun getADoordeckUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse = runBlocking {
-        httpClient.post(Paths.getADoordeckUserPublickKeyPath(userEmail)) {
+    override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse = runBlocking {
+        httpClient.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
             parameter(VISITOR, visitor)
         }.body()
@@ -161,20 +153,20 @@ class LockOperationsResourceImpl(
         performOperation(unlockOperation.baseOperation, operationRequest)
     }
 
-    override fun shareALock(shareALockOperation: LockOperations.ShareALockOperation): Unit = runBlocking {
+    override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): Unit = runBlocking {
         val operationRequest = ShareLockOperationRequest(
-            user = shareALockOperation.targetUserId,
-            publicKey = shareALockOperation.targetUserPublicKey.encodeKeyToBase64(),
-            role = shareALockOperation.targetUserRole,
-            start = shareALockOperation.start,
-            end = shareALockOperation.end
+            user = shareLockOperation.targetUserId,
+            publicKey = shareLockOperation.targetUserPublicKey.encodeKeyToBase64(),
+            role = shareLockOperation.targetUserRole,
+            start = shareLockOperation.start,
+            end = shareLockOperation.end
         )
-        performOperation(shareALockOperation.baseOperation, operationRequest)
+        performOperation(shareLockOperation.baseOperation, operationRequest)
     }
 
-    override fun revokeAccessToALock(revokeAccessToALockOperation: LockOperations.RevokeAccessToALockOperation) {
-        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToALockOperation.users)
-        performOperation(revokeAccessToALockOperation.baseOperation, operationRequest)
+    override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
+        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
+        performOperation(revokeAccessToLockOperation.baseOperation, operationRequest)
     }
 
     override fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation) {

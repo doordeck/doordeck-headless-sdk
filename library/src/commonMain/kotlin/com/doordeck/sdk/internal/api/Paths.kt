@@ -19,7 +19,7 @@ object Paths {
     // Sites
     fun getListSites() = "/site"
     fun getLocksForSitePath(siteId: String) = "/site/$siteId/device"
-    fun getUsersForASitePath(siteId: String) = "/site/$siteId/user"
+    fun getUsersForSitePath(siteId: String) = "/site/$siteId/user"
 
     // Tiles
     fun getLocksBelongingToTilePath(tileId: String) = "/tile/$tileId"
@@ -29,14 +29,13 @@ object Paths {
 
     // Lock Operations
     fun getAllLocksPath() = "/device"
-    fun getASingleLockPath(lockId: String) = "/device/$lockId"
+    fun getSingleLockPath(lockId: String) = "/device/$lockId"
     fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
-    fun getAuditForAUserPath(lockId: String) = "/user/$lockId/log"
-    fun getUsersForALockPath(lockId: String) = "/device/$lockId/users"
-    fun getLocksForAUserPath(userId: String) = "/user/$userId"
+    fun getAuditForUserPath(lockId: String) = "/user/$lockId/log"
+    fun getUsersForLockPath(lockId: String) = "/device/$lockId/users"
+    fun getLocksForUserPath(userId: String) = "/user/$userId"
     fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"
-    fun getPairWithNewLockPath() = "/device"
-    fun getADoordeckUserPublickKeyPath(email: String) = "/share/invite/$email"
+    fun getUserPublicKeyPath(email: String) = "/share/invite/$email"
     fun getUserPublicKeyPath() = "/directory/query"
     fun getOperationPath(lockId: String) = "/device/$lockId/execute"
     fun getPinnedLocksPath() = "/device/favourite"

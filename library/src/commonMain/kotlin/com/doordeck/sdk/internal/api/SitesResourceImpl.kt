@@ -3,7 +3,7 @@ package com.doordeck.sdk.internal.api
 import com.doordeck.sdk.api.SitesResource
 import com.doordeck.sdk.api.responses.SiteLocksResponse
 import com.doordeck.sdk.api.responses.SiteResponse
-import com.doordeck.sdk.api.responses.UserForASiteResponse
+import com.doordeck.sdk.api.responses.UserForSiteResponse
 import com.doordeck.sdk.runBlocking
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -21,7 +21,7 @@ class SitesResourceImpl(
         httpClient.get(Paths.getLocksForSitePath(siteId)).body()
     }
 
-    override fun getUsersForASite(siteId: String): Array<UserForASiteResponse> = runBlocking {
-        httpClient.get(Paths.getUsersForASitePath(siteId)).body()
+    override fun getUsersForSite(siteId: String): Array<UserForSiteResponse> = runBlocking {
+        httpClient.get(Paths.getUsersForSitePath(siteId)).body()
     }
 }

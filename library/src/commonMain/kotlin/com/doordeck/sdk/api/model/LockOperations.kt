@@ -57,7 +57,7 @@ object LockOperations {
         override val baseOperation: BaseOperation
     ): Operation(baseOperation)
 
-    class ShareALockOperation(
+    class ShareLockOperation(
         override val baseOperation: BaseOperation,
         val targetUserId: String,
         val targetUserRole: UserRole,
@@ -66,7 +66,7 @@ object LockOperations {
         val end: Int? = null
     ): Operation(baseOperation)
 
-    class RevokeAccessToALockOperation(
+    class RevokeAccessToLockOperation(
         override val baseOperation: BaseOperation,
         val users: Array<String>
     ): Operation(baseOperation)

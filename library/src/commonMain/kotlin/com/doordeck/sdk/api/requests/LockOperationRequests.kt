@@ -72,12 +72,6 @@ class UserPublicKeyRequest(
 )
 
 @Serializable
-class PairWithNewLockRequest(
-    val key: String,
-    val name: String
-)
-
-@Serializable
 class UpdateLockPropertiesRequest(
     val name: String? = null,
     val favourite: Boolean? = null,
