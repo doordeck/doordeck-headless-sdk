@@ -9,5 +9,5 @@ enum class TwoFactorMethod {
     EMAIL,
     TELEPHONE,
     SMS,
-    WHATSAPP
+    WHATSAPP // FIXME still haven't got whatsapp working, lets remove for now
 }

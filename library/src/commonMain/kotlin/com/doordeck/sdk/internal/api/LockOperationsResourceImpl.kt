@@ -41,14 +41,21 @@ class LockOperationsResourceImpl(
     private val httpClient: HttpClient
 ) : LockOperationsResource {
 
+
+    // FIXME i think we should remove this one, I'm trying to discourage people using it as its quite expensive, I'd prefer people use "get devices for site" style operations
+    // FIXME another note, some APIs like this one, return a streaming JSON response, which might be way too hard to bother supporting on the SDK, but might be worth a brief look into
     override fun getAllLocks(): Array<LockResponse> = runBlocking {
         httpClient.get(Paths.getAllLocksPath()).body()
     }
 
+    // FIXME this one should use version 3
     override fun getSingleLock(lockId: String): LockResponse = runBlocking {
         httpClient.get(Paths.getASingleLockPath(lockId)).body()
     }
 
+    // FIXME we should absolutely use Instant from https://github.com/Kotlin/kotlinx-datetime
+    // FIXME this is a better candidate for streaming API responses since it can lots of data
+    // also if start/end are not provided, the server just returns the last week of data, which is confusing, so i agree its better to have mandatory start/end
     override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail> = runBlocking {
         httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
@@ -64,6 +71,7 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
+    // FIXME might be worth considering if we should have a value class for lockId, otherwise it *could* maybe potentially be abused
     override fun getUsersForALock(lockId: String): Array<UserLockResponse> = runBlocking {
         httpClient.get(Paths.getUsersForALockPath(lockId)).body()
     }
@@ -76,8 +84,8 @@ class LockOperationsResourceImpl(
         runBlocking {
             httpClient.put(Paths.getUpdateLockPropertiesPath(lockId)) {
                 addRequestHeaders()
-                setBody(UpdateLockPropertiesRequest(
-                    name = lockProperties.name,
+                setBody(UpdateLockPropertiesRequest( // TODO how do they get serialized? null tends to mean 'unset' the setting, where as 'absent' means don't change the setting
+                    name = lockProperties.name, // TODO should we hide this one? talk with @Marwan, it allows personal aliases to a lock which only you see but is fairly unclear as settings go
                     favourite = lockProperties.favourite,
                     colour = lockProperties.colour,
                     settings = lockProperties.settings?.let { settings ->
@@ -85,6 +93,7 @@ class LockOperationsResourceImpl(
                             defaultName = settings.defaultName,
                             permittedAddress = settings.permittedAddress,
                             delay = settings.delay,
+                            // FIXME hidden = setting.hidden,
                             usageRequirements = settings.usageRequirements?.let { usageRequirements ->
                                 UsageRequirementsRequest(
                                     time = usageRequirements.time?.let { time ->
@@ -113,6 +122,7 @@ class LockOperationsResourceImpl(
         }
     }
 
+    // FIXME remove this one, its super legacy, I think Ive even deleted the endpoint for it so i should probably update the docs too
     override fun pairWithNewLock(key: String, name: String) {
         runBlocking {
             httpClient.post(Paths.getPairWithNewLockPath()) {
@@ -122,6 +132,7 @@ class LockOperationsResourceImpl(
         }
     }
 
+    // TODO annotate with DoordeckOnly and remove the word Doordeck from the method name
     override fun getADoordeckUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse = runBlocking {
         httpClient.post(Paths.getADoordeckUserPublickKeyPath(userEmail)) {
             addRequestHeaders()
@@ -151,6 +162,7 @@ class LockOperationsResourceImpl(
         }.body()
     }
 
+    // FIXME lets remove this one, lock is only supported on a few integrations, mostly we just support momentary unlock
     override fun lock(lockOperation: LockOperations.LockOperation) {
         val operationRequest = LockOperationRequest(locked = true)
         performOperation(lockOperation.baseOperation, operationRequest)
@@ -161,6 +173,7 @@ class LockOperationsResourceImpl(
         performOperation(unlockOperation.baseOperation, operationRequest)
     }
 
+    // FIXME just call shareLock, not sure I like the `A` in the middle
     override fun shareALock(shareALockOperation: LockOperations.ShareALockOperation): Unit = runBlocking {
         val operationRequest = ShareLockOperationRequest(
             user = shareALockOperation.targetUserId,
@@ -177,11 +190,13 @@ class LockOperationsResourceImpl(
         performOperation(revokeAccessToALockOperation.baseOperation, operationRequest)
     }
 
+    // TODO clarify, this one sets everything to null? i think it might be unsafe to allow that
     override fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation) {
         val operationRequest = UpdateSecureSettingsOperationRequest()
         performOperation(removeSecureSettingsOperation.baseOperation, operationRequest)
     }
 
+    // TODO same question as earlier, null = delete setting, absent = preseve current setting so how we handle that is important here, i know its clunky
     override fun updateSecureSettings(updateSecureSettingsOperation: LockOperations.UpdateSecureSettingsOperation) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockDuration = updateSecureSettingsOperation.unlockDuration,

@@ -27,6 +27,7 @@ class AccountResourceImpl(
     private val httpClient: HttpClient
 ) : AccountResource {
 
+    // FIXME how do we call this without an authToken?
     override fun login(email: String, password: String): TokenResponse = runBlocking {
         httpClient.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
@@ -52,12 +53,14 @@ class AccountResourceImpl(
         }.body()
     }
 
+    // FIXME should this reset the state of the SDK, i.e. set the authToken to null or something?
     override fun logout() {
         runBlocking {
             httpClient.post(Paths.getLogoutPath())
         }
     }
 
+    // FIXME this will often throw a HTTP 423 error, it would be great to wrap that up in an Exception, e.g. SecondaryAuthenticationRequiredException ?
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse = runBlocking {
         val publicKeyEncoded =  publicKey.encodeKeyToBase64()
         httpClient.post(Paths.getRegisterEphemeralKeyPath()) {
@@ -75,6 +78,7 @@ class AccountResourceImpl(
         }.body()
     }
 
+    // FIXME might be nice to see a typealias for the privateKey so someone can't just throw random bytes at it so easily?
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse  = runBlocking {
         val codeSignature = code.signWithPrivateKey(privateKey).encodeKeyToBase64()
         httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
@@ -98,6 +102,7 @@ class AccountResourceImpl(
         }
     }
 
+    // FIXME we could do with a @DoordeckOnly annotation to make this and others clearer that only certain types of apps can call it
     override fun changePassword(oldPassword: String, newPassword: String) {
         runBlocking {
             httpClient.post(Paths.getChangePasswordPath()) {

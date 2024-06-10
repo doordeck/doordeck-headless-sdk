@@ -81,3 +81,14 @@ public class Main {
     }
 }
 ````
+
+
+## Michael General Comments! 
+I really like the SDK, it looks easy to use and clean, I think you've done a fantastic job so far with it!
+
+- Don't merge this PR, its not meant for merging as you can no doubt tell!
+- Should all the APIs be `suspend`? coroutines are multiplaform and mature enough
+- We do have a GPG key and account setup for publishing to Maven Central, so when you get to the JDK/Android publishing let me know
+- Testing this looks like a pain, we can test some stuff like register, etc without creds but we'll need to store some 
+    secrets in GitHub actions if we want to test 'real' accounts which I think we should
+- I really dislike the gradle convention-plugins that the templates use, but let's just leave it 

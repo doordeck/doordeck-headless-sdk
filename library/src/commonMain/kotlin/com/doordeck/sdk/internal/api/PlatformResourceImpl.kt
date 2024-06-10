@@ -40,6 +40,7 @@ class PlatformResourceImpl(
         }
     }
 
+    // TODO upload URL is a presigned S3 url, so we might need to implement a helper function to upload the file, or just create a single public API which gets the upload URL and does the upload in a single go
     override fun getLogoUploadUrl(applicationId: String) {
         TODO("Not yet implemented")
     }

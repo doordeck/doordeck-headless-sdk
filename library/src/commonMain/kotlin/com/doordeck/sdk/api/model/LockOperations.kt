@@ -7,6 +7,7 @@ import kotlin.time.Duration.Companion.minutes
 @JsExport
 object LockOperations {
 
+    // FIXME why are these not data classes?
     class LockProperties(
         val name: String? = null,
         val favourite: Boolean? = null,
@@ -89,7 +90,7 @@ object LockOperations {
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
         val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val trackId: String? = null
+        val trackId: String? = null // FIXME whats trackId?
     )
 
     abstract class Operation(

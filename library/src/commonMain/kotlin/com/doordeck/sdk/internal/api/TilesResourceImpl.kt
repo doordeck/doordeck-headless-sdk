@@ -17,6 +17,8 @@ class TilesResourceImpl(
         httpClient.get(Paths.getLocksBelongingToTilePath(tileId)).body()
     }
 
+    // TODO we should have some annotations to indicate the permission level needed for some API calls?
+    //  e.g. this would be @LockAdmin or @SiteAdmin? i dunno, some nice way to communicate to the user what level of permissions they need
     override fun associateTileWithLock(tileId: String, lockId: String) {
         runBlocking {
             httpClient.put(Paths.getAssociateTileWithLockPath(tileId, lockId))
