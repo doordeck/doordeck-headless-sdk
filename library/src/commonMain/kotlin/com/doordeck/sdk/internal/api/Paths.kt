@@ -38,14 +38,7 @@ object Paths {
     fun getPairWithNewLockPath() = "/device"
     fun getADoordeckUserPublickKeyPath(email: String) = "/share/invite/$email"
     fun getUserPublicKeyPath() = "/directory/query"
-    // TODO Merge all the next ones
-    fun getUnlockPath(lockId: String) = "/device/$lockId/execute"
-    fun getShareALockPath(lockId: String) = "/device/$lockId/execute"
-    fun getRevokeAccessToALockPath(lockId: String) = "/device/$lockId/execute"
-    fun getUpdateSecureSettingsPath(lockId: String) = "/device/$lockId/execute"
-    // Merged
     fun getOperationPath(lockId: String) = "/device/$lockId/execute"
-    //
     fun getPinnedLocksPath() = "/device/favourite"
     fun getShareableLocksPath() = "/device/shareable"
 

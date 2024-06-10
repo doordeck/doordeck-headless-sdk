@@ -10,7 +10,7 @@ import com.doordeck.sdk.internal.api.TilesResourceImpl
 class DoordeckImpl(
     override val apiEnvironment: ApiEnvironment,
     override val token: String,
-    override val refreshToken: String
+    override val refreshToken: String?
 ): Doordeck {
 
     private val httpClient = createHttpClient(apiEnvironment, token, refreshToken)

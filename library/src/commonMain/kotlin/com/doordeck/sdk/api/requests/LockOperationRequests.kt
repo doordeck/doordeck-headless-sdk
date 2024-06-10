@@ -2,9 +2,7 @@ package com.doordeck.sdk.api.requests
 
 import com.doordeck.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 class OperationHeaderRequest(
     val alg: String = "EdDSA",
@@ -12,7 +10,6 @@ class OperationHeaderRequest(
     val type: String = "JWT"
 )
 
-@JsExport
 @Serializable
 class OperationBodyRequest(
     val iss: String,
@@ -24,14 +21,12 @@ class OperationBodyRequest(
     val operation: OperationRequest
 )
 
-@JsExport
 @Serializable
 class LockOperationRequest(
     val type: String = "MUTATE_LOCK",
     val locked: Boolean
 ): OperationRequest
 
-@JsExport
 @Serializable
 class ShareLockOperationRequest(
     val type: String = "ADD_USER",
@@ -42,14 +37,12 @@ class ShareLockOperationRequest(
     val end: Int? = null
 ): OperationRequest
 
-@JsExport
 @Serializable
 class RevokeAccessToALockOperationRequest(
     val type: String = "REMOVE_USER",
     val users: Array<String>
 ): OperationRequest
 
-@JsExport
 @Serializable
 class UpdateSecureSettingsOperationRequest(
     val type: String = "MUTATE_SETTING",
@@ -57,7 +50,6 @@ class UpdateSecureSettingsOperationRequest(
     val unlockBetween: UnlockBetweenSettingRequest? = null
 ): OperationRequest
 
-@JsExport
 @Serializable
 class UnlockBetweenSettingRequest(
     val start: String,
@@ -67,11 +59,9 @@ class UnlockBetweenSettingRequest(
     val exceptions: Array<String>? = null
 )
 
-@JsExport
 @Serializable
 sealed interface OperationRequest
 
-@JsExport
 @Serializable
 class UserPublicKeyRequest(
     val email: String? = null,
@@ -81,9 +71,47 @@ class UserPublicKeyRequest(
     val identity: String? = null
 )
 
-@JsExport
 @Serializable
 class PairWithNewLockRequest(
     val key: String,
     val name: String
+)
+
+@Serializable
+class UpdateLockPropertiesRequest(
+    val name: String? = null,
+    val favourite: Boolean? = null,
+    val colour: String? = null,
+    val settings: LockSettingsRequest? = null
+)
+
+@Serializable
+class LockSettingsRequest(
+    val defaultName: String? = null,
+    val permittedAddress: Array<String>? = null,
+    val delay: Int? = null,
+    val usageRequirements: UsageRequirementsRequest? = null
+)
+
+@Serializable
+class UsageRequirementsRequest(
+    val time: TimeRequirementRequest? = null,
+    val location: LocationRequirementRequest? = null
+)
+
+@Serializable
+class TimeRequirementRequest(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>
+)
+
+@Serializable
+class LocationRequirementRequest(
+    val latitude: Double,
+    val longitude: Double,
+    val enabled: Boolean? = null,
+    val radius: Int? = null,
+    val accuracy: Int? = null
 )
