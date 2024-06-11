@@ -198,7 +198,7 @@ class LockOperationsResourceImpl(
             nbf = baseOperation.notBefore,
             iat = baseOperation.issuedAt,
             exp = baseOperation.expiresAt,
-            jti = baseOperation.trackId,
+            jti = baseOperation.jti,
             operation = operationRequest
         )
         val headerB64 = operationHeader.toJson().encodeToByteArray().encodeToBase64UrlString()

@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.model
 
+import com.benasher44.uuid.uuid4
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.time.Duration.Companion.minutes
@@ -89,7 +90,7 @@ object LockOperations {
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
         val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val trackId: String? = null
+        val jti: String = uuid4().toString()
     )
 
     abstract class Operation(
