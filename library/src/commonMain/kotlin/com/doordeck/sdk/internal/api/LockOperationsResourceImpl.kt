@@ -40,10 +40,6 @@ class LockOperationsResourceImpl(
     private val httpClient: HttpClient
 ) : LockOperationsResource {
 
-    override fun getAllLocks(): Array<LockResponse> = runBlocking {
-        httpClient.get(Paths.getAllLocksPath()).body()
-    }
-
     override fun getSingleLock(lockId: String): LockResponse = runBlocking {
         httpClient.get(Paths.getSingleLockPath(lockId)){
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)

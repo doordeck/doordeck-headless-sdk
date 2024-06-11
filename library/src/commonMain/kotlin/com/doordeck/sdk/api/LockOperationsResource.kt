@@ -13,7 +13,6 @@ import kotlin.js.JsExport
 @JsExport
 interface LockOperationsResource {
 
-    fun getAllLocks(): Array<LockResponse>
     fun getSingleLock(lockId: String): LockResponse
     fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail>
     fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse>

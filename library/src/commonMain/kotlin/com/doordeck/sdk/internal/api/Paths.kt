@@ -28,7 +28,6 @@ object Paths {
     fun getAssociateMultipleLocksToASingleTilePath(tileId: String) = "/tile/$tileId"
 
     // Lock Operations
-    fun getAllLocksPath() = "/device"
     fun getSingleLockPath(lockId: String) = "/device/$lockId"
     fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
     fun getAuditForUserPath(lockId: String) = "/user/$lockId/log"
