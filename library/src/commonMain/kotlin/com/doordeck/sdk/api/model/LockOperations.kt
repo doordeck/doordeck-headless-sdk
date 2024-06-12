@@ -50,10 +50,6 @@ object LockOperations {
         val exceptions: Array<String>? = null
     )
 
-    class LockOperation(
-        override val baseOperation: BaseOperation,
-    ): Operation(baseOperation)
-
     class UnlockOperation(
         override val baseOperation: BaseOperation
     ): Operation(baseOperation)

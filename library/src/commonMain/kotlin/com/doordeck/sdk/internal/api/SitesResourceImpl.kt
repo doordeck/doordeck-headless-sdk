@@ -4,24 +4,21 @@ import com.doordeck.sdk.api.SitesResource
 import com.doordeck.sdk.api.responses.SiteLocksResponse
 import com.doordeck.sdk.api.responses.SiteResponse
 import com.doordeck.sdk.api.responses.UserForSiteResponse
-import com.doordeck.sdk.runBlocking
 import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
 
 class SitesResourceImpl(
     private val httpClient: HttpClient
-) : SitesResource {
+) : AbstractResourceImpl(), SitesResource {
 
-    override fun listSites(): Array<SiteResponse> = runBlocking {
-        httpClient.get(Paths.getListSites()).body()
+    override fun listSites(): Array<SiteResponse> {
+        return httpClient.getApi(Paths.getListSites())
     }
 
-    override fun getLocksForSite(siteId: String): Array<SiteLocksResponse> = runBlocking {
-        httpClient.get(Paths.getLocksForSitePath(siteId)).body()
+    override fun getLocksForSite(siteId: String): Array<SiteLocksResponse> {
+        return httpClient.getApi(Paths.getLocksForSitePath(siteId))
     }
 
-    override fun getUsersForSite(siteId: String): Array<UserForSiteResponse> = runBlocking {
-        httpClient.get(Paths.getUsersForSitePath(siteId)).body()
+    override fun getUsersForSite(siteId: String): Array<UserForSiteResponse> {
+        return httpClient.getApi(Paths.getUsersForSitePath(siteId))
     }
 }
