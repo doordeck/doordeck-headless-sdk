@@ -40,13 +40,13 @@ class LockOperationsResourceImpl(
 ) : AbstractResourceImpl(), LockOperationsResource {
 
     override fun getSingleLock(lockId: String): LockResponse {
-        return httpClient.getApi(Paths.getSingleLockPath(lockId)){
+        return httpClient.get(Paths.getSingleLockPath(lockId)){
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)
         }
     }
 
     override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail> {
-        return httpClient.getApi(Paths.getLockAuditTrailPath(lockId)) {
+        return httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
             parameter(START, start)
             parameter(END, end)
@@ -54,22 +54,22 @@ class LockOperationsResourceImpl(
     }
 
     override fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> {
-        return httpClient.getApi(Paths.getAuditForUserPath(lockId)) {
+        return httpClient.get(Paths.getAuditForUserPath(lockId)) {
             parameter(START, start)
             parameter(END, start)
         }
     }
 
     override fun getUsersForLock(lockId: String): Array<UserLockResponse> {
-        return httpClient.getApi(Paths.getUsersForLockPath(lockId))
+        return httpClient.get(Paths.getUsersForLockPath(lockId))
     }
 
     override fun getLocksForUser(userId: String): LockUserResponse {
-        return httpClient.getApi(Paths.getLocksForUserPath(userId))
+        return httpClient.get(Paths.getLocksForUserPath(userId))
     }
 
     override fun updateLockProperties(lockId: String, lockProperties: LockOperations.LockProperties): EmptyResponse {
-        return httpClient.putApiEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
+        return httpClient.putEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
             setBody(UpdateLockPropertiesRequest(
                 name = lockProperties.name,
@@ -108,7 +108,7 @@ class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return httpClient.postApi(Paths.getUserPublicKeyPath(userEmail)) {
+        return httpClient.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
             parameter(VISITOR, visitor)
         }
@@ -130,7 +130,7 @@ class LockOperationsResourceImpl(
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
     private fun getUserPublicKey(request: UserPublicKeyRequest): UserPublicKeyResponse {
-        return httpClient.postApi(Paths.getUserPublicKeyPath()) {
+        return httpClient.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders()
             setBody(request)
         }
@@ -193,17 +193,17 @@ class LockOperationsResourceImpl(
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
         val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeToBase64UrlString()
         val body = "$headerB64.$bodyB64.$signatureB64"
-        return httpClient.postApiEmpty(Paths.getOperationPath(baseOperation.lockId)) {
+        return httpClient.postEmpty(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }
     }
 
     override fun getPinnedLocks(): Array<LockResponse> {
-        return httpClient.getApi(Paths.getPinnedLocksPath())
+        return httpClient.get(Paths.getPinnedLocksPath())
     }
 
     override fun getShareableLocks(): Array<ShareableLockResponse> {
-        return httpClient.getApi(Paths.getShareableLocksPath())
+        return httpClient.get(Paths.getShareableLocksPath())
     }
 }

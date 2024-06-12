@@ -11,14 +11,14 @@ class SitesResourceImpl(
 ) : AbstractResourceImpl(), SitesResource {
 
     override fun listSites(): Array<SiteResponse> {
-        return httpClient.getApi(Paths.getListSites())
+        return httpClient.get(Paths.getListSites())
     }
 
     override fun getLocksForSite(siteId: String): Array<SiteLocksResponse> {
-        return httpClient.getApi(Paths.getLocksForSitePath(siteId))
+        return httpClient.get(Paths.getLocksForSitePath(siteId))
     }
 
     override fun getUsersForSite(siteId: String): Array<UserForSiteResponse> {
-        return httpClient.getApi(Paths.getUsersForSitePath(siteId))
+        return httpClient.get(Paths.getUsersForSitePath(siteId))
     }
 }

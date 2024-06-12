@@ -3,10 +3,10 @@ package com.doordeck.sdk
 import com.doordeck.sdk.api.model.ApiEnvironment
 import org.koin.core.component.getScopeName
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class IosPlatformTest {
-
     @Test
     fun `test platform engine`() {
         // Given
@@ -14,5 +14,14 @@ class IosPlatformTest {
 
         // When
         assertTrue { client.engine.getScopeName().value.contains("Darwin", true) }
+    }
+
+    @Test
+    fun `test platform type`() {
+        // Given
+        val platform = getPlatform()
+
+        // When
+        assertEquals(platform, PlatformType.IOS)
     }
 }

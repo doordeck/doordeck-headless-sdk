@@ -27,14 +27,14 @@ class AccountResourceImpl(
 ) : AbstractResourceImpl(), AccountResource {
 
     override fun login(email: String, password: String): TokenResponse {
-        return httpClient.postApi(Paths.getLoginPath()) {
+        return httpClient.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }
     }
 
     override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return httpClient.postApi(Paths.getRegistrationPath()) {
+        return httpClient.post(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(RegisterRequest(
                 email = email,
@@ -46,20 +46,20 @@ class AccountResourceImpl(
     }
 
     override fun refreshToken(): TokenResponse {
-        return httpClient.putApi(Paths.getRefreshTokenPath()) {
+        return httpClient.put(Paths.getRefreshTokenPath()) {
             addRequestHeaders()
         }
     }
 
     override fun logout(): EmptyResponse {
-        return httpClient.postApiEmpty(Paths.getLogoutPath()) {
+        return httpClient.postEmpty(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
         val publicKeyEncoded =  publicKey.encodeKeyToBase64()
-        return httpClient.postApi(Paths.getRegisterEphemeralKeyPath()) {
+        return httpClient.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
         }
@@ -67,7 +67,7 @@ class AccountResourceImpl(
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         val publicKeyEncoded =  publicKey.encodeKeyToBase64()
-        return httpClient.postApi(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
+        return httpClient.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
             method?.let { parameter(METHOD, it.name) }
@@ -76,25 +76,25 @@ class AccountResourceImpl(
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
         val codeSignature = code.signWithPrivateKey(privateKey).encodeKeyToBase64()
-        return httpClient.postApi(Paths.getVerifyEphemeralKeyRegistrationPath()) {
+        return httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }
     }
 
     override fun verifyEmail(code: String): EmptyResponse {
-        return httpClient.putApiEmpty(Paths.getVerifyEmailPath()) {
+        return httpClient.putEmpty(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(CODE, code)
         }
     }
 
     override fun reverifyEmail(): EmptyResponse {
-        return httpClient.postApiEmpty(Paths.getReverifyEmailPath())
+        return httpClient.postEmpty(Paths.getReverifyEmailPath())
     }
 
     override fun changePassword(oldPassword: String, newPassword: String): EmptyResponse {
-        return httpClient.postApiEmpty(Paths.getChangePasswordPath()) {
+        return httpClient.postEmpty(Paths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(ChangePasswordRequest(
                 oldPassword = oldPassword,
@@ -104,17 +104,17 @@ class AccountResourceImpl(
     }
 
     override fun getUserDetails(): UserDetailsResponse {
-        return httpClient.getApi(Paths.getUserDetailsPath())
+        return httpClient.get(Paths.getUserDetailsPath())
     }
 
     override fun updateUserDetails(displayName: String): EmptyResponse {
-        return httpClient.postApiEmpty(Paths.getUpdateUserDetailsPath()) {
+        return httpClient.postEmpty(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
         }
     }
 
     override fun deleteAccount(): EmptyResponse {
-        return httpClient.deleteApiEmpty(Paths.getDeleteAccountPath())
+        return httpClient.deleteEmpty(Paths.getDeleteAccountPath())
     }
 }

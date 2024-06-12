@@ -8,14 +8,14 @@ import io.ktor.client.request.*
 
 abstract class AbstractResourceImpl {
 
-    protected inline fun <reified T>HttpClient.postApi(
+    protected inline fun <reified T>HttpClient.post(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = runBlocking {
         post { url(urlString); block() }.body()
     }
 
-    protected inline fun HttpClient.postApiEmpty(
+    protected inline fun HttpClient.postEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): EmptyResponse = runBlocking {
@@ -23,21 +23,21 @@ abstract class AbstractResourceImpl {
         EmptyResponse()
     }
 
-    protected inline fun <reified T>HttpClient.getApi(
+    protected inline fun <reified T>HttpClient.get(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = runBlocking {
         get { url(urlString); block() }.body()
     }
 
-    protected inline fun <reified T>HttpClient.putApi(
+    protected inline fun <reified T>HttpClient.put(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = runBlocking {
         put { url(urlString); block() }.body()
     }
 
-    protected inline fun HttpClient.putApiEmpty(
+    protected inline fun HttpClient.putEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): EmptyResponse = runBlocking {
@@ -45,14 +45,14 @@ abstract class AbstractResourceImpl {
         EmptyResponse()
     }
 
-    protected inline fun <reified T>HttpClient.deleteApi(
+    protected inline fun <reified T>HttpClient.delete(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = runBlocking {
         delete { url(urlString); block() }.body()
     }
 
-    protected inline fun HttpClient.deleteApiEmpty(
+    protected inline fun HttpClient.deleteEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): EmptyResponse = runBlocking {

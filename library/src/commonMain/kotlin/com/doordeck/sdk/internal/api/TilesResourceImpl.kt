@@ -13,19 +13,19 @@ class TilesResourceImpl(
 ) : AbstractResourceImpl(), TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return httpClient.getApi(Paths.getLocksBelongingToTilePath(tileId))
+        return httpClient.get(Paths.getLocksBelongingToTilePath(tileId))
     }
 
     override fun associateTileWithLock(tileId: String, lockId: String): EmptyResponse {
-        return httpClient.putApiEmpty(Paths.getAssociateTileWithLockPath(tileId, lockId))
+        return httpClient.putEmpty(Paths.getAssociateTileWithLockPath(tileId, lockId))
     }
 
     override fun disassociateTileFromLock(tileId: String, lockId: String): EmptyResponse {
-        return httpClient.deleteApiEmpty(Paths.getDisassociateTileFromLockPath(tileId, lockId))
+        return httpClient.deleteEmpty(Paths.getDisassociateTileFromLockPath(tileId, lockId))
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): EmptyResponse {
-        return httpClient.putApiEmpty(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
+        return httpClient.putEmpty(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))
         }
