@@ -28,6 +28,10 @@ object Crypto {
     fun String.decodeBase64ToKey(): ByteArray = LibsodiumUtil.fromBase64(this, Base64Variants.ORIGINAL).toByteArray()
 
     fun ByteArray.encodeKeyToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)
+
+    fun Array<String>.certificateChainToString(): String = joinToString("|")
+
+    fun String.stringToCertificateChain(): Array<String> = split("|").toTypedArray()
 }
 
 internal fun ByteArray.encodeToBase64UrlString() = Base64.UrlSafe.encode(this)

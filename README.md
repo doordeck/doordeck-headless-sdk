@@ -81,3 +81,63 @@ public class Main {
     }
 }
 ````
+### JS (Angular)
+````javascript
+import {Component, OnInit} from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import doordeck from '../assets/doordeck-sdk'
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+
+const apiEnvironment = doordeck.com.doordeck.sdk.api.model.ApiEnvironment;
+const lockOperations = doordeck.com.doordeck.sdk.api.model.LockOperations;
+const crypto = doordeck.com.doordeck.sdk.util.Crypto;
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, HttpClientModule],
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.css'
+})
+export class AppComponent implements OnInit {
+  title = 'TestLibJs';
+
+  constructor(
+    private http: HttpClient
+  ) { }
+  
+  ngOnInit() {
+    this.test()
+  }
+
+  async test() {
+    // Initialize the SDK
+    const token = "YOUR_AUTH_TOKEN";
+    const factory = new doordeck.com.doordeck.sdk.KDoordeckFactory();
+    const sdk = await Promise.resolve(factory.initialize(apiEnvironment.DEV, token));
+
+    // Retrieve the sites
+    const sites = await Promise.resolve(sdk.sites().listSites());
+    console.log(sites);
+
+    // Retrieve the locks
+    const locks = await Promise.resolve(sdk.sites().getLocksForSite(sites[0].id));
+    console.log(locks);
+
+    // Generate a key pair
+    const keyPair = crypto.generateKeyPair();
+
+    // Register a key pair
+    const registerKeyPair = await Promise.resolve(sdk.account().registerEphemeralKey(keyPair.public));
+
+    // Unlock a lock
+    const baseOperation = new lockOperations.BaseOperation(registerKeyPair.userId, registerKeyPair.certificateChain, 
+      registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000, 
+      ((new Date).getTime() / 1000) + 60, "uuid"
+    );
+    const unlockOperation = new lockOperations.UnlockOperation(baseOperation);
+    const unlock = await Promise.resolve(sdk.lockOperations().unlock(unlockOperation));
+    console.log(unlock);
+  }
+}
+````
