@@ -93,6 +93,7 @@ class AccountResourceImpl(
         return httpClient.postEmpty(Paths.getReverifyEmailPath())
     }
 
+    @DoordeckOnly
     override fun changePassword(oldPassword: String, newPassword: String): EmptyResponse {
         return httpClient.postEmpty(Paths.getChangePasswordPath()) {
             addRequestHeaders()
