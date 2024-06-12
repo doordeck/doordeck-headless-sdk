@@ -107,6 +107,7 @@ class LockOperationsResourceImpl(
         }
     }
 
+    @DoordeckOnly
     override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
         return httpClient.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()

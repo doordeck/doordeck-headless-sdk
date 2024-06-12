@@ -16,6 +16,7 @@ class TilesResourceImpl(
         return httpClient.get(Paths.getLocksBelongingToTilePath(tileId))
     }
 
+    @SiteAdmin
     override fun associateTileWithLock(tileId: String, lockId: String): EmptyResponse {
         return httpClient.putEmpty(Paths.getAssociateTileWithLockPath(tileId, lockId))
     }
@@ -24,6 +25,7 @@ class TilesResourceImpl(
         return httpClient.deleteEmpty(Paths.getDisassociateTileFromLockPath(tileId, lockId))
     }
 
+    @SiteAdmin
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): EmptyResponse {
         return httpClient.putEmpty(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
