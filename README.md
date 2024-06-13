@@ -20,7 +20,7 @@ fun main() {
     println(sites)
 
     // Retrieve the locks
-    val locks = sdk.lockOperations().getAllLocks()
+    val locks = sdk.sites().getLocksForSite(sites.first().id)
     println(locks)
 
     // Generate a key pair
@@ -61,7 +61,7 @@ public class Main {
         System.out.println(sites);
 
         // Retrieve the locks
-        var locks = sdk.lockOperations().getAllLocks();
+        var locks = sdk.sites().getLocksForSite(sites[0].id);
         System.out.println(locks);
 
         // Generate a key pair

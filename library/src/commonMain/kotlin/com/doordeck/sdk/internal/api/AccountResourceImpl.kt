@@ -45,6 +45,7 @@ class AccountResourceImpl(
         }
     }
 
+    @DoordeckOnly
     override fun refreshToken(): TokenResponse {
         return httpClient.put(Paths.getRefreshTokenPath()) {
             addRequestHeaders()
