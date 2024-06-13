@@ -89,6 +89,7 @@ class AccountResourceImpl(
         }
     }
 
+    @DoordeckOnly
     override fun reverifyEmail(): EmptyResponse {
         return httpClient.postEmpty(Paths.getReverifyEmailPath())
     }
