@@ -80,6 +80,7 @@ class LockOperationsResourceImpl(
                         defaultName = settings.defaultName,
                         permittedAddress = settings.permittedAddress,
                         delay = settings.delay,
+                        hidden = settings.hidden,
                         usageRequirements = settings.usageRequirements?.let { usageRequirements ->
                             UsageRequirementsRequest(
                                 time = usageRequirements.time?.let { time ->

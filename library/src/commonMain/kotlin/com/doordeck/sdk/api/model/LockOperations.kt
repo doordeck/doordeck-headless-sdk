@@ -19,6 +19,7 @@ object LockOperations {
         val defaultName: String? = null,
         val permittedAddress: Array<String>? = null,
         val delay: Int? = null,
+        val hidden: Boolean? = null,
         val usageRequirements: UsageRequirements? = null
     )
 
