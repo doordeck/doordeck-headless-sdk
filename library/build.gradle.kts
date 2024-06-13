@@ -6,7 +6,7 @@ plugins {
 }
 
 kotlin {
-    targetHierarchy.default()
+    applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
         publishLibraryVariants("release")
@@ -19,8 +19,8 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-   // macosX64()
-   // macosArm64()
+    macosX64()
+    macosArm64()
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
