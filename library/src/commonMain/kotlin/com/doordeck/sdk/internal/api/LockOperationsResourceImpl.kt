@@ -206,11 +206,6 @@ class LockOperationsResourceImpl(
         return performOperation(revokeAccessToLockOperation.baseOperation, operationRequest)
     }
 
-    override fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation): EmptyResponse {
-        val operationRequest = UpdateSecureSettingsOperationRequest()
-        return performOperation(removeSecureSettingsOperation.baseOperation, operationRequest)
-    }
-
     override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): EmptyResponse {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockDuration = updateSecureSettingUnlockDuration.unlockDuration

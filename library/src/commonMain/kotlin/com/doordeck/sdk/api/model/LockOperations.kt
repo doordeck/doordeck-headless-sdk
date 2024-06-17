@@ -79,10 +79,6 @@ object LockOperations {
         val unlockBetween: UnlockBetween? = null
     ): Operation(baseOperation)
 
-    class RemoveSecureSettingsOperation(
-        override val baseOperation: BaseOperation
-    ): Operation(baseOperation)
-
     class BaseOperation(
         val userId: String,
         val userCertificateChain: Array<String>,

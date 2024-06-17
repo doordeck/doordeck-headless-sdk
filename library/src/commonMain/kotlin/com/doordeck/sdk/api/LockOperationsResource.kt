@@ -40,7 +40,6 @@ interface LockOperationsResource {
     fun unlock(unlockOperation: LockOperations.UnlockOperation): EmptyResponse
     fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): EmptyResponse
     fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): EmptyResponse
-    fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation): EmptyResponse
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): EmptyResponse
     fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): EmptyResponse
     fun getPinnedLocks(): Array<LockResponse>
