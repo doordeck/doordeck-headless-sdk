@@ -72,27 +72,68 @@ class UserPublicKeyRequest(
 )
 
 @Serializable
-class UpdateLockPropertiesRequest(
-    val name: String? = null,
-    val favourite: Boolean? = null,
-    val colour: String? = null,
-    val settings: LockSettingsRequest? = null
-)
+sealed interface UpdateLockPropertiesRequest
 
 @Serializable
-class LockSettingsRequest(
-    val defaultName: String? = null,
-    val permittedAddress: Array<String>? = null,
-    val delay: Int? = null,
-    val hidden: Boolean? = null,
-    val usageRequirements: UsageRequirementsRequest? = null
-)
+class UpdateLockNameRequest(
+    val name: String?
+): UpdateLockPropertiesRequest
 
 @Serializable
-class UsageRequirementsRequest(
-    val time: TimeRequirementRequest? = null,
-    val location: LocationRequirementRequest? = null
-)
+class UpdateLockFavouriteRequest(
+    val favourite: Boolean?
+): UpdateLockPropertiesRequest
+
+@Serializable
+class UpdateLockColourRequest(
+    val colour: String?
+): UpdateLockPropertiesRequest
+
+@Serializable
+class UpdateLockSettingRequest(
+    val settings: LockSettingsRequest?
+): UpdateLockPropertiesRequest
+
+@Serializable
+sealed interface LockSettingsRequest
+
+@Serializable
+class LockSettingsDefaultNameRequest(
+    val defaultName: String?
+): LockSettingsRequest
+
+@Serializable
+class LockSettingsPermittedAddressesRequest(
+    val permittedAddresses: Array<String>?
+): LockSettingsRequest
+
+@Serializable
+class LockSettingsDelayRequest(
+    val delay: Int?
+): LockSettingsRequest
+
+@Serializable
+class LockSettingsHiddenRequest(
+    val hidden: Boolean?
+): LockSettingsRequest
+
+@Serializable
+sealed interface UsageRequirementRequest
+
+@Serializable
+class UpdateLockSettingUsageRequirementRequest(
+    val usageRequirements: UsageRequirementRequest?
+): LockSettingsRequest
+
+@Serializable
+class UpdateLockSettingTimeUsageRequirementRequest(
+    val time: TimeRequirementRequest?
+): UsageRequirementRequest
+
+@Serializable
+class UpdateLockSettingLocationUsageRequirementRequest(
+    val location: LocationRequirementRequest?
+): UsageRequirementRequest
 
 @Serializable
 class TimeRequirementRequest(
@@ -103,10 +144,25 @@ class TimeRequirementRequest(
 )
 
 @Serializable
-class LocationRequirementRequest(
+sealed interface LocationRequirementRequest
+
+@Serializable
+class LocationRequirementCoordinatesRequest(
     val latitude: Double,
-    val longitude: Double,
-    val enabled: Boolean? = null,
-    val radius: Int? = null,
-    val accuracy: Int? = null
-)
+    val longitude: Double
+): LocationRequirementRequest
+
+@Serializable
+class LocationRequirementEnabledRequest(
+    val enabled: Boolean?
+): LocationRequirementRequest
+
+@Serializable
+class LocationRequirementRadiusRequest(
+    val radius: Int?
+): LocationRequirementRequest
+
+@Serializable
+class LocationRequirementAccuracyRequest(
+    val accuracy: Int?
+): LocationRequirementRequest

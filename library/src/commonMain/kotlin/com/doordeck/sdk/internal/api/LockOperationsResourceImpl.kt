@@ -2,9 +2,15 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.requests.LocationRequirementRequest
+import com.doordeck.sdk.api.requests.LocationRequirementAccuracyRequest
+import com.doordeck.sdk.api.requests.LocationRequirementCoordinatesRequest
+import com.doordeck.sdk.api.requests.LocationRequirementEnabledRequest
+import com.doordeck.sdk.api.requests.LocationRequirementRadiusRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
-import com.doordeck.sdk.api.requests.LockSettingsRequest
+import com.doordeck.sdk.api.requests.LockSettingsDefaultNameRequest
+import com.doordeck.sdk.api.requests.LockSettingsDelayRequest
+import com.doordeck.sdk.api.requests.LockSettingsHiddenRequest
+import com.doordeck.sdk.api.requests.LockSettingsPermittedAddressesRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
 import com.doordeck.sdk.api.requests.OperationHeaderRequest
 import com.doordeck.sdk.api.requests.OperationRequest
@@ -12,9 +18,15 @@ import com.doordeck.sdk.api.requests.RevokeAccessToALockOperationRequest
 import com.doordeck.sdk.api.requests.ShareLockOperationRequest
 import com.doordeck.sdk.api.requests.TimeRequirementRequest
 import com.doordeck.sdk.api.requests.UnlockBetweenSettingRequest
+import com.doordeck.sdk.api.requests.UpdateLockColourRequest
+import com.doordeck.sdk.api.requests.UpdateLockFavouriteRequest
+import com.doordeck.sdk.api.requests.UpdateLockNameRequest
 import com.doordeck.sdk.api.requests.UpdateLockPropertiesRequest
+import com.doordeck.sdk.api.requests.UpdateLockSettingLocationUsageRequirementRequest
+import com.doordeck.sdk.api.requests.UpdateLockSettingRequest
+import com.doordeck.sdk.api.requests.UpdateLockSettingTimeUsageRequirementRequest
+import com.doordeck.sdk.api.requests.UpdateLockSettingUsageRequirementRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
-import com.doordeck.sdk.api.requests.UsageRequirementsRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.LockAuditTrail
@@ -68,43 +80,78 @@ class LockOperationsResourceImpl(
         return httpClient.get(Paths.getLocksForUserPath(userId))
     }
 
-    override fun updateLockProperties(lockId: String, lockProperties: LockOperations.LockProperties): EmptyResponse {
+    override fun updateLockName(lockId: String, name: String?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockNameRequest(name))
+    }
+
+    override fun updateLockFavourite(lockId: String, favourite: Boolean?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
+    }
+
+    override fun updateLockColour(lockId: String, colour: String?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockColourRequest(colour))
+    }
+
+    override fun updateLockSettingDefaultName(lockId: String, name: String?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
+    }
+
+    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddress)))
+    }
+
+    override fun updateLockSettingDelay(lockId: String, delay: Int?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDelayRequest(delay)))
+    }
+
+    override fun updateLockSettingHidden(lockId: String, hidden: Boolean?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
+    }
+
+    override fun updateLockSettingTimeUsageRequirement(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(
+            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
+                time?.let { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
+            ))
+        ))
+    }
+
+    override fun updateLockSettingLocationUsageRequirementCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(
+            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
+                LocationRequirementCoordinatesRequest(latitude, longitude)
+            ))
+        ))
+    }
+
+    override fun updateLockSettingLocationUsageRequirementEnabled(lockId: String, enabled: Boolean?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(
+            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
+                LocationRequirementEnabledRequest(enabled)
+            ))
+        ))
+    }
+
+    override fun updateLockSettingLocationUsageRequirementRadius(lockId: String, radius: Int?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(
+            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
+                LocationRequirementRadiusRequest(radius)
+            ))
+        ))
+    }
+
+    override fun updateLockSettingLocationUsageRequirementAccuracy(lockId: String, accuracy: Int?): EmptyResponse {
+        return updateLockProperties(lockId, UpdateLockSettingRequest(
+            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
+                LocationRequirementAccuracyRequest(accuracy)
+            ))
+        ))
+    }
+
+    private fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest): EmptyResponse {
         return httpClient.putEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
-            setBody(UpdateLockPropertiesRequest(
-                name = lockProperties.name,
-                favourite = lockProperties.favourite,
-                colour = lockProperties.colour,
-                settings = lockProperties.settings?.let { settings ->
-                    LockSettingsRequest(
-                        defaultName = settings.defaultName,
-                        permittedAddress = settings.permittedAddress,
-                        delay = settings.delay,
-                        hidden = settings.hidden,
-                        usageRequirements = settings.usageRequirements?.let { usageRequirements ->
-                            UsageRequirementsRequest(
-                                time = usageRequirements.time?.let { time ->
-                                    TimeRequirementRequest(
-                                        start = time.start,
-                                        end = time.end,
-                                        timezone = time.timezone,
-                                        days = time.days
-                                    )
-                                },
-                                location = usageRequirements.location?.let { location ->
-                                    LocationRequirementRequest(
-                                        latitude = location.latitude,
-                                        longitude = location.longitude,
-                                        enabled = location.enabled,
-                                        radius = location.radius,
-                                        accuracy = location.accuracy
-                                    )
-                                }
-                            )
-                        }
-                    )
-                }
-            ))
+            setBody(request)
         }
     }
 

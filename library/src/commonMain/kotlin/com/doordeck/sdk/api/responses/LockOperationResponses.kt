@@ -17,17 +17,17 @@ class LockResponse(
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: String, // Duration
-    val unlockForever: Boolean
+    val unlockTime: String? = null,
+    val unlockForever: Boolean? = null,
 )
 
 @JsExport
 @Serializable
 class LockSettingsResponse(
-    val txBeaconRssi: Int,
-    val rxBeaconRssi: Int,
+    val txBeaconRssi: Int? = null,
+    val rxBeaconRssi: Int? = null,
     val unlockTime: String, // Duration
-    val proximityUnlock: Boolean,
+    val proximityUnlock: Boolean? = null,
     val permittedAddresses: Array<String>,
     val defaultName: String,
     //val usageRequirements: Array // TODO
