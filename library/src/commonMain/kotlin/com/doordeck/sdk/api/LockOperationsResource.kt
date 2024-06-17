@@ -1,7 +1,6 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.requests.UpdateLockPropertiesRequest
 import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.LockAuditTrail
 import com.doordeck.sdk.api.responses.LockResponse
@@ -27,11 +26,11 @@ interface LockOperationsResource {
     fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>? = null): EmptyResponse
     fun updateLockSettingDelay(lockId: String, delay: Int? = null): EmptyResponse
     fun updateLockSettingHidden(lockId: String, hidden: Boolean? = null): EmptyResponse
-    fun updateLockSettingTimeUsageRequirement(lockId: String, time: LockOperations.TimeRequirement? = null): EmptyResponse
-    fun updateLockSettingLocationUsageRequirementCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse
-    fun updateLockSettingLocationUsageRequirementEnabled(lockId: String, enabled: Boolean? = null): EmptyResponse
-    fun updateLockSettingLocationUsageRequirementRadius(lockId: String, radius: Int? = null): EmptyResponse
-    fun updateLockSettingLocationUsageRequirementAccuracy(lockId: String, accuracy: Int? = null): EmptyResponse
+    fun updateLockSettingUsageRequirementTime(lockId: String, time: LockOperations.TimeRequirement? = null): EmptyResponse
+    fun updateLockSettingUsageRequirementLocationCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse
+    fun updateLockSettingUsageRequirementLocationEnabled(lockId: String, enabled: Boolean? = null): EmptyResponse
+    fun updateLockSettingUsageRequirementLocationRadius(lockId: String, radius: Int? = null): EmptyResponse
+    fun updateLockSettingUsageRequirementLocationAccuracy(lockId: String, accuracy: Int? = null): EmptyResponse
     fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
     fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
     fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
@@ -42,7 +41,8 @@ interface LockOperationsResource {
     fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): EmptyResponse
     fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): EmptyResponse
     fun removeSecureSettings(removeSecureSettingsOperation: LockOperations.RemoveSecureSettingsOperation): EmptyResponse
-    fun updateSecureSettings(updateSecureSettingsOperation: LockOperations.UpdateSecureSettingsOperation): EmptyResponse
+    fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): EmptyResponse
+    fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): EmptyResponse
     fun getPinnedLocks(): Array<LockResponse>
     fun getShareableLocks(): Array<ShareableLockResponse>
 }

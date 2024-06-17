@@ -69,9 +69,13 @@ object LockOperations {
         val users: Array<String>
     ): Operation(baseOperation)
 
-    class UpdateSecureSettingsOperation(
+    class UpdateSecureSettingUnlockDuration(
         override val baseOperation: BaseOperation,
-        val unlockDuration: Int? = null,
+        val unlockDuration: Int? = null
+    ): Operation(baseOperation)
+
+    class UpdateSecureSettingUnlockBetween(
+        override val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
     ): Operation(baseOperation)
 

@@ -108,7 +108,7 @@ class LockOperationsResourceImpl(
         return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
-    override fun updateLockSettingTimeUsageRequirement(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
+    override fun updateLockSettingUsageRequirementTime(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
                 time?.let { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
@@ -116,7 +116,7 @@ class LockOperationsResourceImpl(
         ))
     }
 
-    override fun updateLockSettingLocationUsageRequirementCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse {
+    override fun updateLockSettingUsageRequirementLocationCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
                 LocationRequirementCoordinatesRequest(latitude, longitude)
@@ -124,7 +124,7 @@ class LockOperationsResourceImpl(
         ))
     }
 
-    override fun updateLockSettingLocationUsageRequirementEnabled(lockId: String, enabled: Boolean?): EmptyResponse {
+    override fun updateLockSettingUsageRequirementLocationEnabled(lockId: String, enabled: Boolean?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
                 LocationRequirementEnabledRequest(enabled)
@@ -132,7 +132,7 @@ class LockOperationsResourceImpl(
         ))
     }
 
-    override fun updateLockSettingLocationUsageRequirementRadius(lockId: String, radius: Int?): EmptyResponse {
+    override fun updateLockSettingUsageRequirementLocationRadius(lockId: String, radius: Int?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
                 LocationRequirementRadiusRequest(radius)
@@ -140,7 +140,7 @@ class LockOperationsResourceImpl(
         ))
     }
 
-    override fun updateLockSettingLocationUsageRequirementAccuracy(lockId: String, accuracy: Int?): EmptyResponse {
+    override fun updateLockSettingUsageRequirementLocationAccuracy(lockId: String, accuracy: Int?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
                 LocationRequirementAccuracyRequest(accuracy)
@@ -211,10 +211,16 @@ class LockOperationsResourceImpl(
         return performOperation(removeSecureSettingsOperation.baseOperation, operationRequest)
     }
 
-    override fun updateSecureSettings(updateSecureSettingsOperation: LockOperations.UpdateSecureSettingsOperation): EmptyResponse {
+    override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): EmptyResponse {
         val operationRequest = UpdateSecureSettingsOperationRequest(
-            unlockDuration = updateSecureSettingsOperation.unlockDuration,
-            unlockBetween = updateSecureSettingsOperation.unlockBetween?.let {
+            unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
+        )
+        return performOperation(updateSecureSettingUnlockDuration.baseOperation, operationRequest)
+    }
+
+    override fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): EmptyResponse {
+        val operationRequest = UpdateSecureSettingsOperationRequest(
+            unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
                     start = it.start,
                     end = it.end,
@@ -224,7 +230,7 @@ class LockOperationsResourceImpl(
                 )
             }
         )
-        return performOperation(updateSecureSettingsOperation.baseOperation, operationRequest)
+        return performOperation(updateSecureSettingUnlockBetween.baseOperation, operationRequest)
     }
 
     private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest): EmptyResponse {
