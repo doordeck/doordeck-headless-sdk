@@ -59,3 +59,8 @@ class AddApplicationOwnerRequest(
 class RemoveApplicationOwnerRequest(
     val userId: String
 )
+
+@Serializable
+class GetLogoUploadUrlRequest(
+    val contentType: String
+)

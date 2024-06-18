@@ -5,10 +5,12 @@ import com.doordeck.sdk.api.requests.AddApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.AddAuthIssuerRequest
 import com.doordeck.sdk.api.requests.AddCorsDomainRequest
 import com.doordeck.sdk.api.requests.DeleteAuthIssuerRequest
+import com.doordeck.sdk.api.requests.GetLogoUploadUrlRequest
 import com.doordeck.sdk.api.requests.RemoveApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.RemoveCorsDomainRequest
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.sdk.api.responses.EmptyResponse
+import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.sdk.util.addRequestHeaders
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -43,8 +45,11 @@ class PlatformResourceImpl(
     }
 
     @DoordeckOnly
-    override fun getLogoUploadUrl(applicationId: String) {
-        TODO("Not yet implemented")
+    override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+        return httpClient.post(Paths.getLogoUploadUrlPath(applicationId)) {
+            addRequestHeaders()
+            setBody(GetLogoUploadUrlRequest(contentType))
+        }
     }
 
     @DoordeckOnly
