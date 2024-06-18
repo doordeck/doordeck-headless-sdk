@@ -8,7 +8,6 @@ import com.doordeck.sdk.api.requests.RegisterEphemeralKeyRequest
 import com.doordeck.sdk.api.requests.RegisterRequest
 import com.doordeck.sdk.api.requests.UpdateUserDetailsRequest
 import com.doordeck.sdk.api.requests.VerifyEphemeralKeyRegistrationRequest
-import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.TokenResponse
@@ -51,8 +50,8 @@ class AccountResourceImpl(
         }
     }
 
-    override fun logout(): EmptyResponse {
-        return httpClient.postEmpty(Paths.getLogoutPath()) {
+    override fun logout() {
+        httpClient.postEmpty(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
     }
@@ -82,19 +81,19 @@ class AccountResourceImpl(
         }
     }
 
-    override fun verifyEmail(code: String): EmptyResponse {
-        return httpClient.putEmpty(Paths.getVerifyEmailPath()) {
+    override fun verifyEmail(code: String) {
+        httpClient.putEmpty(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(CODE, code)
         }
     }
 
-    override fun reverifyEmail(): EmptyResponse {
-        return httpClient.postEmpty(Paths.getReverifyEmailPath())
+    override fun reverifyEmail() {
+        httpClient.postEmpty(Paths.getReverifyEmailPath())
     }
 
-    override fun changePassword(oldPassword: String, newPassword: String): EmptyResponse {
-        return httpClient.postEmpty(Paths.getChangePasswordPath()) {
+    override fun changePassword(oldPassword: String, newPassword: String) {
+        httpClient.postEmpty(Paths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(ChangePasswordRequest(
                 oldPassword = oldPassword,
@@ -107,14 +106,14 @@ class AccountResourceImpl(
         return httpClient.get(Paths.getUserDetailsPath())
     }
 
-    override fun updateUserDetails(displayName: String): EmptyResponse {
-        return httpClient.postEmpty(Paths.getUpdateUserDetailsPath()) {
+    override fun updateUserDetails(displayName: String) {
+        httpClient.postEmpty(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
         }
     }
 
-    override fun deleteAccount(): EmptyResponse {
+    override fun deleteAccount() {
         return httpClient.deleteEmpty(Paths.getDeleteAccountPath())
     }
 }

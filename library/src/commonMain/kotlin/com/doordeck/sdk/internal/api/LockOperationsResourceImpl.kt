@@ -24,7 +24,6 @@ import com.doordeck.sdk.api.requests.UpdateLockSettingTimeUsageRequirementReques
 import com.doordeck.sdk.api.requests.UpdateLockSettingUsageRequirementRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
-import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.LockAuditTrail
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
@@ -76,48 +75,48 @@ class LockOperationsResourceImpl(
         return httpClient.get(Paths.getLocksForUserPath(userId))
     }
 
-    override fun updateLockName(lockId: String, name: String?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockNameRequest(name))
+    override fun updateLockName(lockId: String, name: String?) {
+        updateLockProperties(lockId, UpdateLockNameRequest(name))
     }
 
-    override fun updateLockFavourite(lockId: String, favourite: Boolean?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
+    override fun updateLockFavourite(lockId: String, favourite: Boolean?) {
+        updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
     }
 
-    override fun updateLockColour(lockId: String, colour: String?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockColourRequest(colour))
+    override fun updateLockColour(lockId: String, colour: String?) {
+        updateLockProperties(lockId, UpdateLockColourRequest(colour))
     }
 
-    override fun updateLockSettingDefaultName(lockId: String, name: String?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
+    override fun updateLockSettingDefaultName(lockId: String, name: String?) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
     }
 
-    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddress)))
+    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>?) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddress)))
     }
 
-    override fun updateLockSettingHidden(lockId: String, hidden: Boolean?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
+    override fun updateLockSettingHidden(lockId: String, hidden: Boolean?) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
-    override fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(
+    override fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement?) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
                 time?.let { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
             ))
         ))
     }
 
-    override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(
+    override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
                 location?.let { LocationRequirementRequest(it.latitude, it.longitude, it.enabled, it.radius, it.accuracy) }
             ))
         ))
     }
 
-    private fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest): EmptyResponse {
-        return httpClient.putEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
+    private fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest) {
+        httpClient.putEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -152,12 +151,12 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun unlock(unlockOperation: LockOperations.UnlockOperation): EmptyResponse {
+    override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        return performOperation(unlockOperation.baseOperation, operationRequest)
+        performOperation(unlockOperation.baseOperation, operationRequest)
     }
 
-    override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): EmptyResponse {
+    override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
             user = shareLockOperation.targetUserId,
             publicKey = shareLockOperation.targetUserPublicKey.encodeKeyToBase64(),
@@ -165,22 +164,22 @@ class LockOperationsResourceImpl(
             start = shareLockOperation.start,
             end = shareLockOperation.end
         )
-        return performOperation(shareLockOperation.baseOperation, operationRequest)
+        performOperation(shareLockOperation.baseOperation, operationRequest)
     }
 
-    override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): EmptyResponse {
+    override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
-        return performOperation(revokeAccessToLockOperation.baseOperation, operationRequest)
+        performOperation(revokeAccessToLockOperation.baseOperation, operationRequest)
     }
 
-    override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): EmptyResponse {
+    override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
         )
-        return performOperation(updateSecureSettingUnlockDuration.baseOperation, operationRequest)
+        performOperation(updateSecureSettingUnlockDuration.baseOperation, operationRequest)
     }
 
-    override fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): EmptyResponse {
+    override fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
@@ -192,10 +191,10 @@ class LockOperationsResourceImpl(
                 )
             }
         )
-        return performOperation(updateSecureSettingUnlockBetween.baseOperation, operationRequest)
+        performOperation(updateSecureSettingUnlockBetween.baseOperation, operationRequest)
     }
 
-    private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest): EmptyResponse {
+    private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest) {
         val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperation.userId,
@@ -210,7 +209,7 @@ class LockOperationsResourceImpl(
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
         val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeToBase64UrlString()
         val body = "$headerB64.$bodyB64.$signatureB64"
-        return httpClient.postEmpty(Paths.getOperationPath(baseOperation.lockId)) {
+        httpClient.postEmpty(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }

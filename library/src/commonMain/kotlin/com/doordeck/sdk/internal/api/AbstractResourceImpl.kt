@@ -1,6 +1,5 @@
 package com.doordeck.sdk.internal.api
 
-import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.runBlocking
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -18,9 +17,9 @@ abstract class AbstractResourceImpl {
     protected inline fun HttpClient.postEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): EmptyResponse = runBlocking {
+    ): Unit = runBlocking {
         post { url(urlString); block() }
-        EmptyResponse()
+        Unit
     }
 
     protected inline fun <reified T>HttpClient.get(
@@ -40,9 +39,9 @@ abstract class AbstractResourceImpl {
     protected inline fun HttpClient.putEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): EmptyResponse = runBlocking {
+    ): Unit = runBlocking {
         put { url(urlString); block() }
-        EmptyResponse()
+        Unit
     }
 
     protected inline fun <reified T>HttpClient.delete(
@@ -55,8 +54,8 @@ abstract class AbstractResourceImpl {
     protected inline fun HttpClient.deleteEmpty(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): EmptyResponse = runBlocking {
+    ): Unit = runBlocking {
         delete { url(urlString); block() }
-        EmptyResponse()
+        Unit
     }
 }

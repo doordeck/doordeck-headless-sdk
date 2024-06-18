@@ -1,7 +1,6 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.sdk.internal.api.DoordeckOnly
 import kotlin.js.JsExport
@@ -47,7 +46,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
     @DoordeckOnly
-    fun deleteApplication(applicationId: String): EmptyResponse
+    fun deleteApplication(applicationId: String)
 
     /**
      * Get logo upload URL
@@ -71,7 +70,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    fun addAuthIssuer(applicationId: String, url: String): EmptyResponse
+    fun addAuthIssuer(applicationId: String, url: String)
 
     /**
      * Delete auth issuer
@@ -79,7 +78,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    fun deleteAuthIssuer(applicationId: String, url: String): EmptyResponse
+    fun deleteAuthIssuer(applicationId: String, url: String)
 
     /**
      * Add CORS domain
@@ -87,7 +86,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    fun addCorsDomain(applicationId: String, url: String): EmptyResponse
+    fun addCorsDomain(applicationId: String, url: String)
 
     /**
      * Remove CORS domain
@@ -95,7 +94,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    fun removeCorsDomain(applicationId: String, url: String): EmptyResponse
+    fun removeCorsDomain(applicationId: String, url: String)
 
     /**
      * Add application owner
@@ -103,7 +102,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    fun addApplicationOwner(applicationId: String, userId: String): EmptyResponse
+    fun addApplicationOwner(applicationId: String, userId: String)
 
     /**
      * Remove application owner
@@ -111,7 +110,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    fun removeApplicationOwner(applicationId: String, userId: String): EmptyResponse
+    fun removeApplicationOwner(applicationId: String, userId: String)
 
     /**
      * Get application owners details

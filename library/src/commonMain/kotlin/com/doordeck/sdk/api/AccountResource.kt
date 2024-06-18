@@ -1,7 +1,6 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.model.TwoFactorMethod
-import com.doordeck.sdk.api.responses.EmptyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.TokenResponse
@@ -39,7 +38,7 @@ interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
-    fun logout(): EmptyResponse
+    fun logout()
 
     /**
      * Register ephemeral key
@@ -67,7 +66,7 @@ interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
-    fun verifyEmail(code: String): EmptyResponse
+    fun verifyEmail(code: String)
 
     /**
      * Reverify email
@@ -75,7 +74,7 @@ interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
      */
     @DoordeckOnly
-    fun reverifyEmail(): EmptyResponse
+    fun reverifyEmail()
 
     /**
      * Change password
@@ -83,7 +82,7 @@ interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
      */
     @DoordeckOnly
-    fun changePassword(oldPassword: String, newPassword: String): EmptyResponse
+    fun changePassword(oldPassword: String, newPassword: String)
 
     /**
      * Get user details
@@ -97,12 +96,12 @@ interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
-    fun updateUserDetails(displayName: String): EmptyResponse
+    fun updateUserDetails(displayName: String)
 
     /**
      * Delete account
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
-    fun deleteAccount(): EmptyResponse
+    fun deleteAccount()
 }
