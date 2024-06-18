@@ -114,6 +114,6 @@ class AccountResourceImpl(
     }
 
     override fun deleteAccount() {
-        return httpClient.deleteEmpty(Paths.getDeleteAccountPath())
+        httpClient.deleteEmpty(Paths.getDeleteAccountPath())
     }
 }
