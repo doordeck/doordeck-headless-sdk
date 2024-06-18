@@ -16,7 +16,6 @@ class TilesResourceImpl(
         return httpClient.get(Paths.getLocksBelongingToTilePath(tileId))
     }
 
-    @SiteAdmin
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): EmptyResponse {
         return httpClient.putEmpty(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)

@@ -2,13 +2,9 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.requests.LocationRequirementAccuracyRequest
-import com.doordeck.sdk.api.requests.LocationRequirementCoordinatesRequest
-import com.doordeck.sdk.api.requests.LocationRequirementEnabledRequest
-import com.doordeck.sdk.api.requests.LocationRequirementRadiusRequest
+import com.doordeck.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.sdk.api.requests.LockOperationRequest
 import com.doordeck.sdk.api.requests.LockSettingsDefaultNameRequest
-import com.doordeck.sdk.api.requests.LockSettingsDelayRequest
 import com.doordeck.sdk.api.requests.LockSettingsHiddenRequest
 import com.doordeck.sdk.api.requests.LockSettingsPermittedAddressesRequest
 import com.doordeck.sdk.api.requests.OperationBodyRequest
@@ -100,15 +96,11 @@ class LockOperationsResourceImpl(
         return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddress)))
     }
 
-    override fun updateLockSettingDelay(lockId: String, delay: Int?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDelayRequest(delay)))
-    }
-
     override fun updateLockSettingHidden(lockId: String, hidden: Boolean?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
-    override fun updateLockSettingUsageRequirementTime(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
+    override fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
                 time?.let { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
@@ -116,34 +108,10 @@ class LockOperationsResourceImpl(
         ))
     }
 
-    override fun updateLockSettingUsageRequirementLocationCoordinates(lockId: String, latitude: Double, longitude: Double): EmptyResponse {
+    override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?): EmptyResponse {
         return updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
-                LocationRequirementCoordinatesRequest(latitude, longitude)
-            ))
-        ))
-    }
-
-    override fun updateLockSettingUsageRequirementLocationEnabled(lockId: String, enabled: Boolean?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(
-            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
-                LocationRequirementEnabledRequest(enabled)
-            ))
-        ))
-    }
-
-    override fun updateLockSettingUsageRequirementLocationRadius(lockId: String, radius: Int?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(
-            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
-                LocationRequirementRadiusRequest(radius)
-            ))
-        ))
-    }
-
-    override fun updateLockSettingUsageRequirementLocationAccuracy(lockId: String, accuracy: Int?): EmptyResponse {
-        return updateLockProperties(lockId, UpdateLockSettingRequest(
-            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
-                LocationRequirementAccuracyRequest(accuracy)
+                location?.let { LocationRequirementRequest(it.latitude, it.longitude, it.enabled, it.radius, it.accuracy) }
             ))
         ))
     }
@@ -155,7 +123,6 @@ class LockOperationsResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
         return httpClient.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()

@@ -45,7 +45,6 @@ class AccountResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun refreshToken(): TokenResponse {
         return httpClient.put(Paths.getRefreshTokenPath()) {
             addRequestHeaders()
@@ -90,12 +89,10 @@ class AccountResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun reverifyEmail(): EmptyResponse {
         return httpClient.postEmpty(Paths.getReverifyEmailPath())
     }
 
-    @DoordeckOnly
     override fun changePassword(oldPassword: String, newPassword: String): EmptyResponse {
         return httpClient.postEmpty(Paths.getChangePasswordPath()) {
             addRequestHeaders()

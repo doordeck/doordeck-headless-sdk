@@ -108,11 +108,6 @@ class LockSettingsPermittedAddressesRequest(
 ): LockSettingsRequest
 
 @Serializable
-class LockSettingsDelayRequest(
-    val delay: Int?
-): LockSettingsRequest
-
-@Serializable
 class LockSettingsHiddenRequest(
     val hidden: Boolean?
 ): LockSettingsRequest
@@ -144,25 +139,10 @@ class TimeRequirementRequest(
 )
 
 @Serializable
-sealed interface LocationRequirementRequest
-
-@Serializable
-class LocationRequirementCoordinatesRequest(
+class LocationRequirementRequest(
     val latitude: Double,
-    val longitude: Double
-): LocationRequirementRequest
-
-@Serializable
-class LocationRequirementEnabledRequest(
-    val enabled: Boolean?
-): LocationRequirementRequest
-
-@Serializable
-class LocationRequirementRadiusRequest(
-    val radius: Int?
-): LocationRequirementRequest
-
-@Serializable
-class LocationRequirementAccuracyRequest(
-    val accuracy: Int?
-): LocationRequirementRequest
+    val longitude: Double,
+    val enabled: Boolean? = null,
+    val radius: Int? = null,
+    val accuracy: Int? = null
+)

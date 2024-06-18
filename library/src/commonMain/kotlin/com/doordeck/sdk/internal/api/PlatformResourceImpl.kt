@@ -19,32 +19,26 @@ class PlatformResourceImpl(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl(), PlatformResource {
 
-    @DoordeckOnly
     override fun createApplication() {
         TODO("Not yet implemented")
     }
 
-    @DoordeckOnly
     override fun listApplications() {
         TODO("Not yet implemented")
     }
 
-    @DoordeckOnly
     override fun getApplication(applicationId: String) {
         TODO("Not yet implemented")
     }
 
-    @DoordeckOnly
     override fun updateApplication(applicationId: String) {
         TODO("Not yet implemented")
     }
 
-    @DoordeckOnly
     override fun deleteApplication(applicationId: String): EmptyResponse {
         return httpClient.deleteEmpty(Paths.getDeleteApplicationPath(applicationId))
     }
 
-    @DoordeckOnly
     override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
         return httpClient.post(Paths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
@@ -52,12 +46,10 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun addAuthKey(applicationId: String) {
         TODO("Not yet implemented")
     }
 
-    @DoordeckOnly
     override fun addAuthIssuer(applicationId: String, url: String): EmptyResponse {
         return httpClient.postEmpty(Paths.getAddAuthIssuerPath(applicationId)) {
             addRequestHeaders()
@@ -65,7 +57,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun deleteAuthIssuer(applicationId: String, url: String): EmptyResponse {
         return httpClient.deleteEmpty(Paths.getDeleteAuthIssuerPath(applicationId)) {
             addRequestHeaders()
@@ -73,7 +64,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun addCorsDomain(applicationId: String, url: String): EmptyResponse {
         return httpClient.postEmpty(Paths.getAddCorsDomainPath(applicationId)) {
             addRequestHeaders()
@@ -81,7 +71,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun removeCorsDomain(applicationId: String, url: String): EmptyResponse {
         return httpClient.deleteEmpty(Paths.getRemoveCorsDomainPath(applicationId)) {
             addRequestHeaders()
@@ -89,7 +78,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun addApplicationOwner(applicationId: String, userId: String): EmptyResponse {
         return httpClient.postEmpty(Paths.getAddApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
@@ -97,7 +85,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun removeApplicationOwner(applicationId: String, userId: String): EmptyResponse {
         return httpClient.deleteEmpty(Paths.getRemoveApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
@@ -105,7 +92,6 @@ class PlatformResourceImpl(
         }
     }
 
-    @DoordeckOnly
     override fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse {
         return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
