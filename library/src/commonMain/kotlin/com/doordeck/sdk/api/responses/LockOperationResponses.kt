@@ -24,14 +24,10 @@ class LockResponse(
 @JsExport
 @Serializable
 class LockSettingsResponse(
-    val txBeaconRssi: Int? = null,
-    val rxBeaconRssi: Int? = null,
-    val unlockTime: String, // Duration
-    val proximityUnlock: Boolean? = null,
+    val unlockTime: Double,
     val permittedAddresses: Array<String>,
     val defaultName: String,
     //val usageRequirements: Array // TODO
-    val delay: String, // Duration
     //unlockBetweenWindow
     val tiles: Array<String>,
     val hidden: Boolean
