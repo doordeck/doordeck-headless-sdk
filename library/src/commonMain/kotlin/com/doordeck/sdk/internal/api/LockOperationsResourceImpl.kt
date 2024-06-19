@@ -34,10 +34,9 @@ import com.doordeck.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.sdk.internal.api.Params.END
 import com.doordeck.sdk.internal.api.Params.START
 import com.doordeck.sdk.internal.api.Params.VISITOR
-import com.doordeck.sdk.util.Crypto.encodeKeyToBase64
+import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.sdk.util.addRequestHeaders
-import com.doordeck.sdk.util.encodeToBase64UrlString
 import com.doordeck.sdk.util.toJson
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -159,7 +158,7 @@ class LockOperationsResourceImpl(
     override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
             user = shareLockOperation.targetUserId,
-            publicKey = shareLockOperation.targetUserPublicKey.encodeKeyToBase64(),
+            publicKey = shareLockOperation.targetUserPublicKey.encodeByteArrayToBase64(),
             role = shareLockOperation.targetUserRole,
             start = shareLockOperation.start,
             end = shareLockOperation.end
@@ -205,9 +204,9 @@ class LockOperationsResourceImpl(
             jti = baseOperation.jti,
             operation = operationRequest
         )
-        val headerB64 = operationHeader.toJson().encodeToByteArray().encodeToBase64UrlString()
-        val bodyB64 = operationBody.toJson().encodeToByteArray().encodeToBase64UrlString()
-        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeToBase64UrlString()
+        val headerB64 = operationHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
         httpClient.postEmpty(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)

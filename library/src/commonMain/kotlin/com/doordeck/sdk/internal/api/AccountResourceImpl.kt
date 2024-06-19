@@ -15,7 +15,7 @@ import com.doordeck.sdk.api.responses.UserDetailsResponse
 import com.doordeck.sdk.internal.api.Params.CODE
 import com.doordeck.sdk.internal.api.Params.FORCE
 import com.doordeck.sdk.internal.api.Params.METHOD
-import com.doordeck.sdk.util.Crypto.encodeKeyToBase64
+import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.sdk.util.addRequestHeaders
 import io.ktor.client.*
@@ -57,7 +57,7 @@ class AccountResourceImpl(
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
-        val publicKeyEncoded =  publicKey.encodeKeyToBase64()
+        val publicKeyEncoded =  publicKey.encodeByteArrayToBase64()
         return httpClient.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
@@ -65,7 +65,7 @@ class AccountResourceImpl(
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        val publicKeyEncoded =  publicKey.encodeKeyToBase64()
+        val publicKeyEncoded =  publicKey.encodeByteArrayToBase64()
         return httpClient.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
@@ -74,7 +74,7 @@ class AccountResourceImpl(
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
-        val codeSignature = code.signWithPrivateKey(privateKey).encodeKeyToBase64()
+        val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         return httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))

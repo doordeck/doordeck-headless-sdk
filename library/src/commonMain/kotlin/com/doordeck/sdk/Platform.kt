@@ -19,6 +19,8 @@ enum class PlatformType {
     JVM,
     ANDROID,
     IOS,
+    MAC_OS_ARM_64,
+    MAC_OS_X64,
     JS
 }
 
