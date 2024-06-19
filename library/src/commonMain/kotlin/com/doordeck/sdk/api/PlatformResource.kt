@@ -1,6 +1,8 @@
 package com.doordeck.sdk.api
 
+import com.doordeck.sdk.api.model.Platform
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.sdk.api.responses.ApplicationResponse
 import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.sdk.internal.api.DoordeckOnly
 import kotlin.js.JsExport
@@ -14,7 +16,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    fun createApplication() // TODO
+    fun createApplication(application: Platform.Application)
 
     /**
      * List applications
@@ -22,7 +24,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    fun listApplications() // TODO
+    fun listApplications(): Array<ApplicationResponse>
 
     /**
      * Get application
@@ -30,7 +32,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    fun getApplication(applicationId: String) // TODO
+    fun getApplication(applicationId: String): ApplicationResponse
 
     /**
      * Update application
@@ -38,7 +40,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplication(applicationId: String) // TODO
+    fun updateApplication(applicationId: String, application: Platform.Application)
 
     /**
      * Delete application
@@ -62,7 +64,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    fun addAuthKey(applicationId: String) // TODO
+    fun addAuthKey(applicationId: String, key: Platform.AuthKey)
 
     /**
      * Add auth issuer

@@ -1,14 +1,19 @@
 package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.PlatformResource
+import com.doordeck.sdk.api.model.Platform
 import com.doordeck.sdk.api.requests.AddApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.AddAuthIssuerRequest
+import com.doordeck.sdk.api.requests.AddAuthKeyRequest
 import com.doordeck.sdk.api.requests.AddCorsDomainRequest
 import com.doordeck.sdk.api.requests.DeleteAuthIssuerRequest
 import com.doordeck.sdk.api.requests.GetLogoUploadUrlRequest
 import com.doordeck.sdk.api.requests.RemoveApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.RemoveCorsDomainRequest
+import com.doordeck.sdk.api.requests.toAddAuthKeyRequest
+import com.doordeck.sdk.api.requests.toCreateApplicationRequest
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.sdk.api.responses.ApplicationResponse
 import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.sdk.util.addRequestHeaders
 import io.ktor.client.*
@@ -18,20 +23,30 @@ class PlatformResourceImpl(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl(), PlatformResource {
 
-    override fun createApplication() {
-        TODO("Not yet implemented")
+    override fun createApplication(application: Platform.Application) {
+        httpClient.postEmpty(Paths.getCreateApplicationPath()) {
+            addRequestHeaders()
+            setBody(application.toCreateApplicationRequest())
+        }
     }
 
-    override fun listApplications() {
-        TODO("Not yet implemented")
+    override fun listApplications(): Array<ApplicationResponse> {
+        return httpClient.get(Paths.getListApplicationsPath()) {
+            addRequestHeaders()
+        }
     }
 
-    override fun getApplication(applicationId: String) {
-        TODO("Not yet implemented")
+    override fun getApplication(applicationId: String): ApplicationResponse {
+        return httpClient.get(Paths.getApplicationPath(applicationId)) {
+            addRequestHeaders()
+        }
     }
 
-    override fun updateApplication(applicationId: String) {
-        TODO("Not yet implemented")
+    override fun updateApplication(applicationId: String, application: Platform.Application) {
+        httpClient.postEmpty(Paths.getUpdateApplicationPath(applicationId)) {
+            addRequestHeaders()
+            setBody(application.toCreateApplicationRequest())
+        }
     }
 
     override fun deleteApplication(applicationId: String) {
@@ -45,8 +60,11 @@ class PlatformResourceImpl(
         }
     }
 
-    override fun addAuthKey(applicationId: String) {
-        TODO("Not yet implemented")
+    override fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
+        httpClient.postEmpty(Paths.getAddAuthKeyPath(applicationId)) {
+            addRequestHeaders()
+            setBody(key.toAddAuthKeyRequest())
+        }
     }
 
     override fun addAuthIssuer(applicationId: String, url: String) {
