@@ -1,6 +1,7 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.AccountResource
+import com.doordeck.sdk.api.HelperResource
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.api.SitesResource
@@ -16,6 +17,7 @@ interface Doordeck {
     fun tiles(): TilesResource
     fun lockOperations(): LockOperationsResource
     fun platform(): PlatformResource
+    fun helper(): HelperResource
 
     val apiEnvironment: ApiEnvironment
     val token: String
