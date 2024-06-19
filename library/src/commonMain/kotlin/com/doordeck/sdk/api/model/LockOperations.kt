@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api.model
 
+import com.benasher44.uuid.uuid4
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.time.Duration.Companion.minutes
@@ -18,6 +19,7 @@ object LockOperations {
         val defaultName: String? = null,
         val permittedAddress: Array<String>? = null,
         val delay: Int? = null,
+        val hidden: Boolean? = null,
         val usageRequirements: UsageRequirements? = null
     )
 
@@ -49,15 +51,11 @@ object LockOperations {
         val exceptions: Array<String>? = null
     )
 
-    class LockOperation(
-        override val baseOperation: BaseOperation,
-    ): Operation(baseOperation)
-
     class UnlockOperation(
         override val baseOperation: BaseOperation
     ): Operation(baseOperation)
 
-    class ShareALockOperation(
+    class ShareLockOperation(
         override val baseOperation: BaseOperation,
         val targetUserId: String,
         val targetUserRole: UserRole,
@@ -66,19 +64,19 @@ object LockOperations {
         val end: Int? = null
     ): Operation(baseOperation)
 
-    class RevokeAccessToALockOperation(
+    class RevokeAccessToLockOperation(
         override val baseOperation: BaseOperation,
         val users: Array<String>
     ): Operation(baseOperation)
 
-    class UpdateSecureSettingsOperation(
+    class UpdateSecureSettingUnlockDuration(
         override val baseOperation: BaseOperation,
-        val unlockDuration: Int? = null,
-        val unlockBetween: UnlockBetween? = null
+        val unlockDuration: Int? = null
     ): Operation(baseOperation)
 
-    class RemoveSecureSettingsOperation(
-        override val baseOperation: BaseOperation
+    class UpdateSecureSettingUnlockBetween(
+        override val baseOperation: BaseOperation,
+        val unlockBetween: UnlockBetween? = null
     ): Operation(baseOperation)
 
     class BaseOperation(
@@ -89,7 +87,7 @@ object LockOperations {
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
         val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val trackId: String? = null
+        val jti: String = uuid4().toString()
     )
 
     abstract class Operation(

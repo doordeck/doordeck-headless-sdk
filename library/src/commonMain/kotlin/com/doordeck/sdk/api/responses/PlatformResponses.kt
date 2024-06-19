@@ -12,3 +12,9 @@ class ApplicationOwnerDetailsResponse(
     val orphaned: Boolean,
     val foreign: Boolean
 )
+
+@JsExport
+@Serializable
+class GetLogoUploadUrlResponse(
+    val uploadUrl: String
+)

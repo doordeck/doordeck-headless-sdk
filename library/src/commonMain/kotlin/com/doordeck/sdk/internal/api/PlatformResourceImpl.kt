@@ -5,18 +5,18 @@ import com.doordeck.sdk.api.requests.AddApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.AddAuthIssuerRequest
 import com.doordeck.sdk.api.requests.AddCorsDomainRequest
 import com.doordeck.sdk.api.requests.DeleteAuthIssuerRequest
+import com.doordeck.sdk.api.requests.GetLogoUploadUrlRequest
 import com.doordeck.sdk.api.requests.RemoveApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.RemoveCorsDomainRequest
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.sdk.runBlocking
+import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.sdk.util.addRequestHeaders
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.request.*
 
 class PlatformResourceImpl(
     private val httpClient: HttpClient
-) : PlatformResource {
+) : AbstractResourceImpl(), PlatformResource {
 
     override fun createApplication() {
         TODO("Not yet implemented")
@@ -35,13 +35,14 @@ class PlatformResourceImpl(
     }
 
     override fun deleteApplication(applicationId: String) {
-        runBlocking {
-            httpClient.delete(Paths.getDeleteApplicationPath(applicationId))
-        }
+        httpClient.deleteEmpty(Paths.getDeleteApplicationPath(applicationId))
     }
 
-    override fun getLogoUploadUrl(applicationId: String) {
-        TODO("Not yet implemented")
+    override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+        return httpClient.post(Paths.getLogoUploadUrlPath(applicationId)) {
+            addRequestHeaders()
+            setBody(GetLogoUploadUrlRequest(contentType))
+        }
     }
 
     override fun addAuthKey(applicationId: String) {
@@ -49,60 +50,48 @@ class PlatformResourceImpl(
     }
 
     override fun addAuthIssuer(applicationId: String, url: String) {
-        runBlocking {
-            httpClient.post(Paths.getAddAuthIssuerPath(applicationId)) {
-                addRequestHeaders()
-                setBody(AddAuthIssuerRequest(url))
-            }
+        httpClient.postEmpty(Paths.getAddAuthIssuerPath(applicationId)) {
+            addRequestHeaders()
+            setBody(AddAuthIssuerRequest(url))
         }
     }
 
     override fun deleteAuthIssuer(applicationId: String, url: String) {
-        runBlocking {
-            httpClient.delete(Paths.getDeleteAuthIssuerPath(applicationId)) {
-                addRequestHeaders()
-                setBody(DeleteAuthIssuerRequest(url))
-            }
+        httpClient.deleteEmpty(Paths.getDeleteAuthIssuerPath(applicationId)) {
+            addRequestHeaders()
+            setBody(DeleteAuthIssuerRequest(url))
         }
     }
 
     override fun addCorsDomain(applicationId: String, url: String) {
-        runBlocking {
-            httpClient.post(Paths.getAddCorsDomainPath(applicationId)) {
-                addRequestHeaders()
-                setBody(AddCorsDomainRequest(url))
-            }
+        httpClient.postEmpty(Paths.getAddCorsDomainPath(applicationId)) {
+            addRequestHeaders()
+            setBody(AddCorsDomainRequest(url))
         }
     }
 
     override fun removeCorsDomain(applicationId: String, url: String) {
-        runBlocking {
-            httpClient.delete(Paths.getRemoveCorsDomainPath(applicationId)) {
-                addRequestHeaders()
-                setBody(RemoveCorsDomainRequest(url))
-            }
+        httpClient.deleteEmpty(Paths.getRemoveCorsDomainPath(applicationId)) {
+            addRequestHeaders()
+            setBody(RemoveCorsDomainRequest(url))
         }
     }
 
     override fun addApplicationOwner(applicationId: String, userId: String) {
-        runBlocking {
-            httpClient.post(Paths.getAddApplicationOwnerPath(applicationId)) {
-                addRequestHeaders()
-                setBody(AddApplicationOwnerRequest(userId))
-            }
+        httpClient.postEmpty(Paths.getAddApplicationOwnerPath(applicationId)) {
+            addRequestHeaders()
+            setBody(AddApplicationOwnerRequest(userId))
         }
     }
 
     override fun removeApplicationOwner(applicationId: String, userId: String) {
-        runBlocking {
-            httpClient.delete(Paths.getRemoveApplicationOwnerPath(applicationId)) {
-                addRequestHeaders()
-                setBody(RemoveApplicationOwnerRequest(userId))
-            }
+        httpClient.deleteEmpty(Paths.getRemoveApplicationOwnerPath(applicationId)) {
+            addRequestHeaders()
+            setBody(RemoveApplicationOwnerRequest(userId))
         }
     }
 
-    override fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse = runBlocking {
-        httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
+    override fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse {
+        return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
 }

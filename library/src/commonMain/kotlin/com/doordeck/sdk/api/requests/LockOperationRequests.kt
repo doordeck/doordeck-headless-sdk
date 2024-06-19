@@ -72,32 +72,63 @@ class UserPublicKeyRequest(
 )
 
 @Serializable
-class PairWithNewLockRequest(
-    val key: String,
-    val name: String
-)
+sealed interface UpdateLockPropertiesRequest
 
 @Serializable
-class UpdateLockPropertiesRequest(
-    val name: String? = null,
-    val favourite: Boolean? = null,
-    val colour: String? = null,
-    val settings: LockSettingsRequest? = null
-)
+class UpdateLockNameRequest(
+    val name: String?
+): UpdateLockPropertiesRequest
 
 @Serializable
-class LockSettingsRequest(
-    val defaultName: String? = null,
-    val permittedAddress: Array<String>? = null,
-    val delay: Int? = null,
-    val usageRequirements: UsageRequirementsRequest? = null
-)
+class UpdateLockFavouriteRequest(
+    val favourite: Boolean?
+): UpdateLockPropertiesRequest
 
 @Serializable
-class UsageRequirementsRequest(
-    val time: TimeRequirementRequest? = null,
-    val location: LocationRequirementRequest? = null
-)
+class UpdateLockColourRequest(
+    val colour: String?
+): UpdateLockPropertiesRequest
+
+@Serializable
+class UpdateLockSettingRequest(
+    val settings: LockSettingsRequest?
+): UpdateLockPropertiesRequest
+
+@Serializable
+sealed interface LockSettingsRequest
+
+@Serializable
+class LockSettingsDefaultNameRequest(
+    val defaultName: String?
+): LockSettingsRequest
+
+@Serializable
+class LockSettingsPermittedAddressesRequest(
+    val permittedAddresses: Array<String>?
+): LockSettingsRequest
+
+@Serializable
+class LockSettingsHiddenRequest(
+    val hidden: Boolean?
+): LockSettingsRequest
+
+@Serializable
+sealed interface UsageRequirementRequest
+
+@Serializable
+class UpdateLockSettingUsageRequirementRequest(
+    val usageRequirements: UsageRequirementRequest?
+): LockSettingsRequest
+
+@Serializable
+class UpdateLockSettingTimeUsageRequirementRequest(
+    val time: TimeRequirementRequest?
+): UsageRequirementRequest
+
+@Serializable
+class UpdateLockSettingLocationUsageRequirementRequest(
+    val location: LocationRequirementRequest?
+): UsageRequirementRequest
 
 @Serializable
 class TimeRequirementRequest(

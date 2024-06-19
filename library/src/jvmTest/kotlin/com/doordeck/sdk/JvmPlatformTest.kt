@@ -1,8 +1,9 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
-import org.koin.core.component.getScopeName
+import io.ktor.client.engine.apache.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class JvmPlatformTest {
@@ -12,6 +13,15 @@ class JvmPlatformTest {
         val client = createHttpClient(ApiEnvironment.DEV, "", "")
 
         // When
-        assertTrue { client.engine.getScopeName().value.contains("Apache", true) }
+        assertTrue { client.engine.config is ApacheEngineConfig }
+    }
+
+    @Test
+    fun `test platform type`() {
+        // Given
+        val platform = getPlatform()
+
+        // When
+        assertEquals(platform, PlatformType.JVM)
     }
 }

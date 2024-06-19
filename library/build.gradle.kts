@@ -6,7 +6,7 @@ plugins {
 }
 
 kotlin {
-    targetHierarchy.default()
+    applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
         publishLibraryVariants("release")
@@ -19,8 +19,8 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-   // macosX64()
-   // macosArm64()
+    macosX64()
+    macosArm64()
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
@@ -52,7 +52,6 @@ kotlin {
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
-                implementation(libs.koin.compose)
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)

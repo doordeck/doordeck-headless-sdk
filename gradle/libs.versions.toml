@@ -4,8 +4,7 @@ kotlin = "2.0.0"
 nexus-publish = "2.0.0-rc-1"
 android-minSdk = "24"
 android-compileSdk = "33"
-ktor-client = "3.0.0-beta-1" #latest version of Ktor
-koin="1.1.0"
+ktor-client = "3.0.0-beta-1"
 libsodium = "0.9.2"
 uuid-generator = "0.8.4"
 kotlinx-datetime = "0.6.0"
@@ -26,7 +25,6 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor-clie
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor-client" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-client" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-client" }
-koin-compose = {module="io.insert-koin:koin-compose", version.ref = "koin"}
 
 # Crypto
 libsodium-bindings = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings", version.ref = "libsodium" }

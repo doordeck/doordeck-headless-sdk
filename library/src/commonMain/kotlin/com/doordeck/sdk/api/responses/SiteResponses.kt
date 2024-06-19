@@ -47,7 +47,7 @@ class SiteStateResponse(
 
 @JsExport
 @Serializable
-class UserForASiteResponse(
+class UserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
