@@ -4,14 +4,13 @@ import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.api.model.Platform
 import com.doordeck.sdk.api.requests.AddApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.AddAuthIssuerRequest
-import com.doordeck.sdk.api.requests.AddAuthKeyRequest
 import com.doordeck.sdk.api.requests.AddCorsDomainRequest
 import com.doordeck.sdk.api.requests.DeleteAuthIssuerRequest
 import com.doordeck.sdk.api.requests.GetLogoUploadUrlRequest
 import com.doordeck.sdk.api.requests.RemoveApplicationOwnerRequest
 import com.doordeck.sdk.api.requests.RemoveCorsDomainRequest
 import com.doordeck.sdk.api.requests.toAddAuthKeyRequest
-import com.doordeck.sdk.api.requests.toCreateApplicationRequest
+import com.doordeck.sdk.api.requests.toApplicationRequest
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.sdk.api.responses.ApplicationResponse
 import com.doordeck.sdk.api.responses.GetLogoUploadUrlResponse
@@ -26,7 +25,7 @@ class PlatformResourceImpl(
     override fun createApplication(application: Platform.Application) {
         httpClient.postEmpty(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
-            setBody(application.toCreateApplicationRequest())
+            setBody(application.toApplicationRequest())
         }
     }
 
@@ -45,7 +44,7 @@ class PlatformResourceImpl(
     override fun updateApplication(applicationId: String, application: Platform.Application) {
         httpClient.postEmpty(Paths.getUpdateApplicationPath(applicationId)) {
             addRequestHeaders()
-            setBody(application.toCreateApplicationRequest())
+            setBody(application.toApplicationRequest())
         }
     }
 
