@@ -5,7 +5,7 @@ import kotlin.js.JsExport
 @JsExport
 object Platform {
 
-    class Application(
+    class CreateApplication(
         val name: String,
         val companyName: String,
         val mailingAddress: String,

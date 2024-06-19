@@ -16,7 +16,7 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    fun createApplication(application: Platform.Application)
+    fun createApplication(application: Platform.CreateApplication)
 
     /**
      * List applications
@@ -35,12 +35,68 @@ interface PlatformResource {
     fun getApplication(applicationId: String): ApplicationResponse
 
     /**
-     * Update application
+     * Update application - Name
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplication(applicationId: String, application: Platform.Application)
+    fun updateApplicationName(applicationId: String, name: String)
+
+    /**
+     * Update application - Company name
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationCompanyName(applicationId: String, companyName: String)
+
+    /**
+     * Update application - Mailing address
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
+
+    /**
+     * Update application - Privacy policy
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
+
+    /**
+     * Update application - Support contact
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationSupportContact(applicationId: String, supportContact: String)
+
+    /**
+     * Update application - App link
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationAppLink(applicationId: String, appLink: String)
+
+    /**
+     * Update application - Email preferences
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
+
+    /**
+     * Update application - Logo url
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     */
+    @DoordeckOnly
+    fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
 
     /**
      * Delete application

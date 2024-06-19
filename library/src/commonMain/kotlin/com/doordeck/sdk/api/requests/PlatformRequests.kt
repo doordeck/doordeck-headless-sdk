@@ -4,7 +4,7 @@ import com.doordeck.sdk.api.model.Platform
 import kotlinx.serialization.Serializable
 
 @Serializable
-class ApplicationRequest(
+class CreateApplicationRequest(
     val name: String,
     val companyName: String,
     val mailingAddress: String,
@@ -14,6 +14,49 @@ class ApplicationRequest(
     val emailPreferences: EmailPreferencesRequest? = null,
     val logoUrl: String? = null
 )
+
+@Serializable
+sealed interface UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationNameRequest(
+    val name: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationCompanyNameRequest(
+    val companyName: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationMailingAddressRequest(
+    val mailingAddress: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationPrivacyPolicyRequest(
+    val privacyPolicy: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationSupportContactRequest(
+    val supportContact: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationAppLinkRequest(
+    val appLink: String
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationEmailPreferencesRequest(
+    val emailPreferences: EmailPreferencesRequest
+): UpdateApplicationRequest
+
+@Serializable
+class UpdateApplicationLogoUrlRequest(
+    val logoUrl: String
+): UpdateApplicationRequest
 
 @Serializable
 class EmailPreferencesRequest(
@@ -113,7 +156,7 @@ class AddEd25519KeyRequest(
     val x: String
 ): AddAuthKeyRequest
 
-internal fun Platform.Application.toApplicationRequest(): ApplicationRequest = ApplicationRequest(
+internal fun Platform.CreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
     name = name,
     companyName = companyName,
     mailingAddress = mailingAddress,
