@@ -1,7 +1,7 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
-import org.koin.core.component.getScopeName
+import io.ktor.client.engine.okhttp.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -13,7 +13,7 @@ class AndroidPlatformTest {
         val client = createHttpClient(ApiEnvironment.DEV, "", "")
 
         // When
-        assertTrue { client.engine.getScopeName().value.contains("OkHttp", true) }
+        assertTrue { client.engine.config is OkHttpConfig }
     }
 
     @Test
