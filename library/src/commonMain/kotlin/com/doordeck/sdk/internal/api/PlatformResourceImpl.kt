@@ -41,15 +41,11 @@ class PlatformResourceImpl(
     }
 
     override fun listApplications(): Array<ApplicationResponse> {
-        return httpClient.get(Paths.getListApplicationsPath()) {
-            addRequestHeaders()
-        }
+        return httpClient.get(Paths.getListApplicationsPath())
     }
 
     override fun getApplication(applicationId: String): ApplicationResponse {
-        return httpClient.get(Paths.getApplicationPath(applicationId)) {
-            addRequestHeaders()
-        }
+        return httpClient.get(Paths.getApplicationPath(applicationId))
     }
 
     override fun updateApplicationName(applicationId: String, name: String) {
