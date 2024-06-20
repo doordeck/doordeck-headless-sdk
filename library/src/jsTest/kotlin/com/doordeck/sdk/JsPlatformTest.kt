@@ -1,8 +1,9 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
-import org.koin.core.component.getScopeName
+import io.ktor.client.engine.js.*
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class JsPlatformTest {
@@ -12,6 +13,15 @@ class JsPlatformTest {
         val client = createHttpClient(ApiEnvironment.DEV, "", "")
 
         // When
-        assertTrue { client.engine.getScopeName().value.contains("JsClient", true) }
+        assertTrue { client.engine.config is JsClientEngineConfig }
+    }
+
+    @Test
+    fun testPlatformType() {
+        // Given
+        val platform = getPlatform()
+
+        // When
+        assertEquals(platform, PlatformType.JS)
     }
 }

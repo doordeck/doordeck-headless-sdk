@@ -8,6 +8,5 @@ import kotlin.js.JsExport
 enum class TwoFactorMethod {
     EMAIL,
     TELEPHONE,
-    SMS,
-    WHATSAPP
+    SMS
 }

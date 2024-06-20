@@ -2,6 +2,7 @@ package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.internal.api.AccountResourceImpl
+import com.doordeck.sdk.internal.api.HelperResourceImpl
 import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.internal.api.SitesResourceImpl
@@ -20,10 +21,12 @@ class DoordeckImpl(
     private val tiles = TilesResourceImpl(httpClient)
     private val lockOperations = LockOperationsResourceImpl(httpClient)
     private val platform = PlatformResourceImpl(httpClient)
+    private val helper = HelperResourceImpl(httpClient, platform)
 
     override fun account() = account
     override fun sites() = sites
     override fun tiles() = tiles
     override fun lockOperations() = lockOperations
     override fun platform() = platform
+    override fun helper() = helper
 }

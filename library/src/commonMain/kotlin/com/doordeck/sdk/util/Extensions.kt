@@ -12,7 +12,7 @@ private val DEFAULT_SIGNED_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to "a
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     headers: Map<String, String> = if (signedRequest) DEFAULT_SIGNED_REQUEST_HEADERS else DEFAULT_REQUEST_HEADERS,
-    apiVersion: ApiVersion? = null,
+    apiVersion: ApiVersion? = null
 ) {
     headers {
         headers.map { append(it.key, it.value) }
