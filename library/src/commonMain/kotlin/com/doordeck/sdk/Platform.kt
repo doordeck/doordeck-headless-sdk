@@ -38,6 +38,10 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
         }
         install(Auth) {
             bearer {
+                // Send the auth header only to the api environment host
+                sendWithoutRequest { request ->
+                    request.host == apiEnvironment.host
+                }
                 loadTokens {
                     BearerTokens(token, refreshToken ?: "")
                 }
