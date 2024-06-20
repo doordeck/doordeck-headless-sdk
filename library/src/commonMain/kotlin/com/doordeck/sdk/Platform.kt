@@ -36,6 +36,9 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
         install(ContentNegotiation) {
             json(JSON)
         }
+        install(HttpTimeout) {
+            socketTimeoutMillis = 20_000
+        }
         install(Auth) {
             bearer {
                 // Send the auth header only to the api environment host
