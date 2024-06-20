@@ -3,23 +3,21 @@ package com.doordeck.sdk.api
 import com.doordeck.sdk.KDoordeckFactory
 import com.doordeck.sdk.api.model.ApiEnvironment
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class SitesResourceTest {
 
-    private val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, "")
-
     @Test
-    fun shouldListSites() {
-        sdk.sites().listSites()
-    }
+    fun shouldTestSite() {
+        val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, "")
 
-    @Test
-    fun shouldGetLocksForSite() {
-        sdk.sites().getLocksForSite(sdk.sites().listSites().random().id)
-    }
+        val sites = sdk.sites().listSites()
+        assertTrue { sites.isNotEmpty() }
 
-    @Test
-    fun shouldGetUsersForSite() {
-        sdk.sites().getUsersForSite(sdk.sites().listSites().random().id)
+        val locksForSite = sdk.sites().getLocksForSite(sites.random().id)
+        assertTrue { locksForSite.isNotEmpty() }
+
+        val usersForSite = sdk.sites().getUsersForSite(sites.random().id)
+        assertTrue { usersForSite.isNotEmpty() }
     }
 }
