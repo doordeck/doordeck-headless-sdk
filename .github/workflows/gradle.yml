@@ -21,6 +21,7 @@ jobs:
             os: ubuntu-latest
           - name: Android
             test: testReleaseUnitTest
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
     name: ${{ matrix.name }}
