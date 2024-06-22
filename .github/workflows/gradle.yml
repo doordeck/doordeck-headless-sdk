@@ -15,6 +15,8 @@ jobs:
         include:
           - target: jvmJar
             os: ubuntu-latest
+          - target: jsBrowserProductionWebpack
+            os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
     steps:
