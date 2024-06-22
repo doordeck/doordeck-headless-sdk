@@ -15,8 +15,10 @@ jobs:
         include:
           - target: jvmJar
             os: ubuntu-latest
+            test: jvmTest
           - target: jsBrowserProductionWebpack
             os: ubuntu-latest
+            test: jsTest
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -33,6 +35,9 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+
+      - name: Tests ${{ matrix.target }}
+        run: ./gradlew ${{ matrix.test }}
 
       - name: Build ${{ matrix.target }}
         run: ./gradlew ${{ matrix.target }}
