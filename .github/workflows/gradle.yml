@@ -13,14 +13,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: jvmJar
-            os: ubuntu-latest
+          - name: JVM
             test: jvmTest
-            name: JVM
-          - target: jsBrowserProductionWebpack
             os: ubuntu-latest
+          - name: JS
             test: jsTest
-            name: JS
+            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
     runs-on: ${{ matrix.os }}
 
     name: ${{ matrix.name }}
@@ -40,8 +40,5 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Tests ${{ matrix.target }}
+      - name: Tests
         run: ./gradlew ${{ matrix.test }}
-
-      - name: Build ${{ matrix.target }}
-        run: ./gradlew ${{ matrix.target }}
