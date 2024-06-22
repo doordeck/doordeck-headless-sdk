@@ -16,10 +16,14 @@ jobs:
           - target: jvmJar
             os: ubuntu-latest
             test: jvmTest
+            name: JVM
           - target: jsBrowserProductionWebpack
             os: ubuntu-latest
             test: jsTest
+            name: JS
     runs-on: ${{ matrix.os }}
+
+    name: ${{ matrix.name }}
 
     steps:
       - uses: actions/checkout@v4

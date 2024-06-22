@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -95,6 +97,13 @@ android {
     }
 }
 
+tasks {
+    withType<Test> {
+        testLogging {
+            events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+        }
+    }
+}
 /*publishing {
     publications {
         create<MavenPublication>("mavenJava") {
