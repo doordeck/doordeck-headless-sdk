@@ -18,6 +18,9 @@ jobs:
 
   build:
     needs: validation
+    env:
+      TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
+      TEST_NEW_APPLICATION_OWNER: ${{ secrets.TEST_NEW_APPLICATION_OWNER }}
     strategy:
       matrix:
         include:
