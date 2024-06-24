@@ -3,6 +3,7 @@ package com.doordeck.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.SystemTest
 import com.doordeck.sdk.api.model.Platform
+import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -52,7 +53,7 @@ class PlatformResourceTest : SystemTest() {
     )
 
     @Test
-    fun shouldTestPlatform() {
+    fun shouldTestPlatform() = runBlocking {
         // Create a new application
         sdk.platform().createApplication(application)
 

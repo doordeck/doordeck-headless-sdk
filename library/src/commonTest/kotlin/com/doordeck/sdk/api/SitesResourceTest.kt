@@ -1,13 +1,14 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.SystemTest
+import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class SitesResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestSite() {
+    fun shouldTestSite() = runBlocking {
         // Retrieve the sites
         val sites = sdk.sites().listSites()
         assertTrue { sites.isNotEmpty() }
