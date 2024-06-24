@@ -27,12 +27,12 @@ jobs:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          #- name: JS
-          #  test: jsTest
+          #- name: Android
+          #  test: testReleaseUnitTest
           #  os: ubuntu-latest
+          - name: JS
+            test: jsTest
+            os: ubuntu-latest
           #- name: Apple
           #  test: iosX64Test macosArm64Test macosX64Test
           #  os: macos-latest
