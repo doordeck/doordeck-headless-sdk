@@ -78,6 +78,7 @@ class PlatformResourceImpl(
             senderName = emailPreferences.senderName,
             primaryColour = emailPreferences.primaryColour,
             secondaryColour = emailPreferences.secondaryColour,
+            onlySendEssentialEmails = emailPreferences.onlySendEssentialEmails,
             callToAction = emailPreferences.callToAction?.let {
                 CallToActionRequest(
                     actionTarget = it.actionTarget,
