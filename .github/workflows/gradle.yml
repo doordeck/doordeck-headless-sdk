@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  validation:
+    name: "Gradle Wrapper Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v2
+
+  build:
+    needs: validation
+    strategy:
+      matrix:
+        include:
+          - name: JVM
+            test: jvmTest
+            os: ubuntu-latest
+          - name: JS
+            test: jsTest
+            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
+            os: ubuntu-latest
+          - name: Apple
+            test: iosX64Test macosArm64Test macosX64Test
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+
+    name: ${{ matrix.name }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Tests
+        run: ./gradlew ${{ matrix.test }}

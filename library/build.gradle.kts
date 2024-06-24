@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
@@ -15,6 +17,9 @@ kotlin {
             }
         }
     }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     macosX64()
     macosArm64()
     js(IR) {
@@ -94,6 +99,13 @@ android {
     }
 }
 
+tasks {
+    withType<Test> {
+        testLogging {
+            events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+        }
+    }
+}
 /*publishing {
     publications {
         create<MavenPublication>("mavenJava") {
