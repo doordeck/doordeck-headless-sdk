@@ -30,8 +30,8 @@ jobs:
           #- name: JS
           #  test: jsTest
           #  os: ubuntu-latest
-          #- name: Android
-          #  test: testReleaseUnitTest
+          - name: Android
+            test: testReleaseUnitTest
           #  os: ubuntu-latest
           #- name: Apple
           #  test: iosX64Test macosArm64Test macosX64Test
