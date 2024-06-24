@@ -30,8 +30,8 @@ jobs:
           - name: Android
             test: testReleaseUnitTest
             os: ubuntu-latest
-          - name: IOS
-            test: iosX64Test
+          - name: Apple
+            test: iosX64Test macosArm64Test macosX64Test
             os: macos-latest
     runs-on: ${{ matrix.os }}
 
