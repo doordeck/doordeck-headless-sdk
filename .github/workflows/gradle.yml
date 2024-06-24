@@ -9,7 +9,15 @@ on:
       - 'main'
 
 jobs:
+  validation:
+    name: "Gradle Wrapper Validation"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v2
+
   build:
+    needs: validation
     strategy:
       matrix:
         include:
@@ -30,11 +38,6 @@ jobs:
     name: ${{ matrix.name }}
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
