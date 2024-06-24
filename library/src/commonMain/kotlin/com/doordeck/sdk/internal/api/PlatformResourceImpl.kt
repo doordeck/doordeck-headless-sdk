@@ -159,7 +159,7 @@ class PlatformResourceImpl(
         }
     }
 
-    override fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse {
+    override fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
         return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
 }

@@ -1,17 +1,13 @@
 package com.doordeck.sdk.api
 
-import com.doordeck.sdk.KDoordeckFactory
-import com.doordeck.sdk.api.model.ApiEnvironment
+import com.doordeck.sdk.SystemTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class SitesResourceTest {
+class SitesResourceTest : SystemTest() {
 
     @Test
     fun shouldTestSite() {
-        // Initialize the SDK
-        val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, "")
-
         // Retrieve the sites
         val sites = sdk.sites().listSites()
         assertTrue { sites.isNotEmpty() }
