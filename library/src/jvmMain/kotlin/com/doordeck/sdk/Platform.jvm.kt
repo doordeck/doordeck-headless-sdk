@@ -6,3 +6,5 @@ actual fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T =
     kotlinx.coroutines.runBlocking { block() }
 
 actual fun getPlatform(): PlatformType = PlatformType.JVM
+
+actual fun getEnvironmentVariable(name: String): String? = System.getenv(name)

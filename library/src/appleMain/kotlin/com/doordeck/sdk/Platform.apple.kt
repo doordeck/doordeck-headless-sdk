@@ -6,3 +6,5 @@ actual fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T =
     kotlinx.coroutines.runBlocking { block() }
 
 actual fun getPlatform(): PlatformType = PlatformType.IOS
+
+actual fun getEnvironmentVariable(name: String): String? = null // TODO

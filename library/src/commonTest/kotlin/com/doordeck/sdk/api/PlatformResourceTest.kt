@@ -32,6 +32,7 @@ class PlatformResourceTest : SystemTest() {
         senderName = "test",
         primaryColour = "#000000",
         secondaryColour = "#000000",
+        onlySendEssentialEmails = true,
         callToAction = Platform.EmailCallToAction(
             actionTarget = "test",
             headline = "test",
@@ -108,6 +109,7 @@ class PlatformResourceTest : SystemTest() {
         assertEquals(updatedApplicationEmailPreferences.senderName, actualApplication.emailPreferences.senderName)
         assertEquals(updatedApplicationEmailPreferences.primaryColour, actualApplication.emailPreferences.primaryColour)
         assertEquals(updatedApplicationEmailPreferences.secondaryColour, actualApplication.emailPreferences.secondaryColour)
+        assertEquals(updatedApplicationEmailPreferences.onlySendEssentialEmails, actualApplication.emailPreferences.onlySendEssentialEmails)
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionTarget, actualApplication.emailPreferences.callToAction?.actionTarget)
         assertEquals(updatedApplicationEmailPreferences.callToAction?.headline, actualApplication.emailPreferences.callToAction?.headline)
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, actualApplication.emailPreferences.callToAction?.actionText)

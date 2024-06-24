@@ -74,3 +74,5 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
 expect fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T
 
 expect fun getPlatform(): PlatformType
+
+expect fun getEnvironmentVariable(name: String): String?

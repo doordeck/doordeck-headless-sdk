@@ -21,6 +21,7 @@ object Platform {
         val senderName: String? = null,
         val primaryColour: String? = null,
         val secondaryColour: String? = null,
+        val onlySendEssentialEmails: Boolean? = null,
         val callToAction: EmailCallToAction? = null
     )
 
