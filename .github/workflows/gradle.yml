@@ -22,6 +22,9 @@ jobs:
           - name: Android
             test: testReleaseUnitTest
             os: ubuntu-latest
+          - name: IOS
+            test: iosX64Test
+            os: macos-latest
     runs-on: ${{ matrix.os }}
 
     name: ${{ matrix.name }}
