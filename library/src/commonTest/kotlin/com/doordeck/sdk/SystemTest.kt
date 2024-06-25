@@ -8,5 +8,10 @@ open class SystemTest {
     val TEST_NEW_APPLICATION_OWNER = getEnvironmentVariable("TEST_NEW_APPLICATION_OWNER") ?: ""
 
     // Initialize the SDK
-    val sdk = runBlocking { KDoordeckFactory().initialize(ApiEnvironment.DEV, TEST_AUTH_TOKEN) }
+    val sdk = runBlocking {
+        println("Test initialize SDK")
+        val p = KDoordeckFactory().initialize(ApiEnvironment.DEV, TEST_AUTH_TOKEN)
+        println("Test SDK initialized")
+        p
+    }
 }
