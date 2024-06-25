@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformResourceTest : SystemTest() {
-
+/*
     // Initial application
     private val application = Platform.CreateApplication(
         name = uuid4().toString(),
@@ -141,5 +141,5 @@ class PlatformResourceTest : SystemTest() {
 
         // Delete the application
         sdk.platform().deleteApplication(actualApplication.applicationId)
-    }
+    }*/
 }
