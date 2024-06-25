@@ -9,7 +9,6 @@ class SitesResourceTest : SystemTest() {
 
     @Test
     fun shouldTestSite() = runBlocking {
-        println("Test initialize test")
         // Retrieve the sites
         val sites = sdk.sites().listSites()
         assertTrue { sites.isNotEmpty() }
