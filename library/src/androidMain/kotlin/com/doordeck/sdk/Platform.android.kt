@@ -7,4 +7,5 @@ actual fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T =
 
 actual fun getPlatform(): PlatformType = PlatformType.ANDROID
 
-actual fun getEnvironmentVariable(name: String): String? = System.getProperty(name)
+actual fun getEnvironmentVariable(name: String): String? =
+    System.getenv(name)
