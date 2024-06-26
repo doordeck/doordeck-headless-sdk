@@ -2,7 +2,10 @@ package com.doordeck.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.SystemTest
+import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.model.Platform
+import com.doordeck.sdk.createHttpClient
+import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -54,11 +57,14 @@ class PlatformResourceTest : SystemTest() {
 
     @Test
     fun shouldTestPlatform() = runBlocking {
+        // Initialize the resource
+        val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_MAIN_APPLICATION_OWNER, null))
+
         // Create a new application
-        sdk.platform().createApplication(application)
+        resource.createApplication(application)
 
         // Retrieve the applications
-        val applications = sdk.platform().listApplications()
+        val applications = resource.listApplications()
         assertTrue { applications.isNotEmpty() }
         var actualApplication = applications.firstOrNull {
             it.name == application.name && it.companyName == application.companyName
@@ -66,40 +72,40 @@ class PlatformResourceTest : SystemTest() {
         assertNotNull(actualApplication)
 
         // Update the application name
-        sdk.platform().updateApplicationName(actualApplication.applicationId, updatedApplicationName)
+        resource.updateApplicationName(actualApplication.applicationId, updatedApplicationName)
 
         // Update the application company name
-        sdk.platform().updateApplicationCompanyName(actualApplication.applicationId, updatedApplicationCompanyName)
+        resource.updateApplicationCompanyName(actualApplication.applicationId, updatedApplicationCompanyName)
 
         // Update the application mailing address
-        sdk.platform().updateApplicationMailingAddress(actualApplication.applicationId, updatedApplicationMailingAddress)
+        resource.updateApplicationMailingAddress(actualApplication.applicationId, updatedApplicationMailingAddress)
 
         // Update the application privacy policy
-        sdk.platform().updateApplicationPrivacyPolicy(actualApplication.applicationId, updatedApplicationPrivacyPolicy)
+        resource.updateApplicationPrivacyPolicy(actualApplication.applicationId, updatedApplicationPrivacyPolicy)
 
         //Update the application support contact
-        sdk.platform().updateApplicationSupportContact(actualApplication.applicationId, updatedApplicationSupportContact)
+        resource.updateApplicationSupportContact(actualApplication.applicationId, updatedApplicationSupportContact)
 
         // Update the application app link
-        sdk.platform().updateApplicationAppLink(actualApplication.applicationId, updatedApplicationAppLink)
+        resource.updateApplicationAppLink(actualApplication.applicationId, updatedApplicationAppLink)
 
         // Update the application email preferences
-        sdk.platform().updateApplicationEmailPreferences(actualApplication.applicationId, updatedApplicationEmailPreferences)
+        resource.updateApplicationEmailPreferences(actualApplication.applicationId, updatedApplicationEmailPreferences)
 
         // Update the application logo
-        sdk.platform().updateApplicationLogoUrl(actualApplication.applicationId, updatedApplicationLogoUrl)
+        resource.updateApplicationLogoUrl(actualApplication.applicationId, updatedApplicationLogoUrl)
 
         // Add auth issuer
-        sdk.platform().addAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
+        resource.addAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
 
         // Add cors domain
-        sdk.platform().addCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
+        resource.addCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
 
         // Add auth key
-        sdk.platform().addAuthKey(actualApplication.applicationId, updatedApplicationAuthKey)
+        resource.addAuthKey(actualApplication.applicationId, updatedApplicationAuthKey)
 
         // Retrieve the application
-        actualApplication = sdk.platform().getApplication(actualApplication.applicationId)
+        actualApplication = resource.getApplication(actualApplication.applicationId)
         assertEquals(updatedApplicationName, actualApplication.name)
         assertEquals(updatedApplicationCompanyName, actualApplication.companyName)
         assertEquals(updatedApplicationMailingAddress, actualApplication.mailingAddress)
@@ -119,27 +125,27 @@ class PlatformResourceTest : SystemTest() {
         assertTrue { actualApplication.corsDomains.any { it.equals(updatedApplicationCorsDomain, true) } }
 
         // Delete auth issuer
-        sdk.platform().deleteAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
+        resource.deleteAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
 
         // Delete cors domain
-        sdk.platform().removeCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
+        resource.removeCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
 
         // Add application owner
-        sdk.platform().addApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
+        resource.addApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
 
         // Retrieve the application owner details
-        val applicationOwnerDetails = sdk.platform().getApplicationOwnersDetails(actualApplication.applicationId)
+        val applicationOwnerDetails = resource.getApplicationOwnersDetails(actualApplication.applicationId)
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertTrue { applicationOwnerDetails.any { it.userId == TEST_NEW_APPLICATION_OWNER } }
 
         // Remove application owner
-        sdk.platform().removeApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
+        resource.removeApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
 
         // Generate logo upload url
-        val url = sdk.platform().getLogoUploadUrl(actualApplication.applicationId, "image/png")
+        val url = resource.getLogoUploadUrl(actualApplication.applicationId, "image/png")
         assertTrue { url.uploadUrl.isNotEmpty() }
 
         // Delete the application
-        sdk.platform().deleteApplication(actualApplication.applicationId)
+        resource.deleteApplication(actualApplication.applicationId)
     }
 }

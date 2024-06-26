@@ -78,7 +78,6 @@ class LockUserResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val role: UserRole,
     val start: Double? = null,
     val end: Double? = null,
     val devices: Array<LockUserDetailsResponse>
