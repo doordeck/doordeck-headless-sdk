@@ -25,15 +25,8 @@ kotlin {
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
-        nodejs {
-            testTask {
-                useMocha()
-            }
-        }
+        nodejs()
         browser {
-            testTask {
-                useMocha()
-            }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
             }
@@ -63,6 +56,7 @@ kotlin {
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
+                implementation("io.github.aakira:napier:2.7.1")
             }
         }
         val commonTest by getting {
