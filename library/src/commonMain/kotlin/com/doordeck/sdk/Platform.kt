@@ -35,7 +35,7 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
             json(JSON)
         }
         install(HttpTimeout) {
-            socketTimeoutMillis = 20_000
+            socketTimeoutMillis = 60_000
         }
         install(Auth) {
             bearer {
