@@ -25,8 +25,15 @@ kotlin {
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
-        nodejs()
+        nodejs {
+            testTask {
+                useMocha()
+            }
+        }
         browser {
+            testTask {
+                useMocha()
+            }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
             }
