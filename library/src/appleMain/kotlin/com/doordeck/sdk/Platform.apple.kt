@@ -9,4 +9,4 @@ actual fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T =
 actual fun getPlatform(): PlatformType = PlatformType.APPLE
 
 actual fun getEnvironmentVariable(name: String): String? =
-    NSProcessInfo.processInfo.environment[name]
+    NSProcessInfo.processInfo.environment[name] as? String
