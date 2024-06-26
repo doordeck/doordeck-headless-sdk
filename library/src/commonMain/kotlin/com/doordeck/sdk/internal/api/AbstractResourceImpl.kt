@@ -1,6 +1,20 @@
 package com.doordeck.sdk.internal.api
 
+import com.doordeck.sdk.BadRequestException
+import com.doordeck.sdk.ConflictException
+import com.doordeck.sdk.ForbiddenException
+import com.doordeck.sdk.GatewayTimeoutException
+import com.doordeck.sdk.GoneException
+import com.doordeck.sdk.InternalServerErrorException
+import com.doordeck.sdk.LockedException
+import com.doordeck.sdk.MethodNotAllowedException
+import com.doordeck.sdk.NotAcceptableException
+import com.doordeck.sdk.NotFoundException
 import com.doordeck.sdk.SdkException
+import com.doordeck.sdk.ServiceUnavailableException
+import com.doordeck.sdk.TooManyRequestsException
+import com.doordeck.sdk.TooEarlyException
+import com.doordeck.sdk.UnauthorizedException
 import com.doordeck.sdk.runBlocking
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -78,20 +92,40 @@ abstract class AbstractResourceImpl {
         try {
             val response = function()
             if (!response.status.isSuccess()) {
-                throw SdkException("API call failed with: ${response.status.value} (${response.status.description}): ${response.bodyAsText()}")
+                response.handleClientFailure()
             }
             return if (T::class == Unit::class) {
                 Unit as T
             } else {
                 response.body<T>()
             }
-        } catch(exception: ContentConvertException) {
+        } catch (exception: ContentConvertException) {
             throw SdkException("Failed to deserialize API response", exception)
+        } catch (exception: SdkException) {
+            throw exception
         } catch (exception: Exception) {
-            if (exception is SdkException) {
-                throw exception
-            }
             throw SdkException("Failed to perform API call", exception)
+        }
+    }
+
+    protected suspend fun HttpResponse.handleClientFailure() {
+        val message = "API call failed with: ${status.value} (${status.description}): ${bodyAsText()}"
+        throw when(status) {
+            HttpStatusCode.BadRequest -> BadRequestException(message)
+            HttpStatusCode.Unauthorized -> UnauthorizedException(message)
+            HttpStatusCode.Forbidden -> ForbiddenException(message)
+            HttpStatusCode.NotFound -> NotFoundException(message)
+            HttpStatusCode.MethodNotAllowed -> MethodNotAllowedException(message)
+            HttpStatusCode.NotAcceptable -> NotAcceptableException(message)
+            HttpStatusCode.Conflict -> ConflictException(message)
+            HttpStatusCode.Gone -> GoneException(message)
+            HttpStatusCode.Locked -> LockedException(message)
+            HttpStatusCode.TooEarly -> TooEarlyException(message)
+            HttpStatusCode.TooManyRequests -> TooManyRequestsException(message)
+            HttpStatusCode.InternalServerError -> InternalServerErrorException(message)
+            HttpStatusCode.ServiceUnavailable -> ServiceUnavailableException(message)
+            HttpStatusCode.GatewayTimeout -> GatewayTimeoutException(message)
+            else -> SdkException(message)
         }
     }
 }
