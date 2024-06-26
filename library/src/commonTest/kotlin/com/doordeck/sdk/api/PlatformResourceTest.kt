@@ -16,7 +16,7 @@ class PlatformResourceTest : SystemTest() {
 
     // Initial application
     private val application = Platform.CreateApplication(
-        name = uuid4().toString(),
+        name = "Test Application ${uuid4()}",
         companyName = uuid4().toString(),
         mailingAddress = "test@doordeck.com",
         privacyPolicy = "https://www.doordeck.com/privacy",
@@ -24,7 +24,7 @@ class PlatformResourceTest : SystemTest() {
     )
 
     // Updated application
-    private val updatedApplicationName = uuid4().toString()
+    private val updatedApplicationName = "Test Application ${uuid4()}"
     private val updatedApplicationCompanyName = uuid4().toString()
     private val updatedApplicationMailingAddress = "test2@doordeck.com"
     private val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
