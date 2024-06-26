@@ -21,6 +21,7 @@ jobs:
     env:
       TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
       TEST_NEW_APPLICATION_OWNER: ${{ secrets.TEST_NEW_APPLICATION_OWNER }}
+      TEST_ENV_VAR: ${{ secrets.TEST_ENV_VAR }}
     strategy:
       matrix:
         include:
