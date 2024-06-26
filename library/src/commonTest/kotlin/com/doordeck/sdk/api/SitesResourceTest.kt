@@ -13,7 +13,7 @@ class SitesResourceTest : SystemTest() {
     @Test
     fun shouldTestSite() = runBlocking {
         // Initialize the resource
-        val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_MAIN_APPLICATION_OWNER, null))
+        val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
         // Retrieve the sites
         val sites = resource.listSites()

@@ -58,7 +58,7 @@ class PlatformResourceTest : SystemTest() {
     @Test
     fun shouldTestPlatform() = runBlocking {
         // Initialize the resource
-        val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_MAIN_APPLICATION_OWNER, null))
+        val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
         // Create a new application
         resource.createApplication(application)
