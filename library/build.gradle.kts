@@ -63,7 +63,6 @@ kotlin {
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
-                implementation("io.github.aakira:napier:2.7.1")
             }
         }
         val commonTest by getting {
