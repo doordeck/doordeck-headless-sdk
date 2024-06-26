@@ -92,7 +92,7 @@ abstract class AbstractResourceImpl {
         try {
             val response = function()
             if (!response.status.isSuccess()) {
-                response.handleClientFailure()
+                response.handleResponseFailure()
             }
             return if (T::class == Unit::class) {
                 Unit as T
@@ -108,7 +108,12 @@ abstract class AbstractResourceImpl {
         }
     }
 
-    protected suspend fun HttpResponse.handleClientFailure() {
+    /**
+     * Handle the error codes
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#errors">API Doc</a>
+     */
+    protected suspend fun HttpResponse.handleResponseFailure() {
         val message = "API call failed with: ${status.value} (${status.description}): ${bodyAsText()}"
         throw when(status) {
             HttpStatusCode.BadRequest -> BadRequestException(message)
