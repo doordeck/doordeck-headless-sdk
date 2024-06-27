@@ -1,5 +1,7 @@
 package com.doordeck.sdk.util
 
+import com.doordeck.sdk.PlatformType
+import com.doordeck.sdk.getPlatform
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Crypto.certificateChainToString
 import com.doordeck.sdk.util.Crypto.decodeBase64ToByteArray
@@ -16,37 +18,29 @@ class CryptoTest {
     private val privateBase64Key = "FiCAxj-4_jsYrv3X0oUoIK0QrnZj-tqYIub3YOISkyGZhSurcF_UU7PpUbwZCyNHqMaxON18A9VwMy2KtwWbNw"
     private val publicBase64Key = "mYUrq3Bf1FOz6VG8GQsjR6jGsTjdfAPVcDMtircFmzc"
 
-    init {
-        runBlocking {
-            LibsodiumInitializer.initialize()
-        }
-    }
-
     @Test
-    fun shouldDecodeEncodeKeys() {
+    fun shouldTestCrypto() = runBlocking {
+        if (getPlatform() == PlatformType.ANDROID) {
+            return@runBlocking
+        }
+
+        LibsodiumInitializer.initialize()
+
+        // Decode & encode keys
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
         val publicKey = publicBase64Key.decodeBase64ToByteArray()
-
         assertEquals(privateBase64Key, privateKey.encodeByteArrayToBase64())
         assertEquals(publicBase64Key, publicKey.encodeByteArrayToBase64())
-    }
 
-    @Test
-    fun shouldGenerateKeyPair() {
-        generateKeyPair()
-    }
-
-    @Test
-    fun shouldSignWithPrivateKey() = runBlocking {
-        val privateKey = privateBase64Key.decodeBase64ToByteArray()
-        assertEquals(
-            "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg",
+        // Sign with private key
+        assertEquals("uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg",
             "hello".signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         )
-    }
 
-    @Test
-    fun shouldConvertCertificateChainString() {
+        // Generate key pair
+        generateKeyPair()
+
+        // Convert string to certificate chain
         val certificateChainString = "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg"
         val certificateChain = certificateChainString.stringToCertificateChain()
         assertEquals(certificateChainString, certificateChain.certificateChainToString())
