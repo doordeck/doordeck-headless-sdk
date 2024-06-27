@@ -19,28 +19,48 @@ class CryptoTest {
     private val publicBase64Key = "mYUrq3Bf1FOz6VG8GQsjR6jGsTjdfAPVcDMtircFmzc"
 
     @Test
-    fun shouldTestCrypto() = runBlocking {
+    fun shouldDecodeEncodeKeys() = runBlocking {
         if (getPlatform() == PlatformType.ANDROID) {
             return@runBlocking
         }
-
-        LibsodiumInitializer.initialize()
-
-        // Decode & encode keys
+        if (!LibsodiumInitializer.isInitialized()) {
+            LibsodiumInitializer.initialize()
+        }
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
         val publicKey = publicBase64Key.decodeBase64ToByteArray()
+
         assertEquals(privateBase64Key, privateKey.encodeByteArrayToBase64())
         assertEquals(publicBase64Key, publicKey.encodeByteArrayToBase64())
+    }
 
-        // Sign with private key
-        assertEquals("uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg",
+    @Test
+    fun shouldGenerateKeyPair() = runBlocking {
+        if (getPlatform() == PlatformType.ANDROID) {
+            return@runBlocking
+        }
+        if (!LibsodiumInitializer.isInitialized()) {
+            LibsodiumInitializer.initialize()
+        }
+        generateKeyPair()
+    }
+
+    @Test
+    fun shouldSignWithPrivateKey() = runBlocking {
+        if (getPlatform() == PlatformType.ANDROID) {
+            return@runBlocking
+        }
+        if (!LibsodiumInitializer.isInitialized()) {
+            LibsodiumInitializer.initialize()
+        }
+        val privateKey = privateBase64Key.decodeBase64ToByteArray()
+        assertEquals(
+            "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg",
             "hello".signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         )
+    }
 
-        // Generate key pair
-        generateKeyPair()
-
-        // Convert string to certificate chain
+    @Test
+    fun shouldConvertCertificateChainString() {
         val certificateChainString = "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg"
         val certificateChain = certificateChainString.stringToCertificateChain()
         assertEquals(certificateChainString, certificateChain.certificateChainToString())
