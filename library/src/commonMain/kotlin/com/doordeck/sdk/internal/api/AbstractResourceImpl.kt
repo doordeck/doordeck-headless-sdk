@@ -22,6 +22,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.*
+import kotlinx.serialization.Serializable
 
 abstract class AbstractResourceImpl {
 
@@ -114,7 +115,12 @@ abstract class AbstractResourceImpl {
      * @see <a href="https://developer.doordeck.com/docs/#errors">API Doc</a>
      */
     protected suspend fun HttpResponse.handleResponseFailure() {
-        val message = "API call failed with: ${status.value} (${status.description}): ${bodyAsText()}"
+        val responseError = try {
+            body<ResponseError>()
+        } catch (exception: Exception) {
+            null
+        }
+        val message = "API call failed with: ${if (responseError?.message != null) responseError.message else "${status.value} (${status.description}) - ${bodyAsText()}"}"
         throw when(status) {
             HttpStatusCode.BadRequest -> BadRequestException(message)
             HttpStatusCode.Unauthorized -> UnauthorizedException(message)
@@ -133,4 +139,10 @@ abstract class AbstractResourceImpl {
             else -> SdkException(message)
         }
     }
+
+    @Serializable
+    private class ResponseError(
+        val code: Int? = null,
+        val message: String? = null
+    )
 }
