@@ -83,8 +83,6 @@ class LockUserResponse(
     val devices: Array<LockUserDetailsResponse>
 )
 
-// FIXME Make better names
-
 @JsExport
 @Serializable
 class LockUserDetailsResponse(
