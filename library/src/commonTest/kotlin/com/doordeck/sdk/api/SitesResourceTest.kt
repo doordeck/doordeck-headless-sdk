@@ -10,21 +10,24 @@ import kotlin.test.assertTrue
 
 class SitesResourceTest : SystemTest() {
 
-    @Test
-    fun shouldTestSite() = runBlocking {
-        // Initialize the resource
-        val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
+    // Initialize the resource
+    private val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
-        // Retrieve the sites
+    @Test
+    fun shouldListSites() = runBlocking {
         val sites = resource.listSites()
         assertTrue { sites.isNotEmpty() }
+    }
 
-        // Retrieve the locks for a site
-        val locksForSite = resource.getLocksForSite(sites.random().id)
+    @Test
+    fun shouldGetLocksForSite() = runBlocking {
+        val locksForSite = resource.getLocksForSite(resource.listSites().random().id)
         assertTrue { locksForSite.isNotEmpty() }
+    }
 
-        // Retrieve the users for a site
-        val usersForSite = resource.getUsersForSite(sites.random().id)
+    @Test
+    fun shouldGetUsersForSite() = runBlocking {
+        val usersForSite = resource.getUsersForSite(resource.listSites().random().id)
         assertTrue { usersForSite.isNotEmpty() }
     }
 }

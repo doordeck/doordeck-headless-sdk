@@ -11,18 +11,12 @@ import kotlin.test.assertEquals
 
 class AccountResourceTest : SystemTest() {
 
+    private val resource = AccountResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
     private val updatedUserDisplayName = uuid4().toString()
 
     @Test
-    fun shouldTestAccount() = runBlocking {
-        // Should initialize the resource
-        val resource = AccountResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
-
-        // Update user details
+    fun shouldUpdateUserDetails() = runBlocking {
         resource.updateUserDetails(updatedUserDisplayName)
-
-        // Retrieve the user details
-        val user = resource.getUserDetails()
-        assertEquals(updatedUserDisplayName, user.displayName)
+        assertEquals(updatedUserDisplayName, resource.getUserDetails().displayName)
     }
 }
