@@ -121,10 +121,10 @@ class UserAuditSubjectResponse(
 @JsExport
 @Serializable
 class LockAuditTrail(
-    val timestamp: Int,
+    val timestamp: Double,
     val type: AuditEvent,
     val user: String? = null,
     val email: String? = null,
     val displayName: String? = null,
-    val message: String
+    val message: String? = null
 )
