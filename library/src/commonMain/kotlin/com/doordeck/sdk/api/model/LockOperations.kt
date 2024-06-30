@@ -47,7 +47,7 @@ object LockOperations {
         val start: String,
         val end: String,
         val timezone: String,
-        val days: String,
+        val days: Array<String>,
         val exceptions: Array<String>? = null
     )
 

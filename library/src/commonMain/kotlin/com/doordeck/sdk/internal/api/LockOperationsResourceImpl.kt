@@ -24,7 +24,7 @@ import com.doordeck.sdk.api.requests.UpdateLockSettingTimeUsageRequirementReques
 import com.doordeck.sdk.api.requests.UpdateLockSettingUsageRequirementRequest
 import com.doordeck.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.sdk.api.requests.UserPublicKeyRequest
-import com.doordeck.sdk.api.responses.LockAuditTrail
+import com.doordeck.sdk.api.responses.LockAuditTrailResponse
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -51,7 +51,7 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail> {
+    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse> {
         return httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
             parameter(START, start)

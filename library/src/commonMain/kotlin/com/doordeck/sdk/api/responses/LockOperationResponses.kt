@@ -17,7 +17,7 @@ class LockResponse(
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: String? = null,
+    val unlockTime: Double? = null,
     val unlockForever: Boolean? = null,
 )
 
@@ -27,10 +27,36 @@ class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: Array<String>,
     val defaultName: String,
-    //val usageRequirements: Array // TODO
+    val usageRequirements: UsageRequirementsResponse,
     //unlockBetweenWindow
     val tiles: Array<String>,
     val hidden: Boolean
+)
+
+@JsExport
+@Serializable
+class UsageRequirementsResponse(
+    val time: TimeRequirementResponse? = null,
+    val location: LocationRequirementResponse? = null
+)
+
+@JsExport
+@Serializable
+class TimeRequirementResponse(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>
+)
+
+@JsExport
+@Serializable
+class LocationRequirementResponse(
+    val latitude: Double,
+    val longitude: Double,
+    val enabled: Boolean? = null,
+    val radius: Int? = null,
+    val accuracy: Int? = null
 )
 
 @JsExport
@@ -118,7 +144,7 @@ class UserAuditSubjectResponse(
 
 @JsExport
 @Serializable
-class LockAuditTrail(
+class LockAuditTrailResponse(
     val timestamp: Double,
     val type: AuditEvent,
     val user: String? = null,

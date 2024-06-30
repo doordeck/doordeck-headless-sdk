@@ -1,7 +1,7 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.responses.LockAuditTrail
+import com.doordeck.sdk.api.responses.LockAuditTrailResponse
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -26,7 +26,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail>
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse>
 
     /**
      * Get audit for a user
