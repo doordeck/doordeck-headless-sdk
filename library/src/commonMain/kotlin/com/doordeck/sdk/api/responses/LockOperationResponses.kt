@@ -18,7 +18,7 @@ class LockResponse(
     val state: LockStateResponse,
     val favourite: Boolean,
     val unlockTime: Double? = null,
-    val unlockForever: Boolean? = null,
+    val unlockForever: Boolean? = null
 )
 
 @JsExport
@@ -27,8 +27,8 @@ class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: Array<String>,
     val defaultName: String,
-    val usageRequirements: UsageRequirementsResponse,
-    //unlockBetweenWindow
+    val usageRequirements: UsageRequirementsResponse? = null,
+    val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: Array<String>,
     val hidden: Boolean
 )
@@ -57,6 +57,16 @@ class LocationRequirementResponse(
     val enabled: Boolean? = null,
     val radius: Int? = null,
     val accuracy: Int? = null
+)
+
+@JsExport
+@Serializable
+class UnlockBetweenSettingResponse(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>,
+    val exceptions: Array<String>? = null
 )
 
 @JsExport
