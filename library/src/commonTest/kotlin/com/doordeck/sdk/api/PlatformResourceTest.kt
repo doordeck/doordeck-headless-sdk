@@ -131,15 +131,15 @@ class PlatformResourceTest : SystemTest() {
         resource.removeCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
 
         // Add application owner
-        resource.addApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
+        resource.addApplicationOwner(actualApplication.applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Retrieve the application owner details
         val applicationOwnerDetails = resource.getApplicationOwnersDetails(actualApplication.applicationId)
         assertTrue { applicationOwnerDetails.isNotEmpty() }
-        assertTrue { applicationOwnerDetails.any { it.userId == TEST_NEW_APPLICATION_OWNER } }
+        assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
         // Remove application owner
-        resource.removeApplicationOwner(actualApplication.applicationId, TEST_NEW_APPLICATION_OWNER)
+        resource.removeApplicationOwner(actualApplication.applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Generate logo upload url
         val url = resource.getLogoUploadUrl(actualApplication.applicationId, "image/png")

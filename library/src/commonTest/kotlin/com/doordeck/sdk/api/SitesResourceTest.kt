@@ -21,18 +21,18 @@ class SitesResourceTest : SystemTest() {
         shouldGetUsersForSite(sites.random().id)
     }
 
-    private fun shouldListSites(): Array<SiteResponse> = runBlocking {
+    private fun shouldListSites(): Array<SiteResponse> {
         val sites = resource.listSites()
         assertTrue { sites.isNotEmpty() }
-        return@runBlocking sites
+        return sites
     }
 
-    private fun shouldGetLocksForSite(siteId: String) = runBlocking {
+    private fun shouldGetLocksForSite(siteId: String) {
         val locksForSite = resource.getLocksForSite(siteId)
         assertTrue { locksForSite.isNotEmpty() }
     }
 
-    private fun shouldGetUsersForSite(siteId: String) = runBlocking {
+    private fun shouldGetUsersForSite(siteId: String) {
         val usersForSite = resource.getUsersForSite(siteId)
         assertTrue { usersForSite.isNotEmpty() }
     }
