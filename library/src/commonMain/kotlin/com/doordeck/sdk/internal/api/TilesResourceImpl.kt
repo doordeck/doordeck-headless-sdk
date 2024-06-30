@@ -12,7 +12,9 @@ class TilesResourceImpl(
 ) : AbstractResourceImpl(), TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return httpClient.get(Paths.getLocksBelongingToTilePath(tileId))
+        return httpClient.get(Paths.getLocksBelongingToTilePath(tileId)) {
+            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)
+        }
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>) {

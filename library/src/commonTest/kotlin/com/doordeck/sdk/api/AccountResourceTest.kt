@@ -15,7 +15,11 @@ class AccountResourceTest : SystemTest() {
     private val updatedUserDisplayName = uuid4().toString()
 
     @Test
-    fun shouldUpdateUserDetails() = runBlocking {
+    fun shouldTestAccount() = runBlocking {
+        shouldUpdateUserDetails()
+    }
+
+    private fun shouldUpdateUserDetails() {
         resource.updateUserDetails(updatedUserDisplayName)
         assertEquals(updatedUserDisplayName, resource.getUserDetails().displayName)
     }
