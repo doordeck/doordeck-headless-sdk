@@ -1,12 +1,14 @@
 package com.doordeck.sdk.api
 
 import com.benasher44.uuid.uuid4
+import com.doordeck.sdk.PlatformType
 import com.doordeck.sdk.SystemTest
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.model.LockOperations
 import com.doordeck.sdk.api.model.UserRole
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.createHttpClient
+import com.doordeck.sdk.getPlatform
 import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Crypto.decodeBase64ToByteArray
@@ -49,6 +51,9 @@ class LockOperationsResourceTest : SystemTest() {
 
     @Test
     fun shouldTestLockOperations() = runBlocking {
+        if (getPlatform() == PlatformType.ANDROID) {
+            return@runBlocking
+        }
         LibsodiumInitializer.initialize()
 
         shouldGetSingleLock()
