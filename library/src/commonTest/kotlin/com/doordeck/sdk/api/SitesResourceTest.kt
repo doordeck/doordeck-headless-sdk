@@ -21,18 +21,27 @@ class SitesResourceTest : SystemTest() {
     }
 
     private fun shouldListSites(): Array<SiteResponse> {
+        // When
         val sites = resource.listSites()
+
+        // Then
         assertTrue { sites.isNotEmpty() }
         return sites
     }
 
     private fun shouldGetLocksForSite(siteId: String) {
+        // When
         val locksForSite = resource.getLocksForSite(siteId)
+
+        // Then
         assertTrue { locksForSite.isNotEmpty() }
     }
 
     private fun shouldGetUsersForSite(siteId: String) {
+        // When
         val usersForSite = resource.getUsersForSite(siteId)
+
+        // Then
         assertTrue { usersForSite.isNotEmpty() }
     }
 }

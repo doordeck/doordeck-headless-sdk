@@ -109,7 +109,7 @@ class LockSettingsPermittedAddressesRequest(
 
 @Serializable
 class LockSettingsHiddenRequest(
-    val hidden: Boolean?
+    val hidden: Boolean
 ): LockSettingsRequest
 
 @Serializable

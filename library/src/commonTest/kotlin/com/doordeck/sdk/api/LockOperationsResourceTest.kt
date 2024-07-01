@@ -30,16 +30,6 @@ class LockOperationsResourceTest : SystemTest() {
 
     private val resource = LockOperationsResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
-    private val updatedLockName = "Demo ${uuid4()} Lock"
-    private val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
-    private val updatedLockDefaultName = "Demo ${uuid4()} Lock"
-    private val updatedLockPermittedAddresses = arrayOf("95.19.38.42")
-    private val updatedFavourite = true
-    private val updatedHidden = false
-    private val updatedUnlockDuration = Random.nextInt(30, 60)
-    //private val updatedTimeRestriction = LockOperations.TimeRequirement()
-    //private val updatedLocationRestriction = LockOperations.LocationRequirement
-
     @Test
     fun shouldTestLockOperations() = runBlocking {
         if (getPlatform() == PlatformType.ANDROID) {
@@ -54,8 +44,10 @@ class LockOperationsResourceTest : SystemTest() {
         shouldUpdateLockColour()
         shouldUpdateLockSettingDefaultName()
         shouldUpdateLockSettingPermittedAddresses()
+        shouldRemoveLockSettingPermittedAddresses()
         //shouldUpdateLockSettingTimeRestrictions() // TODO
-        //shouldUpdateLockSettingLocationRestrictions() // TODO
+        shouldUpdateLockSettingLocationRestrictions()
+        shouldRemoveLockSettingLocationRestrictions()
         shouldGetUserPublicKey()
         shouldGetUserPublicKeyByEmail()
         shouldGetLockAuditTrail()
@@ -68,7 +60,9 @@ class LockOperationsResourceTest : SystemTest() {
         shouldShareLock()
         shouldRevokeAccessToLock()
         shouldUpdateSecureSettingUnlockDuration()
+        shouldRemoveSecureSettingUnlockDuration()
         shouldUploadSecureSettingUnlockBetween()
+        shouldRemoveSecureSettingUnlockBetween()
     }
 
     private fun shouldGetSingleLock(): LockResponse {
@@ -76,48 +70,86 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldUpdateLockName() {
+        // Given
+        val updatedLockName = "Demo ${uuid4()} Lock"
+
+        // When
         resource.updateLockName(TEST_MAIN_LOCK_ID, updatedLockName)
 
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedLockName, lock.name)
     }
 
     private fun shouldUpdateLockFavourite() {
+        // Given
+        val updatedFavourite = true
+
+        // When
         resource.updateLockFavourite(TEST_MAIN_LOCK_ID, updatedFavourite)
 
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedFavourite, lock.favourite)
     }
 
     private fun shouldUpdateLockColour() {
+        // Given
+        val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
+
+        // When
         resource.updateLockColour(TEST_MAIN_LOCK_ID, updatedLockColour)
 
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedLockColour, lock.colour)
     }
 
     private fun shouldUpdateLockSettingDefaultName() {
+        // Given
+        val updatedLockDefaultName = "Demo ${uuid4()} Lock"
+
+        // When
         resource.updateLockSettingDefaultName(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
 
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedLockDefaultName, lock.settings.defaultName)
     }
 
     private fun shouldUpdateLockSettingPermittedAddresses() {
+        // Given
+        val updatedLockPermittedAddresses = arrayOf("95.19.38.42")
+
+        // When
         resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
 
-        var lock = shouldGetSingleLock()
+        // Then
+        val lock = shouldGetSingleLock()
         assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
         assertContains(lock.settings.permittedAddresses, updatedLockPermittedAddresses.first())
+    }
 
-        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, emptyArray())
-        lock = shouldGetSingleLock()
+    private fun shouldRemoveLockSettingPermittedAddresses() {
+        // Given
+        val updatedLockPermittedAddresses = emptyArray<String>()
+
+        // When
+        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
+
+        // Then
+        val lock = shouldGetSingleLock()
         assertTrue { lock.settings.permittedAddresses.isEmpty() }
     }
 
     private fun shouldUpdateLockSettingHidden() {
+        // Given
+        val updatedHidden = false
+
+        // When
         resource.updateLockSettingHidden(TEST_MAIN_LOCK_ID, updatedHidden)
 
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedHidden, lock.settings.hidden)
     }
@@ -127,7 +159,38 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldUpdateLockSettingLocationRestrictions() {
-        //resource.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, )
+        // Given
+        val updatedLocationRestriction = LockOperations.LocationRequirement(
+            latitude = Random.nextDouble(-90.0, 90.0),
+            longitude = Random.nextDouble(-180.0, 180.0),
+            enabled = true,
+            radius = Random.nextInt(1, 100),
+            accuracy = Random.nextInt(1, 100)
+        )
+
+        // When
+        resource.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
+
+        // Then
+        val lock = shouldGetSingleLock()
+        assertNotNull(lock.settings.usageRequirements?.location)
+        assertEquals(updatedLocationRestriction.latitude, lock.settings.usageRequirements!!.location!!.latitude)
+        assertEquals(updatedLocationRestriction.longitude, lock.settings.usageRequirements!!.location!!.longitude)
+        assertEquals(updatedLocationRestriction.enabled, lock.settings.usageRequirements!!.location!!.enabled)
+        assertEquals(updatedLocationRestriction.radius, lock.settings.usageRequirements!!.location!!.radius)
+        assertEquals(updatedLocationRestriction.accuracy, lock.settings.usageRequirements!!.location!!.accuracy)
+    }
+
+    private fun shouldRemoveLockSettingLocationRestrictions() {
+        // Given
+        val updatedLocationRestriction = null
+
+        // When
+        resource.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
+
+        // Then
+        val lock = shouldGetSingleLock()
+        assertEquals(lock.settings.usageRequirements?.location, updatedLocationRestriction)
     }
 
     private fun shouldGetUserPublicKey() {
@@ -139,92 +202,168 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldGetLockAuditTrail() {
+        // Given
         val now = Clock.System.now()
-        val lockAuditTrail = resource.getLockAuditTrail(TEST_MAIN_LOCK_ID,
-            now.minus(7.days).epochSeconds.toInt(), now.epochSeconds.toInt())
+        val start = now.minus(7.days).epochSeconds.toInt()
+        val end = now.epochSeconds.toInt()
+
+        // When
+        val lockAuditTrail = resource.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end)
+
+        // Then
         assertTrue { lockAuditTrail.isNotEmpty() }
     }
 
     private fun shouldGetAuditForUser() {
+        // Given
         val now = Clock.System.now()
-        val auditForUser = resource.getAuditForUser(TEST_MAIN_LOCK_ID,
-            now.minus(7.days).epochSeconds.toInt(), now.epochSeconds.toInt())
+        val start = now.minus(7.days).epochSeconds.toInt()
+        val end = now.epochSeconds.toInt()
+
+        // When
+        val auditForUser = resource.getAuditForUser(TEST_MAIN_LOCK_ID, start, end)
+
+        // Then
         assertTrue { auditForUser.isNotEmpty() }
     }
 
     private fun shouldGetUsersForLock() {
+        // When
         val usersForLock = resource.getUsersForLock(TEST_MAIN_LOCK_ID)
+
+        // Then
         assertTrue { usersForLock.isNotEmpty() }
     }
 
     private fun shouldGetLockForUser() {
+        // When
         val locksForUser = resource.getLocksForUser(TEST_MAIN_USER_ID)
+
+        // Then
         assertTrue { locksForUser.devices.isNotEmpty() }
     }
 
     private fun shouldGetPinnedLocks() {
+        // When
         val pinnedLocks = resource.getPinnedLocks()
+
+        // Then
         assertTrue { pinnedLocks.isNotEmpty() }
     }
 
     private fun shouldGetShareableLocks() {
+        // When
         val shareableLocks = resource.getShareableLocks()
+
+        // Then
         assertTrue { shareableLocks.isNotEmpty() }
     }
 
     private fun shouldUnlock() {
-        resource.unlock(LockOperations.UnlockOperation(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            )
-        ))
+        // Given
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        resource.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
+
+        // Then
+        // TODO
+        val lock = shouldGetSingleLock()
+        println(lock)
+       // assertTrue { lock.state.locked }
     }
 
     private fun shouldShareLock() {
+        // Given
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
         resource.shareLock(LockOperations.ShareLockOperation(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            ),
+            baseOperation = baseOperation,
             targetUserId = TEST_SUPPLEMENTARY_USER_ID,
             targetUserRole = UserRole.USER,
             targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
         ))
+
+        // Then
+        val locks = resource.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.isNotEmpty() }
     }
 
     private fun shouldRevokeAccessToLock() {
+        // Given
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
         resource.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            ),
+            baseOperation = baseOperation,
             users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
+
+        // Then
+        val locks = resource.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.isEmpty() }
     }
 
     private fun shouldUpdateSecureSettingUnlockDuration() {
+        // Given
+        val updatedUnlockDuration = Random.nextInt(30, 60)
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
         resource.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            ),
+            baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
         ))
 
+        // Then
+        val lock = shouldGetSingleLock()
+        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+    }
+
+    private fun shouldRemoveSecureSettingUnlockDuration() {
+        // Given
+        val updatedUnlockDuration = 1
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        resource.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+            baseOperation = baseOperation,
+            unlockDuration = updatedUnlockDuration
+        ))
+
+        // Then
         val lock = shouldGetSingleLock()
         assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
     }
 
     private fun shouldUploadSecureSettingUnlockBetween() {
+        // Given
         val timezone = TimeZone.currentSystemDefault()
         val now = Clock.System.now().toLocalDateTime(timezone)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
@@ -234,34 +373,45 @@ class LockOperationsResourceTest : SystemTest() {
             days = arrayOf(now.dayOfWeek.name),
             exceptions = emptyArray()
         )
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
         resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            ),
+            baseOperation = baseOperation,
             unlockBetween = updatedUnlockBetween
         ))
 
-        var lock = shouldGetSingleLock()
+        // Then
+        val lock = shouldGetSingleLock()
         assertNotNull(lock.settings.unlockBetweenWindow)
         assertEquals(lock.settings.unlockBetweenWindow!!.start, updatedUnlockBetween.start)
         assertEquals(lock.settings.unlockBetweenWindow!!.end, updatedUnlockBetween.end)
         assertEquals(lock.settings.unlockBetweenWindow!!.timezone, updatedUnlockBetween.timezone)
         assertContains(lock.settings.unlockBetweenWindow!!.days, now.dayOfWeek.name)
+    }
 
+    private fun shouldRemoveSecureSettingUnlockBetween() {
+        // Given
+        val baseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
+
+        // When
         resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(
-                userId = TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-                lockId = TEST_MAIN_LOCK_ID
-            ),
+            baseOperation = baseOperation,
             unlockBetween = null
         ))
 
-        lock = shouldGetSingleLock()
+        // Then
+        val lock = shouldGetSingleLock()
         assertNull(lock.settings.unlockBetweenWindow)
     }
 }

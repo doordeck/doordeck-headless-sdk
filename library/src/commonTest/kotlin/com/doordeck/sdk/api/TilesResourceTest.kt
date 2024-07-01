@@ -6,6 +6,7 @@ import com.doordeck.sdk.createHttpClient
 import com.doordeck.sdk.internal.api.TilesResourceImpl
 import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class TilesResourceTest : SystemTest() {
 
@@ -18,7 +19,11 @@ class TilesResourceTest : SystemTest() {
     }
 
     private fun shouldGetLocksBelongingToTile() {
-        resource.getLocksBelongingToTile(TEST_MAIN_TILE_ID)
+        // When
+        val locks = resource.getLocksBelongingToTile(TEST_MAIN_TILE_ID)
+
+        // Then
+        assertTrue { locks.deviceIds.isNotEmpty() }
     }
 
     private fun shouldAssociateMultipleLocks() {

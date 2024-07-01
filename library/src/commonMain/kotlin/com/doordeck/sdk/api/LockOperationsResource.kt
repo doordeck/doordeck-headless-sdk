@@ -89,7 +89,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingHidden(lockId: String, hidden: Boolean? = null)
+    fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
     /**
      * Update lock properties - Settings - Usage requirements - Time
