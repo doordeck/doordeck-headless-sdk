@@ -96,7 +96,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement? = null)
+    fun updateLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
 
     /**
      * Update lock properties - Settings - Usage requirements - Location

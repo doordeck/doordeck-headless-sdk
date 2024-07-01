@@ -45,7 +45,8 @@ class LockOperationsResourceTest : SystemTest() {
         shouldUpdateLockSettingDefaultName()
         shouldUpdateLockSettingPermittedAddresses()
         shouldRemoveLockSettingPermittedAddresses()
-        //shouldUpdateLockSettingTimeRestrictions() // TODO
+        shouldUpdateLockSettingTimeRestrictions()
+        shouldRemoveLockSettingTimeRestrictions()
         shouldUpdateLockSettingLocationRestrictions()
         shouldRemoveLockSettingLocationRestrictions()
         shouldGetUserPublicKey()
@@ -127,7 +128,7 @@ class LockOperationsResourceTest : SystemTest() {
         // Then
         val lock = shouldGetSingleLock()
         assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
-        assertContains(lock.settings.permittedAddresses, updatedLockPermittedAddresses.first())
+        assertContains(updatedLockPermittedAddresses, lock.settings.permittedAddresses.first())
     }
 
     private fun shouldRemoveLockSettingPermittedAddresses() {
@@ -155,7 +156,39 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldUpdateLockSettingTimeRestrictions() {
-        //resource.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, )
+        // Given
+        val timezone = TimeZone.currentSystemDefault()
+        val now = Clock.System.now().toLocalDateTime(timezone)
+        val updatedTimeRestriction = LockOperations.TimeRequirement(
+            start = "${now.hour}:${now.minute - 1}",
+            end = "${now.hour}:${now.minute + 5}",
+            timezone = timezone.id,
+            days = arrayOf(now.dayOfWeek.name)
+        )
+
+        // When
+        resource.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(updatedTimeRestriction))
+
+        // Then
+        val lock = shouldGetSingleLock()
+        val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
+        assertNotNull(actualTime)
+        assertEquals(updatedTimeRestriction.start, actualTime.start)
+        assertEquals(updatedTimeRestriction.end, actualTime.end)
+        assertEquals(updatedTimeRestriction.timezone, actualTime.timezone)
+        assertContains(actualTime.days, updatedTimeRestriction.days.first())
+    }
+
+    private fun shouldRemoveLockSettingTimeRestrictions() {
+        // Given
+        val updatedTimeRestriction = emptyArray<LockOperations.TimeRequirement>()
+
+        // When
+        resource.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, updatedTimeRestriction)
+
+        // Then
+        val lock = shouldGetSingleLock()
+        assertNull(lock.settings.usageRequirements?.time)
     }
 
     private fun shouldUpdateLockSettingLocationRestrictions() {
@@ -174,11 +207,11 @@ class LockOperationsResourceTest : SystemTest() {
         // Then
         val lock = shouldGetSingleLock()
         assertNotNull(lock.settings.usageRequirements?.location)
-        assertEquals(updatedLocationRestriction.latitude, lock.settings.usageRequirements!!.location!!.latitude)
-        assertEquals(updatedLocationRestriction.longitude, lock.settings.usageRequirements!!.location!!.longitude)
-        assertEquals(updatedLocationRestriction.enabled, lock.settings.usageRequirements!!.location!!.enabled)
-        assertEquals(updatedLocationRestriction.radius, lock.settings.usageRequirements!!.location!!.radius)
-        assertEquals(updatedLocationRestriction.accuracy, lock.settings.usageRequirements!!.location!!.accuracy)
+        assertEquals(updatedLocationRestriction.latitude, lock.settings.usageRequirements?.location?.latitude)
+        assertEquals(updatedLocationRestriction.longitude, lock.settings.usageRequirements?.location?.longitude)
+        assertEquals(updatedLocationRestriction.enabled, lock.settings.usageRequirements?.location?.enabled)
+        assertEquals(updatedLocationRestriction.radius, lock.settings.usageRequirements?.location?.radius)
+        assertEquals(updatedLocationRestriction.accuracy, lock.settings.usageRequirements?.location?.accuracy)
     }
 
     private fun shouldRemoveLockSettingLocationRestrictions() {
@@ -190,7 +223,7 @@ class LockOperationsResourceTest : SystemTest() {
 
         // Then
         val lock = shouldGetSingleLock()
-        assertEquals(lock.settings.usageRequirements?.location, updatedLocationRestriction)
+        assertEquals(updatedLocationRestriction, lock.settings.usageRequirements?.location)
     }
 
     private fun shouldGetUserPublicKey() {
@@ -272,10 +305,7 @@ class LockOperationsResourceTest : SystemTest() {
         resource.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
 
         // Then
-        // TODO
-        val lock = shouldGetSingleLock()
-        println(lock)
-       // assertTrue { lock.state.locked }
+        // TODO Verify if its locked ?
     }
 
     private fun shouldShareLock() {
@@ -389,9 +419,9 @@ class LockOperationsResourceTest : SystemTest() {
         // Then
         val lock = shouldGetSingleLock()
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(lock.settings.unlockBetweenWindow!!.start, updatedUnlockBetween.start)
-        assertEquals(lock.settings.unlockBetweenWindow!!.end, updatedUnlockBetween.end)
-        assertEquals(lock.settings.unlockBetweenWindow!!.timezone, updatedUnlockBetween.timezone)
+        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
+        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
+        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow?.timezone)
         assertContains(lock.settings.unlockBetweenWindow!!.days, now.dayOfWeek.name)
     }
 

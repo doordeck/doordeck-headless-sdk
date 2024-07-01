@@ -122,7 +122,7 @@ class UpdateLockSettingUsageRequirementRequest(
 
 @Serializable
 class UpdateLockSettingTimeUsageRequirementRequest(
-    val time: TimeRequirementRequest?
+    val time: Array<TimeRequirementRequest>
 ): UsageRequirementRequest
 
 @Serializable

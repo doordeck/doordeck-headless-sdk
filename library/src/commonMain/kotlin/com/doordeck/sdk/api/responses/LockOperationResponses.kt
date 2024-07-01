@@ -36,7 +36,7 @@ class LockSettingsResponse(
 @JsExport
 @Serializable
 class UsageRequirementsResponse(
-    val time: TimeRequirementResponse? = null,
+    val time: Array<TimeRequirementResponse>? = null,
     val location: LocationRequirementResponse? = null
 )
 

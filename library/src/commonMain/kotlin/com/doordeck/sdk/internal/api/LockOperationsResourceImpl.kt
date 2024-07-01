@@ -99,10 +99,10 @@ class LockOperationsResourceImpl(
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
-    override fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement?) {
+    override fun updateLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
-                time?.let { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
+                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }.toTypedArray()
             ))
         ))
     }
