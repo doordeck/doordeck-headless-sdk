@@ -132,10 +132,10 @@ class LockUserDetailsResponse(
 @Serializable
 class UserAuditResponse(
     val deviceId: String,
-    val timestamp: Int,
+    val timestamp: Double,
     val type: AuditEvent,
     val issuer: UserAuditIssuerResponse,
-    val subject: UserAuditSubjectResponse,
+    val subject: UserAuditSubjectResponse? = null,
     val rejected: Boolean
 )
 

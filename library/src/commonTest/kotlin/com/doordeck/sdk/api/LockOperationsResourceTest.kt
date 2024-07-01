@@ -52,7 +52,7 @@ class LockOperationsResourceTest : SystemTest() {
         shouldGetUserPublicKey()
         shouldGetUserPublicKeyByEmail()
         shouldGetLockAuditTrail()
-        //shouldGetAuditForUser() // FAILS - EMPTY
+        shouldGetAuditForUser()
         shouldGetUsersForLock()
         shouldGetLockForUser()
         shouldGetPinnedLocks()
@@ -254,7 +254,7 @@ class LockOperationsResourceTest : SystemTest() {
         val end = now.epochSeconds.toInt()
 
         // When
-        val auditForUser = resource.getAuditForUser(TEST_MAIN_LOCK_ID, start, end)
+        val auditForUser = resource.getAuditForUser(TEST_MAIN_USER_ID, start, end)
 
         // Then
         assertTrue { auditForUser.isNotEmpty() }

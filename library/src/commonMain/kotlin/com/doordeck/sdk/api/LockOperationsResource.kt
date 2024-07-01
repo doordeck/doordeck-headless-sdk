@@ -33,7 +33,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse>
+    fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse>
 
     /**
      * Get users for a lock

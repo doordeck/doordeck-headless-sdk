@@ -59,11 +59,11 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse> {
-        return httpClient.get(Paths.getAuditForUserPath(lockId)) {
+    override fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse> {
+        return httpClient.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
             parameter(START, start)
-            parameter(END, start)
+            parameter(END, end)
         }
     }
 
