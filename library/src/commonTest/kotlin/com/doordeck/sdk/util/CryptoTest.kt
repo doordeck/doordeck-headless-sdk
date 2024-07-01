@@ -15,8 +15,8 @@ import kotlin.test.assertEquals
 
 class CryptoTest {
 
-    private val privateBase64Key = "FiCAxj-4_jsYrv3X0oUoIK0QrnZj-tqYIub3YOISkyGZhSurcF_UU7PpUbwZCyNHqMaxON18A9VwMy2KtwWbNw"
-    private val publicBase64Key = "mYUrq3Bf1FOz6VG8GQsjR6jGsTjdfAPVcDMtircFmzc"
+    private val privateBase64Key = "Q7HNk4W6f1HjEbUjpCM1g6W1Te20Zs27gnPVprIaOsR4qtCq3fkamB+miQ06zG+A64Y7BIrI5RhI/FEHbKIi1A=="
+    private val publicBase64Key = "eKrQqt35GpgfpokNOsxvgOuGOwSKyOUYSPxRB2yiItQ="
 
     @Test
     fun shouldDecodeEncodeKeys() = runBlocking {
@@ -54,7 +54,7 @@ class CryptoTest {
         }
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
         assertEquals(
-            "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg",
+            "XM2po4r/pJXUTcr77VabfHiC/1S7N/srtKc/ydUEMqkmGXMYeMovEL6sb4j0lcQOqC9U43ETQJHbCVqhx3jlCA==",
             "hello".signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         )
     }
