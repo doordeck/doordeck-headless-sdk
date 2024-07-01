@@ -9,7 +9,6 @@ import kotlin.test.Test
 
 class TilesResourceTest : SystemTest() {
 
-    // Initialize the resource
     private val resource = TilesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
     @Test

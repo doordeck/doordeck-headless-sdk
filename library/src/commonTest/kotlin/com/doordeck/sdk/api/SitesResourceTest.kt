@@ -11,7 +11,6 @@ import kotlin.test.assertTrue
 
 class SitesResourceTest : SystemTest() {
 
-    // Initialize the resource
     private val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
     @Test

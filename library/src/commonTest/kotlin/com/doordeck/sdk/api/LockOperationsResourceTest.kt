@@ -17,37 +17,28 @@ import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.random.Random
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 
 class LockOperationsResourceTest : SystemTest() {
-    // Initialize the resource
+
     private val resource = LockOperationsResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
     private val updatedLockName = "Demo ${uuid4()} Lock"
-    private val updatedLockColour = "#000000"
+    private val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
     private val updatedLockDefaultName = "Demo ${uuid4()} Lock"
     private val updatedLockPermittedAddresses = arrayOf("73.238.49.118")
     private val updatedFavourite = true
     private val updatedHidden = false
-    private val updatedUnlockDuration = 30
+    private val updatedUnlockDuration = Random.nextInt(30, 60)
     //private val updatedTimeRestriction = LockOperations.TimeRequirement()
     //private val updatedLocationRestriction = LockOperations.LocationRequirement
-    private val updatedUnlockBetween by lazy {
-        val timezone = TimeZone.currentSystemDefault()
-        val now = Clock.System.now().toLocalDateTime(timezone)
-        LockOperations.UnlockBetween(
-            start = "${now.hour}:${now.minute - 1}",
-            end = "${now.hour}:${now.minute + 5}",
-            timezone = timezone.id,
-            days = arrayOf(now.dayOfWeek.name),
-            exceptions = null
-        )
-    }
-
 
     @Test
     fun shouldTestLockOperations() = runBlocking {
@@ -76,8 +67,8 @@ class LockOperationsResourceTest : SystemTest() {
         shouldUnlock()
         shouldShareLock()
         shouldRevokeAccessToLock()
-        //shouldUpdateSecureSettingUnlockDuration()
-        //shouldUploadSecureSettingUnlockBetween()
+        shouldUpdateSecureSettingUnlockDuration()
+        shouldUploadSecureSettingUnlockBetween()
     }
 
     private fun shouldGetSingleLock(): LockResponse {
@@ -234,6 +225,15 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldUploadSecureSettingUnlockBetween() {
+        val timezone = TimeZone.currentSystemDefault()
+        val now = Clock.System.now().toLocalDateTime(timezone)
+        val updatedUnlockBetween = LockOperations.UnlockBetween(
+            start = "${now.hour}:${now.minute - 1}",
+            end = "${now.hour}:${now.minute + 5}",
+            timezone = timezone.id,
+            days = arrayOf(now.dayOfWeek.name),
+            exceptions = emptyArray()
+        )
         resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation(
                 userId = TEST_MAIN_USER_ID,
@@ -244,10 +244,24 @@ class LockOperationsResourceTest : SystemTest() {
             unlockBetween = updatedUnlockBetween
         ))
 
-        val lock = shouldGetSingleLock()
-        assertEquals(lock.settings.usageRequirements?.time?.start, updatedUnlockBetween.start)
-        assertEquals(lock.settings.usageRequirements?.time?.end, updatedUnlockBetween.end)
-        assertEquals(lock.settings.usageRequirements?.time?.timezone, updatedUnlockBetween.timezone)
-        assertEquals(lock.settings.usageRequirements?.time?.days, updatedUnlockBetween.days)
+        var lock = shouldGetSingleLock()
+        assertNotNull(lock.settings.unlockBetweenWindow)
+        assertEquals(lock.settings.unlockBetweenWindow!!.start, updatedUnlockBetween.start)
+        assertEquals(lock.settings.unlockBetweenWindow!!.end, updatedUnlockBetween.end)
+        assertEquals(lock.settings.unlockBetweenWindow!!.timezone, updatedUnlockBetween.timezone)
+        assertContains(lock.settings.unlockBetweenWindow!!.days, now.dayOfWeek.name)
+
+        resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(
+                userId = TEST_MAIN_USER_ID,
+                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+                userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+                lockId = TEST_MAIN_LOCK_ID
+            ),
+            unlockBetween = null
+        ))
+
+        lock = shouldGetSingleLock()
+        assertNull(lock.settings.unlockBetweenWindow)
     }
 }
