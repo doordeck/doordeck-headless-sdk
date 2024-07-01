@@ -33,7 +33,7 @@ class LockOperationsResourceTest : SystemTest() {
     private val updatedLockName = "Demo ${uuid4()} Lock"
     private val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
     private val updatedLockDefaultName = "Demo ${uuid4()} Lock"
-    private val updatedLockPermittedAddresses = arrayOf("73.238.49.118")
+    private val updatedLockPermittedAddresses = arrayOf("95.19.38.42")
     private val updatedFavourite = true
     private val updatedHidden = false
     private val updatedUnlockDuration = Random.nextInt(30, 60)
@@ -53,7 +53,7 @@ class LockOperationsResourceTest : SystemTest() {
         shouldUpdateLockFavourite()
         shouldUpdateLockColour()
         shouldUpdateLockSettingDefaultName()
-        //shouldUpdateLockSettingPermittedAddresses() // TODO
+        shouldUpdateLockSettingPermittedAddresses()
         //shouldUpdateLockSettingTimeRestrictions() // TODO
         //shouldUpdateLockSettingLocationRestrictions() // TODO
         shouldGetUserPublicKey()
@@ -108,11 +108,11 @@ class LockOperationsResourceTest : SystemTest() {
 
         var lock = shouldGetSingleLock()
         assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
-        assertEquals(updatedLockPermittedAddresses, lock.settings.permittedAddresses)
+        assertContains(lock.settings.permittedAddresses, updatedLockPermittedAddresses.first())
 
-        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, null)
+        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, emptyArray())
         lock = shouldGetSingleLock()
-        assertNull(lock.settings.permittedAddresses)
+        assertTrue { lock.settings.permittedAddresses.isEmpty() }
     }
 
     private fun shouldUpdateLockSettingHidden() {
@@ -135,7 +135,7 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldGetUserPublicKeyByEmail() {
-        resource.getUserPublicKey(TEST_MAIN_USER_EMAIL)
+        resource.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
     }
 
     private fun shouldGetLockAuditTrail() {

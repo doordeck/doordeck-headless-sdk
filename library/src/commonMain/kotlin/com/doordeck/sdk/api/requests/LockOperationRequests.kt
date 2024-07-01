@@ -104,7 +104,7 @@ class LockSettingsDefaultNameRequest(
 
 @Serializable
 class LockSettingsPermittedAddressesRequest(
-    val permittedAddress: Array<String>?
+    val permittedAddresses: Array<String>
 ): LockSettingsRequest
 
 @Serializable

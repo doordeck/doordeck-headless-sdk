@@ -91,8 +91,8 @@ class LockOperationsResourceImpl(
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
     }
 
-    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>?) {
-        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddress)))
+    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>) {
+        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses)))
     }
 
     override fun updateLockSettingHidden(lockId: String, hidden: Boolean?) {

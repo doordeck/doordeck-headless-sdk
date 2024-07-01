@@ -82,7 +82,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>? = null)
+    fun updateLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
 
     /**
      * Update lock properties - Settings - Hidden
