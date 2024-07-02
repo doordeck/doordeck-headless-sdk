@@ -8,7 +8,16 @@ plugins {
 }
 
 tasks.withType<KotlinJsTest>().configureEach {
-    environment("TEST_ENV_VAR", "9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb")
+    environment("TEST_AUTH_TOKEN", System.getenv("TEST_AUTH_TOKEN"))
+    environment("TEST_MAIN_USER_ID", System.getenv("TEST_MAIN_USER_ID"))
+    environment("TEST_MAIN_USER_EMAIL", System.getenv("TEST_MAIN_USER_EMAIL"))
+    environment("TEST_MAIN_USER_CERTIFICATE_CHAIN", System.getenv("TEST_MAIN_USER_CERTIFICATE_CHAIN"))
+    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY"))
+    environment("TEST_SUPPLEMENTARY_USER_ID", System.getenv("TEST_SUPPLEMENTARY_USER_ID"))
+    environment("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY", System.getenv("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY"))
+    environment("TEST_MAIN_TILE_ID", System.getenv("TEST_MAIN_TILE_ID"))
+    environment("TEST_MAIN_LOCK_ID", System.getenv("TEST_MAIN_LOCK_ID"))
+    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR"))
 }
 
 kotlin {
