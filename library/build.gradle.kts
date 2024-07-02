@@ -107,7 +107,7 @@ android {
 }
 
 tasks {
-    withType<Test> {
+    withType<AbstractTestTask> {
         testLogging {
             events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
         }
