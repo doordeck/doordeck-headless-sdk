@@ -25,6 +25,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsResourceTest : SystemTest() {
 
@@ -156,14 +157,15 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldUpdateLockSettingTimeRestrictions() {
-        // Given
         val timezone = TimeZone.currentSystemDefault()
-        val now = Clock.System.now().toLocalDateTime(timezone)
+        val now = Clock.System.now()
+        val min = now.minus(1.minutes).toLocalDateTime(timezone)
+        val max = now.plus(5.minutes).toLocalDateTime(timezone)
         val updatedTimeRestriction = LockOperations.TimeRequirement(
-            start = "${now.hour}:${now.minute - 1}",
-            end = "${now.hour}:${now.minute + 5}",
+            start = "${min.hour}:${min.minute}",
+            end = "${max.hour}:${max}",
             timezone = timezone.id,
-            days = arrayOf(now.dayOfWeek.name)
+            days = arrayOf(min.dayOfWeek.name)
         )
 
         // When
@@ -395,12 +397,14 @@ class LockOperationsResourceTest : SystemTest() {
     private fun shouldUploadSecureSettingUnlockBetween() {
         // Given
         val timezone = TimeZone.currentSystemDefault()
-        val now = Clock.System.now().toLocalDateTime(timezone)
+        val now = Clock.System.now()
+        val min = now.minus(1.minutes).toLocalDateTime(timezone)
+        val max = now.plus(5.minutes).toLocalDateTime(timezone)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${now.hour}:${now.minute - 1}",
-            end = "${now.hour}:${now.minute + 5}",
+            start = "${min.hour}:${min.minute}",
+            end = "${max.hour}:${max.minute}",
             timezone = timezone.id,
-            days = arrayOf(now.dayOfWeek.name),
+            days = arrayOf(min.dayOfWeek.name),
             exceptions = emptyArray()
         )
         val baseOperation = LockOperations.BaseOperation(
@@ -422,7 +426,7 @@ class LockOperationsResourceTest : SystemTest() {
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow?.timezone)
-        assertContains(lock.settings.unlockBetweenWindow!!.days, now.dayOfWeek.name)
+        assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
     }
 
     private fun shouldRemoveSecureSettingUnlockBetween() {
