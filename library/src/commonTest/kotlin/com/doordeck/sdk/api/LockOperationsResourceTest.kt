@@ -162,8 +162,8 @@ class LockOperationsResourceTest : SystemTest() {
         val min = now.minus(1.minutes).toLocalDateTime(timezone)
         val max = now.plus(5.minutes).toLocalDateTime(timezone)
         val updatedTimeRestriction = LockOperations.TimeRequirement(
-            start = "${min.hour}:${min.minute}",
-            end = "${max.hour}:${max.minute}",
+            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
+            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = timezone.id,
             days = arrayOf(min.dayOfWeek.name)
         )
@@ -401,8 +401,8 @@ class LockOperationsResourceTest : SystemTest() {
         val min = now.minus(1.minutes).toLocalDateTime(timezone)
         val max = now.plus(5.minutes).toLocalDateTime(timezone)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour}:${min.minute}",
-            end = "${max.hour}:${max.minute}",
+            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
+            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = timezone.id,
             days = arrayOf(min.dayOfWeek.name),
             exceptions = emptyArray()
