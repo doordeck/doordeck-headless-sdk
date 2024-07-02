@@ -8,9 +8,15 @@ class Platform : SystemTest() {
 
     @Test
     fun shouldRetrieveEnvironmentVariable() {
+        // Given
+        val testEnvVar = "9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb"
+
+        // When
         val result = getEnvironmentVariable("TEST_ENV_VAR")
+
+        // Then
         assertNotNull(result)
-        assertEquals("9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb", result)
+        assertEquals(testEnvVar, result)
     }
 
     //@Test

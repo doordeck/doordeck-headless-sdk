@@ -4,148 +4,302 @@ import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.SystemTest
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.model.Platform
+import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.sdk.api.responses.ApplicationResponse
 import com.doordeck.sdk.createHttpClient
 import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformResourceTest : SystemTest() {
 
-    // Initial application
-    private val application = Platform.CreateApplication(
-        name = "Test Application ${uuid4()}",
-        companyName = uuid4().toString(),
-        mailingAddress = "test@doordeck.com",
-        privacyPolicy = "https://www.doordeck.com/privacy",
-        supportContact = "https://www.doordeck.com"
-    )
-
-    // Updated application
-    private val updatedApplicationName = "Test Application ${uuid4()}"
-    private val updatedApplicationCompanyName = uuid4().toString()
-    private val updatedApplicationMailingAddress = "test2@doordeck.com"
-    private val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
-    private val updatedApplicationSupportContact = "https://www.doordeck2.com"
-    private val updatedApplicationAppLink = "https://www.doordeck.com"
-    private val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
-    private val updatedApplicationEmailPreferences = Platform.EmailPreferences(
-        senderEmail = "test@test.com",
-        senderName = "test",
-        primaryColour = "#000000",
-        secondaryColour = "#000000",
-        onlySendEssentialEmails = true,
-        callToAction = Platform.EmailCallToAction(
-            actionTarget = "test",
-            headline = "test",
-            actionText = "test"
-        )
-    )
-    private val updatedApplicationAuthIssuer = "https://test.com"
-    private val updatedApplicationCorsDomain = "https://test.com"
-    private val updatedApplicationAuthKey = Platform.Ed25519Key(
-        kty = "OKP",
-        use = "sig",
-        kid = uuid4().toString(),
-        alg = "EdDSA",
-        d = "NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4",
-        crv = "Ed25519",
-        x = "vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"
-    )
+    private val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
 
     @Test
     fun shouldTestPlatform() = runBlocking {
-        // Initialize the resource
-        val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
+        val applicationId = shouldCreateApplication()
+        shouldUpdateApplicationName(applicationId)
+        shouldUpdateApplicationCompanyName(applicationId)
+        shouldUpdateApplicationMailingAddress(applicationId)
+        shouldUpdateApplicationPrivacyPolicy(applicationId)
+        shouldUpdateApplicationSupportContact(applicationId)
+        shouldUpdateApplicationAppLink(applicationId)
+        shouldUpdateApplicationEmailPreferences(applicationId)
+        shouldUpdateApplicationLogoUrl(applicationId)
+        shouldAddAuthIssuer(applicationId)
+        shouldDeleteAuthIssuer(applicationId)
+        shouldAddCorsDomain(applicationId)
+        shouldDeleteCorsDomain(applicationId)
+        shouldAddAuthKey(applicationId)
+        shouldGetApplicationOwnersDetails(applicationId)
+        shouldAddApplicationOwner(applicationId)
+        shouldRemoveApplicationOwner(applicationId)
+        shouldGetLogoUploadUrl(applicationId)
+        shouldDeleteApplication(applicationId)
+    }
 
-        // Create a new application
-        resource.createApplication(application)
+    private fun shouldCreateApplication(): String {
+        // Given
+        val newApplication = Platform.CreateApplication(
+            name = "Test Application ${uuid4()}",
+            companyName = uuid4().toString(),
+            mailingAddress = "test@doordeck.com",
+            privacyPolicy = "https://www.doordeck.com/privacy",
+            supportContact = "https://www.doordeck.com"
+        )
 
-        // Retrieve the applications
-        val applications = resource.listApplications()
-        assertTrue { applications.isNotEmpty() }
-        var actualApplication = applications.firstOrNull {
-            it.name == application.name && it.companyName == application.companyName
-        }
-        assertNotNull(actualApplication)
+        // When
+        resource.createApplication(newApplication)
 
-        // Update the application name
-        resource.updateApplicationName(actualApplication.applicationId, updatedApplicationName)
+        // Then
+        val application = shouldListApplications().firstOrNull { it.name.equals(newApplication.name, true) }
+        assertNotNull(application)
 
-        // Update the application company name
-        resource.updateApplicationCompanyName(actualApplication.applicationId, updatedApplicationCompanyName)
+        return application.applicationId
+    }
 
-        // Update the application mailing address
-        resource.updateApplicationMailingAddress(actualApplication.applicationId, updatedApplicationMailingAddress)
+    private fun shouldUpdateApplicationName(applicationId: String) {
+        // Given
+        val updatedApplicationName = "Test Application ${uuid4()}"
 
-        // Update the application privacy policy
-        resource.updateApplicationPrivacyPolicy(actualApplication.applicationId, updatedApplicationPrivacyPolicy)
+        // When
+        resource.updateApplicationName(applicationId, updatedApplicationName)
 
-        //Update the application support contact
-        resource.updateApplicationSupportContact(actualApplication.applicationId, updatedApplicationSupportContact)
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationName, application.name)
+    }
 
-        // Update the application app link
-        resource.updateApplicationAppLink(actualApplication.applicationId, updatedApplicationAppLink)
+    private fun shouldUpdateApplicationCompanyName(applicationId: String) {
+        // Given
+        val updatedApplicationCompanyName = uuid4().toString()
 
-        // Update the application email preferences
-        resource.updateApplicationEmailPreferences(actualApplication.applicationId, updatedApplicationEmailPreferences)
+        // When
+        resource.updateApplicationCompanyName(applicationId, updatedApplicationCompanyName)
 
-        // Update the application logo
-        resource.updateApplicationLogoUrl(actualApplication.applicationId, updatedApplicationLogoUrl)
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationCompanyName, application.companyName)
+    }
 
-        // Add auth issuer
-        resource.addAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
+    private fun shouldUpdateApplicationMailingAddress(applicationId: String) {
+        // Given
+        val updatedApplicationMailingAddress = "test2@doordeck.com"
 
-        // Add cors domain
-        resource.addCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
+        // When
+        resource.updateApplicationMailingAddress(applicationId, updatedApplicationMailingAddress)
 
-        // Add auth key
-        resource.addAuthKey(actualApplication.applicationId, updatedApplicationAuthKey)
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
+    }
 
-        // Retrieve the application
-        actualApplication = resource.getApplication(actualApplication.applicationId)
-        assertEquals(updatedApplicationName, actualApplication.name)
-        assertEquals(updatedApplicationCompanyName, actualApplication.companyName)
-        assertEquals(updatedApplicationMailingAddress, actualApplication.mailingAddress)
-        assertEquals(updatedApplicationPrivacyPolicy, actualApplication.privacyPolicy)
-        assertEquals(updatedApplicationSupportContact, actualApplication.supportContact)
-        assertEquals(updatedApplicationAppLink, actualApplication.appLink)
-        assertEquals(updatedApplicationEmailPreferences.senderEmail, actualApplication.emailPreferences.senderEmail)
-        assertEquals(updatedApplicationEmailPreferences.senderName, actualApplication.emailPreferences.senderName)
-        assertEquals(updatedApplicationEmailPreferences.primaryColour, actualApplication.emailPreferences.primaryColour)
-        assertEquals(updatedApplicationEmailPreferences.secondaryColour, actualApplication.emailPreferences.secondaryColour)
-        assertEquals(updatedApplicationEmailPreferences.onlySendEssentialEmails, actualApplication.emailPreferences.onlySendEssentialEmails)
-        assertEquals(updatedApplicationEmailPreferences.callToAction?.actionTarget, actualApplication.emailPreferences.callToAction?.actionTarget)
-        assertEquals(updatedApplicationEmailPreferences.callToAction?.headline, actualApplication.emailPreferences.callToAction?.headline)
-        assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, actualApplication.emailPreferences.callToAction?.actionText)
-        assertEquals(updatedApplicationLogoUrl, actualApplication.logoUrl)
-        assertTrue { actualApplication.authDomains.any { it.equals(updatedApplicationAuthIssuer, true) } }
-        assertTrue { actualApplication.corsDomains.any { it.equals(updatedApplicationCorsDomain, true) } }
+    private fun shouldUpdateApplicationPrivacyPolicy(applicationId: String) {
+        // Given
+        val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
 
-        // Delete auth issuer
-        resource.deleteAuthIssuer(actualApplication.applicationId, updatedApplicationAuthIssuer)
+        // When
+        resource.updateApplicationPrivacyPolicy(applicationId, updatedApplicationPrivacyPolicy)
 
-        // Delete cors domain
-        resource.removeCorsDomain(actualApplication.applicationId, updatedApplicationCorsDomain)
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
+    }
 
-        // Add application owner
-        resource.addApplicationOwner(actualApplication.applicationId, TEST_SUPPLEMENTARY_USER_ID)
+    private fun shouldUpdateApplicationSupportContact(applicationId: String) {
+        // Given
+        val updatedApplicationSupportContact = "https://www.doordeck2.com"
 
-        // Retrieve the application owner details
-        val applicationOwnerDetails = resource.getApplicationOwnersDetails(actualApplication.applicationId)
-        assertTrue { applicationOwnerDetails.isNotEmpty() }
-        assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
+        // When
+        resource.updateApplicationSupportContact(applicationId, updatedApplicationSupportContact)
 
-        // Remove application owner
-        resource.removeApplicationOwner(actualApplication.applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationSupportContact, application.supportContact)
+    }
 
-        // Generate logo upload url
-        val url = resource.getLogoUploadUrl(actualApplication.applicationId, "image/png")
+    private fun shouldUpdateApplicationAppLink(applicationId: String) {
+        // Given
+        val updatedApplicationAppLink = "https://www.doordeck.com"
+
+        // When
+        resource.updateApplicationAppLink(applicationId, updatedApplicationAppLink)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationAppLink, application.appLink)
+    }
+
+    private fun shouldUpdateApplicationEmailPreferences(applicationId: String) {
+        // Given
+        val updatedApplicationEmailPreferences = Platform.EmailPreferences(
+            senderEmail = "test@test.com",
+            senderName = "test",
+            primaryColour = "#000000",
+            secondaryColour = "#000000",
+            onlySendEssentialEmails = true,
+            callToAction = Platform.EmailCallToAction(
+                actionTarget = "test",
+                headline = "test",
+                actionText = "test"
+            )
+        )
+
+        // When
+        resource.updateApplicationEmailPreferences(applicationId, updatedApplicationEmailPreferences)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationEmailPreferences.senderEmail, application.emailPreferences.senderEmail)
+        assertEquals(updatedApplicationEmailPreferences.senderName, application.emailPreferences.senderName)
+        assertEquals(updatedApplicationEmailPreferences.primaryColour, application.emailPreferences.primaryColour)
+        assertEquals(updatedApplicationEmailPreferences.secondaryColour, application.emailPreferences.secondaryColour)
+        assertEquals(updatedApplicationEmailPreferences.onlySendEssentialEmails, application.emailPreferences.onlySendEssentialEmails)
+        assertEquals(updatedApplicationEmailPreferences.callToAction?.actionTarget, application.emailPreferences.callToAction?.actionTarget)
+        assertEquals(updatedApplicationEmailPreferences.callToAction?.headline, application.emailPreferences.callToAction?.headline)
+        assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, application.emailPreferences.callToAction?.actionText)
+    }
+
+    private fun shouldUpdateApplicationLogoUrl(applicationId: String) {
+        // Given
+        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
+
+        // When
+        resource.updateApplicationLogoUrl(applicationId, updatedApplicationLogoUrl)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertEquals(updatedApplicationLogoUrl, application.logoUrl)
+    }
+
+    private fun shouldAddAuthIssuer(applicationId: String) {
+        // Given
+        val updatedApplicationAuthIssuer = "https://test.com"
+
+        // When
+        resource.addAuthIssuer(applicationId, updatedApplicationAuthIssuer)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertTrue { application.authDomains.any { it.equals(updatedApplicationAuthIssuer, true) } }
+    }
+
+    private fun shouldDeleteAuthIssuer(applicationId: String) {
+        // Given
+        val updatedApplicationAuthIssuer = "https://test.com"
+
+        // When
+        resource.deleteAuthIssuer(applicationId, updatedApplicationAuthIssuer)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertFalse { application.authDomains.any { it.equals(updatedApplicationAuthIssuer, true) } }
+    }
+
+    private fun shouldAddCorsDomain(applicationId: String) {
+        // Given
+        val updatedApplicationCorsDomain = "https://test.com"
+
+        // When
+        resource.addCorsDomain(applicationId, updatedApplicationCorsDomain)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertTrue { application.corsDomains.any { it.equals(updatedApplicationCorsDomain, true) } }
+    }
+
+    private fun shouldDeleteCorsDomain(applicationId: String) {
+        // Given
+        val updatedApplicationCorsDomain = "https://test.com"
+
+        // When
+        resource.removeCorsDomain(applicationId, updatedApplicationCorsDomain)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        assertFalse { application.corsDomains.any { it.equals(updatedApplicationCorsDomain, true) } }
+    }
+
+    private fun shouldAddAuthKey(applicationId: String) {
+        // Given
+        val updatedApplicationAuthKey = Platform.Ed25519Key(
+            kty = "OKP",
+            use = "sig",
+            kid = uuid4().toString(),
+            alg = "EdDSA",
+            d = "NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4",
+            crv = "Ed25519",
+            x = "vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"
+        )
+
+        // When
+        resource.addAuthKey(applicationId, updatedApplicationAuthKey)
+
+        // Then
+        val application = shouldGetApplication(applicationId)
+        // TODO
+    }
+
+    private fun shouldGetApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
+        // When
+        val result = resource.getApplicationOwnersDetails(applicationId)
+
+        // Then
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.any { it.userId == TEST_MAIN_USER_ID } }
+
+        return result
+    }
+
+    private fun shouldAddApplicationOwner(applicationId: String) {
+        // When
+        resource.addApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
+
+        // Then
+        val result = shouldGetApplicationOwnersDetails(applicationId)
+        assertTrue { result.isNotEmpty() }
+        assertTrue { result.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
+    }
+
+    private fun shouldRemoveApplicationOwner(applicationId: String) {
+        // When
+        resource.removeApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
+
+        // Then
+        val result = shouldGetApplicationOwnersDetails(applicationId)
+        assertTrue { result.isNotEmpty() }
+        assertFalse { result.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
+    }
+
+    private fun shouldGetLogoUploadUrl(applicationId: String) {
+        // Given
+        val contentType = "image/png"
+
+        // When
+        val url = resource.getLogoUploadUrl(applicationId, contentType)
+
+        // Then
         assertTrue { url.uploadUrl.isNotEmpty() }
+    }
 
-        // Delete the application
-        resource.deleteApplication(actualApplication.applicationId)
+    private fun shouldListApplications(): Array<ApplicationResponse> {
+        return resource.listApplications()
+    }
+
+    private fun shouldGetApplication(applicationId: String): ApplicationResponse {
+        return resource.getApplication(applicationId)
+    }
+
+    private fun shouldDeleteApplication(applicationId: String) {
+        // When
+        resource.deleteApplication(applicationId)
+
+        // Then
+        val application = shouldListApplications()
+        assertFalse { application.any { it.applicationId == applicationId } }
     }
 }

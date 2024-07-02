@@ -26,11 +26,17 @@ class CryptoTest {
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initialize()
         }
+        // Given
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
         val publicKey = publicBase64Key.decodeBase64ToByteArray()
 
-        assertEquals(privateBase64Key, privateKey.encodeByteArrayToBase64())
-        assertEquals(publicBase64Key, publicKey.encodeByteArrayToBase64())
+        // When
+        val privateKeyEncoded = privateKey.encodeByteArrayToBase64()
+        val publicKeyEncoded = publicKey.encodeByteArrayToBase64()
+
+        // Then
+        assertEquals(privateBase64Key, privateKeyEncoded)
+        assertEquals(publicBase64Key, publicKeyEncoded)
     }
 
     @Test
@@ -52,17 +58,26 @@ class CryptoTest {
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initialize()
         }
+        // Given
+        val signed = "XM2po4r/pJXUTcr77VabfHiC/1S7N/srtKc/ydUEMqkmGXMYeMovEL6sb4j0lcQOqC9U43ETQJHbCVqhx3jlCA=="
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
-        assertEquals(
-            "XM2po4r/pJXUTcr77VabfHiC/1S7N/srtKc/ydUEMqkmGXMYeMovEL6sb4j0lcQOqC9U43ETQJHbCVqhx3jlCA==",
-            "hello".signWithPrivateKey(privateKey).encodeByteArrayToBase64()
-        )
+
+        // When
+        val result = "hello".signWithPrivateKey(privateKey).encodeByteArrayToBase64()
+
+        // Then
+        assertEquals(signed, result)
     }
 
     @Test
     fun shouldConvertCertificateChainString() {
+        // Given
         val certificateChainString = "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg"
+
+        // When
         val certificateChain = certificateChainString.stringToCertificateChain()
+
+        // Then
         assertEquals(certificateChainString, certificateChain.certificateChainToString())
     }
 }
