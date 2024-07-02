@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
 }
 
+tasks.withType<KotlinJsTest>().configureEach {
+    environment("TEST_ENV_VAR", "9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb")
+}
+
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm()
@@ -32,7 +36,7 @@ kotlin {
         }
         browser {
             testTask {
-                useKarma()
+                useMocha()
             }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
