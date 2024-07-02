@@ -32,9 +32,7 @@ kotlin {
         }
         browser {
             testTask {
-                useKarma {
-                    useChromeHeadless()
-                }
+                useKarma()
             }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
