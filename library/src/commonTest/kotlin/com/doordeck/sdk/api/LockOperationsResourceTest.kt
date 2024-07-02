@@ -163,7 +163,7 @@ class LockOperationsResourceTest : SystemTest() {
         val max = now.plus(5.minutes).toLocalDateTime(timezone)
         val updatedTimeRestriction = LockOperations.TimeRequirement(
             start = "${min.hour}:${min.minute}",
-            end = "${max.hour}:${max}",
+            end = "${max.hour}:${max.minute}",
             timezone = timezone.id,
             days = arrayOf(min.dayOfWeek.name)
         )
