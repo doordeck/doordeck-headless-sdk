@@ -77,6 +77,11 @@ jobs:
             build: jvmJar
             publish: publishJvmPublicationToGitHubPackagesRepository
             os: ubuntu-latest
+          - name: Android Release
+            build: androidReleaseSourcesJar
+            publish: publishAndroidReleasePublicationToGitHubPackagesRepository
+            os: ubuntu-latest
+
     #if: (success())
     runs-on: ${{ matrix.os }}
 
