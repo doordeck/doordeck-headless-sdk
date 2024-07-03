@@ -71,7 +71,7 @@ jobs:
           - name: JVM Release
             build: jvmJar
             os: ubuntu-latest
-    if: (success())
+    #if: (success())
     runs-on: ${{ matrix.os }}
 
     name: ${{ matrix.name }}
