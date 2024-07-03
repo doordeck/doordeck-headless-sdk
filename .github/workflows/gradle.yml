@@ -109,6 +109,6 @@ jobs:
         run: ./gradlew ${{ matrix.build }} -x test
 
       - name: Publish
-        run: ./gradlew -Prelease.useLastTag=true ${{ matrix.publish }} -x test
+        run: ./gradlew -Prelease.version=0.0.1 ${{ matrix.publish }} -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
