@@ -83,7 +83,7 @@ jobs:
     #        os: ubuntu-latest
 
     #if: (success())
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     name: Releases
 

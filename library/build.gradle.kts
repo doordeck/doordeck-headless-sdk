@@ -101,14 +101,6 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.doordeck.sdk"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-}
-
 // Set up the environment variables for the JS - Browser platform
 // So far, that is the only way I have found to make those tests pass
 tasks.withType<KotlinJsTest>().configureEach {
@@ -146,6 +138,14 @@ publishing {
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
+    }
+}
+
+android {
+    namespace = "com.doordeck.sdk"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
 
