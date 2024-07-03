@@ -135,7 +135,6 @@ publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["kotlin"])
-            version = "1.0.0"
         }
     }
     repositories {
