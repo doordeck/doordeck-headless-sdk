@@ -62,3 +62,55 @@ jobs:
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }}
+
+
+
+
+  release:
+    needs: build
+    strategy:
+      matrix:
+        include:
+          - name: JVM
+            build: jvmJar
+            os: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    name: ${{ matrix.name }}
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "Doordeck Development"
+          git config --global user.email "development@doordeck.com"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build
+        run: ./gradlew ${{ matrix.build }} -x test
+
+      - name: Publish
+        run: ./gradlew -Prelease.useLastTag=true publish -x test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        env:
+            GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1 --title "Release v1" --verify-tag --generate-notes

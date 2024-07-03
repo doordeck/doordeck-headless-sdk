@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    `maven-publish`
 }
 
 kotlin {
@@ -130,38 +131,21 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
-/*publishing {
+publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["kotlin"])
-            groupId = "com.example"
-            artifactId = "sdk"
-            version = "1.0.0"
-
-            pom {
-                name.set("SDK")
-                description.set("A simple Kotlin Multiplatform SDK")
-                url.set("https://example.com")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("developer")
-                        name.set("Developer Name")
-                        email.set("developer@example.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/example/sdk.git")
-                    developerConnection.set("scm:git:https://github.com/example/sdk.git")
-                    url.set("https://github.com/example/sdk")
-                }
+        }
+    }
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/doordeck/doordeck-sdk-sample")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
-}*/
+}
 
