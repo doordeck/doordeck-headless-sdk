@@ -89,7 +89,20 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Tag for release
+        run: ./gradlew final -x test
+
       - name: Publish
-        run: ./gradlew -Prelease.useLastTag=true :library:publish -x test
+        run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        env:
+            GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
