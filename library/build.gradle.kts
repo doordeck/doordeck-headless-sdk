@@ -11,6 +11,8 @@ plugins {
 }
 
 kotlin {
+    withSourcesJar(publish = false)
+
     applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
