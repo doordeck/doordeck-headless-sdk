@@ -127,11 +127,6 @@ tasks.withType<AbstractTestTask>().configureEach {
 }
 
 publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["kotlin"])
-        }
-    }
     repositories {
         maven {
             name = "GitHubPackages"
