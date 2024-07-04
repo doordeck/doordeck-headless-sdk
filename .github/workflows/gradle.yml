@@ -90,6 +90,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Publish
-        run: ./gradlew -Prelease.useLastTag=true publish -x test
+        run: ./gradlew -Prelease.useLastTag=true :library:publish -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
