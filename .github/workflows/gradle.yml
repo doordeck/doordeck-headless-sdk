@@ -4,12 +4,11 @@ on:
   push:
     branches:
       - 'main'
+    tags:
+      - v*.*.*
   pull_request:
     branches:
       - 'main'
-      - 'project-tests' # Temp
-    tags:
-      - v*.*.*
 
 jobs:
   validation:
@@ -19,52 +18,53 @@ jobs:
       - uses: actions/checkout@v4
       - uses: gradle/wrapper-validation-action@v2
 
-  #build:
-  #  needs: validation
-  #  env:
-  #    TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
-  #    TEST_MAIN_USER_ID: ${{ secrets.TEST_MAIN_USER_ID }}
-  #    TEST_MAIN_USER_EMAIL: ${{ secrets.TEST_MAIN_USER_EMAIL }}
-  #    TEST_MAIN_USER_CERTIFICATE_CHAIN: ${{ secrets.TEST_MAIN_USER_CERTIFICATE_CHAIN }}
-  #    TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-  #    TEST_SUPPLEMENTARY_USER_ID: ${{ secrets.TEST_SUPPLEMENTARY_USER_ID }}
-  #    TEST_SUPPLEMENTARY_USER_PUBLIC_KEY: ${{ secrets.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY }}
-  #    TEST_MAIN_TILE_ID: ${{ secrets.TEST_MAIN_TILE_ID }}
-  #    TEST_MAIN_LOCK_ID: ${{ secrets.TEST_MAIN_LOCK_ID }}
-  #    TEST_ENV_VAR: ${{ secrets.TEST_ENV_VAR }}
-  #  strategy:
-  #    matrix:
-  #      include:
-  #        - name: JVM
-  #          test: jvmTest
-  #          os: ubuntu-latest
-  #        - name: Android
-  #          test: testReleaseUnitTest
-  #          os: ubuntu-latest
-  #        - name: JS
-  #          test: kotlinUpgradeYarnLock jsTest
-  #          os: ubuntu-latest
-  #        - name: Apple
-  #          test: iosX64Test macosArm64Test macosX64Test
-  #          os: macos-latest
-  #  runs-on: ${{ matrix.os }}
-  #  name: ${{ matrix.name }}
-  #  steps:
-  #    - uses: actions/checkout@v4
-  #    - name: Set up Java
-  #      uses: actions/setup-java@v4
-  #      with:
-  #        distribution: corretto
-  #        java-version: 21
-  #    - name: Setup Gradle
-  #      uses: gradle/actions/setup-gradle@v3
-  #    - name: Tests
-  #      run: ./gradlew ${{ matrix.test }}
+  build:
+    needs: validation
+    env:
+      TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
+      TEST_MAIN_USER_ID: ${{ secrets.TEST_MAIN_USER_ID }}
+      TEST_MAIN_USER_EMAIL: ${{ secrets.TEST_MAIN_USER_EMAIL }}
+      TEST_MAIN_USER_CERTIFICATE_CHAIN: ${{ secrets.TEST_MAIN_USER_CERTIFICATE_CHAIN }}
+      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+      TEST_SUPPLEMENTARY_USER_ID: ${{ secrets.TEST_SUPPLEMENTARY_USER_ID }}
+      TEST_SUPPLEMENTARY_USER_PUBLIC_KEY: ${{ secrets.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY }}
+      TEST_MAIN_TILE_ID: ${{ secrets.TEST_MAIN_TILE_ID }}
+      TEST_MAIN_LOCK_ID: ${{ secrets.TEST_MAIN_LOCK_ID }}
+      TEST_ENV_VAR: ${{ secrets.TEST_ENV_VAR }}
+    strategy:
+      matrix:
+        include:
+          - name: JVM
+            test: jvmTest
+            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
+            os: ubuntu-latest
+          - name: JS
+            test: kotlinUpgradeYarnLock jsTest
+            os: ubuntu-latest
+          - name: Apple
+            test: iosX64Test macosArm64Test macosX64Test
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Tests
+        run: ./gradlew ${{ matrix.test }}
 
   release:
-  #  needs: build
-    runs-on: macos-latest
     name: Releases
+    needs: build
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
 
     permissions:
       contents: write
@@ -89,7 +89,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Tag for release
+      - name: Tag for release (if on main)
+        if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
       - name: Publish
