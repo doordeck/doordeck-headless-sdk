@@ -17,8 +17,7 @@ class LockResponse(
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: Double? = null,
-    val unlockForever: Boolean? = null
+    val unlockTime: Double? = null
 )
 
 @JsExport
