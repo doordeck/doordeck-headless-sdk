@@ -1,7 +1,6 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.SystemTest
-import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.responses.SiteResponse
 import com.doordeck.sdk.createHttpClient
 import com.doordeck.sdk.internal.api.SitesResourceImpl
@@ -11,7 +10,7 @@ import kotlin.test.assertTrue
 
 class SitesResourceTest : SystemTest() {
 
-    private val resource = SitesResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
+    private val resource = SitesResourceImpl(createHttpClient(TEST_ENVIRONMENT, TEST_AUTH_TOKEN, null))
 
     @Test
     fun shouldTestSites() = runBlocking {

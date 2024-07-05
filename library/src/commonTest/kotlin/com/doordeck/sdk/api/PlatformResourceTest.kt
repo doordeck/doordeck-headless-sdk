@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 
 class PlatformResourceTest : SystemTest() {
 
-    private val resource = PlatformResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
+    private val resource = PlatformResourceImpl(createHttpClient(TEST_ENVIRONMENT, TEST_AUTH_TOKEN, null))
 
     @Test
     fun shouldTestPlatform() = runBlocking {

@@ -1,6 +1,10 @@
 package com.doordeck.sdk
 
+import com.doordeck.sdk.api.model.ApiEnvironment
+
 open class SystemTest {
+
+    val TEST_ENVIRONMENT = ApiEnvironment.DEV
 
     val TEST_AUTH_TOKEN = getEnvironmentVariable("TEST_AUTH_TOKEN")
         ?: ""

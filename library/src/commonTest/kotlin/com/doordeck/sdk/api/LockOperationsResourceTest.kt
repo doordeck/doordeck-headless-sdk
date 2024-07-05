@@ -17,6 +17,7 @@ import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.Serializable
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -29,7 +30,8 @@ import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsResourceTest : SystemTest() {
 
-    private val resource = LockOperationsResourceImpl(createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null))
+    private val httpClient = createHttpClient(TEST_ENVIRONMENT, TEST_AUTH_TOKEN, null)
+    private val resource = LockOperationsResourceImpl(httpClient)
 
     @Test
     fun shouldTestLockOperations() = runBlocking {
@@ -294,7 +296,7 @@ class LockOperationsResourceTest : SystemTest() {
         assertTrue { shareableLocks.isNotEmpty() }
     }
 
-    private fun shouldUnlock() {
+    private fun shouldUnlock() = runBlocking {
         // Given
         val baseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
@@ -307,7 +309,10 @@ class LockOperationsResourceTest : SystemTest() {
         resource.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
 
         // Then
-        // TODO Verify if its locked ?
+        //val response: StatefulResponse = httpClient.get("/device/$TEST_MAIN_LOCK_ID/request/${baseOperation.jti}")
+        //    .body()
+        //assertEquals(RequestStateResponse.SUCCESSFUL, response.state)
+        // TODO FAILS WITH {"code":404,"message":"HTTP 404 Not Found"}
     }
 
     private fun shouldShareLock() {
@@ -447,5 +452,19 @@ class LockOperationsResourceTest : SystemTest() {
         // Then
         val lock = shouldGetSingleLock()
         assertNull(lock.settings.unlockBetweenWindow)
+    }
+
+    @Serializable
+    private class StatefulResponse(
+        val state: RequestStateResponse
+    )
+
+    @Serializable
+    private enum class RequestStateResponse {
+        PENDING,
+        SUCCESSFUL,
+        REJECTED,
+        EXPIRED,
+        FAILED
     }
 }
