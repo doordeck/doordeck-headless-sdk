@@ -3,13 +3,10 @@ package com.doordeck.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.PlatformType
 import com.doordeck.sdk.SystemTest
-import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.model.LockOperations
 import com.doordeck.sdk.api.model.UserRole
 import com.doordeck.sdk.api.responses.LockResponse
-import com.doordeck.sdk.createHttpClient
 import com.doordeck.sdk.getPlatform
-import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.sdk.util.Crypto.stringToCertificateChain
@@ -29,9 +26,6 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsResourceTest : SystemTest() {
-
-    private val httpClient = createHttpClient(TEST_ENVIRONMENT, TEST_AUTH_TOKEN, null)
-    private val resource = LockOperationsResourceImpl(httpClient)
 
     @Test
     fun shouldTestLockOperations() = runBlocking {
@@ -70,7 +64,7 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldGetSingleLock(): LockResponse {
-        return resource.getSingleLock(TEST_MAIN_LOCK_ID)
+        return LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID)
     }
 
     private fun shouldUpdateLockName() {
@@ -78,7 +72,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockName = "Demo ${uuid4()} Lock"
 
         // When
-        resource.updateLockName(TEST_MAIN_LOCK_ID, updatedLockName)
+        LOCK_OPERATIONS_RESOURCE.updateLockName(TEST_MAIN_LOCK_ID, updatedLockName)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -90,7 +84,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedFavourite = true
 
         // When
-        resource.updateLockFavourite(TEST_MAIN_LOCK_ID, updatedFavourite)
+        LOCK_OPERATIONS_RESOURCE.updateLockFavourite(TEST_MAIN_LOCK_ID, updatedFavourite)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -102,7 +96,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
 
         // When
-        resource.updateLockColour(TEST_MAIN_LOCK_ID, updatedLockColour)
+        LOCK_OPERATIONS_RESOURCE.updateLockColour(TEST_MAIN_LOCK_ID, updatedLockColour)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -114,7 +108,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockDefaultName = "Demo ${uuid4()} Lock"
 
         // When
-        resource.updateLockSettingDefaultName(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingDefaultName(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -126,7 +120,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockPermittedAddresses = arrayOf("95.19.38.42")
 
         // When
-        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -139,7 +133,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockPermittedAddresses = emptyArray<String>()
 
         // When
-        resource.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -151,7 +145,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedHidden = false
 
         // When
-        resource.updateLockSettingHidden(TEST_MAIN_LOCK_ID, updatedHidden)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingHidden(TEST_MAIN_LOCK_ID, updatedHidden)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -171,7 +165,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(updatedTimeRestriction))
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(updatedTimeRestriction))
 
         // Then
         val lock = shouldGetSingleLock()
@@ -188,7 +182,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedTimeRestriction = emptyArray<LockOperations.TimeRequirement>()
 
         // When
-        resource.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, updatedTimeRestriction)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, updatedTimeRestriction)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -206,7 +200,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -223,7 +217,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLocationRestriction = null
 
         // When
-        resource.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
+        LOCK_OPERATIONS_RESOURCE.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, updatedLocationRestriction)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -231,11 +225,11 @@ class LockOperationsResourceTest : SystemTest() {
     }
 
     private fun shouldGetUserPublicKey() {
-        resource.getUserPublicKey(TEST_MAIN_USER_EMAIL, true)
+        LOCK_OPERATIONS_RESOURCE.getUserPublicKey(TEST_MAIN_USER_EMAIL, true)
     }
 
     private fun shouldGetUserPublicKeyByEmail() {
-        resource.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
+        LOCK_OPERATIONS_RESOURCE.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
     }
 
     private fun shouldGetLockAuditTrail() {
@@ -245,7 +239,7 @@ class LockOperationsResourceTest : SystemTest() {
         val end = now.epochSeconds.toInt()
 
         // When
-        val lockAuditTrail = resource.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end)
+        val lockAuditTrail = LOCK_OPERATIONS_RESOURCE.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end)
 
         // Then
         assertTrue { lockAuditTrail.isNotEmpty() }
@@ -258,7 +252,7 @@ class LockOperationsResourceTest : SystemTest() {
         val end = now.epochSeconds.toInt()
 
         // When
-        val auditForUser = resource.getAuditForUser(TEST_MAIN_USER_ID, start, end)
+        val auditForUser = LOCK_OPERATIONS_RESOURCE.getAuditForUser(TEST_MAIN_USER_ID, start, end)
 
         // Then
         assertTrue { auditForUser.isNotEmpty() }
@@ -266,7 +260,7 @@ class LockOperationsResourceTest : SystemTest() {
 
     private fun shouldGetUsersForLock() {
         // When
-        val usersForLock = resource.getUsersForLock(TEST_MAIN_LOCK_ID)
+        val usersForLock = LOCK_OPERATIONS_RESOURCE.getUsersForLock(TEST_MAIN_LOCK_ID)
 
         // Then
         assertTrue { usersForLock.isNotEmpty() }
@@ -274,7 +268,7 @@ class LockOperationsResourceTest : SystemTest() {
 
     private fun shouldGetLockForUser() {
         // When
-        val locksForUser = resource.getLocksForUser(TEST_MAIN_USER_ID)
+        val locksForUser = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_MAIN_USER_ID)
 
         // Then
         assertTrue { locksForUser.devices.isNotEmpty() }
@@ -282,7 +276,7 @@ class LockOperationsResourceTest : SystemTest() {
 
     private fun shouldGetPinnedLocks() {
         // When
-        val pinnedLocks = resource.getPinnedLocks()
+        val pinnedLocks = LOCK_OPERATIONS_RESOURCE.getPinnedLocks()
 
         // Then
         assertTrue { pinnedLocks.isNotEmpty() }
@@ -290,7 +284,7 @@ class LockOperationsResourceTest : SystemTest() {
 
     private fun shouldGetShareableLocks() {
         // When
-        val shareableLocks = resource.getShareableLocks()
+        val shareableLocks = LOCK_OPERATIONS_RESOURCE.getShareableLocks()
 
         // Then
         assertTrue { shareableLocks.isNotEmpty() }
@@ -306,10 +300,10 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
+        LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
 
         // Then
-        //val response: StatefulResponse = httpClient.get("/device/$TEST_MAIN_LOCK_ID/request/${baseOperation.jti}")
+        //val response: StatefulResponse = HTTP_CLIENT.get("/device/$TEST_MAIN_LOCK_ID/request/${baseOperation.jti}")
         //    .body()
         //assertEquals(RequestStateResponse.SUCCESSFUL, response.state)
         // TODO FAILS WITH {"code":404,"message":"HTTP 404 Not Found"}
@@ -325,7 +319,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.shareLock(LockOperations.ShareLockOperation(
+        LOCK_OPERATIONS_RESOURCE.shareLock(LockOperations.ShareLockOperation(
             baseOperation = baseOperation,
             targetUserId = TEST_SUPPLEMENTARY_USER_ID,
             targetUserRole = UserRole.USER,
@@ -333,7 +327,7 @@ class LockOperationsResourceTest : SystemTest() {
         ))
 
         // Then
-        val locks = resource.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        val locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
         assertTrue { locks.devices.isNotEmpty() }
     }
 
@@ -347,13 +341,13 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+        LOCK_OPERATIONS_RESOURCE.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
             baseOperation = baseOperation,
             users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
 
         // Then
-        val locks = resource.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        val locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
         assertTrue { locks.devices.isEmpty() }
     }
 
@@ -368,7 +362,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
         ))
@@ -389,7 +383,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
         ))
@@ -420,7 +414,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LOCK_OPERATIONS_RESOURCE.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = baseOperation,
             unlockBetween = updatedUnlockBetween
         ))
@@ -444,7 +438,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        resource.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LOCK_OPERATIONS_RESOURCE.uploadSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = baseOperation,
             unlockBetween = null
         ))

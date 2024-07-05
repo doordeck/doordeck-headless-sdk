@@ -2,12 +2,9 @@ package com.doordeck.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.SystemTest
-import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.model.Platform
 import com.doordeck.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.sdk.api.responses.ApplicationResponse
-import com.doordeck.sdk.createHttpClient
-import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,8 +13,6 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformResourceTest : SystemTest() {
-
-    private val resource = PlatformResourceImpl(createHttpClient(TEST_ENVIRONMENT, TEST_AUTH_TOKEN, null))
 
     @Test
     fun shouldTestPlatform() = runBlocking {
@@ -53,7 +48,7 @@ class PlatformResourceTest : SystemTest() {
         )
 
         // When
-        resource.createApplication(newApplication)
+        PLATFORM_RESOURCE.createApplication(newApplication)
 
         // Then
         val application = shouldListApplications().firstOrNull { it.name.equals(newApplication.name, true) }
@@ -67,7 +62,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationName = "Test Application ${uuid4()}"
 
         // When
-        resource.updateApplicationName(applicationId, updatedApplicationName)
+        PLATFORM_RESOURCE.updateApplicationName(applicationId, updatedApplicationName)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -79,7 +74,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationCompanyName = uuid4().toString()
 
         // When
-        resource.updateApplicationCompanyName(applicationId, updatedApplicationCompanyName)
+        PLATFORM_RESOURCE.updateApplicationCompanyName(applicationId, updatedApplicationCompanyName)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -91,7 +86,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationMailingAddress = "test2@doordeck.com"
 
         // When
-        resource.updateApplicationMailingAddress(applicationId, updatedApplicationMailingAddress)
+        PLATFORM_RESOURCE.updateApplicationMailingAddress(applicationId, updatedApplicationMailingAddress)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -103,7 +98,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
 
         // When
-        resource.updateApplicationPrivacyPolicy(applicationId, updatedApplicationPrivacyPolicy)
+        PLATFORM_RESOURCE.updateApplicationPrivacyPolicy(applicationId, updatedApplicationPrivacyPolicy)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -115,7 +110,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationSupportContact = "https://www.doordeck2.com"
 
         // When
-        resource.updateApplicationSupportContact(applicationId, updatedApplicationSupportContact)
+        PLATFORM_RESOURCE.updateApplicationSupportContact(applicationId, updatedApplicationSupportContact)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -127,7 +122,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationAppLink = "https://www.doordeck.com"
 
         // When
-        resource.updateApplicationAppLink(applicationId, updatedApplicationAppLink)
+        PLATFORM_RESOURCE.updateApplicationAppLink(applicationId, updatedApplicationAppLink)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -150,7 +145,7 @@ class PlatformResourceTest : SystemTest() {
         )
 
         // When
-        resource.updateApplicationEmailPreferences(applicationId, updatedApplicationEmailPreferences)
+        PLATFORM_RESOURCE.updateApplicationEmailPreferences(applicationId, updatedApplicationEmailPreferences)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -169,7 +164,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
 
         // When
-        resource.updateApplicationLogoUrl(applicationId, updatedApplicationLogoUrl)
+        PLATFORM_RESOURCE.updateApplicationLogoUrl(applicationId, updatedApplicationLogoUrl)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -181,7 +176,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationAuthIssuer = "https://test.com"
 
         // When
-        resource.addAuthIssuer(applicationId, updatedApplicationAuthIssuer)
+        PLATFORM_RESOURCE.addAuthIssuer(applicationId, updatedApplicationAuthIssuer)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -193,7 +188,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationAuthIssuer = "https://test.com"
 
         // When
-        resource.deleteAuthIssuer(applicationId, updatedApplicationAuthIssuer)
+        PLATFORM_RESOURCE.deleteAuthIssuer(applicationId, updatedApplicationAuthIssuer)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -205,7 +200,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationCorsDomain = "https://test.com"
 
         // When
-        resource.addCorsDomain(applicationId, updatedApplicationCorsDomain)
+        PLATFORM_RESOURCE.addCorsDomain(applicationId, updatedApplicationCorsDomain)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -217,7 +212,7 @@ class PlatformResourceTest : SystemTest() {
         val updatedApplicationCorsDomain = "https://test.com"
 
         // When
-        resource.removeCorsDomain(applicationId, updatedApplicationCorsDomain)
+        PLATFORM_RESOURCE.removeCorsDomain(applicationId, updatedApplicationCorsDomain)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -237,7 +232,7 @@ class PlatformResourceTest : SystemTest() {
         )
 
         // When
-        resource.addAuthKey(applicationId, updatedApplicationAuthKey)
+        PLATFORM_RESOURCE.addAuthKey(applicationId, updatedApplicationAuthKey)
 
         // Then
         val application = shouldGetApplication(applicationId)
@@ -246,7 +241,7 @@ class PlatformResourceTest : SystemTest() {
 
     private fun shouldGetApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
         // When
-        val result = resource.getApplicationOwnersDetails(applicationId)
+        val result = PLATFORM_RESOURCE.getApplicationOwnersDetails(applicationId)
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -257,7 +252,7 @@ class PlatformResourceTest : SystemTest() {
 
     private fun shouldAddApplicationOwner(applicationId: String) {
         // When
-        resource.addApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        PLATFORM_RESOURCE.addApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Then
         val result = shouldGetApplicationOwnersDetails(applicationId)
@@ -267,7 +262,7 @@ class PlatformResourceTest : SystemTest() {
 
     private fun shouldRemoveApplicationOwner(applicationId: String) {
         // When
-        resource.removeApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        PLATFORM_RESOURCE.removeApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Then
         val result = shouldGetApplicationOwnersDetails(applicationId)
@@ -280,23 +275,23 @@ class PlatformResourceTest : SystemTest() {
         val contentType = "image/png"
 
         // When
-        val url = resource.getLogoUploadUrl(applicationId, contentType)
+        val url = PLATFORM_RESOURCE.getLogoUploadUrl(applicationId, contentType)
 
         // Then
         assertTrue { url.uploadUrl.isNotEmpty() }
     }
 
     private fun shouldListApplications(): Array<ApplicationResponse> {
-        return resource.listApplications()
+        return PLATFORM_RESOURCE.listApplications()
     }
 
     private fun shouldGetApplication(applicationId: String): ApplicationResponse {
-        return resource.getApplication(applicationId)
+        return PLATFORM_RESOURCE.getApplication(applicationId)
     }
 
     private fun shouldDeleteApplication(applicationId: String) {
         // When
-        resource.deleteApplication(applicationId)
+        PLATFORM_RESOURCE.deleteApplication(applicationId)
 
         // Then
         val application = shouldListApplications()
