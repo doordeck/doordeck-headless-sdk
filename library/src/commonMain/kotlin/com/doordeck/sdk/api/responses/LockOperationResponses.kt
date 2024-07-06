@@ -17,8 +17,7 @@ class LockResponse(
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: String? = null,
-    val unlockForever: Boolean? = null,
+    val unlockTime: Double? = null
 )
 
 @JsExport
@@ -27,10 +26,46 @@ class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: Array<String>,
     val defaultName: String,
-    //val usageRequirements: Array // TODO
-    //unlockBetweenWindow
+    val usageRequirements: UsageRequirementsResponse? = null,
+    val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: Array<String>,
     val hidden: Boolean
+)
+
+@JsExport
+@Serializable
+class UsageRequirementsResponse(
+    val time: Array<TimeRequirementResponse>? = null,
+    val location: LocationRequirementResponse? = null
+)
+
+@JsExport
+@Serializable
+class TimeRequirementResponse(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>
+)
+
+@JsExport
+@Serializable
+class LocationRequirementResponse(
+    val latitude: Double,
+    val longitude: Double,
+    val enabled: Boolean? = null,
+    val radius: Int? = null,
+    val accuracy: Int? = null
+)
+
+@JsExport
+@Serializable
+class UnlockBetweenSettingResponse(
+    val start: String,
+    val end: String,
+    val timezone: String,
+    val days: Array<String>,
+    val exceptions: Array<String>? = null
 )
 
 @JsExport
@@ -78,13 +113,10 @@ class LockUserResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val role: UserRole,
     val start: Double? = null,
     val end: Double? = null,
     val devices: Array<LockUserDetailsResponse>
 )
-
-// FIXME Make better names
 
 @JsExport
 @Serializable
@@ -99,10 +131,10 @@ class LockUserDetailsResponse(
 @Serializable
 class UserAuditResponse(
     val deviceId: String,
-    val timestamp: Int,
+    val timestamp: Double,
     val type: AuditEvent,
     val issuer: UserAuditIssuerResponse,
-    val subject: UserAuditSubjectResponse,
+    val subject: UserAuditSubjectResponse? = null,
     val rejected: Boolean
 )
 
@@ -121,11 +153,11 @@ class UserAuditSubjectResponse(
 
 @JsExport
 @Serializable
-class LockAuditTrail(
-    val timestamp: Int,
+class LockAuditTrailResponse(
+    val timestamp: Double,
     val type: AuditEvent,
     val user: String? = null,
     val email: String? = null,
     val displayName: String? = null,
-    val message: String
+    val message: String? = null
 )

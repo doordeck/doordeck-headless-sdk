@@ -176,5 +176,5 @@ interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse
+    fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse>
 }

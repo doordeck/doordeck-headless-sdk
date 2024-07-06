@@ -41,15 +41,11 @@ class PlatformResourceImpl(
     }
 
     override fun listApplications(): Array<ApplicationResponse> {
-        return httpClient.get(Paths.getListApplicationsPath()) {
-            addRequestHeaders()
-        }
+        return httpClient.get(Paths.getListApplicationsPath())
     }
 
     override fun getApplication(applicationId: String): ApplicationResponse {
-        return httpClient.get(Paths.getApplicationPath(applicationId)) {
-            addRequestHeaders()
-        }
+        return httpClient.get(Paths.getApplicationPath(applicationId))
     }
 
     override fun updateApplicationName(applicationId: String, name: String) {
@@ -82,6 +78,7 @@ class PlatformResourceImpl(
             senderName = emailPreferences.senderName,
             primaryColour = emailPreferences.primaryColour,
             secondaryColour = emailPreferences.secondaryColour,
+            onlySendEssentialEmails = emailPreferences.onlySendEssentialEmails,
             callToAction = emailPreferences.callToAction?.let {
                 CallToActionRequest(
                     actionTarget = it.actionTarget,
@@ -163,7 +160,7 @@ class PlatformResourceImpl(
         }
     }
 
-    override fun getApplicationOwnersDetails(applicationId: String): ApplicationOwnerDetailsResponse {
+    override fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
         return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
 }

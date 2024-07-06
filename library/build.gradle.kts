@@ -1,20 +1,25 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    `maven-publish`
 }
 
 kotlin {
+    withSourcesJar(publish = false)
+
     applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
         publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
     iosX64()
@@ -25,8 +30,15 @@ kotlin {
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
-        nodejs()
+        nodejs {
+            testTask {
+                useMocha()
+            }
+        }
         browser {
+            testTask {
+                useMocha()
+            }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
             }
@@ -38,6 +50,7 @@ kotlin {
 
     sourceSets {
         all {
+            // Remove the warnings from the experimental kotlin features
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
@@ -91,6 +104,41 @@ kotlin {
     }
 }
 
+// Set up the environment variables for the JS - Browser platform
+// So far, that is the only way I have found to make those tests pass
+tasks.withType<KotlinJsTest>().configureEach {
+    environment("TEST_AUTH_TOKEN", System.getenv("TEST_AUTH_TOKEN") ?: "")
+    environment("TEST_MAIN_USER_ID", System.getenv("TEST_MAIN_USER_ID") ?: "")
+    environment("TEST_MAIN_USER_EMAIL", System.getenv("TEST_MAIN_USER_EMAIL") ?: "")
+    environment("TEST_MAIN_USER_CERTIFICATE_CHAIN", System.getenv("TEST_MAIN_USER_CERTIFICATE_CHAIN") ?: "")
+    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY") ?: "")
+    environment("TEST_SUPPLEMENTARY_USER_ID", System.getenv("TEST_SUPPLEMENTARY_USER_ID") ?: "")
+    environment("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY", System.getenv("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY") ?: "")
+    environment("TEST_MAIN_TILE_ID", System.getenv("TEST_MAIN_TILE_ID") ?: "")
+    environment("TEST_MAIN_LOCK_ID", System.getenv("TEST_MAIN_LOCK_ID") ?: "")
+    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR") ?: "")
+}
+
+// Display the test log events at all the platforms
+tasks.withType<AbstractTestTask>().configureEach {
+    testLogging {
+        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/doordeck/doordeck-sdk-sample")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 android {
     namespace = "com.doordeck.sdk"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -98,46 +146,4 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
-
-tasks {
-    withType<Test> {
-        testLogging {
-            events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
-        }
-    }
-}
-/*publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["kotlin"])
-            groupId = "com.example"
-            artifactId = "sdk"
-            version = "1.0.0"
-
-            pom {
-                name.set("SDK")
-                description.set("A simple Kotlin Multiplatform SDK")
-                url.set("https://example.com")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("developer")
-                        name.set("Developer Name")
-                        email.set("developer@example.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/example/sdk.git")
-                    developerConnection.set("scm:git:https://github.com/example/sdk.git")
-                    url.set("https://github.com/example/sdk")
-                }
-            }
-        }
-    }
-}*/
 

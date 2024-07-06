@@ -64,6 +64,7 @@ class EmailPreferencesRequest(
     val senderName: String? = null,
     val primaryColour: String? = null,
     val secondaryColour: String? = null,
+    val onlySendEssentialEmails: Boolean? = null,
     val callToAction: CallToActionRequest? = null
 )
 
@@ -169,6 +170,7 @@ internal fun Platform.CreateApplication.toCreateApplicationRequest(): CreateAppl
             senderName = emailPreference.senderName,
             primaryColour = emailPreference.primaryColour,
             secondaryColour = emailPreference.secondaryColour,
+            onlySendEssentialEmails = emailPreference.onlySendEssentialEmails,
             callToAction = emailPreference.callToAction?.let { callToAction ->
                 CallToActionRequest(
                     actionTarget = callToAction.actionTarget,

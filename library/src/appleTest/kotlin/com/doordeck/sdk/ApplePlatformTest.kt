@@ -22,6 +22,6 @@ class IosPlatformTest {
         val platform = getPlatform()
 
         // When
-        assertEquals(platform, PlatformType.IOS)
+        assertEquals(platform, PlatformType.APPLE)
     }
 }

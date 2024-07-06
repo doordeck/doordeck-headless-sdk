@@ -1,7 +1,7 @@
 package com.doordeck.sdk.api
 
 import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.api.responses.LockAuditTrail
+import com.doordeck.sdk.api.responses.LockAuditTrailResponse
 import com.doordeck.sdk.api.responses.LockResponse
 import com.doordeck.sdk.api.responses.LockUserResponse
 import com.doordeck.sdk.api.responses.ShareableLockResponse
@@ -26,14 +26,14 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrail>
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse>
 
     /**
      * Get audit for a user
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    fun getAuditForUser(lockId: String, start: Int, end: Int): Array<UserAuditResponse>
+    fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse>
 
     /**
      * Get users for a lock
@@ -78,25 +78,25 @@ interface LockOperationsResource {
     fun updateLockSettingDefaultName(lockId: String, name: String? = null)
 
     /**
-     * Update lock properties - Settings - Permitted addresses
+     * Set lock properties - Settings - Permitted addresses
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingPermittedAddresses(lockId: String, permittedAddress: Array<String>? = null)
+    fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
 
     /**
      * Update lock properties - Settings - Hidden
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingHidden(lockId: String, hidden: Boolean? = null)
+    fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
     /**
-     * Update lock properties - Settings - Usage requirements - Time
+     * Set lock properties - Settings - Usage requirements - Time
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingTimeRestrictions(lockId: String, time: LockOperations.TimeRequirement? = null)
+    fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
 
     /**
      * Update lock properties - Settings - Usage requirements - Location

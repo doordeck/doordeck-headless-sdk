@@ -26,9 +26,9 @@ object Crypto {
     ).toByteArray()
 
 
-    fun String.decodeBase64ToByteArray(): ByteArray = LibsodiumUtil.fromBase64(this, Base64Variants.URLSAFE_NO_PADDING).toByteArray()
+    fun String.decodeBase64ToByteArray(): ByteArray = LibsodiumUtil.fromBase64(this, Base64Variants.ORIGINAL).toByteArray()
 
-    fun ByteArray.encodeByteArrayToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.URLSAFE_NO_PADDING)
+    fun ByteArray.encodeByteArrayToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)
 
     fun Array<String>.certificateChainToString(): String = joinToString("|")
 

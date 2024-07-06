@@ -55,7 +55,7 @@ class UnlockBetweenSettingRequest(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: String,
+    val days: Array<String>,
     val exceptions: Array<String>? = null
 )
 
@@ -104,12 +104,12 @@ class LockSettingsDefaultNameRequest(
 
 @Serializable
 class LockSettingsPermittedAddressesRequest(
-    val permittedAddresses: Array<String>?
+    val permittedAddresses: Array<String>
 ): LockSettingsRequest
 
 @Serializable
 class LockSettingsHiddenRequest(
-    val hidden: Boolean?
+    val hidden: Boolean
 ): LockSettingsRequest
 
 @Serializable
@@ -122,7 +122,7 @@ class UpdateLockSettingUsageRequirementRequest(
 
 @Serializable
 class UpdateLockSettingTimeUsageRequirementRequest(
-    val time: TimeRequirementRequest?
+    val time: Array<TimeRequirementRequest>
 ): UsageRequirementRequest
 
 @Serializable

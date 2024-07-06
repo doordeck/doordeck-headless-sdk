@@ -28,7 +28,7 @@ object Paths {
     // Lock Operations
     fun getSingleLockPath(lockId: String) = "/device/$lockId"
     fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
-    fun getAuditForUserPath(lockId: String) = "/user/$lockId/log"
+    fun getAuditForUserPath(userId: String) = "/user/$userId/log"
     fun getUsersForLockPath(lockId: String) = "/device/$lockId/users"
     fun getLocksForUserPath(userId: String) = "/user/$userId"
     fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"

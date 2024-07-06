@@ -18,9 +18,7 @@ import kotlinx.serialization.json.Json
 enum class PlatformType {
     JVM,
     ANDROID,
-    IOS,
-    MAC_OS_ARM_64,
-    MAC_OS_X64,
+    APPLE,
     JS
 }
 
@@ -35,6 +33,9 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
+        }
+        install(HttpTimeout) {
+            socketTimeoutMillis = 60_000
         }
         install(Auth) {
             bearer {
