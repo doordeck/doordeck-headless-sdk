@@ -1,21 +1,25 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    `maven-publish`
 }
 
 kotlin {
+    withSourcesJar(publish = false)
+
     applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
         publishLibraryVariants("release")
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
     iosX64()
@@ -100,14 +104,6 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.doordeck.sdk"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-}
-
 // Set up the environment variables for the JS - Browser platform
 // So far, that is the only way I have found to make those tests pass
 tasks.withType<KotlinJsTest>().configureEach {
@@ -130,38 +126,24 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
-/*publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["kotlin"])
-            groupId = "com.example"
-            artifactId = "sdk"
-            version = "1.0.0"
-
-            pom {
-                name.set("SDK")
-                description.set("A simple Kotlin Multiplatform SDK")
-                url.set("https://example.com")
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("developer")
-                        name.set("Developer Name")
-                        email.set("developer@example.com")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/example/sdk.git")
-                    developerConnection.set("scm:git:https://github.com/example/sdk.git")
-                    url.set("https://github.com/example/sdk")
-                }
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/doordeck/doordeck-sdk-sample")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
-}*/
+}
+
+android {
+    namespace = "com.doordeck.sdk"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+}
 

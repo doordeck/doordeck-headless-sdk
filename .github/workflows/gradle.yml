@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'main'
+    tags:
+      - v*.*.*
   pull_request:
     branches:
       - 'main'
@@ -43,11 +45,38 @@ jobs:
             test: iosX64Test macosArm64Test macosX64Test
             os: macos-latest
     runs-on: ${{ matrix.os }}
-
     name: ${{ matrix.name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+      - name: Tests
+        run: ./gradlew ${{ matrix.test }}
+
+  release:
+    name: Releases
+    needs: build
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "Doordeck Development"
+          git config --global user.email "development@doordeck.com"
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -58,5 +87,21 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }}
+      - name: Tag for release (if on main)
+        if: github.ref == 'refs/heads/main'
+        run: ./gradlew final -x test
+
+      - name: Publish
+        run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        env:
+            GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
