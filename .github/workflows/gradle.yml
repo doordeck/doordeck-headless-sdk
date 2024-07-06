@@ -21,11 +21,12 @@ jobs:
     env:
       TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
       TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+      TEST_MAIN_USER_PUBLIC_KEY: ${{ secrets.TEST_MAIN_USER_PUBLIC_KEY }}
       TEST_SUPPLEMENTARY_USER_ID: ${{ secrets.TEST_SUPPLEMENTARY_USER_ID }}
       TEST_SUPPLEMENTARY_USER_PUBLIC_KEY: ${{ secrets.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY }}
       TEST_MAIN_TILE_ID: ${{ secrets.TEST_MAIN_TILE_ID }}
       TEST_MAIN_LOCK_ID: ${{ secrets.TEST_MAIN_LOCK_ID }}
-      TEST_ENV_VAR: ${{ secrets.TEST_ENV_VAR }}
+      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
     strategy:
       matrix:
         include:

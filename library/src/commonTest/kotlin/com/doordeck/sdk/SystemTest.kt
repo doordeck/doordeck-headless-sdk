@@ -17,6 +17,8 @@ open class SystemTest {
     val TEST_MAIN_USER_ID by lazy { Jwt.getSub(TEST_AUTH_TOKEN)!! }
     val TEST_MAIN_USER_PRIVATE_KEY = getEnvironmentVariable("TEST_MAIN_USER_PRIVATE_KEY")
         ?: ""
+    val TEST_MAIN_USER_PUBLIC_KEY = getEnvironmentVariable("TEST_MAIN_USER_PUBLIC_KEY")
+        ?: ""
 
     // Http client
     val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null) }
@@ -28,10 +30,9 @@ open class SystemTest {
     val SITES_RESOURCE by lazy { SitesResourceImpl(HTTP_CLIENT) }
     val TILES_RESOURCE by lazy { TilesResourceImpl(HTTP_CLIENT) }
 
-    private val MAIN_USER_DETAILS by lazy { ACCOUNT_RESOURCE.getUserDetails() }
-    val TEST_MAIN_USER_EMAIL by lazy { MAIN_USER_DETAILS.email }
+    val TEST_MAIN_USER_EMAIL by lazy { ACCOUNT_RESOURCE.getUserDetails().email }
     val TEST_MAIN_USER_CERTIFICATE_CHAIN by lazy {
-        ACCOUNT_RESOURCE.registerEphemeralKey(MAIN_USER_DETAILS.publicKey.decodeBase64ToByteArray())
+        ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainToString()
     }
