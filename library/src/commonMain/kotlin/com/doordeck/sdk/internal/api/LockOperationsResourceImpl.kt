@@ -91,7 +91,7 @@ class LockOperationsResourceImpl(
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
     }
 
-    override fun updateLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>) {
+    override fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses)))
     }
 
@@ -99,7 +99,7 @@ class LockOperationsResourceImpl(
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
-    override fun updateLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>) {
+    override fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
                 time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }.toTypedArray()

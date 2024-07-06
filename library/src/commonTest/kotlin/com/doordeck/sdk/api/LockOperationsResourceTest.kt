@@ -40,9 +40,9 @@ class LockOperationsResourceTest : SystemTest() {
         shouldUpdateLockFavourite()
         shouldUpdateLockColour()
         shouldUpdateLockSettingDefaultName()
-        shouldUpdateLockSettingPermittedAddresses()
+        shouldSetLockSettingPermittedAddresses()
         shouldRemoveLockSettingPermittedAddresses()
-        shouldUpdateLockSettingTimeRestrictions()
+        shouldSetLockSettingTimeRestrictions()
         shouldRemoveLockSettingTimeRestrictions()
         shouldUpdateLockSettingLocationRestrictions()
         shouldRemoveLockSettingLocationRestrictions()
@@ -115,12 +115,12 @@ class LockOperationsResourceTest : SystemTest() {
         assertEquals(updatedLockDefaultName, lock.settings.defaultName)
     }
 
-    private fun shouldUpdateLockSettingPermittedAddresses() {
+    private fun shouldSetLockSettingPermittedAddresses() {
         // Given
         val updatedLockPermittedAddresses = arrayOf("95.19.38.42")
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
+        LOCK_OPERATIONS_RESOURCE.setLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -133,7 +133,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedLockPermittedAddresses = emptyArray<String>()
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
+        LOCK_OPERATIONS_RESOURCE.setLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, updatedLockPermittedAddresses)
 
         // Then
         val lock = shouldGetSingleLock()
@@ -152,7 +152,7 @@ class LockOperationsResourceTest : SystemTest() {
         assertEquals(updatedHidden, lock.settings.hidden)
     }
 
-    private fun shouldUpdateLockSettingTimeRestrictions() {
+    private fun shouldSetLockSettingTimeRestrictions() {
         val timezone = TimeZone.currentSystemDefault()
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(timezone)
@@ -165,7 +165,7 @@ class LockOperationsResourceTest : SystemTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(updatedTimeRestriction))
+        LOCK_OPERATIONS_RESOURCE.setLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(updatedTimeRestriction))
 
         // Then
         val lock = shouldGetSingleLock()
@@ -182,7 +182,7 @@ class LockOperationsResourceTest : SystemTest() {
         val updatedTimeRestriction = emptyArray<LockOperations.TimeRequirement>()
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, updatedTimeRestriction)
+        LOCK_OPERATIONS_RESOURCE.setLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, updatedTimeRestriction)
 
         // Then
         val lock = shouldGetSingleLock()

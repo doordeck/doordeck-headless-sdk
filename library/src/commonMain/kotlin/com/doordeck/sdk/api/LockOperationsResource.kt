@@ -78,11 +78,11 @@ interface LockOperationsResource {
     fun updateLockSettingDefaultName(lockId: String, name: String? = null)
 
     /**
-     * Update lock properties - Settings - Permitted addresses
+     * Set lock properties - Settings - Permitted addresses
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
+    fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
 
     /**
      * Update lock properties - Settings - Hidden
@@ -92,11 +92,11 @@ interface LockOperationsResource {
     fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
     /**
-     * Update lock properties - Settings - Usage requirements - Time
+     * Set lock properties - Settings - Usage requirements - Time
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
+    fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
 
     /**
      * Update lock properties - Settings - Usage requirements - Location
