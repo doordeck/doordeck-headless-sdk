@@ -6,6 +6,7 @@ import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.internal.api.SitesResourceImpl
 import com.doordeck.sdk.internal.api.TilesResourceImpl
+import com.doordeck.sdk.internal.api.TokenManagerImpl
 import com.doordeck.sdk.util.Crypto.certificateChainToString
 import com.doordeck.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.sdk.util.Jwt
@@ -21,10 +22,10 @@ open class SystemTest {
         ?: ""
 
     // Http client
-    val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, TEST_AUTH_TOKEN, null) }
+    val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, TokenManagerImpl()) }
 
     // Resources
-    val ACCOUNT_RESOURCE by lazy { AccountResourceImpl(HTTP_CLIENT) }
+    val ACCOUNT_RESOURCE by lazy { AccountResourceImpl(HTTP_CLIENT, TokenManagerImpl()) }
     val LOCK_OPERATIONS_RESOURCE by lazy { LockOperationsResourceImpl(HTTP_CLIENT) }
     val PLATFORM_RESOURCE by lazy { PlatformResourceImpl(HTTP_CLIENT) }
     val SITES_RESOURCE by lazy { SitesResourceImpl(HTTP_CLIENT) }

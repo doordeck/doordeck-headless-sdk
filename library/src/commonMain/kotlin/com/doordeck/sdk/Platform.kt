@@ -3,6 +3,7 @@ package com.doordeck.sdk
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.internal.api.Paths
+import com.doordeck.sdk.internal.api.TokenManagerImpl
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -29,7 +30,7 @@ val JSON = Json {
     classDiscriminator = "classType"
 }
 
-fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken: String?): HttpClient {
+fun createHttpClient(apiEnvironment: ApiEnvironment, tokenManager: TokenManagerImpl): HttpClient {
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
@@ -37,24 +38,19 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
         }
-        install(Auth) {
-            bearer {
-                // Send the auth header only to the api environment host
-                sendWithoutRequest { request ->
-                    request.host == apiEnvironment.host
-                }
-                loadTokens {
-                    BearerTokens(token, refreshToken ?: "")
-                }
-                // Automatically refresh the auth token if a refresh token has been provided during the initialization
-                if (refreshToken != null) {
+        val currentRefreshToken = tokenManager.currentRefreshToken
+        if (currentRefreshToken != null) {
+            install(Auth) {
+                bearer {
+                    // Automatically refresh the tokens if a refresh token has been provided during the initialization
                     refreshTokens {
-                        val refreshTokens: TokenResponse = client.put(Paths.getRefreshTokenPath()) {
+                        val refreshTokens: TokenResponse = client.post(Paths.getRefreshTokenPath()) {
                             headers {
                                 append(HttpHeaders.ContentType, ContentType.Application.Json)
-                                append(HttpHeaders.Authorization, "Bearer $refreshToken")
+                                append(HttpHeaders.Authorization, "Bearer $currentRefreshToken")
                             }
                         }.body()
+                        tokenManager.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                         BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                     }
                 }
@@ -65,6 +61,24 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, token: String, refreshToken
                 host = apiEnvironment.host
                 protocol = URLProtocol.HTTPS
             }
+        }
+    }.also {
+        it.plugin(HttpSend).intercept { request ->
+            val requestPath = request.url.encodedPath
+            if (request.host == apiEnvironment.host
+                && requestPath != Paths.getLoginPath()
+                && requestPath != Paths.getRegistrationPath()
+                && requestPath != Paths.getVerifyEmailPath()
+                && !request.headers.contains(HttpHeaders.Authorization)) {
+
+                val currentToken = tokenManager.currentToken
+                if (currentToken != null) {
+                    request.headers {
+                        append(HttpHeaders.Authorization, "Bearer $currentToken")
+                    }
+                }
+            }
+            execute(request)
         }
     }
 }

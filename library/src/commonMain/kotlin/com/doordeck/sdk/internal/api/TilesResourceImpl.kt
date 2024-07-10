@@ -13,7 +13,7 @@ class TilesResourceImpl(
 
     override fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
         return httpClient.get(Paths.getLocksBelongingToTilePath(tileId)) {
-            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)
+            addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }
     }
 

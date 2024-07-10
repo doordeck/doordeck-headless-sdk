@@ -12,26 +12,12 @@ import kotlin.js.JsExport
 interface AccountResource {
 
     /**
-     * Login
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
-     */
-    fun login(email: String, password: String): TokenResponse
-
-    /**
-     * Registration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
-     */
-    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
-
-    /**
      * Refresh token
      *
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    fun refreshToken(): TokenResponse
+    fun refreshToken(refreshToken: String): TokenResponse
 
     /**
      * Logout
@@ -60,13 +46,6 @@ interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
-
-    /**
-     * Verify email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
-     */
-    fun verifyEmail(code: String)
 
     /**
      * Reverify email

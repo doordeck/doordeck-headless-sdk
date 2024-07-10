@@ -1,19 +1,16 @@
 package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.AccountResource
+import com.doordeck.sdk.api.TokenManager
 import com.doordeck.sdk.api.model.TwoFactorMethod
 import com.doordeck.sdk.api.requests.ChangePasswordRequest
-import com.doordeck.sdk.api.requests.LoginRequest
 import com.doordeck.sdk.api.requests.RegisterEphemeralKeyRequest
-import com.doordeck.sdk.api.requests.RegisterRequest
 import com.doordeck.sdk.api.requests.UpdateUserDetailsRequest
 import com.doordeck.sdk.api.requests.VerifyEphemeralKeyRegistrationRequest
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.api.responses.UserDetailsResponse
-import com.doordeck.sdk.internal.api.Params.CODE
-import com.doordeck.sdk.internal.api.Params.FORCE
 import com.doordeck.sdk.internal.api.Params.METHOD
 import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey
@@ -22,31 +19,13 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 
 class AccountResourceImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val tokenManager: TokenManager
 ) : AbstractResourceImpl(), AccountResource {
 
-    override fun login(email: String, password: String): TokenResponse {
-        return httpClient.post(Paths.getLoginPath()) {
-            addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
-            setBody(LoginRequest(email, password))
-        }
-    }
-
-    override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return httpClient.post(Paths.getRegistrationPath()) {
-            addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
-            setBody(RegisterRequest(
-                email = email,
-                password = password,
-                displayName = displayName
-            ))
-            parameter(FORCE, force)
-        }
-    }
-
-    override fun refreshToken(): TokenResponse {
-        return httpClient.put(Paths.getRefreshTokenPath()) {
-            addRequestHeaders()
+    override fun refreshToken(refreshToken: String): TokenResponse {
+        return httpClient.post(Paths.getRefreshTokenPath()) {
+            addRequestHeaders(token = refreshToken)
         }
     }
 
@@ -54,6 +33,7 @@ class AccountResourceImpl(
         httpClient.postEmpty(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
+        tokenManager.resetTokens()
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
@@ -78,13 +58,6 @@ class AccountResourceImpl(
         return httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
-        }
-    }
-
-    override fun verifyEmail(code: String) {
-        httpClient.putEmpty(Paths.getVerifyEmailPath()) {
-            addRequestHeaders()
-            parameter(CODE, code)
         }
     }
 

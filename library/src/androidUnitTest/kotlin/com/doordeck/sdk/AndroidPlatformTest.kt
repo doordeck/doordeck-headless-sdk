@@ -1,6 +1,7 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
+import com.doordeck.sdk.internal.api.TokenManagerImpl
 import io.ktor.client.engine.okhttp.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,7 +11,7 @@ class AndroidPlatformTest {
     @Test
     fun `test platform engine`() {
         // Given
-        val client = createHttpClient(ApiEnvironment.DEV, "", "")
+        val client = createHttpClient(ApiEnvironment.DEV, TokenManagerImpl())
 
         // When
         assertTrue { client.engine.config is OkHttpConfig }

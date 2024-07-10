@@ -6,18 +6,24 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.encodeToString
 
-private val DEFAULT_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to ContentType.Application.Json.toString())
-private val DEFAULT_SIGNED_REQUEST_HEADERS = mapOf(HttpHeaders.ContentType to "application/jwt")
+private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
+private val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
-    headers: Map<String, String> = if (signedRequest) DEFAULT_SIGNED_REQUEST_HEADERS else DEFAULT_REQUEST_HEADERS,
-    apiVersion: ApiVersion? = null
+    contentType: String? = if (signedRequest) DEFAULT_SIGNED_REQUEST_CONTENT_TYPE else DEFAULT_REQUEST_CONTENT_TYPE,
+    apiVersion: ApiVersion? = null,
+    token: String? = null
 ) {
     headers {
-        headers.map { append(it.key, it.value) }
+        if (contentType != null) {
+            append(HttpHeaders.ContentType, contentType)
+        }
         if (apiVersion != null) {
             append(HttpHeaders.Accept, "application/vnd.doordeck.api-v${apiVersion.version}+json")
+        }
+        if (token != null) {
+            append(HttpHeaders.Authorization, "Bearer $token")
         }
     }
 }
