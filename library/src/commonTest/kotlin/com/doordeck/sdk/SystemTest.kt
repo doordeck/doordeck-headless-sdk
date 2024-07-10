@@ -21,6 +21,9 @@ open class SystemTest {
     val TEST_MAIN_USER_PUBLIC_KEY = getEnvironmentVariable("TEST_MAIN_USER_PUBLIC_KEY")
         ?: ""
 
+    // Token manager
+    val tokenManager = TokenManagerImpl(TEST_AUTH_TOKEN)
+
     // Http client
     val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, tokenManager) }
 
