@@ -7,6 +7,7 @@ import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.api.SitesResource
 import com.doordeck.sdk.api.TilesResource
+import com.doordeck.sdk.api.TokenManager
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.internal.api.AccountResourceImpl
 import com.doordeck.sdk.internal.api.AccountlessResourceImpl
@@ -34,6 +35,7 @@ class DoordeckImpl(
     private val platform: PlatformResource = PlatformResourceImpl(httpClient)
     private val helper: HelperResource = HelperResourceImpl(httpClient, platform)
 
+    override fun tokenManager(): TokenManager = tokenManager
     override fun accountless(): AccountlessResource = accountless
     override fun account(): AccountResource = account
     override fun sites(): SitesResource = sites

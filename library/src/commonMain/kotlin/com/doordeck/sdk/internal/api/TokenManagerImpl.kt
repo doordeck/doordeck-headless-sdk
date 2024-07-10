@@ -14,12 +14,12 @@ class TokenManagerImpl(
         currentToken = token
     }
 
-    override fun setTokens(token: String, refreshToken: String) {
+    fun setTokens(token: String, refreshToken: String) {
         currentToken = token
         currentRefreshToken = refreshToken
     }
 
-    override fun resetTokens() {
+    fun resetTokens() {
         currentToken = null
         currentRefreshToken = null
     }

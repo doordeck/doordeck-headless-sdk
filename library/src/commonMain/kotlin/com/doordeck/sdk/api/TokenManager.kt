@@ -6,10 +6,4 @@ import kotlin.js.JsExport
 interface TokenManager {
 
     fun setAuthToken(token: String)
-
-    @JsExport.Ignore
-    fun setTokens(token: String, refreshToken: String)
-
-    @JsExport.Ignore
-    fun resetTokens()
 }

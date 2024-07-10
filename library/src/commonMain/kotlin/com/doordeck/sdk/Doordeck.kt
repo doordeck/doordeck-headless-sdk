@@ -7,11 +7,13 @@ import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.api.SitesResource
 import com.doordeck.sdk.api.TilesResource
+import com.doordeck.sdk.api.TokenManager
 import kotlin.js.JsExport
 
 @JsExport
 interface Doordeck {
 
+    fun tokenManager(): TokenManager
     fun accountless(): AccountlessResource
     fun account(): AccountResource
     fun sites(): SitesResource
