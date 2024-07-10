@@ -20,7 +20,7 @@ import io.ktor.client.request.*
 
 class AccountResourceImpl(
     private val httpClient: HttpClient,
-    private val tokenManager: TokenManager
+    private val tokenManager: TokenManagerImpl
 ) : AbstractResourceImpl(), AccountResource {
 
     override fun refreshToken(refreshToken: String): TokenResponse {
