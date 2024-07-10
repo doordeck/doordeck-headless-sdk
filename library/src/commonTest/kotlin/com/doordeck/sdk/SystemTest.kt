@@ -22,10 +22,10 @@ open class SystemTest {
         ?: ""
 
     // Http client
-    val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, TokenManagerImpl()) }
+    val HTTP_CLIENT  by lazy { createHttpClient(ApiEnvironment.DEV, tokenManager) }
 
     // Resources
-    val ACCOUNT_RESOURCE by lazy { AccountResourceImpl(HTTP_CLIENT, TokenManagerImpl()) }
+    val ACCOUNT_RESOURCE by lazy { AccountResourceImpl(HTTP_CLIENT, tokenManager) }
     val LOCK_OPERATIONS_RESOURCE by lazy { LockOperationsResourceImpl(HTTP_CLIENT) }
     val PLATFORM_RESOURCE by lazy { PlatformResourceImpl(HTTP_CLIENT) }
     val SITES_RESOURCE by lazy { SitesResourceImpl(HTTP_CLIENT) }
