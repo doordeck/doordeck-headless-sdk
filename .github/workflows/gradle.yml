@@ -21,7 +21,8 @@ jobs:
   build:
     needs: validation
     env:
-      TEST_AUTH_TOKEN: ${{ secrets.TEST_AUTH_TOKEN }}
+      TEST_MAIN_USER_EMAIL: ${{ secrets.TEST_MAIN_USER_EMAIL }}
+      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
       TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
       TEST_MAIN_USER_PUBLIC_KEY: ${{ secrets.TEST_MAIN_USER_PUBLIC_KEY }}
       TEST_SUPPLEMENTARY_USER_ID: ${{ secrets.TEST_SUPPLEMENTARY_USER_ID }}
