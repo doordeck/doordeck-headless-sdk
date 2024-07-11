@@ -19,6 +19,7 @@ class AccountResourceTest : SystemTest() {
         shouldGetUserDetails()
         shouldUpdateUserDetails()
         shouldRegisterEphemeralKey()
+        shouldChangePassword()
     }
 
     private fun shouldGetUserDetails(): UserDetailsResponse {
@@ -53,5 +54,9 @@ class AccountResourceTest : SystemTest() {
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
+    }
+
+    private fun shouldChangePassword() {
+        ACCOUNT_RESOURCE.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
     }
 }

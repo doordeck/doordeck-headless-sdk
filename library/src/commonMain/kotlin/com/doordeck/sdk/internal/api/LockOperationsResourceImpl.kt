@@ -47,13 +47,13 @@ class LockOperationsResourceImpl(
 
     override fun getSingleLock(lockId: String): LockResponse {
         return httpClient.get(Paths.getSingleLockPath(lockId)){
-            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_3)
+            addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }
     }
 
     override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse> {
         return httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
-            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
+            addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(START, start)
             parameter(END, end)
         }
@@ -61,7 +61,7 @@ class LockOperationsResourceImpl(
 
     override fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse> {
         return httpClient.get(Paths.getAuditForUserPath(userId)) {
-            addRequestHeaders(headers = emptyMap(), apiVersion = ApiVersion.VERSION_2)
+            addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(START, start)
             parameter(END, end)
         }

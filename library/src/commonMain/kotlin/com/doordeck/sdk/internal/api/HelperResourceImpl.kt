@@ -2,14 +2,14 @@ package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.Constants.CDN_URL
 import com.doordeck.sdk.api.HelperResource
+import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.util.addRequestHeaders
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 
 class HelperResourceImpl(
     private val httpClient: HttpClient,
-    private val platform: PlatformResourceImpl
+    private val platform: PlatformResource
 ) : AbstractResourceImpl(), HelperResource {
 
     override fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
@@ -18,7 +18,7 @@ class HelperResourceImpl(
 
         // Upload the image into the presigned URL
         httpClient.putEmpty(url.uploadUrl) {
-            addRequestHeaders(headers = mapOf(HttpHeaders.ContentType to contentType))
+            addRequestHeaders(contentType = contentType)
             setBody(image)
         }
 

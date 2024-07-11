@@ -14,7 +14,6 @@ import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.Serializable
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -48,8 +47,6 @@ class LockOperationsResourceTest : SystemTest() {
         shouldRemoveLockSettingLocationRestrictions()
         shouldGetUserPublicKey()
         shouldGetUserPublicKeyByEmail()
-        shouldGetLockAuditTrail()
-        shouldGetAuditForUser()
         shouldGetUsersForLock()
         shouldGetLockForUser()
         shouldGetPinnedLocks()
@@ -61,6 +58,8 @@ class LockOperationsResourceTest : SystemTest() {
         shouldRemoveSecureSettingUnlockDuration()
         shouldUploadSecureSettingUnlockBetween()
         shouldRemoveSecureSettingUnlockBetween()
+        shouldGetLockAuditTrail()
+        shouldGetAuditForUser()
     }
 
     private fun shouldGetSingleLock(): LockResponse {
@@ -232,32 +231,6 @@ class LockOperationsResourceTest : SystemTest() {
         LOCK_OPERATIONS_RESOURCE.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
     }
 
-    private fun shouldGetLockAuditTrail() {
-        // Given
-        val now = Clock.System.now()
-        val start = now.minus(7.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
-
-        // When
-        val lockAuditTrail = LOCK_OPERATIONS_RESOURCE.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end)
-
-        // Then
-        assertTrue { lockAuditTrail.isNotEmpty() }
-    }
-
-    private fun shouldGetAuditForUser() {
-        // Given
-        val now = Clock.System.now()
-        val start = now.minus(7.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
-
-        // When
-        val auditForUser = LOCK_OPERATIONS_RESOURCE.getAuditForUser(TEST_MAIN_USER_ID, start, end)
-
-        // Then
-        assertTrue { auditForUser.isNotEmpty() }
-    }
-
     private fun shouldGetUsersForLock() {
         // When
         val usersForLock = LOCK_OPERATIONS_RESOURCE.getUsersForLock(TEST_MAIN_LOCK_ID)
@@ -303,10 +276,6 @@ class LockOperationsResourceTest : SystemTest() {
         LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
 
         // Then
-        //val response: StatefulResponse = HTTP_CLIENT.get("/device/$TEST_MAIN_LOCK_ID/request/${baseOperation.jti}")
-        //    .body()
-        //assertEquals(RequestStateResponse.SUCCESSFUL, response.state)
-        // TODO FAILS WITH {"code":404,"message":"HTTP 404 Not Found"}
     }
 
     private fun shouldShareLock() {
@@ -448,17 +417,29 @@ class LockOperationsResourceTest : SystemTest() {
         assertNull(lock.settings.unlockBetweenWindow)
     }
 
-    @Serializable
-    private class StatefulResponse(
-        val state: RequestStateResponse
-    )
+    private fun shouldGetLockAuditTrail() {
+        // Given
+        val now = Clock.System.now()
+        val start = now.minus(7.days).epochSeconds.toInt()
+        val end = now.epochSeconds.toInt()
 
-    @Serializable
-    private enum class RequestStateResponse {
-        PENDING,
-        SUCCESSFUL,
-        REJECTED,
-        EXPIRED,
-        FAILED
+        // When
+        val lockAuditTrail = LOCK_OPERATIONS_RESOURCE.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end)
+
+        // Then
+        assertTrue { lockAuditTrail.isNotEmpty() }
+    }
+
+    private fun shouldGetAuditForUser() {
+        // Given
+        val now = Clock.System.now()
+        val start = now.minus(7.days).epochSeconds.toInt()
+        val end = now.epochSeconds.toInt()
+
+        // When
+        val auditForUser = LOCK_OPERATIONS_RESOURCE.getAuditForUser(TEST_MAIN_USER_ID, start, end)
+
+        // Then
+        assertTrue { auditForUser.isNotEmpty() }
     }
 }
