@@ -14,7 +14,7 @@ import com.doordeck.sdk.util.Jwt.getUserIdFromToken
 
 open class SystemTest {
 
-    private val TEST_ENVIRONMENT = ApiEnvironment.DEV
+    val TEST_ENVIRONMENT = ApiEnvironment.DEV
 
     val TEST_MAIN_USER_EMAIL = getEnvironmentVariable("TEST_MAIN_USER_EMAIL")
         ?: ""
