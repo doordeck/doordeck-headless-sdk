@@ -8,26 +8,6 @@ import kotlin.time.Duration.Companion.minutes
 @JsExport
 object LockOperations {
 
-    class LockProperties(
-        val name: String? = null,
-        val favourite: Boolean? = null,
-        val colour: String? = null,
-        val settings: LockSettings? = null
-    )
-
-    class LockSettings(
-        val defaultName: String? = null,
-        val permittedAddress: Array<String>? = null,
-        val delay: Int? = null,
-        val hidden: Boolean? = null,
-        val usageRequirements: UsageRequirements? = null
-    )
-
-    class UsageRequirements(
-        val time: TimeRequirement? = null,
-        val location: LocationRequirement? = null
-    )
-
     class TimeRequirement(
         val start: String,
         val end: String,
@@ -57,12 +37,16 @@ object LockOperations {
 
     class ShareLockOperation(
         override val baseOperation: BaseOperation,
+        val shareLock: ShareLock
+    ): Operation(baseOperation)
+
+    class ShareLock(
         val targetUserId: String,
         val targetUserRole: UserRole,
         val targetUserPublicKey: ByteArray,
         val start: Int? = null,
         val end: Int? = null
-    ): Operation(baseOperation)
+    )
 
     class RevokeAccessToLockOperation(
         override val baseOperation: BaseOperation,
@@ -71,7 +55,7 @@ object LockOperations {
 
     class UpdateSecureSettingUnlockDuration(
         override val baseOperation: BaseOperation,
-        val unlockDuration: Int? = null
+        val unlockDuration: Int
     ): Operation(baseOperation)
 
     class UpdateSecureSettingUnlockBetween(
@@ -92,5 +76,11 @@ object LockOperations {
 
     abstract class Operation(
         open val baseOperation: BaseOperation
+    )
+
+    class OperationContext(
+        val userId: String,
+        val userCertificateChain: Array<String>,
+        val userPrivateKey: ByteArray
     )
 }

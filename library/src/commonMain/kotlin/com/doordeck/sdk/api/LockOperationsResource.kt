@@ -10,6 +10,7 @@ import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.sdk.internal.api.DoordeckOnly
 import kotlin.js.JsExport
+import kotlin.js.JsName
 
 @JsExport
 interface LockOperationsResource {
@@ -153,7 +154,23 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
+    @JsName("unlockWithContext")
+    fun unlock(context: LockOperations.OperationContext, lockId: String)
+
+    /**
+     * Unlock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     */
     fun unlock(unlockOperation: LockOperations.UnlockOperation)
+
+    /**
+     * Share a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
+     */
+    @JsName("shareLockWithContext")
+    fun shareLock(context: LockOperations.OperationContext, lockId: String, shareLock: LockOperations.ShareLock)
 
     /**
      * Share a lock
@@ -167,6 +184,14 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
+    @JsName("revokeAccessToLockWithContext")
+    fun revokeAccessToLock(context: LockOperations.OperationContext, lockId: String, users: Array<String>)
+
+    /**
+     * Revoke access to a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
+     */
     fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation)
 
     /**
@@ -174,7 +199,23 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
+    @JsName("updateSecureSettingUnlockDurationWithContext")
+    fun updateSecureSettingUnlockDuration(context: LockOperations.OperationContext, lockId: String, unlockDuration: Int)
+
+    /**
+     * Update secure settings - Unlock duration
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     */
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
+
+    /**
+     * Update secure settings - Unlock between
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     */
+    @JsName("uploadSecureSettingUnlockBetweenWithContext")
+    fun uploadSecureSettingUnlockBetween(context: LockOperations.OperationContext, lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
     /**
      * Update secure settings - Unlock between

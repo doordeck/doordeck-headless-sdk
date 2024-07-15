@@ -151,37 +151,107 @@ class LockOperationsResourceImpl(
         }
     }
 
+    override fun unlock(context: LockOperations.OperationContext, lockId: String) {
+        val baseOperation = LockOperations.BaseOperation(
+            userId = context.userId,
+            userCertificateChain = context.userCertificateChain,
+            userPrivateKey = context.userPrivateKey,
+            lockId = lockId
+        )
+        unlock(baseOperation)
+    }
+
     override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
+        unlock(unlockOperation.baseOperation)
+    }
+
+    private fun unlock(baseOperation: LockOperations.BaseOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(unlockOperation.baseOperation, operationRequest)
+        performOperation(baseOperation, operationRequest)
+    }
+
+    override fun shareLock(context: LockOperations.OperationContext, lockId: String, shareLock: LockOperations.ShareLock) {
+        val baseOperation = LockOperations.BaseOperation(
+            userId = context.userId,
+            userCertificateChain = context.userCertificateChain,
+            userPrivateKey = context.userPrivateKey,
+            lockId = lockId
+        )
+        shareLock(baseOperation, shareLock)
     }
 
     override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
+        shareLock(shareLockOperation.baseOperation, shareLockOperation.shareLock)
+    }
+
+    private fun shareLock(baseOperation: LockOperations.BaseOperation, shareLock: LockOperations.ShareLock) {
         val operationRequest = ShareLockOperationRequest(
-            user = shareLockOperation.targetUserId,
-            publicKey = shareLockOperation.targetUserPublicKey.encodeByteArrayToBase64(),
-            role = shareLockOperation.targetUserRole,
-            start = shareLockOperation.start,
-            end = shareLockOperation.end
+            user = shareLock.targetUserId,
+            publicKey = shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
+            role = shareLock.targetUserRole,
+            start = shareLock.start,
+            end = shareLock.end
         )
-        performOperation(shareLockOperation.baseOperation, operationRequest)
+        performOperation(baseOperation, operationRequest)
+    }
+
+    override fun revokeAccessToLock(context: LockOperations.OperationContext, lockId: String, users: Array<String>) {
+        val baseOperation = LockOperations.BaseOperation(
+            userId = context.userId,
+            userCertificateChain = context.userCertificateChain,
+            userPrivateKey = context.userPrivateKey,
+            lockId = lockId
+        )
+        revokeAccessToLock(baseOperation, users)
     }
 
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
-        performOperation(revokeAccessToLockOperation.baseOperation, operationRequest)
+        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users)
+    }
+
+    private fun revokeAccessToLock(baseOperation: LockOperations.BaseOperation, users: Array<String>) {
+        val operationRequest = RevokeAccessToALockOperationRequest(users = users)
+        performOperation(baseOperation, operationRequest)
+    }
+
+    override fun updateSecureSettingUnlockDuration(context: LockOperations.OperationContext, lockId: String, unlockDuration: Int) {
+        val baseOperation = LockOperations.BaseOperation(
+            userId = context.userId,
+            userCertificateChain = context.userCertificateChain,
+            userPrivateKey = context.userPrivateKey,
+            lockId = lockId
+        )
+        updateSecureSettingUnlockDuration(baseOperation, unlockDuration)
     }
 
     override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
+        updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration.baseOperation, updateSecureSettingUnlockDuration.unlockDuration)
+    }
+
+    private fun updateSecureSettingUnlockDuration(baseOperation: LockOperations.BaseOperation, unlockDuration: Int) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
-            unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
+            unlockDuration = unlockDuration
         )
-        performOperation(updateSecureSettingUnlockDuration.baseOperation, operationRequest)
+        performOperation(baseOperation, operationRequest)
+    }
+
+    override fun uploadSecureSettingUnlockBetween(context: LockOperations.OperationContext, lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+        val baseOperation = LockOperations.BaseOperation(
+            userId = context.userId,
+            userCertificateChain = context.userCertificateChain,
+            userPrivateKey = context.userPrivateKey,
+            lockId = lockId
+        )
+        uploadSecureSettingUnlockBetween(baseOperation, unlockBetween)
     }
 
     override fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+        uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween.baseOperation, updateSecureSettingUnlockBetween.unlockBetween)
+    }
+
+    private fun uploadSecureSettingUnlockBetween(baseOperation: LockOperations.BaseOperation, unlockBetween: LockOperations.UnlockBetween?) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
-            unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
+            unlockBetween = unlockBetween?.let {
                 UnlockBetweenSettingRequest(
                     start = it.start,
                     end = it.end,
@@ -191,7 +261,7 @@ class LockOperationsResourceImpl(
                 )
             }
         )
-        performOperation(updateSecureSettingUnlockBetween.baseOperation, operationRequest)
+        performOperation(baseOperation, operationRequest)
     }
 
     private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest) {
