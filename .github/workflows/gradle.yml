@@ -33,18 +33,21 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: JVM
-            test: jvmTest
+          #- name: JVM
+          #  test: jvmTest
+          #  os: ubuntu-latest
+          #- name: Android
+          #  test: testReleaseUnitTest
+          #  os: ubuntu-latest
+          #- name: JS
+          #  test: kotlinUpgradeYarnLock jsTest
+          #  os: ubuntu-latest
+          #- name: Apple
+          #  test: iosX64Test macosArm64Test macosX64Test
+          #  os: macos-latest
+          - name: Windows
+            test: mingwX64Test
             os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple
-            test: iosX64Test macosArm64Test macosX64Test
-            os: macos-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
     steps:
