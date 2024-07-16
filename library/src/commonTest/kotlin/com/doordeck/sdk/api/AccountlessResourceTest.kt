@@ -4,7 +4,7 @@ import com.benasher44.uuid.uuid4
 import com.doordeck.sdk.SystemTest
 import com.doordeck.sdk.createHttpClient
 import com.doordeck.sdk.internal.api.AccountResourceImpl
-import com.doordeck.sdk.internal.api.TokenManagerImpl
+import com.doordeck.sdk.internal.TokenManagerImpl
 import com.doordeck.sdk.runBlocking
 import com.doordeck.sdk.util.Jwt.getEmailFromToken
 import kotlin.test.Test

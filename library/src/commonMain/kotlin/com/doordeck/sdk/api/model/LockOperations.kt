@@ -3,6 +3,7 @@ package com.doordeck.sdk.api.model
 import com.benasher44.uuid.uuid4
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
+import kotlin.jvm.JvmOverloads
 import kotlin.time.Duration.Companion.minutes
 
 @JsExport
@@ -15,7 +16,7 @@ object LockOperations {
         val days: Array<String>
     )
 
-    class LocationRequirement(
+    class LocationRequirement @JvmOverloads constructor(
         val latitude: Double,
         val longitude: Double,
         val enabled: Boolean? = null,
@@ -23,7 +24,7 @@ object LockOperations {
         val accuracy: Int? = null
     )
 
-    class UnlockBetween(
+    class UnlockBetween @JvmOverloads constructor(
         val start: String,
         val end: String,
         val timezone: String,
@@ -40,7 +41,7 @@ object LockOperations {
         val shareLock: ShareLock
     ): Operation(baseOperation)
 
-    class ShareLock(
+    class ShareLock @JvmOverloads constructor(
         val targetUserId: String,
         val targetUserRole: UserRole,
         val targetUserPublicKey: ByteArray,
@@ -58,12 +59,12 @@ object LockOperations {
         val unlockDuration: Int
     ): Operation(baseOperation)
 
-    class UpdateSecureSettingUnlockBetween(
+    class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
         override val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
     ): Operation(baseOperation)
 
-    class BaseOperation(
+    class BaseOperation @JvmOverloads constructor(
         val userId: String,
         val userCertificateChain: Array<String>,
         val userPrivateKey: ByteArray,

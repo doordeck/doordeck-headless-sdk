@@ -1,7 +1,6 @@
 package com.doordeck.sdk.internal.api
 
 import com.doordeck.sdk.api.AccountResource
-import com.doordeck.sdk.api.TokenManager
 import com.doordeck.sdk.api.model.TwoFactorMethod
 import com.doordeck.sdk.api.requests.ChangePasswordRequest
 import com.doordeck.sdk.api.requests.RegisterEphemeralKeyRequest
@@ -11,6 +10,7 @@ import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.api.responses.UserDetailsResponse
+import com.doordeck.sdk.internal.TokenManagerImpl
 import com.doordeck.sdk.internal.api.Params.METHOD
 import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey

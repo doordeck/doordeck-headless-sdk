@@ -16,7 +16,7 @@ import com.doordeck.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.sdk.internal.api.SitesResourceImpl
 import com.doordeck.sdk.internal.api.TilesResourceImpl
-import com.doordeck.sdk.internal.api.TokenManagerImpl
+import com.doordeck.sdk.internal.TokenManagerImpl
 
 class DoordeckImpl(
     apiEnvironment: ApiEnvironment,

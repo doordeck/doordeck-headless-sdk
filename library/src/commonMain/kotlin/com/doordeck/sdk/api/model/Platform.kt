@@ -1,11 +1,12 @@
 package com.doordeck.sdk.api.model
 
 import kotlin.js.JsExport
+import kotlin.jvm.JvmOverloads
 
 @JsExport
 object Platform {
 
-    class CreateApplication(
+    class CreateApplication @JvmOverloads constructor(
         val name: String,
         val companyName: String,
         val mailingAddress: String,
@@ -16,7 +17,7 @@ object Platform {
         val logoUrl: String? = null
     )
 
-    class EmailPreferences(
+    class EmailPreferences @JvmOverloads constructor(
         val senderEmail: String? = null,
         val senderName: String? = null,
         val primaryColour: String? = null,

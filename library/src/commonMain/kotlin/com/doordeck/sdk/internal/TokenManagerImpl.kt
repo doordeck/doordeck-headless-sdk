@@ -1,4 +1,4 @@
-package com.doordeck.sdk.internal.api
+package com.doordeck.sdk.internal
 
 import com.doordeck.sdk.api.TokenManager
 

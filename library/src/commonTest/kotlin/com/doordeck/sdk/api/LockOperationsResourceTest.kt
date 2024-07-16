@@ -290,9 +290,11 @@ class LockOperationsResourceTest : SystemTest() {
         // When
         LOCK_OPERATIONS_RESOURCE.shareLock(LockOperations.ShareLockOperation(
             baseOperation = baseOperation,
-            targetUserId = TEST_SUPPLEMENTARY_USER_ID,
-            targetUserRole = UserRole.USER,
-            targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            shareLock = LockOperations.ShareLock(
+                targetUserId = TEST_SUPPLEMENTARY_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            )
         ))
 
         // Then

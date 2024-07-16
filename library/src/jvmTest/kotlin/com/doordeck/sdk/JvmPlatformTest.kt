@@ -1,7 +1,7 @@
 package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
-import com.doordeck.sdk.internal.api.TokenManagerImpl
+import com.doordeck.sdk.internal.TokenManagerImpl
 import io.ktor.client.engine.apache.*
 import kotlin.test.Test
 import kotlin.test.assertEquals

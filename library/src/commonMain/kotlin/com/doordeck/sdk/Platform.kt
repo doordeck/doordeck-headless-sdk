@@ -3,7 +3,7 @@ package com.doordeck.sdk
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.internal.api.Paths
-import com.doordeck.sdk.internal.api.TokenManagerImpl
+import com.doordeck.sdk.internal.TokenManagerImpl
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
