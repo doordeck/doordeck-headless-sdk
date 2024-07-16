@@ -27,6 +27,13 @@ kotlin {
     iosSimulatorArm64()
     macosX64()
     macosArm64()
+    mingwX64 {
+        binaries {
+            sharedLib {
+                baseName = "doordeck-sdk"
+            }
+        }
+    }
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
@@ -55,6 +62,8 @@ kotlin {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
                 optIn("kotlin.ExperimentalUnsignedTypes")
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }
 
@@ -99,6 +108,12 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
+            }
+        }
+
+        val mingwMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.winhttp)
             }
         }
     }

@@ -20,6 +20,7 @@ enum class PlatformType {
     JVM,
     ANDROID,
     APPLE,
+    WINDOWS,
     JS
 }
 
