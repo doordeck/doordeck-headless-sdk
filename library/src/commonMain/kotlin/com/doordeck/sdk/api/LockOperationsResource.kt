@@ -1,5 +1,6 @@
 package com.doordeck.sdk.api
 
+import com.doordeck.sdk.MissingOperationContextException
 import com.doordeck.sdk.api.model.LockOperations
 import com.doordeck.sdk.api.responses.LockAuditTrailResponse
 import com.doordeck.sdk.api.responses.LockResponse
@@ -10,7 +11,6 @@ import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.sdk.internal.api.DoordeckOnly
 import kotlin.js.JsExport
-import kotlin.js.JsName
 
 @JsExport
 interface LockOperationsResource {
@@ -151,11 +151,11 @@ interface LockOperationsResource {
 
     /**
      * Unlock
+     * @throws MissingOperationContextException if the operation context has not been set
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    @JsName("unlockWithContext")
-    fun unlock(context: LockOperations.OperationContext, lockId: String)
+    fun unlockWithContext(lockId: String)
 
     /**
      * Unlock
@@ -166,11 +166,11 @@ interface LockOperationsResource {
 
     /**
      * Share a lock
+     * @throws MissingOperationContextException if the operation context has not been set
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
-    @JsName("shareLockWithContext")
-    fun shareLock(context: LockOperations.OperationContext, lockId: String, shareLock: LockOperations.ShareLock)
+    fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
 
     /**
      * Share a lock
@@ -181,11 +181,11 @@ interface LockOperationsResource {
 
     /**
      * Revoke access to a lock
+     * @throws MissingOperationContextException if the operation context has not been set
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    @JsName("revokeAccessToLockWithContext")
-    fun revokeAccessToLock(context: LockOperations.OperationContext, lockId: String, users: Array<String>)
+    fun revokeAccessToLockWithContext(lockId: String, users: Array<String>)
 
     /**
      * Revoke access to a lock
@@ -196,11 +196,11 @@ interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
+     * @throws MissingOperationContextException if the operation context has not been set
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    @JsName("updateSecureSettingUnlockDurationWithContext")
-    fun updateSecureSettingUnlockDuration(context: LockOperations.OperationContext, lockId: String, unlockDuration: Int)
+    fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
 
     /**
      * Update secure settings - Unlock duration
@@ -211,11 +211,11 @@ interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock between
+     * @throws MissingOperationContextException if the operation context has not been set
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    @JsName("uploadSecureSettingUnlockBetweenWithContext")
-    fun uploadSecureSettingUnlockBetween(context: LockOperations.OperationContext, lockId: String, unlockBetween: LockOperations.UnlockBetween?)
+    fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
     /**
      * Update secure settings - Unlock between

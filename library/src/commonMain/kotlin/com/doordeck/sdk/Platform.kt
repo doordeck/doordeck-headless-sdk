@@ -2,8 +2,8 @@ package com.doordeck.sdk
 
 import com.doordeck.sdk.api.model.ApiEnvironment
 import com.doordeck.sdk.api.responses.TokenResponse
+import com.doordeck.sdk.internal.ContextManagerImpl
 import com.doordeck.sdk.internal.api.Paths
-import com.doordeck.sdk.internal.TokenManagerImpl
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -30,7 +30,7 @@ val JSON = Json {
     classDiscriminator = "classType"
 }
 
-fun createHttpClient(apiEnvironment: ApiEnvironment, tokenManager: TokenManagerImpl): HttpClient {
+fun createHttpClient(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl): HttpClient {
     return HttpClient {
         install(ContentNegotiation) {
             json(JSON)
@@ -38,7 +38,7 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, tokenManager: TokenManagerI
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
         }
-        val currentRefreshToken = tokenManager.currentRefreshToken
+        val currentRefreshToken = contextManager.currentRefreshToken
         if (currentRefreshToken != null) {
             install(Auth) {
                 bearer {
@@ -50,7 +50,7 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, tokenManager: TokenManagerI
                                 append(HttpHeaders.Authorization, "Bearer $currentRefreshToken")
                             }
                         }.body()
-                        tokenManager.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                        contextManager.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                         BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                     }
                 }
@@ -71,7 +71,7 @@ fun createHttpClient(apiEnvironment: ApiEnvironment, tokenManager: TokenManagerI
                 && requestPath != Paths.getVerifyEmailPath()
                 && !request.headers.contains(HttpHeaders.Authorization)) {
 
-                val currentToken = tokenManager.currentToken
+                val currentToken = contextManager.currentToken
                 if (currentToken != null) {
                     request.headers {
                         append(HttpHeaders.Authorization, "Bearer $currentToken")

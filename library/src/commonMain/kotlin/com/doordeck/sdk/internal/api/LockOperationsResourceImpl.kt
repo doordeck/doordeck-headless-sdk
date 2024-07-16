@@ -31,6 +31,7 @@ import com.doordeck.sdk.api.responses.ShareableLockResponse
 import com.doordeck.sdk.api.responses.UserAuditResponse
 import com.doordeck.sdk.api.responses.UserLockResponse
 import com.doordeck.sdk.api.responses.UserPublicKeyResponse
+import com.doordeck.sdk.internal.ContextManagerImpl
 import com.doordeck.sdk.internal.api.Params.END
 import com.doordeck.sdk.internal.api.Params.START
 import com.doordeck.sdk.internal.api.Params.VISITOR
@@ -42,7 +43,8 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 
 class LockOperationsResourceImpl(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val contextManager: ContextManagerImpl
 ) : AbstractResourceImpl(), LockOperationsResource {
 
     override fun getSingleLock(lockId: String): LockResponse {
@@ -151,11 +153,12 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun unlock(context: LockOperations.OperationContext, lockId: String) {
+    override fun unlockWithContext(lockId: String) {
+        val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
-            userId = context.userId,
-            userCertificateChain = context.userCertificateChain,
-            userPrivateKey = context.userPrivateKey,
+            userId = operationContext.userId,
+            userCertificateChain = operationContext.userCertificateChain,
+            userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
         unlock(baseOperation)
@@ -170,11 +173,12 @@ class LockOperationsResourceImpl(
         performOperation(baseOperation, operationRequest)
     }
 
-    override fun shareLock(context: LockOperations.OperationContext, lockId: String, shareLock: LockOperations.ShareLock) {
+    override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
+        val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
-            userId = context.userId,
-            userCertificateChain = context.userCertificateChain,
-            userPrivateKey = context.userPrivateKey,
+            userId = operationContext.userId,
+            userCertificateChain = operationContext.userCertificateChain,
+            userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
         shareLock(baseOperation, shareLock)
@@ -195,11 +199,12 @@ class LockOperationsResourceImpl(
         performOperation(baseOperation, operationRequest)
     }
 
-    override fun revokeAccessToLock(context: LockOperations.OperationContext, lockId: String, users: Array<String>) {
+    override fun revokeAccessToLockWithContext(lockId: String, users: Array<String>) {
+        val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
-            userId = context.userId,
-            userCertificateChain = context.userCertificateChain,
-            userPrivateKey = context.userPrivateKey,
+            userId = operationContext.userId,
+            userCertificateChain = operationContext.userCertificateChain,
+            userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
         revokeAccessToLock(baseOperation, users)
@@ -214,11 +219,12 @@ class LockOperationsResourceImpl(
         performOperation(baseOperation, operationRequest)
     }
 
-    override fun updateSecureSettingUnlockDuration(context: LockOperations.OperationContext, lockId: String, unlockDuration: Int) {
+    override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
+        val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
-            userId = context.userId,
-            userCertificateChain = context.userCertificateChain,
-            userPrivateKey = context.userPrivateKey,
+            userId = operationContext.userId,
+            userCertificateChain = operationContext.userCertificateChain,
+            userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
         updateSecureSettingUnlockDuration(baseOperation, unlockDuration)
@@ -235,11 +241,12 @@ class LockOperationsResourceImpl(
         performOperation(baseOperation, operationRequest)
     }
 
-    override fun uploadSecureSettingUnlockBetween(context: LockOperations.OperationContext, lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+    override fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+        val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
-            userId = context.userId,
-            userCertificateChain = context.userCertificateChain,
-            userPrivateKey = context.userPrivateKey,
+            userId = operationContext.userId,
+            userCertificateChain = operationContext.userCertificateChain,
+            userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
         uploadSecureSettingUnlockBetween(baseOperation, unlockBetween)

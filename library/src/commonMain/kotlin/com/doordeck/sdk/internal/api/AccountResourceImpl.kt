@@ -10,7 +10,7 @@ import com.doordeck.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.sdk.api.responses.TokenResponse
 import com.doordeck.sdk.api.responses.UserDetailsResponse
-import com.doordeck.sdk.internal.TokenManagerImpl
+import com.doordeck.sdk.internal.ContextManagerImpl
 import com.doordeck.sdk.internal.api.Params.METHOD
 import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.sdk.util.Crypto.signWithPrivateKey
@@ -20,7 +20,7 @@ import io.ktor.client.request.*
 
 class AccountResourceImpl(
     private val httpClient: HttpClient,
-    private val tokenManager: TokenManagerImpl
+    private val contextManager: ContextManagerImpl
 ) : AbstractResourceImpl(), AccountResource {
 
     override fun refreshToken(refreshToken: String): TokenResponse {
@@ -33,7 +33,7 @@ class AccountResourceImpl(
         httpClient.postEmpty(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
-        tokenManager.resetTokens()
+        contextManager.reset()
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
@@ -88,5 +88,6 @@ class AccountResourceImpl(
 
     override fun deleteAccount() {
         httpClient.deleteEmpty(Paths.getDeleteAccountPath())
+        contextManager.reset()
     }
 }

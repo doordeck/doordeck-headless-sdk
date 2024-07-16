@@ -78,10 +78,4 @@ object LockOperations {
     abstract class Operation(
         open val baseOperation: BaseOperation
     )
-
-    class OperationContext(
-        val userId: String,
-        val userCertificateChain: Array<String>,
-        val userPrivateKey: ByteArray
-    )
 }

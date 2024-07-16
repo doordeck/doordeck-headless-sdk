@@ -2,18 +2,18 @@ package com.doordeck.sdk
 
 import com.doordeck.sdk.api.AccountResource
 import com.doordeck.sdk.api.AccountlessResource
+import com.doordeck.sdk.api.ContextManager
 import com.doordeck.sdk.api.HelperResource
 import com.doordeck.sdk.api.LockOperationsResource
 import com.doordeck.sdk.api.PlatformResource
 import com.doordeck.sdk.api.SitesResource
 import com.doordeck.sdk.api.TilesResource
-import com.doordeck.sdk.api.TokenManager
 import kotlin.js.JsExport
 
 @JsExport
 interface Doordeck {
 
-    fun tokenManager(): TokenManager
+    fun contextManager(): ContextManager
     fun accountless(): AccountlessResource
     fun account(): AccountResource
     fun sites(): SitesResource
