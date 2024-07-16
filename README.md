@@ -147,3 +147,52 @@ export class AppComponent implements OnInit {
   }
 }
 ````
+
+### Android (Kotlin)
+````kotlin
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import com.doordeck.sdk.KDoordeckFactory
+import com.doordeck.sdk.api.model.ApiEnvironment
+import com.doordeck.sdk.api.model.LockOperations
+import com.doordeck.sdk.util.Crypto
+import com.doordeck.sdk.util.Crypto.certificateChainToString
+import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Initialize the SDK
+        val token = "YOUR_AUTH_TOKEN"
+        val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, token)
+
+        // Retrieve the sites
+        val sites = sdk.sites().listSites()
+        println(sites)
+
+        // Retrieve the locks
+        val locks = sdk.sites().getLocksForSite(sites.first().id)
+        println(locks)
+
+        // Generate a key pair
+        val keyPair = Crypto.generateKeyPair()
+        println("Private key: ${keyPair.private.encodeByteArrayToBase64()}")
+        println("Public key: ${keyPair.public.encodeByteArrayToBase64()}")
+
+        // Register a key pair
+        val registerKeyPair = sdk.account().registerEphemeralKey(keyPair.public)
+        println("Certificate chain: ${registerKeyPair.certificateChain.certificateChainToString()}")
+
+        // Unlock a lock
+        val baseOperation = LockOperations.BaseOperation(
+            userId = registerKeyPair.userId,
+            userCertificateChain = registerKeyPair.certificateChain,
+            userPrivateKey = keyPair.private,
+            lockId = locks.first().id
+        )
+        val unlockOperation = LockOperations.UnlockOperation(baseOperation)
+        sdk.lockOperations().unlock(unlockOperation)
+    }
+}
+````
