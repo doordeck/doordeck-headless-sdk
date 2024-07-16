@@ -47,7 +47,7 @@ jobs:
           #  os: macos-latest
           - name: Windows
             test: mingwX64Test
-            os: ubuntu-latest
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
     steps:
