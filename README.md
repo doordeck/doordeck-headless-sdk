@@ -5,12 +5,12 @@ doordeck-sdk-sample
 # Samples
 ### JVM (Kotlin)
 ````kotlin
-import com.doordeck.sdk.KDoordeckFactory
-import com.doordeck.sdk.api.model.ApiEnvironment
-import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.util.Crypto
-import com.doordeck.sdk.util.Crypto.certificateChainToString
-import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.KDoordeckFactory
+import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.util.Crypto
+import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
+import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 
 fun main() {
     // Initialize the SDK
@@ -48,11 +48,11 @@ fun main() {
 
 ### JVM (JAVA)
 ````java
-import com.doordeck.sdk.Doordeck;
-import com.doordeck.sdk.KDoordeckFactory;
-import com.doordeck.sdk.api.model.ApiEnvironment;
-import com.doordeck.sdk.api.model.LockOperations;
-import com.doordeck.sdk.util.Crypto;
+import com.doordeck.multiplatform.sdk.Doordeck;
+import com.doordeck.multiplatform.sdk.KDoordeckFactory;
+import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+import com.doordeck.multiplatform.sdk.api.model.LockOperations;
+import com.doordeck.multiplatform.sdk.util.Crypto;
 
 public class Main {
     public static void main(String[] args) {
@@ -92,9 +92,9 @@ import { RouterOutlet } from '@angular/router';
 import doordeck from '../assets/doordeck-sdk'
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 
-const apiEnvironment = doordeck.com.doordeck.sdk.api.model.ApiEnvironment;
-const lockOperations = doordeck.com.doordeck.sdk.api.model.LockOperations;
-const crypto = doordeck.com.doordeck.sdk.util.Crypto;
+const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const crypto = doordeck.com.doordeck.multiplatform.sdk.util.Crypto;
 
 @Component({
   selector: 'app-root',
@@ -152,12 +152,12 @@ export class AppComponent implements OnInit {
 ````kotlin
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.doordeck.sdk.KDoordeckFactory
-import com.doordeck.sdk.api.model.ApiEnvironment
-import com.doordeck.sdk.api.model.LockOperations
-import com.doordeck.sdk.util.Crypto
-import com.doordeck.sdk.util.Crypto.certificateChainToString
-import com.doordeck.sdk.util.Crypto.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.KDoordeckFactory
+import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.util.Crypto
+import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
+import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
