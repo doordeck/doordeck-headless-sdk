@@ -1,6 +1,13 @@
 # doordeck-sdk-sample
-doordeck-sdk-sample
+To make it build, you need to specify the Android SDK directory. To do this, you need to create a `local.properties` file in the root project directory with a single configuration like this: `sdk.dir=ANDROID_SDK_DIR`
 
+NOTE: It's normal to see '_Unresolved references_'. For example, if you are on Windows, you won't be able to resolve macOS-specific imports.
+
+To import the SDK into your project, you need access to the Maven repository from GitHub. You may need to create the file `~/.gradle/gradle.properties` with the following configuration:
+```
+gpr.user=GITHUB_USERNAME
+gpr.key=PERSONAL_ACCESS_TOKEN
+```
 
 # Samples
 ### JVM (Kotlin)
