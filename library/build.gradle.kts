@@ -55,6 +55,7 @@ kotlin {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
                 optIn("kotlin.ExperimentalUnsignedTypes")
+                optIn("kotlinx.coroutines.DelicateCoroutinesApi")
             }
         }
 
@@ -140,7 +141,7 @@ publishing {
 }
 
 android {
-    namespace = "com.doordeck.sdk"
+    namespace = "com.doordeck.multiplatform.sdk"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
