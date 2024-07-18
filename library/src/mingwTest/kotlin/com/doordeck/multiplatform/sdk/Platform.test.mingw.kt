@@ -1,4 +1,4 @@
-package com.doordeck.sdk
+package com.doordeck.multiplatform.sdk
 
 import platform.posix.getenv
 import kotlinx.cinterop.toKString

@@ -1,4 +1,4 @@
-package com.doordeck.sdk
+package com.doordeck.multiplatform.sdk
 
 import kotlinx.coroutines.CoroutineScope
 
