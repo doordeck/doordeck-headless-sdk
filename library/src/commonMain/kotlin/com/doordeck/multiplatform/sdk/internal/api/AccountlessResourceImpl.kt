@@ -34,7 +34,7 @@ class AccountlessResourceImpl(
     }
 
     override fun verifyEmail(code: String) {
-        httpClient.putEmpty(Paths.getVerifyEmailPath()) {
+        httpClient.put<Unit>(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(CODE, code)
         }

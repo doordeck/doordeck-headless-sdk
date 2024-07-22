@@ -7,4 +7,5 @@ interface ContextManager {
 
     fun setAuthToken(token: String)
     fun setOperationContext(userId: String, certificateChain: Array<String>, privateKey: ByteArray)
+    fun setFusionAuthToken(token: String)
 }

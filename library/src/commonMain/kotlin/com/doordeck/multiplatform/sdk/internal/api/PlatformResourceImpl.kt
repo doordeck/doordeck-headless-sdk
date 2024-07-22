@@ -34,7 +34,7 @@ class PlatformResourceImpl(
 ) : AbstractResourceImpl(), PlatformResource {
 
     override fun createApplication(application: Platform.CreateApplication) {
-        httpClient.postEmpty(Paths.getCreateApplicationPath()) {
+        httpClient.post<Unit>(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
@@ -94,14 +94,14 @@ class PlatformResourceImpl(
     }
 
     private fun updateApplication(applicationId: String, request: UpdateApplicationRequest) {
-        httpClient.postEmpty(Paths.getUpdateApplicationPath(applicationId)) {
+        httpClient.post<Unit>(Paths.getUpdateApplicationPath(applicationId)) {
             addRequestHeaders()
             setBody(request)
         }
     }
 
     override fun deleteApplication(applicationId: String) {
-        httpClient.deleteEmpty(Paths.getDeleteApplicationPath(applicationId))
+        httpClient.delete<Unit>(Paths.getDeleteApplicationPath(applicationId))
     }
 
     override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
@@ -112,49 +112,49 @@ class PlatformResourceImpl(
     }
 
     override fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        httpClient.postEmpty(Paths.getAddAuthKeyPath(applicationId)) {
+        httpClient.post<Unit>(Paths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())
         }
     }
 
     override fun addAuthIssuer(applicationId: String, url: String) {
-        httpClient.postEmpty(Paths.getAddAuthIssuerPath(applicationId)) {
+        httpClient.post<Unit>(Paths.getAddAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddAuthIssuerRequest(url))
         }
     }
 
     override fun deleteAuthIssuer(applicationId: String, url: String) {
-        httpClient.deleteEmpty(Paths.getDeleteAuthIssuerPath(applicationId)) {
+        httpClient.delete<Unit>(Paths.getDeleteAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(DeleteAuthIssuerRequest(url))
         }
     }
 
     override fun addCorsDomain(applicationId: String, url: String) {
-        httpClient.postEmpty(Paths.getAddCorsDomainPath(applicationId)) {
+        httpClient.post<Unit>(Paths.getAddCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(AddCorsDomainRequest(url))
         }
     }
 
     override fun removeCorsDomain(applicationId: String, url: String) {
-        httpClient.deleteEmpty(Paths.getRemoveCorsDomainPath(applicationId)) {
+        httpClient.delete<Unit>(Paths.getRemoveCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveCorsDomainRequest(url))
         }
     }
 
     override fun addApplicationOwner(applicationId: String, userId: String) {
-        httpClient.postEmpty(Paths.getAddApplicationOwnerPath(applicationId)) {
+        httpClient.post<Unit>(Paths.getAddApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddApplicationOwnerRequest(userId))
         }
     }
 
     override fun removeApplicationOwner(applicationId: String, userId: String) {
-        httpClient.deleteEmpty(Paths.getRemoveApplicationOwnerPath(applicationId)) {
+        httpClient.delete<Unit>(Paths.getRemoveApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveApplicationOwnerRequest(userId))
         }

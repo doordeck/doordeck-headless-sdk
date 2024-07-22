@@ -11,7 +11,7 @@ class IosPlatformTest {
     @Test
     fun `test platform engine`() {
         // Given
-        val client = createHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
+        val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
 
         // When
         assertTrue { client.engine.config is DarwinClientEngineConfig }

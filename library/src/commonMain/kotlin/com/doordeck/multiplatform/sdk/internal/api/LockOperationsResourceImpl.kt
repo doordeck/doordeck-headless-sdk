@@ -118,7 +118,7 @@ class LockOperationsResourceImpl(
     }
 
     private fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest) {
-        httpClient.putEmpty(Paths.getUpdateLockPropertiesPath(lockId)) {
+        httpClient.put<Unit>(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -286,7 +286,7 @@ class LockOperationsResourceImpl(
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
         val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
-        httpClient.postEmpty(Paths.getOperationPath(baseOperation.lockId)) {
+        httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }

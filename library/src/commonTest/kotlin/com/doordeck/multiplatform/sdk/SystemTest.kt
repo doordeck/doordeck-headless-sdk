@@ -22,7 +22,7 @@ open class SystemTest {
         ?: ""
 
     val ACCOUNTLESS_RESOURCE by lazy {
-        AccountlessResourceImpl(createHttpClient(TEST_ENVIRONMENT, ContextManagerImpl()))
+        AccountlessResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, ContextManagerImpl()))
     }
 
     val TEST_AUTH_TOKEN by lazy { ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).authToken }
@@ -36,7 +36,7 @@ open class SystemTest {
     val contextManager = ContextManagerImpl(TEST_AUTH_TOKEN)
 
     // Http client
-    val HTTP_CLIENT  by lazy { createHttpClient(TEST_ENVIRONMENT, contextManager) }
+    val HTTP_CLIENT  by lazy { createCloudHttpClient(TEST_ENVIRONMENT, contextManager) }
 
     // Resources
     val ACCOUNT_RESOURCE by lazy { AccountResourceImpl(HTTP_CLIENT, contextManager) }

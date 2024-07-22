@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk
 import com.doordeck.multiplatform.sdk.api.AccountResource
 import com.doordeck.multiplatform.sdk.api.AccountlessResource
 import com.doordeck.multiplatform.sdk.api.ContextManager
+import com.doordeck.multiplatform.sdk.api.FusionResource
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.PlatformResource
@@ -21,4 +22,5 @@ interface Doordeck {
     fun lockOperations(): LockOperationsResource
     fun platform(): PlatformResource
     fun helper(): HelperResource
+    fun fusion(): FusionResource
 }
