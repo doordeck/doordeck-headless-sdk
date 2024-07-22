@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.api.responses
 
+import com.doordeck.multiplatform.sdk.serializers.AuthKeyResponseSerializer
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -20,10 +21,61 @@ class ApplicationResponse(
     val appLink: String? = null,
     val slug: String? = null,
     val emailPreferences: EmailPreferencesResponse,
-    //val authKeys // TODO We cannot use Map :/
+    val authKeys: Container<AuthKeyResponse>,
     val oauth: OauthResponse? = null,
     val isDoordeckApplication: Boolean
 )
+
+@JsExport
+@Serializable(with = AuthKeyResponseSerializer::class)
+sealed interface AuthKeyResponse {
+    val kid: String
+    val kty: String
+    val use: String
+    val alg: String?
+}
+
+@JsExport
+@Serializable
+class RsaKeyResponse(
+    override val kty: String,
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val p: String,
+    val q: String,
+    val d: String,
+    val e: String,
+    val qi: String,
+    val dp: String,
+    val dq: String,
+    val n: String
+): AuthKeyResponse
+
+@JsExport
+@Serializable
+class EcKeyResponse(
+    override val kty: String,
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val d: String,
+    val crv: String,
+    val x: String,
+    val y: String
+): AuthKeyResponse
+
+@JsExport
+@Serializable
+class Ed25519KeyResponse(
+    override val kty: String,
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val d: String? = null,
+    val crv: String,
+    val x: String
+): AuthKeyResponse
 
 @JsExport
 @Serializable
