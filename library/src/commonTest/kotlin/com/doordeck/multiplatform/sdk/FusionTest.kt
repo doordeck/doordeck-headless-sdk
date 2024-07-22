@@ -9,8 +9,6 @@ open class FusionTest {
         ?: ""
     val TEST_MAIN_USER_PASSWORD = getEnvironmentVariable("TEST_MAIN_USER_PASSWORD")
         ?: ""
-    val TEST_MAIN_FUSION_DEVICE_ID = getEnvironmentVariable("TEST_MAIN_FUSION_DEVICE_ID")
-        ?: ""
     val TEST_MAIN_FUSION_SITE_ID = getEnvironmentVariable("TEST_MAIN_FUSION_SITE_ID")
         ?: ""
 

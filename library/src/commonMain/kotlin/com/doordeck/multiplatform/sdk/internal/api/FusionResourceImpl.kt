@@ -37,6 +37,7 @@ class FusionResourceImpl(
 
     override fun enableDoor(name: String, siteId: String, controller: LockController) {
         httpClient.post<Unit>(FusionPaths.getEnableDoorPath()) {
+            addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId , controller))
         }
     }
