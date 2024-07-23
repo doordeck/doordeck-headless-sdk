@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
-import com.doordeck.multiplatform.sdk.FusionTest
+import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.api.model.Fusion
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.runBlocking
@@ -10,7 +10,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class FusionResourceTest : FusionTest() {
+class FusionResourceTest : SystemTest() {
 
     @Test
     fun shouldTestFusion() = runBlocking {
@@ -25,7 +25,7 @@ class FusionResourceTest : FusionTest() {
 
     private fun shouldTestLogin() {
         val response = FUSION_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setFusionAuthToken(response.authToken)
+        FUSION_CONTEXT_MANAGER.setFusionAuthToken(response.authToken)
     }
 
     private fun shouldEnableDoor(): String {
@@ -34,7 +34,7 @@ class FusionResourceTest : FusionTest() {
         val type = Fusion.DemoController(Random.nextInt(8000, 9999))
 
         // When
-        FUSION_RESOURCE.enableDoor(name, TEST_MAIN_FUSION_SITE_ID, type)
+        FUSION_RESOURCE.enableDoor(name, TEST_MAIN_SITE_ID, type)
 
         // Then
         val restored = shouldGetIntegrationConfiguration(type.type)
