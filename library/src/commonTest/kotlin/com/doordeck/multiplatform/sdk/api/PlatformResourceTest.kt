@@ -221,10 +221,11 @@ class PlatformResourceTest : SystemTest() {
 
     private fun shouldAddAuthKey(applicationId: String) {
         // Given
+        val keyId = uuid4().toString()
         val updatedApplicationAuthKey = Platform.Ed25519Key(
             kty = "OKP",
             use = "sig",
-            kid = uuid4().toString(),
+            kid = keyId,
             alg = "EdDSA",
             d = "NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4",
             crv = "Ed25519",
@@ -236,7 +237,8 @@ class PlatformResourceTest : SystemTest() {
 
         // Then
         val application = shouldGetApplication(applicationId)
-        // TODO
+        val actualKey = application.authKeys.values.firstOrNull { it.key == keyId }
+        assertNotNull(actualKey)
     }
 
     private fun shouldGetApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
