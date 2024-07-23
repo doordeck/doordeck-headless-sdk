@@ -79,7 +79,7 @@ internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, ho
 internal fun HttpClient.addCloudInterceptor(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl) {
     plugin(HttpSend).intercept { request ->
         val requestPath = request.url.encodedPath
-        if (request.host == apiEnvironment.host
+        if (request.host == apiEnvironment.cloudHost
             && requestPath != Paths.getLoginPath()
             && requestPath != Paths.getRegistrationPath()
             && requestPath != Paths.getVerifyEmailPath()
