@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
+import com.doordeck.multiplatform.sdk.util.installTimeout
 import io.ktor.client.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +30,7 @@ val JSON = Json {
 internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl): HttpClient {
     return HttpClient {
         installContentNegotiation()
+        installTimeout()
         installAuth(contextManager)
         installDefaultRequest(URLProtocol.HTTPS, apiEnvironment.cloudHost)
     }.also {
@@ -39,6 +41,7 @@ internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManage
 internal fun createFusionHttpClient(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl): HttpClient {
     return HttpClient {
         installContentNegotiation()
+        installTimeout()
         installDefaultRequest(URLProtocol.HTTP, apiEnvironment.fusionHost)
     }.also {
         it.addFusionInterceptor(contextManager)

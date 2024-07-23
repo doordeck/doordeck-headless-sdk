@@ -76,6 +76,12 @@ internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, ho
     }
 }
 
+internal fun HttpClientConfig<*>.installTimeout() {
+    install(HttpTimeout) {
+        socketTimeoutMillis = 60_000
+    }
+}
+
 internal fun HttpClient.addCloudInterceptor(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl) {
     plugin(HttpSend).intercept { request ->
         val requestPath = request.url.encodedPath
