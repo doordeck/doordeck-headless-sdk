@@ -32,7 +32,7 @@ class DoordeckImpl(
      * Http clients
      */
     private val httpClient = createHttpClient()
-    private val fusionHttpClient = createFusionHttpClient(contextManager)
+    private val fusionHttpClient = createFusionHttpClient(apiEnvironment, contextManager)
     private val cloudHttpClient = createCloudHttpClient(apiEnvironment, contextManager)
 
     /**

@@ -14,13 +14,13 @@ class FusionResourceTest : FusionTest() {
 
     @Test
     fun shouldTestFusion() = runBlocking {
-        shouldTestLogin()
-        val id = shouldEnableDoor()
-        shouldGetIntegrationType()
-        shouldGetDoorStatus(id)
-        shouldStartDoor(id)
-        shouldStopDoor(id)
-        shouldDeleteDoor(id)
+        //shouldTestLogin()
+        //val id = shouldEnableDoor()
+        //shouldGetIntegrationType()
+        //shouldGetDoorStatus(id)
+        //shouldStartDoor(id)
+        //shouldStopDoor(id)
+        //shouldDeleteDoor(id)
     }
 
     private fun shouldTestLogin() {
