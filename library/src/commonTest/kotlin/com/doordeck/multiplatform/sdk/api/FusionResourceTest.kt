@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.FusionTest
-import com.doordeck.multiplatform.sdk.api.requests.DemoController
+import com.doordeck.multiplatform.sdk.api.model.Fusion
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.runBlocking
 import kotlin.random.Random
@@ -31,7 +31,7 @@ class FusionResourceTest : FusionTest() {
     private fun shouldEnableDoor(): String {
         // Given
         val name = "${uuid4()} Fusion Door"
-        val type = DemoController(Random.nextInt(8000, 9999))
+        val type = Fusion.DemoController(Random.nextInt(8000, 9999))
 
         // When
         FUSION_RESOURCE.enableDoor(name, TEST_MAIN_FUSION_SITE_ID, type)

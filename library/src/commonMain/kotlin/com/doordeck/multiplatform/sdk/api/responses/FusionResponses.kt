@@ -28,7 +28,6 @@ class IntegrationConfigurationResponse(
     val doordeck: ControllerResponse? = null,
     val service: ServiceStateResponse? = null,
     val integration: DiscoveredDeviceResponse? = null
-    // TODO MORE STUFF
 )
 
 @JsExport
@@ -48,7 +47,8 @@ class ServiceStateResponse(
 @JsExport
 @Serializable
 class DiscoveredDeviceResponse(
-    //val key: Map<String, String>
+    val key: Container<String>,
+    val metadata: Container<String>
 )
 
 @JsExport

@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.FusionResource
+import com.doordeck.multiplatform.sdk.api.model.Fusion
 import com.doordeck.multiplatform.sdk.api.requests.EnableDoorRequest
 import com.doordeck.multiplatform.sdk.api.requests.IntegrationConfigurationRequest
 import com.doordeck.multiplatform.sdk.api.requests.FusionLoginRequest
-import com.doordeck.multiplatform.sdk.api.requests.LockController
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
@@ -35,7 +35,7 @@ class FusionResourceImpl(
         }
     }
 
-    override fun enableDoor(name: String, siteId: String, controller: LockController) {
+    override fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
         httpClient.post<Unit>(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId , controller))
