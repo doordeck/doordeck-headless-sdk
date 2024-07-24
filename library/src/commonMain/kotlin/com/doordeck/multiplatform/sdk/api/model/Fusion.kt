@@ -97,7 +97,7 @@ object Fusion {
     ) : LockController
 
     @Serializable
-    class Net2Controller(
+    class PaxtonNet2Controller(
         val host: String,
         val address: String,
         val output: Short,
