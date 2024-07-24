@@ -114,7 +114,7 @@ object Fusion {
     ) : LockController
 
     @Serializable
-    class IntegraController(
+    class IntegraV1Controller(
         val username: String,
         val password: String,
         val controllerId: Int,
