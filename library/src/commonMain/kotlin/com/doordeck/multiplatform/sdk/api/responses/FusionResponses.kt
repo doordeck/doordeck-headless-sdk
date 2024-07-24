@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.api.responses
 
+import com.doordeck.multiplatform.sdk.api.model.Fusion
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -47,7 +48,7 @@ class ServiceStateResponse(
 @JsExport
 @Serializable
 class DiscoveredDeviceResponse(
-    val key: Container<String>,
+    val key: Fusion.LockController,
     val metadata: Container<String>
 )
 

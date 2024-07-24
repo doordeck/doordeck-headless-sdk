@@ -56,6 +56,7 @@ kotlin {
                 optIn("kotlin.js.ExperimentalJsExport")
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
             }
         }
 

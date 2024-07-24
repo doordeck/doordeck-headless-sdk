@@ -24,7 +24,6 @@ val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
-    classDiscriminator = "classType"
 }
 
 internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl): HttpClient {

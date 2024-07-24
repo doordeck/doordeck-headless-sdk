@@ -37,7 +37,7 @@ class FusionResourceTest : SystemTest() {
         FUSION_RESOURCE.enableDoor(name, TEST_MAIN_SITE_ID, type)
 
         // Then
-        val restored = shouldGetIntegrationConfiguration(type.type)
+        val restored = shouldGetIntegrationConfiguration("demo")
         val actualDoor = restored.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor)
         return actualDoor.doordeck!!.id
