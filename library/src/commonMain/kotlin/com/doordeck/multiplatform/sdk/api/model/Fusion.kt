@@ -161,7 +161,7 @@ object Fusion {
         val host: String,
         val username: String,
         val password: String,
-        val doorID: Int,
+        val doorId: Int,
         override val type: String = "tdsi-gardis"
     ) : LockController
 
