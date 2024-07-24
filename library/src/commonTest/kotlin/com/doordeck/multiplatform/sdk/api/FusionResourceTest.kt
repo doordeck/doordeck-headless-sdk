@@ -3,11 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.api.model.Fusion
+import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
+import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.runBlocking
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 
 class FusionResourceTest : SystemTest() {
@@ -17,7 +20,6 @@ class FusionResourceTest : SystemTest() {
         //shouldTestLogin()
         //val id = shouldEnableDoor()
         //shouldGetIntegrationType()
-        //shouldGetDoorStatus(id)
         //shouldStartDoor(id)
         //shouldStopDoor(id)
         //shouldDeleteDoor(id)
@@ -30,7 +32,7 @@ class FusionResourceTest : SystemTest() {
 
     private fun shouldEnableDoor(): String {
         // Given
-        val name = "${uuid4()} Fusion Door"
+        val name = "Test Fusion Door ${uuid4()}"
         val type = Fusion.DemoController(Random.nextInt(8000, 9999))
 
         // When
@@ -57,19 +59,35 @@ class FusionResourceTest : SystemTest() {
         return FUSION_RESOURCE.getIntegrationConfiguration(type)
     }
 
-    private fun shouldGetDoorStatus(deviceId: String) {
-        FUSION_RESOURCE.getDoorStatus(deviceId)
+    private fun shouldGetDoorStatus(deviceId: String): DoorStateResponse {
+        return FUSION_RESOURCE.getDoorStatus(deviceId)
     }
 
     private fun shouldStartDoor(deviceId: String) {
+        // When
         FUSION_RESOURCE.startDoor(deviceId)
+
+        // Then
+        val result = shouldGetDoorStatus(deviceId)
+        assertEquals(ServiceStateType.RUNNING, result.state)
     }
 
     private fun shouldStopDoor(deviceId: String) {
+        // When
         FUSION_RESOURCE.stopDoor(deviceId)
+
+        // Then
+        val result = shouldGetDoorStatus(deviceId)
+        assertEquals(ServiceStateType.STOPPED, result.state)
     }
 
     private fun shouldDeleteDoor(deviceId: String) {
+        // When
         FUSION_RESOURCE.deleteDoor(deviceId)
+
+        // Then
+        assertFails {
+            shouldGetDoorStatus(deviceId)
+        }
     }
 }
