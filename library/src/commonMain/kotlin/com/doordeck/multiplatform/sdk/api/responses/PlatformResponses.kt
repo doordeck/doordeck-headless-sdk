@@ -1,7 +1,8 @@
 package com.doordeck.multiplatform.sdk.api.responses
 
-import com.doordeck.multiplatform.sdk.serializers.AuthKeyResponseSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 import kotlin.js.JsExport
 
 @JsExport
@@ -27,7 +28,8 @@ class ApplicationResponse(
 )
 
 @JsExport
-@Serializable(with = AuthKeyResponseSerializer::class)
+@Serializable
+@JsonClassDiscriminator("kty")
 sealed interface AuthKeyResponse {
     val kid: String
     val kty: String
@@ -37,6 +39,7 @@ sealed interface AuthKeyResponse {
 
 @JsExport
 @Serializable
+@SerialName("RSA")
 class RsaKeyResponse(
     override val kty: String,
     override val use: String,
@@ -54,6 +57,7 @@ class RsaKeyResponse(
 
 @JsExport
 @Serializable
+@SerialName("EC")
 class EcKeyResponse(
     override val kty: String,
     override val use: String,
@@ -67,6 +71,7 @@ class EcKeyResponse(
 
 @JsExport
 @Serializable
+@SerialName("OKP")
 class Ed25519KeyResponse(
     override val kty: String,
     override val use: String,

@@ -12,6 +12,8 @@ class ContextManagerImpl(
     var currentToken: String? = token
     var currentRefreshToken: String? = refreshToken
 
+    var currentFusionToken: String? = null
+
     private var currentUserId: String? = null
     private var currentUserCertificateChain: Array<String>? = null
     private var currentUserPrivateKey: ByteArray? = null
@@ -37,6 +39,10 @@ class ContextManagerImpl(
         currentUserId = userId
         currentUserCertificateChain = certificateChain
         currentUserPrivateKey = privateKey
+    }
+
+    override fun setFusionAuthToken(token: String) {
+        currentFusionToken = token
     }
 
     fun getOperationContext(): Context.OperationContext {

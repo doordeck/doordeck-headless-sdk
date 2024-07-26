@@ -17,7 +17,7 @@ class HelperResourceImpl(
         val url = platform.getLogoUploadUrl(applicationId, contentType)
 
         // Upload the image into the presigned URL
-        httpClient.putEmpty(url.uploadUrl) {
+        httpClient.put<Unit>(url.uploadUrl) {
             addRequestHeaders(contentType = contentType)
             setBody(image)
         }

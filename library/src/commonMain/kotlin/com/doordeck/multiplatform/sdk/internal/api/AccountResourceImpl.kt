@@ -30,7 +30,7 @@ class AccountResourceImpl(
     }
 
     override fun logout() {
-        httpClient.postEmpty(Paths.getLogoutPath()) {
+        httpClient.post<Unit>(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
         contextManager.reset()
@@ -62,11 +62,11 @@ class AccountResourceImpl(
     }
 
     override fun reverifyEmail() {
-        httpClient.postEmpty(Paths.getReverifyEmailPath())
+        httpClient.post<Unit>(Paths.getReverifyEmailPath())
     }
 
     override fun changePassword(oldPassword: String, newPassword: String) {
-        httpClient.postEmpty(Paths.getChangePasswordPath()) {
+        httpClient.post<Unit>(Paths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(ChangePasswordRequest(
                 oldPassword = oldPassword,
@@ -80,14 +80,14 @@ class AccountResourceImpl(
     }
 
     override fun updateUserDetails(displayName: String) {
-        httpClient.postEmpty(Paths.getUpdateUserDetailsPath()) {
+        httpClient.post<Unit>(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
         }
     }
 
     override fun deleteAccount() {
-        httpClient.deleteEmpty(Paths.getDeleteAccountPath())
+        httpClient.delete<Unit>(Paths.getDeleteAccountPath())
         contextManager.reset()
     }
 }

@@ -11,7 +11,7 @@ class JsPlatformTest {
     @Test
     fun testPlatformJsEngine() {
         // Given
-        val client = createHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
+        val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
 
         // When
         assertTrue { client.engine.config is JsClientEngineConfig }

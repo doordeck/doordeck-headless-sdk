@@ -54,3 +54,14 @@ object Paths {
     fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
 }
+
+object FusionPaths {
+    fun getLoginPath() = "/api/auth/token"
+    fun getConfigurationTypePath() = "/api/configuration/type"
+    fun getIntegrationConfiguration() = "/api/configuration"
+    fun getEnableDoorPath() = "/api/configuration/enable"
+    fun getDeleteDoorPath(deviceId: String) = "/api/configuration/$deviceId"
+    fun getDoorStatusPath(deviceId: String) = "/api/controller/state/$deviceId"
+    fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
+    fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"
+}

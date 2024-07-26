@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.SystemTest
-import com.doordeck.multiplatform.sdk.createHttpClient
+import com.doordeck.multiplatform.sdk.createCloudHttpClient
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.runBlocking
@@ -47,7 +47,7 @@ class AccountlessResourceTest : SystemTest() {
     private fun shouldDelete(token: String) {
         // Given
         val contextManager = ContextManagerImpl(token)
-        val resource = AccountResourceImpl(createHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
+        val resource = AccountResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
 
         // When
         resource.deleteAccount()

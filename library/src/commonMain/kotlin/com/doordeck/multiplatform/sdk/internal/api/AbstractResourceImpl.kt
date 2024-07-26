@@ -35,15 +35,6 @@ abstract class AbstractResourceImpl {
         }
     }
 
-    protected inline fun HttpClient.postEmpty(
-        urlString: String,
-        crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): Unit = runBlocking {
-        handleRequest {
-            post { url(urlString); block() }
-        }
-    }
-
     protected inline fun <reified T>HttpClient.get(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
@@ -62,28 +53,10 @@ abstract class AbstractResourceImpl {
         }
     }
 
-    protected inline fun HttpClient.putEmpty(
-        urlString: String,
-        crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): Unit = runBlocking {
-        handleRequest {
-            put { url(urlString); block() }
-        }
-    }
-
     protected inline fun <reified T>HttpClient.delete(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = runBlocking {
-        handleRequest {
-            delete { url(urlString); block() }
-        }
-    }
-
-    protected inline fun HttpClient.deleteEmpty(
-        urlString: String,
-        crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): Unit = runBlocking {
         handleRequest {
             delete { url(urlString); block() }
         }
