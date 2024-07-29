@@ -18,7 +18,7 @@ class TilesResourceImpl(
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>) {
-        httpClient.putEmpty(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
+        httpClient.put<Unit>(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))
         }

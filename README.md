@@ -1,4 +1,4 @@
-# doordeck-sdk-sample
+# doordeck-headless-sdk
 To make it build, you need to specify the Android SDK directory. To do this, you need to create a `local.properties` file in the root project directory with a single configuration like this: `sdk.dir=ANDROID_SDK_DIR`
 
 NOTE: It's normal to see '_Unresolved references_'. For example, if you are on Windows, you won't be able to resolve macOS-specific imports.

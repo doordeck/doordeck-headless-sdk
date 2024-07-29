@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.api.requests
 
 import com.doordeck.multiplatform.sdk.api.model.UserRole
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,14 +23,14 @@ class OperationBodyRequest(
 )
 
 @Serializable
+@SerialName("MUTATE_LOCK")
 class LockOperationRequest(
-    val type: String = "MUTATE_LOCK",
     val locked: Boolean
 ): OperationRequest
 
 @Serializable
+@SerialName("ADD_USER")
 class ShareLockOperationRequest(
-    val type: String = "ADD_USER",
     val user: String,
     val publicKey: String,
     val role: UserRole? = null,
@@ -38,14 +39,14 @@ class ShareLockOperationRequest(
 ): OperationRequest
 
 @Serializable
+@SerialName("REMOVE_USER")
 class RevokeAccessToALockOperationRequest(
-    val type: String = "REMOVE_USER",
     val users: Array<String>
 ): OperationRequest
 
+@SerialName("MUTATE_SETTING")
 @Serializable
 class UpdateSecureSettingsOperationRequest(
-    val type: String = "MUTATE_SETTING",
     val unlockDuration: Int? = null,
     val unlockBetween: UnlockBetweenSettingRequest? = null
 ): OperationRequest

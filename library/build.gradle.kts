@@ -63,6 +63,7 @@ kotlin {
                 optIn("kotlin.js.ExperimentalJsExport")
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
@@ -146,7 +147,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/doordeck/doordeck-sdk-sample")
+            url = uri("https://maven.pkg.github.com/doordeck/doordeck-headless-sdk")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
