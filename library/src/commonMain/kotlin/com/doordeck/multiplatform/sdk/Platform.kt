@@ -37,11 +37,11 @@ internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManage
     }
 }
 
-internal fun createFusionHttpClient(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl): HttpClient {
+internal fun createFusionHttpClient(fusionHost: String, contextManager: ContextManagerImpl): HttpClient {
     return HttpClient {
         installContentNegotiation()
         installTimeout()
-        installDefaultRequest(URLProtocol.HTTP, apiEnvironment.fusionHost)
+        installDefaultRequest(URLProtocol.HTTP, fusionHost)
     }.also {
         it.addFusionInterceptor(contextManager)
     }

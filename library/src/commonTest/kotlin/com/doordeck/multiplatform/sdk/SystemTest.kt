@@ -43,9 +43,6 @@ open class SystemTest {
     val CONTEXT_MANAGER by lazy {
         ContextManagerImpl(TEST_AUTH_TOKEN)
     }
-    val FUSION_CONTEXT_MANAGER by lazy {
-        ContextManagerImpl()
-    }
 
     // Http client
     private val CLOUD_HTTP_CLIENT  by lazy {
@@ -67,9 +64,6 @@ open class SystemTest {
     }
     val TILES_RESOURCE by lazy {
         TilesResourceImpl(CLOUD_HTTP_CLIENT)
-    }
-    val FUSION_RESOURCE by lazy {
-        FusionResourceImpl(createFusionHttpClient(TEST_ENVIRONMENT, FUSION_CONTEXT_MANAGER))
     }
 
     val TEST_MAIN_USER_CERTIFICATE_CHAIN by lazy {

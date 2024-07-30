@@ -6,8 +6,10 @@ import com.doordeck.multiplatform.sdk.api.model.Fusion
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
+import com.doordeck.multiplatform.sdk.createFusionHttpClient
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import com.doordeck.multiplatform.sdk.runBlocking
-import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -15,79 +17,105 @@ import kotlin.test.assertNotNull
 
 class FusionResourceTest : SystemTest() {
 
+    private class TestController(
+        val type: String,
+        val controller: Fusion.LockController,
+        val enabled: Boolean = false
+    )
+
+    private val integrations: Map<String, TestController> = mapOf(
+        "192.168.202.54::27700" to TestController("demo", Fusion.DemoController(1)),
+        "192.168.202.26::27700" to TestController("paxton10", Fusion.Paxton10Controller("", "", "", 1)),
+        "192.168.202.58::27700" to TestController("amag", Fusion.AmagController("", "", 1, "")),
+        "192.168.202.19::27700" to TestController("gallagher", Fusion.GallagherController("", "", "")),
+        "192.168.202.56::27700" to TestController("genetec", Fusion.GenetecController("", "", "", "")),
+        "192.168.202.39::27700" to TestController("lenel", Fusion.LenelController("", "", "", "", "", "")),
+        "192.168.202.31::27700" to TestController("net2", Fusion.PaxtonNet2Controller("", "", 0)),
+        "192.168.202.18::27700" to TestController("integra-v2", Fusion.IntegraV2Controller("", "", 1, 1, 1)),
+        //"192.168.202.16::27700" to TestController("", ), WORK IN PROGRESS
+        "192.168.202.52:27700" to TestController("tdsi-gardis", Fusion.TdsiGardisController("", "", "", 1)),
+        "192.168.202.61:27700" to TestController("tdsi-exgarde", Fusion.TdsiExgardeController("", "", "", 1)),
+        "192.168.202.62:27700" to TestController("zkteco-zkbio-cvsecurity", Fusion.ZktecoController("", "", "", Fusion.ZktecoEntityType.DOOR)),
+        "192.168.202.63:27700" to TestController("alpeta", Fusion.AlpetaController("", "", 1, ""))
+    )
+
     @Test
     fun shouldTestFusion() = runBlocking {
-        //shouldTestLogin()
-        //val id = shouldEnableDoor()
-        //shouldGetIntegrationType()
-        //shouldStartDoor(id)
-        //shouldStopDoor(id)
-        //shouldDeleteDoor(id)
+        integrations.filter { it.value.enabled }.forEach { (host, testController) ->
+            val fusionContextManager = ContextManagerImpl()
+            val fusionResource = FusionResourceImpl(createFusionHttpClient(host, fusionContextManager))
+
+            shouldTestLogin(fusionResource, fusionContextManager)
+            val id = shouldEnableDoor(fusionResource, testController)
+            shouldGetIntegrationType(fusionResource, testController.type)
+            shouldStartDoor(fusionResource, id)
+            shouldStopDoor(fusionResource, id)
+            shouldDeleteDoor(fusionResource, id)
+        }
     }
 
-    private fun shouldTestLogin() {
-        val response = FUSION_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        FUSION_CONTEXT_MANAGER.setFusionAuthToken(response.authToken)
+    private fun shouldTestLogin(resource: FusionResourceImpl, contextManager: ContextManager) {
+        val response = resource.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        contextManager.setFusionAuthToken(response.authToken)
     }
 
-    private fun shouldEnableDoor(): String {
+    private fun shouldEnableDoor(resource: FusionResourceImpl, testController: TestController): String {
         // Given
         val name = "Test Fusion Door ${uuid4()}"
-        val type = Fusion.DemoController(Random.nextInt(8000, 9999))
 
         // When
-        FUSION_RESOURCE.enableDoor(name, TEST_MAIN_SITE_ID, type)
+        resource.enableDoor(name, TEST_MAIN_SITE_ID, testController.controller)
 
         // Then
-        val restored = shouldGetIntegrationConfiguration("demo")
+        val restored = shouldGetIntegrationConfiguration(resource, testController.type)
         val actualDoor = restored.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor)
         return actualDoor.doordeck!!.id
     }
 
-    private fun shouldGetIntegrationType() {
+    private fun shouldGetIntegrationType(resource: FusionResourceImpl, type: String) {
         // When
-        val resource = FUSION_RESOURCE.getIntegrationType()
+        val response = resource.getIntegrationType()
 
         // Then
-        val result = resource.status
+        val result = response.status
         assertNotNull(result)
-        assertEquals("demo", result)
+        assertEquals(type, result)
     }
 
-    private fun shouldGetIntegrationConfiguration(type: String): Array<IntegrationConfigurationResponse> {
-        return FUSION_RESOURCE.getIntegrationConfiguration(type)
+    private fun shouldGetIntegrationConfiguration(resource: FusionResourceImpl, type: String): Array<IntegrationConfigurationResponse> {
+        return resource.getIntegrationConfiguration(type)
     }
 
-    private fun shouldGetDoorStatus(deviceId: String): DoorStateResponse {
-        return FUSION_RESOURCE.getDoorStatus(deviceId)
+    private fun shouldGetDoorStatus(resource: FusionResourceImpl, deviceId: String): DoorStateResponse {
+        return resource.getDoorStatus(deviceId)
     }
 
-    private fun shouldStartDoor(deviceId: String) {
+    private fun shouldStartDoor(resource: FusionResourceImpl, deviceId: String) {
         // When
-        FUSION_RESOURCE.startDoor(deviceId)
+        resource.startDoor(deviceId)
 
         // Then
-        val result = shouldGetDoorStatus(deviceId)
+        val result = shouldGetDoorStatus(resource, deviceId)
         assertEquals(ServiceStateType.RUNNING, result.state)
     }
 
-    private fun shouldStopDoor(deviceId: String) {
+    private fun shouldStopDoor(resource: FusionResourceImpl, deviceId: String) {
         // When
-        FUSION_RESOURCE.stopDoor(deviceId)
+        resource.stopDoor(deviceId)
 
         // Then
-        val result = shouldGetDoorStatus(deviceId)
+        val result = shouldGetDoorStatus(resource, deviceId)
         assertEquals(ServiceStateType.STOPPED, result.state)
     }
 
-    private fun shouldDeleteDoor(deviceId: String) {
+    private fun shouldDeleteDoor(resource: FusionResourceImpl, deviceId: String) {
         // When
-        FUSION_RESOURCE.deleteDoor(deviceId)
+        resource.deleteDoor(deviceId)
 
         // Then
         assertFails {
-            shouldGetDoorStatus(deviceId)
+            shouldGetDoorStatus(resource, deviceId)
         }
     }
 }
