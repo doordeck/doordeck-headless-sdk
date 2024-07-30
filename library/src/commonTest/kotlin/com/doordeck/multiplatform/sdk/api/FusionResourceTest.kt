@@ -24,15 +24,15 @@ class FusionResourceTest : SystemTest() {
     )
 
     private val integrations: Map<String, TestController> = mapOf(
-        "192.168.202.54::27700" to TestController("demo", Fusion.DemoController(1)),
-        "192.168.202.26::27700" to TestController("paxton10", Fusion.Paxton10Controller("", "", "", 1)),
-        "192.168.202.58::27700" to TestController("amag", Fusion.AmagController("", "", 1, "")),
-        "192.168.202.19::27700" to TestController("gallagher", Fusion.GallagherController("", "", "")),
-        "192.168.202.56::27700" to TestController("genetec", Fusion.GenetecController("", "", "", "")),
-        "192.168.202.39::27700" to TestController("lenel", Fusion.LenelController("", "", "", "", "", "")),
-        "192.168.202.31::27700" to TestController("net2", Fusion.PaxtonNet2Controller("", "", 0)),
-        "192.168.202.18::27700" to TestController("integra-v2", Fusion.IntegraV2Controller("", "", 1, 1, 1)),
-        //"192.168.202.16::27700" to TestController("", ), WORK IN PROGRESS
+        "192.168.202.54:27700" to TestController("demo", Fusion.DemoController(1)),
+        "192.168.202.26:27700" to TestController("paxton10", Fusion.Paxton10Controller("", "", "", 1)),
+        "192.168.202.58:27700" to TestController("amag", Fusion.AmagController("", "", 1, "")),
+        "192.168.202.19:27700" to TestController("gallagher", Fusion.GallagherController("", "", "")),
+        "192.168.202.56:27700" to TestController("genetec", Fusion.GenetecController("", "", "", "")),
+        "192.168.202.39:27700" to TestController("lenel", Fusion.LenelController("", "", "", "", "", "")),
+        "192.168.202.31:27700" to TestController("net2", Fusion.PaxtonNet2Controller("", "", 0)),
+        "192.168.202.18:27700" to TestController("integra-v2", Fusion.IntegraV2Controller("", "", 1, 1, 1)),
+        //"192.168.202.16:27700" to TestController("", ), WORK IN PROGRESS
         "192.168.202.52:27700" to TestController("tdsi-gardis", Fusion.TdsiGardisController("", "", "", 1)),
         "192.168.202.61:27700" to TestController("tdsi-exgarde", Fusion.TdsiExgardeController("", "", "", 1)),
         "192.168.202.62:27700" to TestController("zkteco-zkbio-cvsecurity", Fusion.ZktecoController("", "", "", Fusion.ZktecoEntityType.DOOR)),
