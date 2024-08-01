@@ -5,7 +5,9 @@ import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
+import kotlin.js.JsExport
 
+@JsExport
 interface FusionResource {
 
     fun login(email: String, password: String): FusionLoginResponse
