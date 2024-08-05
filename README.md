@@ -53,7 +53,7 @@ fun main() {
 }
 ````
 
-### JVM (JAVA)
+### JVM (Java)
 ````java
 import com.doordeck.multiplatform.sdk.Doordeck;
 import com.doordeck.multiplatform.sdk.KDoordeckFactory;
@@ -92,6 +92,7 @@ public class Main {
     }
 }
 ````
+
 ### JS (Angular)
 ````javascript
 import {Component, OnInit} from '@angular/core';
@@ -153,6 +154,47 @@ export class AppComponent implements OnInit {
     await Promise.resolve(sdk.lockOperations().unlock(unlockOperation));
   }
 }
+````
+
+### JS (Vue)
+````vue
+<script>
+const doordeck = require('../assets/doordeck-sdk.js');
+
+const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+const crypto = doordeck.com.doordeck.multiplatform.sdk.util.Crypto;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+
+// Initialize the SDK
+const token = "YOUR_AUTH_TOKEN";
+const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
+const sdk = await factory.initializeWithAuthToken(apiEnvironment.DEV, token);
+
+// Retrieve the sites
+const sites = await sdk.sites().listSites();
+console.log(sites);
+
+// Retrieve the locks
+const locks = await sdk.sites().getLocksForSite(sites[0].id);
+console.log(locks);
+
+// Generate a key pair
+const keyPair = crypto.generateKeyPair();
+console.log(`Private key: ${crypto.encodeByteArrayToBase64(keyPair.private)}`);
+console.log(`Public key: ${crypto.encodeByteArrayToBase64(keyPair.public)}`);
+
+// Register a key pair
+const registerKeyPair = await sdk.account().registerEphemeralKey(keyPair.public);
+console.log(`Public key: ${crypto.certificateChainToString(registerKeyPair.certificateChain)}`);
+
+// Unlock a lock
+const baseOperation = new lockOperations.BaseOperation(registerKeyPair.userId, registerKeyPair.certificateChain,
+    registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000,
+    ((new Date).getTime() / 1000) + 60, "uuid"
+);
+const unlockOperation = new lockOperations.UnlockOperation(baseOperation);
+await sdk.lockOperations().unlock(unlockOperation);
+</script>
 ````
 
 ### Android (Kotlin)
