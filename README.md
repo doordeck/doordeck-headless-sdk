@@ -10,6 +10,14 @@ gpr.key=PERSONAL_ACCESS_TOKEN
 ```
 
 # Samples
+* [JVM (Kotlin)](#jvm-kotlin)
+* [JVM (Java)](#jvm-java)
+* [JS (Angular)](#js-angular)
+* [JS (Vue)](#js-vue)
+* [Android (Kotlin)](#android-kotlin)
+* IOS (TODO)
+* Windows Native (C#) (TODO)
+
 ### JVM (Kotlin)
 ````kotlin
 import com.doordeck.multiplatform.sdk.KDoordeckFactory
