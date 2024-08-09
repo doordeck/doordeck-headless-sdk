@@ -56,7 +56,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Tests
-        run: ./gradlew ${{ matrix.test }}
+        run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
   release:
     name: Releases
