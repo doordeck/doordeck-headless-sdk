@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
@@ -22,11 +23,17 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    macosX64()
-    macosArm64()
+
+    val xcf = XCFramework()
+    val iosTargets = listOf(iosX64(), iosArm64(), macosArm64())
+
+    iosTargets.forEach {
+        it.binaries.framework {
+            baseName = "doordeck-sdk"
+            xcf.add(this)
+        }
+    }
+
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
