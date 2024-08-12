@@ -10,10 +10,10 @@ import kotlin.js.JsExport
 class ApplicationResponse(
     val applicationId: String,
     val name: String,
-    val lastUpdated: Double,
-    val owners: Array<String>,
-    val corsDomains: Array<String>,
-    val authDomains: Array<String>,
+    val lastUpdated: Double? = null,
+    val owners: Array<String>? = null,
+    val corsDomains: Array<String>? = null,
+    val authDomains: Array<String>? = null,
     val logoUrl: String? = null,
     val privacyPolicy: String? = null,
     val mailingAddress: String? = null,
@@ -24,7 +24,7 @@ class ApplicationResponse(
     val emailPreferences: EmailPreferencesResponse,
     val authKeys: Container<AuthKeyResponse>,
     val oauth: OauthResponse? = null,
-    val isDoordeckApplication: Boolean
+    val isDoordeckApplication: Boolean? = null
 )
 
 @JsExport
@@ -35,11 +35,9 @@ sealed interface AuthKeyResponse {
     val kty: String
     val use: String
     val alg: String?
-    @SerialName("key_ops")
     val ops: Array<String>?
     val x5u: String?
     val x5t: String?
-    @SerialName("x5t#S256")
     val x5t256: String?
     val x5c: Array<String>?
     val exp: Int?
@@ -55,21 +53,17 @@ class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    @SerialName("key_ops")
     override val ops: Array<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
+    @SerialName("x5t#S256")
     override val x5t256: String? = null,
     override val x5c: Array<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
-    val p: String,
-    val q: String,
-    val d: String,
     val e: String,
-    val qi: String,
-    val dp: String,
-    val dq: String,
     val n: String
 ): AuthKeyResponse
 
@@ -81,15 +75,16 @@ class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    @SerialName("key_ops")
     override val ops: Array<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
+    @SerialName("x5t#S256")
     override val x5t256: String? = null,
     override val x5c: Array<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
-    val d: String,
     val crv: String,
     val x: String,
     val y: String
@@ -103,9 +98,11 @@ class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    @SerialName("key_ops")
     override val ops: Array<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
+    @SerialName("x5t#S256")
     override val x5t256: String? = null,
     override val x5c: Array<String>? = null,
     override val exp: Int? = null,
@@ -119,11 +116,11 @@ class Ed25519KeyResponse(
 @JsExport
 @Serializable
 class EmailPreferencesResponse(
-    val senderEmail: String,
-    val senderName: String,
+    val senderEmail: String? = null,
+    val senderName: String? = null,
     val primaryColour: String,
     val secondaryColour: String,
-    val onlySendEssentialEmails: Boolean,
+    val onlySendEssentialEmails: Boolean? = null,
     val callToAction: EmailCallToActionResponse? = null,
 )
 

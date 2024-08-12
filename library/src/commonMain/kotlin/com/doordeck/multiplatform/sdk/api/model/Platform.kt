@@ -37,10 +37,6 @@ object Platform {
         val kty: String
         val use: String
         val alg: String?
-        val ops: Array<String>?
-        val exp: Int?
-        val nbf: Int?
-        val iat: Int?
     }
 
     class RsaKey(
@@ -48,10 +44,6 @@ object Platform {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        override val ops: Array<String>? = null,
-        override val exp: Int? = null,
-        override val nbf: Int? = null,
-        override val iat: Int? = null,
         val p: String,
         val q: String,
         val d: String,
@@ -67,10 +59,6 @@ object Platform {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        override val ops: Array<String>? = null,
-        override val exp: Int? = null,
-        override val nbf: Int? = null,
-        override val iat: Int? = null,
         val d: String,
         val crv: String,
         val x: String,
@@ -82,10 +70,6 @@ object Platform {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        override val ops: Array<String>? = null,
-        override val exp: Int? = null,
-        override val nbf: Int? = null,
-        override val iat: Int? = null,
         val d: String,
         val crv: String,
         val x: String
