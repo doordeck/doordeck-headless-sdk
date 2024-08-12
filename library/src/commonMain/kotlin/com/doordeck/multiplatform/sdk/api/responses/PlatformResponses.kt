@@ -35,6 +35,16 @@ sealed interface AuthKeyResponse {
     val kty: String
     val use: String
     val alg: String?
+    @SerialName("key_ops")
+    val ops: Array<String>?
+    val x5u: String?
+    val x5t: String?
+    @SerialName("x5t#S256")
+    val x5t256: String?
+    val x5c: Array<String>?
+    val exp: Int?
+    val nbf: Int?
+    val iat: Int?
 }
 
 @JsExport
@@ -45,6 +55,14 @@ class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    override val ops: Array<String>? = null,
+    override val x5u: String? = null,
+    override val x5t: String? = null,
+    override val x5t256: String? = null,
+    override val x5c: Array<String>? = null,
+    override val exp: Int? = null,
+    override val nbf: Int? = null,
+    override val iat: Int? = null,
     val p: String,
     val q: String,
     val d: String,
@@ -63,6 +81,14 @@ class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    override val ops: Array<String>? = null,
+    override val x5u: String? = null,
+    override val x5t: String? = null,
+    override val x5t256: String? = null,
+    override val x5c: Array<String>? = null,
+    override val exp: Int? = null,
+    override val nbf: Int? = null,
+    override val iat: Int? = null,
     val d: String,
     val crv: String,
     val x: String,
@@ -77,6 +103,14 @@ class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
+    override val ops: Array<String>? = null,
+    override val x5u: String? = null,
+    override val x5t: String? = null,
+    override val x5t256: String? = null,
+    override val x5c: Array<String>? = null,
+    override val exp: Int? = null,
+    override val nbf: Int? = null,
+    override val iat: Int? = null,
     val d: String? = null,
     val crv: String,
     val x: String
