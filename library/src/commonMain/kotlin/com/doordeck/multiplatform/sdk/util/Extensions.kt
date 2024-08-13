@@ -19,7 +19,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.encodeToString
 
 private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
-private val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
+private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
