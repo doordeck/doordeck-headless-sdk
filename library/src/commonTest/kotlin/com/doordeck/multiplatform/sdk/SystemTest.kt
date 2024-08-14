@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
+import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
@@ -43,13 +44,19 @@ open class SystemTest {
     private val CLOUD_HTTP_CLIENT  by lazy {
         createCloudHttpClient(TEST_ENVIRONMENT, CONTEXT_MANAGER)
     }
+    private val HTTP_CLIENT by lazy {
+        createHttpClient()
+    }
 
     // Resources
     val ACCOUNT_RESOURCE by lazy {
         AccountResourceImpl(CLOUD_HTTP_CLIENT, CONTEXT_MANAGER)
     }
+    val LOCAL_UNLOCK_RESOURCE by lazy {
+        LocalUnlockResourceImpl(HTTP_CLIENT)
+    }
     val LOCK_OPERATIONS_RESOURCE by lazy {
-        LockOperationsResourceImpl(CLOUD_HTTP_CLIENT, CONTEXT_MANAGER)
+        LockOperationsResourceImpl(CLOUD_HTTP_CLIENT, CONTEXT_MANAGER, LOCAL_UNLOCK_RESOURCE)
     }
     val PLATFORM_RESOURCE by lazy {
         PlatformResourceImpl(CLOUD_HTTP_CLIENT)
