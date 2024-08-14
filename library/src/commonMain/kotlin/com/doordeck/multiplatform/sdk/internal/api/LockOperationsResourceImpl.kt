@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.api.LocalUnlockResource
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.requests.LocationRequirementRequest
@@ -44,7 +45,8 @@ import io.ktor.client.request.*
 
 class LockOperationsResourceImpl(
     private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl
+    private val contextManager: ContextManagerImpl,
+    private val localUnlockResource: LocalUnlockResource
 ) : AbstractResourceImpl(), LockOperationsResource {
 
     override fun getSingleLock(lockId: String): LockResponse {
@@ -153,7 +155,7 @@ class LockOperationsResourceImpl(
         }
     }
 
-    override fun unlockWithContext(lockId: String) {
+    override fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>?) {
         val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
             userId = operationContext.userId,
@@ -161,16 +163,12 @@ class LockOperationsResourceImpl(
             userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
-        unlock(baseOperation)
+        unlock(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints))
     }
 
     override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        unlock(unlockOperation.baseOperation)
-    }
-
-    private fun unlock(baseOperation: LockOperations.BaseOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(baseOperation, operationRequest)
+        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints)
     }
 
     override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
@@ -271,7 +269,8 @@ class LockOperationsResourceImpl(
         performOperation(baseOperation, operationRequest)
     }
 
-    private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest) {
+    private fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest,
+                                 directAccessEndpoints: Array<String>? = null) {
         val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperation.userId,
@@ -286,6 +285,12 @@ class LockOperationsResourceImpl(
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
         val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
+
+        // Launch the calls to the direct access endpoints
+        if (operationRequest is LockOperationRequest && directAccessEndpoints != null) {
+            localUnlockResource.unlock(directAccessEndpoints, body)
+        }
+
         httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
             addRequestHeaders(true)
             setBody(body)

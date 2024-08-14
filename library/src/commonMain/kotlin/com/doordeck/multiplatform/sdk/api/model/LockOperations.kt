@@ -33,7 +33,8 @@ object LockOperations {
     )
 
     class UnlockOperation(
-        override val baseOperation: BaseOperation
+        override val baseOperation: BaseOperation,
+        val directAccessEndpoints: Array<String>? = null
     ): Operation(baseOperation)
 
     class ShareLockOperation(

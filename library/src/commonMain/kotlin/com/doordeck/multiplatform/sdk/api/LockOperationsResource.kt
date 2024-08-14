@@ -155,7 +155,7 @@ interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    fun unlockWithContext(lockId: String)
+    fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>? = null)
 
     /**
      * Unlock
