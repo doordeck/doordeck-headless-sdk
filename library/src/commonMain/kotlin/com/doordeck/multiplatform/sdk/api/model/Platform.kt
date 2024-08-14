@@ -40,7 +40,7 @@ object Platform {
     }
 
     class RsaKey(
-        override val kty: String,
+        override val kty: String = "RSA",
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
@@ -55,7 +55,7 @@ object Platform {
     ): AuthKey
 
     class EcKey(
-        override val kty: String,
+        override val kty: String = "EC",
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
@@ -66,7 +66,7 @@ object Platform {
     ): AuthKey
 
     class Ed25519Key(
-        override val kty: String,
+        override val kty: String = "OKP",
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
