@@ -133,8 +133,8 @@ export class AppComponent implements OnInit {
   async test() {
     // Initialize the SDK
     const token = "YOUR_AUTH_TOKEN";
-    const factory = new doordeck.com.doordeck.sdk.KDoordeckFactory();
-    const sdk = await Promise.resolve(factory.initialize(apiEnvironment.DEV, token));
+    const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
+    const sdk = await Promise.resolve(factory.initializeWithAuthToken(apiEnvironment.DEV, token));
 
     // Retrieve the sites
     const sites = await Promise.resolve(sdk.sites().listSites());

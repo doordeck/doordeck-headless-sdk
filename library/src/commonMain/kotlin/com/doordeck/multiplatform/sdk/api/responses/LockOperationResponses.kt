@@ -30,7 +30,7 @@ class LockSettingsResponse(
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: Array<String>,
     val hidden: Boolean,
-    val directAccessEndpoints: Array<String>
+    val directAccessEndpoints: Array<String> = emptyArray()
 )
 
 @JsExport

@@ -287,7 +287,7 @@ class LockOperationsResourceImpl(
         val body = "$headerB64.$bodyB64.$signatureB64"
 
         // Launch the calls to the direct access endpoints
-        if (operationRequest is LockOperationRequest && directAccessEndpoints != null) {
+        if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
             localUnlockResource.unlock(directAccessEndpoints, body)
         }
 
