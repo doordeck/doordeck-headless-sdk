@@ -24,12 +24,12 @@ kotlin {
         }
     }
 
-    val xcf = XCFramework()
-    val iosTargets = listOf(iosX64(), iosArm64(), macosArm64())
+    val xcf = XCFramework("DoordeckSDK")
+    val iosTargets = listOf(iosX64(), iosArm64(), macosArm64(), iosSimulatorArm64())
 
     iosTargets.forEach {
         it.binaries.framework {
-            baseName = "doordeck-sdk"
+            baseName = "DoordeckSDK"
             xcf.add(this)
         }
     }
