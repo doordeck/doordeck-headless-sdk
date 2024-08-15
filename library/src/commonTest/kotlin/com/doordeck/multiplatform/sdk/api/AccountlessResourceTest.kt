@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.createCloudHttpClient
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
-import com.doordeck.multiplatform.sdk.runBlocking
 import com.doordeck.multiplatform.sdk.util.Jwt.getEmailFromToken
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class AccountlessResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestAccountless() = runBlocking {
+    fun shouldTestAccountless() = runTest {
         shouldLogin()
         val token = shouldRegister()
         shouldDelete(token)

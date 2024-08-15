@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.runBlocking
 import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
@@ -10,6 +9,7 @@ import com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPair
 import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,9 +19,9 @@ class CryptoTest {
     private val publicBase64Key = "eKrQqt35GpgfpokNOsxvgOuGOwSKyOUYSPxRB2yiItQ="
 
     @Test
-    fun shouldDecodeEncodeKeys() = runBlocking {
+    fun shouldDecodeEncodeKeys() = runTest {
         if (getPlatform() == PlatformType.ANDROID) {
-            return@runBlocking
+            return@runTest
         }
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initialize()
@@ -40,9 +40,9 @@ class CryptoTest {
     }
 
     @Test
-    fun shouldGenerateKeyPair() = runBlocking {
+    fun shouldGenerateKeyPair() = runTest {
         if (getPlatform() == PlatformType.ANDROID) {
-            return@runBlocking
+            return@runTest
         }
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initialize()
@@ -51,9 +51,9 @@ class CryptoTest {
     }
 
     @Test
-    fun shouldSignWithPrivateKey() = runBlocking {
+    fun shouldSignWithPrivateKey() = runTest {
         if (getPlatform() == PlatformType.ANDROID) {
-            return@runBlocking
+            return@runTest
         }
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initialize()

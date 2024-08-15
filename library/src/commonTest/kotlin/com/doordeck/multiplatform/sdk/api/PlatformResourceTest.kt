@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -19,7 +19,7 @@ import kotlin.test.assertTrue
 class PlatformResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestPlatform() = runBlocking {
+    fun shouldTestPlatform() = runTest {
         val applicationId = shouldCreateApplication()
         shouldUpdateApplicationName(applicationId)
         shouldUpdateApplicationCompanyName(applicationId)

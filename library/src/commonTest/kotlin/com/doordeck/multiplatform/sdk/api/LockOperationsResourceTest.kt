@@ -8,10 +8,10 @@ import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.runBlocking
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
+import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -29,9 +29,9 @@ import kotlin.time.Duration.Companion.minutes
 class LockOperationsResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestLockOperations() = runBlocking {
+    fun shouldTestLockOperations() = runTest {
         if (getPlatform() == PlatformType.ANDROID) {
-            return@runBlocking
+            return@runTest
         }
         LibsodiumInitializer.initialize()
 

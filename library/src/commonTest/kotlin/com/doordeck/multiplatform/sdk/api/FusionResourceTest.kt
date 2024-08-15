@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.createFusionHttpClient
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import com.doordeck.multiplatform.sdk.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -40,7 +40,7 @@ class FusionResourceTest : SystemTest() {
     )
 
     @Test
-    fun shouldTestFusion() = runBlocking {
+    fun shouldTestFusion() = runTest {
         integrations.filter { it.value.enabled }.forEach { (host, testController) ->
             val fusionContextManager = ContextManagerImpl()
             val fusionResource = FusionResourceImpl(createFusionHttpClient(host, fusionContextManager))
