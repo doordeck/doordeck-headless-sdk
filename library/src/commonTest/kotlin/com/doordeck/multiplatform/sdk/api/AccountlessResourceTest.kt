@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.createCloudHttpClient
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.runBlocking
@@ -31,7 +32,7 @@ class AccountlessResourceTest : SystemTest() {
 
     private fun shouldRegister(): String {
         // When
-        val response = ACCOUNTLESS_RESOURCE.registration(TEST_MAIN_USER_EMAIL.replace("@", "+${uuid4()}@"), TEST_MAIN_USER_PASSWORD)
+        val response = ACCOUNTLESS_RESOURCE.registration(TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${uuid4()}@"), TEST_MAIN_USER_PASSWORD)
 
         // When
         assertTrue { response.authToken.isNotEmpty() }
