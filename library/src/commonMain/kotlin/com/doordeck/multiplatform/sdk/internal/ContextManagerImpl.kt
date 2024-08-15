@@ -11,7 +11,6 @@ class ContextManagerImpl(
 
     var currentToken: String? = token
     var currentRefreshToken: String? = refreshToken
-
     var currentFusionToken: String? = null
 
     private var currentUserId: String? = null
@@ -28,8 +27,17 @@ class ContextManagerImpl(
     }
 
     internal fun reset() {
+        resetTokens()
+        resetOperationContext()
+    }
+
+    internal fun resetTokens() {
         currentToken = null
         currentRefreshToken = null
+        currentFusionToken = null
+    }
+
+    internal fun resetOperationContext() {
         currentUserId = null
         currentUserCertificateChain = null
         currentUserPrivateKey = null
