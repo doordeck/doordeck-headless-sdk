@@ -263,7 +263,7 @@ class LockOperationsResourceTest : SystemTest() {
         assertTrue { shareableLocks.isNotEmpty() }
     }
 
-    private fun shouldUnlock() = runBlocking {
+    private fun shouldUnlock() {
         // Given
         val baseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
@@ -274,8 +274,6 @@ class LockOperationsResourceTest : SystemTest() {
 
         // When
         LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
-
-        // Then
     }
 
     private fun shouldShareLock() {

@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -45,7 +46,7 @@ class PlatformResourceTest : SystemTest() {
     private fun shouldCreateApplication(): String {
         // Given
         val newApplication = Platform.CreateApplication(
-            name = "Test Application ${uuid4()}",
+            name = "Test Application ${getPlatform()} ${uuid4()}",
             companyName = uuid4().toString(),
             mailingAddress = "test@doordeck.com",
             privacyPolicy = "https://www.doordeck.com/privacy",

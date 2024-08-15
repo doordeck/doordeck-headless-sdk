@@ -29,7 +29,8 @@ class LockSettingsResponse(
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: Array<String>,
-    val hidden: Boolean
+    val hidden: Boolean,
+    val directAccessEndpoints: Array<String> = emptyArray()
 )
 
 @JsExport
