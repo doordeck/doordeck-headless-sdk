@@ -379,7 +379,7 @@ class LockOperationsResourceTest : SystemTest() {
 
         // Then
         val locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
-        assertTrue { locks.devices.isNotEmpty() }
+        assertTrue { locks.devices.isEmpty() }
     }
 
     private fun shouldUpdateSecureSettingUnlockDuration() {
