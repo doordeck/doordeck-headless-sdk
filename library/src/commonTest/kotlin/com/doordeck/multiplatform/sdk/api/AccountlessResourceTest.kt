@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.SystemTest
-import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.createCloudHttpClient
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -11,58 +10,26 @@ import com.doordeck.multiplatform.sdk.runBlocking
 import com.doordeck.multiplatform.sdk.util.Jwt.getEmailFromToken
 import kotlin.test.Test
 import kotlin.test.assertFails
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AccountlessResourceTest : SystemTest() {
 
     @Test
     fun shouldTestAccountless() = runBlocking {
-        val login = shouldLogin()
-        val refresh = shouldRefreshToken(login.refreshToken)
-        shouldLogout(refresh.authToken)
+        shouldLogin()
         val token = shouldRegister()
         shouldDelete(token)
     }
 
-    private fun shouldLogin(): TokenResponse {
+    private fun shouldLogin() {
         // When
         val response = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        return response
     }
 
-    private fun shouldRefreshToken(refreshToken: String): TokenResponse {
-        // Given
-        val contextManager = ContextManagerImpl()
-        val resource = AccountResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
-
-        // When
-        val response = resource.refreshToken(refreshToken)
-
-        // Then
-        assertTrue { response.authToken.isNotEmpty() }
-        assertTrue { response.refreshToken.isNotEmpty() }
-        return response
-    }
-
-    // In this test, we are calling a different resource
-    private fun shouldLogout(token: String) {
-        // Given
-        val contextManager = ContextManagerImpl(token)
-        val resource = AccountResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
-
-        // When
-        resource.logout()
-
-        // Then
-        assertNull(contextManager.currentToken)
-    }
-
-    // In this test, we are calling a different resource
     private fun shouldRegister(): String {
         // When
         val response = ACCOUNTLESS_RESOURCE.registration(TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${uuid4()}@"), TEST_MAIN_USER_PASSWORD)

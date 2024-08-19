@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class AccountResourceTest : SystemTest() {
@@ -20,6 +21,8 @@ class AccountResourceTest : SystemTest() {
         shouldUpdateUserDetails()
         shouldRegisterEphemeralKey()
         shouldChangePassword()
+        shouldRefreshToken()
+        shouldLogout()
     }
 
     private fun shouldGetUserDetails(): UserDetailsResponse {
@@ -58,5 +61,22 @@ class AccountResourceTest : SystemTest() {
 
     private fun shouldChangePassword() {
         ACCOUNT_RESOURCE.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
+    }
+
+    private fun shouldRefreshToken() {
+        // When
+        val response = ACCOUNT_RESOURCE.refreshToken(TEST_REFRESH_TOKEN)
+
+        // Then
+        assertTrue { response.authToken.isNotEmpty() }
+        assertTrue { response.refreshToken.isNotEmpty() }
+    }
+
+    private fun shouldLogout() {
+        // When
+        ACCOUNT_RESOURCE.logout()
+
+        // Then
+        assertNull(CONTEXT_MANAGER.currentToken)
     }
 }
