@@ -5,9 +5,9 @@ import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.runBlocking
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
 class AccountResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestAccount() = runTest {
+    fun shouldTestAccount() = runBlocking {
         shouldGetUserDetails()
         shouldUpdateUserDetails()
         shouldRegisterEphemeralKey()
@@ -38,9 +38,9 @@ class AccountResourceTest : SystemTest() {
         assertEquals(updatedUserDisplayName, result.displayName)
     }
 
-    private fun shouldRegisterEphemeralKey() = runTest {
+    private fun shouldRegisterEphemeralKey() = runBlocking {
         if (getPlatform() == PlatformType.ANDROID) {
-            return@runTest
+            return@runBlocking
         }
 
         LibsodiumInitializer.initialize()

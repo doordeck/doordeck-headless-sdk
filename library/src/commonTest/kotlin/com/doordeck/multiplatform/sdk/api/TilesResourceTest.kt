@@ -1,14 +1,14 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.SystemTest
-import kotlinx.coroutines.test.runTest
+import com.doordeck.multiplatform.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class TilesResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestTiles() = runTest {
+    fun shouldTestTiles() = runBlocking {
         shouldGetLocksBelongingToTile()
         //shouldAssociateMultipleLocks()
     }

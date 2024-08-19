@@ -2,14 +2,14 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
-import kotlinx.coroutines.test.runTest
+import com.doordeck.multiplatform.sdk.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class SitesResourceTest : SystemTest() {
 
     @Test
-    fun shouldTestSites() = runTest {
+    fun shouldTestSites() = runBlocking {
         val sites = shouldListSites()
         shouldGetLocksForSite(sites.random().id)
         shouldGetUsersForSite(sites.random().id)
