@@ -24,8 +24,14 @@ open class SystemTest {
     val ACCOUNTLESS_RESOURCE by lazy {
         AccountlessResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, ContextManagerImpl()))
     }
+    private val LOGIN_RESPONSE by lazy {
+        ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+    }
     val TEST_AUTH_TOKEN by lazy {
-        ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).authToken
+        LOGIN_RESPONSE.authToken
+    }
+    val TEST_REFRESH_TOKEN by lazy {
+        LOGIN_RESPONSE.refreshToken
     }
     val TEST_MAIN_USER_ID by lazy {
         TEST_AUTH_TOKEN.getUserIdFromToken()!!

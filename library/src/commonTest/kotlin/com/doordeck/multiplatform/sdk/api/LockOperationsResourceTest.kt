@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
+import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.SystemTest
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -18,6 +19,7 @@ import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -52,14 +54,19 @@ class LockOperationsResourceTest : SystemTest() {
         shouldGetPinnedLocks()
         shouldGetShareableLocks()
         shouldUnlock()
+        shouldUnlockWithContext()
         shouldShareLock()
         shouldRevokeAccessToLock()
+        shouldShareLockWithContext()
+        shouldRevokeAccessToLockWithContext()
         shouldUpdateSecureSettingUnlockDuration()
-        shouldRemoveSecureSettingUnlockDuration()
+        shouldUpdateSecureSettingUnlockDurationWithContext()
         shouldUploadSecureSettingUnlockBetween()
+        shouldUploadSecureSettingUnlockBetweenWithContext()
         shouldRemoveSecureSettingUnlockBetween()
         shouldGetLockAuditTrail()
         shouldGetAuditForUser()
+        shouldThrowExceptionWhenOperationContextIsMissing()
     }
 
     private fun shouldGetSingleLock(): LockResponse {
@@ -276,6 +283,18 @@ class LockOperationsResourceTest : SystemTest() {
         LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
     }
 
+    private fun shouldUnlockWithContext() {
+        // Given
+        CONTEXT_MANAGER.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+
+        // When
+        LOCK_OPERATIONS_RESOURCE.unlockWithContext(TEST_MAIN_LOCK_ID)
+    }
+
     private fun shouldShareLock() {
         // Given
         val baseOperation = LockOperations.BaseOperation(
@@ -320,6 +339,49 @@ class LockOperationsResourceTest : SystemTest() {
         assertTrue { locks.devices.isEmpty() }
     }
 
+    private fun shouldShareLockWithContext() {
+        // Given
+        CONTEXT_MANAGER.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+        val shareLock = LockOperations.ShareLock(
+            targetUserId = TEST_SUPPLEMENTARY_USER_ID,
+            targetUserRole = UserRole.USER,
+            targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+        )
+
+        // When
+        LOCK_OPERATIONS_RESOURCE.shareLockWithContext(
+            lockId = TEST_MAIN_LOCK_ID,
+            shareLock = shareLock
+        )
+
+        // Then
+        val locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.isNotEmpty() }
+    }
+
+    private fun shouldRevokeAccessToLockWithContext() {
+        // Given
+        CONTEXT_MANAGER.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+
+        // When
+        LOCK_OPERATIONS_RESOURCE.revokeAccessToLockWithContext(
+            lockId = TEST_MAIN_LOCK_ID,
+            users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
+        )
+
+        // Then
+        val locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.isEmpty() }
+    }
+
     private fun shouldUpdateSecureSettingUnlockDuration() {
         // Given
         val updatedUnlockDuration = Random.nextInt(30, 60)
@@ -341,21 +403,20 @@ class LockOperationsResourceTest : SystemTest() {
         assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
     }
 
-    private fun shouldRemoveSecureSettingUnlockDuration() {
+    private fun shouldUpdateSecureSettingUnlockDurationWithContext() {
         // Given
         val updatedUnlockDuration = 1
-        val baseOperation = LockOperations.BaseOperation(
+        CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            lockId = TEST_MAIN_LOCK_ID
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = baseOperation,
+        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDurationWithContext(
+            lockId = TEST_MAIN_LOCK_ID,
             unlockDuration = updatedUnlockDuration
-        ))
+        )
 
         // Then
         val lock = shouldGetSingleLock()
@@ -387,6 +448,40 @@ class LockOperationsResourceTest : SystemTest() {
             baseOperation = baseOperation,
             unlockBetween = updatedUnlockBetween
         ))
+
+        // Then
+        val lock = shouldGetSingleLock()
+        assertNotNull(lock.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
+        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
+        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow?.timezone)
+        assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
+    }
+
+    private fun shouldUploadSecureSettingUnlockBetweenWithContext() {
+        // Given
+        val timezone = TimeZone.currentSystemDefault()
+        val now = Clock.System.now()
+        val min = now.minus(5.minutes).toLocalDateTime(timezone)
+        val max = now.plus(10.minutes).toLocalDateTime(timezone)
+        val updatedUnlockBetween = LockOperations.UnlockBetween(
+            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
+            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+            timezone = timezone.id,
+            days = arrayOf(min.dayOfWeek.name),
+            exceptions = emptyArray()
+        )
+        CONTEXT_MANAGER.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+
+        // When
+        LOCK_OPERATIONS_RESOURCE.uploadSecureSettingUnlockBetweenWithContext(
+            lockId = TEST_MAIN_LOCK_ID,
+            unlockBetween = updatedUnlockBetween
+        )
 
         // Then
         val lock = shouldGetSingleLock()
@@ -441,5 +536,53 @@ class LockOperationsResourceTest : SystemTest() {
 
         // Then
         assertTrue { auditForUser.isNotEmpty() }
+    }
+
+    private fun shouldThrowExceptionWhenOperationContextIsMissing() {
+        // Given
+        CONTEXT_MANAGER.resetOperationContext()
+        val exceptionMessage = "The operation context is missing"
+
+        // When
+        val revokeAccessToLockWithContextException = assertFails {
+            LOCK_OPERATIONS_RESOURCE.revokeAccessToLockWithContext("", emptyArray())
+        }
+        val shareLockWithContextException = assertFails {
+            LOCK_OPERATIONS_RESOURCE.shareLockWithContext("", LockOperations.ShareLock(
+                targetUserId = "",
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = byteArrayOf()
+            ))
+        }
+        val unlockWithContextException = assertFails {
+            LOCK_OPERATIONS_RESOURCE.unlockWithContext("")
+        }
+        val updateSecureSettingUnlockDurationWithContextException = assertFails {
+            LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDurationWithContext("", 0)
+        }
+        val uploadSecureSettingUnlockBetweenWithContextException = assertFails {
+            LOCK_OPERATIONS_RESOURCE.uploadSecureSettingUnlockBetweenWithContext(
+                lockId = TEST_MAIN_LOCK_ID,
+                unlockBetween = LockOperations.UnlockBetween(
+                    start = "",
+                    end = "",
+                    timezone = "",
+                    days = emptyArray(),
+                    exceptions = emptyArray()
+                )
+            )
+        }
+
+        // Then
+        assertTrue { revokeAccessToLockWithContextException is MissingOperationContextException }
+        assertEquals(exceptionMessage, revokeAccessToLockWithContextException.message)
+        assertTrue { shareLockWithContextException is MissingOperationContextException }
+        assertEquals(exceptionMessage, shareLockWithContextException.message)
+        assertTrue { unlockWithContextException is MissingOperationContextException }
+        assertEquals(exceptionMessage, unlockWithContextException.message)
+        assertTrue { updateSecureSettingUnlockDurationWithContextException is MissingOperationContextException }
+        assertEquals(exceptionMessage, updateSecureSettingUnlockDurationWithContextException.message)
+        assertTrue { uploadSecureSettingUnlockBetweenWithContextException is MissingOperationContextException }
+        assertEquals(exceptionMessage, uploadSecureSettingUnlockBetweenWithContextException.message)
     }
 }
