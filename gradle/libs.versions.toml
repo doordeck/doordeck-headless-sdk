@@ -4,14 +4,16 @@ kotlin = "2.0.0"
 nexus-publish = "2.0.0-rc-1"
 android-minSdk = "24"
 android-compileSdk = "33"
-ktor-client = "3.0.0-beta-1"
+ktor-client = "3.0.0-beta-2"
 libsodium = "0.9.2"
 uuid-generator = "0.8.4"
 kotlinx-datetime = "0.6.0"
+kotlin-coroutines-test = "1.9.0-RC.2"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-test" }
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }

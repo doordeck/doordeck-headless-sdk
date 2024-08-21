@@ -53,6 +53,4 @@ internal fun createHttpClient(): HttpClient {
     }
 }
 
-expect fun <T> runBlocking(block: suspend CoroutineScope.() -> T): T
-
 expect fun getPlatform(): PlatformType

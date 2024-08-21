@@ -15,7 +15,6 @@ import com.doordeck.multiplatform.sdk.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.TooEarlyException
 import com.doordeck.multiplatform.sdk.UnauthorizedException
-import com.doordeck.multiplatform.sdk.runBlocking
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -26,40 +25,32 @@ import kotlinx.serialization.Serializable
 
 abstract class AbstractResourceImpl {
 
-    protected inline fun <reified T>HttpClient.post(
+    protected suspend inline fun <reified T>HttpClient.post(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): T = runBlocking {
-        handleRequest {
-            post { url(urlString); block() }
-        }
+    ): T = handleRequest {
+        post { url(urlString); block() }
     }
 
-    protected inline fun <reified T>HttpClient.get(
+    protected suspend inline fun <reified T>HttpClient.get(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): T = runBlocking {
-        handleRequest {
-            get { url(urlString); block() }
-        }
+    ): T = handleRequest {
+        get { url(urlString); block() }
     }
 
-    protected inline fun <reified T>HttpClient.put(
+    protected suspend inline fun <reified T>HttpClient.put(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): T = runBlocking {
-        handleRequest {
-            put { url(urlString); block() }
-        }
+    ): T = handleRequest {
+        put { url(urlString); block() }
     }
 
-    protected inline fun <reified T>HttpClient.delete(
+    protected suspend inline fun <reified T>HttpClient.delete(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
-    ): T = runBlocking {
-        handleRequest {
-            delete { url(urlString); block() }
-        }
+    ): T = handleRequest {
+        delete { url(urlString); block() }
     }
 
     protected suspend inline fun <reified T>handleRequest(function: () -> HttpResponse): T {

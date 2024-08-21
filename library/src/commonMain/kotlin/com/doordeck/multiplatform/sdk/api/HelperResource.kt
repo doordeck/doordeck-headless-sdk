@@ -1,9 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import kotlin.js.JsExport
+expect interface HelperResource
 
-@JsExport
-interface HelperResource {
-
-    fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
-}
+expect fun helper(): HelperResource

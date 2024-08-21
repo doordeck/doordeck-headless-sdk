@@ -58,6 +58,10 @@ kotlin {
     sourceSets {
         all {
             // Remove the warnings from the experimental kotlin features
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
+            compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
@@ -78,11 +82,13 @@ kotlin {
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
+                implementation("io.insert-koin:koin-core:4.0.0-RC1")
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlin.coroutines.test)
             }
         }
 

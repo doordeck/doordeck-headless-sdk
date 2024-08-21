@@ -1,0 +1,59 @@
+package com.doordeck.multiplatform.sdk.internal.api
+
+import com.doordeck.multiplatform.sdk.api.model.Fusion
+import com.doordeck.multiplatform.sdk.api.requests.EnableDoorRequest
+import com.doordeck.multiplatform.sdk.api.requests.FusionLoginRequest
+import com.doordeck.multiplatform.sdk.api.requests.IntegrationConfigurationRequest
+import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
+import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
+import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
+import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
+import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import io.ktor.client.*
+import io.ktor.client.request.*
+
+abstract class AbstractFusionClientImpl(
+    private val httpClient: HttpClient
+) : AbstractResourceImpl() {
+
+    suspend fun loginRequest(email: String, password: String): FusionLoginResponse {
+        return httpClient.post(FusionPaths.getLoginPath()) {
+            addRequestHeaders()
+            setBody(FusionLoginRequest(email, password))
+        }
+    }
+
+    suspend fun getIntegrationTypeRequest(): IntegrationTypeResponse {
+        return httpClient.get(FusionPaths.getConfigurationTypePath())
+    }
+
+    suspend fun getIntegrationConfigurationRequest(type: String): Array<IntegrationConfigurationResponse> {
+        return httpClient.post(FusionPaths.getIntegrationConfiguration()) {
+            addRequestHeaders()
+            setBody(IntegrationConfigurationRequest(type))
+        }
+    }
+
+    suspend fun enableDoorRequest(name: String, siteId: String, controller: Fusion.LockController) {
+        httpClient.post<Unit>(FusionPaths.getEnableDoorPath()) {
+            addRequestHeaders()
+            setBody(EnableDoorRequest(name, siteId , controller))
+        }
+    }
+
+    suspend fun deleteDoorRequest(deviceId: String) {
+        httpClient.delete<Unit>(FusionPaths.getDeleteDoorPath(deviceId))
+    }
+
+    suspend fun getDoorStatusRequest(deviceId: String): DoorStateResponse {
+        return httpClient.get(FusionPaths.getDoorStatusPath(deviceId))
+    }
+
+    suspend fun startDoorRequest(deviceId: String) {
+        httpClient.get<Unit>(FusionPaths.startDoorPathPath(deviceId))
+    }
+
+    suspend fun stopDoorRequest(deviceId: String) {
+        httpClient.get<Unit>(FusionPaths.stopDoorPathPath(deviceId))
+    }
+}
