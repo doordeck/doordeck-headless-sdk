@@ -29,7 +29,7 @@ class AccountlessResourceTest : IntegrationTest() {
 
     @Test
     fun shouldRegisterAndDelete() = runTest {
-        // Given - Register
+        // Given - shouldRegister
          val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${uuid4()}@")
 
         // When
@@ -39,7 +39,7 @@ class AccountlessResourceTest : IntegrationTest() {
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
 
-        // Given - Delete
+        // Given - shouldDelete
         val contextManager = ContextManagerImpl(response.authToken)
         val resource = AccountResourceImpl(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
 

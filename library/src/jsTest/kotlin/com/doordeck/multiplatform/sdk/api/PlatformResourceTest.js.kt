@@ -2,7 +2,9 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
@@ -22,6 +24,8 @@ class PlatformResourceTest : IntegrationTest() {
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
+        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
         val newApplication = Platform.CreateApplication(
             name = "Test Application ${getPlatform()} ${uuid4()}",
             companyName = uuid4().toString(),

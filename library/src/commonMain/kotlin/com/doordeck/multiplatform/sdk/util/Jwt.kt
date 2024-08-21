@@ -18,7 +18,7 @@ object Jwt {
         if (parts.size != 3) {
             return null
         }
-        val decodedPayload = String(Base64.decode(parts[1]))
+        val decodedPayload = String(Base64.decode(parts[1])) // TODO This is failing but is not used right now
         val json = JSON.parseToJsonElement(decodedPayload)
         return json.jsonObject.map { it.key to it.value.jsonPrimitive.content }.toMap()
     }
