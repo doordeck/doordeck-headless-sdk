@@ -27,7 +27,7 @@ abstract class AbstractFusionClientImpl(
         return httpClient.get(FusionPaths.getConfigurationTypePath())
     }
 
-    suspend fun getIntegrationConfigurationRequest(type: String): Array<IntegrationConfigurationResponse> {
+    suspend fun getIntegrationConfigurationRequest(type: String): List<IntegrationConfigurationResponse> {
         return httpClient.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
             setBody(IntegrationConfigurationRequest(type))

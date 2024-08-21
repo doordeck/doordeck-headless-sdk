@@ -32,11 +32,11 @@ class FusionResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { getIntegrationTypeRequest() }
     }
 
-    override suspend fun getIntegrationConfiguration(type: String): Array<IntegrationConfigurationResponse> {
+    override suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
         return getIntegrationConfigurationRequest(type)
     }
 
-    override fun getIntegrationConfigurationFuture(type: String): CompletableFuture<Array<IntegrationConfigurationResponse>> {
+    override fun getIntegrationConfigurationFuture(type: String): CompletableFuture<List<IntegrationConfigurationResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getIntegrationConfigurationRequest(type) }
     }
 

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class OperationHeaderRequest(
     val alg: String = "EdDSA",
-    val x5c: Array<String>,
+    val x5c: List<String>,
     val type: String = "JWT"
 )
 
@@ -41,7 +41,7 @@ class ShareLockOperationRequest(
 @Serializable
 @SerialName("REMOVE_USER")
 class RevokeAccessToALockOperationRequest(
-    val users: Array<String>
+    val users: List<String>
 ): OperationRequest
 
 @SerialName("MUTATE_SETTING")
@@ -56,8 +56,8 @@ class UnlockBetweenSettingRequest(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Array<String>,
-    val exceptions: Array<String>? = null
+    val days: List<String>,
+    val exceptions: List<String>? = null
 )
 
 @Serializable
@@ -105,7 +105,7 @@ class LockSettingsDefaultNameRequest(
 
 @Serializable
 class LockSettingsPermittedAddressesRequest(
-    val permittedAddresses: Array<String>
+    val permittedAddresses: List<String>
 ): LockSettingsRequest
 
 @Serializable
@@ -123,7 +123,7 @@ class UpdateLockSettingUsageRequirementRequest(
 
 @Serializable
 class UpdateLockSettingTimeUsageRequirementRequest(
-    val time: Array<TimeRequirementRequest>
+    val time: List<TimeRequirementRequest>
 ): UsageRequirementRequest
 
 @Serializable
@@ -136,7 +136,7 @@ class TimeRequirementRequest(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Array<String>
+    val days: List<String>
 )
 
 @Serializable

@@ -14,27 +14,27 @@ class SitesResourceImpl(
     private val httpClient: HttpClient
 ) : AbstractSitesClientImpl(httpClient), SitesResource {
 
-    override suspend fun listSites(): Array<SiteResponse> {
+    override suspend fun listSites(): List<SiteResponse> {
         return listSitesRequest()
     }
 
-    override suspend fun listSitesFuture(): CompletableFuture<Array<SiteResponse>> {
+    override suspend fun listSitesFuture(): CompletableFuture<List<SiteResponse>> {
         return GlobalScope.future(Dispatchers.IO) { listSitesRequest() }
     }
 
-    override suspend fun getLocksForSite(siteId: String): Array<SiteLocksResponse> {
+    override suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
         return getLocksForSiteRequest(siteId)
     }
 
-    override fun getLocksForSiteFuture(siteId: String): CompletableFuture<Array<SiteLocksResponse>> {
+    override fun getLocksForSiteFuture(siteId: String): CompletableFuture<List<SiteLocksResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getLocksForSiteRequest(siteId) }
     }
 
-    override suspend fun getUsersForSite(siteId: String): Array<UserForSiteResponse> {
+    override suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
         return getUsersForSiteRequest(siteId)
     }
 
-    override fun getUsersForSiteFuture(siteId: String): CompletableFuture<Array<UserForSiteResponse>> {
+    override fun getUsersForSiteFuture(siteId: String): CompletableFuture<List<UserForSiteResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getUsersForSiteRequest(siteId) }
     }
 }

@@ -29,10 +29,10 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun listApplications(): Array<ApplicationResponse>
+    suspend fun listApplications(): List<ApplicationResponse>
 
     @DoordeckOnly
-    fun listApplicationsFuture(): CompletableFuture<Array<ApplicationResponse>>
+    fun listApplicationsFuture(): CompletableFuture<List<ApplicationResponse>>
 
     /**
      * Get application
@@ -238,10 +238,10 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse>
+    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse>
 
     @DoordeckOnly
-    fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<Array<ApplicationOwnerDetailsResponse>>
+    fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>>
 }
 
 actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

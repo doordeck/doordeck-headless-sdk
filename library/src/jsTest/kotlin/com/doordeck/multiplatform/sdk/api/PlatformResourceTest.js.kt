@@ -5,8 +5,6 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.api.model.Platform
-import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
@@ -21,33 +19,9 @@ import kotlin.test.assertTrue
 
 class PlatformResourceTest : IntegrationTest() {
 
-    /*@Test
+    @Test
     fun shouldTestPlatform() = runTest {
-        val applicationId = shouldCreateApplication()
-        shouldUpdateApplicationName(applicationId)
-        shouldUpdateApplicationCompanyName(applicationId)
-        shouldUpdateApplicationMailingAddress(applicationId)
-        shouldUpdateApplicationPrivacyPolicy(applicationId)
-        shouldUpdateApplicationSupportContact(applicationId)
-        shouldUpdateApplicationAppLink(applicationId)
-        shouldUpdateApplicationEmailPreferences(applicationId)
-        shouldUpdateApplicationLogoUrl(applicationId)
-        shouldAddAuthIssuer(applicationId)
-        shouldDeleteAuthIssuer(applicationId)
-        shouldAddCorsDomain(applicationId)
-        shouldDeleteCorsDomain(applicationId)
-        shouldAddEd25519AuthKey(applicationId)
-        shouldAddRsaAuthKey(applicationId)
-        shouldAddEcAuthKey(applicationId)
-        shouldGetApplicationOwnersDetails(applicationId)
-        shouldAddApplicationOwner(applicationId)
-        shouldRemoveApplicationOwner(applicationId)
-        shouldGetLogoUploadUrl(applicationId)
-        shouldDeleteApplication(applicationId)
-    }
-
-    private fun shouldCreateApplication(): String {
-        // Given
+        // Given - shouldCreateApplication
         val newApplication = Platform.CreateApplication(
             name = "Test Application ${getPlatform()} ${uuid4()}",
             companyName = uuid4().toString(),
@@ -60,86 +34,72 @@ class PlatformResourceTest : IntegrationTest() {
         PLATFORM_RESOURCE.createApplication(newApplication).await()
 
         // Then
-        val application = shouldListApplications().firstOrNull { it.name.equals(newApplication.name, true) }
+        var application = PLATFORM_RESOURCE.listApplications().await().firstOrNull {
+            it.name.equals(newApplication.name, true)
+        }
         assertNotNull(application)
 
-        return application.applicationId
-    }
-
-    private fun shouldUpdateApplicationName(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationName
         val updatedApplicationName = "Test Application ${uuid4()}"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationName(applicationId, updatedApplicationName).await()
+        PLATFORM_RESOURCE.updateApplicationName(application.applicationId, updatedApplicationName).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationName, application.name)
-    }
 
-    private fun shouldUpdateApplicationCompanyName(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationCompanyName
         val updatedApplicationCompanyName = uuid4().toString()
 
         // When
-        PLATFORM_RESOURCE.updateApplicationCompanyName(applicationId, updatedApplicationCompanyName).await()
+        PLATFORM_RESOURCE.updateApplicationCompanyName(application.applicationId, updatedApplicationCompanyName).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationCompanyName, application.companyName)
-    }
 
-    private fun shouldUpdateApplicationMailingAddress(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationMailingAddress
         val updatedApplicationMailingAddress = "test2@doordeck.com"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationMailingAddress(applicationId, updatedApplicationMailingAddress).await()
+        PLATFORM_RESOURCE.updateApplicationMailingAddress(application.applicationId, updatedApplicationMailingAddress).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
-    }
 
-    private fun shouldUpdateApplicationPrivacyPolicy(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationPrivacyPolicy
         val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationPrivacyPolicy(applicationId, updatedApplicationPrivacyPolicy).await()
+        PLATFORM_RESOURCE.updateApplicationPrivacyPolicy(application.applicationId, updatedApplicationPrivacyPolicy).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
-    }
 
-    private fun shouldUpdateApplicationSupportContact(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationSupportContact
         val updatedApplicationSupportContact = "https://www.doordeck2.com"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationSupportContact(applicationId, updatedApplicationSupportContact).await()
+        PLATFORM_RESOURCE.updateApplicationSupportContact(application.applicationId, updatedApplicationSupportContact).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationSupportContact, application.supportContact)
-    }
 
-    private fun shouldUpdateApplicationAppLink(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationAppLink
         val updatedApplicationAppLink = "https://www.doordeck.com"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationAppLink(applicationId, updatedApplicationAppLink).await()
+        PLATFORM_RESOURCE.updateApplicationAppLink(application.applicationId, updatedApplicationAppLink).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationAppLink, application.appLink)
-    }
 
-    private fun shouldUpdateApplicationEmailPreferences(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationEmailPreferences
         val updatedApplicationEmailPreferences = Platform.EmailPreferences(
             senderEmail = "test@test.com",
             senderName = "test",
@@ -154,10 +114,10 @@ class PlatformResourceTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_RESOURCE.updateApplicationEmailPreferences(applicationId, updatedApplicationEmailPreferences).await()
+        PLATFORM_RESOURCE.updateApplicationEmailPreferences(application.applicationId, updatedApplicationEmailPreferences).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationEmailPreferences.senderEmail, application.emailPreferences.senderEmail)
         assertEquals(updatedApplicationEmailPreferences.senderName, application.emailPreferences.senderName)
         assertEquals(updatedApplicationEmailPreferences.primaryColour, application.emailPreferences.primaryColour)
@@ -166,75 +126,63 @@ class PlatformResourceTest : IntegrationTest() {
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionTarget, application.emailPreferences.callToAction?.actionTarget)
         assertEquals(updatedApplicationEmailPreferences.callToAction?.headline, application.emailPreferences.callToAction?.headline)
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, application.emailPreferences.callToAction?.actionText)
-    }
 
-    private fun shouldUpdateApplicationLogoUrl(applicationId: String) = runTest {
-        // Given
+        // Given - shouldUpdateApplicationLogoUrl
         val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
 
         // When
-        PLATFORM_RESOURCE.updateApplicationLogoUrl(applicationId, updatedApplicationLogoUrl).await()
+        PLATFORM_RESOURCE.updateApplicationLogoUrl(application.applicationId, updatedApplicationLogoUrl).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
-    }
 
-    private fun shouldAddAuthIssuer(applicationId: String) = runTest {
-        // Given
-        val updatedApplicationAuthIssuer = "https://test.com"
+        // Given - shouldAddAuthIssuer
+        val addedApplicationAuthIssuer = "https://test.com"
 
         // When
-        PLATFORM_RESOURCE.addAuthIssuer(applicationId, updatedApplicationAuthIssuer).await()
+        PLATFORM_RESOURCE.addAuthIssuer(application.applicationId, addedApplicationAuthIssuer).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertNotNull(application.authDomains)
-        assertTrue { application.authDomains!!.any { it.equals(updatedApplicationAuthIssuer, true) } }
-    }
+        assertTrue { application!!.authDomains!!.any { it.equals(addedApplicationAuthIssuer, true) } }
 
-    private fun shouldDeleteAuthIssuer(applicationId: String) = runTest {
-        // Given
-        val updatedApplicationAuthIssuer = "https://test.com"
+        // Given - shouldDeleteAuthIssuer
+        val removedApplicationAuthIssuer = "https://test.com"
 
         // When
-        PLATFORM_RESOURCE.deleteAuthIssuer(applicationId, updatedApplicationAuthIssuer).await()
+        PLATFORM_RESOURCE.deleteAuthIssuer(application.applicationId, removedApplicationAuthIssuer).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertNotNull(application.authDomains)
-        assertFalse { application.authDomains!!.any { it.equals(updatedApplicationAuthIssuer, true) } }
-    }
+        assertFalse { application!!.authDomains!!.any { it.equals(removedApplicationAuthIssuer, true) } }
 
-    private fun shouldAddCorsDomain(applicationId: String) = runTest {
-        // Given
-        val updatedApplicationCorsDomain = "https://test.com"
+        // Given - shouldAddCorsDomain
+        val addedApplicationCorsDomain = "https://test.com"
 
         // When
-        PLATFORM_RESOURCE.addCorsDomain(applicationId, updatedApplicationCorsDomain).await()
+        PLATFORM_RESOURCE.addCorsDomain(application.applicationId, addedApplicationCorsDomain).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertNotNull(application.corsDomains)
-        assertTrue { application.corsDomains!!.any { it.equals(updatedApplicationCorsDomain, true) } }
-    }
+        assertTrue { application!!.corsDomains!!.any { it.equals(addedApplicationCorsDomain, true) } }
 
-    private fun shouldDeleteCorsDomain(applicationId: String) = runTest {
-        // Given
-        val updatedApplicationCorsDomain = "https://test.com"
+        // Given - shouldDeleteCorsDomain
+        val removedApplicationCorsDomain = "https://test.com"
 
         // When
-        PLATFORM_RESOURCE.removeCorsDomain(applicationId, updatedApplicationCorsDomain).await()
+        PLATFORM_RESOURCE.removeCorsDomain(application.applicationId, removedApplicationCorsDomain).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
         assertNotNull(application.corsDomains)
-        assertFalse { application.corsDomains!!.any { it.equals(updatedApplicationCorsDomain, true) } }
-    }
+        assertFalse { application!!.corsDomains!!.any { it.equals(removedApplicationCorsDomain, true) } }
 
-    private fun shouldAddEd25519AuthKey(applicationId: String) = runTest {
-        // Given
-        val key = Platform.Ed25519Key(
+        // Given - shouldAddEd25519AuthKey
+        val ed25519Key = Platform.Ed25519Key(
             kid = uuid4().toString(),
             use = "sig",
             alg = "EdDSA",
@@ -244,25 +192,23 @@ class PlatformResourceTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_RESOURCE.addAuthKey(applicationId, key).await()
+        PLATFORM_RESOURCE.addAuthKey(application.applicationId, ed25519Key).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
-        val actualKey = application.authKeys.values.firstOrNull {
-            it.key == key.kid
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
+        val actualEd25519Key = application.authKeys.values.firstOrNull {
+            it.key == ed25519Key.kid
         }?.value as? Ed25519KeyResponse
-        assertNotNull(actualKey)
-        assertEquals(key.kty, actualKey.kty)
-        assertEquals(key.use, actualKey.use)
-        assertEquals(key.kid, actualKey.kid)
-        assertEquals(key.alg, actualKey.alg)
-        assertEquals(key.crv, actualKey.crv)
-        assertEquals(key.x, actualKey.x)
-    }
+        assertNotNull(actualEd25519Key)
+        assertEquals(ed25519Key.kty, actualEd25519Key.kty)
+        assertEquals(ed25519Key.use, actualEd25519Key.use)
+        assertEquals(ed25519Key.kid, actualEd25519Key.kid)
+        assertEquals(ed25519Key.alg, actualEd25519Key.alg)
+        assertEquals(ed25519Key.crv, actualEd25519Key.crv)
+        assertEquals(ed25519Key.x, actualEd25519Key.x)
 
-    private fun shouldAddRsaAuthKey(applicationId: String) = runTest {
-        // Given
-        val key = Platform.RsaKey(
+        // Given - shouldAddRsaAuthKey
+        val rsaKey = Platform.RsaKey(
             kid = uuid4().toString(),
             use = "sig",
             alg = "RS256",
@@ -277,25 +223,23 @@ class PlatformResourceTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_RESOURCE.addAuthKey(applicationId, key).await()
+        PLATFORM_RESOURCE.addAuthKey(application.applicationId, rsaKey).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
-        val actualKey = application.authKeys.values.firstOrNull {
-            it.key == key.kid
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
+        val actualRsaKey = application.authKeys.values.firstOrNull {
+            it.key == rsaKey.kid
         }?.value as? RsaKeyResponse
-        assertNotNull(actualKey)
-        assertEquals(key.kty, actualKey.kty)
-        assertEquals(key.use, actualKey.use)
-        assertEquals(key.kid, actualKey.kid)
-        assertEquals(key.alg, actualKey.alg)
-        assertEquals(key.e, actualKey.e)
-        assertEquals(key.n, actualKey.n)
-    }
+        assertNotNull(actualRsaKey)
+        assertEquals(rsaKey.kty, actualRsaKey.kty)
+        assertEquals(rsaKey.use, actualRsaKey.use)
+        assertEquals(rsaKey.kid, actualRsaKey.kid)
+        assertEquals(rsaKey.alg, actualRsaKey.alg)
+        assertEquals(rsaKey.e, actualRsaKey.e)
+        assertEquals(rsaKey.n, actualRsaKey.n)
 
-    private fun shouldAddEcAuthKey(applicationId: String) = runTest {
-        // Given
-        val key = Platform.EcKey(
+        // Given - shouldAddEcAuthKey
+        val ecKey = Platform.EcKey(
             kid = uuid4().toString(),
             use = "sig",
             alg = "ES256",
@@ -306,79 +250,72 @@ class PlatformResourceTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_RESOURCE.addAuthKey(applicationId, key).await()
+        PLATFORM_RESOURCE.addAuthKey(application.applicationId, ecKey).await()
 
         // Then
-        val application = shouldGetApplication(applicationId)
-        val actualKey = application.authKeys.values.firstOrNull {
-            it.key == key.kid
+        application = PLATFORM_RESOURCE.getApplication(application.applicationId).await()
+        val actualKeyEcKey = application.authKeys.values.firstOrNull {
+            it.key == ecKey.kid
         }?.value as? EcKeyResponse
-        assertNotNull(actualKey)
-        assertEquals(key.kty, actualKey.kty)
-        assertEquals(key.use, actualKey.use)
-        assertEquals(key.kid, actualKey.kid)
-        assertEquals(key.alg, actualKey.alg)
-        assertEquals(key.crv, actualKey.crv)
-        assertEquals(key.x, actualKey.x)
-        assertEquals(key.y, actualKey.y)
-    }
+        assertNotNull(actualKeyEcKey)
+        assertEquals(ecKey.kty, actualKeyEcKey.kty)
+        assertEquals(ecKey.use, actualKeyEcKey.use)
+        assertEquals(ecKey.kid, actualKeyEcKey.kid)
+        assertEquals(ecKey.alg, actualKeyEcKey.alg)
+        assertEquals(ecKey.crv, actualKeyEcKey.crv)
+        assertEquals(ecKey.x, actualKeyEcKey.x)
+        assertEquals(ecKey.y, actualKeyEcKey.y)
 
-    private fun shouldGetApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
+        // Given - shouldGetApplicationOwnersDetails
         // When
-        val result = PLATFORM_RESOURCE.getApplicationOwnersDetails(applicationId).await()
+        var applicationOwnerDetails = PLATFORM_RESOURCE.getApplicationOwnersDetails(application.applicationId).await()
 
         // Then
-        assertTrue { result.isNotEmpty() }
-        assertTrue { result.any { it.userId == TEST_MAIN_USER_ID } }
+        assertTrue { applicationOwnerDetails.isNotEmpty() }
+        assertTrue { applicationOwnerDetails.any { it.userId == TEST_MAIN_USER_ID } }
 
-        return result
-    }
-
-    private fun shouldAddApplicationOwner(applicationId: String) = runTest {
+        // Given - shouldAddApplicationOwner
         // When
-        PLATFORM_RESOURCE.addApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID).await()
+        PLATFORM_RESOURCE.addApplicationOwner(application.applicationId, TEST_SUPPLEMENTARY_USER_ID).await()
 
         // Then
-        val result = shouldGetApplicationOwnersDetails(applicationId)
-        assertTrue { result.isNotEmpty() }
-        assertTrue { result.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
-    }
+        applicationOwnerDetails  = PLATFORM_RESOURCE.getApplicationOwnersDetails(application.applicationId).await()
+        assertTrue { applicationOwnerDetails.isNotEmpty() }
+        assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
-    private fun shouldRemoveApplicationOwner(applicationId: String) = runTest {
+        // Given - shouldAddApplicationOwner
         // When
-        PLATFORM_RESOURCE.removeApplicationOwner(applicationId, TEST_SUPPLEMENTARY_USER_ID).await()
+        PLATFORM_RESOURCE.addApplicationOwner(application.applicationId, TEST_SUPPLEMENTARY_USER_ID).await()
 
         // Then
-        val result = shouldGetApplicationOwnersDetails(applicationId)
-        assertTrue { result.isNotEmpty() }
-        assertFalse { result.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
-    }
+        applicationOwnerDetails = PLATFORM_RESOURCE.getApplicationOwnersDetails(application.applicationId).await()
+        assertTrue { applicationOwnerDetails.isNotEmpty() }
+        assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
-    private fun shouldGetLogoUploadUrl(applicationId: String) = runTest {
-        // Given
+        // Given - shouldRemoveApplicationOwner
+        // When
+        PLATFORM_RESOURCE.removeApplicationOwner(application.applicationId, TEST_SUPPLEMENTARY_USER_ID).await()
+
+        // Then
+        applicationOwnerDetails = PLATFORM_RESOURCE.getApplicationOwnersDetails(application.applicationId).await()
+        assertTrue { applicationOwnerDetails.isNotEmpty() }
+        assertFalse { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
+
+        // Given - shouldGetLogoUploadUrl
         val contentType = "image/png"
 
         // When
-        val url = PLATFORM_RESOURCE.getLogoUploadUrl(applicationId, contentType).await()
+        val url = PLATFORM_RESOURCE.getLogoUploadUrl(application.applicationId, contentType).await()
 
         // Then
         assertTrue { url.uploadUrl.isNotEmpty() }
-    }
 
-    private fun shouldListApplications(): Array<ApplicationResponse> {
-        return PLATFORM_RESOURCE.listApplications().await()
-    }
-
-    private fun shouldGetApplication(applicationId: String): ApplicationResponse {
-        return PLATFORM_RESOURCE.getApplication(applicationId).await()
-    }
-
-    private fun shouldDeleteApplication(applicationId: String) = runTest {
+        // Given - shouldDeleteApplication
         // When
-        PLATFORM_RESOURCE.deleteApplication(applicationId).await()
+        PLATFORM_RESOURCE.deleteApplication(application.applicationId).await()
 
         // Then
-        val application = shouldListApplications()
-        assertFalse { application.any { it.applicationId == applicationId } }
-    }*/
+        val applications = PLATFORM_RESOURCE.listApplications().await()
+        assertFalse { applications.any { it.applicationId == application.applicationId } }
+    }
 }

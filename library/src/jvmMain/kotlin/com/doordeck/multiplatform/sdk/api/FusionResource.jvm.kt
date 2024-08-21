@@ -17,8 +17,8 @@ actual interface FusionResource {
     fun loginFuture(email: String, password: String): CompletableFuture<FusionLoginResponse>
     suspend fun getIntegrationType(): IntegrationTypeResponse
     fun getIntegrationTypeFuture(): CompletableFuture<IntegrationTypeResponse>
-    suspend fun getIntegrationConfiguration(type: String): Array<IntegrationConfigurationResponse>
-    fun getIntegrationConfigurationFuture(type: String): CompletableFuture<Array<IntegrationConfigurationResponse>>
+    suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse>
+    fun getIntegrationConfigurationFuture(type: String): CompletableFuture<List<IntegrationConfigurationResponse>>
     suspend fun enableDoor(name: String, siteId: String, controller: Fusion.LockController)
     fun enableDoorFuture(name: String, siteId: String, controller: Fusion.LockController): CompletableFuture<Unit>
     suspend fun deleteDoor(deviceId: String)

@@ -33,27 +33,27 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse>
+    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse>
 
-    fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<Array<LockAuditTrailResponse>>
+    fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>>
 
     /**
      * Get audit for a user
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse>
+    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse>
 
-    fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<Array<UserAuditResponse>>
+    fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>>
 
     /**
      * Get users for a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
-    suspend fun getUsersForLock(lockId: String): Array<UserLockResponse>
+    suspend fun getUsersForLock(lockId: String): List<UserLockResponse>
 
-    fun getUsersForLockFuture(lockId: String): CompletableFuture<Array<UserLockResponse>>
+    fun getUsersForLockFuture(lockId: String): CompletableFuture<List<UserLockResponse>>
 
     /**
      * Get locks for a user
@@ -105,9 +105,9 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
+    suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>)
 
-    fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: Array<String>): CompletableFuture<Unit>
+    fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Hidden
@@ -123,9 +123,9 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
+    suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>)
 
-    fun setLockSettingTimeRestrictionsFuture(lockId: String, times: Array<LockOperations.TimeRequirement>): CompletableFuture<Unit>
+    fun setLockSettingTimeRestrictionsFuture(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Usage requirements - Location
@@ -198,9 +198,9 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    suspend fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>? = null)
+    suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
 
-    fun unlockWithContextFuture(lockId: String, directAccessEndpoints: Array<String>? = null): CompletableFuture<Unit>
+    fun unlockWithContextFuture(lockId: String, directAccessEndpoints: List<String>? = null): CompletableFuture<Unit>
 
     /**
      * Unlock
@@ -236,9 +236,9 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    suspend fun revokeAccessToLockWithContext(lockId: String, users: Array<String>)
+    suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
 
-    fun revokeAccessToLockWithContextFuture(lockId: String, users: Array<String>): CompletableFuture<Unit>
+    fun revokeAccessToLockWithContextFuture(lockId: String, users: List<String>): CompletableFuture<Unit>
 
     /**
      * Revoke access to a lock
@@ -292,18 +292,18 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
-    suspend fun getPinnedLocks(): Array<LockResponse>
+    suspend fun getPinnedLocks(): List<LockResponse>
 
-    fun getPinnedLocksFuture(): CompletableFuture<Array<LockResponse>>
+    fun getPinnedLocksFuture(): CompletableFuture<List<LockResponse>>
 
     /**
      * Get shareable locks
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
-    suspend fun getShareableLocks(): Array<ShareableLockResponse>
+    suspend fun getShareableLocks(): List<ShareableLockResponse>
 
-    fun getShareableLocksFuture(): CompletableFuture<Array<ShareableLockResponse>>
+    fun getShareableLocksFuture(): CompletableFuture<List<ShareableLockResponse>>
 }
 
 actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(

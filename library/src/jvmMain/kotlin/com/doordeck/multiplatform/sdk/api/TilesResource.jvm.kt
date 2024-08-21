@@ -24,10 +24,10 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>)
+    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
 
     @SiteAdmin
-    fun associateMultipleLocksFuture(tileId: String, siteId: String, lockIds: Array<String>): CompletableFuture<Unit>
+    fun associateMultipleLocksFuture(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit>
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

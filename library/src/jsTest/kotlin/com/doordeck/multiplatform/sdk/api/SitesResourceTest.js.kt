@@ -1,10 +1,11 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.TestConstants
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -15,7 +16,7 @@ class SitesResourceTest : IntegrationTest() {
     @Test
     fun shouldListSites() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TestConstants.TEST_MAIN_USER_EMAIL, TestConstants.TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
@@ -28,7 +29,7 @@ class SitesResourceTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSite() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TestConstants.TEST_MAIN_USER_EMAIL, TestConstants.TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
@@ -42,7 +43,7 @@ class SitesResourceTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSite() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TestConstants.TEST_MAIN_USER_EMAIL, TestConstants.TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When

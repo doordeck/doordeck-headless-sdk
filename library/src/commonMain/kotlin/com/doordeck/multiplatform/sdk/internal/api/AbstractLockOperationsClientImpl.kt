@@ -60,7 +60,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
         return httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -73,7 +73,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): Array<UserAuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<UserAuditResponse> {
         return httpClient.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -86,7 +86,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
-    suspend fun getUsersForLockRequest(lockId: String): Array<UserLockResponse> {
+    suspend fun getUsersForLockRequest(lockId: String): List<UserLockResponse> {
         return httpClient.get(Paths.getUsersForLockPath(lockId))
     }
 
@@ -140,7 +140,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: Array<String>) {
+    suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: List<String>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses)))
     }
 
@@ -158,10 +158,10 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: Array<LockOperations.TimeRequirement>) {
+    suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<LockOperations.TimeRequirement>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
-                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }.toTypedArray()
+                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days.toList()) }
             ))
         ))
     }
@@ -252,7 +252,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    suspend fun unlockWithContextRequest(lockId: String, directAccessEndpoints: Array<String>?) {
+    suspend fun unlockWithContextRequest(lockId: String, directAccessEndpoints: List<String>?) {
         val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
             userId = operationContext.userId,
@@ -260,7 +260,7 @@ abstract class AbstractLockOperationsClientImpl(
             userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
-        unlockRequest(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints))
+        unlockRequest(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints?.toTypedArray()))
     }
 
     /**
@@ -270,7 +270,7 @@ abstract class AbstractLockOperationsClientImpl(
      */
     suspend fun unlockRequest(unlockOperation: LockOperations.UnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints)
+        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints?.toList())
     }
 
     /**
@@ -316,7 +316,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    suspend fun revokeAccessToLockWithContextRequest(lockId: String, users: Array<String>) {
+    suspend fun revokeAccessToLockWithContextRequest(lockId: String, users: List<String>) {
         val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
             userId = operationContext.userId,
@@ -333,10 +333,10 @@ abstract class AbstractLockOperationsClientImpl(
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users)
+        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users.toList())
     }
 
-    private suspend fun revokeAccessToLock(baseOperation: LockOperations.BaseOperation, users: Array<String>) {
+    private suspend fun revokeAccessToLock(baseOperation: LockOperations.BaseOperation, users: List<String>) {
         val operationRequest = RevokeAccessToALockOperationRequest(users = users)
         performOperation(baseOperation, operationRequest)
     }
@@ -407,8 +407,8 @@ abstract class AbstractLockOperationsClientImpl(
                     start = it.start,
                     end = it.end,
                     timezone = it.timezone,
-                    days = it.days,
-                    exceptions = it.exceptions
+                    days = it.days.toList(),
+                    exceptions = it.exceptions?.toList()
                 )
             }
         )
@@ -416,8 +416,8 @@ abstract class AbstractLockOperationsClientImpl(
     }
 
     private suspend fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest,
-                                 directAccessEndpoints: Array<String>? = null) {
-        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
+                                 directAccessEndpoints: List<String>? = null) {
+        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain.toList())
         val operationBody = OperationBodyRequest(
             iss = baseOperation.userId,
             sub = baseOperation.lockId,
@@ -448,7 +448,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
-    suspend fun getPinnedLocksRequest(): Array<LockResponse> {
+    suspend fun getPinnedLocksRequest(): List<LockResponse> {
         return httpClient.get(Paths.getPinnedLocksPath())
     }
 
@@ -457,7 +457,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
-    suspend fun getShareableLocksRequest(): Array<ShareableLockResponse> {
+    suspend fun getShareableLocksRequest(): List<ShareableLockResponse> {
         return httpClient.get(Paths.getShareableLocksPath())
     }
 }

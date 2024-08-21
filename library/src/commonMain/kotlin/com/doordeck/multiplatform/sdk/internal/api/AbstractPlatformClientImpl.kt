@@ -51,7 +51,7 @@ abstract class AbstractPlatformClientImpl(
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun listApplicationsRequest(): Array<ApplicationResponse> {
+    suspend fun listApplicationsRequest(): List<ApplicationResponse> {
         return httpClient.get(Paths.getListApplicationsPath())
     }
 
@@ -285,7 +285,7 @@ abstract class AbstractPlatformClientImpl(
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
+    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<ApplicationOwnerDetailsResponse> {
         return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
 }

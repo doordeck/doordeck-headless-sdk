@@ -15,7 +15,7 @@ class LocalUnlockClientImpl(
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    suspend fun unlock(directAccessEndpoints: Array<String>, request: String) {
+    suspend fun unlock(directAccessEndpoints: List<String>, request: String) {
         // Launch the request at the direct access endpoints
         val requests = directAccessEndpoints.map {
             coroutineScope.async {

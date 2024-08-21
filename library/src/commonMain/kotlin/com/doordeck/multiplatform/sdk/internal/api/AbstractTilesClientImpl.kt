@@ -27,7 +27,7 @@ abstract class AbstractTilesClientImpl(
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
-    suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: Array<String>) {
+    suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
         httpClient.put<Unit>(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))

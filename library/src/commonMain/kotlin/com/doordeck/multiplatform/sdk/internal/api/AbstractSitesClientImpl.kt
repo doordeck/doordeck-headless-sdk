@@ -14,7 +14,7 @@ abstract class AbstractSitesClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
-    suspend fun listSitesRequest(): Array<SiteResponse> {
+    suspend fun listSitesRequest(): List<SiteResponse> {
         return httpClient.get(Paths.getListSites())
     }
 
@@ -23,7 +23,7 @@ abstract class AbstractSitesClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
-    suspend fun getLocksForSiteRequest(siteId: String): Array<SiteLocksResponse> {
+    suspend fun getLocksForSiteRequest(siteId: String): List<SiteLocksResponse> {
         return httpClient.get(Paths.getLocksForSitePath(siteId))
     }
 
@@ -32,7 +32,7 @@ abstract class AbstractSitesClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
-    suspend fun getUsersForSiteRequest(siteId: String): Array<UserForSiteResponse> {
+    suspend fun getUsersForSiteRequest(siteId: String): List<UserForSiteResponse> {
         return httpClient.get(Paths.getUsersForSitePath(siteId))
     }
 }

@@ -15,27 +15,27 @@ actual interface SitesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
-    suspend fun listSites(): Array<SiteResponse>
+    suspend fun listSites(): List<SiteResponse>
 
-    suspend fun listSitesFuture(): CompletableFuture<Array<SiteResponse>>
+    suspend fun listSitesFuture(): CompletableFuture<List<SiteResponse>>
 
     /**
      * Get locks for site
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
-    suspend fun getLocksForSite(siteId: String): Array<SiteLocksResponse>
+    suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse>
 
-    fun getLocksForSiteFuture(siteId: String): CompletableFuture<Array<SiteLocksResponse>>
+    fun getLocksForSiteFuture(siteId: String): CompletableFuture<List<SiteLocksResponse>>
 
     /**
      * Get users for a site
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
-    suspend fun getUsersForSite(siteId: String): Array<UserForSiteResponse>
+    suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse>
 
-    fun getUsersForSiteFuture(siteId: String): CompletableFuture<Array<UserForSiteResponse>>
+    fun getUsersForSiteFuture(siteId: String): CompletableFuture<List<UserForSiteResponse>>
 }
 
 actual fun sites(): SitesResource = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

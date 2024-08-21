@@ -23,11 +23,11 @@ class PlatformResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { createApplicationRequest(application) }
     }
 
-    override suspend fun listApplications(): Array<ApplicationResponse> {
+    override suspend fun listApplications(): List<ApplicationResponse> {
         return listApplicationsRequest()
     }
 
-    override fun listApplicationsFuture(): CompletableFuture<Array<ApplicationResponse>> {
+    override fun listApplicationsFuture(): CompletableFuture<List<ApplicationResponse>> {
         return GlobalScope.future(Dispatchers.IO) { listApplicationsRequest() }
     }
 
@@ -175,11 +175,11 @@ class PlatformResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { removeApplicationOwnerRequest(applicationId, userId) }
     }
 
-    override suspend fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse> {
+    override suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
         return getApplicationOwnersDetailsRequest(applicationId)
     }
 
-    override fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<Array<ApplicationOwnerDetailsResponse>> {
+    override fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getApplicationOwnersDetailsRequest(applicationId) }
     }
 }

@@ -30,27 +30,27 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { getSingleLockRequest(lockId) }
     }
 
-    override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse> {
+    override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
         return getLockAuditTrailRequest(lockId, start, end)
     }
 
-    override fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<Array<LockAuditTrailResponse>> {
+    override fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getLockAuditTrailRequest(lockId, start, end) }
     }
 
-    override suspend fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse> {
+    override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse> {
         return getAuditForUserRequest(userId, start, end)
     }
 
-    override fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<Array<UserAuditResponse>> {
+    override fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getAuditForUserRequest(userId, start, end) }
     }
 
-    override suspend fun getUsersForLock(lockId: String): Array<UserLockResponse> {
+    override suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
         return getUsersForLockRequest(lockId)
     }
 
-    override fun getUsersForLockFuture(lockId: String): CompletableFuture<Array<UserLockResponse>> {
+    override fun getUsersForLockFuture(lockId: String): CompletableFuture<List<UserLockResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getUsersForLockRequest(lockId) }
     }
 
@@ -94,11 +94,11 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { updateLockSettingDefaultNameRequest(lockId, name) }
     }
 
-    override suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>) {
+    override suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
         return setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
     }
 
-    override fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: Array<String>): CompletableFuture<Unit> {
+    override fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
     }
 
@@ -110,11 +110,11 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { updateLockSettingHiddenRequest(lockId, hidden) }
     }
 
-    override suspend fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>) {
+    override suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
         return setLockSettingTimeRestrictionsRequest(lockId, times)
     }
 
-    override fun setLockSettingTimeRestrictionsFuture(lockId: String, times: Array<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
+    override fun setLockSettingTimeRestrictionsFuture(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { setLockSettingTimeRestrictionsRequest(lockId, times) }
     }
 
@@ -174,11 +174,11 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { getUserPublicKeyByIdentityRequest(identity) }
     }
 
-    override suspend fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>?) {
+    override suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
         return unlockWithContextRequest(lockId, directAccessEndpoints)
     }
 
-    override fun unlockWithContextFuture(lockId: String, directAccessEndpoints: Array<String>?): CompletableFuture<Unit> {
+    override fun unlockWithContextFuture(lockId: String, directAccessEndpoints: List<String>?): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { unlockWithContextRequest(lockId, directAccessEndpoints) }
     }
 
@@ -206,11 +206,11 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { shareLockRequest(shareLockOperation) }
     }
 
-    override suspend fun revokeAccessToLockWithContext(lockId: String, users: Array<String>) {
+    override suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
         return revokeAccessToLockWithContextRequest(lockId, users)
     }
 
-    override fun revokeAccessToLockWithContextFuture(lockId: String, users: Array<String>): CompletableFuture<Unit> {
+    override fun revokeAccessToLockWithContextFuture(lockId: String, users: List<String>): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { revokeAccessToLockWithContextRequest(lockId, users) }
     }
 
@@ -254,19 +254,19 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
-    override suspend fun getPinnedLocks(): Array<LockResponse> {
+    override suspend fun getPinnedLocks(): List<LockResponse> {
         return getPinnedLocksRequest()
     }
 
-    override fun getPinnedLocksFuture(): CompletableFuture<Array<LockResponse>> {
+    override fun getPinnedLocksFuture(): CompletableFuture<List<LockResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getPinnedLocksRequest() }
     }
 
-    override suspend fun getShareableLocks(): Array<ShareableLockResponse> {
+    override suspend fun getShareableLocks(): List<ShareableLockResponse> {
         return getShareableLocksRequest()
     }
 
-    override fun getShareableLocksFuture(): CompletableFuture<Array<ShareableLockResponse>> {
+    override fun getShareableLocksFuture(): CompletableFuture<List<ShareableLockResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getShareableLocksRequest() }
     }
 }
