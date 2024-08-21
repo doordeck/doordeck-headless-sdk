@@ -82,7 +82,7 @@ kotlin {
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
-                implementation("io.insert-koin:koin-core:4.0.0-RC1")
+                implementation(libs.koin)
             }
         }
         val commonTest by getting {

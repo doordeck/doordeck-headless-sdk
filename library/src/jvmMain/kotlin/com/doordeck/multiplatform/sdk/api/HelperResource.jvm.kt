@@ -1,7 +1,16 @@
 package com.doordeck.multiplatform.sdk.api
 
-actual interface HelperResource
+import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
+import io.ktor.client.*
+import org.koin.core.qualifier.named
+import org.koin.mp.KoinPlatform.getKoin
 
-actual fun helper(): HelperResource {
-    TODO("Not yet implemented")
+actual interface HelperResource {
+
+    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
 }
+
+actual fun helper(): HelperResource = HelperResourceImpl(
+    httpClient = getKoin().get<HttpClient>(named("httpClient")),
+    cloudHttpClient = getKoin().get<HttpClient>(named("cloudHttpClient"))
+)

@@ -9,11 +9,15 @@ libsodium = "0.9.2"
 uuid-generator = "0.8.4"
 kotlinx-datetime = "0.6.0"
 kotlin-coroutines-test = "1.9.0-RC.2"
+koin = "4.0.0-RC1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-test" }
+
+#Dependency injection
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }

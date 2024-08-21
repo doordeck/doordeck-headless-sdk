@@ -1,7 +1,27 @@
 package com.doordeck.multiplatform.sdk.api
 
-actual interface TilesResource
+import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
+import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
+import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
+import io.ktor.client.*
+import org.koin.core.qualifier.named
+import org.koin.mp.KoinPlatform.getKoin
 
-actual fun tiles(): TilesResource {
-    TODO("Not yet implemented")
+actual interface TilesResource {
+    /**
+     * Get locks belonging to tile
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
+     */
+    suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse
+
+    /**
+     * Associate multiple locks (devices) to a single tile
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
+     */
+    @SiteAdmin
+    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>)
 }
+
+actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
