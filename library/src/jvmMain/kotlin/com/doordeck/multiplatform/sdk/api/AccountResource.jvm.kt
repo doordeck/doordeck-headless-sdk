@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface AccountResource {
     /**
@@ -21,12 +22,17 @@ actual interface AccountResource {
     @DoordeckOnly
     suspend fun refreshToken(refreshToken: String): TokenResponse
 
+    @DoordeckOnly
+    fun refreshTokenFuture(refreshToken: String): CompletableFuture<TokenResponse>
+
     /**
      * Logout
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
     suspend fun logout()
+
+    fun logoutFuture(): CompletableFuture<Unit>
 
     /**
      * Register ephemeral key
@@ -35,6 +41,8 @@ actual interface AccountResource {
      */
     suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
 
+    fun registerEphemeralKeyFuture(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
+
     /**
      * Register ephemeral key with secondary authentication
      *
@@ -42,12 +50,16 @@ actual interface AccountResource {
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
+    fun registerEphemeralKeyWithSecondaryAuthenticationFuture(publicKey: ByteArray, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+
+    fun verifyEphemeralKeyRegistrationFuture(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email
@@ -57,6 +69,9 @@ actual interface AccountResource {
     @DoordeckOnly
     suspend fun reverifyEmail()
 
+    @DoordeckOnly
+    fun reverifyEmailFuture(): CompletableFuture<Unit>
+
     /**
      * Change password
      *
@@ -65,12 +80,17 @@ actual interface AccountResource {
     @DoordeckOnly
     suspend fun changePassword(oldPassword: String, newPassword: String)
 
+    @DoordeckOnly
+    fun changePasswordFuture(oldPassword: String, newPassword: String): CompletableFuture<Unit>
+
     /**
      * Get user details
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
     suspend fun getUserDetails(): UserDetailsResponse
+
+    fun getUserDetailsFuture(): CompletableFuture<UserDetailsResponse>
 
     /**
      * Update user details
@@ -79,12 +99,16 @@ actual interface AccountResource {
      */
     suspend fun updateUserDetails(displayName: String)
 
+    fun updateUserDetailsFuture(displayName: String): CompletableFuture<Unit>
+
     /**
      * Delete account
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
     suspend fun deleteAccount()
+
+    fun deleteAccountFuture(): CompletableFuture<Unit>
 }
 
 actual fun account(): AccountResource = AccountResourceImpl(

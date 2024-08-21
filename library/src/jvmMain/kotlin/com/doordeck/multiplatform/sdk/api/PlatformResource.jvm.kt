@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface PlatformResource {
     /**
@@ -19,6 +20,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun createApplication(application: Platform.CreateApplication)
 
+    @DoordeckOnly
+    fun createApplicationFuture(application: Platform.CreateApplication): CompletableFuture<Unit>
+
     /**
      * List applications
      *
@@ -26,6 +30,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun listApplications(): Array<ApplicationResponse>
+
+    @DoordeckOnly
+    fun listApplicationsFuture(): CompletableFuture<Array<ApplicationResponse>>
 
     /**
      * Get application
@@ -35,6 +42,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun getApplication(applicationId: String): ApplicationResponse
 
+    @DoordeckOnly
+    fun getApplicationFuture(applicationId: String): CompletableFuture<ApplicationResponse>
+
     /**
      * Update application - Name
      *
@@ -42,6 +52,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun updateApplicationName(applicationId: String, name: String)
+
+    @DoordeckOnly
+    fun updateApplicationNameFuture(applicationId: String, name: String): CompletableFuture<Unit>
 
     /**
      * Update application - Company name
@@ -51,6 +64,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun updateApplicationCompanyName(applicationId: String, companyName: String)
 
+    @DoordeckOnly
+    fun updateApplicationCompanyNameFuture(applicationId: String, companyName: String): CompletableFuture<Unit>
+
     /**
      * Update application - Mailing address
      *
@@ -58,6 +74,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
+
+    @DoordeckOnly
+    fun updateApplicationMailingAddressFuture(applicationId: String, mailingAddress: String): CompletableFuture<Unit>
 
     /**
      * Update application - Privacy policy
@@ -67,6 +86,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
 
+    @DoordeckOnly
+    fun updateApplicationPrivacyPolicyFuture(applicationId: String, privacyPolicy: String): CompletableFuture<Unit>
+
     /**
      * Update application - Support contact
      *
@@ -74,6 +96,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String)
+
+    @DoordeckOnly
+    fun updateApplicationSupportContactFuture(applicationId: String, supportContact: String): CompletableFuture<Unit>
 
     /**
      * Update application - App link
@@ -83,6 +108,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun updateApplicationAppLink(applicationId: String, appLink: String)
 
+    @DoordeckOnly
+    fun updateApplicationAppLinkFuture(applicationId: String, appLink: String): CompletableFuture<Unit>
+
     /**
      * Update application - Email preferences
      *
@@ -90,6 +118,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
+
+    @DoordeckOnly
+    fun updateApplicationEmailPreferencesFuture(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit>
 
     /**
      * Update application - Logo url
@@ -99,6 +130,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
 
+    @DoordeckOnly
+    fun updateApplicationLogoUrlFuture(applicationId: String, logoUrl: String): CompletableFuture<Unit>
+
     /**
      * Delete application
      *
@@ -106,6 +140,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun deleteApplication(applicationId: String)
+
+    @DoordeckOnly
+    fun deleteApplicationFuture(applicationId: String): CompletableFuture<Unit>
 
     /**
      * Get logo upload URL
@@ -115,6 +152,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse
 
+    @DoordeckOnly
+    fun getLogoUploadUrlFuture(applicationId: String, contentType: String): CompletableFuture<GetLogoUploadUrlResponse>
+
     /**
      * Add auth key
      *
@@ -122,6 +162,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey)
+
+    @DoordeckOnly
+    fun addAuthKeyFuture(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit>
 
     /**
      * Add auth issuer
@@ -131,6 +174,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun addAuthIssuer(applicationId: String, url: String)
 
+    @DoordeckOnly
+    fun addAuthIssuerFuture(applicationId: String, url: String): CompletableFuture<Unit>
+
     /**
      * Delete auth issuer
      *
@@ -138,6 +184,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun deleteAuthIssuer(applicationId: String, url: String)
+
+    @DoordeckOnly
+    fun deleteAuthIssuerFuture(applicationId: String, url: String): CompletableFuture<Unit>
 
     /**
      * Add CORS domain
@@ -147,6 +196,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun addCorsDomain(applicationId: String, url: String)
 
+    @DoordeckOnly
+    fun addCorsDomainFuture(applicationId: String, url: String): CompletableFuture<Unit>
+
     /**
      * Remove CORS domain
      *
@@ -154,6 +206,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun removeCorsDomain(applicationId: String, url: String)
+
+    @DoordeckOnly
+    fun removeCorsDomainFuture(applicationId: String, url: String): CompletableFuture<Unit>
 
     /**
      * Add application owner
@@ -163,6 +218,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun addApplicationOwner(applicationId: String, userId: String)
 
+    @DoordeckOnly
+    fun addApplicationOwnerFuture(applicationId: String, userId: String): CompletableFuture<Unit>
+
     /**
      * Remove application owner
      *
@@ -171,6 +229,9 @@ actual interface PlatformResource {
     @DoordeckOnly
     suspend fun removeApplicationOwner(applicationId: String, userId: String)
 
+    @DoordeckOnly
+    fun removeApplicationOwnerFuture(applicationId: String, userId: String): CompletableFuture<Unit>
+
     /**
      * Get application owners details
      *
@@ -178,6 +239,9 @@ actual interface PlatformResource {
      */
     @DoordeckOnly
     suspend fun getApplicationOwnersDetails(applicationId: String): Array<ApplicationOwnerDetailsResponse>
+
+    @DoordeckOnly
+    fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<Array<ApplicationOwnerDetailsResponse>>
 }
 
 actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

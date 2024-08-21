@@ -16,6 +16,7 @@ import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface LockOperationsResource {
     /**
@@ -25,12 +26,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getSingleLock(lockId: String): LockResponse
 
+    fun getSingleLockFuture(lockId: String): CompletableFuture<LockResponse>
+
     /**
      * Get lock audit trail
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
     suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): Array<LockAuditTrailResponse>
+
+    fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<Array<LockAuditTrailResponse>>
 
     /**
      * Get audit for a user
@@ -39,12 +44,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getAuditForUser(userId: String, start: Int, end: Int): Array<UserAuditResponse>
 
+    fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<Array<UserAuditResponse>>
+
     /**
      * Get users for a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
     suspend fun getUsersForLock(lockId: String): Array<UserLockResponse>
+
+    fun getUsersForLockFuture(lockId: String): CompletableFuture<Array<UserLockResponse>>
 
     /**
      * Get locks for a user
@@ -53,12 +62,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getLocksForUser(userId: String): LockUserResponse
 
+    fun getLocksForUserFuture(userId: String): CompletableFuture<LockUserResponse>
+
     /**
      * Update lock properties - Name
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun updateLockName(lockId: String, name: String? = null)
+
+    fun updateLockNameFuture(lockId: String, name: String? = null): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Favourite
@@ -67,12 +80,16 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null)
 
+    fun updateLockFavouriteFuture(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit>
+
     /**
      * Update lock properties - Colour
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun updateLockColour(lockId: String, colour: String? = null)
+
+    fun updateLockColourFuture(lockId: String, colour: String? = null): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Default name
@@ -81,12 +98,16 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null)
 
+    fun updateLockSettingDefaultNameFuture(lockId: String, name: String? = null): CompletableFuture<Unit>
+
     /**
      * Set lock properties - Settings - Permitted addresses
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>)
+
+    fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: Array<String>): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Hidden
@@ -95,6 +116,8 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
+    fun updateLockSettingHiddenFuture(lockId: String, hidden: Boolean): CompletableFuture<Unit>
+
     /**
      * Set lock properties - Settings - Usage requirements - Time
      *
@@ -102,12 +125,16 @@ actual interface LockOperationsResource {
      */
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>)
 
+    fun setLockSettingTimeRestrictionsFuture(lockId: String, times: Array<LockOperations.TimeRequirement>): CompletableFuture<Unit>
+
     /**
      * Update lock properties - Settings - Usage requirements - Location
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null)
+
+    fun updateLockSettingLocationRestrictionsFuture(lockId: String, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit>
 
     /**
      * Get user’s public key
@@ -117,12 +144,17 @@ actual interface LockOperationsResource {
     @DoordeckOnly
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
 
+    @DoordeckOnly
+    suspend fun getUserPublicKeyFuture(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKeyResponse>
+
     /**
      * Get a user’s public key by email
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
+
+    fun getUserPublicKeyByEmailFuture(email: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by telephone
@@ -131,12 +163,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
 
+    fun getUserPublicKeyByTelephoneFuture(telephone: String): CompletableFuture<UserPublicKeyResponse>
+
     /**
      * Get a user’s public key by local key
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
+
+    fun getUserPublicKeyByLocalKeyFuture(localKey: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by foreign key
@@ -145,12 +181,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
 
+    fun getUserPublicKeyByForeignKeyFuture(foreignKey: String): CompletableFuture<UserPublicKeyResponse>
+
     /**
      * Get a user’s public key
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
+
+    fun getUserPublicKeyByIdentityFuture(identity: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Unlock
@@ -160,12 +200,16 @@ actual interface LockOperationsResource {
      */
     suspend fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>? = null)
 
+    fun unlockWithContextFuture(lockId: String, directAccessEndpoints: Array<String>? = null): CompletableFuture<Unit>
+
     /**
      * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation)
+
+    fun unlockFuture(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit>
 
     /**
      * Share a lock
@@ -175,12 +219,16 @@ actual interface LockOperationsResource {
      */
     suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
 
+    fun shareLockWithContextFuture(lockId: String, shareLock: LockOperations.ShareLock): CompletableFuture<Unit>
+
     /**
      * Share a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
+
+    fun shareLockFuture(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit>
 
     /**
      * Revoke access to a lock
@@ -190,12 +238,16 @@ actual interface LockOperationsResource {
      */
     suspend fun revokeAccessToLockWithContext(lockId: String, users: Array<String>)
 
+    fun revokeAccessToLockWithContextFuture(lockId: String, users: Array<String>): CompletableFuture<Unit>
+
     /**
      * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation)
+
+    fun revokeAccessToLockFuture(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock duration
@@ -205,12 +257,16 @@ actual interface LockOperationsResource {
      */
     suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
 
+    fun updateSecureSettingUnlockDurationWithContextFuture(lockId: String, unlockDuration: Int): CompletableFuture<Unit>
+
     /**
      * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
+
+    fun updateSecureSettingUnlockDurationFuture(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock between
@@ -220,12 +276,16 @@ actual interface LockOperationsResource {
      */
     suspend fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
+    fun uploadSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
+
     /**
      * Update secure settings - Unlock between
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     suspend fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
+
+    fun uploadSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit>
 
     /**
      * Get pinned locks
@@ -234,12 +294,16 @@ actual interface LockOperationsResource {
      */
     suspend fun getPinnedLocks(): Array<LockResponse>
 
+    fun getPinnedLocksFuture(): CompletableFuture<Array<LockResponse>>
+
     /**
      * Get shareable locks
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
     suspend fun getShareableLocks(): Array<ShareableLockResponse>
+
+    fun getShareableLocksFuture(): CompletableFuture<Array<ShareableLockResponse>>
 }
 
 actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(

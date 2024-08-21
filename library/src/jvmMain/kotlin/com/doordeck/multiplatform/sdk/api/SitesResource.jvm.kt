@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface SitesResource {
     /**
@@ -16,6 +17,8 @@ actual interface SitesResource {
      */
     suspend fun listSites(): Array<SiteResponse>
 
+    suspend fun listSitesFuture(): CompletableFuture<Array<SiteResponse>>
+
     /**
      * Get locks for site
      *
@@ -23,12 +26,16 @@ actual interface SitesResource {
      */
     suspend fun getLocksForSite(siteId: String): Array<SiteLocksResponse>
 
+    fun getLocksForSiteFuture(siteId: String): CompletableFuture<Array<SiteLocksResponse>>
+
     /**
      * Get users for a site
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
     suspend fun getUsersForSite(siteId: String): Array<UserForSiteResponse>
+
+    fun getUsersForSiteFuture(siteId: String): CompletableFuture<Array<UserForSiteResponse>>
 }
 
 actual fun sites(): SitesResource = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

@@ -14,6 +14,7 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
     suspend fun login(email: String, password: String): TokenResponse
+
     fun loginFuture(email: String, password: String): CompletableFuture<TokenResponse>
 
     /**
@@ -22,6 +23,7 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
+
     fun registrationFuture(email: String, password: String, displayName: String? = null, force: Boolean = false): CompletableFuture<TokenResponse>
 
     /**
@@ -30,6 +32,7 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
     suspend fun verifyEmail(code: String)
+
     fun verifyEmailFuture(code: String): CompletableFuture<Unit>
 }
 

@@ -4,10 +4,13 @@ import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface HelperResource {
 
     suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
+
+    fun uploadPlatformLogoFuture(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit>
 }
 
 actual fun helper(): HelperResource = HelperResourceImpl(

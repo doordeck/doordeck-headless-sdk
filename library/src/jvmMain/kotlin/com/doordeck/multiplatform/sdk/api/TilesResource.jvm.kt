@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
+import java.util.concurrent.CompletableFuture
 
 actual interface TilesResource {
     /**
@@ -15,6 +16,8 @@ actual interface TilesResource {
      */
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse
 
+    fun getLocksBelongingToTileFuture(tileId: String): CompletableFuture<TileLocksResponse>
+
     /**
      * Associate multiple locks (devices) to a single tile
      *
@@ -22,6 +25,9 @@ actual interface TilesResource {
      */
     @SiteAdmin
     suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>)
+
+    @SiteAdmin
+    fun associateMultipleLocksFuture(tileId: String, siteId: String, lockIds: Array<String>): CompletableFuture<Unit>
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
