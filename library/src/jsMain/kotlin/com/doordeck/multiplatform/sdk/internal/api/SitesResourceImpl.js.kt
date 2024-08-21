@@ -14,14 +14,14 @@ class SitesResourceImpl(
 ) : AbstractSitesClientImpl(httpClient), SitesResource {
 
     override fun listSites(): Promise<Array<SiteResponse>> {
-        return GlobalScope.promise { listSitesRequest() }
+        return GlobalScope.promise { listSitesRequest().toTypedArray() }
     }
 
     override fun getLocksForSite(siteId: String): Promise<Array<SiteLocksResponse>> {
-        return GlobalScope.promise { getLocksForSiteRequest(siteId) }
+        return GlobalScope.promise { getLocksForSiteRequest(siteId).toTypedArray() }
     }
 
     override fun getUsersForSite(siteId: String): Promise<Array<UserForSiteResponse>> {
-        return GlobalScope.promise { getUsersForSiteRequest(siteId) }
+        return GlobalScope.promise { getUsersForSiteRequest(siteId).toTypedArray() }
     }
 }
