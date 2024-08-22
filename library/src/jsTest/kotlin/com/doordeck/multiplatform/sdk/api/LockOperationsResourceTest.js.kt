@@ -153,7 +153,7 @@ class LockOperationsResourceTest : IntegrationTest() {
         // Given - shouldSetLockSettingTimeRestrictions
         val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val timezone = TimeZone.currentSystemDefault()
+        val timezone = TimeZone.UTC
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(timezone)
         val max = now.plus(5.minutes).toLocalDateTime(timezone)
@@ -483,7 +483,7 @@ class LockOperationsResourceTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
             .certificateChain
             .certificateChainArrayToString()
-        val timezone = TimeZone.currentSystemDefault()
+        val timezone = TimeZone.UTC
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(timezone)
         val max = now.plus(5.minutes).toLocalDateTime(timezone)
@@ -542,7 +542,7 @@ class LockOperationsResourceTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
             .certificateChain
             .certificateChainArrayToString()
-        val timezone = TimeZone.currentSystemDefault()
+        val timezone = TimeZone.UTC
         val now = Clock.System.now()
         val min = now.minus(5.minutes).toLocalDateTime(timezone)
         val max = now.plus(10.minutes).toLocalDateTime(timezone)
