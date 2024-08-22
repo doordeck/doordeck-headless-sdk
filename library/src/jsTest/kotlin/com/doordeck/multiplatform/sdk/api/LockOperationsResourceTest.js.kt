@@ -26,6 +26,7 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -319,9 +320,6 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // When
         LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation)).await()
-
-        // Then
-        assertTrue { true }
     }
 
     @Test
@@ -340,9 +338,6 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // When
         LOCK_OPERATIONS_RESOURCE.unlockWithContext(TEST_MAIN_LOCK_ID).await()
-
-        // Then
-        assertTrue { true }
     }
 
     @Test
@@ -372,7 +367,7 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         var locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
-        assertTrue { locks.devices.isNotEmpty() }
+        assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLock
         val revokeBaseOperation = LockOperations.BaseOperation(
@@ -390,7 +385,7 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
-        assertTrue { locks.devices.isEmpty() }
+        assertFalse { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
     }
 
     @Test
@@ -420,7 +415,7 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         var locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
-        assertTrue { locks.devices.isNotEmpty() }
+        assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLockWithContext
         // When
@@ -431,7 +426,7 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
-        assertTrue { locks.devices.isEmpty() }
+        assertFalse { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
     }
 
     @Test
