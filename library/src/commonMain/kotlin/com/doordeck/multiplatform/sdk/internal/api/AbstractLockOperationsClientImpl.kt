@@ -434,7 +434,7 @@ abstract class AbstractLockOperationsClientImpl(
 
         // Launch the calls to the direct access endpoints
         if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
-            localUnlock.unlock(directAccessEndpoints, body)
+            //localUnlock.unlock(directAccessEndpoints, body)
         }
 
         httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
