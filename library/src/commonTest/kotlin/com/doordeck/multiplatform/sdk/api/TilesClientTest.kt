@@ -21,6 +21,5 @@ class TilesClientTest : IntegrationTest() {
 
         // Then
         assertTrue { locks.deviceIds.isNotEmpty() }
-        assertTrue { false }
     }
 }
