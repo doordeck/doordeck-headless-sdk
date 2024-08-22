@@ -10,7 +10,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise

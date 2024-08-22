@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 
 abstract class AbstractSitesClientImpl(
     private val httpClient: HttpClient,

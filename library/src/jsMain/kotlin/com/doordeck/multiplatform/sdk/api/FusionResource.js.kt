@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise

@@ -13,8 +13,9 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.parameter
+import io.ktor.client.request.setBody
 
 abstract class AbstractAccountClientImpl(
     private val httpClient: HttpClient,

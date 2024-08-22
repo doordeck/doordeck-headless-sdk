@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.requests.AssociateMultipleLocksRequest
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.setBody
 
 abstract class AbstractTilesClientImpl(
     private val httpClient: HttpClient

@@ -4,8 +4,9 @@ import com.doordeck.multiplatform.sdk.api.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.api.requests.RegisterRequest
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.parameter
+import io.ktor.client.request.setBody
 
 abstract class AbstractAccountlessClientImpl(
     private val httpClient: HttpClient

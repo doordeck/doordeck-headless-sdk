@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 

@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+import com.doordeck.multiplatform.sdk.api.model.Fusion
 
 object TestConstants {
     val TEST_MAIN_USER_PASSWORD = getEnvironmentVariable("TEST_MAIN_USER_PASSWORD")

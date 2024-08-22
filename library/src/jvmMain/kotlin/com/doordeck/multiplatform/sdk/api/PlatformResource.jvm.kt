@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture

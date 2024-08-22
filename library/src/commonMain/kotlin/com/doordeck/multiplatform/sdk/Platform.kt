@@ -8,9 +8,8 @@ import com.doordeck.multiplatform.sdk.util.installAuth
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
 import com.doordeck.multiplatform.sdk.util.installTimeout
-import io.ktor.client.*
-import io.ktor.http.*
-import kotlinx.coroutines.CoroutineScope
+import io.ktor.client.HttpClient
+import io.ktor.http.URLProtocol
 import kotlinx.serialization.json.Json
 
 enum class PlatformType {

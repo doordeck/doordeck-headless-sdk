@@ -13,7 +13,7 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClientImpl
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 

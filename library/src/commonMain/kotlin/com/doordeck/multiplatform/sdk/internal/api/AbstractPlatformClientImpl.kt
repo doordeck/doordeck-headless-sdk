@@ -25,8 +25,8 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsRespo
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.setBody
 
 abstract class AbstractPlatformClientImpl(
     private val httpClient: HttpClient

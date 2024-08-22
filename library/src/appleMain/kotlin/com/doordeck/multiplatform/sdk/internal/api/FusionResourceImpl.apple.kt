@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 
 class FusionResourceImpl(
     private val httpClient: HttpClient

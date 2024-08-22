@@ -6,10 +6,8 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
-import io.ktor.client.*
-import org.koin.core.context.GlobalContext.get
+import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
-import org.koin.mp.KoinPlatform
 import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 

@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
-import io.ktor.utils.io.core.*
+import io.ktor.utils.io.core.String
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive

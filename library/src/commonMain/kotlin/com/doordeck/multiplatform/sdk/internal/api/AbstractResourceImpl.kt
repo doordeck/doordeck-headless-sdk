@@ -12,15 +12,22 @@ import com.doordeck.multiplatform.sdk.NotAcceptableException
 import com.doordeck.multiplatform.sdk.NotFoundException
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.ServiceUnavailableException
-import com.doordeck.multiplatform.sdk.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.TooEarlyException
+import com.doordeck.multiplatform.sdk.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.UnauthorizedException
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.serialization.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.put
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.isSuccess
+import io.ktor.serialization.ContentConvertException
 import kotlinx.serialization.Serializable
 
 abstract class AbstractResourceImpl {

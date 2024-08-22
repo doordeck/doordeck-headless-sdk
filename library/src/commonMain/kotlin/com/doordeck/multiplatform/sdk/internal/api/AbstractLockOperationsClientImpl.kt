@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.multiplatform.sdk.api.requests.LockOperationRequest
@@ -35,8 +36,9 @@ import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.*
-import io.ktor.client.request.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.parameter
+import io.ktor.client.request.setBody
 
 abstract class AbstractLockOperationsClientImpl(
     private val httpClient: HttpClient,
@@ -434,7 +436,7 @@ abstract class AbstractLockOperationsClientImpl(
 
         // Launch the calls to the direct access endpoints
         if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
-            //localUnlock.unlock(directAccessEndpoints, body)
+            localUnlock.unlock(directAccessEndpoints, body)
         }
 
         httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
