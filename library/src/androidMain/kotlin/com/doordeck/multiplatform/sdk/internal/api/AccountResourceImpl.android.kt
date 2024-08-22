@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSeco
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future

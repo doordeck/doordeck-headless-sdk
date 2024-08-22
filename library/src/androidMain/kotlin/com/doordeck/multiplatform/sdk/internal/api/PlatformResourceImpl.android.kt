@@ -5,7 +5,7 @@ import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
