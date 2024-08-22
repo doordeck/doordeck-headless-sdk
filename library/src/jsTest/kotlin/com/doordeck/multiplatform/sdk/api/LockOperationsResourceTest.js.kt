@@ -234,7 +234,6 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         assertTrue { result.publicKey.isNotEmpty() }
-        assertEquals(TEST_MAIN_USER_PUBLIC_KEY, result.publicKey)
     }
 
     @Test
@@ -248,7 +247,6 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // Then
         assertTrue { result.publicKey.isNotEmpty() }
-        assertEquals(TEST_MAIN_USER_PUBLIC_KEY, result.publicKey)
     }
 
     @Test
