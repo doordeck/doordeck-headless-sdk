@@ -40,7 +40,6 @@ kotlin {
         nodejs {
             testTask {
                 useMocha {
-                    nodeJsArgs.add("--exit")
                     timeout = "30s"
                 }
             }
@@ -48,7 +47,6 @@ kotlin {
         browser {
             testTask {
                 useMocha {
-                    nodeJsArgs.add("--exit")
                     timeout = "30s"
                 }
             }
