@@ -118,7 +118,7 @@ class LockOperationsResourceImpl(
     }
 
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): Promise<Unit> {
-        return GlobalScope.promise { revokeAccessToLock(revokeAccessToLockOperation) }
+        return GlobalScope.promise { revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
     override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int): Promise<Unit> {
