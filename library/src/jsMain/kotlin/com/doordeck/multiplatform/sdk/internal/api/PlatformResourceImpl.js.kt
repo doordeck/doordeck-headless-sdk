@@ -11,8 +11,8 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class PlatformResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractPlatformClientImpl(httpClient), PlatformResource {
+    httpClient: HttpClient
+) : PlatformClient(httpClient), PlatformResource {
 
     override fun createApplication(application: Platform.CreateApplication): Promise<Unit> {
         return GlobalScope.promise { createApplicationRequest(application) }

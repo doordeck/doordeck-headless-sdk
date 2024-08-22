@@ -16,10 +16,10 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class LockOperationsResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl,
-    private val localUnlock: LocalUnlockClientImpl
-) : AbstractLockOperationsClientImpl(httpClient, contextManager, localUnlock), LockOperationsResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl,
+    localUnlock: LocalUnlockClient
+) : LockOperationsClient(httpClient, contextManager, localUnlock), LockOperationsResource {
     
     override fun getSingleLock(lockId: String): Promise<LockResponse> {
         return GlobalScope.promise { getSingleLockRequest(lockId) }

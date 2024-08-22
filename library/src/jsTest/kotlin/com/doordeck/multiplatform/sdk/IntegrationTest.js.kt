@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClientImpl
+import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
@@ -20,6 +20,6 @@ open class IntegrationTest {
     val SITES_RESOURCE = SitesResourceImpl(CLOUD_HTTP_CLIENT)
     val PLATFORM_RESOURCE = PlatformResourceImpl(CLOUD_HTTP_CLIENT)
     val ACCOUNT_RESOURCE = AccountResourceImpl(CLOUD_HTTP_CLIENT, CONTEXT_MANAGER)
-    val LOCAL_UNLOCK_RESOURCE = LocalUnlockClientImpl(HTTP_CLIENT)
+    val LOCAL_UNLOCK_RESOURCE = LocalUnlockClient(HTTP_CLIENT)
     val LOCK_OPERATIONS_RESOURCE = LockOperationsResourceImpl(CLOUD_HTTP_CLIENT, CONTEXT_MANAGER, LOCAL_UNLOCK_RESOURCE)
 }

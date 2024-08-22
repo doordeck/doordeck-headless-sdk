@@ -8,8 +8,8 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class TilesResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractTilesClientImpl(httpClient), TilesResource {
+    httpClient: HttpClient
+) : TilesClient(httpClient), TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): Promise<TileLocksResponse> {
         return GlobalScope.promise { getLocksBelongingToTileRequest(tileId) }

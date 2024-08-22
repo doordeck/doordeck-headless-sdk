@@ -8,8 +8,8 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class AccountlessResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractAccountlessClientImpl(httpClient), AccountlessResource {
+    httpClient: HttpClient
+) : AccountlessClient(httpClient), AccountlessResource {
 
     override fun login(email: String, password: String): Promise<TokenResponse> {
         return GlobalScope.promise { loginRequest(email, password) }

@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.api.SitesResource
 import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClientImpl
+import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
@@ -36,7 +36,7 @@ class DoordeckImpl(
                 single<HttpClient>(named("cloudHttpClient")) { cloudHttpClient }
                 single<HttpClient>(named("fusionHttpClient")) { fusionHttpClient }
                 single<ContextManagerImpl> { mainContextManager }
-                single<LocalUnlockClientImpl> { LocalUnlockClientImpl(httpClient) }
+                single<LocalUnlockClient> { LocalUnlockClient(httpClient) }
             }))
         }
     }

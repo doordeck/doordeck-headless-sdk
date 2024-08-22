@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-abstract class AbstractHelperClientImpl(
+open class HelperClient(
     private val httpClient: HttpClient,
     private val cloudHttpClient: HttpClient
 ) : AbstractResourceImpl() {

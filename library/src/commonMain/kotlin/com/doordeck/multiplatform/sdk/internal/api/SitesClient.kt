@@ -5,7 +5,7 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import io.ktor.client.HttpClient
 
-abstract class AbstractSitesClientImpl(
+open class SitesClient(
     private val httpClient: HttpClient,
 ) : AbstractResourceImpl() {
 

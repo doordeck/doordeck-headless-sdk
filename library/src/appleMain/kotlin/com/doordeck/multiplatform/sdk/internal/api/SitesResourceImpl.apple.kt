@@ -7,8 +7,8 @@ import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import io.ktor.client.HttpClient
 
 class SitesResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractSitesClientImpl(httpClient), SitesResource {
+    httpClient: HttpClient
+) : SitesClient(httpClient), SitesResource {
 
     override suspend fun listSites(): List<SiteResponse> {
         return listSitesRequest()

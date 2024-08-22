@@ -40,10 +40,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
-abstract class AbstractLockOperationsClientImpl(
+open class LockOperationsClient(
     private val httpClient: HttpClient,
     private val contextManager: ContextManagerImpl,
-    private val localUnlock: LocalUnlockClientImpl
+    private val localUnlock: LocalUnlockClient
 ) : AbstractResourceImpl() {
 
     /**

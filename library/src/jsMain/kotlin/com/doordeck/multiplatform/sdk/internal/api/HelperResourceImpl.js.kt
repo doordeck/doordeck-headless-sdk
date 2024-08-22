@@ -7,9 +7,9 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class HelperResourceImpl(
-    private val httpClient: HttpClient,
-    private val cloudHttpClient: HttpClient
-) : AbstractHelperClientImpl(httpClient, cloudHttpClient), HelperResource {
+    httpClient: HttpClient,
+    cloudHttpClient: HttpClient
+) : HelperClient(httpClient, cloudHttpClient), HelperResource {
 
     override fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<Unit> {
         return GlobalScope.promise { uploadPlatformLogoRequest(applicationId, contentType, image) }

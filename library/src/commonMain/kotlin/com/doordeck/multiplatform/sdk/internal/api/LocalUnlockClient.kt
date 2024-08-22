@@ -9,7 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 
-class LocalUnlockClientImpl(
+open class LocalUnlockClient(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl() {
 

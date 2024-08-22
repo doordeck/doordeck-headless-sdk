@@ -13,9 +13,9 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class AccountResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl
-) : AbstractAccountClientImpl(httpClient, contextManager), AccountResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl
+) : AccountClient(httpClient, contextManager), AccountResource {
 
     override fun refreshToken(refreshToken: String): Promise<TokenResponse> {
         return GlobalScope.promise { refreshTokenRequest(refreshToken) }

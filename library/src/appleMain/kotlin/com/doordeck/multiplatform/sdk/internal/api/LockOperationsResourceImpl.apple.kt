@@ -13,10 +13,10 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.HttpClient
 
 class LockOperationsResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl,
-    private val localUnlock: LocalUnlockClientImpl
-) : AbstractLockOperationsClientImpl(httpClient, contextManager, localUnlock), LockOperationsResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl,
+    localUnlock: LocalUnlockClient
+) : LockOperationsClient(httpClient, contextManager, localUnlock), LockOperationsResource {
 
     override suspend fun getSingleLock(lockId: String): LockResponse {
         return getSingleLockRequest(lockId)

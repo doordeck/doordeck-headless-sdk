@@ -12,8 +12,8 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class FusionResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractFusionClientImpl(httpClient), FusionResource {
+    httpClient: HttpClient
+) : FusionClient(httpClient), FusionResource {
 
     override fun login(email: String, password: String): Promise<FusionLoginResponse> {
         return GlobalScope.promise { loginRequest(email, password) }

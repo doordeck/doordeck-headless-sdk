@@ -14,9 +14,9 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class AccountResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl
-) : AbstractAccountClientImpl(httpClient, contextManager), AccountResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl
+) : AccountClient(httpClient, contextManager), AccountResource {
 
     override suspend fun refreshToken(refreshToken: String): TokenResponse {
         return refreshTokenRequest(refreshToken)

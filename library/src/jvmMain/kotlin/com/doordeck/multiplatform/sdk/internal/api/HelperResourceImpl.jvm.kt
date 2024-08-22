@@ -8,9 +8,9 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class HelperResourceImpl(
-    private val httpClient: HttpClient,
-    private val cloudHttpClient: HttpClient
-) : AbstractHelperClientImpl(httpClient, cloudHttpClient), HelperResource {
+    httpClient: HttpClient,
+    cloudHttpClient: HttpClient
+) : HelperClient(httpClient, cloudHttpClient), HelperResource {
 
     override suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
         return uploadPlatformLogoRequest(applicationId, contentType, image)

@@ -13,8 +13,8 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class FusionResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractFusionClientImpl(httpClient), FusionResource {
+    httpClient: HttpClient
+) : FusionClient(httpClient), FusionResource {
 
     override suspend fun login(email: String, password: String): FusionLoginResponse {
         return loginRequest(email, password)

@@ -11,8 +11,8 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class SitesResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractSitesClientImpl(httpClient), SitesResource {
+    httpClient: HttpClient
+) : SitesClient(httpClient), SitesResource {
 
     override suspend fun listSites(): List<SiteResponse> {
         return listSitesRequest()

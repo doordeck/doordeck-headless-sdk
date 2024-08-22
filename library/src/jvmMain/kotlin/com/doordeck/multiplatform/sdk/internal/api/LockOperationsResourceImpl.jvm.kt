@@ -17,10 +17,10 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class LockOperationsResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl,
-    private val localUnlock: LocalUnlockClientImpl
-) : AbstractLockOperationsClientImpl(httpClient, contextManager, localUnlock), LockOperationsResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl,
+    localUnlock: LocalUnlockClient
+) : LockOperationsClient(httpClient, contextManager, localUnlock), LockOperationsResource {
     
     override suspend fun getSingleLock(lockId: String): LockResponse {
         return getSingleLockRequest(lockId)

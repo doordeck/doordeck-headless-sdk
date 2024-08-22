@@ -8,8 +8,8 @@ import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import io.ktor.client.HttpClient
 
 class PlatformResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractPlatformClientImpl(httpClient), PlatformResource {
+    httpClient: HttpClient
+) : PlatformClient(httpClient), PlatformResource {
 
     override suspend fun createApplication(application: Platform.CreateApplication) {
         return createApplicationRequest(application)

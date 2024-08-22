@@ -10,7 +10,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClientImpl
+import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import io.ktor.client.*
 import org.koin.core.qualifier.named
@@ -247,5 +247,5 @@ actual interface LockOperationsResource {
 actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(
     httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
     contextManager = getKoin().get<ContextManagerImpl>(),
-    localUnlock = getKoin().get<LocalUnlockClientImpl>()
+    localUnlock = getKoin().get<LocalUnlockClient>()
 )

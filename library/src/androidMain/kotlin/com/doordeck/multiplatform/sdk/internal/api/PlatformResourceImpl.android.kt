@@ -12,8 +12,8 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class PlatformResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractPlatformClientImpl(httpClient), PlatformResource {
+    httpClient: HttpClient
+) : PlatformClient(httpClient), PlatformResource {
 
     override suspend fun createApplication(application: Platform.CreateApplication) {
         return createApplicationRequest(application)

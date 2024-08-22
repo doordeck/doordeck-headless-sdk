@@ -10,8 +10,8 @@ import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 class SitesResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractSitesClientImpl(httpClient), SitesResource {
+    httpClient: HttpClient
+) : SitesClient(httpClient), SitesResource {
 
     override fun listSites(): Promise<Array<SiteResponse>> {
         return GlobalScope.promise { listSitesRequest().toTypedArray() }

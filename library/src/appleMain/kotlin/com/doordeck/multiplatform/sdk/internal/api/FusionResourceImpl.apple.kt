@@ -9,8 +9,8 @@ import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import io.ktor.client.HttpClient
 
 class FusionResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractFusionClientImpl(httpClient), FusionResource {
+    httpClient: HttpClient
+) : FusionClient(httpClient), FusionResource {
 
     override suspend fun login(email: String, password: String): FusionLoginResponse {
         return loginRequest(email, password)

@@ -5,8 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import io.ktor.client.HttpClient
 
 class TilesResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractTilesClientImpl(httpClient), TilesResource {
+    httpClient: HttpClient
+) : TilesClient(httpClient), TilesResource {
 
     override suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
         return getLocksBelongingToTileRequest(tileId)

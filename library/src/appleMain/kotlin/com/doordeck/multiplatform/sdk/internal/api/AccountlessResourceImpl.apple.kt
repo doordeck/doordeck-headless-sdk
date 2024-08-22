@@ -5,8 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import io.ktor.client.HttpClient
 
 class AccountlessResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractAccountlessClientImpl(httpClient), AccountlessResource {
+    httpClient: HttpClient
+) : AccountlessClient(httpClient), AccountlessResource {
 
     override suspend fun login(email: String, password: String): TokenResponse {
         return loginRequest(email, password)

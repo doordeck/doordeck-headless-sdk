@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-abstract class AbstractTilesClientImpl(
+open class TilesClient(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl() {
 

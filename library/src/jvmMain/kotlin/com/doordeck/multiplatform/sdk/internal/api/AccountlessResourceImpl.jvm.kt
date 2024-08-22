@@ -9,8 +9,8 @@ import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
 class AccountlessResourceImpl(
-    private val httpClient: HttpClient
-) : AbstractAccountlessClientImpl(httpClient), AccountlessResource {
+    httpClient: HttpClient
+) : AccountlessClient(httpClient), AccountlessResource {
 
     override suspend fun login(email: String, password: String): TokenResponse {
         return loginRequest(email, password)

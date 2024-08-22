@@ -8,7 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
-abstract class AbstractAccountlessClientImpl(
+open class AccountlessClient(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl()  {
 

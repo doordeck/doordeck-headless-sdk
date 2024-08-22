@@ -10,9 +10,9 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.HttpClient
 
 class AccountResourceImpl(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl
-) : AbstractAccountClientImpl(httpClient, contextManager), AccountResource {
+    httpClient: HttpClient,
+    contextManager: ContextManagerImpl
+) : AccountClient(httpClient, contextManager), AccountResource {
 
     override suspend fun refreshToken(refreshToken: String): TokenResponse {
         return refreshTokenRequest(refreshToken)
