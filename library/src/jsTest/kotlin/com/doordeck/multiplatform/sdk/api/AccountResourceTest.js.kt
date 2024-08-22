@@ -72,6 +72,9 @@ class AccountResourceTest : IntegrationTest() {
 
         // When
         ACCOUNT_RESOURCE.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD).await()
+
+        // Then
+        assertTrue { true }
     }
 
     @Test

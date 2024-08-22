@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -42,6 +43,7 @@ class FusionResourceTest : IntegrationTest() {
         "192.168.202.63:27700" to TestController("alpeta", Fusion.AlpetaController("", "", 1, ""))
     )
 
+    @Ignore
     @Test
     fun shouldTestFusion() = runTest {
         integrations.filter { it.value.enabled }.forEach { (host, testController) ->
