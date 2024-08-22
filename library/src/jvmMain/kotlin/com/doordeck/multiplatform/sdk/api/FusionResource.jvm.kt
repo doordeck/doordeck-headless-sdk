@@ -12,7 +12,6 @@ import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface FusionResource {
-
     suspend fun login(email: String, password: String): FusionLoginResponse
     fun loginFuture(email: String, password: String): CompletableFuture<FusionLoginResponse>
     suspend fun getIntegrationType(): IntegrationTypeResponse

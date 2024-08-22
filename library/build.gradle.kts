@@ -39,12 +39,16 @@ kotlin {
         useCommonJs()
         nodejs {
             testTask {
-                useMocha()
+                useMocha {
+                    timeout = "60s"
+                }
             }
         }
         browser {
             testTask {
-                useMocha()
+                useMocha {
+                    timeout = "60s"
+                }
             }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"

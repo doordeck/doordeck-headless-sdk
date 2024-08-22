@@ -274,18 +274,18 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
+    suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
-    fun uploadSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock between
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
+    suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
 
-    fun uploadSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit>
 
     /**
      * Get pinned locks

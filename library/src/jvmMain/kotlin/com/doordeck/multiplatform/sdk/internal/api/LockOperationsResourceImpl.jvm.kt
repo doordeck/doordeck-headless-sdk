@@ -238,20 +238,20 @@ class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
 
-    override suspend fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return uploadSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
+    override suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+        return updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
     }
 
-    override fun uploadSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { uploadSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
+    override fun updateSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit> {
+        return GlobalScope.future(Dispatchers.IO) { updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
     }
 
-    override suspend fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+    override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+        return updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
-    override fun uploadSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
+    override fun updateSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit> {
+        return GlobalScope.future(Dispatchers.IO) { updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
     override suspend fun getPinnedLocks(): List<LockResponse> {

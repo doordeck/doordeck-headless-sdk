@@ -129,12 +129,12 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
 
-    override fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<Unit> {
-        return GlobalScope.promise { uploadSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
+    override fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<Unit> {
+        return GlobalScope.promise { updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
     }
 
-    override fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): Promise<Unit> {
-        return GlobalScope.promise { uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
+    override fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): Promise<Unit> {
+        return GlobalScope.promise { updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
     override fun getPinnedLocks(): Promise<Array<LockResponse>> {

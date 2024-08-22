@@ -7,9 +7,7 @@ import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface HelperResource {
-
     suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
-
     fun uploadPlatformLogoFuture(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit>
 }
 

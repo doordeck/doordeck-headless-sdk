@@ -5,6 +5,9 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 object TestConstants {
     val TEST_MAIN_USER_PASSWORD = getEnvironmentVariable("TEST_MAIN_USER_PASSWORD")
         ?: ""
+    val TEST_MAIN_USER_PRIVATE_KEY = getEnvironmentVariable("TEST_MAIN_USER_PRIVATE_KEY")
+        ?: ""
+
 
     val TEST_ENVIRONMENT = ApiEnvironment.DEV
     val TEST_MAIN_USER_EMAIL = "training@doordeck.com"

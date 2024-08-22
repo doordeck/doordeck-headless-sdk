@@ -380,7 +380,7 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun uploadSecureSettingUnlockBetweenWithContextRequest(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+    suspend fun updateSecureSettingUnlockBetweenWithContextRequest(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
         val operationContext = contextManager.getOperationContext()
         val baseOperation = LockOperations.BaseOperation(
             userId = operationContext.userId,
@@ -388,7 +388,7 @@ abstract class AbstractLockOperationsClientImpl(
             userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
-        uploadSecureSettingUnlockBetween(baseOperation, unlockBetween)
+        updateSecureSettingUnlockBetween(baseOperation, unlockBetween)
     }
 
     /**
@@ -396,11 +396,11 @@ abstract class AbstractLockOperationsClientImpl(
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween.baseOperation, updateSecureSettingUnlockBetween.unlockBetween)
+    suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+        updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween.baseOperation, updateSecureSettingUnlockBetween.unlockBetween)
     }
 
-    private suspend fun uploadSecureSettingUnlockBetween(baseOperation: LockOperations.BaseOperation, unlockBetween: LockOperations.UnlockBetween?) {
+    private suspend fun updateSecureSettingUnlockBetween(baseOperation: LockOperations.BaseOperation, unlockBetween: LockOperations.UnlockBetween?) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockBetween = unlockBetween?.let {
                 UnlockBetweenSettingRequest(

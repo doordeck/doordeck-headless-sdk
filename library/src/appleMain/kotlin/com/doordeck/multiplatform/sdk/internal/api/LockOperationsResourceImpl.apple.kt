@@ -126,12 +126,12 @@ class LockOperationsResourceImpl(
         return updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
     }
 
-    override suspend fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return uploadSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
+    override suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+        return updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
     }
 
-    override suspend fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return uploadSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+    override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+        return updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
     override suspend fun getPinnedLocks(): List<LockResponse> {

@@ -219,14 +219,14 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    fun uploadSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<dynamic>
+    fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<dynamic>
 
     /**
      * Update secure settings - Unlock between
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    fun uploadSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): Promise<dynamic>
+    fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): Promise<dynamic>
 
     /**
      * Get pinned locks

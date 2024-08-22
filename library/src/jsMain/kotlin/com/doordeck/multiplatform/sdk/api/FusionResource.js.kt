@@ -13,7 +13,6 @@ import kotlin.js.Promise
 
 @JsExport
 actual interface FusionResource {
-
     fun login(email: String, password: String): Promise<FusionLoginResponse>
     fun getIntegrationType(): Promise<IntegrationTypeResponse>
     fun getIntegrationConfiguration(type: String): Promise<Array<IntegrationConfigurationResponse>>
