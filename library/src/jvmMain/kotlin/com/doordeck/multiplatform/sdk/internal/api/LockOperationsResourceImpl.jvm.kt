@@ -215,11 +215,11 @@ class LockOperationsResourceImpl(
     }
 
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return revokeAccessToLock(revokeAccessToLockOperation)
+        return revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
     override fun revokeAccessToLockFuture(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { revokeAccessToLock(revokeAccessToLockOperation) }
+        return GlobalScope.future(Dispatchers.IO) { revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
     override suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
