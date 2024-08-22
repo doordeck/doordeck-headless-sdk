@@ -154,14 +154,13 @@ class LockOperationsResourceTest : IntegrationTest() {
         // Given - shouldSetLockSettingTimeRestrictions
         val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val timezone = TimeZone.UTC
         val now = Clock.System.now()
-        val min = now.minus(1.minutes).toLocalDateTime(timezone)
-        val max = now.plus(5.minutes).toLocalDateTime(timezone)
+        val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
+        val max = now.plus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val addedTimeRestriction = LockOperations.TimeRequirement(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = timezone.id,
+            timezone = TimeZone.UTC.id,
             days = arrayOf(min.dayOfWeek.name)
         )
 
@@ -310,7 +309,6 @@ class LockOperationsResourceTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
             .certificateChain
             .certificateChainArrayToString()
-
         val baseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
@@ -490,14 +488,13 @@ class LockOperationsResourceTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
             .certificateChain
             .certificateChainArrayToString()
-        val timezone = TimeZone.UTC
         val now = Clock.System.now()
-        val min = now.minus(1.minutes).toLocalDateTime(timezone)
-        val max = now.plus(5.minutes).toLocalDateTime(timezone)
+        val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
+        val max = now.plus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = timezone.id,
+            timezone = TimeZone.UTC.id,
             days = arrayOf(min.dayOfWeek.name),
             exceptions = emptyArray()
         )
@@ -549,14 +546,13 @@ class LockOperationsResourceTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
             .certificateChain
             .certificateChainArrayToString()
-        val timezone = TimeZone.UTC
         val now = Clock.System.now()
-        val min = now.minus(5.minutes).toLocalDateTime(timezone)
-        val max = now.plus(10.minutes).toLocalDateTime(timezone)
+        val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
+        val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = timezone.id,
+            timezone = TimeZone.UTC.id,
             days = arrayOf(min.dayOfWeek.name),
             exceptions = emptyArray()
         )
