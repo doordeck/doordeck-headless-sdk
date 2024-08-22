@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
+import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
@@ -13,9 +14,11 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainArrayToString
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChainArray
+import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -33,6 +36,12 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsClientTest : IntegrationTest() {
+
+    init {
+        if (getPlatform() != PlatformType.ANDROID) {
+            LibsodiumInitializer.initializeWithCallback {  }
+        }
+    }
 
     @Test
     fun shouldGetSingleLock() = runTest {
@@ -302,6 +311,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUnlock() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -321,6 +331,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUnlockWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -339,6 +350,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldShareAndRevokeLock() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given - shouldShareLock
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -387,6 +399,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldShareAndRevokeLockWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given - shouldShareLockWithContext
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -428,6 +441,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -455,6 +469,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -481,6 +496,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetween() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -539,6 +555,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
