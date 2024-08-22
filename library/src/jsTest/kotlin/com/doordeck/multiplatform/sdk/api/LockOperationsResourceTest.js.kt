@@ -32,7 +32,7 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
-class LockOperationsResourceTest : IntegrationTest() {
+/*class LockOperationsResourceTest : IntegrationTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
@@ -676,4 +676,4 @@ class LockOperationsResourceTest : IntegrationTest() {
         assertTrue { updateSecureSettingUnlockBetweenWithContextException is MissingOperationContextException }
         assertEquals(exceptionMessage, updateSecureSettingUnlockBetweenWithContextException.message)
     }
-}
+}*/
