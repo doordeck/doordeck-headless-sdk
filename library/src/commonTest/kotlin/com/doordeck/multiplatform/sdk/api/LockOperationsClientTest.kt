@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
+import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
@@ -13,10 +14,11 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainArrayToString
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChainArray
-import kotlinx.coroutines.await
+import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -33,16 +35,22 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 
-class LockOperationsResourceTest : IntegrationTest() {
+class LockOperationsClientTest : IntegrationTest() {
+
+    init {
+        if (getPlatform() != PlatformType.ANDROID) {
+            LibsodiumInitializer.initializeWithCallback {  }
+        }
+    }
 
     @Test
     fun shouldGetSingleLock() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val response = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val response = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
 
         // Then
         assertEquals(TEST_MAIN_LOCK_ID, response.id)
@@ -51,108 +59,108 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockName() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val updatedLockName = "Demo ${uuid4()} Lock"
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockName(TEST_MAIN_LOCK_ID, updatedLockName).await()
+        LOCK_OPERATIONS_CLIENT.updateLockNameRequest(TEST_MAIN_LOCK_ID, updatedLockName)
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedLockName, lock.name)
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val updatedFavourite = true
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockFavourite(TEST_MAIN_LOCK_ID, updatedFavourite).await()
+        LOCK_OPERATIONS_CLIENT.updateLockFavouriteRequest(TEST_MAIN_LOCK_ID, updatedFavourite)
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedFavourite, lock.favourite)
     }
 
     @Test
     fun shouldUpdateLockColour() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockColour(TEST_MAIN_LOCK_ID, updatedLockColour).await()
+        LOCK_OPERATIONS_CLIENT.updateLockColourRequest(TEST_MAIN_LOCK_ID, updatedLockColour)
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedLockColour, lock.colour)
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val updatedLockDefaultName = "Demo ${uuid4()} Lock"
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingDefaultName(TEST_MAIN_LOCK_ID, updatedLockDefaultName).await()
+        LOCK_OPERATIONS_CLIENT.updateLockSettingDefaultNameRequest(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedLockDefaultName, lock.settings.defaultName)
     }
 
     @Test
     fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
         // Given - shouldSetLockSettingPermittedAddresses
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val addedLockPermittedAddresses = arrayOf("95.19.38.42")
+        val addedLockPermittedAddresses = listOf("95.19.38.42")
 
         // When
-        LOCK_OPERATIONS_RESOURCE.setLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, addedLockPermittedAddresses).await()
+        LOCK_OPERATIONS_CLIENT.setLockSettingPermittedAddressesRequest(TEST_MAIN_LOCK_ID, addedLockPermittedAddresses)
 
         // Then
-        var lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
         assertContains(addedLockPermittedAddresses, lock.settings.permittedAddresses.first())
 
         // Given - shouldRemoveLockSettingPermittedAddresses
-        val removedLockPermittedAddresses = emptyArray<String>()
+        val removedLockPermittedAddresses = listOf<String>()
 
         // When
-        LOCK_OPERATIONS_RESOURCE.setLockSettingPermittedAddresses(TEST_MAIN_LOCK_ID, removedLockPermittedAddresses).await()
+        LOCK_OPERATIONS_CLIENT.setLockSettingPermittedAddressesRequest(TEST_MAIN_LOCK_ID, removedLockPermittedAddresses)
 
         // Then
-        lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertTrue { lock.settings.permittedAddresses.isEmpty() }
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val updatedHidden = false
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingHidden(TEST_MAIN_LOCK_ID, updatedHidden).await()
+        LOCK_OPERATIONS_CLIENT.updateLockSettingHiddenRequest(TEST_MAIN_LOCK_ID, updatedHidden)
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedHidden, lock.settings.hidden)
     }
 
     @Test
     fun shouldSetAndRemoveLockSettingTimeRestrictions() = runTest {
         // Given - shouldSetLockSettingTimeRestrictions
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
@@ -165,10 +173,10 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.setLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, arrayOf(addedTimeRestriction)).await()
+        LOCK_OPERATIONS_CLIENT.setLockSettingTimeRestrictionsRequest(TEST_MAIN_LOCK_ID, listOf(addedTimeRestriction))
 
         // Then
-        var lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
         assertNotNull(actualTime)
         assertEquals(addedTimeRestriction.start, actualTime.start)
@@ -177,20 +185,20 @@ class LockOperationsResourceTest : IntegrationTest() {
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
-        val removedTimeRestriction = emptyArray<LockOperations.TimeRequirement>()
+        val removedTimeRestriction = emptyList<LockOperations.TimeRequirement>()
 
         // When
-        LOCK_OPERATIONS_RESOURCE.setLockSettingTimeRestrictions(TEST_MAIN_LOCK_ID, removedTimeRestriction).await()
+        LOCK_OPERATIONS_CLIENT.setLockSettingTimeRestrictionsRequest(TEST_MAIN_LOCK_ID, removedTimeRestriction)
 
         // Then
-        lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNull(lock.settings.usageRequirements?.time)
     }
 
     @Test
     fun shouldUpdateAndRemoveLockSettingLocationRestrictions() = runTest {
         // Given - shouldUpdateLockSettingLocationRestrictions
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val addedLocationRestriction = LockOperations.LocationRequirement(
             latitude = Random.nextDouble(-90.0, 90.0),
@@ -201,10 +209,10 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, addedLocationRestriction).await()
+        LOCK_OPERATIONS_CLIENT.updateLockSettingLocationRestrictionsRequest(TEST_MAIN_LOCK_ID, addedLocationRestriction)
 
         // Then
-        var lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.usageRequirements?.location)
         assertEquals(addedLocationRestriction.latitude, lock.settings.usageRequirements?.location?.latitude)
         assertEquals(addedLocationRestriction.longitude, lock.settings.usageRequirements?.location?.longitude)
@@ -216,21 +224,21 @@ class LockOperationsResourceTest : IntegrationTest() {
         val removedLocationRestriction = null
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateLockSettingLocationRestrictions(TEST_MAIN_LOCK_ID, removedLocationRestriction).await()
+        LOCK_OPERATIONS_CLIENT.updateLockSettingLocationRestrictionsRequest(TEST_MAIN_LOCK_ID, removedLocationRestriction)
 
         // Then
-        lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(removedLocationRestriction, lock.settings.usageRequirements?.location)
     }
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val result = LOCK_OPERATIONS_RESOURCE.getUserPublicKey(TEST_MAIN_USER_EMAIL, true).await()
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyRequest(TEST_MAIN_USER_EMAIL, true)
 
         // Then
         assertTrue { result.publicKey.isNotEmpty() }
@@ -239,11 +247,11 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val result = LOCK_OPERATIONS_RESOURCE.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL).await()
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByEmailRequest(TEST_MAIN_USER_EMAIL)
 
         // Then
         assertTrue { result.publicKey.isNotEmpty() }
@@ -252,11 +260,11 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForLock() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val usersForLock = LOCK_OPERATIONS_RESOURCE.getUsersForLock(TEST_MAIN_LOCK_ID).await()
+        val usersForLock = LOCK_OPERATIONS_CLIENT.getUsersForLockRequest(TEST_MAIN_LOCK_ID)
 
         // Then
         assertTrue { usersForLock.isNotEmpty() }
@@ -265,11 +273,11 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetLockForUser() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val locksForUser = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_MAIN_USER_ID).await()
+        val locksForUser = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_MAIN_USER_ID)
 
         // Then
         assertTrue { locksForUser.devices.isNotEmpty() }
@@ -278,11 +286,11 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetPinnedLocks() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val pinnedLocks = LOCK_OPERATIONS_RESOURCE.getPinnedLocks().await()
+        val pinnedLocks = LOCK_OPERATIONS_CLIENT.getPinnedLocksRequest()
 
         // Then
         assertTrue { pinnedLocks.isNotEmpty() }
@@ -291,11 +299,11 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetShareableLocks() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
 
         // When
-        val shareableLocks = LOCK_OPERATIONS_RESOURCE.getShareableLocks().await()
+        val shareableLocks = LOCK_OPERATIONS_CLIENT.getShareableLocksRequest()
 
         // Then
         assertTrue { shareableLocks.isNotEmpty() }
@@ -303,10 +311,11 @@ class LockOperationsResourceTest : IntegrationTest() {
 
     @Test
     fun shouldUnlock() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val baseOperation = LockOperations.BaseOperation(
@@ -317,15 +326,16 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation)).await()
+        LOCK_OPERATIONS_CLIENT.unlockRequest(LockOperations.UnlockOperation(baseOperation = baseOperation))
     }
 
     @Test
     fun shouldUnlockWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         CONTEXT_MANAGER.setOperationContext(
@@ -335,15 +345,16 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.unlockWithContext(TEST_MAIN_LOCK_ID).await()
+        LOCK_OPERATIONS_CLIENT.unlockWithContextRequest(TEST_MAIN_LOCK_ID, emptyList())
     }
 
     @Test
     fun shouldShareAndRevokeLock() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given - shouldShareLock
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val shareBaseOperation = LockOperations.BaseOperation(
@@ -354,17 +365,17 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.shareLock(LockOperations.ShareLockOperation(
+        LOCK_OPERATIONS_CLIENT.shareLockRequest(LockOperations.ShareLockOperation(
             baseOperation = shareBaseOperation,
             shareLock = LockOperations.ShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
             )
-        )).await()
+        ))
 
         // Then
-        var locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
+        var locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLock
@@ -376,22 +387,23 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+        LOCK_OPERATIONS_CLIENT.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
             users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
-        )).await()
+        ))
 
         // Then
-        locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
+        locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertFalse { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldShareAndRevokeLockWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given - shouldShareLockWithContext
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         CONTEXT_MANAGER.setOperationContext(
@@ -406,33 +418,34 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.shareLockWithContext(
+        LOCK_OPERATIONS_CLIENT.shareLockWithContextRequest(
             lockId = TEST_MAIN_LOCK_ID,
             shareLock = shareLock
-        ).await()
+        )
 
         // Then
-        var locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
+        var locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLockWithContext
         // When
-        LOCK_OPERATIONS_RESOURCE.revokeAccessToLockWithContext(
+        LOCK_OPERATIONS_CLIENT.revokeAccessToLockWithContextRequest(
             lockId = TEST_MAIN_LOCK_ID,
-            users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
-        ).await()
+            users = listOf(TEST_SUPPLEMENTARY_USER_ID)
+        )
 
         // Then
-        locks = LOCK_OPERATIONS_RESOURCE.getLocksForUser(TEST_SUPPLEMENTARY_USER_ID).await()
+        locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertFalse { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val updatedUnlockDuration = Random.nextInt(30, 60)
@@ -444,22 +457,23 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationRequest(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
-        )).await()
+        ))
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val updatedUnlockDuration = 1
@@ -470,22 +484,23 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDurationWithContext(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationWithContextRequest(
             lockId = TEST_MAIN_LOCK_ID,
             unlockDuration = updatedUnlockDuration
-        ).await()
+        )
 
         // Then
-        val lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        val lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
     }
 
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetween() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val now = Clock.System.now()
@@ -506,13 +521,13 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = addBaseOperation,
             unlockBetween = updatedUnlockBetween
-        )).await()
+        ))
 
         // Then
-        var lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
@@ -528,22 +543,23 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = removeBaseOperation,
             unlockBetween = null
-        )).await()
+        ))
 
         // Then
-        lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNull(lock.settings.unlockBetweenWindow)
     }
 
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenWithContext() = runTest {
+        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_RESOURCE.registerEphemeralKey(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()).await()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainArrayToString()
         val now = Clock.System.now()
@@ -563,13 +579,13 @@ class LockOperationsResourceTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockBetweenWithContext(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
             lockId = TEST_MAIN_LOCK_ID,
             unlockBetween = updatedUnlockBetween
-        ).await()
+        )
 
         // Then
-        var lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
@@ -577,27 +593,27 @@ class LockOperationsResourceTest : IntegrationTest() {
         assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
 
         // Given
-        LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockBetweenWithContext(
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
             lockId = TEST_MAIN_LOCK_ID,
             unlockBetween = null
-        ).await()
+        )
 
         // Then
-        lock = LOCK_OPERATIONS_RESOURCE.getSingleLock(TEST_MAIN_LOCK_ID).await()
+        lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
         assertNull(lock.settings.unlockBetweenWindow)
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val now = Clock.System.now()
         val start = now.minus(7.days).epochSeconds.toInt()
         val end = now.epochSeconds.toInt()
 
         // When
-        val lockAuditTrail = LOCK_OPERATIONS_RESOURCE.getLockAuditTrail(TEST_MAIN_LOCK_ID, start, end).await()
+        val lockAuditTrail = LOCK_OPERATIONS_CLIENT.getLockAuditTrailRequest(TEST_MAIN_LOCK_ID, start, end)
 
         // Then
         assertTrue { lockAuditTrail.isNotEmpty() }
@@ -606,14 +622,14 @@ class LockOperationsResourceTest : IntegrationTest() {
     @Test
     fun shouldGetAuditForUser() = runTest {
         // Given
-        val login = ACCOUNTLESS_RESOURCE.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val now = Clock.System.now()
         val start = now.minus(7.days).epochSeconds.toInt()
         val end = now.epochSeconds.toInt()
 
         // When
-        val auditForUser = LOCK_OPERATIONS_RESOURCE.getAuditForUser(TEST_MAIN_USER_ID, start, end).await()
+        val auditForUser = LOCK_OPERATIONS_CLIENT.getAuditForUserRequest(TEST_MAIN_USER_ID, start, end)
 
         // Then
         assertTrue { auditForUser.isNotEmpty() }
@@ -627,23 +643,23 @@ class LockOperationsResourceTest : IntegrationTest() {
 
         // When
         val revokeAccessToLockWithContextException = assertFails {
-            LOCK_OPERATIONS_RESOURCE.revokeAccessToLockWithContext("", emptyArray()).await()
+            LOCK_OPERATIONS_CLIENT.revokeAccessToLockWithContextRequest("", listOf())
         }
         val shareLockWithContextException = assertFails {
-            LOCK_OPERATIONS_RESOURCE.shareLockWithContext("", LockOperations.ShareLock(
+            LOCK_OPERATIONS_CLIENT.shareLockWithContextRequest("", LockOperations.ShareLock(
                 targetUserId = "",
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = byteArrayOf()
-            )).await()
+            ))
         }
         val unlockWithContextException = assertFails {
-            LOCK_OPERATIONS_RESOURCE.unlockWithContext("").await()
+            LOCK_OPERATIONS_CLIENT.unlockWithContextRequest("", emptyList())
         }
         val updateSecureSettingUnlockDurationWithContextException = assertFails {
-            LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockDurationWithContext("", 0).await()
+            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationWithContextRequest("", 0)
         }
         val updateSecureSettingUnlockBetweenWithContextException = assertFails {
-            LOCK_OPERATIONS_RESOURCE.updateSecureSettingUnlockBetweenWithContext(
+            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
                 lockId = TEST_MAIN_LOCK_ID,
                 unlockBetween = LockOperations.UnlockBetween(
                     start = "",
@@ -652,7 +668,7 @@ class LockOperationsResourceTest : IntegrationTest() {
                     days = emptyArray(),
                     exceptions = emptyArray()
                 )
-            ).await()
+            )
         }
 
         // Then

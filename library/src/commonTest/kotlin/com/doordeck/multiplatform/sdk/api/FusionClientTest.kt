@@ -9,8 +9,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.createFusionHttpClient
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import kotlinx.coroutines.await
+import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -19,7 +18,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class FusionResourceTest : IntegrationTest() {
+class FusionClientTest : IntegrationTest() {
 
     @Ignore
     @Test
@@ -28,10 +27,10 @@ class FusionResourceTest : IntegrationTest() {
 
             // Given - shouldTestLogin
             val fusionContextManager = ContextManagerImpl()
-            val fusionResource = FusionResourceImpl(createFusionHttpClient(host, fusionContextManager))
+            val fusionClient = FusionClient(createFusionHttpClient(host, fusionContextManager))
 
             // When
-            val login = fusionResource.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+            val login = fusionClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
             // Then
             assertTrue { login.authToken.isNotEmpty() }
@@ -42,16 +41,16 @@ class FusionResourceTest : IntegrationTest() {
             val name = "Test Fusion Door ${uuid4()}"
 
             // When
-            fusionResource.enableDoor(name, TEST_MAIN_SITE_ID, testController.controller).await()
+            fusionClient.enableDoorRequest(name, TEST_MAIN_SITE_ID, testController.controller)
 
             // Then
-            val integrations = fusionResource.getIntegrationConfiguration(testController.type).await()
+            val integrations = fusionClient.getIntegrationConfigurationRequest(testController.type)
             val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
             assertNotNull(actualDoor)
 
             // Given - shouldGetIntegrationType
             // When
-            val integrationTypeResponse = fusionResource.getIntegrationType().await()
+            val integrationTypeResponse = fusionClient.getIntegrationTypeRequest()
 
             // Then
             assertNotNull(integrationTypeResponse.status)
@@ -59,27 +58,27 @@ class FusionResourceTest : IntegrationTest() {
 
             // Given - shouldStartDoor
             // When
-            fusionResource.startDoor(actualDoor.doordeck!!.id)
+            fusionClient.startDoorRequest(actualDoor.doordeck!!.id)
 
             // Then
-            var doorState = fusionResource.getDoorStatus(actualDoor.doordeck!!.id).await()
+            var doorState = fusionClient.getDoorStatusRequest(actualDoor.doordeck!!.id)
             assertEquals(ServiceStateType.RUNNING, doorState.state)
 
             // Given - shouldStopDoor
             // When
-            fusionResource.stopDoor(actualDoor.doordeck!!.id)
+            fusionClient.stopDoorRequest(actualDoor.doordeck!!.id)
 
             // Then
-            doorState = fusionResource.getDoorStatus(actualDoor.doordeck!!.id).await()
+            doorState = fusionClient.getDoorStatusRequest(actualDoor.doordeck!!.id)
             assertEquals(ServiceStateType.STOPPED, doorState.state)
 
             // Given - shouldDeleteDoor
             // When
-            fusionResource.deleteDoor(actualDoor.doordeck!!.id)
+            fusionClient.deleteDoorRequest(actualDoor.doordeck!!.id)
 
             // Then
             assertFails {
-                fusionResource.getDoorStatus(actualDoor.doordeck!!.id).await()
+                fusionClient.getDoorStatusRequest(actualDoor.doordeck!!.id)
             }
         }
     }

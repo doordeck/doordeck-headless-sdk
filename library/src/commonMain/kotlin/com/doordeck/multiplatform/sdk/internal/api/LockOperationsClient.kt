@@ -43,7 +43,7 @@ import io.ktor.client.request.setBody
 open class LockOperationsClient(
     private val httpClient: HttpClient,
     private val contextManager: ContextManagerImpl,
-    private val localUnlock: LocalUnlockClient
+    private val localUnlockClient: LocalUnlockClient
 ) : AbstractResourceImpl() {
 
     /**
@@ -436,7 +436,7 @@ open class LockOperationsClient(
 
         // Launch the calls to the direct access endpoints
         if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
-            localUnlock.unlock(directAccessEndpoints, body)
+            localUnlockClient.unlock(directAccessEndpoints, body)
         }
 
         httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
