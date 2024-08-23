@@ -17,7 +17,7 @@ actual interface SitesResource {
      */
     suspend fun listSites(): List<SiteResponse>
 
-    suspend fun listSitesFuture(): CompletableFuture<List<SiteResponse>>
+    fun listSitesFuture(): CompletableFuture<List<SiteResponse>>
 
     /**
      * Get locks for site

@@ -27,7 +27,7 @@ actual interface FusionResource {
     suspend fun startDoor(deviceId: String)
     fun startDoorFuture(deviceId: String): CompletableFuture<Unit>
     suspend fun stopDoor(deviceId: String)
-    suspend fun stopDoorFuture(deviceId: String): CompletableFuture<Unit>
+    fun stopDoorFuture(deviceId: String): CompletableFuture<Unit>
 }
 
 actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<HttpClient>(named("fusionHttpClient")))

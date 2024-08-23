@@ -15,9 +15,9 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBL
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainArrayToString
+import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChainArray
+import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -317,10 +317,10 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val baseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -337,10 +337,10 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
@@ -356,10 +356,10 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val shareBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -381,7 +381,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given - shouldRevokeAccessToLock
         val revokeBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -405,10 +405,10 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
         val shareLock = LockOperations.ShareLock(
@@ -447,11 +447,11 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val updatedUnlockDuration = Random.nextInt(30, 60)
         val baseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -475,11 +475,11 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val updatedUnlockDuration = 1
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
@@ -502,7 +502,7 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(5.minutes).toLocalDateTime(TimeZone.UTC)
@@ -515,7 +515,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
         val addBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -537,7 +537,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
@@ -561,7 +561,7 @@ class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
-            .certificateChainArrayToString()
+            .certificateChainToString()
         val now = Clock.System.now()
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
@@ -574,7 +574,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChainArray(),
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 

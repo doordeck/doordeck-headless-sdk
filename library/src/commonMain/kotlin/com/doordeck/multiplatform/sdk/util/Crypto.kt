@@ -29,13 +29,7 @@ object Crypto {
 
     fun ByteArray.encodeByteArrayToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)
 
-    fun Array<String>.certificateChainArrayToString(): String = joinToString("|")
+    fun Array<String>.certificateChainToString(): String = joinToString("|")
 
-    @JsExport.Ignore
-    fun List<String>.certificateChainListToString(): String = joinToString("|")
-
-    fun String.stringToCertificateChainArray(): Array<String> = split("|").toTypedArray()
-
-    @JsExport.Ignore
-    fun String.stringToCertificateChainList(): List<String> = split("|")
+    fun String.stringToCertificateChain(): Array<String> = split("|").toTypedArray()
 }

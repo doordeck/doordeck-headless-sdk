@@ -2,12 +2,12 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainArrayToString
+import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPair
 import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
-import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChainArray
+import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -75,9 +75,9 @@ class CryptoTest {
         val certificateChainString = "uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg|uW8nxtdWJe4FgKu7kd_cSun_KVI_faBAxC_oyqoO_vlykWGYdVggrEsBkD-d1qwOAxLI9qJWQZGp42u-Pp2dDg"
 
         // When
-        val certificateChain = certificateChainString.stringToCertificateChainArray()
+        val certificateChain = certificateChainString.stringToCertificateChain()
 
         // Then
-        assertEquals(certificateChainString, certificateChain.certificateChainArrayToString())
+        assertEquals(certificateChainString, certificateChain.certificateChainToString())
     }
 }

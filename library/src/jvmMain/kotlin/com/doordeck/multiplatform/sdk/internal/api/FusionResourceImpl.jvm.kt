@@ -76,7 +76,7 @@ class FusionResourceImpl(
         return stopDoorRequest(deviceId)
     }
 
-    override suspend fun stopDoorFuture(deviceId: String): CompletableFuture<Unit> {
+    override fun stopDoorFuture(deviceId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { stopDoorRequest(deviceId) }
     }
 }

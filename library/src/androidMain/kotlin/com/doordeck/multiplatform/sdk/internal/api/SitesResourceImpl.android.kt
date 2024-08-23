@@ -18,7 +18,7 @@ class SitesResourceImpl(
         return listSitesRequest()
     }
 
-    override suspend fun listSitesFuture(): CompletableFuture<List<SiteResponse>> {
+    override fun listSitesFuture(): CompletableFuture<List<SiteResponse>> {
         return GlobalScope.future(Dispatchers.IO) { listSitesRequest() }
     }
 
