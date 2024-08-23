@@ -27,7 +27,7 @@ import com.doordeck.multiplatform.sdk.util.Crypto
 import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 
-fun main() {
+suspend fun main() {
     // Initialize the SDK
     val token = "YOUR_AUTH_TOKEN"
     val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, token)
@@ -69,18 +69,20 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
 import com.doordeck.multiplatform.sdk.api.model.LockOperations;
 import com.doordeck.multiplatform.sdk.util.Crypto;
 
+import java.util.concurrent.ExecutionException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         // Initialize the SDK
         final String token = "YOUR_AUTH_TOKEN";
         final Doordeck sdk = new KDoordeckFactory().initialize(ApiEnvironment.DEV, token);
 
         // Retrieve the sites
-        var sites = sdk.sites().listSites();
+        var sites = sdk.sites().listSitesFuture().get();
         System.out.println(sites);
 
         // Retrieve the locks
-        var locks = sdk.sites().getLocksForSite(sites[0].getId());
+        var locks = sdk.sites().getLocksForSiteFuture(sites.getFirst().getId()).get();
         System.out.println(locks);
 
         // Generate a key pair
@@ -89,14 +91,14 @@ public class Main {
         System.out.println("Public key: " + Crypto.INSTANCE.encodeByteArrayToBase64(keyPair.getPublic()));
 
         // Register a key pair
-        var registerKeyPair = sdk.account().registerEphemeralKey(keyPair.getPublic());
+        var registerKeyPair = sdk.account().registerEphemeralKeyFuture(keyPair.getPublic()).get();
         System.out.println("Certificate chain: " + Crypto.INSTANCE.certificateChainToString(registerKeyPair.getCertificateChain()));
 
         // Unlock a lock
         var baseOperation = new LockOperations.BaseOperation(registerKeyPair.getUserId(),
-                registerKeyPair.getCertificateChain(), keyPair.getPrivate(), locks[0].getId());
+                registerKeyPair.getCertificateChain(), keyPair.getPrivate(), locks.getFirst().getId());
         var unlockOperation = new LockOperations.UnlockOperation(baseOperation);
-        sdk.lockOperations().unlock(unlockOperation);
+        sdk.lockOperations().unlockFuture(unlockOperation).get();
     }
 }
 ````
@@ -134,14 +136,19 @@ export class AppComponent implements OnInit {
     // Initialize the SDK
     const token = "YOUR_AUTH_TOKEN";
     const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
-    const sdk = await Promise.resolve(factory.initializeWithAuthToken(apiEnvironment.DEV, token));
+    const sdk = factory.initializeWithAuthToken(apiEnvironment.DEV, token);
 
+    // Resources
+    const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
+    const account = doordeck.com.doordeck.multiplatform.sdk.api.account();
+    const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.lockOperations();
+    
     // Retrieve the sites
-    const sites = await Promise.resolve(sdk.sites().listSites());
-    console.log(sites);
+    const allSites = await sites.listSites();
+    console.log(allSites);
 
     // Retrieve the locks
-    const locks = await Promise.resolve(sdk.sites().getLocksForSite(sites[0].id));
+    const locks = await sites.getLocksForSite(sites[0].id);
     console.log(locks);
 
     // Generate a key pair
@@ -150,7 +157,7 @@ export class AppComponent implements OnInit {
     console.log(`Public key: ${crypto.encodeByteArrayToBase64(keyPair.public)}`);
 
     // Register a key pair
-    const registerKeyPair = await Promise.resolve(sdk.account().registerEphemeralKey(keyPair.public));
+    const registerKeyPair = await account.registerEphemeralKey(keyPair.public);
     console.log(`Public key: ${crypto.certificateChainToString(registerKeyPair.certificateChain)}`);
 
     // Unlock a lock
@@ -158,8 +165,8 @@ export class AppComponent implements OnInit {
         registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000,
         ((new Date).getTime() / 1000) + 60, "uuid"
     );
-    const unlockOperation = new lockOperations.UnlockOperation(baseOperation);
-    await Promise.resolve(sdk.lockOperations().unlock(unlockOperation));
+    const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
+    await lockOperations.unlock(unlockOperation);
   }
 }
 ````
@@ -176,14 +183,19 @@ const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOpe
 // Initialize the SDK
 const token = "YOUR_AUTH_TOKEN";
 const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
-const sdk = await factory.initializeWithAuthToken(apiEnvironment.DEV, token);
+const sdk = factory.initializeWithAuthToken(apiEnvironment.DEV, token);
+
+// Resources
+const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
+const account = doordeck.com.doordeck.multiplatform.sdk.api.account();
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.lockOperations();
 
 // Retrieve the sites
-const sites = await sdk.sites().listSites();
-console.log(sites);
+const allSites = await sites.listSites();
+console.log(allSites);
 
 // Retrieve the locks
-const locks = await sdk.sites().getLocksForSite(sites[0].id);
+const locks = await sites.getLocksForSite(sites[0].id);
 console.log(locks);
 
 // Generate a key pair
@@ -192,7 +204,7 @@ console.log(`Private key: ${crypto.encodeByteArrayToBase64(keyPair.private)}`);
 console.log(`Public key: ${crypto.encodeByteArrayToBase64(keyPair.public)}`);
 
 // Register a key pair
-const registerKeyPair = await sdk.account().registerEphemeralKey(keyPair.public);
+const registerKeyPair = await account.registerEphemeralKey(keyPair.public);
 console.log(`Public key: ${crypto.certificateChainToString(registerKeyPair.certificateChain)}`);
 
 // Unlock a lock
@@ -200,8 +212,8 @@ const baseOperation = new lockOperations.BaseOperation(registerKeyPair.userId, r
     registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000,
     ((new Date).getTime() / 1000) + 60, "uuid"
 );
-const unlockOperation = new lockOperations.UnlockOperation(baseOperation);
-await sdk.lockOperations().unlock(unlockOperation);
+const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
+await lockOperations.unlock(unlockOperation);
 </script>
 ````
 
@@ -225,11 +237,11 @@ class MainActivity : ComponentActivity() {
         val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, token)
 
         // Retrieve the sites
-        val sites = sdk.sites().listSites()
+        val sites = sdk.sites().listSitesFuture().get()
         println(sites)
 
         // Retrieve the locks
-        val locks = sdk.sites().getLocksForSite(sites.first().id)
+        val locks = sdk.sites().getLocksForSiteFuture(sites.first().id).get()
         println(locks)
 
         // Generate a key pair
@@ -238,7 +250,7 @@ class MainActivity : ComponentActivity() {
         println("Public key: ${keyPair.public.encodeByteArrayToBase64()}")
 
         // Register a key pair
-        val registerKeyPair = sdk.account().registerEphemeralKey(keyPair.public)
+        val registerKeyPair = sdk.account().registerEphemeralKeyFuture(keyPair.public).get()
         println("Certificate chain: ${registerKeyPair.certificateChain.certificateChainToString()}")
 
         // Unlock a lock
@@ -249,7 +261,7 @@ class MainActivity : ComponentActivity() {
             lockId = locks.first().id
         )
         val unlockOperation = LockOperations.UnlockOperation(baseOperation)
-        sdk.lockOperations().unlock(unlockOperation)
+        sdk.lockOperations().unlockFuture(unlockOperation).get()
     }
 }
 ````
