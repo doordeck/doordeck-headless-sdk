@@ -53,67 +53,67 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun updateApplicationAppLink() = runTest {
+    fun shouldUpdateApplicationAppLink() = runTest {
         platform.updateApplicationAppLink(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun updateApplicationEmailPreferences() = runTest {
+    fun shouldUpdateApplicationEmailPreferences() = runTest {
         platform.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
     }
 
     @Test
-    fun updateApplicationLogoUrl() = runTest {
+    fun shouldUpdateApplicationLogoUrl() = runTest {
         platform.updateApplicationLogoUrl(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun deleteApplication() = runTest {
+    fun shouldDeleteApplication() = runTest {
         platform.deleteApplication(DEFAULT_APPLICATION_ID).await()
     }
 
     @Test
-    fun getLogoUploadUrl() = runTest {
+    fun shouldGetLogoUploadUrl() = runTest {
         platform.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addAuthKey() = runTest {
+    fun shouldAddAuthKey() = runTest {
         platform.addAuthKey(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test
-    fun addAuthIssuer() = runTest {
+    fun shouldAddAuthIssuer() = runTest {
         platform.addAuthIssuer(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun deleteAuthIssuer() = runTest {
+    fun shouldDeleteAuthIssuer() = runTest {
         platform.deleteAuthIssuer(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addCorsDomain() = runTest {
+    fun shouldAddCorsDomain() = runTest {
         platform.addCorsDomain(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun removeCorsDomain() = runTest {
+    fun shouldRemoveCorsDomain() = runTest {
         platform.removeCorsDomain(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addApplicationOwner() = runTest {
+    fun shouldAddApplicationOwner() = runTest {
         platform.addApplicationOwner(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun removeApplicationOwner() = runTest {
+    fun shouldRemoveApplicationOwner() = runTest {
         platform.removeApplicationOwner(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun getApplicationOwnersDetails() = runTest {
+    fun shouldGetApplicationOwnersDetails() = runTest {
         platform.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID).await()
     }
 }
