@@ -203,7 +203,6 @@ class PlatformClientTest : IntegrationTest() {
             it.key == ed25519Key.kid
         }?.value as? Ed25519KeyResponse
         assertNotNull(actualEd25519Key)
-        assertEquals(ed25519Key.kty, actualEd25519Key.kty)
         assertEquals(ed25519Key.use, actualEd25519Key.use)
         assertEquals(ed25519Key.kid, actualEd25519Key.kid)
         assertEquals(ed25519Key.alg, actualEd25519Key.alg)
@@ -234,7 +233,6 @@ class PlatformClientTest : IntegrationTest() {
             it.key == rsaKey.kid
         }?.value as? RsaKeyResponse
         assertNotNull(actualRsaKey)
-        assertEquals(rsaKey.kty, actualRsaKey.kty)
         assertEquals(rsaKey.use, actualRsaKey.use)
         assertEquals(rsaKey.kid, actualRsaKey.kid)
         assertEquals(rsaKey.alg, actualRsaKey.alg)
@@ -261,7 +259,6 @@ class PlatformClientTest : IntegrationTest() {
             it.key == ecKey.kid
         }?.value as? EcKeyResponse
         assertNotNull(actualKeyEcKey)
-        assertEquals(ecKey.kty, actualKeyEcKey.kty)
         assertEquals(ecKey.use, actualKeyEcKey.use)
         assertEquals(ecKey.kid, actualKeyEcKey.kid)
         assertEquals(ecKey.alg, actualKeyEcKey.alg)

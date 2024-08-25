@@ -8,6 +8,7 @@ import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 
 class ContainerSerializer<T: Any>(
@@ -18,7 +19,15 @@ class ContainerSerializer<T: Any>(
         element("values", valuesSerializer.descriptor)
     }
 
-    override fun serialize(encoder: Encoder, value: Container<T>) { }
+    override fun serialize(encoder: Encoder, value: Container<T>) {
+        val jsonEncoder = encoder as kotlinx.serialization.json.JsonEncoder
+        val jsonObjectBuilder = buildJsonObject {
+            value.values.forEach { containerElement ->
+                put(containerElement.key, jsonEncoder.json.encodeToJsonElement(valuesSerializer, containerElement.value))
+            }
+        }
+        jsonEncoder.encodeJsonElement(jsonObjectBuilder)
+    }
 
     override fun deserialize(decoder: Decoder): Container<T> {
         val jsonDecoder = decoder as kotlinx.serialization.json.JsonDecoder

@@ -93,6 +93,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
+                implementation("io.ktor:ktor-client-mock:3.0.0-beta-2")
             }
         }
 
