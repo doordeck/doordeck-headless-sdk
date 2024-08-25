@@ -93,132 +93,132 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun updateApplicationAppLink() = runTest {
+    fun shouldUpdateApplicationAppLink() = runTest {
         platform.updateApplicationAppLink(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun updateApplicationAppLinkFuture() = runTest {
+    fun shouldUpdateApplicationAppLinkFuture() = runTest {
         platform.updateApplicationAppLinkFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun updateApplicationEmailPreferences() = runTest {
+    fun shouldUpdateApplicationEmailPreferences() = runTest {
         platform.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, Platform.EmailPreferences())
     }
 
     @Test
-    fun updateApplicationEmailPreferencesFuture() = runTest {
+    fun shouldUpdateApplicationEmailPreferencesFuture() = runTest {
         platform.updateApplicationEmailPreferencesFuture(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
     }
 
     @Test
-    fun updateApplicationLogoUrl() = runTest {
+    fun shouldUpdateApplicationLogoUrl() = runTest {
         platform.updateApplicationLogoUrl(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun updateApplicationLogoUrlFuture() = runTest {
+    fun shouldUpdateApplicationLogoUrlFuture() = runTest {
         platform.updateApplicationLogoUrlFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun deleteApplication() = runTest {
+    fun shouldDeleteApplication() = runTest {
         platform.deleteApplication(DEFAULT_APPLICATION_ID)
     }
 
     @Test
-    fun deleteApplicationFuture() = runTest {
+    fun shouldDeleteApplicationFuture() = runTest {
         platform.deleteApplicationFuture(DEFAULT_APPLICATION_ID).await()
     }
 
     @Test
-    fun getLogoUploadUrl() = runTest {
+    fun shouldGetLogoUploadUrl() = runTest {
         platform.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun getLogoUploadUrlFuture() = runTest {
+    fun shouldGetLogoUploadUrlFuture() = runTest {
         platform.getLogoUploadUrlFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addAuthKey() = runTest {
+    fun shouldAddAuthKey() = runTest {
         platform.addAuthKey(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
     }
 
     @Test
-    fun addAuthKeyFuture() = runTest {
+    fun shouldAddAuthKeyFuture() = runTest {
         platform.addAuthKeyFuture(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test
-    fun addAuthIssuer() = runTest {
+    fun shouldAddAuthIssuer() = runTest {
         platform.addAuthIssuer(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun addAuthIssuerFuture() = runTest {
+    fun shouldAddAuthIssuerFuture() = runTest {
         platform.addAuthIssuerFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun deleteAuthIssuer() = runTest {
+    fun shouldDeleteAuthIssuer() = runTest {
         platform.deleteAuthIssuer(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun deleteAuthIssuerFuture() = runTest {
+    fun shouldDeleteAuthIssuerFuture() = runTest {
         platform.deleteAuthIssuerFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addCorsDomain() = runTest {
+    fun shouldAddCorsDomain() = runTest {
         platform.addCorsDomain(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun addCorsDomainFuture() = runTest {
+    fun shouldAddCorsDomainFuture() = runTest {
         platform.addCorsDomainFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun removeCorsDomain() = runTest {
+    fun shouldRemoveCorsDomain() = runTest {
         platform.removeCorsDomain(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun removeCorsDomainFuture() = runTest {
+    fun shouldRemoveCorsDomainFuture() = runTest {
         platform.removeCorsDomainFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun addApplicationOwner() = runTest {
+    fun shouldAddApplicationOwner() = runTest {
         platform.addApplicationOwner(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun addApplicationOwnerFuture() = runTest {
+    fun shouldAddApplicationOwnerFuture() = runTest {
         platform.addApplicationOwnerFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun removeApplicationOwner() = runTest {
+    fun shouldRemoveApplicationOwner() = runTest {
         platform.removeApplicationOwner(DEFAULT_APPLICATION_ID, "")
     }
 
     @Test
-    fun removeApplicationOwnerFuture() = runTest {
+    fun shouldRemoveApplicationOwnerFuture() = runTest {
         platform.removeApplicationOwnerFuture(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
-    fun getApplicationOwnersDetails() = runTest {
+    fun shouldGetApplicationOwnersDetails() = runTest {
         platform.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
     }
 
     @Test
-    fun getApplicationOwnersDetailsFuture() = runTest {
+    fun shouldGetApplicationOwnersDetailsFuture() = runTest {
         platform.getApplicationOwnersDetailsFuture(DEFAULT_APPLICATION_ID).await()
     }
 }

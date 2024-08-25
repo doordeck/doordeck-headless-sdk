@@ -1,8 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
+import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -38,7 +40,7 @@ class AccountResourceImplTest {
 
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        account.verifyEphemeralKeyRegistration("", byteArrayOf())
+        account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
