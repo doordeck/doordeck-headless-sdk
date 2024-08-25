@@ -14,7 +14,7 @@ class TilesResourceImplTest {
 
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
-        tiles.getLocksBelongingToTile("").await()
+        tiles.getLocksBelongingToTile(DEFAULT_TILE_ID).await()
     }
 
     @Test

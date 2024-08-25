@@ -12,7 +12,7 @@ class TilesResourceImplTest {
 
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
-        tiles.getLocksBelongingToTile("")
+        tiles.getLocksBelongingToTile(DEFAULT_TILE_ID)
     }
 
     @Test
