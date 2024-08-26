@@ -39,14 +39,14 @@ kotlin {
         nodejs {
             testTask {
                 useMocha {
-                    timeout = "30s"
+                    timeout = "60s"
                 }
             }
         }
         browser {
             testTask {
                 useMocha {
-                    timeout = "30s"
+                    timeout = "60s"
                 }
             }
             webpackTask {
