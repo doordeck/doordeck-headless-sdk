@@ -31,5 +31,7 @@ actual interface AccountlessResource {
     fun verifyEmail(code: String): Promise<dynamic>
 }
 
+private val accountless = AccountlessResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+
 @JsExport
-actual fun accountless(): AccountlessResource = AccountlessResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+actual fun accountless(): AccountlessResource = accountless

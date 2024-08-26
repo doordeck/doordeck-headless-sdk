@@ -89,8 +89,10 @@ actual interface AccountResource {
     fun deleteAccount(): Promise<dynamic>
 }
 
-@JsExport
-actual fun account(): AccountResource = AccountResourceImpl(
+private val account = AccountResourceImpl(
     httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
     contextManager = getKoin().get<ContextManagerImpl>()
 )
+
+@JsExport
+actual fun account(): AccountResource = account

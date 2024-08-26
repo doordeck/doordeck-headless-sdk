@@ -23,5 +23,7 @@ actual interface FusionResource {
     fun stopDoor(deviceId: String): Promise<dynamic>
 }
 
+private val fusion = FusionResourceImpl(getKoin().get<HttpClient>(named("fusionHttpClient")))
+
 @JsExport
-actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<HttpClient>(named("fusionHttpClient")))
+actual fun fusion(): FusionResource = fusion

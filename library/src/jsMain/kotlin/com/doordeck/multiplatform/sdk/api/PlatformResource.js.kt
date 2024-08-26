@@ -182,5 +182,7 @@ actual interface PlatformResource {
     fun getApplicationOwnersDetails(applicationId: String): Promise<Array<ApplicationOwnerDetailsResponse>>
 }
 
+private val platform = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+
 @JsExport
-actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+actual fun platform(): PlatformResource = platform

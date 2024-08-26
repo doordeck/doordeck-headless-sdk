@@ -26,5 +26,7 @@ actual interface TilesResource {
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): Promise<dynamic>
 }
 
+private val tiles = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+
 @JsExport
-actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+actual fun tiles(): TilesResource = tiles

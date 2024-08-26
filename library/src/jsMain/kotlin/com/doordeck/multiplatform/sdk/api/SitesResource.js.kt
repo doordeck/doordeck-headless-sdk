@@ -33,5 +33,7 @@ actual interface SitesResource {
     fun getUsersForSite(siteId: String): Promise<Array<UserForSiteResponse>>
 }
 
+private val sites = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+
 @JsExport
-actual fun sites(): SitesResource = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+actual fun sites(): SitesResource = sites

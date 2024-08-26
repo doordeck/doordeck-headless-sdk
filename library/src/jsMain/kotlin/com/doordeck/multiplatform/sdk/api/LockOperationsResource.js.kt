@@ -243,9 +243,11 @@ actual interface LockOperationsResource {
     fun getShareableLocks(): Promise<Array<ShareableLockResponse>>
 }
 
-@JsExport
-actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(
+private val lockOperations = LockOperationsResourceImpl(
     httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
     contextManager = getKoin().get<ContextManagerImpl>(),
     localUnlock = getKoin().get<LocalUnlockClient>()
 )
+
+@JsExport
+actual fun lockOperations(): LockOperationsResource = lockOperations

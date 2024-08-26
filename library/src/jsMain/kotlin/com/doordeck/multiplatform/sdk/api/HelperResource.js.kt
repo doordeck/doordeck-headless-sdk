@@ -11,8 +11,10 @@ actual interface HelperResource {
     fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<dynamic>
 }
 
-@JsExport
-actual fun helper(): HelperResource = HelperResourceImpl(
+private val helper = HelperResourceImpl(
     httpClient = getKoin().get<HttpClient>(named("httpClient")),
     cloudHttpClient = getKoin().get<HttpClient>(named("cloudHttpClient"))
 )
+
+@JsExport
+actual fun helper(): HelperResource = helper
