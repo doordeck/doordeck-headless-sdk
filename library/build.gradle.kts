@@ -2,7 +2,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -124,14 +123,6 @@ kotlin {
         }
     }
 }
-
-// Set up the environment variables for the JS - Browser platform
-// So far, that is the only way I have found to make those tests pass
-//tasks.withType<KotlinJsTest>().configureEach {
-//    environment("TEST_MAIN_USER_PASSWORD", System.getenv("TEST_MAIN_USER_PASSWORD") ?: "")
-//    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY") ?: "")
-//    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR") ?: "")
-//}
 
 // Display the test log events at all the platforms
 tasks.withType<AbstractTestTask>().configureEach {

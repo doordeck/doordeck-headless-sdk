@@ -45,19 +45,18 @@ import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
+import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondOk
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.HttpResponseData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.charsets.Charsets
 import io.ktor.utils.io.core.toByteArray
@@ -143,9 +142,7 @@ private val TEST_ENGINE = MockEngine { request ->
 }
 
 val TEST_HTTP_CLIENT = HttpClient(TEST_ENGINE)  {
-    install(ContentNegotiation) {
-        json()
-    }
+    installContentNegotiation()
 }
 
 private fun MockRequestHandleScope.respondContent(content: String): HttpResponseData =
