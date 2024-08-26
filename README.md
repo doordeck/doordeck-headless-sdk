@@ -30,7 +30,7 @@ import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 suspend fun main() {
     // Initialize the SDK
     val token = "YOUR_AUTH_TOKEN"
-    val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, token)
+    val sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token)
 
     // Retrieve the sites
     val sites = sdk.sites().listSites()
@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // Initialize the SDK
         final String token = "YOUR_AUTH_TOKEN";
-        final Doordeck sdk = new KDoordeckFactory().initialize(ApiEnvironment.DEV, token);
+        final Doordeck sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token);
 
         // Retrieve the sites
         var sites = sdk.sites().listSitesFuture().get();
@@ -135,8 +135,7 @@ export class AppComponent implements OnInit {
   async test() {
     // Initialize the SDK
     const token = "YOUR_AUTH_TOKEN";
-    const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
-    const sdk = factory.initializeWithAuthToken(apiEnvironment.DEV, token);
+    const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.DEV, token);
 
     // Resources
     const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
@@ -182,8 +181,7 @@ const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOpe
 
 // Initialize the SDK
 const token = "YOUR_AUTH_TOKEN";
-const factory = new doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory();
-const sdk = factory.initializeWithAuthToken(apiEnvironment.DEV, token);
+const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.DEV, token);
 
 // Resources
 const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
@@ -234,7 +232,7 @@ class MainActivity : ComponentActivity() {
 
         // Initialize the SDK
         val token = "YOUR_AUTH_TOKEN"
-        val sdk = KDoordeckFactory().initialize(ApiEnvironment.DEV, token)
+        val sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token)
 
         // Retrieve the sites
         val sites = sdk.sites().listSitesFuture().get()
