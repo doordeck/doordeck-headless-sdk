@@ -32,7 +32,6 @@ class ApplicationResponse(
 @JsonClassDiscriminator("kty")
 sealed interface AuthKeyResponse {
     val kid: String
-    val kty: String
     val use: String
     val alg: String?
     val ops: Array<String>?
@@ -49,7 +48,6 @@ sealed interface AuthKeyResponse {
 @Serializable
 @SerialName("RSA")
 class RsaKeyResponse(
-    override val kty: String,
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -71,7 +69,6 @@ class RsaKeyResponse(
 @Serializable
 @SerialName("EC")
 class EcKeyResponse(
-    override val kty: String,
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -94,7 +91,6 @@ class EcKeyResponse(
 @Serializable
 @SerialName("OKP")
 class Ed25519KeyResponse(
-    override val kty: String,
     override val use: String,
     override val kid: String,
     override val alg: String? = null,

@@ -17,7 +17,7 @@ class UserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
-    val publicKey: String,
+    val publicKey: String
 )
 
 @JsExport

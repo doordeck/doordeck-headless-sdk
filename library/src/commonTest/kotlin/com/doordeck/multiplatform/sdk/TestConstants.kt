@@ -19,8 +19,6 @@ object TestConstants {
     val TEST_MAIN_LOCK_ID = "ad8fb900-4def-11e8-9370-170748b9fca8"
     val TEST_MAIN_SITE_ID = "7659e430-4a28-11e8-bf0b-bffab372a82e"
 
-
-
     val FUSION_INTEGRATIONS: Map<String, TestController> = mapOf(
         "192.168.202.54:27700" to TestController("demo", Fusion.DemoController(1)),
         "192.168.202.26:27700" to TestController("paxton10", Fusion.Paxton10Controller("", "", "", 1)),
@@ -42,4 +40,14 @@ object TestConstants {
         val controller: Fusion.LockController,
         val enabled: Boolean = false
     )
+
+    val DEFAULT_TILE_ID = "TILE_ID"
+    val DEFAULT_SITE_ID = "SITE_ID"
+    val DEFAULT_APPLICATION_ID = "APPLICATION_ID"
+    val DEFAULT_DEVICE_ID = "DEVICE_ID"
+    val DEFAULT_LOCK_ID = "LOCK_ID"
+    val DEFAULT_USER_ID = "USER_ID"
+    val DEFAULT_USER_EMAIL = "USER_EMAIL"
+    val DEFAULT_UPLOAD_URL_PATH = "/upload"
+    val DEFAULT_UPLOAD_URL = "https://cute-upload-url.com$DEFAULT_UPLOAD_URL_PATH"
 }
