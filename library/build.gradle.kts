@@ -61,11 +61,12 @@ kotlin {
 
     sourceSets {
         all {
-            // Remove the warnings from the experimental kotlin features
+            // Remove the warning about using expect/actual in interfaces
             @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions {
                 freeCompilerArgs.add("-Xexpect-actual-classes")
             }
+            // Remove the warnings from the experimental kotlin features
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
@@ -126,18 +127,11 @@ kotlin {
 
 // Set up the environment variables for the JS - Browser platform
 // So far, that is the only way I have found to make those tests pass
-tasks.withType<KotlinJsTest>().configureEach {
-    environment("TEST_AUTH_TOKEN", System.getenv("TEST_AUTH_TOKEN") ?: "")
-    environment("TEST_MAIN_USER_ID", System.getenv("TEST_MAIN_USER_ID") ?: "")
-    environment("TEST_MAIN_USER_EMAIL", System.getenv("TEST_MAIN_USER_EMAIL") ?: "")
-    environment("TEST_MAIN_USER_CERTIFICATE_CHAIN", System.getenv("TEST_MAIN_USER_CERTIFICATE_CHAIN") ?: "")
-    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY") ?: "")
-    environment("TEST_SUPPLEMENTARY_USER_ID", System.getenv("TEST_SUPPLEMENTARY_USER_ID") ?: "")
-    environment("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY", System.getenv("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY") ?: "")
-    environment("TEST_MAIN_TILE_ID", System.getenv("TEST_MAIN_TILE_ID") ?: "")
-    environment("TEST_MAIN_LOCK_ID", System.getenv("TEST_MAIN_LOCK_ID") ?: "")
-    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR") ?: "")
-}
+//tasks.withType<KotlinJsTest>().configureEach {
+//    environment("TEST_MAIN_USER_PASSWORD", System.getenv("TEST_MAIN_USER_PASSWORD") ?: "")
+//    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY") ?: "")
+//    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR") ?: "")
+//}
 
 // Display the test log events at all the platforms
 tasks.withType<AbstractTestTask>().configureEach {
