@@ -78,7 +78,7 @@ public class Main {
         final Doordeck sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token);
 
         // Retrieve the sites
-        var sites = sdk.sites().listSitesFuture().get();
+        var sites = sdk.sites().listSitesAsync().get();
         System.out.println(sites);
 
         // Retrieve the locks
