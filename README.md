@@ -98,7 +98,7 @@ public class Main {
         var baseOperation = new LockOperations.BaseOperation(registerKeyPair.getUserId(),
                 registerKeyPair.getCertificateChain(), keyPair.getPrivate(), locks.getFirst().getId());
         var unlockOperation = new LockOperations.UnlockOperation(baseOperation);
-        sdk.lockOperations().unlockFuture(unlockOperation).get();
+        sdk.lockOperations().unlockAsync(unlockOperation).get();
     }
 }
 ````
