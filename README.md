@@ -248,7 +248,7 @@ class MainActivity : ComponentActivity() {
         println("Public key: ${keyPair.public.encodeByteArrayToBase64()}")
 
         // Register a key pair
-        val registerKeyPair = sdk.account().registerEphemeralKeyFuture(keyPair.public).get()
+        val registerKeyPair = sdk.account().registerEphemeralKeyAsync(keyPair.public).get()
         println("Certificate chain: ${registerKeyPair.certificateChain.certificateChainToString()}")
 
         // Unlock a lock
