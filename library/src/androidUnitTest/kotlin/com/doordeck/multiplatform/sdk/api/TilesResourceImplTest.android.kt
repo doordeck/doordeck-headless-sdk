@@ -18,8 +18,8 @@ class TilesResourceImplTest {
     }
 
     @Test
-    fun shouldGetLocksBelongingToTileFuture() = runTest {
-        tiles.getLocksBelongingToTileFuture(DEFAULT_TILE_ID).await()
+    fun shouldGetLocksBelongingToTileAsync() = runTest {
+        tiles.getLocksBelongingToTileAsync(DEFAULT_TILE_ID).await()
     }
 
     @Test
@@ -28,7 +28,7 @@ class TilesResourceImplTest {
     }
 
     @Test
-    fun shouldAssociateMultipleLocksFuture() = runTest {
-        tiles.associateMultipleLocksFuture(DEFAULT_TILE_ID, "", emptyList()).await()
+    fun shouldAssociateMultipleLocksAsync() = runTest {
+        tiles.associateMultipleLocksAsync(DEFAULT_TILE_ID, "", emptyList()).await()
     }
 }

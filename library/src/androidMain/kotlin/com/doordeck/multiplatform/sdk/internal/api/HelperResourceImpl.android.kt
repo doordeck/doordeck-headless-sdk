@@ -16,7 +16,7 @@ class HelperResourceImpl(
         return uploadPlatformLogoRequest(applicationId, contentType, image)
     }
 
-    override fun uploadPlatformLogoFuture(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
+    override fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { uploadPlatformLogoRequest(applicationId, contentType, image) }
     }
 }

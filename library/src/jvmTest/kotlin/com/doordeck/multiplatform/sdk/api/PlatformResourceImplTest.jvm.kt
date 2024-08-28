@@ -18,8 +18,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldCreateApplicationFuture() = runTest {
-        platform.createApplicationFuture(Platform.CreateApplication("name", "companyName", "mailingAddress")).await()
+    fun shouldCreateApplicationAsync() = runTest {
+        platform.createApplicationAsync(Platform.CreateApplication("name", "companyName", "mailingAddress")).await()
     }
 
     @Test
@@ -28,8 +28,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldListApplicationsFuture() = runTest {
-        platform.listApplicationsFuture().await()
+    fun shouldListApplicationsAsync() = runTest {
+        platform.listApplicationsAsync().await()
     }
 
     @Test
@@ -38,8 +38,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldGetApplicationFuture() = runTest {
-        platform.getApplicationFuture(DEFAULT_APPLICATION_ID).await()
+    fun shouldGetApplicationAsync() = runTest {
+        platform.getApplicationAsync(DEFAULT_APPLICATION_ID).await()
     }
 
     @Test
@@ -48,8 +48,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationNameFuture() = runTest {
-        platform.updateApplicationNameFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationNameAsync() = runTest {
+        platform.updateApplicationNameAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -58,8 +58,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationCompanyNameFuture() = runTest {
-        platform.updateApplicationCompanyNameFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationCompanyNameAsync() = runTest {
+        platform.updateApplicationCompanyNameAsync(DEFAULT_APPLICATION_ID, "").await()
     }
     
     @Test
@@ -68,8 +68,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationMailingAddressFuture() = runTest {
-        platform.updateApplicationMailingAddressFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationMailingAddressAsync() = runTest {
+        platform.updateApplicationMailingAddressAsync(DEFAULT_APPLICATION_ID, "").await()
     }
     
     @Test
@@ -78,8 +78,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationPrivacyPolicyFuture() = runTest {
-        platform.updateApplicationPrivacyPolicyFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationPrivacyPolicyAsync() = runTest {
+        platform.updateApplicationPrivacyPolicyAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -88,8 +88,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationSupportContactFuture() = runTest {
-        platform.updateApplicationSupportContactFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationSupportContactAsync() = runTest {
+        platform.updateApplicationSupportContactAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -98,8 +98,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationAppLinkFuture() = runTest {
-        platform.updateApplicationAppLinkFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationAppLinkAsync() = runTest {
+        platform.updateApplicationAppLinkAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -108,8 +108,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationEmailPreferencesFuture() = runTest {
-        platform.updateApplicationEmailPreferencesFuture(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
+    fun shouldUpdateApplicationEmailPreferencesAsync() = runTest {
+        platform.updateApplicationEmailPreferencesAsync(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
     }
 
     @Test
@@ -118,8 +118,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateApplicationLogoUrlFuture() = runTest {
-        platform.updateApplicationLogoUrlFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldUpdateApplicationLogoUrlAsync() = runTest {
+        platform.updateApplicationLogoUrlAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -128,8 +128,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldDeleteApplicationFuture() = runTest {
-        platform.deleteApplicationFuture(DEFAULT_APPLICATION_ID).await()
+    fun shouldDeleteApplicationAsync() = runTest {
+        platform.deleteApplicationAsync(DEFAULT_APPLICATION_ID).await()
     }
 
     @Test
@@ -138,8 +138,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldGetLogoUploadUrlFuture() = runTest {
-        platform.getLogoUploadUrlFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldGetLogoUploadUrlAsync() = runTest {
+        platform.getLogoUploadUrlAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -148,8 +148,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldAddAuthKeyFuture() = runTest {
-        platform.addAuthKeyFuture(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
+    fun shouldAddAuthKeyAsync() = runTest {
+        platform.addAuthKeyAsync(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test
@@ -158,8 +158,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldAddAuthIssuerFuture() = runTest {
-        platform.addAuthIssuerFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldAddAuthIssuerAsync() = runTest {
+        platform.addAuthIssuerAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -168,8 +168,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldDeleteAuthIssuerFuture() = runTest {
-        platform.deleteAuthIssuerFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldDeleteAuthIssuerAsync() = runTest {
+        platform.deleteAuthIssuerAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -178,8 +178,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldAddCorsDomainFuture() = runTest {
-        platform.addCorsDomainFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldAddCorsDomainAsync() = runTest {
+        platform.addCorsDomainAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -188,8 +188,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldRemoveCorsDomainFuture() = runTest {
-        platform.removeCorsDomainFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldRemoveCorsDomainAsync() = runTest {
+        platform.removeCorsDomainAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -198,8 +198,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldAddApplicationOwnerFuture() = runTest {
-        platform.addApplicationOwnerFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldAddApplicationOwnerAsync() = runTest {
+        platform.addApplicationOwnerAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -208,8 +208,8 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldRemoveApplicationOwnerFuture() = runTest {
-        platform.removeApplicationOwnerFuture(DEFAULT_APPLICATION_ID, "").await()
+    fun shouldRemoveApplicationOwnerAsync() = runTest {
+        platform.removeApplicationOwnerAsync(DEFAULT_APPLICATION_ID, "").await()
     }
 
     @Test
@@ -218,7 +218,7 @@ class PlatformResourceImplTest {
     }
 
     @Test
-    fun shouldGetApplicationOwnersDetailsFuture() = runTest {
-        platform.getApplicationOwnersDetailsFuture(DEFAULT_APPLICATION_ID).await()
+    fun shouldGetApplicationOwnersDetailsAsync() = runTest {
+        platform.getApplicationOwnersDetailsAsync(DEFAULT_APPLICATION_ID).await()
     }
 }

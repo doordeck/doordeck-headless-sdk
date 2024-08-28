@@ -20,8 +20,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRefreshTokenFuture() = runTest {
-        account.refreshTokenFuture("").await()
+    fun shouldRefreshTokenAsync() = runTest {
+        account.refreshTokenAsync("").await()
     }
 
     @Test
@@ -30,8 +30,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldLogoutFuture() = runTest {
-        account.logoutFuture().await()
+    fun shouldLogoutAsync() = runTest {
+        account.logoutAsync().await()
     }
 
     @Ignore("Libsodium does not work with the android tests")
@@ -42,8 +42,8 @@ class AccountResourceImplTest {
 
     @Ignore("Libsodium does not work with the android tests")
     @Test
-    fun shouldRegisterEphemeralKeyFuture() = runTest {
-        account.registerEphemeralKeyFuture(byteArrayOf()).await()
+    fun shouldRegisterEphemeralKeyAsync() = runTest {
+        account.registerEphemeralKeyAsync(byteArrayOf()).await()
     }
 
     @Ignore("Libsodium does not work with the android tests")
@@ -54,8 +54,8 @@ class AccountResourceImplTest {
 
     @Ignore("Libsodium does not work with the android tests")
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationFuture() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationFuture(byteArrayOf()).await()
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationAsync() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthenticationAsync(byteArrayOf()).await()
     }
 
     @Ignore("Libsodium does not work with the android tests")
@@ -66,8 +66,8 @@ class AccountResourceImplTest {
 
     @Ignore("Libsodium does not work with the android tests")
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationFuture() = runTest {
-        account.verifyEphemeralKeyRegistrationFuture("", byteArrayOf()).await()
+    fun shouldVerifyEphemeralKeyRegistrationAsync() = runTest {
+        account.verifyEphemeralKeyRegistrationAsync("", byteArrayOf()).await()
     }
 
     @Test
@@ -76,8 +76,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldReverifyEmailFuture() = runTest {
-        account.reverifyEmailFuture().await()
+    fun shouldReverifyEmailAsync() = runTest {
+        account.reverifyEmailAsync().await()
     }
 
     @Test
@@ -86,8 +86,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldChangePasswordFuture() = runTest {
-        account.changePasswordFuture("", "").await()
+    fun shouldChangePasswordAsync() = runTest {
+        account.changePasswordAsync("", "").await()
     }
 
     @Test
@@ -96,8 +96,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldGetUserDetailsFuture() = runTest {
-        account.getUserDetailsFuture().await()
+    fun shouldGetUserDetailsAsync() = runTest {
+        account.getUserDetailsAsync().await()
     }
 
     @Test
@@ -106,8 +106,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateUserDetailsFuture() = runTest {
-        account.updateUserDetailsFuture("").await()
+    fun shouldUpdateUserDetailsAsync() = runTest {
+        account.updateUserDetailsAsync("").await()
     }
 
     @Test
@@ -116,7 +116,7 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldDeleteAccountFuture() = runTest {
-        account.deleteAccountFuture().await()
+    fun shouldDeleteAccountAsync() = runTest {
+        account.deleteAccountAsync().await()
     }
 }

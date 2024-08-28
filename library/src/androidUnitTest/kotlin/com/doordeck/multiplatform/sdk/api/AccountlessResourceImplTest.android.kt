@@ -16,8 +16,8 @@ class AccountlessResourceImplTest {
     }
 
     @Test
-    fun shouldLoginFuture() = runTest {
-        accountless.loginFuture("", "").await()
+    fun shouldLoginAsync() = runTest {
+        accountless.loginAsync("", "").await()
     }
 
     @Test
@@ -26,8 +26,8 @@ class AccountlessResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterFuture() = runTest {
-        accountless.registrationFuture("", "", "", false).await()
+    fun shouldRegisterAsync() = runTest {
+        accountless.registrationAsync("", "", "", false).await()
     }
 
     @Test
@@ -36,7 +36,7 @@ class AccountlessResourceImplTest {
     }
 
     @Test
-    fun shouldVerifyEmailFuture() = runTest {
-        accountless.verifyEmailFuture("").await()
+    fun shouldVerifyEmailAsync() = runTest {
+        accountless.verifyEmailAsync("").await()
     }
 }

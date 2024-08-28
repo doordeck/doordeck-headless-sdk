@@ -16,7 +16,7 @@ class TilesResourceImpl(
         return getLocksBelongingToTileRequest(tileId)
     }
 
-    override fun getLocksBelongingToTileFuture(tileId: String): CompletableFuture<TileLocksResponse> {
+    override fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse> {
         return GlobalScope.future(Dispatchers.IO) { getLocksBelongingToTileRequest(tileId) }
     }
 
@@ -24,7 +24,7 @@ class TilesResourceImpl(
         return associateMultipleLocksRequest(tileId, siteId, lockIds)
     }
 
-    override fun associateMultipleLocksFuture(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit> {
+    override fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 }

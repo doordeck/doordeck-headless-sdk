@@ -23,7 +23,7 @@ actual interface AccountResource {
     suspend fun refreshToken(refreshToken: String): TokenResponse
 
     @DoordeckOnly
-    fun refreshTokenFuture(refreshToken: String): CompletableFuture<TokenResponse>
+    fun refreshTokenAsync(refreshToken: String): CompletableFuture<TokenResponse>
 
     /**
      * Logout
@@ -32,7 +32,7 @@ actual interface AccountResource {
      */
     suspend fun logout()
 
-    fun logoutFuture(): CompletableFuture<Unit>
+    fun logoutAsync(): CompletableFuture<Unit>
 
     /**
      * Register ephemeral key
@@ -41,7 +41,7 @@ actual interface AccountResource {
      */
     suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
 
-    fun registerEphemeralKeyFuture(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
+    fun registerEphemeralKeyAsync(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Register ephemeral key with secondary authentication
@@ -50,7 +50,7 @@ actual interface AccountResource {
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
-    fun registerEphemeralKeyWithSecondaryAuthenticationFuture(publicKey: ByteArray, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+    fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
 
     /**
      * Verify ephemeral key registration
@@ -59,7 +59,7 @@ actual interface AccountResource {
      */
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
 
-    fun verifyEphemeralKeyRegistrationFuture(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
+    fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email
@@ -70,7 +70,7 @@ actual interface AccountResource {
     suspend fun reverifyEmail()
 
     @DoordeckOnly
-    fun reverifyEmailFuture(): CompletableFuture<Unit>
+    fun reverifyEmailAsync(): CompletableFuture<Unit>
 
     /**
      * Change password
@@ -81,7 +81,7 @@ actual interface AccountResource {
     suspend fun changePassword(oldPassword: String, newPassword: String)
 
     @DoordeckOnly
-    fun changePasswordFuture(oldPassword: String, newPassword: String): CompletableFuture<Unit>
+    fun changePasswordAsync(oldPassword: String, newPassword: String): CompletableFuture<Unit>
 
     /**
      * Get user details
@@ -90,7 +90,7 @@ actual interface AccountResource {
      */
     suspend fun getUserDetails(): UserDetailsResponse
 
-    fun getUserDetailsFuture(): CompletableFuture<UserDetailsResponse>
+    fun getUserDetailsAsync(): CompletableFuture<UserDetailsResponse>
 
     /**
      * Update user details
@@ -99,7 +99,7 @@ actual interface AccountResource {
      */
     suspend fun updateUserDetails(displayName: String)
 
-    fun updateUserDetailsFuture(displayName: String): CompletableFuture<Unit>
+    fun updateUserDetailsAsync(displayName: String): CompletableFuture<Unit>
 
     /**
      * Delete account
@@ -108,7 +108,7 @@ actual interface AccountResource {
      */
     suspend fun deleteAccount()
 
-    fun deleteAccountFuture(): CompletableFuture<Unit>
+    fun deleteAccountAsync(): CompletableFuture<Unit>
 }
 
 actual fun account(): AccountResource = AccountResourceImpl(

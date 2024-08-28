@@ -17,7 +17,7 @@ class HelperResourceImplTest {
     }
 
     @Test
-    fun shouldUploadPlatformLogoFuture() = runTest {
-        helper.uploadPlatformLogoFuture(DEFAULT_APPLICATION_ID, "", byteArrayOf()).await()
+    fun shouldUploadPlatformLogoAsync() = runTest {
+        helper.uploadPlatformLogoAsync(DEFAULT_APPLICATION_ID, "", byteArrayOf()).await()
     }
 }

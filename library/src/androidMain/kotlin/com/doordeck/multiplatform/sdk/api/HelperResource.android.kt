@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture
 
 actual interface HelperResource {
     suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
-    fun uploadPlatformLogoFuture(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit>
+    fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit>
 }
 
 actual fun helper(): HelperResource = HelperResourceImpl(

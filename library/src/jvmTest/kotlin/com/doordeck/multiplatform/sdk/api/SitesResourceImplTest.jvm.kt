@@ -17,8 +17,8 @@ class SitesResourceImplTest {
     }
 
     @Test
-    fun shouldListSitesFuture() = runTest {
-        sites.listSitesFuture().await()
+    fun shouldListSitesAsync() = runTest {
+        sites.listSitesAsync().await()
     }
 
     @Test
@@ -27,8 +27,8 @@ class SitesResourceImplTest {
     }
 
     @Test
-    fun shouldGetLocksForSiteFuture() = runTest {
-        sites.getLocksForSiteFuture(DEFAULT_SITE_ID).await()
+    fun shouldGetLocksForSiteAsync() = runTest {
+        sites.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
     }
 
     @Test
@@ -37,7 +37,7 @@ class SitesResourceImplTest {
     }
 
     @Test
-    fun shouldGetUsersForSiteFuture() = runTest {
-        sites.getUsersForSiteFuture(DEFAULT_SITE_ID).await()
+    fun shouldGetUsersForSiteAsync() = runTest {
+        sites.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
     }
 }

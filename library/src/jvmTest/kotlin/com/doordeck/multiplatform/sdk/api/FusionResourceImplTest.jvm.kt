@@ -18,8 +18,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldLoginFuture() = runTest {
-        fusion.loginFuture("", "").await()
+    fun shouldLoginAsync() = runTest {
+        fusion.loginAsync("", "").await()
     }
 
     @Test
@@ -28,8 +28,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldGetIntegrationTypeFuture() = runTest {
-        fusion.getIntegrationTypeFuture().await()
+    fun shouldGetIntegrationTypeAsync() = runTest {
+        fusion.getIntegrationTypeAsync().await()
     }
 
     @Test
@@ -38,8 +38,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldGetIntegrationConfigurationFuture() = runTest {
-        fusion.getIntegrationConfigurationFuture("").await()
+    fun shouldGetIntegrationConfigurationAsync() = runTest {
+        fusion.getIntegrationConfigurationAsync("").await()
     }
 
     @Test
@@ -48,8 +48,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldEnableDoorFuture() = runTest {
-        fusion.enableDoorFuture("", "", Fusion.DemoController()).await()
+    fun shouldEnableDoorAsync() = runTest {
+        fusion.enableDoorAsync("", "", Fusion.DemoController()).await()
     }
 
     @Test
@@ -58,8 +58,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldDeleteDoorFuture() = runTest {
-        fusion.deleteDoorFuture(DEFAULT_DEVICE_ID).await()
+    fun shouldDeleteDoorAsync() = runTest {
+        fusion.deleteDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
@@ -68,8 +68,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldGetDoorStatusFuture() = runTest {
-        fusion.getDoorStatusFuture(DEFAULT_DEVICE_ID).await()
+    fun shouldGetDoorStatusAsync() = runTest {
+        fusion.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
@@ -78,8 +78,8 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldStartDoorFuture() = runTest {
-        fusion.startDoorFuture(DEFAULT_DEVICE_ID).await()
+    fun shouldStartDoorAsync() = runTest {
+        fusion.startDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
@@ -88,7 +88,7 @@ class FusionResourceImplTest {
     }
 
     @Test
-    fun shouldStopDoorFuture() = runTest {
-        fusion.stopDoorFuture(DEFAULT_DEVICE_ID).await()
+    fun shouldStopDoorAsync() = runTest {
+        fusion.stopDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 }

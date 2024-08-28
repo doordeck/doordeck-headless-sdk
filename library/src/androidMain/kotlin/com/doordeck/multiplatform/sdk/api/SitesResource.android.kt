@@ -17,7 +17,7 @@ actual interface SitesResource {
      */
     suspend fun listSites(): List<SiteResponse>
 
-    fun listSitesFuture(): CompletableFuture<List<SiteResponse>>
+    fun listSitesAsync(): CompletableFuture<List<SiteResponse>>
 
     /**
      * Get locks for site
@@ -26,7 +26,7 @@ actual interface SitesResource {
      */
     suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse>
 
-    fun getLocksForSiteFuture(siteId: String): CompletableFuture<List<SiteLocksResponse>>
+    fun getLocksForSiteAsync(siteId: String): CompletableFuture<List<SiteLocksResponse>>
 
     /**
      * Get users for a site
@@ -35,7 +35,7 @@ actual interface SitesResource {
      */
     suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse>
 
-    fun getUsersForSiteFuture(siteId: String): CompletableFuture<List<UserForSiteResponse>>
+    fun getUsersForSiteAsync(siteId: String): CompletableFuture<List<UserForSiteResponse>>
 }
 
 actual fun sites(): SitesResource = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

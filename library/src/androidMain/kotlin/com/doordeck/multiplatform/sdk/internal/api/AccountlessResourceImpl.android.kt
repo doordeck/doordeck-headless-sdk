@@ -16,7 +16,7 @@ class AccountlessResourceImpl(
         return loginRequest(email, password)
     }
 
-    override fun loginFuture(email: String, password: String): CompletableFuture<TokenResponse> {
+    override fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
         return GlobalScope.future(Dispatchers.IO) { loginRequest(email, password) }
     }
 
@@ -24,7 +24,7 @@ class AccountlessResourceImpl(
         return registrationRequest(email, password, displayName, force)
     }
 
-    override fun registrationFuture(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<TokenResponse> {
+    override fun registrationAsync(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<TokenResponse> {
         return GlobalScope.future(Dispatchers.IO) { registrationRequest(email, password, displayName, force) }
     }
 
@@ -32,7 +32,7 @@ class AccountlessResourceImpl(
         return verifyEmailRequest(code)
     }
 
-    override fun verifyEmailFuture(code: String): CompletableFuture<Unit> {
+    override fun verifyEmailAsync(code: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { verifyEmailRequest(code) }
     }
 }

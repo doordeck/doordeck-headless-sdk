@@ -16,7 +16,7 @@ actual interface TilesResource {
      */
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse
 
-    fun getLocksBelongingToTileFuture(tileId: String): CompletableFuture<TileLocksResponse>
+    fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse>
 
     /**
      * Associate multiple locks (devices) to a single tile
@@ -27,7 +27,7 @@ actual interface TilesResource {
     suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
 
     @SiteAdmin
-    fun associateMultipleLocksFuture(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit>
+    fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit>
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

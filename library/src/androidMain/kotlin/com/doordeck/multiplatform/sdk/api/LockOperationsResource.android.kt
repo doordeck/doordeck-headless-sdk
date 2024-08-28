@@ -26,7 +26,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getSingleLock(lockId: String): LockResponse
 
-    fun getSingleLockFuture(lockId: String): CompletableFuture<LockResponse>
+    fun getSingleLockAsync(lockId: String): CompletableFuture<LockResponse>
 
     /**
      * Get lock audit trail
@@ -35,7 +35,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse>
 
-    fun getLockAuditTrailFuture(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>>
+    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>>
 
     /**
      * Get audit for a user
@@ -44,7 +44,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse>
 
-    fun getAuditForUserFuture(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>>
+    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>>
 
     /**
      * Get users for a lock
@@ -53,7 +53,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse>
 
-    fun getUsersForLockFuture(lockId: String): CompletableFuture<List<UserLockResponse>>
+    fun getUsersForLockAsync(lockId: String): CompletableFuture<List<UserLockResponse>>
 
     /**
      * Get locks for a user
@@ -62,7 +62,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getLocksForUser(userId: String): LockUserResponse
 
-    fun getLocksForUserFuture(userId: String): CompletableFuture<LockUserResponse>
+    fun getLocksForUserAsync(userId: String): CompletableFuture<LockUserResponse>
 
     /**
      * Update lock properties - Name
@@ -71,7 +71,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockName(lockId: String, name: String? = null)
 
-    fun updateLockNameFuture(lockId: String, name: String? = null): CompletableFuture<Unit>
+    fun updateLockNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Favourite
@@ -80,7 +80,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null)
 
-    fun updateLockFavouriteFuture(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit>
+    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Colour
@@ -89,7 +89,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockColour(lockId: String, colour: String? = null)
 
-    fun updateLockColourFuture(lockId: String, colour: String? = null): CompletableFuture<Unit>
+    fun updateLockColourAsync(lockId: String, colour: String? = null): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Default name
@@ -98,7 +98,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null)
 
-    fun updateLockSettingDefaultNameFuture(lockId: String, name: String? = null): CompletableFuture<Unit>
+    fun updateLockSettingDefaultNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit>
 
     /**
      * Set lock properties - Settings - Permitted addresses
@@ -107,7 +107,7 @@ actual interface LockOperationsResource {
      */
     suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>)
 
-    fun setLockSettingPermittedAddressesFuture(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit>
+    fun setLockSettingPermittedAddressesAsync(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Hidden
@@ -116,7 +116,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
-    fun updateLockSettingHiddenFuture(lockId: String, hidden: Boolean): CompletableFuture<Unit>
+    fun updateLockSettingHiddenAsync(lockId: String, hidden: Boolean): CompletableFuture<Unit>
 
     /**
      * Set lock properties - Settings - Usage requirements - Time
@@ -125,7 +125,7 @@ actual interface LockOperationsResource {
      */
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>)
 
-    fun setLockSettingTimeRestrictionsFuture(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit>
+    fun setLockSettingTimeRestrictionsAsync(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit>
 
     /**
      * Update lock properties - Settings - Usage requirements - Location
@@ -134,7 +134,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null)
 
-    fun updateLockSettingLocationRestrictionsFuture(lockId: String, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit>
+    fun updateLockSettingLocationRestrictionsAsync(lockId: String, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit>
 
     /**
      * Get user’s public key
@@ -145,7 +145,7 @@ actual interface LockOperationsResource {
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
 
     @DoordeckOnly
-    suspend fun getUserPublicKeyFuture(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKeyResponse>
+    suspend fun getUserPublicKeyAsync(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by email
@@ -154,7 +154,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
 
-    fun getUserPublicKeyByEmailFuture(email: String): CompletableFuture<UserPublicKeyResponse>
+    fun getUserPublicKeyByEmailAsync(email: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by telephone
@@ -163,7 +163,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
 
-    fun getUserPublicKeyByTelephoneFuture(telephone: String): CompletableFuture<UserPublicKeyResponse>
+    fun getUserPublicKeyByTelephoneAsync(telephone: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by local key
@@ -172,7 +172,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
 
-    fun getUserPublicKeyByLocalKeyFuture(localKey: String): CompletableFuture<UserPublicKeyResponse>
+    fun getUserPublicKeyByLocalKeyAsync(localKey: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by foreign key
@@ -181,7 +181,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
 
-    fun getUserPublicKeyByForeignKeyFuture(foreignKey: String): CompletableFuture<UserPublicKeyResponse>
+    fun getUserPublicKeyByForeignKeyAsync(foreignKey: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key
@@ -190,7 +190,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
 
-    fun getUserPublicKeyByIdentityFuture(identity: String): CompletableFuture<UserPublicKeyResponse>
+    fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKeyResponse>
 
     /**
      * Unlock
@@ -200,7 +200,7 @@ actual interface LockOperationsResource {
      */
     suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
 
-    fun unlockWithContextFuture(lockId: String, directAccessEndpoints: List<String>? = null): CompletableFuture<Unit>
+    fun unlockWithContextAsync(lockId: String, directAccessEndpoints: List<String>? = null): CompletableFuture<Unit>
 
     /**
      * Unlock
@@ -209,7 +209,7 @@ actual interface LockOperationsResource {
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation)
 
-    fun unlockFuture(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit>
+    fun unlockAsync(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit>
 
     /**
      * Share a lock
@@ -219,7 +219,7 @@ actual interface LockOperationsResource {
      */
     suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
 
-    fun shareLockWithContextFuture(lockId: String, shareLock: LockOperations.ShareLock): CompletableFuture<Unit>
+    fun shareLockWithContextAsync(lockId: String, shareLock: LockOperations.ShareLock): CompletableFuture<Unit>
 
     /**
      * Share a lock
@@ -228,7 +228,7 @@ actual interface LockOperationsResource {
      */
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
 
-    fun shareLockFuture(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit>
+    fun shareLockAsync(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit>
 
     /**
      * Revoke access to a lock
@@ -238,7 +238,7 @@ actual interface LockOperationsResource {
      */
     suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
 
-    fun revokeAccessToLockWithContextFuture(lockId: String, users: List<String>): CompletableFuture<Unit>
+    fun revokeAccessToLockWithContextAsync(lockId: String, users: List<String>): CompletableFuture<Unit>
 
     /**
      * Revoke access to a lock
@@ -247,7 +247,7 @@ actual interface LockOperationsResource {
      */
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation)
 
-    fun revokeAccessToLockFuture(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit>
+    fun revokeAccessToLockAsync(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock duration
@@ -257,7 +257,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
 
-    fun updateSecureSettingUnlockDurationWithContextFuture(lockId: String, unlockDuration: Int): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockDurationWithContextAsync(lockId: String, unlockDuration: Int): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock duration
@@ -266,7 +266,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
 
-    fun updateSecureSettingUnlockDurationFuture(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockDurationAsync(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock between
@@ -276,7 +276,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
-    fun updateSecureSettingUnlockBetweenWithContextFuture(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockBetweenWithContextAsync(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock between
@@ -285,7 +285,7 @@ actual interface LockOperationsResource {
      */
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
 
-    fun updateSecureSettingUnlockBetweenFuture(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit>
+    fun updateSecureSettingUnlockBetweenAsync(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit>
 
     /**
      * Get pinned locks
@@ -294,7 +294,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getPinnedLocks(): List<LockResponse>
 
-    fun getPinnedLocksFuture(): CompletableFuture<List<LockResponse>>
+    fun getPinnedLocksAsync(): CompletableFuture<List<LockResponse>>
 
     /**
      * Get shareable locks
@@ -303,7 +303,7 @@ actual interface LockOperationsResource {
      */
     suspend fun getShareableLocks(): List<ShareableLockResponse>
 
-    fun getShareableLocksFuture(): CompletableFuture<List<ShareableLockResponse>>
+    fun getShareableLocksAsync(): CompletableFuture<List<ShareableLockResponse>>
 }
 
 actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(

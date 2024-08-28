@@ -19,7 +19,7 @@ class PlatformResourceImpl(
         return createApplicationRequest(application)
     }
 
-    override fun createApplicationFuture(application: Platform.CreateApplication): CompletableFuture<Unit> {
+    override fun createApplicationAsync(application: Platform.CreateApplication): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { createApplicationRequest(application) }
     }
 
@@ -27,7 +27,7 @@ class PlatformResourceImpl(
         return listApplicationsRequest()
     }
 
-    override fun listApplicationsFuture(): CompletableFuture<List<ApplicationResponse>> {
+    override fun listApplicationsAsync(): CompletableFuture<List<ApplicationResponse>> {
         return GlobalScope.future(Dispatchers.IO) { listApplicationsRequest() }
     }
 
@@ -35,7 +35,7 @@ class PlatformResourceImpl(
         return getApplicationRequest(applicationId)
     }
 
-    override fun getApplicationFuture(applicationId: String): CompletableFuture<ApplicationResponse> {
+    override fun getApplicationAsync(applicationId: String): CompletableFuture<ApplicationResponse> {
         return GlobalScope.future(Dispatchers.IO) { getApplicationRequest(applicationId) }
     }
 
@@ -43,7 +43,7 @@ class PlatformResourceImpl(
         return updateApplicationNameRequest(applicationId, name)
     }
 
-    override fun updateApplicationNameFuture(applicationId: String, name: String): CompletableFuture<Unit> {
+    override fun updateApplicationNameAsync(applicationId: String, name: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationNameRequest(applicationId, name) }
     }
 
@@ -51,7 +51,7 @@ class PlatformResourceImpl(
         return updateApplicationCompanyNameRequest(applicationId, companyName)
     }
 
-    override fun updateApplicationCompanyNameFuture(applicationId: String, companyName: String): CompletableFuture<Unit> {
+    override fun updateApplicationCompanyNameAsync(applicationId: String, companyName: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationCompanyNameRequest(applicationId, companyName) }
     }
 
@@ -59,7 +59,7 @@ class PlatformResourceImpl(
         return updateApplicationMailingAddressRequest(applicationId, mailingAddress)
     }
 
-    override fun updateApplicationMailingAddressFuture(applicationId: String, mailingAddress: String): CompletableFuture<Unit> {
+    override fun updateApplicationMailingAddressAsync(applicationId: String, mailingAddress: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
     }
 
@@ -67,7 +67,7 @@ class PlatformResourceImpl(
         return updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
     }
 
-    override fun updateApplicationPrivacyPolicyFuture(applicationId: String, privacyPolicy: String): CompletableFuture<Unit> {
+    override fun updateApplicationPrivacyPolicyAsync(applicationId: String, privacyPolicy: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
     }
 
@@ -75,7 +75,7 @@ class PlatformResourceImpl(
         return updateApplicationSupportContactRequest(applicationId, supportContact)
     }
 
-    override fun updateApplicationSupportContactFuture(applicationId: String, supportContact: String): CompletableFuture<Unit> {
+    override fun updateApplicationSupportContactAsync(applicationId: String, supportContact: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationSupportContactRequest(applicationId, supportContact) }
     }
 
@@ -83,7 +83,7 @@ class PlatformResourceImpl(
         return updateApplicationAppLinkRequest(applicationId, appLink)
     }
 
-    override fun updateApplicationAppLinkFuture(applicationId: String, appLink: String): CompletableFuture<Unit> {
+    override fun updateApplicationAppLinkAsync(applicationId: String, appLink: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationAppLinkRequest(applicationId, appLink) }
     }
 
@@ -91,7 +91,7 @@ class PlatformResourceImpl(
         return updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
     }
 
-    override fun updateApplicationEmailPreferencesFuture(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
+    override fun updateApplicationEmailPreferencesAsync(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
     }
 
@@ -99,7 +99,7 @@ class PlatformResourceImpl(
         return updateApplicationLogoUrlRequest(applicationId, logoUrl)
     }
 
-    override fun updateApplicationLogoUrlFuture(applicationId: String, logoUrl: String): CompletableFuture<Unit> {
+    override fun updateApplicationLogoUrlAsync(applicationId: String, logoUrl: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateApplicationLogoUrlRequest(applicationId, logoUrl) }
     }
 
@@ -107,7 +107,7 @@ class PlatformResourceImpl(
         return deleteApplicationRequest(applicationId)
     }
 
-    override fun deleteApplicationFuture(applicationId: String): CompletableFuture<Unit> {
+    override fun deleteApplicationAsync(applicationId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { deleteApplicationRequest(applicationId) }
     }
 
@@ -115,7 +115,7 @@ class PlatformResourceImpl(
         return getLogoUploadUrlRequest(applicationId, contentType)
     }
 
-    override fun getLogoUploadUrlFuture(applicationId: String, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
+    override fun getLogoUploadUrlAsync(applicationId: String, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
         return GlobalScope.future(Dispatchers.IO) { getLogoUploadUrlRequest(applicationId, contentType) }
     }
 
@@ -123,7 +123,7 @@ class PlatformResourceImpl(
         return addAuthKeyRequest(applicationId, key)
     }
 
-    override fun addAuthKeyFuture(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit> {
+    override fun addAuthKeyAsync(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { addAuthKeyRequest(applicationId, key) }
     }
 
@@ -131,7 +131,7 @@ class PlatformResourceImpl(
         return addAuthIssuerRequest(applicationId, url)
     }
 
-    override fun addAuthIssuerFuture(applicationId: String, url: String): CompletableFuture<Unit> {
+    override fun addAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { addAuthIssuerRequest(applicationId, url) }
     }
 
@@ -139,7 +139,7 @@ class PlatformResourceImpl(
         return deleteAuthIssuerRequest(applicationId, url)
     }
 
-    override fun deleteAuthIssuerFuture(applicationId: String, url: String): CompletableFuture<Unit> {
+    override fun deleteAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { deleteAuthIssuerRequest(applicationId, url) }
     }
 
@@ -147,7 +147,7 @@ class PlatformResourceImpl(
         return addCorsDomainRequest(applicationId, url)
     }
 
-    override fun addCorsDomainFuture(applicationId: String, url: String): CompletableFuture<Unit> {
+    override fun addCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { addCorsDomainRequest(applicationId, url) }
     }
 
@@ -155,7 +155,7 @@ class PlatformResourceImpl(
         return removeCorsDomainRequest(applicationId, url)
     }
 
-    override fun removeCorsDomainFuture(applicationId: String, url: String): CompletableFuture<Unit> {
+    override fun removeCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) {removeCorsDomainRequest(applicationId, url) }
     }
 
@@ -163,7 +163,7 @@ class PlatformResourceImpl(
         return addApplicationOwnerRequest(applicationId, userId)
     }
 
-    override fun addApplicationOwnerFuture(applicationId: String, userId: String): CompletableFuture<Unit> {
+    override fun addApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { addApplicationOwnerRequest(applicationId, userId) }
     }
 
@@ -171,7 +171,7 @@ class PlatformResourceImpl(
         return removeApplicationOwnerRequest(applicationId, userId)
     }
 
-    override fun removeApplicationOwnerFuture(applicationId: String, userId: String): CompletableFuture<Unit> {
+    override fun removeApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { removeApplicationOwnerRequest(applicationId, userId) }
     }
 
@@ -179,7 +179,7 @@ class PlatformResourceImpl(
         return getApplicationOwnersDetailsRequest(applicationId)
     }
 
-    override fun getApplicationOwnersDetailsFuture(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
+    override fun getApplicationOwnersDetailsAsync(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getApplicationOwnersDetailsRequest(applicationId) }
     }
 }

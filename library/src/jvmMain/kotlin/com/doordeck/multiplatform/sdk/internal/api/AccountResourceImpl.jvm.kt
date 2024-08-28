@@ -22,7 +22,7 @@ class AccountResourceImpl(
         return refreshTokenRequest(refreshToken)
     }
 
-    override fun refreshTokenFuture(refreshToken: String): CompletableFuture<TokenResponse> {
+    override fun refreshTokenAsync(refreshToken: String): CompletableFuture<TokenResponse> {
         return GlobalScope.future(Dispatchers.IO) { refreshTokenRequest(refreshToken) }
     }
 
@@ -30,7 +30,7 @@ class AccountResourceImpl(
         return logoutRequest()
     }
 
-    override fun logoutFuture(): CompletableFuture<Unit> {
+    override fun logoutAsync(): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { logoutRequest() }
     }
 
@@ -38,7 +38,7 @@ class AccountResourceImpl(
         return registerEphemeralKeyRequest(publicKey)
     }
 
-    override fun registerEphemeralKeyFuture(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse> {
+    override fun registerEphemeralKeyAsync(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse> {
         return GlobalScope.future(Dispatchers.IO) { registerEphemeralKeyRequest(publicKey) }
     }
 
@@ -46,7 +46,7 @@ class AccountResourceImpl(
         return registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
     }
 
-    override fun registerEphemeralKeyWithSecondaryAuthenticationFuture(publicKey: ByteArray, method: TwoFactorMethod?): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
+    override fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray, method: TwoFactorMethod?): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
         return GlobalScope.future(Dispatchers.IO) { registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
@@ -54,7 +54,7 @@ class AccountResourceImpl(
         return verifyEphemeralKeyRegistrationRequest(code, privateKey)
     }
 
-    override fun verifyEphemeralKeyRegistrationFuture(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse> {
+    override fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse> {
         return GlobalScope.future(Dispatchers.IO) { verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
@@ -62,7 +62,7 @@ class AccountResourceImpl(
         return reverifyEmailRequest()
     }
 
-    override fun reverifyEmailFuture(): CompletableFuture<Unit> {
+    override fun reverifyEmailAsync(): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { reverifyEmailRequest() }
     }
 
@@ -70,7 +70,7 @@ class AccountResourceImpl(
         return changePasswordRequest(oldPassword, newPassword)
     }
 
-    override fun changePasswordFuture(oldPassword: String, newPassword: String): CompletableFuture<Unit> {
+    override fun changePasswordAsync(oldPassword: String, newPassword: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { changePasswordRequest(oldPassword, newPassword) }
     }
 
@@ -78,7 +78,7 @@ class AccountResourceImpl(
         return getUserDetailsRequest()
     }
 
-    override fun getUserDetailsFuture(): CompletableFuture<UserDetailsResponse> {
+    override fun getUserDetailsAsync(): CompletableFuture<UserDetailsResponse> {
         return GlobalScope.future(Dispatchers.IO) { getUserDetailsRequest() }
     }
 
@@ -86,7 +86,7 @@ class AccountResourceImpl(
         return updateUserDetailsRequest(displayName)
     }
 
-    override fun updateUserDetailsFuture(displayName: String): CompletableFuture<Unit> {
+    override fun updateUserDetailsAsync(displayName: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { updateUserDetailsRequest(displayName) }
     }
 
@@ -94,7 +94,7 @@ class AccountResourceImpl(
         return deleteAccountRequest()
     }
 
-    override fun deleteAccountFuture(): CompletableFuture<Unit> {
+    override fun deleteAccountAsync(): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { deleteAccountRequest() }
     }
 }

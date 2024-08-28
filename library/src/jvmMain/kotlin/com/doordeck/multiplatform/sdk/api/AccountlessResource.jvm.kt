@@ -15,7 +15,7 @@ actual interface AccountlessResource {
      */
     suspend fun login(email: String, password: String): TokenResponse
 
-    fun loginFuture(email: String, password: String): CompletableFuture<TokenResponse>
+    fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse>
 
     /**
      * Registration
@@ -24,7 +24,7 @@ actual interface AccountlessResource {
      */
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
 
-    fun registrationFuture(email: String, password: String, displayName: String? = null, force: Boolean = false): CompletableFuture<TokenResponse>
+    fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false): CompletableFuture<TokenResponse>
 
     /**
      * Verify email
@@ -33,7 +33,7 @@ actual interface AccountlessResource {
      */
     suspend fun verifyEmail(code: String)
 
-    fun verifyEmailFuture(code: String): CompletableFuture<Unit>
+    fun verifyEmailAsync(code: String): CompletableFuture<Unit>
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

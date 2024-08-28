@@ -20,7 +20,7 @@ class FusionResourceImpl(
         return loginRequest(email, password)
     }
 
-    override fun loginFuture(email: String, password: String): CompletableFuture<FusionLoginResponse> {
+    override fun loginAsync(email: String, password: String): CompletableFuture<FusionLoginResponse> {
         return GlobalScope.future(Dispatchers.IO) { loginRequest(email, password) }
     }
 
@@ -28,7 +28,7 @@ class FusionResourceImpl(
         return getIntegrationTypeRequest()
     }
 
-    override fun getIntegrationTypeFuture(): CompletableFuture<IntegrationTypeResponse> {
+    override fun getIntegrationTypeAsync(): CompletableFuture<IntegrationTypeResponse> {
         return GlobalScope.future(Dispatchers.IO) { getIntegrationTypeRequest() }
     }
 
@@ -36,7 +36,7 @@ class FusionResourceImpl(
         return getIntegrationConfigurationRequest(type)
     }
 
-    override fun getIntegrationConfigurationFuture(type: String): CompletableFuture<List<IntegrationConfigurationResponse>> {
+    override fun getIntegrationConfigurationAsync(type: String): CompletableFuture<List<IntegrationConfigurationResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getIntegrationConfigurationRequest(type) }
     }
 
@@ -44,7 +44,7 @@ class FusionResourceImpl(
         return enableDoorRequest(name, siteId, controller)
     }
 
-    override fun enableDoorFuture(name: String, siteId: String, controller: Fusion.LockController): CompletableFuture<Unit> {
+    override fun enableDoorAsync(name: String, siteId: String, controller: Fusion.LockController): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { enableDoorRequest(name, siteId, controller) }
     }
 
@@ -52,7 +52,7 @@ class FusionResourceImpl(
         return deleteDoorRequest(deviceId)
     }
 
-    override fun deleteDoorFuture(deviceId: String): CompletableFuture<Unit> {
+    override fun deleteDoorAsync(deviceId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { deleteDoorRequest(deviceId) }
     }
 
@@ -60,7 +60,7 @@ class FusionResourceImpl(
         return getDoorStatusRequest(deviceId)
     }
 
-    override fun getDoorStatusFuture(deviceId: String): CompletableFuture<DoorStateResponse> {
+    override fun getDoorStatusAsync(deviceId: String): CompletableFuture<DoorStateResponse> {
         return GlobalScope.future(Dispatchers.IO) { getDoorStatusRequest(deviceId) }
     }
 
@@ -68,7 +68,7 @@ class FusionResourceImpl(
         return startDoorRequest(deviceId)
     }
 
-    override fun startDoorFuture(deviceId: String): CompletableFuture<Unit> {
+    override fun startDoorAsync(deviceId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { startDoorRequest(deviceId) }
     }
 
@@ -76,7 +76,7 @@ class FusionResourceImpl(
         return stopDoorRequest(deviceId)
     }
 
-    override fun stopDoorFuture(deviceId: String): CompletableFuture<Unit> {
+    override fun stopDoorAsync(deviceId: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { stopDoorRequest(deviceId) }
     }
 }

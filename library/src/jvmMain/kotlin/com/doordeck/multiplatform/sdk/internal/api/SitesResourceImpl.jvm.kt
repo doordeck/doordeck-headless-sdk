@@ -18,7 +18,7 @@ class SitesResourceImpl(
         return listSitesRequest()
     }
 
-    override fun listSitesFuture(): CompletableFuture<List<SiteResponse>> {
+    override fun listSitesAsync(): CompletableFuture<List<SiteResponse>> {
         return GlobalScope.future(Dispatchers.IO) { listSitesRequest() }
     }
 
@@ -26,7 +26,7 @@ class SitesResourceImpl(
         return getLocksForSiteRequest(siteId)
     }
 
-    override fun getLocksForSiteFuture(siteId: String): CompletableFuture<List<SiteLocksResponse>> {
+    override fun getLocksForSiteAsync(siteId: String): CompletableFuture<List<SiteLocksResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getLocksForSiteRequest(siteId) }
     }
 
@@ -34,7 +34,7 @@ class SitesResourceImpl(
         return getUsersForSiteRequest(siteId)
     }
 
-    override fun getUsersForSiteFuture(siteId: String): CompletableFuture<List<UserForSiteResponse>> {
+    override fun getUsersForSiteAsync(siteId: String): CompletableFuture<List<UserForSiteResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getUsersForSiteRequest(siteId) }
     }
 }
