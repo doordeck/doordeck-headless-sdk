@@ -235,7 +235,7 @@ class MainActivity : ComponentActivity() {
         val sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token)
 
         // Retrieve the sites
-        val sites = sdk.sites().listSitesFuture().get()
+        val sites = sdk.sites().listSitesAsync().get()
         println(sites)
 
         // Retrieve the locks
