@@ -259,7 +259,7 @@ class MainActivity : ComponentActivity() {
             lockId = locks.first().id
         )
         val unlockOperation = LockOperations.UnlockOperation(baseOperation)
-        sdk.lockOperations().unlockFuture(unlockOperation).get()
+        sdk.lockOperations().unlockAsync(unlockOperation).get()
     }
 }
 ````
