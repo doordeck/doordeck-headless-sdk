@@ -91,7 +91,7 @@ public class Main {
         System.out.println("Public key: " + Crypto.INSTANCE.encodeByteArrayToBase64(keyPair.getPublic()));
 
         // Register a key pair
-        var registerKeyPair = sdk.account().registerEphemeralKeyFuture(keyPair.getPublic()).get();
+        var registerKeyPair = sdk.account().registerEphemeralKeyAsync(keyPair.getPublic()).get();
         System.out.println("Certificate chain: " + Crypto.INSTANCE.certificateChainToString(registerKeyPair.getCertificateChain()));
 
         // Unlock a lock
