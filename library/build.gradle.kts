@@ -33,6 +33,14 @@ kotlin {
         }
     }
 
+    mingwX64 {
+        binaries {
+            sharedLib {
+                baseName = "doordeck-sdk"
+            }
+        }
+    }
+
     js(IR) {
         moduleName = "doordeck-sdk"
         useCommonJs()
@@ -72,6 +80,8 @@ kotlin {
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
+                optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }
 
@@ -119,6 +129,12 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
+            }
+        }
+
+        val mingwMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.winhttp)
             }
         }
     }
