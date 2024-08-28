@@ -82,7 +82,7 @@ public class Main {
         System.out.println(sites);
 
         // Retrieve the locks
-        var locks = sdk.sites().getLocksForSiteFuture(sites.getFirst().getId()).get();
+        var locks = sdk.sites().getLocksForSiteAsync(sites.getFirst().getId()).get();
         System.out.println(locks);
 
         // Generate a key pair
