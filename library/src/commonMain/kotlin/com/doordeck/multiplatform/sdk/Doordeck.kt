@@ -15,12 +15,21 @@ import kotlin.js.JsExport
 interface Doordeck {
 
     fun contextManager(): ContextManager
+
+    @JsExport.Ignore
     fun accountless(): AccountlessResource
+    @JsExport.Ignore
     fun account(): AccountResource
+    @JsExport.Ignore
     fun sites(): SitesResource
+    @JsExport.Ignore
     fun tiles(): TilesResource
+    @JsExport.Ignore
     fun lockOperations(): LockOperationsResource
+    @JsExport.Ignore
     fun platform(): PlatformResource
-    fun helper(): HelperResource
+    @JsExport.Ignore
     fun fusion(): FusionResource
+    @JsExport.Ignore
+    fun helper(): HelperResource
 }

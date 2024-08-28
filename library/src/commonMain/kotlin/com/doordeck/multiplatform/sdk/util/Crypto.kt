@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.ionspin.kotlin.crypto.signature.Signature
 import com.ionspin.kotlin.crypto.util.Base64Variants
 import com.ionspin.kotlin.crypto.util.LibsodiumUtil
-import io.ktor.utils.io.core.*
+import io.ktor.utils.io.core.toByteArray
 import kotlin.js.JsExport
 
 @JsExport

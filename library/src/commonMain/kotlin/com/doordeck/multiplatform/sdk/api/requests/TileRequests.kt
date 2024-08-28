@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class AssociateMultipleLocksRequest(
     val siteId: String,
-    val devices: Array<String>
+    val devices: List<String>
 )

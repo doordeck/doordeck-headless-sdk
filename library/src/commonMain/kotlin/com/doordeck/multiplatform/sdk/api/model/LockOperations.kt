@@ -32,7 +32,7 @@ object LockOperations {
         val exceptions: Array<String>? = null
     )
 
-    class UnlockOperation(
+    class UnlockOperation @JvmOverloads constructor(
         override val baseOperation: BaseOperation,
         val directAccessEndpoints: Array<String>? = null
     ): Operation(baseOperation)

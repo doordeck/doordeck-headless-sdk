@@ -5,18 +5,18 @@ import kotlin.js.JsExport
 import kotlin.js.JsName
 
 @JsExport
-class KDoordeckFactory {
+object KDoordeckFactory {
 
     @JsName("initialize")
     fun initialize(apiEnvironment: ApiEnvironment): Doordeck =
-        DoordeckFactory().initialize(apiEnvironment, null, null)
+        DoordeckFactory.initialize(apiEnvironment, null, null)
 
     @JsName("initializeWithAuthToken")
     fun initialize(apiEnvironment: ApiEnvironment, token: String): Doordeck =
-        DoordeckFactory().initialize(apiEnvironment, token, null)
+        DoordeckFactory.initialize(apiEnvironment, token, null)
 
 
     @JsName("initializeWithAuthAndRefreshTokens")
     fun initialize(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
-        DoordeckFactory().initialize(apiEnvironment, token, refreshToken)
+        DoordeckFactory.initialize(apiEnvironment, token, refreshToken)
 }

@@ -2,7 +2,6 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.targets.js.testing.KotlinJsTest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -39,12 +38,16 @@ kotlin {
         useCommonJs()
         nodejs {
             testTask {
-                useMocha()
+                useMocha {
+                    timeout = "60s"
+                }
             }
         }
         browser {
             testTask {
-                useMocha()
+                useMocha {
+                    timeout = "60s"
+                }
             }
             webpackTask {
                 mainOutputFileName = "doordeck-sdk.js"
@@ -57,6 +60,11 @@ kotlin {
 
     sourceSets {
         all {
+            // Remove the warning about using expect/actual in interfaces
+            @OptIn(ExperimentalKotlinGradlePluginApi::class)
+            compilerOptions {
+                freeCompilerArgs.add("-Xexpect-actual-classes")
+            }
             // Remove the warnings from the experimental kotlin features
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
@@ -78,11 +86,14 @@ kotlin {
                 implementation(libs.libsodium.bindings)
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.koin)
             }
         }
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlin.coroutines.test)
+                implementation(libs.ktor.client.mock)
             }
         }
 
@@ -111,21 +122,6 @@ kotlin {
             }
         }
     }
-}
-
-// Set up the environment variables for the JS - Browser platform
-// So far, that is the only way I have found to make those tests pass
-tasks.withType<KotlinJsTest>().configureEach {
-    environment("TEST_AUTH_TOKEN", System.getenv("TEST_AUTH_TOKEN") ?: "")
-    environment("TEST_MAIN_USER_ID", System.getenv("TEST_MAIN_USER_ID") ?: "")
-    environment("TEST_MAIN_USER_EMAIL", System.getenv("TEST_MAIN_USER_EMAIL") ?: "")
-    environment("TEST_MAIN_USER_CERTIFICATE_CHAIN", System.getenv("TEST_MAIN_USER_CERTIFICATE_CHAIN") ?: "")
-    environment("TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY") ?: "")
-    environment("TEST_SUPPLEMENTARY_USER_ID", System.getenv("TEST_SUPPLEMENTARY_USER_ID") ?: "")
-    environment("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY", System.getenv("TEST_SUPPLEMENTARY_USER_PUBLIC_KEY") ?: "")
-    environment("TEST_MAIN_TILE_ID", System.getenv("TEST_MAIN_TILE_ID") ?: "")
-    environment("TEST_MAIN_LOCK_ID", System.getenv("TEST_MAIN_LOCK_ID") ?: "")
-    environment("TEST_ENV_VAR", System.getenv("TEST_ENV_VAR") ?: "")
 }
 
 // Display the test log events at all the platforms

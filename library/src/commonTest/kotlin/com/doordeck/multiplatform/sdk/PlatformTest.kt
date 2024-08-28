@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class PlatformTest : SystemTest() {
+class PlatformTest {
     @Test
     fun shouldRetrieveEnvironmentVariable() {
         // Given
@@ -17,9 +17,4 @@ class PlatformTest : SystemTest() {
         assertNotNull(result)
         assertEquals(testEnvVar, result)
     }
-
-    //@Test
-    //fun shouldInitializeSdk() = runBlocking {
-    //    KDoordeckFactory().initialize(ApiEnvironment.DEV, TEST_AUTH_TOKEN)
-    //}
 }
