@@ -239,7 +239,7 @@ class MainActivity : ComponentActivity() {
         println(sites)
 
         // Retrieve the locks
-        val locks = sdk.sites().getLocksForSiteFuture(sites.first().id).get()
+        val locks = sdk.sites().getLocksForSiteAsync(sites.first().id).get()
         println(locks)
 
         // Generate a key pair
