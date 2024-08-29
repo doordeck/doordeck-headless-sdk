@@ -3,8 +3,7 @@ package com.doordeck.multiplatform.sdk
 object Constants {
 
     const val CDN_URL = "https://cdn.doordeck.com"
-
-    const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "*.doordeck.com"
+    const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "**.doordeck.com"
     val TRUSTED_CERTIFICATES = listOf(
          "sha256/++MBgDH5WGvL9Bcn5Be30cRcL0f5O+NyoXuWtQdX1aI=",
          "sha256/f0KW/FtqTjs108NpYj42SrGvOB2PpxIVM8nWxjPqJGE=",
