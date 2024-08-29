@@ -100,7 +100,6 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
-                implementation(libs.ktor.client.cio)
             }
         }
 
@@ -112,7 +111,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(libs.ktor.client.apache)
+                implementation(libs.ktor.client.okhttp)
             }
         }
 
