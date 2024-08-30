@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.addCloudInterceptor
 import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
@@ -30,6 +31,7 @@ internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManage
         installContentNegotiation()
         installTimeout()
         installAuth(contextManager)
+        installCertificatePinner()
         installDefaultRequest(URLProtocol.HTTPS, apiEnvironment.cloudHost)
     }.also {
         it.addCloudInterceptor(apiEnvironment, contextManager)
