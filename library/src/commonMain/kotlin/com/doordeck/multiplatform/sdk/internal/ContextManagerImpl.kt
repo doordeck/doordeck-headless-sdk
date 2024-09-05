@@ -64,7 +64,7 @@ class ContextManagerImpl(
     }
 
     override fun loadContext() {
-        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+        initializeSecureStorage()
 
         currentToken =  currentToken ?: secureStorage?.getCloudAuthToken()
         currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
@@ -74,13 +74,23 @@ class ContextManagerImpl(
     }
 
     override fun storeContext() {
-        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+        initializeSecureStorage()
 
         currentToken?.let { secureStorage?.addCloudAuthToken(it) }
         currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
         currentUserId?.let { secureStorage?.addUserId(it) }
         currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
         currentUserPrivateKey?.let { secureStorage?.addPrivateKey(it) }
+    }
+
+    override fun clearContext() {
+        initializeSecureStorage()
+
+        secureStorage?.let { clearContext() }
+    }
+
+    private fun initializeSecureStorage() {
+        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
     }
 
     internal fun getOperationContext(): Context.OperationContext {

@@ -56,4 +56,8 @@ class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
     override fun getCertificateChain(): Array<String>? {
         return settings.getStringOrNull(CERTIFICATE_CHAIN_KEY)?.stringToCertificateChain()
     }
+
+    override fun clear() {
+        settings.clear()
+    }
 }

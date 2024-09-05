@@ -89,7 +89,6 @@ kotlin {
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin)
                 implementation(libs.multiplatform.settings)
-                implementation("com.russhwolf:multiplatform-settings-test:1.2.0")
             }
         }
         val commonTest by getting {
@@ -97,6 +96,7 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
                 implementation(libs.ktor.client.mock)
+                implementation(libs.multiplatform.settings.test)
             }
         }
 

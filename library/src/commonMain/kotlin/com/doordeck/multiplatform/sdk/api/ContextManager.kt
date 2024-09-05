@@ -12,4 +12,5 @@ interface ContextManager {
     fun setSecureStorageImpl(secureStorage: SecureStorage)
     fun loadContext()
     fun storeContext()
+    fun clearContext()
 }

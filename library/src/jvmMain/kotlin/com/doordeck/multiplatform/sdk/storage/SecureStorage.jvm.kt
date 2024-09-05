@@ -1,8 +1,9 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.russhwolf.settings.MapSettings
+import com.russhwolf.settings.PropertiesSettings
+import java.util.*
 
 actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {
-    return DefaultSecureStorage(MapSettings())
+    return DefaultSecureStorage(PropertiesSettings(Properties()))
 }

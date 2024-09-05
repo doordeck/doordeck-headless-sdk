@@ -19,6 +19,8 @@ interface SecureStorage {
 
     fun addCertificateChain(certificateChain: Array<String>)
     fun getCertificateChain(): Array<String>?
+
+    fun clear()
 }
 
 expect fun createSecureStorage(applicationContext: ApplicationContext? = null): SecureStorage
