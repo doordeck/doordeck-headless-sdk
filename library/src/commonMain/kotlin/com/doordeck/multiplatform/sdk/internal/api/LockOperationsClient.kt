@@ -52,7 +52,7 @@ open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
     suspend fun getSingleLockRequest(lockId: String): LockResponse {
-        return httpClient.get(Paths.getSingleLockPath(lockId)){
+        return httpClient.get(Paths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }
     }
@@ -306,8 +306,8 @@ open class LockOperationsClient(
             user = shareLock.targetUserId,
             publicKey = shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
             role = shareLock.targetUserRole,
-            start = shareLock.start,
-            end = shareLock.end
+            start = shareLock.start?.toLong(),
+            end = shareLock.end?.toLong()
         )
         performOperation(baseOperation, operationRequest)
     }
@@ -423,9 +423,9 @@ open class LockOperationsClient(
         val operationBody = OperationBodyRequest(
             iss = baseOperation.userId,
             sub = baseOperation.lockId,
-            nbf = baseOperation.notBefore,
-            iat = baseOperation.issuedAt,
-            exp = baseOperation.expiresAt,
+            nbf = baseOperation.notBefore.toLong(),
+            iat = baseOperation.issuedAt.toLong(),
+            exp = baseOperation.expiresAt.toLong(),
             jti = baseOperation.jti,
             operation = operationRequest
         )

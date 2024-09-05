@@ -4,8 +4,8 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 
 object DoordeckFactory {
-    fun initialize(apiEnvironment: ApiEnvironment, token: String?, refreshToken: String?): Doordeck {
+    fun initialize(applicationContext: ApplicationContext?, apiEnvironment: ApiEnvironment, token: String?, refreshToken: String?): Doordeck {
         LibsodiumInitializer.initializeWithCallback {  }
-        return DoordeckImpl(apiEnvironment, token, refreshToken)
+        return DoordeckImpl(applicationContext, apiEnvironment, token, refreshToken)
     }
 }

@@ -72,6 +72,7 @@ kotlin {
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
+                optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
             }
         }
 
@@ -87,6 +88,8 @@ kotlin {
                 implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin)
+                implementation(libs.multiplatform.settings)
+                implementation("com.russhwolf:multiplatform-settings-test:1.2.0")
             }
         }
         val commonTest by getting {
@@ -100,6 +103,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.security.crypto)
             }
         }
 
