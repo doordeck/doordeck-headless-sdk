@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 
 class ContextManagerImpl(
-    applicationContext: ApplicationContext? = null,
+    private val applicationContext: ApplicationContext? = null,
     token: String? = null,
     refreshToken: String? = null
 ): ContextManager {
@@ -21,7 +21,7 @@ class ContextManagerImpl(
     private var currentUserCertificateChain: Array<String>? = null
     private var currentUserPrivateKey: ByteArray? = null
 
-    private var secureStorage: SecureStorage = createSecureStorage(applicationContext)
+    private var secureStorage: SecureStorage? = null
 
     override fun setAuthToken(token: String) {
         currentToken = token
@@ -64,19 +64,23 @@ class ContextManagerImpl(
     }
 
     override fun loadContext() {
-        currentToken =  currentToken ?: secureStorage.getCloudAuthToken()
-        currentFusionToken = currentFusionToken ?: secureStorage.getFusionAuthToken()
-        currentUserId = currentUserId ?: secureStorage.getUserId()
-        currentUserCertificateChain = currentUserCertificateChain ?: secureStorage.getCertificateChain()
-        currentUserPrivateKey = currentUserPrivateKey ?: secureStorage.getPrivateKey()
+        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+
+        currentToken =  currentToken ?: secureStorage?.getCloudAuthToken()
+        currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
+        currentUserId = currentUserId ?: secureStorage?.getUserId()
+        currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
+        currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
     }
 
     override fun storeContext() {
-        currentToken?.let { secureStorage.addCloudAuthToken(it) }
-        currentFusionToken?.let { secureStorage.addFusionAuthToken(it) }
-        currentUserId?.let { secureStorage.addUserId(it) }
-        currentUserCertificateChain?.let { secureStorage.addCertificateChain(it) }
-        currentUserPrivateKey?.let { secureStorage.addPrivateKey(it) }
+        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+
+        currentToken?.let { secureStorage?.addCloudAuthToken(it) }
+        currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
+        currentUserId?.let { secureStorage?.addUserId(it) }
+        currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
+        currentUserPrivateKey?.let { secureStorage?.addPrivateKey(it) }
     }
 
     internal fun getOperationContext(): Context.OperationContext {
