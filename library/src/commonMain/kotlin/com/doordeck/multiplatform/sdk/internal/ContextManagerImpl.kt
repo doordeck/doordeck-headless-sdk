@@ -86,7 +86,7 @@ class ContextManagerImpl(
     override fun clearContext() {
         initializeSecureStorage()
 
-        secureStorage?.let { clearContext() }
+        secureStorage?.clear()
     }
 
     private fun initializeSecureStorage() {
