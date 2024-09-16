@@ -199,7 +199,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualEd25519Key = application.authKeys.values.firstOrNull {
+        val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.kid
         }?.value as? Ed25519KeyResponse
         assertNotNull(actualEd25519Key)
@@ -229,7 +229,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualRsaKey = application.authKeys.values.firstOrNull {
+        val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.kid
         }?.value as? RsaKeyResponse
         assertNotNull(actualRsaKey)
@@ -255,7 +255,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualKeyEcKey = application.authKeys.values.firstOrNull {
+        val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.kid
         }?.value as? EcKeyResponse
         assertNotNull(actualKeyEcKey)
