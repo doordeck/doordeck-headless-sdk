@@ -74,7 +74,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldSetLockSettingPermittedAddresses() = runTest {
-        lockOperations.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, arrayOf("1.1.1.1")).await()
+        lockOperations.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, listOf("1.1.1.1")).await()
     }
 
     @Test
