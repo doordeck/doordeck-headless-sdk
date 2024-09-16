@@ -609,7 +609,7 @@ class LockOperationsClientTest : IntegrationTest() {
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val now = Clock.System.now()
-        val start = now.minus(7.days).epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds.toInt()
         val end = now.epochSeconds.toInt()
 
         // When
@@ -625,7 +625,7 @@ class LockOperationsClientTest : IntegrationTest() {
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val now = Clock.System.now()
-        val start = now.minus(7.days).epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds.toInt()
         val end = now.epochSeconds.toInt()
 
         // When
