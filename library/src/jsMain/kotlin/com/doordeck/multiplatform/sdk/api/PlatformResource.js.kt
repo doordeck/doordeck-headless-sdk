@@ -27,7 +27,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    fun listApplications(): Promise<Array<ApplicationResponse>>
+    fun listApplications(): Promise<List<ApplicationResponse>>
 
     /**
      * Get application
@@ -179,7 +179,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(applicationId: String): Promise<Array<ApplicationOwnerDetailsResponse>>
+    fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>>
 }
 
 private val platform = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

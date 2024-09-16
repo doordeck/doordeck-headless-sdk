@@ -4,7 +4,7 @@ object Context {
 
     class OperationContext(
         val userId: String,
-        val userCertificateChain: Array<String>,
+        val userCertificateChain: List<String>,
         val userPrivateKey: ByteArray
     )
 }

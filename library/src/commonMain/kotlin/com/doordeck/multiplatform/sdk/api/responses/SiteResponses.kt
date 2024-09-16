@@ -32,9 +32,9 @@ class SiteLocksResponse(
 @Serializable
 class SiteLockSettingsResponse(
     val unlockTime: Double,
-    val permittedAddresses: Array<String>,
+    val permittedAddresses: List<String>,
     val defaultName: String,
-    val tiles: Array<String>,
+    val tiles: List<String>,
     val state: SiteStateResponse? = null,
     val favourite: Boolean? = null
 )

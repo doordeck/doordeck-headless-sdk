@@ -16,21 +16,21 @@ actual interface SitesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
-    fun listSites(): Promise<Array<SiteResponse>>
+    fun listSites(): Promise<List<SiteResponse>>
 
     /**
      * Get locks for site
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
-    fun getLocksForSite(siteId: String): Promise<Array<SiteLocksResponse>>
+    fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>>
 
     /**
      * Get users for a site
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
-    fun getUsersForSite(siteId: String): Promise<Array<UserForSiteResponse>>
+    fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>>
 }
 
 private val sites = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
