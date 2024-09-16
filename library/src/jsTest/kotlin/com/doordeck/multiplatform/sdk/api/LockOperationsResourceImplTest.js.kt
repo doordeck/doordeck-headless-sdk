@@ -24,7 +24,7 @@ class LockOperationsResourceImplTest {
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
-        contextManager.setOperationContext("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
@@ -84,7 +84,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldSetLockSettingTimeRestrictions() = runTest {
-        lockOperations.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyArray()).await()
+        lockOperations.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyList()).await()
     }
 
     @Test
@@ -129,7 +129,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUnlock() = runTest {
-        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
     }
 
     @Test
@@ -141,21 +141,21 @@ class LockOperationsResourceImplTest {
     fun shouldShareLock() = runTest {
         lockOperations.shareLock(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
         )).await()
     }
 
     @Test
     fun shouldRevokeAccessToLockWithContext() = runTest {
-        lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyArray()).await()
+        lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList()).await()
     }
 
     @Test
     fun shouldRevokeAccessToLock() = runTest {
         lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            users = emptyArray()
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            users = emptyList()
         )).await()
     }
 
@@ -167,7 +167,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
     }
@@ -180,7 +180,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
         lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
     }

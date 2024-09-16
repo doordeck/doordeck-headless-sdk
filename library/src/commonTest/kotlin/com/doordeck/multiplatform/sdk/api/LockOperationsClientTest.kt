@@ -169,7 +169,7 @@ class LockOperationsClientTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = arrayOf(min.dayOfWeek.name)
+            days = listOf(min.dayOfWeek.name)
         )
 
         // When
@@ -389,7 +389,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // When
         LOCK_OPERATIONS_CLIENT.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
-            users = arrayOf(TEST_SUPPLEMENTARY_USER_ID)
+            users = listOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
 
         // Then
@@ -510,8 +510,8 @@ class LockOperationsClientTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = arrayOf(min.dayOfWeek.name),
-            exceptions = emptyArray()
+            days = listOf(min.dayOfWeek.name),
+            exceptions = emptyList()
         )
         val addBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
@@ -569,8 +569,8 @@ class LockOperationsClientTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = arrayOf(min.dayOfWeek.name),
-            exceptions = emptyArray()
+            days = listOf(min.dayOfWeek.name),
+            exceptions = emptyList()
         )
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
@@ -665,8 +665,8 @@ class LockOperationsClientTest : IntegrationTest() {
                     start = "",
                     end = "",
                     timezone = "",
-                    days = emptyArray(),
-                    exceptions = emptyArray()
+                    days = emptyList(),
+                    exceptions = emptyList()
                 )
             )
         }
