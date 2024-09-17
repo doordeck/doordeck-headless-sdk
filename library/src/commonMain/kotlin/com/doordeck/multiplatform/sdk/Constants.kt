@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk
 
 object Constants {
 
+    const val PLATFORM_HEADER_NAME = "X-POWERED-BY"
+    val PLATFORM_HEADER_VALUE = "KMP SDK ${getPlatform()}"
     const val CDN_URL = "https://cdn.doordeck.com"
     const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "**.doordeck.com"
     val TRUSTED_CERTIFICATES = listOf(

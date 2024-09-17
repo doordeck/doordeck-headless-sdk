@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.util
 
+import com.doordeck.multiplatform.sdk.Constants.PLATFORM_HEADER_NAME
+import com.doordeck.multiplatform.sdk.Constants.PLATFORM_HEADER_VALUE
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
@@ -10,14 +12,11 @@ import com.doordeck.multiplatform.sdk.internal.api.Paths
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.host
@@ -85,6 +84,9 @@ internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, ho
             this.protocol = protocol
             this.host = host
         }
+        headers {
+            append(PLATFORM_HEADER_NAME, PLATFORM_HEADER_VALUE)
+        }
     }
 }
 
@@ -131,4 +133,4 @@ internal fun HttpClient.addFusionInterceptor(contextManager: ContextManagerImpl)
 
 internal expect fun HttpClientConfig<*>.installCertificatePinner()
 
-inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
+internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)

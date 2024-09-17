@@ -2,10 +2,10 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.addCloudInterceptor
 import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
+import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
 import com.doordeck.multiplatform.sdk.util.installTimeout
@@ -20,7 +20,7 @@ enum class PlatformType {
     JS
 }
 
-val JSON = Json {
+internal val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
