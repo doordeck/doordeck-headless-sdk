@@ -23,7 +23,7 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
-    fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): Promise<dynamic>
+    fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<dynamic>
 }
 
 private val tiles = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

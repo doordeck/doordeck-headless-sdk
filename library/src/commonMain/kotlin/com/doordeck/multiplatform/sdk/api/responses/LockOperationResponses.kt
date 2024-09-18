@@ -24,19 +24,19 @@ class LockResponse(
 @Serializable
 class LockSettingsResponse(
     val unlockTime: Double,
-    val permittedAddresses: Array<String>,
+    val permittedAddresses: List<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
-    val tiles: Array<String>,
+    val tiles: List<String>,
     val hidden: Boolean,
-    val directAccessEndpoints: Array<String> = emptyArray()
+    val directAccessEndpoints: List<String> = emptyList()
 )
 
 @JsExport
 @Serializable
 class UsageRequirementsResponse(
-    val time: Array<TimeRequirementResponse>? = null,
+    val time: List<TimeRequirementResponse>? = null,
     val location: LocationRequirementResponse? = null
 )
 
@@ -46,7 +46,7 @@ class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Array<String>
+    val days: List<String>
 )
 
 @JsExport
@@ -65,8 +65,8 @@ class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Array<String>,
-    val exceptions: Array<String>? = null
+    val days: List<String>,
+    val exceptions: List<String>? = null
 )
 
 @JsExport
@@ -116,7 +116,7 @@ class LockUserResponse(
     val foreign: Boolean,
     val start: Double? = null,
     val end: Double? = null,
-    val devices: Array<LockUserDetailsResponse>
+    val devices: List<LockUserDetailsResponse>
 )
 
 @JsExport

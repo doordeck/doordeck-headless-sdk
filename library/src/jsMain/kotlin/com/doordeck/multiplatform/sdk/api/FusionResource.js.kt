@@ -15,7 +15,7 @@ import kotlin.js.Promise
 actual interface FusionResource {
     fun login(email: String, password: String): Promise<FusionLoginResponse>
     fun getIntegrationType(): Promise<IntegrationTypeResponse>
-    fun getIntegrationConfiguration(type: String): Promise<Array<IntegrationConfigurationResponse>>
+    fun getIntegrationConfiguration(type: String): Promise<List<IntegrationConfigurationResponse>>
     fun enableDoor(name: String, siteId: String, controller: Fusion.LockController): Promise<dynamic>
     fun deleteDoor(deviceId: String): Promise<dynamic>
     fun getDoorStatus(deviceId: String): Promise<DoorStateResponse>

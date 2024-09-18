@@ -31,21 +31,21 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<Array<LockAuditTrailResponse>>
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<LockAuditTrailResponse>>
 
     /**
      * Get audit for a user
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<Array<UserAuditResponse>>
+    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<UserAuditResponse>>
 
     /**
      * Get users for a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
-    fun getUsersForLock(lockId: String): Promise<Array<UserLockResponse>>
+    fun getUsersForLock(lockId: String): Promise<List<UserLockResponse>>
 
     /**
      * Get locks for a user
@@ -87,7 +87,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>): Promise<dynamic>
+    fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>): Promise<dynamic>
 
     /**
      * Update lock properties - Settings - Hidden
@@ -101,7 +101,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>): Promise<dynamic>
+    fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>): Promise<dynamic>
 
     /**
      * Update lock properties - Settings - Usage requirements - Location
@@ -159,7 +159,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>? = null): Promise<dynamic>
+    fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null): Promise<dynamic>
 
     /**
      * Unlock
@@ -189,7 +189,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    fun revokeAccessToLockWithContext(lockId: String, users: Array<String>): Promise<dynamic>
+    fun revokeAccessToLockWithContext(lockId: String, users: List<String>): Promise<dynamic>
 
     /**
      * Revoke access to a lock
@@ -233,14 +233,14 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
-    fun getPinnedLocks(): Promise<Array<LockResponse>>
+    fun getPinnedLocks(): Promise<List<LockResponse>>
 
     /**
      * Get shareable locks
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
-    fun getShareableLocks(): Promise<Array<ShareableLockResponse>>
+    fun getShareableLocks(): Promise<List<ShareableLockResponse>>
 }
 
 private val lockOperations = LockOperationsResourceImpl(

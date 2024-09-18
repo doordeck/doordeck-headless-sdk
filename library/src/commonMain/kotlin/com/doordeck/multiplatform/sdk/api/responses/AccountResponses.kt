@@ -23,7 +23,7 @@ class UserDetailsResponse(
 @JsExport
 @Serializable
 class RegisterEphemeralKeyResponse(
-    val certificateChain: Array<String>,
+    val certificateChain: List<String>,
     val userId: String
 )
 

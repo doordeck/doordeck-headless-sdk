@@ -6,6 +6,6 @@ import kotlin.js.JsExport
 interface ContextManager {
 
     fun setAuthToken(token: String)
-    fun setOperationContext(userId: String, certificateChain: Array<String>, privateKey: ByteArray)
+    fun setOperationContext(userId: String, certificateChain: List<String>, privateKey: ByteArray)
     fun setFusionAuthToken(token: String)
 }
