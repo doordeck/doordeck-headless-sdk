@@ -639,7 +639,7 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
         // Given
         CONTEXT_MANAGER.resetOperationContext()
-        val exceptionMessage = "The operation context is missing"
+        val exceptionMessage = "Operation context is missing"
 
         // When
         val revokeAccessToLockWithContextException = assertFails {

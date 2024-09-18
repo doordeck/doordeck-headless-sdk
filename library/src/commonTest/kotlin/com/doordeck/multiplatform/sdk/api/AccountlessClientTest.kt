@@ -39,7 +39,7 @@ class AccountlessClientTest : IntegrationTest() {
         assertTrue { response.refreshToken.isNotEmpty() }
 
         // Given - shouldDelete
-        val contextManager = ContextManagerImpl(response.authToken)
+        val contextManager = ContextManagerImpl(token = response.authToken)
         val accountClient = AccountClient(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
 
         // When

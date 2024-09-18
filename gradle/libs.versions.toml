@@ -1,17 +1,21 @@
 [versions]
 agp = "8.2.0"
 kotlin = "2.0.20"
+multiplatform-settings = "1.2.0"
 nexus-publish = "2.0.0-rc-1"
-android-minSdk = "24"
-android-compileSdk = "33"
+android-minSdk = "21"
+android-compileSdk = "34"
 ktor-client = "3.0.0-beta-2"
 libsodium = "0.9.2"
-kotlinx-datetime = "0.6.0"
+security-crypto = "1.1.0-alpha06"
+kotlinx-datetime = "0.6.1"
 kotlin-coroutines-test = "1.9.0-RC.2"
 koin = "4.0.0-RC1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
+multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatform-settings" }
 nexus-publish = { module = "io.github.gradle-nexus.publish-plugin:io.github.gradle-nexus.publish-plugin.gradle.plugin", version.ref = "nexus-publish" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-test" }
 
@@ -34,6 +38,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 libsodium-bindings = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings", version.ref = "libsodium" }
 
 # Utils
+security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]

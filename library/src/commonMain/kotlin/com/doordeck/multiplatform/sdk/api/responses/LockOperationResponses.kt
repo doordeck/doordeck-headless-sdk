@@ -73,8 +73,7 @@ class UnlockBetweenSettingResponse(
 @Serializable
 class LockStateResponse(
     val locked: Boolean,
-    val connected: Boolean,
-    val delay: String? = null // Duration
+    val connected: Boolean
 )
 
 @JsExport
