@@ -49,11 +49,11 @@ class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
         return settings.getStringOrNull(USER_ID_KEY)
     }
 
-    override fun addCertificateChain(certificateChain: Array<String>) {
+    override fun addCertificateChain(certificateChain: List<String>) {
         return settings.putString(CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString())
     }
 
-    override fun getCertificateChain(): Array<String>? {
+    override fun getCertificateChain(): List<String>? {
         return settings.getStringOrNull(CERTIFICATE_CHAIN_KEY)?.stringToCertificateChain()
     }
 
