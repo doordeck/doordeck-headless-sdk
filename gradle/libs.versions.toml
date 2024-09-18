@@ -6,7 +6,6 @@ android-minSdk = "24"
 android-compileSdk = "33"
 ktor-client = "3.0.0-beta-2"
 libsodium = "0.9.2"
-uuid-generator = "0.8.4"
 kotlinx-datetime = "0.6.0"
 kotlin-coroutines-test = "1.9.0-RC.2"
 koin = "4.0.0-RC1"
@@ -35,7 +34,6 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 libsodium-bindings = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings", version.ref = "libsodium" }
 
 # Utils
-uuid-generator = { module = "com.benasher44:uuid", version.ref = "uuid-generator" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]

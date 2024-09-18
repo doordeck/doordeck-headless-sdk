@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api.model
 
-import com.benasher44.uuid.uuid4
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
 import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
 @JsExport
 object LockOperations {
@@ -73,7 +73,7 @@ object LockOperations {
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
         val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val jti: String = uuid4().toString()
+        val jti: String = Uuid.random().toString()
     )
 
     abstract class Operation(

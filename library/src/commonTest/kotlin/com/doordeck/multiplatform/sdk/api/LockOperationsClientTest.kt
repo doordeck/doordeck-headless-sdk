@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.PlatformType
@@ -34,6 +33,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
 class LockOperationsClientTest : IntegrationTest() {
 
@@ -61,7 +61,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val updatedLockName = "Demo ${uuid4()} Lock"
+        val updatedLockName = "Demo ${Uuid.random()} Lock"
 
         // When
         LOCK_OPERATIONS_CLIENT.updateLockNameRequest(TEST_MAIN_LOCK_ID, updatedLockName)
@@ -106,7 +106,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val updatedLockDefaultName = "Demo ${uuid4()} Lock"
+        val updatedLockDefaultName = "Demo ${Uuid.random()} Lock"
 
         // When
         LOCK_OPERATIONS_CLIENT.updateLockSettingDefaultNameRequest(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
