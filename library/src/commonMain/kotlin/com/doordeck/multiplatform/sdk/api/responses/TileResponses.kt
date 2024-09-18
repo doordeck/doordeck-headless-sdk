@@ -8,5 +8,5 @@ import kotlin.js.JsExport
 class TileLocksResponse(
     val siteId: String,
     val tileId: String,
-    val deviceIds: Array<String>
+    val deviceIds: List<String>
 )

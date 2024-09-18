@@ -23,8 +23,8 @@ class FusionResourceImpl(
         return GlobalScope.promise { getIntegrationTypeRequest() }
     }
 
-    override fun getIntegrationConfiguration(type: String): Promise<Array<IntegrationConfigurationResponse>> {
-        return GlobalScope.promise { getIntegrationConfigurationRequest(type).toTypedArray() }
+    override fun getIntegrationConfiguration(type: String): Promise<List<IntegrationConfigurationResponse>> {
+        return GlobalScope.promise { getIntegrationConfigurationRequest(type) }
     }
 
     override fun enableDoor(name: String, siteId: String, controller: Fusion.LockController): Promise<Unit> {

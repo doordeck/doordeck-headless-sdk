@@ -49,7 +49,7 @@ class ServiceStateResponse(
 @Serializable
 class DiscoveredDeviceResponse(
     val key: Fusion.LockController,
-    val metadata: Container<String>
+    val metadata: Map<String, String>
 )
 
 @JsExport

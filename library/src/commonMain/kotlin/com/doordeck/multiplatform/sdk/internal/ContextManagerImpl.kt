@@ -18,7 +18,7 @@ class ContextManagerImpl(
     var currentFusionToken: String? = null
 
     private var currentUserId: String? = null
-    private var currentUserCertificateChain: Array<String>? = null
+    private var currentUserCertificateChain: List<String>? = null
     private var currentUserPrivateKey: ByteArray? = null
 
     private var secureStorage: SecureStorage? = null
@@ -49,7 +49,7 @@ class ContextManagerImpl(
         currentUserPrivateKey = null
     }
 
-    override fun setOperationContext(userId: String, certificateChain: Array<String>, privateKey: ByteArray) {
+    override fun setOperationContext(userId: String, certificateChain: List<String>, privateKey: ByteArray) {
         currentUserId = userId
         currentUserCertificateChain = certificateChain
         currentUserPrivateKey = privateKey

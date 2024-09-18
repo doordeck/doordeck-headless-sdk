@@ -8,8 +8,7 @@ android-compileSdk = "34"
 ktor-client = "3.0.0-beta-2"
 libsodium = "0.9.2"
 security-crypto = "1.1.0-alpha06"
-uuid-generator = "0.8.4"
-kotlinx-datetime = "0.6.1"
+kotlinx-datetime = "0.6.10"
 kotlin-coroutines-test = "1.9.0-RC.2"
 koin = "4.0.0-RC1"
 
@@ -40,7 +39,6 @@ libsodium-bindings = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodi
 
 # Utils
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
-uuid-generator = { module = "com.benasher44:uuid", version.ref = "uuid-generator" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 [plugins]
