@@ -18,8 +18,8 @@ class PlatformResourceImpl(
         return GlobalScope.promise { createApplicationRequest(application) }
     }
 
-    override fun listApplications(): Promise<Array<ApplicationResponse>> {
-        return GlobalScope.promise { listApplicationsRequest().toTypedArray() }
+    override fun listApplications(): Promise<List<ApplicationResponse>> {
+        return GlobalScope.promise { listApplicationsRequest() }
     }
 
     override fun getApplication(applicationId: String): Promise<ApplicationResponse> {
@@ -94,7 +94,7 @@ class PlatformResourceImpl(
         return GlobalScope.promise { removeApplicationOwnerRequest(applicationId, userId) }
     }
 
-    override fun getApplicationOwnersDetails(applicationId: String): Promise<Array<ApplicationOwnerDetailsResponse>> {
-        return GlobalScope.promise { getApplicationOwnersDetailsRequest(applicationId).toTypedArray() }
+    override fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>> {
+        return GlobalScope.promise { getApplicationOwnersDetailsRequest(applicationId) }
     }
 }

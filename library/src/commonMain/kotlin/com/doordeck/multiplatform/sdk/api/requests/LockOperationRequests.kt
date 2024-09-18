@@ -15,9 +15,9 @@ class OperationHeaderRequest(
 class OperationBodyRequest(
     val iss: String,
     val sub: String,
-    val nbf: Int,
-    val iat: Int,
-    val exp: Int,
+    val nbf: Long,
+    val iat: Long,
+    val exp: Long,
     val jti: String? = null,
     val operation: OperationRequest
 )
@@ -34,8 +34,8 @@ class ShareLockOperationRequest(
     val user: String,
     val publicKey: String,
     val role: UserRole? = null,
-    val start: Int? = null,
-    val end: Int? = null
+    val start: Long? = null,
+    val end: Long? = null
 ): OperationRequest
 
 @Serializable
@@ -53,8 +53,8 @@ class UpdateSecureSettingsOperationRequest(
 
 @Serializable
 class UnlockBetweenSettingRequest(
-    val start: String,
-    val end: String,
+    val start: String, // Local time, (HH:mm)
+    val end: String, // Local time, (HH:mm)
     val timezone: String,
     val days: List<String>,
     val exceptions: List<String>? = null
@@ -133,8 +133,8 @@ class UpdateLockSettingLocationUsageRequirementRequest(
 
 @Serializable
 class TimeRequirementRequest(
-    val start: String,
-    val end: String,
+    val start: String, // Local time, (HH:mm)
+    val end: String, // Local time, (HH:mm)
     val timezone: String,
     val days: List<String>
 )

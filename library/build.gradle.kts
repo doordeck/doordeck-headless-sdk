@@ -80,6 +80,8 @@ kotlin {
                 optIn("kotlin.ExperimentalUnsignedTypes")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
+                optIn("kotlin.uuid.ExperimentalUuidApi")
+                optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
@@ -94,9 +96,9 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.libsodium.bindings)
-                implementation(libs.uuid.generator)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin)
+                implementation(libs.multiplatform.settings)
             }
         }
         val commonTest by getting {
@@ -104,13 +106,14 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
                 implementation(libs.ktor.client.mock)
+                implementation(libs.multiplatform.settings.test)
             }
         }
 
         val androidMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
-                implementation(libs.ktor.client.cio)
+                implementation(libs.security.crypto)
             }
         }
 
@@ -122,7 +125,7 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                implementation(libs.ktor.client.apache)
+                implementation(libs.ktor.client.okhttp)
             }
         }
 

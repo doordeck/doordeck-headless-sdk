@@ -21,7 +21,7 @@ class LockOperationsResourceImplTest {
     private val lockOperations = LockOperationsResourceImpl(TEST_HTTP_CLIENT, contextManager, localUnlock)
 
     init {
-        contextManager.setOperationContext("", emptyArray(), byteArrayOf())
+        contextManager.setOperationContext("", emptyList(), byteArrayOf())
     }
 
     @Test
@@ -230,13 +230,13 @@ class LockOperationsResourceImplTest {
     @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlock() = runTest {
-        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID)))
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID)))
     }
 
     @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockAsync() = runTest {
-        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID))).await()
+        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID))).await()
     }
 
     @Ignore("Libsodium does not work with the android tests")
@@ -256,7 +256,7 @@ class LockOperationsResourceImplTest {
     fun shouldShareLock() = runTest {
         lockOperations.shareLock(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
         ))
     }
@@ -266,7 +266,7 @@ class LockOperationsResourceImplTest {
     fun shouldShareLockAsync() = runTest {
         lockOperations.shareLockAsync(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
             )).await()
     }
@@ -287,8 +287,8 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldRevokeAccessToLock() = runTest {
         lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
-            users = emptyArray()
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            users = emptyList()
         ))
     }
 
@@ -296,8 +296,8 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldRevokeAccessToLockAsync() = runTest {
         lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
-            users = emptyArray()
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            users = emptyList()
         )).await()
     }
 
@@ -317,7 +317,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         ))
     }
@@ -326,7 +326,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
         lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
     }
@@ -347,7 +347,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
         lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
             unlockBetween = null
         ))
     }
@@ -356,7 +356,7 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenAsync() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyArray(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
     }

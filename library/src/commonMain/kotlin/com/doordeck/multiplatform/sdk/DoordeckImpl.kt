@@ -19,6 +19,7 @@ import org.koin.dsl.module
 import org.koin.mp.KoinPlatform.getKoin
 
 class DoordeckImpl(
+    applicationContext: ApplicationContext?,
     apiEnvironment: ApiEnvironment,
     token: String?,
     refreshToken: String?
@@ -28,7 +29,7 @@ class DoordeckImpl(
         // Dependency injection
         startKoin {
             modules(listOf(module {
-                val mainContextManager = ContextManagerImpl(token, refreshToken)
+                val mainContextManager = ContextManagerImpl(applicationContext, token, refreshToken)
                 val httpClient = createHttpClient()
                 val cloudHttpClient = createCloudHttpClient(apiEnvironment, mainContextManager)
                 val fusionHttpClient = createFusionHttpClient(apiEnvironment.fusionHost, mainContextManager)
