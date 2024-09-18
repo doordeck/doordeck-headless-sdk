@@ -17,8 +17,8 @@ interface SecureStorage {
     fun addUserId(userId: String)
     fun getUserId(): String?
 
-    fun addCertificateChain(certificateChain: Array<String>)
-    fun getCertificateChain(): Array<String>?
+    fun addCertificateChain(certificateChain: List<String>)
+    fun getCertificateChain(): List<String>?
 
     fun clear()
 }
