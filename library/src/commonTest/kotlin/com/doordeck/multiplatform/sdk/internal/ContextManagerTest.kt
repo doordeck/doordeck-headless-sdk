@@ -4,7 +4,6 @@ import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
-import com.doordeck.multiplatform.sdk.util.toArrayList
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
@@ -25,7 +24,7 @@ class ContextManagerTest {
         val cloudAuthToken = uuid4().toString()
         val fusionAuthToken = uuid4().toString()
         val userId = uuid4().toString()
-        val certificateChain = (1..3).map { uuid4().toString() }.toArrayList()
+        val certificateChain = (1..3).map { uuid4().toString() }
         val privateKey = uuid4().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
@@ -56,7 +55,7 @@ class ContextManagerTest {
         val cloudAuthToken = uuid4().toString()
         val fusionAuthToken = uuid4().toString()
         val userId = uuid4().toString()
-        val certificateChain = (1..3).map { uuid4().toString() }.toArrayList()
+        val certificateChain = (1..3).map { uuid4().toString() }
         val privateKey = uuid4().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
