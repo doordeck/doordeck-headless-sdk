@@ -12,21 +12,21 @@ actual interface AccountlessResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
-    suspend fun login(email: String, password: String): TokenResponse
+    fun login(email: String, password: String): TokenResponse
 
     /**
      * Registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
-    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
+    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
 
     /**
      * Verify email
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
-    suspend fun verifyEmail(code: String)
+    fun verifyEmail(code: String)
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

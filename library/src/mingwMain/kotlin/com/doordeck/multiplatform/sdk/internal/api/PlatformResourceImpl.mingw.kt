@@ -6,92 +6,93 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsRespo
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 
 class PlatformResourceImpl(
     httpClient: HttpClient
 ) : PlatformClient(httpClient), PlatformResource {
 
-    override suspend fun createApplication(application: Platform.CreateApplication) {
-        return createApplicationRequest(application)
+    override fun createApplication(application: Platform.CreateApplication) {
+        return runBlocking { createApplicationRequest(application) }
     }
 
-    override suspend fun listApplications(): List<ApplicationResponse> {
-        return listApplicationsRequest()
+    override fun listApplications(): List<ApplicationResponse> {
+        return runBlocking { listApplicationsRequest() }
     }
 
-    override suspend fun getApplication(applicationId: String): ApplicationResponse {
-        return getApplicationRequest(applicationId)
+    override fun getApplication(applicationId: String): ApplicationResponse {
+        return runBlocking { getApplicationRequest(applicationId) }
     }
 
-    override suspend fun updateApplicationName(applicationId: String, name: String) {
-        return updateApplicationNameRequest(applicationId, name)
+    override fun updateApplicationName(applicationId: String, name: String) {
+        return runBlocking { updateApplicationNameRequest(applicationId, name) }
     }
 
-    override suspend fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return updateApplicationCompanyNameRequest(applicationId, companyName)
+    override fun updateApplicationCompanyName(applicationId: String, companyName: String) {
+        return runBlocking { updateApplicationCompanyNameRequest(applicationId, companyName) }
     }
 
-    override suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return updateApplicationMailingAddressRequest(applicationId, mailingAddress)
+    override fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
+        return runBlocking { updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
     }
 
-    override suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
+    override fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
+        return runBlocking { updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
     }
 
-    override suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return updateApplicationSupportContactRequest(applicationId, supportContact)
+    override fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
+        return runBlocking { updateApplicationSupportContactRequest(applicationId, supportContact) }
     }
 
-    override suspend fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return updateApplicationAppLinkRequest(applicationId, appLink)
+    override fun updateApplicationAppLink(applicationId: String, appLink: String) {
+        return runBlocking { updateApplicationAppLinkRequest(applicationId, appLink) }
     }
 
-    override suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        return updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
+    override fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
+        return runBlocking { updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
     }
 
-    override suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return updateApplicationLogoUrlRequest(applicationId, logoUrl)
+    override fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
+        return runBlocking { updateApplicationLogoUrlRequest(applicationId, logoUrl) }
     }
 
-    override suspend fun deleteApplication(applicationId: String) {
-        return deleteApplicationRequest(applicationId)
+    override fun deleteApplication(applicationId: String) {
+        return runBlocking { deleteApplicationRequest(applicationId) }
     }
 
-    override suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return getLogoUploadUrlRequest(applicationId, contentType)
+    override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+        return runBlocking { getLogoUploadUrlRequest(applicationId, contentType) }
     }
 
-    override suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        return addAuthKeyRequest(applicationId, key)
+    override fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
+        return runBlocking { addAuthKeyRequest(applicationId, key) }
     }
 
-    override suspend fun addAuthIssuer(applicationId: String, url: String) {
-        return addAuthIssuerRequest(applicationId, url)
+    override fun addAuthIssuer(applicationId: String, url: String) {
+        return runBlocking { addAuthIssuerRequest(applicationId, url) }
     }
 
-    override suspend fun deleteAuthIssuer(applicationId: String, url: String) {
-        return deleteAuthIssuerRequest(applicationId, url)
+    override fun deleteAuthIssuer(applicationId: String, url: String) {
+        return runBlocking { deleteAuthIssuerRequest(applicationId, url) }
     }
 
-    override suspend fun addCorsDomain(applicationId: String, url: String) {
-        return addCorsDomainRequest(applicationId, url)
+    override fun addCorsDomain(applicationId: String, url: String) {
+        return runBlocking { addCorsDomainRequest(applicationId, url) }
     }
 
-    override suspend fun removeCorsDomain(applicationId: String, url: String) {
-        return removeCorsDomainRequest(applicationId, url)
+    override fun removeCorsDomain(applicationId: String, url: String) {
+        return runBlocking { removeCorsDomainRequest(applicationId, url) }
     }
 
-    override suspend fun addApplicationOwner(applicationId: String, userId: String) {
-        return addApplicationOwnerRequest(applicationId, userId)
+    override fun addApplicationOwner(applicationId: String, userId: String) {
+        return runBlocking { addApplicationOwnerRequest(applicationId, userId) }
     }
 
-    override suspend fun removeApplicationOwner(applicationId: String, userId: String) {
-        return removeApplicationOwnerRequest(applicationId, userId)
+    override fun removeApplicationOwner(applicationId: String, userId: String) {
+        return runBlocking { removeApplicationOwnerRequest(applicationId, userId) }
     }
 
-    override suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return getApplicationOwnersDetailsRequest(applicationId)
+    override fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
+        return runBlocking { getApplicationOwnersDetailsRequest(applicationId) }
     }
 }

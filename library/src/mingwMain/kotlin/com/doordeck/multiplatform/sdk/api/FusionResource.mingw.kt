@@ -11,14 +11,14 @@ import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface FusionResource {
-    suspend fun login(email: String, password: String): FusionLoginResponse
-    suspend fun getIntegrationType(): IntegrationTypeResponse
-    suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse>
-    suspend fun enableDoor(name: String, siteId: String, controller: Fusion.LockController)
-    suspend fun deleteDoor(deviceId: String)
-    suspend fun getDoorStatus(deviceId: String): DoorStateResponse
-    suspend fun startDoor(deviceId: String)
-    suspend fun stopDoor(deviceId: String)
+    fun login(email: String, password: String): FusionLoginResponse
+    fun getIntegrationType(): IntegrationTypeResponse
+    fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse>
+    fun enableDoor(name: String, siteId: String, controller: Fusion.LockController)
+    fun deleteDoor(deviceId: String)
+    fun getDoorStatus(deviceId: String): DoorStateResponse
+    fun startDoor(deviceId: String)
+    fun stopDoor(deviceId: String)
 }
 
 actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<HttpClient>(named("fusionHttpClient")))

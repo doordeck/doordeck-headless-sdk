@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.api.model
 
 import kotlinx.datetime.Clock
+import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
 import kotlin.time.Duration.Companion.minutes
@@ -9,6 +10,7 @@ import kotlin.uuid.Uuid
 @JsExport
 object LockOperations {
 
+    @Serializable
     class TimeRequirement(
         val start: String,
         val end: String,
@@ -16,6 +18,7 @@ object LockOperations {
         val days: List<String>
     )
 
+    @Serializable
     class LocationRequirement @JvmOverloads constructor(
         val latitude: Double,
         val longitude: Double,
@@ -24,6 +27,7 @@ object LockOperations {
         val accuracy: Int? = null
     )
 
+    @Serializable
     class UnlockBetween @JvmOverloads constructor(
         val start: String,
         val end: String,
@@ -32,16 +36,19 @@ object LockOperations {
         val exceptions: List<String>? = null
     )
 
+    @Serializable
     class UnlockOperation @JvmOverloads constructor(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val directAccessEndpoints: List<String>? = null
-    ): Operation(baseOperation)
+    ): Operation
 
+    @Serializable
     class ShareLockOperation(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val shareLock: ShareLock
-    ): Operation(baseOperation)
+    ): Operation
 
+    @Serializable
     class ShareLock @JvmOverloads constructor(
         val targetUserId: String,
         val targetUserRole: UserRole,
@@ -50,21 +57,25 @@ object LockOperations {
         val end: Int? = null
     )
 
+    @Serializable
     class RevokeAccessToLockOperation(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val users: List<String>
-    ): Operation(baseOperation)
+    ): Operation
 
+    @Serializable
     class UpdateSecureSettingUnlockDuration(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val unlockDuration: Int
-    ): Operation(baseOperation)
+    ): Operation
 
+    @Serializable
     class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
-    ): Operation(baseOperation)
+    ): Operation
 
+    @Serializable
     class BaseOperation @JvmOverloads constructor(
         val userId: String,
         val userCertificateChain: List<String>,
@@ -76,7 +87,6 @@ object LockOperations {
         val jti: String = Uuid.random().toString()
     )
 
-    abstract class Operation(
-        open val baseOperation: BaseOperation
-    )
+    @Serializable
+    sealed interface Operation
 }

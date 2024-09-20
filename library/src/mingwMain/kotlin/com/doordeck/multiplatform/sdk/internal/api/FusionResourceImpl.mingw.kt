@@ -7,40 +7,41 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 
 class FusionResourceImpl(
     httpClient: HttpClient
 ) : FusionClient(httpClient), FusionResource {
 
-    override suspend fun login(email: String, password: String): FusionLoginResponse {
-        return loginRequest(email, password)
+    override fun login(email: String, password: String): FusionLoginResponse {
+        return runBlocking { loginRequest(email, password) }
     }
 
-    override suspend fun getIntegrationType(): IntegrationTypeResponse {
-        return getIntegrationTypeRequest()
+    override fun getIntegrationType(): IntegrationTypeResponse {
+        return runBlocking { getIntegrationTypeRequest() }
     }
 
-    override suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
-        return getIntegrationConfigurationRequest(type)
+    override fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
+        return runBlocking { getIntegrationConfigurationRequest(type) }
     }
 
-    override suspend fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
-        return enableDoorRequest(name, siteId, controller)
+    override fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
+        return runBlocking { enableDoorRequest(name, siteId, controller) }
     }
 
-    override suspend fun deleteDoor(deviceId: String) {
-        return deleteDoorRequest(deviceId)
+    override fun deleteDoor(deviceId: String) {
+        return runBlocking { deleteDoorRequest(deviceId) }
     }
 
-    override suspend fun getDoorStatus(deviceId: String): DoorStateResponse {
-        return getDoorStatusRequest(deviceId)
+    override fun getDoorStatus(deviceId: String): DoorStateResponse {
+        return runBlocking { getDoorStatusRequest(deviceId) }
     }
 
-    override suspend fun startDoor(deviceId: String) {
-        return startDoorRequest(deviceId)
+    override fun startDoor(deviceId: String) {
+        return runBlocking { startDoorRequest(deviceId) }
     }
 
-    override suspend fun stopDoor(deviceId: String) {
-        return stopDoorRequest(deviceId)
+    override fun stopDoor(deviceId: String) {
+        return runBlocking { stopDoorRequest(deviceId) }
     }
 }

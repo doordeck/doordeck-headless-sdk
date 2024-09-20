@@ -19,35 +19,35 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun refreshToken(refreshToken: String): TokenResponse
+    fun refreshToken(refreshToken: String): TokenResponse
 
     /**
      * Logout
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
-    suspend fun logout()
+    fun logout()
 
     /**
      * Register ephemeral key
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
 
     /**
      * Register ephemeral key with secondary authentication
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
 
     /**
      * Reverify email
@@ -55,7 +55,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun reverifyEmail()
+    fun reverifyEmail()
 
     /**
      * Change password
@@ -63,28 +63,28 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun changePassword(oldPassword: String, newPassword: String)
+    fun changePassword(oldPassword: String, newPassword: String)
 
     /**
      * Get user details
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
-    suspend fun getUserDetails(): UserDetailsResponse
+    fun getUserDetails(): UserDetailsResponse
 
     /**
      * Update user details
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
-    suspend fun updateUserDetails(displayName: String)
+    fun updateUserDetails(displayName: String)
 
     /**
      * Delete account
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
-    suspend fun deleteAccount()
+    fun deleteAccount()
 }
 
 actual fun account(): AccountResource = AccountResourceImpl(

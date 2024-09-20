@@ -17,7 +17,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun createApplication(application: Platform.CreateApplication)
+    fun createApplication(application: Platform.CreateApplication)
 
     /**
      * List applications
@@ -25,7 +25,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun listApplications(): List<ApplicationResponse>
+    fun listApplications(): List<ApplicationResponse>
 
     /**
      * Get application
@@ -33,7 +33,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplication(applicationId: String): ApplicationResponse
+    fun getApplication(applicationId: String): ApplicationResponse
 
     /**
      * Update application - Name
@@ -41,7 +41,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationName(applicationId: String, name: String)
+    fun updateApplicationName(applicationId: String, name: String)
 
     /**
      * Update application - Company name
@@ -49,7 +49,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String)
+    fun updateApplicationCompanyName(applicationId: String, companyName: String)
 
     /**
      * Update application - Mailing address
@@ -57,7 +57,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
+    fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
 
     /**
      * Update application - Privacy policy
@@ -65,7 +65,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
+    fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
 
     /**
      * Update application - Support contact
@@ -73,7 +73,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String)
+    fun updateApplicationSupportContact(applicationId: String, supportContact: String)
 
     /**
      * Update application - App link
@@ -81,7 +81,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationAppLink(applicationId: String, appLink: String)
+    fun updateApplicationAppLink(applicationId: String, appLink: String)
 
     /**
      * Update application - Email preferences
@@ -89,7 +89,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
+    fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
 
     /**
      * Update application - Logo url
@@ -97,7 +97,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
+    fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
 
     /**
      * Delete application
@@ -105,7 +105,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun deleteApplication(applicationId: String)
+    fun deleteApplication(applicationId: String)
 
     /**
      * Get logo upload URL
@@ -113,7 +113,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse
+    fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse
 
     /**
      * Add auth key
@@ -121,7 +121,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey)
+    fun addAuthKey(applicationId: String, key: Platform.AuthKey)
 
     /**
      * Add auth issuer
@@ -129,7 +129,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addAuthIssuer(applicationId: String, url: String)
+    fun addAuthIssuer(applicationId: String, url: String)
 
     /**
      * Delete auth issuer
@@ -137,7 +137,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun deleteAuthIssuer(applicationId: String, url: String)
+    fun deleteAuthIssuer(applicationId: String, url: String)
 
     /**
      * Add CORS domain
@@ -145,7 +145,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addCorsDomain(applicationId: String, url: String)
+    fun addCorsDomain(applicationId: String, url: String)
 
     /**
      * Remove CORS domain
@@ -153,7 +153,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun removeCorsDomain(applicationId: String, url: String)
+    fun removeCorsDomain(applicationId: String, url: String)
 
     /**
      * Add application owner
@@ -161,7 +161,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addApplicationOwner(applicationId: String, userId: String)
+    fun addApplicationOwner(applicationId: String, userId: String)
 
     /**
      * Remove application owner
@@ -169,7 +169,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun removeApplicationOwner(applicationId: String, userId: String)
+    fun removeApplicationOwner(applicationId: String, userId: String)
 
     /**
      * Get application owners details
@@ -177,7 +177,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse>
+    fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse>
 }
 
 actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

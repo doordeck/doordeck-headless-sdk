@@ -1,28 +1,23 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.SitesResource
-import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
-import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 
 class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 
-    override suspend fun listSites(): List<SiteResponse> {
-        return listSitesRequest()
+    override fun listSites(): String {
+        return runBlocking { listSitesRequest() }.toJson()
     }
 
-    override fun listSites2(): List<SiteResponse> {
-        return listOf(SiteResponse("5", "test", "red", 0.0, 0.0, 5, "back", "today", "now"))
+    override fun getLocksForSite(siteId: String): String {
+        return runBlocking { getLocksForSiteRequest(siteId) }.toJson()
     }
 
-    override suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
-        return getLocksForSiteRequest(siteId)
-    }
-
-    override suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
-        return getUsersForSiteRequest(siteId)
+    override fun getUsersForSite(siteId: String): String {
+        return runBlocking { getUsersForSiteRequest(siteId) }.toJson()
     }
 }

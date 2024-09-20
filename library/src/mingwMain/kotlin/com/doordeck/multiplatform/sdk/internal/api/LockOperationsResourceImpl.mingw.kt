@@ -10,7 +10,9 @@ import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.util.fromJson
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 
 class LockOperationsResourceImpl(
     httpClient: HttpClient,
@@ -18,127 +20,131 @@ class LockOperationsResourceImpl(
     localUnlock: LocalUnlockClient
 ) : LockOperationsClient(httpClient, contextManager, localUnlock), LockOperationsResource {
 
-    override suspend fun getSingleLock(lockId: String): LockResponse {
-        return getSingleLockRequest(lockId)
+    override fun getSingleLock(lockId: String): LockResponse {
+        return runBlocking { getSingleLockRequest(lockId) }
     }
 
-    override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
-        return getLockAuditTrailRequest(lockId, start, end)
+    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
+        return runBlocking { getLockAuditTrailRequest(lockId, start, end) }
     }
 
-    override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse> {
-        return getAuditForUserRequest(userId, start, end)
+    override fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse> {
+        return runBlocking { getAuditForUserRequest(userId, start, end) }
     }
 
-    override suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return getUsersForLockRequest(lockId)
+    override fun getUsersForLock(lockId: String): List<UserLockResponse> {
+        return runBlocking { getUsersForLockRequest(lockId) }
     }
 
-    override suspend fun getLocksForUser(userId: String): LockUserResponse {
-        return getLocksForUserRequest(userId)
+    override fun getLocksForUser(userId: String): LockUserResponse {
+        return runBlocking { getLocksForUserRequest(userId) }
     }
 
-    override suspend fun updateLockName(lockId: String, name: String?) {
-        return updateLockNameRequest(lockId, name)
+    override fun updateLockName(lockId: String, name: String?) {
+        return runBlocking { updateLockNameRequest(lockId, name) }
     }
 
-    override suspend fun updateLockFavourite(lockId: String, favourite: Boolean?) {
-        return updateLockFavouriteRequest(lockId, favourite)
+    override fun updateLockFavourite(lockId: String, favourite: Boolean?) {
+        return runBlocking { updateLockFavouriteRequest(lockId, favourite) }
     }
 
-    override suspend fun updateLockColour(lockId: String, colour: String?) {
-        return updateLockColourRequest(lockId, colour)
+    override fun updateLockColour(lockId: String, colour: String?) {
+        return runBlocking { updateLockColourRequest(lockId, colour) }
     }
 
-    override suspend fun updateLockSettingDefaultName(lockId: String, name: String?) {
-        return updateLockSettingDefaultNameRequest(lockId, name)
+    override fun updateLockSettingDefaultName(lockId: String, name: String?) {
+        return runBlocking { updateLockSettingDefaultNameRequest(lockId, name) }
     }
 
-    override suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
+    override fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
+        return runBlocking { setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
     }
 
-    override suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return updateLockSettingHiddenRequest(lockId, hidden)
+    override fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
+        return runBlocking { updateLockSettingHiddenRequest(lockId, hidden) }
     }
 
-    override suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return setLockSettingTimeRestrictionsRequest(lockId, times)
+    override fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
+        return runBlocking { setLockSettingTimeRestrictionsRequest(lockId, times) }
     }
 
-    override suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
-        return updateLockSettingLocationRestrictionsRequest(lockId, location)
+    override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
+        return runBlocking { updateLockSettingLocationRestrictionsRequest(lockId, location) }
     }
 
-    override suspend fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return getUserPublicKeyRequest(userEmail, visitor)
+    override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyRequest(userEmail, visitor) }
     }
 
-    override suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
-        return getUserPublicKeyByEmailRequest(email)
+    override fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyByEmailRequest(email) }
     }
 
-    override suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
-        return getUserPublicKeyByTelephoneRequest(telephone)
+    override fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyByTelephoneRequest(telephone) }
     }
 
-    override suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
-        return getUserPublicKeyByLocalKeyRequest(localKey)
+    override fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyByLocalKeyRequest(localKey) }
     }
 
-    override suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
-        return getUserPublicKeyByForeignKeyRequest(foreignKey)
+    override fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyByForeignKeyRequest(foreignKey) }
     }
 
-    override suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
-        return getUserPublicKeyByIdentityRequest(identity)
+    override fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
+        return runBlocking { getUserPublicKeyByIdentityRequest(identity) }
     }
 
-    override suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
-        return unlockWithContextRequest(lockId, directAccessEndpoints)
+    override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
+        return runBlocking { unlockWithContextRequest(lockId, directAccessEndpoints) }
     }
 
-    override suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return unlockRequest(unlockOperation)
+    override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
+        return runBlocking { unlockRequest(unlockOperation) }
     }
 
-    override suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
-        return shareLockWithContextRequest(lockId, shareLock)
+    override fun unlockSync2(unlockOperation: String) {
+        return runBlocking { unlockRequest(unlockOperation.fromJson()) }
     }
 
-    override suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return shareLockRequest(shareLockOperation)
+    override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
+        return runBlocking { shareLockWithContextRequest(lockId, shareLock) }
     }
 
-    override suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
-        return revokeAccessToLockWithContextRequest(lockId, users)
+    override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
+        return runBlocking { shareLockRequest(shareLockOperation) }
     }
 
-    override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return revokeAccessToLockRequest(revokeAccessToLockOperation)
+    override fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
+        return runBlocking { revokeAccessToLockWithContextRequest(lockId, users) }
     }
 
-    override suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
-        return updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration)
+    override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
+        return runBlocking { revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
-    override suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
+    override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
+        return runBlocking { updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration) }
     }
 
-    override suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
+    override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
+        return runBlocking { updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
 
-    override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+    override fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
+        return runBlocking { updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
     }
 
-    override suspend fun getPinnedLocks(): List<LockResponse> {
-        return getPinnedLocksRequest()
+    override fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+        return runBlocking { updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
-    override suspend fun getShareableLocks(): List<ShareableLockResponse> {
-        return getShareableLocksRequest()
+    override fun getPinnedLocks(): List<LockResponse> {
+        return runBlocking { getPinnedLocksRequest() }
+    }
+
+    override fun getShareableLocks(): List<ShareableLockResponse> {
+        return runBlocking { getShareableLocksRequest() }
     }
 }

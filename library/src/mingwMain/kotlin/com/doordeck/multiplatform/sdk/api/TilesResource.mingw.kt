@@ -13,7 +13,7 @@ actual interface TilesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
-    suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse
+    fun getLocksBelongingToTile(tileId: String): TileLocksResponse
 
     /**
      * Associate multiple locks (devices) to a single tile
@@ -21,7 +21,7 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
+    fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))

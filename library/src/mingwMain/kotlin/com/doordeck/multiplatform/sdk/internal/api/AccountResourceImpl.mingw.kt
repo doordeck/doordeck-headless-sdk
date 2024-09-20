@@ -8,49 +8,50 @@ import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.runBlocking
 
 class AccountResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl
 ) : AccountClient(httpClient, contextManager), AccountResource {
 
-    override suspend fun refreshToken(refreshToken: String): TokenResponse {
-        return refreshTokenRequest(refreshToken)
+    override fun refreshToken(refreshToken: String): TokenResponse {
+        return runBlocking { refreshTokenRequest(refreshToken) }
     }
 
-    override suspend fun logout() {
-        return logoutRequest()
+    override fun logout() {
+        return runBlocking { logoutRequest() }
     }
 
-    override suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
-        return registerEphemeralKeyRequest(publicKey)
+    override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
+        return runBlocking { registerEphemeralKeyRequest(publicKey) }
     }
 
-    override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+    override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        return runBlocking { registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
-    override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
-        return verifyEphemeralKeyRegistrationRequest(code, privateKey)
+    override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
+        return runBlocking { verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
-    override suspend fun reverifyEmail() {
-        return reverifyEmailRequest()
+    override fun reverifyEmail() {
+        return runBlocking { reverifyEmailRequest() }
     }
 
-    override suspend fun changePassword(oldPassword: String, newPassword: String) {
-        return changePasswordRequest(oldPassword, newPassword)
+    override fun changePassword(oldPassword: String, newPassword: String) {
+        return runBlocking { changePasswordRequest(oldPassword, newPassword) }
     }
 
-    override suspend fun getUserDetails(): UserDetailsResponse {
-        return getUserDetailsRequest()
+    override fun getUserDetails(): UserDetailsResponse {
+        return runBlocking { getUserDetailsRequest() }
     }
 
-    override suspend fun updateUserDetails(displayName: String) {
-        return updateUserDetailsRequest(displayName)
+    override fun updateUserDetails(displayName: String) {
+        return runBlocking { updateUserDetailsRequest(displayName) }
     }
 
-    override suspend fun deleteAccount() {
-        return deleteAccountRequest()
+    override fun deleteAccount() {
+        return runBlocking { deleteAccountRequest() }
     }
 }
