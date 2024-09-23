@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -15,6 +14,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class AccountClientTest : IntegrationTest() {
 
@@ -42,7 +42,7 @@ class AccountClientTest : IntegrationTest() {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
-        val updatedUserDisplayName = uuid4().toString()
+        val updatedUserDisplayName = Uuid.random().toString()
 
         // When
         ACCOUNT_CLIENT.updateUserDetailsRequest(updatedUserDisplayName)

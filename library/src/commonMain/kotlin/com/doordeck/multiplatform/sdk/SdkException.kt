@@ -2,8 +2,15 @@ package com.doordeck.multiplatform.sdk
 
 open class SdkException(override val message: String, exception: Throwable? = null) : RuntimeException(message, exception)
 
+/**
+ * SDK Exceptions
+ */
 class MissingOperationContextException(override val message: String): SdkException(message)
+class MissingAndroidContextException(override val message: String): SdkException(message)
 
+/**
+ * API Exceptions
+ */
 class BadRequestException(override val message: String): SdkException(message)
 class UnauthorizedException(override val message: String): SdkException(message)
 class ForbiddenException(override val message: String): SdkException(message)

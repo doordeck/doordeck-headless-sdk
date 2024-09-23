@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
@@ -17,6 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class PlatformClientTest : IntegrationTest() {
 
@@ -26,8 +26,8 @@ class PlatformClientTest : IntegrationTest() {
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val newApplication = Platform.CreateApplication(
-            name = "Test Application ${getPlatform()} ${uuid4()}",
-            companyName = uuid4().toString(),
+            name = "Test Application ${getPlatform()} ${Uuid.random()}",
+            companyName = Uuid.random().toString(),
             mailingAddress = "test@doordeck.com",
             privacyPolicy = "https://www.doordeck.com/privacy",
             supportContact = "https://www.doordeck.com"
@@ -43,7 +43,7 @@ class PlatformClientTest : IntegrationTest() {
         assertNotNull(application)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application ${uuid4()}"
+        val updatedApplicationName = "Test Application ${Uuid.random()}"
 
         // When
         PLATFORM_CLIENT.updateApplicationNameRequest(application.applicationId, updatedApplicationName)
@@ -53,7 +53,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationName, application.name)
 
         // Given - shouldUpdateApplicationCompanyName
-        val updatedApplicationCompanyName = uuid4().toString()
+        val updatedApplicationCompanyName = Uuid.random().toString()
 
         // When
         PLATFORM_CLIENT.updateApplicationCompanyNameRequest(application.applicationId, updatedApplicationCompanyName)
@@ -186,7 +186,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Given - shouldAddEd25519AuthKey
         val ed25519Key = Platform.Ed25519Key(
-            kid = uuid4().toString(),
+            kid = Uuid.random().toString(),
             use = "sig",
             alg = "EdDSA",
             d = "NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4",
@@ -199,7 +199,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualEd25519Key = application.authKeys.values.firstOrNull {
+        val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.kid
         }?.value as? Ed25519KeyResponse
         assertNotNull(actualEd25519Key)
@@ -211,7 +211,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Given - shouldAddRsaAuthKey
         val rsaKey = Platform.RsaKey(
-            kid = uuid4().toString(),
+            kid = Uuid.random().toString(),
             use = "sig",
             alg = "RS256",
             p = "_86RLMHT_HrvYGzRLA8K2gEzUh3UADy5xMatYY7nh6KLBWY2USMn5nD93adcT0u6FKE6cEBjNRhWpq_11ai4UuJmLI88Cpf3HoN-eVBqpf0aULsLMNPJK88MWNRvLR5_54-NrAqZOUDLGi32te-CWd4Uq4ly6D_MS_p7G1z7zdk",
@@ -229,7 +229,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualRsaKey = application.authKeys.values.firstOrNull {
+        val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.kid
         }?.value as? RsaKeyResponse
         assertNotNull(actualRsaKey)
@@ -241,7 +241,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Given - shouldAddEcAuthKey
         val ecKey = Platform.EcKey(
-            kid = uuid4().toString(),
+            kid = Uuid.random().toString(),
             use = "sig",
             alg = "ES256",
             d = "6BCNLf3Qdkle4DRLzqocD_58yIQLkaCT-EiWVThFf1s",
@@ -255,7 +255,7 @@ class PlatformClientTest : IntegrationTest() {
 
         // Then
         application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
-        val actualKeyEcKey = application.authKeys.values.firstOrNull {
+        val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.kid
         }?.value as? EcKeyResponse
         assertNotNull(actualKeyEcKey)

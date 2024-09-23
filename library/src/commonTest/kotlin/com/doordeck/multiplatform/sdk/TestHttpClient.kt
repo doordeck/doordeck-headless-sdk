@@ -14,8 +14,6 @@ import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.api.responses.Container
-import com.doordeck.multiplatform.sdk.api.responses.ContainerElement
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.EmailPreferencesResponse
@@ -153,11 +151,11 @@ private fun MockRequestHandleScope.respondContent(content: String): HttpResponse
     )
 
 private val TOKEN_RESPONSE = TokenResponse("", "").toJson()
-private val TILE_LOCKS_RESPONSE = TileLocksResponse("", "", emptyArray()).toJson()
+private val TILE_LOCKS_RESPONSE = TileLocksResponse("", "", emptyList()).toJson()
 private val LIST_SITES_RESPONSE = listOf(SiteResponse("", "", "", 0.0, 0.0, 0, "", "", "")).toJson()
-private val LOCKS_FOR_SITE_RESPONSE = listOf(SiteLocksResponse("", "", null, UserRole.USER, SiteLockSettingsResponse(0.0, emptyArray(), "", emptyArray()))).toJson()
+private val LOCKS_FOR_SITE_RESPONSE = listOf(SiteLocksResponse("", "", null, UserRole.USER, SiteLockSettingsResponse(0.0, emptyList(), "", emptyList()))).toJson()
 private val USER_FOR_SITE_RESPONSE = listOf(UserForSiteResponse("", "", null, false)).toJson()
-private val REGISTER_EPHEMERAL_KEY_RESPONSE = RegisterEphemeralKeyResponse(arrayOf(""), "").toJson()
+private val REGISTER_EPHEMERAL_KEY_RESPONSE = RegisterEphemeralKeyResponse(listOf(""), "").toJson()
 private val REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(TwoFactorMethod.EMAIL).toJson()
 private val USER_DETAILS_RESPONSE = UserDetailsResponse("", null, true, "").toJson()
 private val LOGO_UPLOAD_URL_RESPONSE = GetLogoUploadUrlResponse(DEFAULT_UPLOAD_URL).toJson()
@@ -165,14 +163,14 @@ private val FUSION_LOGIN_RESPONSE = FusionLoginResponse("").toJson()
 private val INTEGRATION_TYPE_RESPONSE = IntegrationTypeResponse().toJson()
 private val INTEGRATION_CONFIGURATION_RESPONSE = listOf(IntegrationConfigurationResponse()).toJson()
 private val DOOR_STATE_RESPONSE = DoorStateResponse(ServiceStateType.RUNNING).toJson()
-private val APPLICATION_RESPONSE = ApplicationResponse("", "", emailPreferences = EmailPreferencesResponse(primaryColour = "", secondaryColour = ""), authKeys = Container(arrayOf(ContainerElement(key = "", value = EcKeyResponse("EC", "use", "kid", crv = "crv", x = "x", y = "y"))))).toJson()
-private val APPLICATION_LIST_RESPONSE = listOf(ApplicationResponse("", "", emailPreferences = EmailPreferencesResponse(primaryColour = "", secondaryColour = ""), authKeys = Container(arrayOf(ContainerElement(key = "", value = EcKeyResponse("EC", "use", "kid", crv = "crv", x = "x", y = "y")))))).toJson()
+private val APPLICATION_RESPONSE = ApplicationResponse("", "", emailPreferences = EmailPreferencesResponse(primaryColour = "", secondaryColour = ""), authKeys = mapOf("" to EcKeyResponse("EC", "use", "kid", crv = "crv", x = "x", y = "y"))).toJson()
+private val APPLICATION_LIST_RESPONSE = listOf(ApplicationResponse("", "", emailPreferences = EmailPreferencesResponse(primaryColour = "", secondaryColour = ""), authKeys = mapOf("" to EcKeyResponse("EC", "use", "kid", crv = "crv", x = "x", y = "y")))).toJson()
 private val APPLICATION_OWNER_DETAILS_RESPONSE = listOf(ApplicationOwnerDetailsResponse("", "", null, false, false)).toJson()
-private val LOCK_RESPONSE = LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyArray(), "", tiles = emptyArray(), hidden = false), LockStateResponse(false, false), false).toJson()
+private val LOCK_RESPONSE = LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyList(), "", tiles = emptyList(), hidden = false), LockStateResponse(false, false), false).toJson()
 private val LOCK_AUDIT_TRAIL_RESPONSE = listOf(LockAuditTrailResponse(0.0, AuditEvent.DOOR_LOCK)).toJson()
 private val USER_AUDIT_RESPONSE = listOf(UserAuditResponse("", 0.0, AuditEvent.DOOR_LOCK, UserAuditIssuerResponse(""), rejected = false)).toJson()
 private val USER_LOCK_RESPONSE = listOf(UserLockResponse("", "", "", null, false, false, UserRole.USER)).toJson()
-private val LOCK_USER_RESPONSE = LockUserResponse("", "", "", null, false, false, null, null, emptyArray()).toJson()
+private val LOCK_USER_RESPONSE = LockUserResponse("", "", "", null, false, false, null, null, emptyList()).toJson()
 private val USER_PUBLIC_KEY_RESPONSE = UserPublicKeyResponse("", "").toJson()
-private val PINNED_LOCKS_RESPONSE = listOf(LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyArray(), "", tiles = emptyArray(), hidden = false), LockStateResponse(false, false), false)).toJson()
+private val PINNED_LOCKS_RESPONSE = listOf(LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyList(), "", tiles = emptyList(), hidden = false), LockStateResponse(false, false), false)).toJson()
 private val SHAREABLE_LOCKS_RESPONSE = listOf(ShareableLockResponse("", "")).toJson()

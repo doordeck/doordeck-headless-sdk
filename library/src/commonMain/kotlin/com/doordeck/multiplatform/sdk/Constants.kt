@@ -12,5 +12,5 @@ object Constants {
          "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k=", // CN=Amazon Root CA 3,O=Amazon,C=US
          "sha256/9+ze1cZgR9KO1kZrVDxA4HQ6voHRCSVNz4RdTCx4U8U=", // CN=Amazon Root CA 4,O=Amazon,C=US
          "sha256/KwccWaCgrnaw6tsrrSO61FgLacNgG2MMLq8GE6+oP5I=" // CN=Starfield Services Root Certificate Authority - G2,O=Starfield Technologies, Inc.,L=Scottsdale,ST=Arizona,C=US
-     )
+    )
 }

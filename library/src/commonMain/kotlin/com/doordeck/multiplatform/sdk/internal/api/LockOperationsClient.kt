@@ -52,7 +52,7 @@ open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
     suspend fun getSingleLockRequest(lockId: String): LockResponse {
-        return httpClient.get(Paths.getSingleLockPath(lockId)){
+        return httpClient.get(Paths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }
     }
@@ -163,7 +163,7 @@ open class LockOperationsClient(
     suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<LockOperations.TimeRequirement>) {
         updateLockProperties(lockId, UpdateLockSettingRequest(
             UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
-                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days.toList()) }
+                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
             ))
         ))
     }
@@ -262,7 +262,7 @@ open class LockOperationsClient(
             userPrivateKey = operationContext.userPrivateKey,
             lockId = lockId
         )
-        unlockRequest(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints?.toTypedArray()))
+        unlockRequest(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints))
     }
 
     /**
@@ -272,7 +272,7 @@ open class LockOperationsClient(
      */
     suspend fun unlockRequest(unlockOperation: LockOperations.UnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints?.toList())
+        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints)
     }
 
     /**
@@ -306,8 +306,8 @@ open class LockOperationsClient(
             user = shareLock.targetUserId,
             publicKey = shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
             role = shareLock.targetUserRole,
-            start = shareLock.start,
-            end = shareLock.end
+            start = shareLock.start?.toLong(),
+            end = shareLock.end?.toLong()
         )
         performOperation(baseOperation, operationRequest)
     }
@@ -335,7 +335,7 @@ open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users.toList())
+        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users)
     }
 
     private suspend fun revokeAccessToLock(baseOperation: LockOperations.BaseOperation, users: List<String>) {
@@ -409,8 +409,8 @@ open class LockOperationsClient(
                     start = it.start,
                     end = it.end,
                     timezone = it.timezone,
-                    days = it.days.toList(),
-                    exceptions = it.exceptions?.toList()
+                    days = it.days,
+                    exceptions = it.exceptions
                 )
             }
         )
@@ -419,13 +419,13 @@ open class LockOperationsClient(
 
     private suspend fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest,
                                  directAccessEndpoints: List<String>? = null) {
-        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain.toList())
+        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperation.userId,
             sub = baseOperation.lockId,
-            nbf = baseOperation.notBefore,
-            iat = baseOperation.issuedAt,
-            exp = baseOperation.expiresAt,
+            nbf = baseOperation.notBefore.toLong(),
+            iat = baseOperation.issuedAt.toLong(),
+            exp = baseOperation.expiresAt.toLong(),
             jti = baseOperation.jti,
             operation = operationRequest
         )

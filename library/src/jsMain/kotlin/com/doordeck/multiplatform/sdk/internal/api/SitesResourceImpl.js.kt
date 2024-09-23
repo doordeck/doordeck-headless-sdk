@@ -13,15 +13,15 @@ class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 
-    override fun listSites(): Promise<Array<SiteResponse>> {
-        return GlobalScope.promise { listSitesRequest().toTypedArray() }
+    override fun listSites(): Promise<List<SiteResponse>> {
+        return GlobalScope.promise { listSitesRequest() }
     }
 
-    override fun getLocksForSite(siteId: String): Promise<Array<SiteLocksResponse>> {
-        return GlobalScope.promise { getLocksForSiteRequest(siteId).toTypedArray() }
+    override fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>> {
+        return GlobalScope.promise { getLocksForSiteRequest(siteId) }
     }
 
-    override fun getUsersForSite(siteId: String): Promise<Array<UserForSiteResponse>> {
-        return GlobalScope.promise { getUsersForSiteRequest(siteId).toTypedArray() }
+    override fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>> {
+        return GlobalScope.promise { getUsersForSiteRequest(siteId) }
     }
 }

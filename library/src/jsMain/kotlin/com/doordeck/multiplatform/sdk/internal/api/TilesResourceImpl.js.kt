@@ -15,7 +15,7 @@ class TilesResourceImpl(
         return GlobalScope.promise { getLocksBelongingToTileRequest(tileId) }
     }
 
-    override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: Array<String>): Promise<Unit> {
-        return GlobalScope.promise { associateMultipleLocksRequest(tileId, siteId, lockIds.toList()) }
+    override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<Unit> {
+        return GlobalScope.promise { associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 }

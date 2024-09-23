@@ -41,6 +41,7 @@ object TestConstants {
         val enabled: Boolean = false
     )
 
+    // Default values used on the Mock http client
     val DEFAULT_TILE_ID = "TILE_ID"
     val DEFAULT_SITE_ID = "SITE_ID"
     val DEFAULT_APPLICATION_ID = "APPLICATION_ID"

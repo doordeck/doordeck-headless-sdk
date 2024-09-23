@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
@@ -17,6 +16,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class FusionClientTest : IntegrationTest() {
 
@@ -38,7 +38,7 @@ class FusionClientTest : IntegrationTest() {
             fusionContextManager.setFusionAuthToken(login.authToken)
 
             // Given - shouldEnableDoor
-            val name = "Test Fusion Door ${uuid4()}"
+            val name = "Test Fusion Door ${Uuid.random()}"
 
             // When
             fusionClient.enableDoorRequest(name, TEST_MAIN_SITE_ID, testController.controller)

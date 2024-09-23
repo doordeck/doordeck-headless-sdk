@@ -55,3 +55,5 @@ internal fun createHttpClient(): HttpClient {
 }
 
 expect fun getPlatform(): PlatformType
+
+expect object ApplicationContext
