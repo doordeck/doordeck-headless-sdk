@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -13,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class AccountlessClientTest : IntegrationTest() {
 
@@ -29,7 +29,7 @@ class AccountlessClientTest : IntegrationTest() {
     @Test
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
-         val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${uuid4()}@")
+         val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${Uuid.random()}@")
 
         // When
         val response = ACCOUNTLESS_CLIENT.registrationRequest(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false)
@@ -39,7 +39,7 @@ class AccountlessClientTest : IntegrationTest() {
         assertTrue { response.refreshToken.isNotEmpty() }
 
         // Given - shouldDelete
-        val contextManager = ContextManagerImpl(response.authToken)
+        val contextManager = ContextManagerImpl(token = response.authToken)
         val accountClient = AccountClient(createCloudHttpClient(TEST_ENVIRONMENT, contextManager), contextManager)
 
         // When

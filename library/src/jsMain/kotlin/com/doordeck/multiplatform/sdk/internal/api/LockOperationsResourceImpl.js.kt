@@ -25,16 +25,16 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { getSingleLockRequest(lockId) }
     }
 
-    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<Array<LockAuditTrailResponse>> {
-        return GlobalScope.promise { getLockAuditTrailRequest(lockId, start, end).toTypedArray() }
+    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<LockAuditTrailResponse>> {
+        return GlobalScope.promise { getLockAuditTrailRequest(lockId, start, end) }
     }
 
-    override fun getAuditForUser(userId: String, start: Int, end: Int): Promise<Array<UserAuditResponse>> {
-        return GlobalScope.promise { getAuditForUserRequest(userId, start, end).toTypedArray() }
+    override fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<UserAuditResponse>> {
+        return GlobalScope.promise { getAuditForUserRequest(userId, start, end) }
     }
 
-    override fun getUsersForLock(lockId: String): Promise<Array<UserLockResponse>> {
-        return GlobalScope.promise { getUsersForLockRequest(lockId).toTypedArray() }
+    override fun getUsersForLock(lockId: String): Promise<List<UserLockResponse>> {
+        return GlobalScope.promise { getUsersForLockRequest(lockId) }
     }
 
     override fun getLocksForUser(userId: String): Promise<LockUserResponse> {
@@ -57,16 +57,16 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { updateLockSettingDefaultNameRequest(lockId, name) }
     }
 
-    override fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: Array<String>): Promise<Unit> {
-        return GlobalScope.promise { setLockSettingPermittedAddressesRequest(lockId, permittedAddresses.toList()) }
+    override fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>): Promise<Unit> {
+        return GlobalScope.promise { setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
     }
 
     override fun updateLockSettingHidden(lockId: String, hidden: Boolean): Promise<Unit> {
         return GlobalScope.promise { updateLockSettingHiddenRequest(lockId, hidden) }
     }
 
-    override fun setLockSettingTimeRestrictions(lockId: String, times: Array<LockOperations.TimeRequirement>): Promise<Unit> {
-        return GlobalScope.promise { setLockSettingTimeRestrictionsRequest(lockId, times.toList()) }
+    override fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>): Promise<Unit> {
+        return GlobalScope.promise { setLockSettingTimeRestrictionsRequest(lockId, times) }
     }
 
     override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?): Promise<Unit> {
@@ -97,8 +97,8 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { getUserPublicKeyByIdentityRequest(identity) }
     }
 
-    override fun unlockWithContext(lockId: String, directAccessEndpoints: Array<String>?): Promise<Unit> {
-        return GlobalScope.promise { unlockWithContextRequest(lockId, directAccessEndpoints?.toList()) }
+    override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?): Promise<Unit> {
+        return GlobalScope.promise { unlockWithContextRequest(lockId, directAccessEndpoints) }
     }
 
     override fun unlock(unlockOperation: LockOperations.UnlockOperation): Promise<Unit> {
@@ -113,8 +113,8 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { shareLockRequest(shareLockOperation) }
     }
 
-    override fun revokeAccessToLockWithContext(lockId: String, users: Array<String>): Promise<Unit> {
-        return GlobalScope.promise { revokeAccessToLockWithContextRequest(lockId, users.toList()) }
+    override fun revokeAccessToLockWithContext(lockId: String, users: List<String>): Promise<Unit> {
+        return GlobalScope.promise { revokeAccessToLockWithContextRequest(lockId, users) }
     }
 
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): Promise<Unit> {
@@ -137,11 +137,11 @@ class LockOperationsResourceImpl(
         return GlobalScope.promise { updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
-    override fun getPinnedLocks(): Promise<Array<LockResponse>> {
-        return GlobalScope.promise { getPinnedLocksRequest().toTypedArray() }
+    override fun getPinnedLocks(): Promise<List<LockResponse>> {
+        return GlobalScope.promise { getPinnedLocksRequest() }
     }
 
-    override fun getShareableLocks(): Promise<Array<ShareableLockResponse>> {
-        return GlobalScope.promise { getShareableLocksRequest().toTypedArray() }
+    override fun getShareableLocks(): Promise<List<ShareableLockResponse>> {
+        return GlobalScope.promise { getShareableLocksRequest() }
     }
 }

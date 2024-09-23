@@ -11,9 +11,9 @@ class ApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
-    val owners: Array<String>? = null,
-    val corsDomains: Array<String>? = null,
-    val authDomains: Array<String>? = null,
+    val owners: List<String>? = null,
+    val corsDomains: List<String>? = null,
+    val authDomains: List<String>? = null,
     val logoUrl: String? = null,
     val privacyPolicy: String? = null,
     val mailingAddress: String? = null,
@@ -22,7 +22,7 @@ class ApplicationResponse(
     val appLink: String? = null,
     val slug: String? = null,
     val emailPreferences: EmailPreferencesResponse,
-    val authKeys: Container<AuthKeyResponse>,
+    val authKeys: Map<String, AuthKeyResponse>,
     val oauth: OauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
@@ -34,11 +34,11 @@ sealed interface AuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
-    val ops: Array<String>?
+    val ops: List<String>?
     val x5u: String?
     val x5t: String?
     val x5t256: String?
-    val x5c: Array<String>?
+    val x5c: List<String>?
     val exp: Int?
     val nbf: Int?
     val iat: Int?
@@ -52,12 +52,12 @@ class RsaKeyResponse(
     override val kid: String,
     override val alg: String? = null,
     @SerialName("key_ops")
-    override val ops: Array<String>? = null,
+    override val ops: List<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     @SerialName("x5t#S256")
     override val x5t256: String? = null,
-    override val x5c: Array<String>? = null,
+    override val x5c: List<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
@@ -73,12 +73,12 @@ class EcKeyResponse(
     override val kid: String,
     override val alg: String? = null,
     @SerialName("key_ops")
-    override val ops: Array<String>? = null,
+    override val ops: List<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     @SerialName("x5t#S256")
     override val x5t256: String? = null,
-    override val x5c: Array<String>? = null,
+    override val x5c: List<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
@@ -95,12 +95,12 @@ class Ed25519KeyResponse(
     override val kid: String,
     override val alg: String? = null,
     @SerialName("key_ops")
-    override val ops: Array<String>? = null,
+    override val ops: List<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     @SerialName("x5t#S256")
     override val x5t256: String? = null,
-    override val x5c: Array<String>? = null,
+    override val x5c: List<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,

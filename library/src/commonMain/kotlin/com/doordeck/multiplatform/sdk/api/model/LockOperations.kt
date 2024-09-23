@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api.model
 
-import com.benasher44.uuid.uuid4
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
 import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
 @JsExport
 object LockOperations {
@@ -13,7 +13,7 @@ object LockOperations {
         val start: String,
         val end: String,
         val timezone: String,
-        val days: Array<String>
+        val days: List<String>
     )
 
     class LocationRequirement @JvmOverloads constructor(
@@ -28,13 +28,13 @@ object LockOperations {
         val start: String,
         val end: String,
         val timezone: String,
-        val days: Array<String>,
-        val exceptions: Array<String>? = null
+        val days: List<String>,
+        val exceptions: List<String>? = null
     )
 
     class UnlockOperation @JvmOverloads constructor(
         override val baseOperation: BaseOperation,
-        val directAccessEndpoints: Array<String>? = null
+        val directAccessEndpoints: List<String>? = null
     ): Operation(baseOperation)
 
     class ShareLockOperation(
@@ -52,7 +52,7 @@ object LockOperations {
 
     class RevokeAccessToLockOperation(
         override val baseOperation: BaseOperation,
-        val users: Array<String>
+        val users: List<String>
     ): Operation(baseOperation)
 
     class UpdateSecureSettingUnlockDuration(
@@ -67,13 +67,13 @@ object LockOperations {
 
     class BaseOperation @JvmOverloads constructor(
         val userId: String,
-        val userCertificateChain: Array<String>,
+        val userCertificateChain: List<String>,
         val userPrivateKey: ByteArray,
         val lockId: String,
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
         val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val jti: String = uuid4().toString()
+        val jti: String = Uuid.random().toString()
     )
 
     abstract class Operation(

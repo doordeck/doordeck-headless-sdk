@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
@@ -10,14 +11,11 @@ import com.doordeck.multiplatform.sdk.internal.api.Paths
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
-import io.ktor.client.plugins.HttpSend
-import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.host
@@ -88,6 +86,12 @@ internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, ho
     }
 }
 
+internal fun HttpClientConfig<*>.installUserAgent() {
+    install(UserAgent) {
+        agent = "KMP SDK ${getPlatform()}"
+    }
+}
+
 internal fun HttpClientConfig<*>.installTimeout() {
     install(HttpTimeout) {
         socketTimeoutMillis = 60_000
@@ -131,4 +135,4 @@ internal fun HttpClient.addFusionInterceptor(contextManager: ContextManagerImpl)
 
 internal expect fun HttpClientConfig<*>.installCertificatePinner()
 
-inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
+internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
