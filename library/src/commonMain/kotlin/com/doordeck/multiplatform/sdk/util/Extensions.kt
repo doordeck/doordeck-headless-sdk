@@ -1,10 +1,9 @@
 package com.doordeck.multiplatform.sdk.util
 
-import com.doordeck.multiplatform.sdk.Constants.PLATFORM_HEADER_NAME
-import com.doordeck.multiplatform.sdk.Constants.PLATFORM_HEADER_VALUE
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
@@ -84,9 +83,12 @@ internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, ho
             this.protocol = protocol
             this.host = host
         }
-        headers {
-            append(PLATFORM_HEADER_NAME, PLATFORM_HEADER_VALUE)
-        }
+    }
+}
+
+internal fun HttpClientConfig<*>.installUserAgent() {
+    install(UserAgent) {
+        agent = "KMP SDK ${getPlatform()}"
     }
 }
 
