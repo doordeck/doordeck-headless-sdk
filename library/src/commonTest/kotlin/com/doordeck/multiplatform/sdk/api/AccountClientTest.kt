@@ -54,7 +54,6 @@ class AccountClientTest : IntegrationTest() {
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        if (getPlatform() == PlatformType.ANDROID) return@runTest
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
