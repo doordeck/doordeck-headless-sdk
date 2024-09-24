@@ -7,6 +7,7 @@ import org.koin.mp.KoinPlatform.getKoin
 
 actual interface HelperResource {
     fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
+    fun uploadPlatformLogoJson(data: String)
 }
 
 actual fun helper(): HelperResource = HelperResourceImpl(

@@ -14,6 +14,7 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
     fun getLocksBelongingToTile(tileId: String): TileLocksResponse
+    fun getLocksBelongingToTileJson(data: String): String
 
     /**
      * Associate multiple locks (devices) to a single tile
@@ -22,6 +23,8 @@ actual interface TilesResource {
      */
     @SiteAdmin
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
+    @SiteAdmin
+    fun associateMultipleLocksJson(data: String)
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
