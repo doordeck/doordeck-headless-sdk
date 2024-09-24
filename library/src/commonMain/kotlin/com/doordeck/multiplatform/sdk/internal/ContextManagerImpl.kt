@@ -6,6 +6,8 @@ import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
+import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.fromJson
 
 class ContextManagerImpl(
     private val applicationContext: ApplicationContext? = null,
@@ -53,6 +55,13 @@ class ContextManagerImpl(
         currentUserId = userId
         currentUserCertificateChain = certificateChain
         currentUserPrivateKey = privateKey
+    }
+
+    override fun setOperationContextJson(data: String) {
+        val operationContextData = data.fromJson<Context.OperationContextData>()
+        currentUserId = operationContextData.userId
+        currentUserCertificateChain = operationContextData.userCertificateChain
+        currentUserPrivateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
     }
 
     override fun setFusionAuthToken(token: String) {
