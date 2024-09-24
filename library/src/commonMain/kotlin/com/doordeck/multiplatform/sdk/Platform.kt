@@ -2,10 +2,11 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.installCertificatePinner
+import com.doordeck.multiplatform.sdk.util.*
 import com.doordeck.multiplatform.sdk.util.addCloudInterceptor
 import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
+import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
 import com.doordeck.multiplatform.sdk.util.installTimeout
@@ -21,7 +22,7 @@ enum class PlatformType {
     JS
 }
 
-val JSON = Json {
+internal val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
@@ -33,6 +34,7 @@ internal fun createCloudHttpClient(apiEnvironment: ApiEnvironment, contextManage
         installTimeout()
         installAuth(contextManager)
         installCertificatePinner()
+        installUserAgent()
         installDefaultRequest(URLProtocol.HTTPS, apiEnvironment.cloudHost)
     }.also {
         it.addCloudInterceptor(apiEnvironment, contextManager)
@@ -43,6 +45,7 @@ internal fun createFusionHttpClient(fusionHost: String, contextManager: ContextM
     return HttpClient {
         installContentNegotiation()
         installTimeout()
+        installUserAgent()
         installDefaultRequest(URLProtocol.HTTP, fusionHost)
     }.also {
         it.addFusionInterceptor(contextManager)
