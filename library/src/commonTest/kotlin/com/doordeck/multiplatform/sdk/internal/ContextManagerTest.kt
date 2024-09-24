@@ -1,10 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal
 
 import com.benasher44.uuid.uuid4
-import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -17,9 +14,6 @@ class ContextManagerTest {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {
-        if (getPlatform() == PlatformType.ANDROID) return@runTest
-        LibsodiumInitializer.initializeWithCallback {  }
-
         // Given
         val cloudAuthToken = uuid4().toString()
         val fusionAuthToken = uuid4().toString()
@@ -48,9 +42,6 @@ class ContextManagerTest {
 
     @Test
     fun shouldClearContext() = runTest {
-        if (getPlatform() == PlatformType.ANDROID) return@runTest
-        LibsodiumInitializer.initializeWithCallback {  }
-
         // Given
         val cloudAuthToken = uuid4().toString()
         val fusionAuthToken = uuid4().toString()

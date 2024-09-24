@@ -20,12 +20,6 @@ class CryptoTest {
 
     @Test
     fun shouldDecodeEncodeKeys() = runTest {
-        if (getPlatform() == PlatformType.ANDROID) {
-            return@runTest
-        }
-        if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initialize()
-        }
         // Given
         val privateKey = privateBase64Key.decodeBase64ToByteArray()
         val publicKey = publicBase64Key.decodeBase64ToByteArray()

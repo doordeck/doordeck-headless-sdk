@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.ionspin.kotlin.crypto.signature.Signature
-import com.ionspin.kotlin.crypto.util.Base64Variants
-import com.ionspin.kotlin.crypto.util.LibsodiumUtil
+import io.ktor.util.decodeBase64Bytes
+import io.ktor.util.encodeBase64
 import io.ktor.utils.io.core.toByteArray
 import kotlin.js.JsExport
 
@@ -25,9 +25,9 @@ object Crypto {
     ).toByteArray()
 
 
-    fun String.decodeBase64ToByteArray(): ByteArray = LibsodiumUtil.fromBase64(this, Base64Variants.ORIGINAL).toByteArray()
+    fun String.decodeBase64ToByteArray(): ByteArray = decodeBase64Bytes()
 
-    fun ByteArray.encodeByteArrayToBase64(): String = LibsodiumUtil.toBase64(toUByteArray(), Base64Variants.ORIGINAL)
+    fun ByteArray.encodeByteArrayToBase64(): String = encodeBase64()
 
     fun List<String>.certificateChainToString(): String = joinToString("|")
 
