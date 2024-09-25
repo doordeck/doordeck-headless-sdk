@@ -16,7 +16,7 @@ gpr.key=PERSONAL_ACCESS_TOKEN
 * [JS (Vue)](#js-vue)
 * [Android (Kotlin)](#android-kotlin)
 * IOS (TODO)
-* Windows Native (C#) (TODO)
+* [MinGW (C#)](#mingw-c)
 
 ### JVM (Kotlin)
 ````kotlin
@@ -260,6 +260,57 @@ class MainActivity : ComponentActivity() {
         )
         val unlockOperation = LockOperations.UnlockOperation(baseOperation)
         sdk.lockOperations().unlockAsync(unlockOperation).get()
+    }
+}
+````
+
+### MinGW (C#)
+````csharp
+using bindings;
+using TestLibNet;
+using TestLibNet.model;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        unsafe
+        {
+            // Initialize the SDK
+            const string token = "YOUR_AUTH_TOKEN";
+            doordeck_sdk_ExportedSymbols* symbols = Methods.doordeck_sdk_symbols();
+            var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV.get();
+            var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
+            var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(factory, apiEnvironment, token.toSByte());
+
+            // Retrieve the sites
+            var sitesResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+            var sites = Utils.toListSites(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(sitesResource));
+            Console.WriteLine(sites);
+
+            // Retrieve the locks
+            var getLocksForSiteData = new GetLocksForSiteData(sites.First().id);
+            var locks = Utils.toGetLocksForSite(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(sitesResource, getLocksForSiteData.toData()));
+            Console.WriteLine(locks);
+
+            // Generate a key pair
+            var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto._instance();
+            var keyPair = Utils.toEncodedKeyPair(symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPairJson(crypto));
+            Console.WriteLine("Private key: {0}", keyPair.@private);
+            Console.WriteLine("Public key: {0}", keyPair.@public);
+
+            // Register a key pair
+            var accountResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+            var registerEphemeralKey = new RegisterEphemeralKeyData(keyPair.@public);
+            var registerKeyPair = Utils.toRegisterEphemeralKey(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(accountResource, registerEphemeralKey.toData()));
+            Console.WriteLine("Certificate chain: {0}", string.Join(", ", registerKeyPair.certificateChain));
+
+            // Unlock a lock
+            var lockOperationsResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+            var baseOperation = new BaseOperationData(registerKeyPair.userId, registerKeyPair.certificateChain, keyPair.@private, locks.First().id);
+            var unlockOperation = new UnlockOperationData(baseOperation);
+            symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(lockOperationsResource, unlockOperation.toData());
+        }
     }
 }
 ````
