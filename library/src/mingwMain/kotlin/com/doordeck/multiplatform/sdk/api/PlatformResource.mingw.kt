@@ -169,7 +169,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun deleteAuthIssuer(applicationId: String, url: String)
     @DoordeckOnly
-    fun deleteAuthIssuer(data: String)
+    fun deleteAuthIssuerJson(data: String)
 
     /**
      * Add CORS domain
@@ -179,7 +179,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun addCorsDomain(applicationId: String, url: String)
     @DoordeckOnly
-    fun addCorsDomain(data: String)
+    fun addCorsDomainJson(data: String)
 
     /**
      * Remove CORS domain

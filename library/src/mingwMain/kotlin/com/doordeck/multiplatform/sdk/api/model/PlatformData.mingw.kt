@@ -96,6 +96,59 @@ class GetLogoUploadUrlData(
 )
 
 @Serializable
+class AddAuthKeyData(
+    val applicationId: String,
+    val key: AuthKeyData
+)
+
+@Serializable
+sealed interface AuthKeyData {
+    val kid: String
+    val kty: String
+    val use: String
+    val alg: String?
+}
+
+@Serializable
+class RsaKeyData(
+    override val kty: String = "RSA",
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val p: String,
+    val q: String,
+    val d: String,
+    val e: String,
+    val qi: String,
+    val dp: String,
+    val dq: String,
+    val n: String
+): AuthKeyData
+
+@Serializable
+class EcKeyData(
+    override val kty: String = "EC",
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val d: String,
+    val crv: String,
+    val x: String,
+    val y: String
+): AuthKeyData
+
+@Serializable
+class Ed25519KeyData(
+    override val kty: String = "OKP",
+    override val use: String,
+    override val kid: String,
+    override val alg: String? = null,
+    val d: String,
+    val crv: String,
+    val x: String
+): AuthKeyData
+
+@Serializable
 class AddAuthIssuerData(
     val applicationId: String,
     val url: String
@@ -161,3 +214,9 @@ internal fun EmailCallToActionData.toEmailCallToAction() = Platform.EmailCallToA
     headline = headline,
     actionText = actionText
 )
+
+internal fun AuthKeyData.toAuthKey() = when(this) {
+    is RsaKeyData -> Platform.RsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is EcKeyData -> Platform.EcKey(kty, use, kid, alg, d, crv, x, y)
+    is Ed25519KeyData -> Platform.Ed25519Key(kty, use, kid, alg, d, crv, x)
+}

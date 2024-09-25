@@ -135,7 +135,8 @@ class PlatformResourceImpl(
     }
 
     override fun addAuthKeyJson(data: String) {
-        TODO("Not yet implemented")
+        val addAuthKeyData = data.fromJson<AddAuthKeyData>()
+        return addAuthKey(addAuthKeyData.applicationId, addAuthKeyData.key.toAuthKey())
     }
 
     override fun addAuthIssuer(applicationId: String, url: String) {
@@ -151,7 +152,7 @@ class PlatformResourceImpl(
         return runBlocking { deleteAuthIssuerRequest(applicationId, url) }
     }
 
-    override fun deleteAuthIssuer(data: String) {
+    override fun deleteAuthIssuerJson(data: String) {
         val deleteAuthIssuerData = data.fromJson<DeleteAuthIssuerData>()
         return deleteAuthIssuer(deleteAuthIssuerData.applicationId, deleteAuthIssuerData.url)
     }
@@ -160,7 +161,7 @@ class PlatformResourceImpl(
         return runBlocking { addCorsDomainRequest(applicationId, url) }
     }
 
-    override fun addCorsDomain(data: String) {
+    override fun addCorsDomainJson(data: String) {
         val addCorsDomainData = data.fromJson<AddCorsDomainData>()
         return addCorsDomain(addCorsDomainData.applicationId, addCorsDomainData.url)
     }
