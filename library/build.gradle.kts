@@ -101,6 +101,7 @@ kotlin {
                 implementation(libs.multiplatform.settings)
             }
         }
+
         val commonTest by getting {
             dependencies {
                 implementation(libs.kotlin.test)

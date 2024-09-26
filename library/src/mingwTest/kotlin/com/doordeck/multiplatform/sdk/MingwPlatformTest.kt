@@ -10,7 +10,7 @@ import kotlin.test.assertTrue
 
 class MingwPlatformTest {
     @Test
-    fun `test platform engine`() = runTest {
+    fun shouldTestPlatformEngine() = runTest {
         // Given
         val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
 
@@ -19,7 +19,7 @@ class MingwPlatformTest {
     }
 
     @Test
-    fun `test platform type`() = runTest {
+    fun shouldTestPlatformType() = runTest {
         // Given
         val platform = getPlatform()
 

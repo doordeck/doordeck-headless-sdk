@@ -27,8 +27,8 @@ object Crypto {
     }
 
     fun generateKeyPairJson(): String {
-        val keyPair = Signature.keypair()
-        return EncodedKeyPair(keyPair.secretKey.toByteArray().encodeByteArrayToBase64(), keyPair.publicKey.toByteArray().encodeByteArrayToBase64()).toJson()
+        val keyPair = generateKeyPair()
+        return EncodedKeyPair(keyPair.private.encodeByteArrayToBase64(), keyPair.public.encodeByteArrayToBase64()).toJson()
     }
 
     fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = Signature.detached(
