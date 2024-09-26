@@ -136,3 +136,5 @@ internal fun HttpClient.addFusionInterceptor(contextManager: ContextManagerImpl)
 internal expect fun HttpClientConfig<*>.installCertificatePinner()
 
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
+
+internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this)

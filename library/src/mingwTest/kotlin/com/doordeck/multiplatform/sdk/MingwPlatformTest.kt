@@ -2,20 +2,20 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import io.ktor.client.engine.darwin.DarwinClientEngineConfig
+import io.ktor.client.engine.winhttp.*
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class IosPlatformTest {
+class MingwPlatformTest {
     @Test
     fun shouldTestPlatformEngine() = runTest {
         // Given
         val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
 
         // When
-        assertTrue { client.engine.config is DarwinClientEngineConfig }
+        assertTrue { client.engine.config is WinHttpClientEngineConfig }
     }
 
     @Test
@@ -24,6 +24,6 @@ class IosPlatformTest {
         val platform = getPlatform()
 
         // When
-        assertEquals(platform, PlatformType.APPLE)
+        assertEquals(platform, PlatformType.WINDOWS)
     }
 }

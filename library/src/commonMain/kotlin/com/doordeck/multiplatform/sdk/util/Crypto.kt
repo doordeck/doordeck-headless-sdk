@@ -4,6 +4,7 @@ import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.util.decodeBase64Bytes
 import io.ktor.util.encodeBase64
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
 @JsExport
@@ -14,9 +15,20 @@ object Crypto {
         val public: ByteArray
     )
 
+    @Serializable
+    class EncodedKeyPair(
+        val private: String,
+        val public: String
+    )
+
     fun generateKeyPair(): KeyPair {
         val keyPair = Signature.keypair()
         return KeyPair(keyPair.secretKey.toByteArray(), keyPair.publicKey.toByteArray())
+    }
+
+    fun generateKeyPairJson(): String {
+        val keyPair = generateKeyPair()
+        return EncodedKeyPair(keyPair.private.encodeByteArrayToBase64(), keyPair.public.encodeByteArrayToBase64()).toJson()
     }
 
     fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = Signature.detached(

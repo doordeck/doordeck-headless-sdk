@@ -33,14 +33,14 @@ object LockOperations {
     )
 
     class UnlockOperation @JvmOverloads constructor(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val directAccessEndpoints: List<String>? = null
-    ): Operation(baseOperation)
+    ): Operation
 
     class ShareLockOperation(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val shareLock: ShareLock
-    ): Operation(baseOperation)
+    ): Operation
 
     class ShareLock @JvmOverloads constructor(
         val targetUserId: String,
@@ -51,19 +51,19 @@ object LockOperations {
     )
 
     class RevokeAccessToLockOperation(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val users: List<String>
-    ): Operation(baseOperation)
+    ): Operation
 
     class UpdateSecureSettingUnlockDuration(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val unlockDuration: Int
-    ): Operation(baseOperation)
+    ): Operation
 
     class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
-        override val baseOperation: BaseOperation,
+        val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
-    ): Operation(baseOperation)
+    ): Operation
 
     class BaseOperation @JvmOverloads constructor(
         val userId: String,
@@ -76,7 +76,5 @@ object LockOperations {
         val jti: String = Uuid.random().toString()
     )
 
-    abstract class Operation(
-        open val baseOperation: BaseOperation
-    )
+    sealed interface Operation
 }
