@@ -7,9 +7,9 @@ actual object KDoordeckFactory {
     fun initialize(apiEnvironment: ApiEnvironment): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, null, null)
 
-    fun initialize(apiEnvironment: ApiEnvironment, token: String): Doordeck =
+    fun initializeWithAuthToken(apiEnvironment: ApiEnvironment, token: String): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, token, null)
 
-    fun initialize(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
+    fun initializeWithAuthAndRefreshTokens(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, token, refreshToken)
 }
