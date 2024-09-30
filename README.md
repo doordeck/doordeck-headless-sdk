@@ -1,316 +1,672 @@
-# doordeck-headless-sdk
-To make it build, you need to specify the Android SDK directory. To do this, you need to create a `local.properties` file in the root project directory with a single configuration like this: `sdk.dir=ANDROID_SDK_DIR`
+# SDK Documentation
 
-NOTE: It's normal to see '_Unresolved references_'. For example, if you are on Windows, you won't be able to resolve macOS-specific imports.
+* Add the SDK into your project
+* [Initialize the SDK](#initialize-the-sdk)
+* [Crypto](#crypto)
+    * [Generate a key pair](#generate-a-key-pair)
+* [Context manager](#context-manager)
+    * [Set operation context](#set-operation-context)
+    * Save, load and clear operation context
+* [Accountless resource](#accountless-resource)
+    * [Login](#login)
+    * [Register a new user](#register-a-new-user)
+    * [Verify email](#verify-email)
+* [Account resource](#account-resource)
+    * [Request a new refresh token](#request-a-new-refresh-token)
+    * [Logout](#logout)
+    * [Register ephemeral key](#register-ephemeral-key)
+    * [Register ephemeral key with secondary authentication](#register-ephemeral-key-with-secondary-authentication)
+    * [Verify ephemeral key registration](#verify-ephemeral-key-registration)
+    * [Re-verify email](#re-verify-email)
+    * [Change password](#change-password)
+    * [Get the user details](#get-the-user-details)
+    * [Update the user details](#get-the-user-details)
+    * [Delete account](#delete-account)
+* [Fusion resource](#fusion-resource)
+    * [Login](#login-1)
+    * [Get integration type](#get-integration-type)
+    * [Get integration configuration](#get-integration-configuration)
+    * Enable door
+    * [Delete door](#delete-door)
+    * [Get door status](#get-door-status)
+    * [Start door](#start-door)
+    * [Stop door](#stop-door)
+* [Helper resource](#helper-resource)
+    * [Upload platform logo](#upload-platform-logo)
 
-To import the SDK into your project, you need access to the Maven repository from GitHub. You may need to create the file `~/.gradle/gradle.properties` with the following configuration:
-```
-gpr.user=GITHUB_USERNAME
-gpr.key=PERSONAL_ACCESS_TOKEN
-```
+# Initialize the SDK
+The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
 
-# Samples
-* [JVM (Kotlin)](#jvm-kotlin)
-* [JVM (Java)](#jvm-java)
-* [JS (Angular)](#js-angular)
-* [JS (Vue)](#js-vue)
-* [Android (Kotlin)](#android-kotlin)
-* IOS (TODO)
-* [MinGW (C#)](#mingw-c)
+It can also be initialized without an auth token, but you will need to manually set an auth token through the `context manager` to use most of the SDK functionalities
 
-### JVM (Kotlin)
+<details><summary>JVM</summary>
+
 ````kotlin
-import com.doordeck.multiplatform.sdk.KDoordeckFactory
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.util.Crypto
-import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
-import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
-
-suspend fun main() {
-    // Initialize the SDK
-    val token = "YOUR_AUTH_TOKEN"
-    val sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token)
-
-    // Retrieve the sites
-    val sites = sdk.sites().listSites()
-    println(sites)
-
-    // Retrieve the locks
-    val locks = sdk.sites().getLocksForSite(sites.first().id)
-    println(locks)
-
-    // Generate a key pair
-    val keyPair = Crypto.generateKeyPair()
-    println("Private key: ${keyPair.private.encodeByteArrayToBase64()}")
-    println("Public key: ${keyPair.public.encodeByteArrayToBase64()}")
-
-    // Register a key pair
-    val registerKeyPair = sdk.account().registerEphemeralKey(keyPair.public)
-    println("Certificate chain: ${registerKeyPair.certificateChain.certificateChainToString()}")
-
-    // Unlock a lock
-    val baseOperation = LockOperations.BaseOperation(
-        userId = registerKeyPair.userId,
-        userCertificateChain = registerKeyPair.certificateChain,
-        userPrivateKey = keyPair.private,
-        lockId = locks.first().id
-    )
-    val unlockOperation = LockOperations.UnlockOperation(baseOperation)
-    sdk.lockOperations().unlock(unlockOperation)
-}
+val sdk = KDoordeckFactory.initialize(ApiEnvironment.PROD, token)
 ````
+</details>
 
-### JVM (Java)
-````java
-import com.doordeck.multiplatform.sdk.Doordeck;
-import com.doordeck.multiplatform.sdk.KDoordeckFactory;
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
-import com.doordeck.multiplatform.sdk.api.model.LockOperations;
-import com.doordeck.multiplatform.sdk.util.Crypto;
+<details><summary>Android</summary>
 
-import java.util.concurrent.ExecutionException;
+In Android, the SDK requires you to pass the android application context
 
-public class Main {
-    public static void main(String[] args) throws ExecutionException, InterruptedException {
-        // Initialize the SDK
-        final String token = "YOUR_AUTH_TOKEN";
-        final Doordeck sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token);
-
-        // Retrieve the sites
-        var sites = sdk.sites().listSitesAsync().get();
-        System.out.println(sites);
-
-        // Retrieve the locks
-        var locks = sdk.sites().getLocksForSiteAsync(sites.getFirst().getId()).get();
-        System.out.println(locks);
-
-        // Generate a key pair
-        var keyPair = Crypto.INSTANCE.generateKeyPair();
-        System.out.println("Private key: " + Crypto.INSTANCE.encodeByteArrayToBase64(keyPair.getPrivate()));
-        System.out.println("Public key: " + Crypto.INSTANCE.encodeByteArrayToBase64(keyPair.getPublic()));
-
-        // Register a key pair
-        var registerKeyPair = sdk.account().registerEphemeralKeyAsync(keyPair.getPublic()).get();
-        System.out.println("Certificate chain: " + Crypto.INSTANCE.certificateChainToString(registerKeyPair.getCertificateChain()));
-
-        // Unlock a lock
-        var baseOperation = new LockOperations.BaseOperation(registerKeyPair.getUserId(),
-                registerKeyPair.getCertificateChain(), keyPair.getPrivate(), locks.getFirst().getId());
-        var unlockOperation = new LockOperations.UnlockOperation(baseOperation);
-        sdk.lockOperations().unlockAsync(unlockOperation).get();
-    }
-}
-````
-
-### JS (Angular)
-````javascript
-import {Component, OnInit} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import doordeck from '../assets/doordeck-sdk'
-import {HttpClient, HttpClientModule} from "@angular/common/http";
-
-const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const crypto = doordeck.com.doordeck.multiplatform.sdk.util.Crypto;
-
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, HttpClientModule],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
-})
-export class AppComponent implements OnInit {
-  title = 'TestLibJs';
-
-  constructor(
-    private http: HttpClient
-  ) { }
-  
-  ngOnInit() {
-    this.test()
-  }
-
-  async test() {
-    // Initialize the SDK
-    const token = "YOUR_AUTH_TOKEN";
-    const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.DEV, token);
-
-    // Resources
-    const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
-    const account = doordeck.com.doordeck.multiplatform.sdk.api.account();
-    const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.lockOperations();
-    
-    // Retrieve the sites
-    const allSites = await sites.listSites();
-    console.log(allSites);
-
-    // Retrieve the locks
-    const locks = await sites.getLocksForSite(sites[0].id);
-    console.log(locks);
-
-    // Generate a key pair
-    const keyPair = crypto.generateKeyPair();
-    console.log(`Private key: ${crypto.encodeByteArrayToBase64(keyPair.private)}`);
-    console.log(`Public key: ${crypto.encodeByteArrayToBase64(keyPair.public)}`);
-
-    // Register a key pair
-    const registerKeyPair = await account.registerEphemeralKey(keyPair.public);
-    console.log(`Public key: ${crypto.certificateChainToString(registerKeyPair.certificateChain)}`);
-
-    // Unlock a lock
-    const baseOperation = new lockOperations.BaseOperation(registerKeyPair.userId, registerKeyPair.certificateChain,
-        registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000,
-        ((new Date).getTime() / 1000) + 60, "uuid"
-    );
-    const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
-    await lockOperations.unlock(unlockOperation);
-  }
-}
-````
-
-### JS (Vue)
-````vue
-<script>
-const doordeck = require('../assets/doordeck-sdk.js');
-
-const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
-const crypto = doordeck.com.doordeck.multiplatform.sdk.util.Crypto;
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-
-// Initialize the SDK
-const token = "YOUR_AUTH_TOKEN";
-const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.DEV, token);
-
-// Resources
-const sites = doordeck.com.doordeck.multiplatform.sdk.api.sites();
-const account = doordeck.com.doordeck.multiplatform.sdk.api.account();
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.lockOperations();
-
-// Retrieve the sites
-const allSites = await sites.listSites();
-console.log(allSites);
-
-// Retrieve the locks
-const locks = await sites.getLocksForSite(sites[0].id);
-console.log(locks);
-
-// Generate a key pair
-const keyPair = crypto.generateKeyPair();
-console.log(`Private key: ${crypto.encodeByteArrayToBase64(keyPair.private)}`);
-console.log(`Public key: ${crypto.encodeByteArrayToBase64(keyPair.public)}`);
-
-// Register a key pair
-const registerKeyPair = await account.registerEphemeralKey(keyPair.public);
-console.log(`Public key: ${crypto.certificateChainToString(registerKeyPair.certificateChain)}`);
-
-// Unlock a lock
-const baseOperation = new lockOperations.BaseOperation(registerKeyPair.userId, registerKeyPair.certificateChain,
-    registerKeyPair.private, locks[0].id, (new Date).getTime() / 1000, (new Date).getTime() / 1000,
-    ((new Date).getTime() / 1000) + 60, "uuid"
-);
-const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
-await lockOperations.unlock(unlockOperation);
-</script>
-````
-
-### Android (Kotlin)
 ````kotlin
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import com.doordeck.multiplatform.sdk.KDoordeckFactory
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.util.Crypto
-import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
-import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
-
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Initialize the SDK
-        val token = "YOUR_AUTH_TOKEN"
-        val sdk = KDoordeckFactory.initialize(ApiEnvironment.DEV, token)
-
-        // Retrieve the sites
-        val sites = sdk.sites().listSitesAsync().get()
-        println(sites)
-
-        // Retrieve the locks
-        val locks = sdk.sites().getLocksForSiteAsync(sites.first().id).get()
-        println(locks)
-
-        // Generate a key pair
-        val keyPair = Crypto.generateKeyPair()
-        println("Private key: ${keyPair.private.encodeByteArrayToBase64()}")
-        println("Public key: ${keyPair.public.encodeByteArrayToBase64()}")
-
-        // Register a key pair
-        val registerKeyPair = sdk.account().registerEphemeralKeyAsync(keyPair.public).get()
-        println("Certificate chain: ${registerKeyPair.certificateChain.certificateChainToString()}")
-
-        // Unlock a lock
-        val baseOperation = LockOperations.BaseOperation(
-            userId = registerKeyPair.userId,
-            userCertificateChain = registerKeyPair.certificateChain,
-            userPrivateKey = keyPair.private,
-            lockId = locks.first().id
-        )
-        val unlockOperation = LockOperations.UnlockOperation(baseOperation)
-        sdk.lockOperations().unlockAsync(unlockOperation).get()
-    }
-}
+val applicationContext = ApplicationContext(context)
+val sdk = KDoordeckFactory.initialize(applicationContext, ApiEnvironment.PROD, token)
 ````
+</details>
 
-### MinGW (C#)
+<details><summary>JS</summary>
+
+````js
+const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.PROD, token);
+````
+</details>
+
+<details><summary>C#</summary>
+
 ````csharp
-using bindings;
-using TestLibNet;
-using TestLibNet.model;
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        unsafe
-        {
-            // Initialize the SDK
-            const string token = "YOUR_AUTH_TOKEN";
-            doordeck_sdk_ExportedSymbols* symbols = Methods.doordeck_sdk_symbols();
-            var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV.get();
-            var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
-            var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(factory, apiEnvironment, token.toSByte());
-
-            // Retrieve the sites
-            var sitesResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-            var sites = Utils.toListSites(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(sitesResource));
-            Console.WriteLine(sites);
-
-            // Retrieve the locks
-            var getLocksForSiteData = new GetLocksForSiteData(sites.First().id);
-            var locks = Utils.toGetLocksForSite(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(sitesResource, getLocksForSiteData.toData()));
-            Console.WriteLine(locks);
-
-            // Generate a key pair
-            var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto._instance();
-            var keyPair = Utils.toEncodedKeyPair(symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPairJson(crypto));
-            Console.WriteLine("Private key: {0}", keyPair.@private);
-            Console.WriteLine("Public key: {0}", keyPair.@public);
-
-            // Register a key pair
-            var accountResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-            var registerEphemeralKey = new RegisterEphemeralKeyData(keyPair.@public);
-            var registerKeyPair = Utils.toRegisterEphemeralKey(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(accountResource, registerEphemeralKey.toData()));
-            Console.WriteLine("Certificate chain: {0}", string.Join(", ", registerKeyPair.certificateChain));
-
-            // Unlock a lock
-            var lockOperationsResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-            var baseOperation = new BaseOperationData(registerKeyPair.userId, registerKeyPair.certificateChain, keyPair.@private, locks.First().id);
-            var unlockOperation = new UnlockOperationData(baseOperation);
-            symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(lockOperationsResource, unlockOperation.toData());
-        }
-    }
-}
+var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD.get();
+var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
+var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(factory, apiEnvironment, token.toSByte());
 ````
+</details>
+
+# Crypto
+### Generate a key pair
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val keyPair = Crypto.generateKeyPair()
+````
+>:information_source: In Java, you should use `Crypto.INSTANCE.generateKeyPair()` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const crypto = doordeck.com.doordeck.multiplatform.sdk.util.Crypto;
+const keyPair = crypto.generateKeyPair();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto._instance();
+var keyPair = Utils.fromData<EncodedKeyPair>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPairJson(crypto));
+````
+</details>
+
+# Context manager
+
+### Set operation context
+By setting the operation context, the usage of the most complex functions from the SDK will be simplified, as you will need to use far fewer parameters with them
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY)
+````
+</details>
+
+<details><summary>JS</summary>
+
+````js
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
+````
+</details>
+
+### Save, load and clear operation context
+
+# Accountless resource
+
+### Login
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.accountless().login("EMAIL", "PASSWORD")
+````
+>:information_source: In Java, you can use the `loginAsync` function, which returns a `CompletableFuture<TokenResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless().login("EMAIL", "PASSWORD");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+var data = new LoginData("EMAIL", "PASSWORD").toData();
+var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
+````
+</details>
+
+### Register a new user
+After the registration you will need to [verify the email](#verify-email)
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false)
+````
+>:information_source: In Java, you can use the `registrationAsync` function, which returns a `CompletableFuture<TokenResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).toData();
+var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
+````
+</details>
+
+### Verify email
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.accountless().verifyEmail("CODE")
+````
+>:information_source: In Java, you can use the `verifyEmailAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("CODE");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+var data = new VerifyEmailData("CODE").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(resource, data);
+````
+</details>
+
+
+# Account resource
+
+### Request a new refresh token
+> [!IMPORTANT]
+> This function is only available to users with Doordeck issued auth tokens
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.account().refreshToken("REFRESH_TOKEN")
+````
+>:information_source: In Java, you can use the `refreshTokenAsync` function, which returns a `CompletableFuture<TokenResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().refreshToken("REFRESH_TOKEN");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new RefreshTokenData("REFRESH_TOKEN").toData();
+var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(resource, data));
+````
+</details>
+
+### Logout
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.account().logout()
+````
+>:information_source: In Java, you can use the `logoutAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.account().logout();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.logout(resource);
+````
+</details>
+
+### Register ephemeral key
+To register a new ephemeral key, you will need to [generate a new key pair](#generate-a-key-pair)
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.account().registerEphemeralKey(PUBLIC_KEY)
+````
+>:information_source: In Java, you can use the `registerEphemeralKeyAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().registerEphemeralKey(PUBLIC_KEY);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new RegisterEphemeralKeyData("BASE64_ENCODED_PUBLIC_KEY").toData();
+var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
+````
+</details>
+
+### Register ephemeral key with secondary authentication
+To register a new ephemeral key with secondary authentication, you will need to [generate a new key pair](#generate-a-key-pair). After the registration you will need to [verify the ephemeral key registration](#verify-ephemeral-key-registration)
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.account().registerEphemeralKeyWithSecondaryAuthentication(PUBLIC_KEY)
+````
+>:information_source: In Java, you can use the `registerEphemeralKeyWithSecondaryAuthenticationAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const twoFactorMethod = doordeck.com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod;
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().registerEphemeralKeyWithSecondaryAuthentication(PUBLIC_KEY, twoFactorMethod.EMAIL);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_ENCODED_PUBLIC_KEY").toData();
+var response = Utils.fromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
+````
+</details>
+
+### Verify ephemeral key registration
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.account().verifyEphemeralKeyRegistration("CODE", PRIVATE_KEY)
+````
+>:information_source: In Java, you can use the `verifyEphemeralKeyRegistrationAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().verifyEphemeralKeyRegistration("CODE", PRIVATE_KEY);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_ENCODED_PRIVATE_KEY").toData();
+var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
+````
+</details>
+
+### Re-verify email
+> [!IMPORTANT]
+> This function is only available to users with Doordeck issued auth tokens
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.account().reverifyEmail()
+````
+>:information_source: In Java, you can use the `reverifyEmailAsync` function, which returns a `CompletableFuture<Unit>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.account().reverifyEmail();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.reverifyEmail(resource);
+````
+</details>
+
+### Change password
+> [!IMPORTANT]
+> This function is only available to users with Doordeck issued auth tokens
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.account().changePassword("OLD_PASSWORD", "NEW_PASSWORD")
+````
+>:information_source: In Java, you can use the `changePasswordAsync` function, which returns a `CompletableFuture<Unit>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.account().changePassword("OLD_PASSWORD", "NEW_PASSWORD");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.changePasswordJson(resource, data);
+````
+</details>
+
+### Get the user details
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.account().getUserDetails()
+````
+>:information_source: In Java, you can use the `getUserDetailsAsync` function, which returns a `CompletableFuture<UserDetailsResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().getUserDetails();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var response Utils.fromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
+````
+</details>
+
+### Update the user details
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.account().updateUserDetails("DISPLAY_NAME")
+````
+>:information_source: In Java, you can use the `updateUserDetailsAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.account().updateUserDetails("DISPLAY_NAME");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+var data = new UpdateUserDetailsData("DISPLAY_NAME").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.updateUserDetailsJson(resource, data);
+````
+</details>
+
+### Delete account
+> [!CAUTION]
+> This operation is executed instantly and is irreversible
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.account().deleteAccount()
+````
+>:information_source: In Java, you can use the `deleteAccountAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.account().deleteAccount();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAccount(resource);
+````
+</details>
+
+# Fusion resource
+
+### Login
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.fusion().login("EMAIL", "PASSWORD")
+````
+>:information_source: In Java, you can use the `fusionAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().login("EMAIL", "PASSWORD");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new FusionLoginData("EMAIL", "PASSWORD").toData();
+var response = Utils.fromData<FusionLoginResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.loginJson(resource, data));
+````
+</details>
+
+### Get integration type
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.fusion().getIntegrationType()
+````
+>:information_source: In Java, you can use the `getIntegrationTypeAsync` function, which returns a `CompletableFuture<IntegrationTypeResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getIntegrationType();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var response = Utils.fromData<IntegrationTypeResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationTypeJson(resource));
+````
+</details>
+
+### Get integration configuration
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.fusion().getIntegrationConfiguration("TYPE")
+````
+>:information_source: In Java, you can use the `getIntegrationConfigurationAsync` function, which returns a `CompletableFuture<List<IntegrationConfigurationResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getIntegrationConfiguration("TYPE");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new GetIntegrationConfigurationData("TYPE");
+var response = Utils.fromData<List<IntegrationConfigurationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationConfigurationJson(resource, data));
+````
+</details>
+
+### Enable door
+### Delete door
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.fusion().deleteDoor("DEVICE_ID")
+````
+>:information_source: In Java, you can use the `deleteDoorAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new DeleteDoorData("DEVICE_ID");
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.deleteDoorJson(resource, data);
+````
+</details>
+
+### Get door status
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.fusion().getDoorStatus("DEVICE_ID")
+````
+>:information_source: In Java, you can use the `getDoorStatusAsync` function, which returns a `CompletableFuture<DoorStateResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getDoorStatus("DEVICE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new GetDoorStatusData("DEVICE_ID");
+var response = Utils.fromData<DoorStateResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getDoorStatusJson(resource, data));
+````
+</details>
+
+### Start door
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.fusion().startDoor("DEVICE_ID")
+````
+>:information_source: In Java, you can use the `startDoorAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.fusion().startDoor("DEVICE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new StartDoorData("DEVICE_ID");
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.startDoorJson(resource, data);
+````
+</details>
+
+### Stop door
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.fusion().stopDoor("DEVICE_ID")
+````
+>:information_source: In Java, you can use the `stopDoorAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var data = new StopDoorData("DEVICE_ID");
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.stopDoorJson(resource, data);
+````
+</details>
+
+# Helper resource
+This function facilitates the upload of a logo into your application in a single call
+
+### Upload platform logo
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.helper().uploadPlatformLogo("APPLICATION_ID", "CONTENT_TYPE", IMAGE_BYTES)
+````
+>:information_source: In Java, you can use the `uploadPlatformLogoAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.helper().uploadPlatformLogo("APPLICATION_ID", "CONTENT_TYPE", IMAGE_BYTES);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper(sdk);
+var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_ENCODED_IMAGE").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPlatformLogoJson(resource, data);
+````
+</details>
