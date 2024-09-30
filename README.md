@@ -125,6 +125,7 @@ const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeW
 <details><summary>C#</summary>
 
 ````csharp
+doordeck_sdk_ExportedSymbols* symbols = Methods.doordeck_sdk_symbols();
 var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD.get();
 var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(factory, apiEnvironment, token.toSByte());
@@ -179,7 +180,7 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 
 ````csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY).toData();
+var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
 ````
 </details>
@@ -295,6 +296,9 @@ var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.m
 </details>
 
 ### Logout
+> [!IMPORTANT]
+> When used, the [context manager](#context-manager) is restarted, so for any further usage, you will need to load or provide a new context
+
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -469,7 +473,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().get
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var response Utils.fromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
+var response = Utils.fromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
 ````
 </details>
 
@@ -979,7 +983,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var data = new SetLockSettingPermittedAddressesData("LOCK_ID", PERMITTED_ADDRESSES_LIST).toData();
+List<string> permittedAddresses = ["PERMITTED_ADDRESS"];
+var data = new SetLockSettingPermittedAddressesData("LOCK_ID", permittedAddresses).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingPermittedAddressesJson(resource, data);
 ````
 </details>
@@ -1013,7 +1018,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-val timeRequirements = listOf(LockOperations.TimeRequirement("START", "END", "TIMEZONE", DAYS_LIST))
+val timeRequirements = listOf(LockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST))
 sdk.lockOperations().setLockSettingTimeRestrictions("LOCK_ID", timeRequirements)
 ````
 >:information_source: In Java, you can use the `setLockSettingTimeRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
@@ -1033,7 +1038,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var timeRequirementsData = [new TimeRequirementData("START", "END", "TIMEZONE", DAYS_LIST)];
+List<string> days = ["MONDAY"];
+List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", days)];
 var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingTimeRestrictionsJson(resource, data);
 ````
@@ -1044,7 +1050,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.s
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-val locationRequirement = LockOperations.LocationRequirement("LATITUDE", "LONGITUDE", true, 100)
+val locationRequirement = LockOperations.LocationRequirement(LATITUDE, LONGITUDE, true, 100)
 sdk.lockOperations().updateLockSettingLocationRestrictions("LOCK_ID", locationRequirement)
 ````
 >:information_source: In Java, you can use the `updateLockSettingLocationRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
@@ -1063,7 +1069,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var locationRequirementData = new LocationRequirementData("LATITUDE", "LONGITUDE", true, 100);
+var locationRequirementData = new LocationRequirementData(LATITUDE, LONGITUDE, true, 100);
 var data = new UpdateLockSettingLocationRestrictionsData("LOCK_ID", locationRequirementData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingLocationRestrictionsJson(resource, data);
 ````
@@ -1247,7 +1253,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlock
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID)
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", LOCK_ID);
 var data = new UnlockOperationData(baseOperationData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(resource, data);
 ````
@@ -1277,7 +1283,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock("LO
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var data = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, BASE64_TARGET_PUBLIC_KEY).toData();
+var data = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(resource, data);
 ````
 </details>
@@ -1310,8 +1316,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessT
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
-var data = new RevokeAccessToLockOperationData(baseOperationData, USER_LIST).toData();
+List<string> userList = ["USER_ID"];
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", LOCK_ID);
+var data = new RevokeAccessToLockOperationData(baseOperationData, userList).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(resource, data);
 ````
 </details>
@@ -1342,7 +1349,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
 var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_DURATION).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockDurationJson(resource, data);
 ````
@@ -1354,7 +1361,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 
 ````kotlin
 val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
-val unlockBetween = LockOperations.UnlockBetween("START", "END", "TIMEZONE", DAYS_LIST)
+val unlockBetween = LockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST)
 val updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)
 sdk.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween)
 ````
@@ -1367,7 +1374,7 @@ sdk.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockB
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
         PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
-const unlockBetween = lockOperations.UnlockBetween("START", "END", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
+const unlockBetween = lockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
 const updateSecureSettingUnlockBetween = new lockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween);
 ````
@@ -1377,8 +1384,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
-var unlockBetweenData = new UnlockBetweenData("START", "END", "TIMEZONE", DAYS_LIST);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
 var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockBetweenJson(resource, data);
 ````
@@ -1461,7 +1468,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().createApplication(a
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
 var data = new CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM").toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.createApplicationJs(resource, data);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.createApplicationJson(resource, data);
 ````
 </details>
 
@@ -1518,7 +1525,7 @@ var response = Utils.fromData<ApplicationResponse>(symbols->kotlin.root.com.door
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-sdk.platform().updateApplicationName("APPLICATION_NAME")
+sdk.platform().updateApplicationName("APPLICATION_ID", "APPLICATION_NAME")
 ````
 >:information_source: In Java, you can use the `updateApplicationNameAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
@@ -1526,7 +1533,7 @@ sdk.platform().updateApplicationName("APPLICATION_NAME")
 <details><summary>JS</summary>
 
 ````js
-await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationName("APPLICATION_NAME");
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationName("APPLICATION_ID", "APPLICATION_NAME");
 ````
 </details>
 
@@ -1534,7 +1541,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationNa
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-var data = new UpdateApplicationNameData("APPLICATION_NAME").toData();
+var data = new UpdateApplicationNameData("APPLICATION_ID","APPLICATION_NAME").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationNameJson(resource, data);
 ````
 </details>
@@ -1543,7 +1550,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateA
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-sdk.platform().updateApplicationCompanyName("APPLICATION_COMPANY_NAME")
+sdk.platform().updateApplicationCompanyName("APPLICATION_ID", "APPLICATION_COMPANY_NAME")
 ````
 >:information_source: In Java, you can use the `updateApplicationCompanyNameAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
@@ -1551,7 +1558,7 @@ sdk.platform().updateApplicationCompanyName("APPLICATION_COMPANY_NAME")
 <details><summary>JS</summary>
 
 ````js
-await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCompanyName("APPLICATION_COMPANY_NAME");
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCompanyName("APPLICATION_ID", "APPLICATION_COMPANY_NAME");
 ````
 </details>
 
@@ -1559,7 +1566,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCo
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-var data = new UpdateApplicationCompanyNameData("APPLICATION_COMPANY_NAME").toData();
+var data = new UpdateApplicationCompanyNameData("APPLICATION_ID", "APPLICATION_COMPANY_NAME").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationCompanyNameJson(resource, data);
 ````
 </details>
@@ -1687,7 +1694,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationEm
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-var data = new UpdateApplicationEmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false).toData();
+var emailPreferencesData = new EmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false);
+var data = new UpdateApplicationEmailPreferencesData("APPLICATION_ID", emailPreferencesData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationEmailPreferencesJson(resource, data);
 ````
 </details>
@@ -1763,7 +1771,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
 var data = new GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE").toData();
-var response = Utils.fromData<GetLogoUploadUrlResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getLogoUploadUrl(resource, data));
+var response = Utils.fromData<GetLogoUploadUrlResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getLogoUploadUrlJson(resource, data));
 ````
 </details>
 
@@ -2072,7 +2080,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
-var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", LOCK_ID_LIST).toData();
+List<string> lockIdList = ["LOCK_ID"];
+var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", lockIdList).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
 ````
 </details>
