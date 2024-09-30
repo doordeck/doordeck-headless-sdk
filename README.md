@@ -3,36 +3,94 @@
 * Add the SDK into your project
 * [Initialize the SDK](#initialize-the-sdk)
 * [Crypto](#crypto)
-    * [Generate a key pair](#generate-a-key-pair)
+  * [Generate a key pair](#generate-a-key-pair)
 * [Context manager](#context-manager)
-    * [Set operation context](#set-operation-context)
-    * Save, load and clear operation context
+  * [Set operation context](#set-operation-context)
+  * Save, load and clear operation context
 * [Accountless resource](#accountless-resource)
-    * [Login](#login)
-    * [Register a new user](#register-a-new-user)
-    * [Verify email](#verify-email)
+  * [Login](#login)
+  * [Register a new user](#register-a-new-user)
+  * [Verify email](#verify-email)
 * [Account resource](#account-resource)
-    * [Request a new refresh token](#request-a-new-refresh-token)
-    * [Logout](#logout)
-    * [Register ephemeral key](#register-ephemeral-key)
-    * [Register ephemeral key with secondary authentication](#register-ephemeral-key-with-secondary-authentication)
-    * [Verify ephemeral key registration](#verify-ephemeral-key-registration)
-    * [Re-verify email](#re-verify-email)
-    * [Change password](#change-password)
-    * [Get the user details](#get-the-user-details)
-    * [Update the user details](#get-the-user-details)
-    * [Delete account](#delete-account)
+  * [Request a new refresh token](#request-a-new-refresh-token)
+  * [Logout](#logout)
+  * [Register ephemeral key](#register-ephemeral-key)
+  * [Register ephemeral key with secondary authentication](#register-ephemeral-key-with-secondary-authentication)
+  * [Verify ephemeral key registration](#verify-ephemeral-key-registration)
+  * [Re-verify email](#re-verify-email)
+  * [Change password](#change-password)
+  * [Get the user details](#get-the-user-details)
+  * [Update the user details](#get-the-user-details)
+  * [Delete account](#delete-account)
 * [Fusion resource](#fusion-resource)
-    * [Login](#login-1)
-    * [Get integration type](#get-integration-type)
-    * [Get integration configuration](#get-integration-configuration)
-    * Enable door
-    * [Delete door](#delete-door)
-    * [Get door status](#get-door-status)
-    * [Start door](#start-door)
-    * [Stop door](#stop-door)
+  * [Login](#login-1)
+  * [Get integration type](#get-integration-type)
+  * [Get integration configuration](#get-integration-configuration)
+  * Enable door
+  * [Delete door](#delete-door)
+  * [Get door status](#get-door-status)
+  * [Start door](#start-door)
+  * [Stop door](#stop-door)
 * [Helper resource](#helper-resource)
-    * [Upload platform logo](#upload-platform-logo)
+  * [Upload platform logo](#upload-platform-logo)
+* [Lock operations resource](#lock-operations-resource)
+  * [Get single lock](#get-single-lock)
+  * [Get lock audit trail](#get-lock-audit-trail)
+  * [Get audit for user](#get-audit-for-user)
+  * [Get users for lock](#get-users-for-lock)
+  * [Get locks for user](#get-locks-for-user)
+  * [Update lock name](#update-lock-name)
+  * [Update lock favourite](#update-lock-favourite)
+  * [Update lock color](#update-lock-color)
+  * [Update lock setting default name](#update-lock-setting-default-name)
+  * [Set lock setting permitted addresses](#set-lock-setting-permitted-addresses)
+  * [Update lock setting hidden](#update-lock-setting-hidden)
+  * [Set lock setting time restrictions](#set-lock-setting-time-restrictions)
+  * [Update lock setting location restrictions](#update-lock-setting-location-restrictions)
+  * [Get a Doordeck user's public key](#get-a-doordeck-users-public-key)
+  * [Get user public key by email](#get-user-public-key-by-email)
+  * [Get user public key by telephone](#get-user-public-key-by-telephone)
+  * [Get user public key by local key](#get-user-public-key-by-local-key)
+  * [Get user public key by foreign key](#get-user-public-key-by-foreign-key)
+  * [Get user public key by identity](#get-user-public-key-by-identity)
+  * [Unlock](#unlock)
+  * [Share lock](#share-lock)
+  * [Revoke access to lock](#revoke-access-to-lock)
+  * [Update secure setting unlock duration](#update-secure-setting-unlock-duration)
+  * [Update secure setting unlock between](#update-secure-setting-unlock-between)
+  * [Get pinned locks](#get-pinned-locks)
+  * [Get shareable locks](#get-shareable-locks)
+* [Platform resource](#platform-resource)
+  * [Create application](#create-application)
+  * [List applications](#list-applications)
+  * [Get application](#get-application)
+  * [Update application name](#update-application-name)
+  * [Update application company name](#update-application-company-name)
+  * [Update application mailing address](#update-application-mailing-address)
+  * [Update application privacy policy](#update-application-privacy-policy)
+  * [Update application support contact](#update-application-support-contact)
+  * [Update application app link](#update-application-app-link)
+  * [Update application email preferences](#update-application-email-preferences)
+  * [Update application logo url](#update-application-log-url)
+  * [Delete application](#delete-application)
+  * [Get logo upload url](#get-logo-upload-url)
+  * Add auth key
+  * [Add auth issuer](#add-auth-issuer)
+  * [Delete auth issuer](#delete-auth-issuer)
+  * [Add CORS domain](#add-cors-domain)
+  * [Remove CORS domain](#remove-cors-domain)
+  * [Add application owner](#add-application-owner)
+  * [Remove application owner](#remove-application-owner)
+  * [Get application owners details](#get-application-owners-details)
+* [Sites resource](#sites-resource)
+  * [List sites](#list-sites)
+  * [Get locks for a site](#get-locks-for-a-site)
+  * [Get users for a site](#get-users-for-a-site)
+* [Tiles resource](#tiles-resource)
+  * [Get locks belonging to a tile](#get-locks-belonging-to-a-tile)
+  * [Associate multiple locks](#associate-multiple-locks)
+* Samples
+
 
 # Initialize the SDK
 The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
@@ -668,5 +726,1353 @@ await doordeck.com.doordeck.multiplatform.sdk.api.helper().uploadPlatformLogo("A
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper(sdk);
 var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_ENCODED_IMAGE").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPlatformLogoJson(resource, data);
+````
+</details>
+
+
+# Lock operations resource
+
+### Get single lock
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getSingleLock("LOCK_ID")
+````
+>:information_source: In Java, you can use the `getSingleLockAsync` function, which returns a `CompletableFuture<LockResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getSingleLock("LOCK_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetSingleLockData("LOCK_ID").toData();
+var response = Utils.fromData<LockResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getSingleLockJson(resource, data));
+````
+</details>
+
+### Get lock audit trail
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getLockAuditTrail("LOCK_ID", START_EPOCH, END_EPOCH)
+````
+>:information_source: In Java, you can use the `getLockAuditTrailAsync` function, which returns a `CompletableFuture<List<LockAuditTrailResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getLockAuditTrail("LOCK_ID", START_EPOCH, END_EPOCH);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetLockAuditTrailData("LOCK_ID", START_EPOCH, END_EPOCH).toData();
+var response = Utils.fromData<List<LockAuditTrailResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getLockAuditTrailJson(resource, data));
+````
+</details>
+
+### Get audit for user
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getAuditForUser("USER_ID", START_EPOCH, END_EPOCH)
+````
+>:information_source: In Java, you can use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<UserAuditResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getAuditForUser("USER_ID", START_EPOCH, END_EPOCH);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetAuditForUserData("USER_ID", START_EPOCH, END_EPOCH).toData();
+var response = Utils.fromData<List<UserAuditResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getAuditForUserJson(resource, data));
+````
+</details>
+
+### Get users for lock
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUsersForLock("LOCK_ID")
+````
+>:information_source: In Java, you can use the `getUsersForLockAsync` function, which returns a `CompletableFuture<List<UserLockResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUsersForLock("LOCK_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUsersForLockData("LOCK_ID").toData();
+var response = Utils.fromData<List<UserLockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUsersForLockJson(resource, data));
+````
+</details>
+
+### Get locks for user
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getLocksForUser("LOCK_ID")
+````
+>:information_source: In Java, you can use the `getLocksForUserAsync` function, which returns a `CompletableFuture<LockUserResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getLocksForUser("LOCK_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetLocksForUserData("LOCK_ID").toData();
+var response = Utils.fromData<LockUserResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getLocksForUserJson(resource, data));
+````
+</details>
+
+### Update lock name
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().updateLockName("LOCK_ID", "LOCK_NAME")
+````
+>:information_source: In Java, you can use the `updateLockNameAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockName("LOCK_ID", "LOCK_NAME");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new UpdateLockNameData("LOCK_ID", "LOCK_NAME").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockNameJson(resource, data);
+````
+</details>
+
+### Update lock favourite
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().updateLockFavourite("LOCK_ID", true)
+````
+>:information_source: In Java, you can use the `updateLockFavouriteAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockFavourite("LOCK_ID", true);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new UpdateLockFavouriteData("LOCK_ID", true).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockFavouriteJson(resource, data);
+````
+</details>
+
+### Update lock color
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().updateLockColour("LOCK_ID", "COLOR")
+````
+>:information_source: In Java, you can use the `updateLockColourAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockColour("LOCK_ID", "COLOR");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new UpdateLockColourData("LOCK_ID", "COLOR").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockColourJson(resource, data);
+````
+</details>
+
+### Update lock setting default name
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().updateLockSettingDefaultName("LOCK_ID", "LOCK_NAME")
+````
+>:information_source: In Java, you can use the `updateLockSettingDefaultNameAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSettingDefaultName("LOCK_ID", "LOCK_NAME");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new UpdateLockSettingDefaultNameData("LOCK_ID", "LOCK_NAME").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingDefaultNameJson(resource, data);
+````
+</details>
+
+### Set lock setting permitted addresses
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", PERMITTED_ADDRESSES_LIST)
+````
+>:information_source: In Java, you can use the `setLockSettingPermittedAddressesAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const ktList = doordeck.kotlin.collections.KtList;
+const permittedAddresses = ktList.fromJsArray(["PERMITTED_ADDRESS"]);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", permittedAddresses);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new SetLockSettingPermittedAddressesData("LOCK_ID", PERMITTED_ADDRESSES_LIST).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingPermittedAddressesJson(resource, data);
+````
+</details>
+
+### Update lock setting hidden
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().updateLockSettingHidden("LOCK_ID", true)
+````
+>:information_source: In Java, you can use the `updateLockSettingHiddenAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSettingHidden("LOCK_ID", true);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new UpdateLockSettingHiddenData("LOCK_ID", true).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingHiddenJson(resource, data);
+````
+</details>
+
+### Set lock setting time restrictions
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val timeRequirements = listOf(LockOperations.TimeRequirement("START", "END", "TIMEZONE", DAYS_LIST))
+sdk.lockOperations().setLockSettingTimeRestrictions("LOCK_ID", timeRequirements)
+````
+>:information_source: In Java, you can use the `setLockSettingTimeRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const ktList = doordeck.kotlin.collections.KtList;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const timeRequirements = ktList.fromJsArray([new lockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", ktList.fromJsArray(["MONDAY"]))]);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingTimeRestrictions("LOCK_ID", timeRequirements);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var timeRequirementsData = [new TimeRequirementData("START", "END", "TIMEZONE", DAYS_LIST)];
+var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingTimeRestrictionsJson(resource, data);
+````
+</details>
+
+
+### Update lock setting location restrictions
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val locationRequirement = LockOperations.LocationRequirement("LATITUDE", "LONGITUDE", true, 100)
+sdk.lockOperations().updateLockSettingLocationRestrictions("LOCK_ID", locationRequirement)
+````
+>:information_source: In Java, you can use the `updateLockSettingLocationRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const locationRequirement = new lockOperations.LocationRequirement(LATITUDE, LONGITUDE, ENABLED, RADIUS, ACCURACY);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSettingLocationRestrictions("LOCK_ID", locationRequirement);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var locationRequirementData = new LocationRequirementData("LATITUDE", "LONGITUDE", true, 100);
+var data = new UpdateLockSettingLocationRestrictionsData("LOCK_ID", locationRequirementData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingLocationRestrictionsJson(resource, data);
+````
+</details>
+
+
+### Get a Doordeck user's public key
+> [!IMPORTANT]
+> This function is only available to users with Doordeck issued auth tokens
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKey("USER_EMAIL", false)
+````
+>:information_source: In Java, you can use the `getUserPublicKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKey("USER_EMAIL", false);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyData("USER_EMAIL", false).toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyJson(resource, data));
+````
+</details>
+
+### Get user public key by email
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKeyByEmail("USER_EMAIL")
+````
+>:information_source: In Java, you can use the `getUserPublicKeyByEmailAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByEmail("USER_EMAIL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyByEmailData("USER_EMAIL").toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByEmailJson(resource, data));
+````
+</details>
+
+### Get user public key by telephone
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKeyByTelephone("USER_TELEPHONE")
+````
+>:information_source: In Java, you can use the `getUserPublicKeyByTelephoneAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByTelephone("USER_TELEPHONE");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyByTelephoneData("USER_TELEPHONE").toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByTelephoneJson(resource, data));
+````
+</details>
+
+### Get user public key by local key
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKeyByLocalKey("USER_LOCAL_KEY")
+````
+>:information_source: In Java, you can use the `getUserPublicKeyByLocalKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByLocalKey("USER_LOCAL_KEY");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyByLocalKeyData("USER_LOCAL_KEY").toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByLocalKeyJson(resource, data));
+````
+</details>
+
+### Get user public key by foreign key
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKeyByForeignKey("USER_FOREIGN_KEY")
+````
+>:information_source: In Java, you can use the `getUserPublicKeyByForeignKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByForeignKey("USER_FOREIGN_KEY");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyByForeignKeyData("USER_FOREIGN_KEY").toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByForeignKeyJson(resource, data));
+````
+</details>
+
+### Get user public key by identity
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getUserPublicKeyByIdentity("USER_IDENTITY")
+````
+>:information_source: In Java, you can use the `getUserPublicKeyByIdentityAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByIdentity("USER_IDENTITY");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new GetUserPublicKeyByIdentityData("USER_IDENTITY").toData();
+var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByIdentityJson(resource, data));
+````
+</details>
+
+### Unlock
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val unlockOperation = LockOperations.UnlockOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val response = sdk.lockOperations().unlock(unlockOperation)
+````
+>:information_source: In Java, you can use the `unlockAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
+        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlockOperation);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID)
+var data = new UnlockOperationData(baseOperationData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(resource, data);
+````
+</details>
+
+### Share lock
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val shareLockOperation = LockOperations.ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, TARGET_PUBLIC_KEY)
+sdk.lockOperations().shareLock("LOCK_ID", shareLockOperation)
+````
+>:information_source: In Java, you can use the `shareLockAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
+const shareLockOperation = new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock("LOCK_ID", shareLockOperation);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var data = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, BASE64_TARGET_PUBLIC_KEY).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(resource, data);
+````
+</details>
+
+### Revoke access to lock
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(baseOperation, USER_LIST)
+sdk.lockOperations().revokeAccessToLock(revokeAccessToLockOperation)
+````
+>:information_source: In Java, you can use the `revokeAccessToLockAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const ktList = doordeck.kotlin.collections.KtList;
+const userList = ktList.fromJsArray(["USER_ID"]);
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
+        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const revokeAccessToLockOperation = new lockOperations.RevokeAccessToLockOperation(baseOperation, userList);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLock(revokeAccessToLockOperation);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
+var data = new RevokeAccessToLockOperationData(baseOperationData, USER_LIST).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(resource, data);
+````
+</details>
+
+### Update secure setting unlock duration
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(baseOperation, UNLOCK_DURATION)
+sdk.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration)
+````
+>:information_source: In Java, you can use the `updateSecureSettingUnlockDurationAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
+        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const updateSecureSettingUnlockDuration = new lockOperations.UpdateSecureSettingUnlockDuration(baseOperation, UNLOCK_DURATION);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
+var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_DURATION).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockDurationJson(resource, data);
+````
+</details>
+
+
+### Update secure setting unlock between
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val unlockBetween = LockOperations.UnlockBetween("START", "END", "TIMEZONE", DAYS_LIST)
+val updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)
+sdk.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween)
+````
+>:information_source: In Java, you can use the `updateSecureSettingUnlockBetweenAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
+        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const unlockBetween = lockOperations.UnlockBetween("START", "END", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
+const updateSecureSettingUnlockBetween = new lockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, BASE64_PRIVATE_KEY, LOCK_ID);
+var unlockBetweenData = new UnlockBetweenData("START", "END", "TIMEZONE", DAYS_LIST);
+var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockBetweenJson(resource, data);
+````
+</details>
+
+### Get pinned locks
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getPinnedLocks()
+````
+>:information_source: In Java, you can use the `getPinnedLocksAsync` function, which returns a `CompletableFuture<List<LockResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getPinnedLocks();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var response = Utils.fromData<List<LockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getPinnedLocksJson(resource));
+````
+</details>
+
+### Get shareable locks
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.lockOperations().getShareableLocks()
+````
+>:information_source: In Java, you can use the `getShareableLocksAsync` function, which returns a `CompletableFuture<List<ShareableLockResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getShareableLocks();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var response = Utils.fromData<List<ShareableLockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getShareableLocksJson(resource));
+````
+</details>
+
+
+# Platform resource
+> [!IMPORTANT]
+> All of the platform functions are only available to users with Doordeck issued auth tokens
+
+### Create application
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val application = Platform.CreateApplication("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM")
+sdk.platform().createApplication(application)
+````
+>:information_source: In Java, you can use the `createApplicationAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const application = new platform.CreateApplication("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM", null, null, null, null, null);
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().createApplication(application);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.createApplicationJs(resource, data);
+````
+</details>
+
+### List applications
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.platform().listApplications()
+````
+>:information_source: In Java, you can use the `listApplicationsAsync` function, which returns a `CompletableFuture<List<ApplicationResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().listApplications();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var response = Utils.fromData<List<ApplicationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.listApplicationsJson(resource));
+````
+</details>
+
+### Get application
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.platform().getApplication("APPLICATION_ID")
+````
+>:information_source: In Java, you can use the `getApplicationAsync` function, which returns a `CompletableFuture<ApplicationResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().getApplication("APPLICATION_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new GetApplicationData("APPLICATION_ID").toData();
+var response = Utils.fromData<ApplicationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getApplicationJson(resource, data));
+````
+</details>
+
+### Update application name
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationName("APPLICATION_NAME")
+````
+>:information_source: In Java, you can use the `updateApplicationNameAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationName("APPLICATION_NAME");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationNameData("APPLICATION_NAME").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationNameJson(resource, data);
+````
+</details>
+
+### Update application company name
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationCompanyName("APPLICATION_COMPANY_NAME")
+````
+>:information_source: In Java, you can use the `updateApplicationCompanyNameAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCompanyName("APPLICATION_COMPANY_NAME");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationCompanyNameData("APPLICATION_COMPANY_NAME").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationCompanyNameJson(resource, data);
+````
+</details>
+
+### Update application mailing address
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationMailingAddress("APPLICATION_ID", "COMPANY@MAIL.COM")
+````
+>:information_source: In Java, you can use the `updateApplicationMailingAddressAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationMailingAddress("APPLICATION_ID", "COMPANY@MAIL.COM");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationMailingAddressData("APPLICATION_ID", "COMPANY@MAIL.COM").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationMailingAddressJson(resource, data);
+````
+</details>
+
+### Update application privacy policy
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationPrivacyPolicy("APPLICATION_ID", "PRIVACY_POLICY")
+````
+>:information_source: In Java, you can use the `updateApplicationPrivacyPolicyAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationPrivacyPolicy("APPLICATION_ID", "PRIVACY_POLICY");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationPrivacyPolicyData("APPLICATION_ID", "PRIVACY_POLICY").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationPrivacyPolicyJson(resource, data);
+````
+</details>
+
+### Update application support contact
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationSupportContact("APPLICATION_ID", "SUPPORT_CONTACT_URL")
+````
+>:information_source: In Java, you can use the `updateApplicationSupportContactAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationSupportContact("APPLICATION_ID", "SUPPORT_CONTACT_URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationSupportContactData("APPLICATION_ID", "SUPPORT_CONTACT_URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationSupportContactJson(resource, data);
+````
+</details>
+
+### Update application app link
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationAppLink("APPLICATION_ID", "APP_LINK")
+````
+>:information_source: In Java, you can use the `updateApplicationAppLinkAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationAppLink("APPLICATION_ID", "APP_LINK");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationAppLinkData("APPLICATION_ID", "APP_LINK").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationAppLinkJson(resource, data);
+````
+</details>
+
+### Update application email preferences
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val emailPreferences = Platform.EmailPreferences("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false, null)
+sdk.platform().updateApplicationEmailPreferences("APPLICATION_ID", emailPreferences)
+````
+>:information_source: In Java, you can use the `updateApplicationEmailPreferencesAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const emailPreferences = new platform.EmailPreferences("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false, null);
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationEmailPreferences("APPLICATION_ID", emailPreferences);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationEmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationEmailPreferencesJson(resource, data);
+````
+</details>
+
+### Update application log url
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().updateApplicationLogoUrl("APPLICATION_ID", "LOGO_URL")
+````
+>:information_source: In Java, you can use the `updateApplicationLogoUrlAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationLogoUrl("APPLICATION_ID", "LOGO_URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new UpdateApplicationLogoUrlData("APPLICATION_ID", "LOGO_URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationLogoUrlJson(resource, data);
+````
+</details>
+
+### Delete application
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().deleteApplication("APPLICATION_ID")
+````
+>:information_source: In Java, you can use the `deleteApplicationAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteApplication("APPLICATION_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new DeleteApplicationData("APPLICATION_ID").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteApplicationJson(resource, data);
+````
+</details>
+
+### Get logo upload url
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.platform().getLogoUploadUrl("APPLICATION_ID", "CONTENT_TYPE")
+````
+>:information_source: In Java, you can use the `getLogoUploadUrlAsync` function, which returns a `CompletableFuture<GetLogoUploadUrlResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().getLogoUploadUrl("APPLICATION_ID", "CONTENT_TYPE");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE").toData();
+var response = Utils.fromData<GetLogoUploadUrlResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getLogoUploadUrl(resource, data));
+````
+</details>
+
+### Add auth key
+// TODO
+
+### Add auth issuer
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().addAuthIssuer("APPLICATION_ID", "URL")
+````
+>:information_source: In Java, you can use the `addAuthIssuerAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthIssuer("APPLICATION_ID", "URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new AddAuthIssuerData("APPLICATION_ID", "URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addAuthIssuerJson(resource, data);
+````
+</details>
+
+### Delete auth issuer
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().deleteAuthIssuer("APPLICATION_ID", "URL")
+````
+>:information_source: In Java, you can use the `deleteAuthIssuerAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteAuthIssuer("APPLICATION_ID", "URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new DeleteAuthIssuerData("APPLICATION_ID", "URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteAuthIssuerJson(resource, data);
+````
+</details>
+
+### Add CORS domain
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().addCorsDomain("APPLICATION_ID", "URL")
+````
+>:information_source: In Java, you can use the `addCorsDomainAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().addCorsDomain("APPLICATION_ID", "URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new AddCorsDomainData("APPLICATION_ID", "URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addCorsDomainJson(resource, data);
+````
+</details>
+
+### Remove CORS domain
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().removeCorsDomain("APPLICATION_ID", "URL")
+````
+>:information_source: In Java, you can use the `removeCorsDomainAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeCorsDomain("APPLICATION_ID", "URL");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new RemoveCorsDomainData("APPLICATION_ID", "URL").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeCorsDomainJson(resource, data);
+````
+</details>
+
+### Add application owner
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().addApplicationOwner("APPLICATION_ID", "OWNER_ID")
+````
+>:information_source: In Java, you can use the `addApplicationOwnerAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().addApplicationOwner("APPLICATION_ID", "OWNER_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new AddApplicationOwnerData("APPLICATION_ID", "OWNER_ID").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addApplicationOwnerJson(resource, data);
+````
+</details>
+
+### Remove application owner
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.platform().removeApplicationOwner("APPLICATION_ID", "OWNER_ID")
+````
+>:information_source: In Java, you can use the `removeApplicationOwnerAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeApplicationOwner("APPLICATION_ID", "OWNER_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new RemoveApplicationOwnerData("APPLICATION_ID", "OWNER_ID").toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeApplicationOwnerJson(resource, data);
+````
+</details>
+
+### Get application owners details
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.platform().getApplicationOwnersDetails("APPLICATION_ID")
+````
+>:information_source: In Java, you can use the `getApplicationOwnersDetailsAsync` function, which returns a `CompletableFuture<List<ApplicationOwnerDetailsResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().getApplicationOwnersDetails("APPLICATION_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var data = new GetApplicationOwnersDetailsData("APPLICATION_ID").toData();
+var response = Utils.fromData<List<ApplicationOwnerDetailsResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getApplicationOwnersDetailsJson(resource, data));
+````
+</details>
+
+
+# Sites resource
+
+### List sites
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.sites().listSites()
+````
+>:information_source: In Java, you can use the `listSitesAsync` function, which returns a `CompletableFuture<List<SiteResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().listSites();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+var response = Utils.fromData<List<SiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(resource));
+````
+</details>
+
+### Get locks for a site
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.sites().getLocksForSite("SITE_ID")
+````
+>:information_source: In Java, you can use the `getLocksForSiteAsync` function, which returns a `CompletableFuture<List<SiteLocksResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getLocksForSite("SITE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+var data = new GetLocksForSiteData("SITE_ID").toData();
+var response = Utils.fromData<List<SiteLocksResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(resource, data));
+````
+</details>
+
+### Get users for a site
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.sites().getUsersForSite("SITE_ID")
+````
+>:information_source: In Java, you can use the `getUsersForSiteAsync` function, which returns a `CompletableFuture<List<UserForSiteResponse>>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUsersForSite("SITE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+var data = new GetUsersForSiteData("SITE_ID").toData();
+var response = Utils.fromData<List<UserForSiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(resource, data));
+````
+</details>
+
+
+# Tiles resource
+
+### Get locks belonging to a tile
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val response = sdk.tiles().getLocksBelongingToTile("TILE_ID")
+````
+>:information_source: In Java, you can use the `getLocksBelongingToTileAsync` function, which returns a `CompletableFuture<TileLocksResponse>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.tiles().getLocksBelongingToTile("TILE_ID");
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
+var data = new GetLocksBelongingToTileData("TILE_ID").toData();
+var response = Utils.fromData<TileLocksResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.getLocksBelongingToTileJson(resource, data));
+````
+</details>
+
+### Associate multiple locks
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", LOCK_ID_LIST)
+````
+>:information_source: In Java, you can use the `associateMultipleLocksAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const ktList = doordeck.kotlin.collections.KtList;
+const lockIdList = ktList.fromJsArray(["LOCK_ID"]);
+await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", lockIdList);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
+var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", LOCK_ID_LIST).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
 ````
 </details>
