@@ -2199,6 +2199,13 @@ val response = sdk.tiles().getLocksBelongingToTile("TILE_ID")
 >:information_source: In Java, you can use the `getLocksBelongingToTileAsync` function, which returns a `CompletableFuture<TileLocksResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.tiles().getLocksBelongingToTile("TILE_ID"))
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -2219,9 +2226,16 @@ var response = Utils.fromData<TileLocksResponse>(symbols->kotlin.root.com.doorde
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", LOCK_ID_LIST)
+sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", listOf("LOCK_ID"))
 ````
 >:information_source: In Java, you can use the `associateMultipleLocksAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", ["LOCK_ID"]))
+````
 </details>
 
 <details><summary>JS</summary>
