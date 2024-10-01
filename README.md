@@ -77,7 +77,7 @@
   * [Update application logo url](#update-application-log-url)
   * [Delete application](#delete-application)
   * [Get logo upload url](#get-logo-upload-url)
-  * Add auth key
+  * [Add auth key](#add-auth-key)
   * [Add auth issuer](#add-auth-issuer)
   * [Delete auth issuer](#delete-auth-issuer)
   * [Add CORS domain](#add-cors-domain)
@@ -235,7 +235,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusion
 </details>
 
 ### Store context
-If you have previously set the [operation context](#set-operation-context) or the [auth token](#set-auth-token), you can store those context fields in the system so they are persisted between sessions.
+If you have previously set the [operation context](#set-operation-context), [auth token](#set-auth-token) or the [fusion auth token](#set-fusion-auth-token), you can store those context fields in the system so they are persisted between sessions.
 <details><summary>JVM</summary>
 
 ````kotlin
@@ -1882,7 +1882,34 @@ var response = Utils.fromData<GetLogoUploadUrlResponse>(symbols->kotlin.root.com
 </details>
 
 ### Add auth key
-// TODO
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val key = Platform.Ed25519Key("OKP", "sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc")
+sdk.platform().addAuthKey("APPLICATION_ID", key)
+````
+>:information_source: In Java, you can use the `addAuthKeyAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const key = platform.Ed25519Key("OKP", "sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
+await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthKey("APPLICATION_ID", key);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+var keyData = new Ed25519KeyData("sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
+var data = new AddAuthKeyData("APPLICATION_ID", keyData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addAuthKeyJson(resource, data);
+````
+</details>
+
 
 ### Add auth issuer
 <details><summary>JVM & Android</summary>
