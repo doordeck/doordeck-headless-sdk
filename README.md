@@ -10,6 +10,7 @@
   * [Set fusion auth token](#set-fusion-auth-token)
   * [Store context](#store-context)
   * [Load context](#load-context)
+  * [Clear context](#clear-context)
 * [Accountless resource](#accountless-resource)
   * [Login](#login)
   * [Register a new user](#register-a-new-user)
@@ -292,6 +293,29 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadConte
 ````
 </details>
 
+### Clear context
+Removes all the stored fields from the system; however, this function does not clear the fields from memory
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.contextManager().clearContext()
+````
+</details>
+
+<details><summary>JS</summary>
+
+````js
+sdk.contextManager().clearContext();
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
+````
+</details>
 
 # Accountless resource
 
