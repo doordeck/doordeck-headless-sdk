@@ -30,7 +30,7 @@
   * [Login](#login-1)
   * [Get integration type](#get-integration-type)
   * [Get integration configuration](#get-integration-configuration)
-  * Enable door
+  * [Enable door](#enable-door)
   * [Delete door](#delete-door)
   * [Get door status](#get-door-status)
   * [Start door](#start-door)
@@ -905,6 +905,42 @@ var response = Utils.fromData<List<IntegrationConfigurationResponse>>(symbols->k
 </details>
 
 ### Enable door
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val controller = Fusion.DemoController()
+sdk.fusion().enableDoor("NAME", "SITE_ID", controller)
+````
+>:information_source: In Java, you can use the `enableDoorAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let controller = Fusion.DemoController()
+sdk.fusion().enableDoor(name: "NAME", siteId: "SITE_ID", controller: controller)
+````
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const fusion = doordeck.com.doordeck.multiplatform.sdk.api.model.Fusion;
+const controller = new fusion.DemoController(8080);
+await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "SITE_ID", controller);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+var controllerData = new DemoControllerData(8080);
+var data = new EnableDoorData("NAME", "SITE_ID", controllerData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.enableDoor(resource, data);
+````
+</details>
+
 ### Delete door
 <details><summary>JVM & Android</summary>
 
