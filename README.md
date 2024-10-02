@@ -1,6 +1,7 @@
 # SDK Documentation
 
-* Add the SDK into your project
+* [Build the project](#build-the-project)
+* [Add the SDK into your project](#add-the-sdk-into-your-project)
 * [Initialize the SDK](#initialize-the-sdk)
 * [Crypto](#crypto)
   * [Generate a key pair](#generate-a-key-pair)
@@ -95,6 +96,14 @@
   * [Associate multiple locks](#associate-multiple-locks)
 * Samples
 
+# Build the project
+To build the project, you need to specify the Android SDK directory. To do this, create a `local.properties` file in the root project directory with the following configuration: `sdk.dir=ANDROID_SDK_DIR`
+
+> [!NOTE]  
+> It’s normal to see `Unresolved references`. For example, if you are using Windows, you won’t be able to resolve macOS-specific imports
+
+# Add the SDK into your project
+// TODO
 
 # Initialize the SDK
 The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
