@@ -555,6 +555,13 @@ val response = sdk.account().registerEphemeralKey(PUBLIC_KEY)
 >:information_source: In Java, you can use the `registerEphemeralKeyAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.account().registerEphemeralKey(publicKey: PUBLIC_KEY)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -566,7 +573,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyData("BASE64_ENCODED_PUBLIC_KEY").toData();
+var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY").toData();
 var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
 ````
 </details>
@@ -581,6 +588,13 @@ val response = sdk.account().registerEphemeralKeyWithSecondaryAuthentication(PUB
 >:information_source: In Java, you can use the `registerEphemeralKeyWithSecondaryAuthenticationAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.account().registerEphemeralKeyWithSecondaryAuthentication(publicKey: PUBLIC_KEY, method: null)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -593,7 +607,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_ENCODED_PUBLIC_KEY").toData();
+var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY").toData();
 var response = Utils.fromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
 ````
 </details>
@@ -607,6 +621,13 @@ val response = sdk.account().verifyEphemeralKeyRegistration("CODE", PRIVATE_KEY)
 >:information_source: In Java, you can use the `verifyEphemeralKeyRegistrationAsync` function, which returns a `CompletableFuture<RegisterEphemeralKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.account().verifyEphemeralKeyRegistration(code: "CODE", privateKey: PRIVATE_KEY)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -618,7 +639,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_ENCODED_PRIVATE_KEY").toData();
+var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY").toData();
 var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
 ````
 </details>
@@ -632,6 +653,13 @@ var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root
 sdk.account().reverifyEmail()
 ````
 >:information_source: In Java, you can use the `reverifyEmailAsync` function, which returns a `CompletableFuture<Unit>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.account().reverifyEmail()
+````
 </details>
 
 <details><summary>JS</summary>
@@ -660,6 +688,13 @@ sdk.account().changePassword("OLD_PASSWORD", "NEW_PASSWORD")
 >:information_source: In Java, you can use the `changePasswordAsync` function, which returns a `CompletableFuture<Unit>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.account().changePassword(oldPassword: "OLD_PASSWORD", newPassword: "NEW_PASSWORD")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -685,6 +720,13 @@ val response = sdk.account().getUserDetails()
 >:information_source: In Java, you can use the `getUserDetailsAsync` function, which returns a `CompletableFuture<UserDetailsResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.account().getUserDetails()
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -707,6 +749,13 @@ var response = Utils.fromData<UserDetailsResponse>(symbols->kotlin.root.com.door
 sdk.account().updateUserDetails("DISPLAY_NAME")
 ````
 >:information_source: In Java, you can use the `updateUserDetailsAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.account().updateUserDetails(displayName: "DISPLAY_NAME")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -736,6 +785,13 @@ sdk.account().deleteAccount()
 >:information_source: In Java, you can use the `deleteAccountAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.account().deleteAccount()
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -760,6 +816,13 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAc
 val response = sdk.fusion().login("EMAIL", "PASSWORD")
 ````
 >:information_source: In Java, you can use the `fusionAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.fusion().login(email: "EMAIL", password: "PASSWORD")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -787,6 +850,13 @@ val response = sdk.fusion().getIntegrationType()
 >:information_source: In Java, you can use the `getIntegrationTypeAsync` function, which returns a `CompletableFuture<IntegrationTypeResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.fusion().getIntegrationType()
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -809,6 +879,13 @@ var response = Utils.fromData<IntegrationTypeResponse>(symbols->kotlin.root.com.
 val response = sdk.fusion().getIntegrationConfiguration("TYPE")
 ````
 >:information_source: In Java, you can use the `getIntegrationConfigurationAsync` function, which returns a `CompletableFuture<List<IntegrationConfigurationResponse>>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.fusion().getIntegrationConfiguration(type: "TYPE")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -837,6 +914,13 @@ sdk.fusion().deleteDoor("DEVICE_ID")
 >:information_source: In Java, you can use the `deleteDoorAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.fusion().deleteDoor(deviceId: "DEVICE_ID")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -860,6 +944,13 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.deleteDoo
 val response = sdk.fusion().getDoorStatus("DEVICE_ID")
 ````
 >:information_source: In Java, you can use the `getDoorStatusAsync` function, which returns a `CompletableFuture<DoorStateResponse>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.fusion().getDoorStatus(deviceId: "DEVICE_ID")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -887,6 +978,13 @@ sdk.fusion().startDoor("DEVICE_ID")
 >:information_source: In Java, you can use the `startDoorAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.fusion().startDoor(deviceId: "DEVICE_ID")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -910,6 +1008,13 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.startDoor
 sdk.fusion().stopDoor("DEVICE_ID")
 ````
 >:information_source: In Java, you can use the `stopDoorAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.fusion().stopDoor(deviceId: "DEVICE_ID")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -940,6 +1045,13 @@ sdk.helper().uploadPlatformLogo("APPLICATION_ID", "CONTENT_TYPE", IMAGE_BYTES)
 >:information_source: In Java, you can use the `uploadPlatformLogoAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.helper().uploadPlatformLogo(applicationId: "APPLICATION_ID", contentType: "CONTENT_TYPE", image: IMAGE_BYTES)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -951,7 +1063,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.helper().uploadPlatformLogo("A
 
 ````csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper(sdk);
-var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_ENCODED_IMAGE").toData();
+var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_IMAGE").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPlatformLogoJson(resource, data);
 ````
 </details>
@@ -966,6 +1078,13 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPla
 val response = sdk.lockOperations().getSingleLock("LOCK_ID")
 ````
 >:information_source: In Java, you can use the `getSingleLockAsync` function, which returns a `CompletableFuture<LockResponse>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getSingleLock(lockId: "LOCK_ID")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -993,6 +1112,13 @@ val response = sdk.lockOperations().getLockAuditTrail("LOCK_ID", START_EPOCH, EN
 >:information_source: In Java, you can use the `getLockAuditTrailAsync` function, which returns a `CompletableFuture<List<LockAuditTrailResponse>>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getLockAuditTrail(lockId: "LOCK_ID", start: START_EPOCH, end: END_EPOCH)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1016,6 +1142,13 @@ var response = Utils.fromData<List<LockAuditTrailResponse>>(symbols->kotlin.root
 val response = sdk.lockOperations().getAuditForUser("USER_ID", START_EPOCH, END_EPOCH)
 ````
 >:information_source: In Java, you can use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<UserAuditResponse>>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getAuditForUser(userId: "USER_ID", start: START_EPOCH, end: END_EPOCH)
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1043,6 +1176,13 @@ val response = sdk.lockOperations().getUsersForLock("LOCK_ID")
 >:information_source: In Java, you can use the `getUsersForLockAsync` function, which returns a `CompletableFuture<List<UserLockResponse>>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUsersForLock(lockId: "LOCK_ID")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1066,6 +1206,13 @@ var response = Utils.fromData<List<UserLockResponse>>(symbols->kotlin.root.com.d
 val response = sdk.lockOperations().getLocksForUser("LOCK_ID")
 ````
 >:information_source: In Java, you can use the `getLocksForUserAsync` function, which returns a `CompletableFuture<LockUserResponse>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getLocksForUser(lockId: "LOCK_ID")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1093,6 +1240,13 @@ sdk.lockOperations().updateLockName("LOCK_ID", "LOCK_NAME")
 >:information_source: In Java, you can use the `updateLockNameAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().updateLockName(lockId: "LOCK_ID", name: "LOCK_NAME")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1116,6 +1270,13 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 sdk.lockOperations().updateLockFavourite("LOCK_ID", true)
 ````
 >:information_source: In Java, you can use the `updateLockFavouriteAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().updateLockFavourite(lockId: "LOCK_ID", favourite: true)
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1143,6 +1304,13 @@ sdk.lockOperations().updateLockColour("LOCK_ID", "COLOR")
 >:information_source: In Java, you can use the `updateLockColourAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().updateLockColour(lockId: "LOCK_ID", color: "COLOR")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1168,6 +1336,13 @@ sdk.lockOperations().updateLockSettingDefaultName("LOCK_ID", "LOCK_NAME")
 >:information_source: In Java, you can use the `updateLockSettingDefaultNameAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().updateLockSettingDefaultName(lockId: "LOCK_ID", name: "LOCK_NAME")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1188,9 +1363,16 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-sdk.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", PERMITTED_ADDRESSES_LIST)
+sdk.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", listOf("PERMITTED_ADDRESS"))
 ````
 >:information_source: In Java, you can use the `setLockSettingPermittedAddressesAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().setLockSettingPermittedAddresses(lockId: "LOCK_ID", permittedAddresses: ["PERMITTED_ADDRESS"])
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1221,6 +1403,13 @@ sdk.lockOperations().updateLockSettingHidden("LOCK_ID", true)
 >:information_source: In Java, you can use the `updateLockSettingHiddenAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().updateLockSettingHidden(lockId: "LOCK_ID", hidden: true)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1241,10 +1430,18 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-val timeRequirements = listOf(LockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST))
+val timeRequirements = listOf(LockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", listOf("MONDAY")))
 sdk.lockOperations().setLockSettingTimeRestrictions("LOCK_ID", timeRequirements)
 ````
 >:information_source: In Java, you can use the `setLockSettingTimeRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let timeRequirements = [LockOperations.TimeRequirement(start: "START_HH_MM", end: "END_HH_MM", timezone: "TIMEZONE", days: ["MONDAY"])]
+sdk.lockOperations().setLockSettingTimeRestrictions(lockId: "LOCK_ID", times: locationRequirement)
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1279,6 +1476,14 @@ sdk.lockOperations().updateLockSettingLocationRestrictions("LOCK_ID", locationRe
 >:information_source: In Java, you can use the `updateLockSettingLocationRestrictionsAsync` function, which returns a `CompletableFuture<Void>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let locationRequirement = LockOperations.LocationRequirement(latitude: LATITUDE, longitude: LONGITUDE, enabled: true, radius: 100, accuracy: 100)
+sdk.lockOperations().updateLockSettingLocationRestrictions(lockId: "LOCK_ID", location: locationRequirement)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1310,6 +1515,13 @@ val response = sdk.lockOperations().getUserPublicKey("USER_EMAIL", false)
 >:information_source: In Java, you can use the `getUserPublicKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKey(userEmail: "USER_EMAIL", visitor: false)
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1333,6 +1545,13 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 val response = sdk.lockOperations().getUserPublicKeyByEmail("USER_EMAIL")
 ````
 >:information_source: In Java, you can use the `getUserPublicKeyByEmailAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKeyByEmail(email: "USER_EMAIL")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1360,6 +1579,13 @@ val response = sdk.lockOperations().getUserPublicKeyByTelephone("USER_TELEPHONE"
 >:information_source: In Java, you can use the `getUserPublicKeyByTelephoneAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKeyByTelephone(telephone: "USER_TELEPHONE")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1383,6 +1609,13 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 val response = sdk.lockOperations().getUserPublicKeyByLocalKey("USER_LOCAL_KEY")
 ````
 >:information_source: In Java, you can use the `getUserPublicKeyByLocalKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKeyByLocalKey(localKey: "USER_LOCAL_KEY")
+````
 </details>
 
 <details><summary>JS</summary>
@@ -1410,6 +1643,13 @@ val response = sdk.lockOperations().getUserPublicKeyByForeignKey("USER_FOREIGN_K
 >:information_source: In Java, you can use the `getUserPublicKeyByForeignKeyAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKeyByForeignKey(foreignKey: "USER_FOREIGN_KEY")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1435,6 +1675,13 @@ val response = sdk.lockOperations().getUserPublicKeyByIdentity("USER_IDENTITY")
 >:information_source: In Java, you can use the `getUserPublicKeyByIdentityAsync` function, which returns a `CompletableFuture<UserPublicKeyResponse>` instead
 </details>
 
+<details><summary>Swift</summary>
+
+````swift
+let response = sdk.lockOperations().getUserPublicKeyByIdentity(identity: "USER_IDENTITY")
+````
+</details>
+
 <details><summary>JS</summary>
 
 ````js
@@ -1455,18 +1702,27 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 <details><summary>JVM & Android</summary>
 
 ````kotlin
-val unlockOperation = LockOperations.UnlockOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val unlockOperation = LockOperations.UnlockOperation(baseOperation)
 val response = sdk.lockOperations().unlock(unlockOperation)
 ````
 >:information_source: In Java, you can use the `unlockAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let baseOperation = LockOperations.BaseOperation(userId: "USER_ID", userCertificateChain: USER_CERTIFICATE_CHAIN_LIST, userPrivateKey: PRIVATE_KEY, lockId: "LOCK_ID", notBefore: NOT_BEFORE, issuedAt: ISSUED_AT, expiresAt: EXPIRES_AT, jti: UUID)
+let unlockOperation = LockOperations.UnlockOperation(baseOperation: baseOperation, directAccessEndpoints: null)
+sdk.lockOperations().unlock(unlockOperation: shareLockOperation)
+````
 </details>
 
 <details><summary>JS</summary>
 
 ````js
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
-        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlockOperation);
 ````
@@ -1532,7 +1788,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.s
 
 ````kotlin
 val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
-val revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(baseOperation, USER_LIST)
+val revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(baseOperation, listOf("USER_ID"))
 sdk.lockOperations().revokeAccessToLock(revokeAccessToLockOperation)
 ````
 >:information_source: In Java, you can use the `revokeAccessToLockAsync` function, which returns a `CompletableFuture<Void>` instead
@@ -1553,8 +1809,7 @@ sdk.lockOperations().revokeAccessToLock(revokeAccessToLockOperation: revokeAcces
 const ktList = doordeck.kotlin.collections.KtList;
 const userList = ktList.fromJsArray(["USER_ID"]);
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
-        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const revokeAccessToLockOperation = new lockOperations.RevokeAccessToLockOperation(baseOperation, userList);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLock(revokeAccessToLockOperation);
 ````
@@ -1595,8 +1850,7 @@ sdk.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlock
 
 ````js
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
-        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const updateSecureSettingUnlockDuration = new lockOperations.UpdateSecureSettingUnlockDuration(baseOperation, UNLOCK_DURATION);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration);
 ````
@@ -1611,7 +1865,6 @@ var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_D
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockDurationJson(resource, data);
 ````
 </details>
-
 
 ### Update secure setting unlock between
 <details><summary>JVM & Android</summary>
@@ -1639,8 +1892,7 @@ sdk.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockB
 
 ````js
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
-        PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const unlockBetween = lockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
 const updateSecureSettingUnlockBetween = new lockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween);
@@ -1670,7 +1922,7 @@ val response = sdk.lockOperations().getPinnedLocks()
 <details><summary>Swift</summary>
 
 ````swift
-let response = sdk.createApplication().getPinnedLocks()
+let response = sdk.lockOperations().getPinnedLocks()
 ````
 </details>
 
@@ -1701,7 +1953,7 @@ val response = sdk.lockOperations().getShareableLocks()
 <details><summary>Swift</summary>
 
 ````swift
-let response = sdk.createApplication().getShareableLocks()
+let response = sdk.lockOperations().getShareableLocks()
 ````
 </details>
 
@@ -2163,7 +2415,7 @@ sdk.platform().addAuthKey("APPLICATION_ID", key)
 
 ````swift
 let key = Platform.Ed25519Key(kty: "OKP", user: "sig", kid: "90a983fd-9077-41f9-840c-7220581017f5", alg: "EdDSA", d: "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", crv: "Ed25519", x: "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc")
-sdk.platform().addAuthKey(applicationId: "APPLICATION_ID", key: "URL")
+sdk.platform().addAuthKey(applicationId: "APPLICATION_ID", key: key)
 ````
 </details>
 
@@ -2457,7 +2709,7 @@ val response = sdk.sites().getLocksForSite("SITE_ID")
 <details><summary>Swift</summary>
 
 ````swift
-let response = sdk.sites().getLocksForSite("SITE_ID")
+let response = sdk.sites().getLocksForSite(siteId: "SITE_ID")
 ````
 </details>
 
@@ -2489,7 +2741,7 @@ val response = sdk.sites().getUsersForSite("SITE_ID")
 <details><summary>Swift</summary>
 
 ````swift
-let response = sdk.sites().getUsersForSite("SITE_ID")
+let response = sdk.sites().getUsersForSite(siteId: "SITE_ID")
 ````
 </details>
 
@@ -2524,7 +2776,7 @@ val response = sdk.tiles().getLocksBelongingToTile("TILE_ID")
 <details><summary>Swift</summary>
 
 ````swift
-let response = sdk.tiles().getLocksBelongingToTile("TILE_ID")
+let response = sdk.tiles().getLocksBelongingToTile(tileId: "TILE_ID")
 ````
 </details>
 
@@ -2556,7 +2808,7 @@ sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", listOf("LOCK_ID"))
 <details><summary>Swift</summary>
 
 ````swift
-sdk.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", ["LOCK_ID"]))
+sdk.tiles().associateMultipleLocks(tileId: "TILE_ID", siteId: "SITE_ID", lockIds: ["LOCK_ID"]))
 ````
 </details>
 
