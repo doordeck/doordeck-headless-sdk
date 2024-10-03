@@ -127,6 +127,19 @@ implementation("doordeck-headless-sdk:library-android:0.22.0")
 >:information_source: The iOS package requires at least iOS version 15
 </details>
 
+<details><summary>JS</summary>
+
+````js
+// TODO
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+// TODO
+````
+</details>
 
 # Initialize the SDK
 The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
