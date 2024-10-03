@@ -103,7 +103,30 @@ To build the project, you need to specify the Android SDK directory. To do this,
 > It’s normal to see `Unresolved references`. For example, if you are using Windows, you won’t be able to resolve macOS-specific imports
 
 # Add the SDK into your project
+<details><summary>JVM</summary>
+
+````kotlin
+implementation("doordeck-headless-sdk:library-jvm:0.22.0")
+````
+>:information_source: The JVM package requires at least Java SDK 1.8
+</details>
+
+<details><summary>Android</summary>
+
+````kotlin
+implementation("doordeck-headless-sdk:library-android:0.22.0")
+````
+>:information_source: The Android package requires at least Android SDK 21
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
 // TODO
+````
+>:information_source: The iOS package requires at least iOS version 15
+</details>
+
 
 # Initialize the SDK
 The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
@@ -2383,6 +2406,8 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateA
 </details>
 
 ### Delete application
+> [!CAUTION]
+> This operation is executed instantly and is irreversible
 <details><summary>JVM & Android</summary>
 
 ````kotlin
