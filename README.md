@@ -60,6 +60,7 @@
   * [Get user public key by identity](#get-user-public-key-by-identity)
   * [Unlock](#unlock)
   * [Share lock](#share-lock)
+  * [Share lock with context](#share-lock-with-context)
   * [Revoke access to lock](#revoke-access-to-lock)
   * [Revoke access to lock with context](#revoke-access-to-lock-with-context)
   * [Update secure setting unlock duration](#update-secure-setting-unlock-duration)
@@ -1862,6 +1863,46 @@ var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_
 var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
 var data = new ShareLockOperationData(baseOperationData, shareLockData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(resource, data);
+````
+</details>
+
+### Share lock with context
+> [!IMPORTANT]  
+> This functionality requires you to have previously [set the operation context](#set-operation-context).
+<details><summary>JVM & Android</summary>
+
+````kotlin
+val shareLock = LockOperations.ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, TARGET_PUBLIC_KEY)
+sdk.lockOperations().shareLockWithContext("LOCK_ID", shareLock)
+````
+>:information_source: In Java, you can use the `shareLockWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+let shareLock = LockOperations.ShareLock(targetUserId: "TARGET_USER_ID", targetUserRole: TARGET_USER_ROLE, targetUserPublicKey: TARGET_PUBLIC_KEY, start: null, end: null)
+sdk.lockOperations().shareLockWithContext(lockId: "LOCK_ID", shareLock: shareLock)
+````
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
+const shareLock = new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLockWithContext("LOCK_ID", shareLock);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
+var data = new ShareLockWithContextData("LOCK_ID", shareLockData).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockWithContextJson(resource, data);
 ````
 </details>
 
