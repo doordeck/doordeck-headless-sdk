@@ -12,6 +12,7 @@ actual interface AccountlessResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun login(email: String, password: String): TokenResponse
 
     /**
@@ -19,6 +20,7 @@ actual interface AccountlessResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
 
     /**
@@ -26,6 +28,7 @@ actual interface AccountlessResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun verifyEmail(code: String)
 }
 

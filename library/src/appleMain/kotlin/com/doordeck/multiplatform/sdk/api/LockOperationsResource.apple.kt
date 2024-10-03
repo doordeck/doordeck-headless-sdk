@@ -23,6 +23,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getSingleLock(lockId: String): LockResponse
 
     /**
@@ -30,6 +31,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse>
 
     /**
@@ -37,6 +39,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse>
 
     /**
@@ -44,6 +47,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse>
 
     /**
@@ -51,6 +55,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getLocksForUser(userId: String): LockUserResponse
 
     /**
@@ -58,6 +63,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockName(lockId: String, name: String? = null)
 
     /**
@@ -65,6 +71,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null)
 
     /**
@@ -72,6 +79,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockColour(lockId: String, colour: String? = null)
 
     /**
@@ -79,6 +87,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null)
 
     /**
@@ -86,6 +95,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>)
 
     /**
@@ -93,6 +103,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean)
 
     /**
@@ -100,6 +111,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>)
 
     /**
@@ -107,6 +119,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null)
 
     /**
@@ -115,6 +128,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse
 
     /**
@@ -122,6 +136,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
 
     /**
@@ -129,6 +144,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
 
     /**
@@ -136,6 +152,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
 
     /**
@@ -143,6 +160,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
 
     /**
@@ -150,6 +168,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
 
     /**
@@ -158,6 +177,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
 
     /**
@@ -165,6 +185,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation)
 
     /**
@@ -173,6 +194,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
 
     /**
@@ -180,6 +202,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
 
     /**
@@ -188,6 +211,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
 
     /**
@@ -195,6 +219,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation)
 
     /**
@@ -203,6 +228,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
 
     /**
@@ -210,6 +236,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
 
     /**
@@ -218,6 +245,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
     /**
@@ -225,6 +253,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
 
     /**
@@ -232,6 +261,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getPinnedLocks(): List<LockResponse>
 
     /**
@@ -239,6 +269,7 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getShareableLocks(): List<ShareableLockResponse>
 }
 

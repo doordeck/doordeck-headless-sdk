@@ -14,6 +14,7 @@ actual interface SitesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun listSites(): List<SiteResponse>
 
     /**
@@ -21,6 +22,7 @@ actual interface SitesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse>
 
     /**
@@ -28,6 +30,7 @@ actual interface SitesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse>
 }
 

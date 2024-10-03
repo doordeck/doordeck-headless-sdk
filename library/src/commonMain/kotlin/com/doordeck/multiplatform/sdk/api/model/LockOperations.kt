@@ -10,8 +10,8 @@ import kotlin.uuid.Uuid
 object LockOperations {
 
     class TimeRequirement(
-        val start: String,
-        val end: String,
+        val start: String, // HH:mm
+        val end: String, // HH:mm
         val timezone: String,
         val days: List<String>
     )
@@ -25,8 +25,8 @@ object LockOperations {
     )
 
     class UnlockBetween @JvmOverloads constructor(
-        val start: String,
-        val end: String,
+        val start: String, // HH:mm
+        val end: String, // HH:mm
         val timezone: String,
         val days: List<String>,
         val exceptions: List<String>? = null

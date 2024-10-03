@@ -5,15 +5,12 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 @JsExport
 actual object KDoordeckFactory {
 
-    @JsName("initialize")
     fun initialize(apiEnvironment: ApiEnvironment): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, null, null)
 
-    @JsName("initializeWithAuthToken")
-    fun initialize(apiEnvironment: ApiEnvironment, token: String): Doordeck =
+    fun initializeWithAuthToken(apiEnvironment: ApiEnvironment, token: String): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, token, null)
 
-    @JsName("initializeWithAuthAndRefreshTokens")
-    fun initialize(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
+    fun initializeWithAuthAndRefreshTokens(apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, token, refreshToken)
 }

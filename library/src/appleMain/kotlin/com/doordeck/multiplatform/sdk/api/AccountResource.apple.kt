@@ -19,6 +19,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun refreshToken(refreshToken: String): TokenResponse
 
     /**
@@ -26,6 +27,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun logout()
 
     /**
@@ -33,6 +35,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
 
     /**
@@ -40,6 +43,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
     /**
@@ -47,6 +51,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
 
     /**
@@ -55,6 +60,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun reverifyEmail()
 
     /**
@@ -63,6 +69,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun changePassword(oldPassword: String, newPassword: String)
 
     /**
@@ -70,6 +77,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getUserDetails(): UserDetailsResponse
 
     /**
@@ -77,6 +85,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun updateUserDetails(displayName: String)
 
     /**
@@ -84,6 +93,7 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun deleteAccount()
 }
 
