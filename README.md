@@ -61,6 +61,7 @@
   * [Unlock](#unlock)
   * [Share lock](#share-lock)
   * [Revoke access to lock](#revoke-access-to-lock)
+  * [Revoke access to lock with context]
   * [Update secure setting unlock duration](#update-secure-setting-unlock-duration)
   * [Update secure setting unlock between](#update-secure-setting-unlock-between)
   * [Get pinned locks](#get-pinned-locks)
@@ -1904,6 +1905,43 @@ List<string> userList = ["USER_ID"];
 var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
 var data = new RevokeAccessToLockOperationData(baseOperationData, userList).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(resource, data);
+````
+</details>
+
+### Revoke access to lock with context
+> [!IMPORTANT]  
+> This functionality requires you to have previously [set the operation context](#set-operation-context).
+<details><summary>JVM & Android</summary>
+
+````kotlin
+sdk.lockOperations().revokeAccessToLockWithContext("LOCK_ID", listOf("USER_ID"))
+````
+>:information_source: In Java, you can use the `revokeAccessToLockWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+<details><summary>Swift</summary>
+
+````swift
+sdk.lockOperations().revokeAccessToLockWithContext(lockId: "LOCK_ID", users: ["USER_ID"])
+````
+</details>
+
+<details><summary>JS</summary>
+
+````js
+const ktList = doordeck.kotlin.collections.KtList;
+const userList = ktList.fromJsArray(["USER_ID"]);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLockWithContext("LOCK_ID", userList);
+````
+</details>
+
+<details><summary>C#</summary>
+
+````csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+List<string> userList = ["USER_ID"];
+var data = new RevokeAccessToLockWithContextData("LOCK_ID", userList).toData();
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockWithContextJson(resource, data);
 ````
 </details>
 
