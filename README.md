@@ -61,7 +61,7 @@
   * [Unlock](#unlock)
   * [Share lock](#share-lock)
   * [Revoke access to lock](#revoke-access-to-lock)
-  * [Revoke access to lock with context]
+  * [Revoke access to lock with context](#revoke-access-to-lock-with-context)
   * [Update secure setting unlock duration](#update-secure-setting-unlock-duration)
   * [Update secure setting unlock between](#update-secure-setting-unlock-between)
   * [Get pinned locks](#get-pinned-locks)
