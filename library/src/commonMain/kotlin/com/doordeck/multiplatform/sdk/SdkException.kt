@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-open class SdkException(override val message: String, exception: Throwable? = null) : RuntimeException(message, exception)
+open class SdkException(override val message: String, exception: Throwable? = null) : Exception(message, exception)
 
 /**
  * SDK Exceptions

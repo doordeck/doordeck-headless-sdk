@@ -4,12 +4,8 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 
 actual object KDoordeckFactory {
 
-    fun initialize(applicationContext: ApplicationContext, apiEnvironment: ApiEnvironment): Doordeck =
-        DoordeckFactory.initialize(applicationContext, apiEnvironment, null, null)
-
-    fun initialize(applicationContext: ApplicationContext, apiEnvironment: ApiEnvironment, token: String): Doordeck =
-        DoordeckFactory.initialize(applicationContext, apiEnvironment, token, null)
-
-    fun initialize(applicationContext: ApplicationContext, apiEnvironment: ApiEnvironment, token: String, refreshToken: String): Doordeck =
+    @JvmOverloads
+    fun initialize(applicationContext: ApplicationContext, apiEnvironment: ApiEnvironment = ApiEnvironment.PROD,
+                   token: String? = null, refreshToken: String? = null): Doordeck =
         DoordeckFactory.initialize(applicationContext, apiEnvironment, token, refreshToken)
 }

@@ -13,6 +13,7 @@ actual interface TilesResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
+    @Throws(Exception::class)
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse
 
     /**
@@ -21,6 +22,7 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
+    @Throws(Exception::class)
     suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
 }
 

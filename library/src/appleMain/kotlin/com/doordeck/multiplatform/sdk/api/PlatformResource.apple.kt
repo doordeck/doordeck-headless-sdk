@@ -17,6 +17,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun createApplication(application: Platform.CreateApplication)
 
     /**
@@ -25,6 +26,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun listApplications(): List<ApplicationResponse>
 
     /**
@@ -33,6 +35,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun getApplication(applicationId: String): ApplicationResponse
 
     /**
@@ -41,6 +44,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationName(applicationId: String, name: String)
 
     /**
@@ -49,6 +53,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationCompanyName(applicationId: String, companyName: String)
 
     /**
@@ -57,6 +62,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
 
     /**
@@ -65,6 +71,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
 
     /**
@@ -73,6 +80,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String)
 
     /**
@@ -81,6 +89,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationAppLink(applicationId: String, appLink: String)
 
     /**
@@ -89,6 +98,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
 
     /**
@@ -97,6 +107,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
 
     /**
@@ -105,6 +116,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun deleteApplication(applicationId: String)
 
     /**
@@ -113,6 +125,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse
 
     /**
@@ -121,6 +134,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey)
 
     /**
@@ -129,6 +143,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun addAuthIssuer(applicationId: String, url: String)
 
     /**
@@ -137,6 +152,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun deleteAuthIssuer(applicationId: String, url: String)
 
     /**
@@ -145,6 +161,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun addCorsDomain(applicationId: String, url: String)
 
     /**
@@ -153,6 +170,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun removeCorsDomain(applicationId: String, url: String)
 
     /**
@@ -161,6 +179,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun addApplicationOwner(applicationId: String, userId: String)
 
     /**
@@ -169,6 +188,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun removeApplicationOwner(applicationId: String, userId: String)
 
     /**
@@ -177,6 +197,7 @@ actual interface PlatformResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
+    @Throws(Exception::class)
     suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse>
 }
 
