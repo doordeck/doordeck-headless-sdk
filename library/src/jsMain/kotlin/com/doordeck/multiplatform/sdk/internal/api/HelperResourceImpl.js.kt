@@ -6,7 +6,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class HelperResourceImpl(
+internal class HelperResourceImpl(
     httpClient: HttpClient,
     cloudHttpClient: HttpClient
 ) : HelperClient(httpClient, cloudHttpClient), HelperResource {

@@ -7,7 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class AccountlessResourceImpl(
+internal class AccountlessResourceImpl(
     httpClient: HttpClient
 ) : AccountlessClient(httpClient), AccountlessResource {
 

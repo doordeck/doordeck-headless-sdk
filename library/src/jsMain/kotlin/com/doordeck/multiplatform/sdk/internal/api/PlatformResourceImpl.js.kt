@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class PlatformResourceImpl(
+internal class PlatformResourceImpl(
     httpClient: HttpClient
 ) : PlatformClient(httpClient), PlatformResource {
 

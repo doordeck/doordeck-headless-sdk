@@ -13,7 +13,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class AccountResourceImpl(
+internal class AccountResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl
 ) : AccountClient(httpClient, contextManager), AccountResource {

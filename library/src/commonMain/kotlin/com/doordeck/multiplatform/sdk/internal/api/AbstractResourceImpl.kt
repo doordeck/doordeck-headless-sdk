@@ -30,7 +30,7 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.ContentConvertException
 import kotlinx.serialization.Serializable
 
-abstract class AbstractResourceImpl {
+internal abstract class AbstractResourceImpl {
 
     protected suspend inline fun <reified T>HttpClient.post(
         urlString: String,

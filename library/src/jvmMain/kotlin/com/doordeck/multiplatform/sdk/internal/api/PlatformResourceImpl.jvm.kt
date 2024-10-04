@@ -11,7 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class PlatformResourceImpl(
+internal class PlatformResourceImpl(
     httpClient: HttpClient
 ) : PlatformClient(httpClient), PlatformResource {
 

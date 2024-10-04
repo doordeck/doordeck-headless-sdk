@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class SitesResourceImpl(
+internal class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 

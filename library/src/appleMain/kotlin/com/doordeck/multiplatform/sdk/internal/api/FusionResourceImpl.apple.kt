@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResp
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import io.ktor.client.HttpClient
 
-class FusionResourceImpl(
+internal class FusionResourceImpl(
     httpClient: HttpClient
 ) : FusionClient(httpClient), FusionResource {
 

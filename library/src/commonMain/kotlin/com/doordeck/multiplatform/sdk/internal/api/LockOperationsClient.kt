@@ -40,7 +40,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
-open class LockOperationsClient(
+internal open class LockOperationsClient(
     private val httpClient: HttpClient,
     private val contextManager: ContextManagerImpl,
     private val localUnlockClient: LocalUnlockClient

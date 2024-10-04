@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.util.fromJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class HelperResourceImpl(
+internal class HelperResourceImpl(
     httpClient: HttpClient,
     cloudHttpClient: HttpClient
 ) : HelperClient(httpClient, cloudHttpClient), HelperResource {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class AccountlessResourceImpl(
+internal class AccountlessResourceImpl(
     httpClient: HttpClient
 ) : AccountlessClient(httpClient), AccountlessResource {
 

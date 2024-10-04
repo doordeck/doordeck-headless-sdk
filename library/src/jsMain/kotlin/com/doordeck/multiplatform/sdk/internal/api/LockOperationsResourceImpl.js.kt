@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class LockOperationsResourceImpl(
+internal class LockOperationsResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl,
     localUnlock: LocalUnlockClient

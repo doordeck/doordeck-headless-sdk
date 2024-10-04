@@ -28,7 +28,7 @@ import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-open class PlatformClient(
+internal open class PlatformClient(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl() {
 

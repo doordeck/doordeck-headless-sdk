@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-open class FusionClient(
+internal open class FusionClient(
     private val httpClient: HttpClient
 ) : AbstractResourceImpl() {
 

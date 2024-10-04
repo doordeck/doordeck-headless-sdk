@@ -18,7 +18,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.mp.KoinPlatform.getKoin
 
-class DoordeckImpl(
+internal class DoordeckImpl(
     applicationContext: ApplicationContext?,
     apiEnvironment: ApiEnvironment,
     token: String?,

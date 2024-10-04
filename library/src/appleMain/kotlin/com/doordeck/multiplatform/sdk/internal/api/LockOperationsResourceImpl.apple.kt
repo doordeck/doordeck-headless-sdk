@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.HttpClient
 
-class LockOperationsResourceImpl(
+internal class LockOperationsResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl,
     localUnlock: LocalUnlockClient

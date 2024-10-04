@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class TilesResourceImpl(
+internal class TilesResourceImpl(
     httpClient: HttpClient
 ) : TilesClient(httpClient), TilesResource {
 

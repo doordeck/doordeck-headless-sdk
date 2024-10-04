@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
-object Params {
+internal object Params {
 
     const val CODE = "code"
     const val METHOD = "method"

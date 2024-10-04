@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import io.ktor.client.HttpClient
 
-class SitesResourceImpl(
+internal class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 

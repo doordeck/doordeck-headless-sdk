@@ -11,7 +11,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class FusionResourceImpl(
+internal class FusionResourceImpl(
     httpClient: HttpClient
 ) : FusionClient(httpClient), FusionResource {
 

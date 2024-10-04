@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
 import com.russhwolf.settings.Settings
 
-class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
+internal class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
 
     /**
      * Storage Keys

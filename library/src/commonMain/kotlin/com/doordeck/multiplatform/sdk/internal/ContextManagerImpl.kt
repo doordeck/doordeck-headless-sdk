@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 
-class ContextManagerImpl(
+internal class ContextManagerImpl(
     private val applicationContext: ApplicationContext? = null,
     token: String? = null,
     refreshToken: String? = null

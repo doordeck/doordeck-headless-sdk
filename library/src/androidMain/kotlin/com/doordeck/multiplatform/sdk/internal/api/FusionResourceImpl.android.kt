@@ -12,7 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class FusionResourceImpl(
+internal class FusionResourceImpl(
     httpClient: HttpClient
 ) : FusionClient(httpClient), FusionResource {
 
