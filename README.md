@@ -27,7 +27,7 @@
     * [Get the user details](#get-the-user-details)
     * [Update the user details](#get-the-user-details)
     * [Delete account](#delete-account)
-* [Fusion resource](#fusion-resource:API-FUSION.md)
+* [Fusion resource](API-FUSION.md#fusion-resource)
     * [Login](#login-1)
     * [Get integration type](#get-integration-type)
     * [Get integration configuration](#get-integration-configuration)
