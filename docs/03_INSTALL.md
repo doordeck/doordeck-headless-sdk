@@ -1,4 +1,4 @@
-# Add the SDK into your project
+# Install the SDK into your project
 <details><summary>JVM</summary>
 
 ````kotlin

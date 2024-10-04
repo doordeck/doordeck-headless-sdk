@@ -1,7 +1,7 @@
 # Initialize the SDK
 The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
 
-It can also be initialized without an auth token, but you will need to manually [set an auth token through the context manager](#set-auth-token) to use most of the SDK functionalities
+It can also be initialized without an auth token, but you will need to manually [set an auth token through the context manager](06_CONTEXT-MANAGER.md#set-auth-token) to use most of the SDK functionalities
 
 <details><summary>JVM</summary>
 

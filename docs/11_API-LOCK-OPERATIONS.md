@@ -669,7 +669,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 
 ### Unlock with context
 > [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](#set-operation-context).
+> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -748,7 +748,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.s
 
 ### Share lock with context
 > [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](#set-operation-context).
+> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -831,7 +831,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.r
 
 ### Revoke access to lock with context
 > [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](#set-operation-context).
+> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -908,7 +908,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 
 ### Update secure setting unlock duration with context
 > [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](#set-operation-context).
+> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -986,7 +986,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 
 ### Update secure setting unlock between with context
 > [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](#set-operation-context).
+> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
 <details><summary>JVM & Android</summary>
 
 ````kotlin

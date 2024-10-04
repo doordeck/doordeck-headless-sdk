@@ -36,7 +36,7 @@ var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.m
 
 ### Logout
 > [!IMPORTANT]
-> When used, the [context manager](#context-manager) is restarted, so for any further usage, you will need to load or provide a new context
+> When used, the [context manager](06_CONTEXT-MANAGER.md#context-manager) is restarted, so for any further usage, you will need to load or provide a new context
 
 <details><summary>JVM & Android</summary>
 
@@ -69,7 +69,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.logout(r
 </details>
 
 ### Register ephemeral key
-To register a new ephemeral key, you will need to [generate a new key pair](#generate-a-key-pair)
+To register a new ephemeral key, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair)
 <details><summary>JVM & Android</summary>
 
 ````kotlin
@@ -102,7 +102,7 @@ var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root
 </details>
 
 ### Register ephemeral key with secondary authentication
-To register a new ephemeral key with secondary authentication, you will need to [generate a new key pair](#generate-a-key-pair). After the registration you will need to [verify the ephemeral key registration](#verify-ephemeral-key-registration)
+To register a new ephemeral key with secondary authentication, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair). After the registration you will need to [verify the ephemeral key registration](#verify-ephemeral-key-registration)
 <details><summary>JVM & Android</summary>
 
 ````kotlin
