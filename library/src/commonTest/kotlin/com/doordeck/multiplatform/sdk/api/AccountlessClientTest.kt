@@ -14,7 +14,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class AccountlessClientTest : IntegrationTest() {
+internal class AccountlessClientTest : IntegrationTest() {
 
     @Test
     fun shouldLogin() = runTest {

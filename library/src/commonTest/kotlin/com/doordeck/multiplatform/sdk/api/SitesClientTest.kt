@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class SitesClientTest : IntegrationTest() {
+internal class SitesClientTest : IntegrationTest() {
 
     @Test
     fun shouldListSites() = runTest {

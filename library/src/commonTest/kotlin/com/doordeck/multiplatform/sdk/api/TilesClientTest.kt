@@ -8,7 +8,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class TilesClientTest : IntegrationTest() {
+internal class TilesClientTest : IntegrationTest() {
 
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
