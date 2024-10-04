@@ -1,3 +1,4 @@
+# Index
 * [Build the project](02_BUILD.md#build-the-project)
 * [Install the SDK into your project](03_INSTALL.md#install-the-sdk-into-your-project)
 * [Initialize the SDK](04_INITIALIZE.md#initialize-the-sdk)
