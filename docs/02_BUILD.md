@@ -4,4 +4,4 @@ To build the project, you need to specify the Android SDK directory. To do this,
 > [!NOTE]  
 > It’s normal to see `Unresolved references`. For example, if you are using Windows, you won’t be able to resolve macOS-specific imports
 
-... :arrow_left: [Back to index](01_INDEX.md)
+:arrow_left: [Back to index](01_INDEX.md)
