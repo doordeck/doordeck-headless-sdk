@@ -196,3 +196,5 @@ var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordec
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

@@ -32,3 +32,5 @@ var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPlatformLogoJson(resource, data);
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

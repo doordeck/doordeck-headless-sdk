@@ -329,3 +329,5 @@ var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.acco
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAccount(resource);
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

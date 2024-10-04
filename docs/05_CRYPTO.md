@@ -30,3 +30,5 @@ var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto._in
 var keyPair = Utils.fromData<EncodedKeyPair>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Crypto.generateKeyPairJson(crypto));
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

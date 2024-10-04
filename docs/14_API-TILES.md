@@ -66,3 +66,5 @@ var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", lockIdList).toDa
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

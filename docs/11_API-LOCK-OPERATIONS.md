@@ -1084,3 +1084,5 @@ var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lock
 var response = Utils.fromData<List<ShareableLockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getShareableLocksJson(resource));
 ````
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)
