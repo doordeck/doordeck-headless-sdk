@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.api.AccountlessResource
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import io.ktor.client.HttpClient
 
-class AccountlessResourceImpl(
+internal class AccountlessResourceImpl(
     httpClient: HttpClient
 ) : AccountlessClient(httpClient), AccountlessResource {
 

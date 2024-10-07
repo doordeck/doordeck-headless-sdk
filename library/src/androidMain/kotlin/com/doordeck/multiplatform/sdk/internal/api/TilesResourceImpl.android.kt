@@ -8,7 +8,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class TilesResourceImpl(
+internal class TilesResourceImpl(
     httpClient: HttpClient
 ) : TilesClient(httpClient), TilesResource {
 

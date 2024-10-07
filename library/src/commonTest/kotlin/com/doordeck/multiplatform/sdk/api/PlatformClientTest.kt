@@ -18,7 +18,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class PlatformClientTest : IntegrationTest() {
+internal class PlatformClientTest : IntegrationTest() {
 
     @Test
     fun shouldTestPlatform() = runTest {

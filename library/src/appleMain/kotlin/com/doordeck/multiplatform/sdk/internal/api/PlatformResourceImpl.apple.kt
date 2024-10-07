@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import io.ktor.client.HttpClient
 
-class PlatformResourceImpl(
+internal class PlatformResourceImpl(
     httpClient: HttpClient
 ) : PlatformClient(httpClient), PlatformResource {
 

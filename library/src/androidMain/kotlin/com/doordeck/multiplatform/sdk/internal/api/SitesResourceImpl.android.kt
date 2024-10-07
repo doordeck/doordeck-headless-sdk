@@ -10,7 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class SitesResourceImpl(
+internal class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 

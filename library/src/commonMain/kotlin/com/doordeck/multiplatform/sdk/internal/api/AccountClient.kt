@@ -17,7 +17,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
-open class AccountClient(
+internal open class AccountClient(
     private val httpClient: HttpClient,
     private val contextManager: ContextManagerImpl
 ) : AbstractResourceImpl() {

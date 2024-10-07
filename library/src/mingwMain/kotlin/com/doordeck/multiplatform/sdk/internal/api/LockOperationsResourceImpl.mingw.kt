@@ -15,7 +15,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class LockOperationsResourceImpl(
+internal class LockOperationsResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl,
     localUnlock: LocalUnlockClient

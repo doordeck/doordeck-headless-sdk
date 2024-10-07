@@ -16,7 +16,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-class LockOperationsResourceImpl(
+internal class LockOperationsResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl,
     localUnlock: LocalUnlockClient

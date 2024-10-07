@@ -18,7 +18,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class FusionClientTest : IntegrationTest() {
+internal class FusionClientTest : IntegrationTest() {
 
     @Ignore
     @Test

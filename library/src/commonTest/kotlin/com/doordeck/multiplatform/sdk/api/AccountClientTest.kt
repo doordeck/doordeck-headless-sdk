@@ -16,7 +16,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class AccountClientTest : IntegrationTest() {
+internal class AccountClientTest : IntegrationTest() {
 
     init {
         if (getPlatform() != PlatformType.ANDROID) {

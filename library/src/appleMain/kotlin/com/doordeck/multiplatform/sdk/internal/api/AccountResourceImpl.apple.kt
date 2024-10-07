@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.HttpClient
 
-class AccountResourceImpl(
+internal class AccountResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl
 ) : AccountClient(httpClient, contextManager), AccountResource {

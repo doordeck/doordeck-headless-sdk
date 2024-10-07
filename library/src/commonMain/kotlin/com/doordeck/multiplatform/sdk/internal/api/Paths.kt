@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
-object Paths {
+internal object Paths {
     // Account
     fun getLoginPath() = "/auth/token"
     fun getRegistrationPath() = "/auth/register"
@@ -55,7 +55,7 @@ object Paths {
     fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
 }
 
-object FusionPaths {
+internal object FusionPaths {
     fun getLoginPath() = "/api/auth/token"
     fun getConfigurationTypePath() = "/api/configuration/type"
     fun getIntegrationConfiguration() = "/api/configuration"

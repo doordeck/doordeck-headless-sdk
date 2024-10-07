@@ -12,7 +12,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class AccountResourceImpl(
+internal class AccountResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl
 ) : AccountClient(httpClient, contextManager), AccountResource {

@@ -9,7 +9,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class SitesResourceImpl(
+internal class SitesResourceImpl(
     httpClient: HttpClient
 ) : SitesClient(httpClient), SitesResource {
 

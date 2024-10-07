@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.BINARY)
-annotation class DoordeckOnly
+internal annotation class DoordeckOnly
 
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.BINARY)
-annotation class SiteAdmin
+internal annotation class SiteAdmin

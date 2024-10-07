@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class FusionResourceImpl(
+internal class FusionResourceImpl(
     httpClient: HttpClient
 ) : FusionClient(httpClient), FusionResource {
 

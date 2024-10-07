@@ -7,7 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-class TilesResourceImpl(
+internal class TilesResourceImpl(
     httpClient: HttpClient
 ) : TilesClient(httpClient), TilesResource {
 

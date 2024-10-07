@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import io.ktor.client.HttpClient
 
-class TilesResourceImpl(
+internal class TilesResourceImpl(
     httpClient: HttpClient
 ) : TilesClient(httpClient), TilesResource {
 

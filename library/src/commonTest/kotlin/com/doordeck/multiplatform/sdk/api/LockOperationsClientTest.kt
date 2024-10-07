@@ -35,7 +35,7 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
-class LockOperationsClientTest : IntegrationTest() {
+internal class LockOperationsClientTest : IntegrationTest() {
 
     init {
         if (getPlatform() != PlatformType.ANDROID) {

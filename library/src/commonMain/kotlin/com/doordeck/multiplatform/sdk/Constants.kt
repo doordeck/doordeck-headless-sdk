@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-object Constants {
+internal object Constants {
 
     const val CDN_URL = "https://cdn.doordeck.com"
     const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "**.doordeck.com"

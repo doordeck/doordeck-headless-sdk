@@ -13,7 +13,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
-class AccountResourceImpl(
+internal class AccountResourceImpl(
     httpClient: HttpClient,
     contextManager: ContextManagerImpl
 ) : AccountClient(httpClient, contextManager), AccountResource {
