@@ -90,6 +90,11 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
+      - name: Publish (NPM)
+        run: ./gradlew -Prelease.useLastTag=true publishJsPackageToNpmjsRegistry --stacktrace -x test
+        env:
+          NPM_PUBLISHING_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+
       - name: Publish
         run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:

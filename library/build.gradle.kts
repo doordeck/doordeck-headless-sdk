@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.npmPublish)
     `maven-publish`
 }
 
@@ -160,6 +161,37 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+}
+
+npmPublish {
+    dry = true
+    readme.set(file("../README.md"))
+    packages {
+        named("js") {
+            packageJson {
+                name.set("@doordeck/doordeck-headless-sdk")
+                license.set("Apache-2.0")
+                homepage.set("https://www.doordeck.com/")
+                keywords.set(setOf("doordeck", "sdk", "javascript", "access control"))
+                author {
+                    name.set("Doordeck")
+                }
+                repository {
+                    type.set("git")
+                    url.set("git+https://github.com/doordeck/doordeck-headless-sdk.git")
+                }
+                bugs {
+                    url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
+                }
+            }
+        }
+    }
+    registries {
+        npmjs {
+            uri.set("https://registry.npmjs.org")
+            authToken.set(System.getenv("NPM_PUBLISHING_TOKEN"))
         }
     }
 }
