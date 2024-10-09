@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.api.responses
 
 import com.doordeck.multiplatform.sdk.api.model.AuditEvent
+import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
+import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -30,7 +32,8 @@ class LockSettingsResponse(
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: List<String>,
     val hidden: Boolean,
-    val directAccessEndpoints: List<String> = emptyList()
+    val directAccessEndpoints: List<String> = emptyList(),
+    val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
 @JsExport
