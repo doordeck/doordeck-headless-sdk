@@ -166,7 +166,8 @@ publishing {
 }
 
 npmPublish {
-    dry = true
+    val npmToken = System.getenv("NPM_PUBLISHING_TOKEN")
+    dry = npmToken == null // When set to true, it doesn't make any modifications to local or remote files
     readme.set(file("../README.md"))
     packages {
         named("js") {
@@ -191,7 +192,7 @@ npmPublish {
     registries {
         npmjs {
             uri.set("https://registry.npmjs.org")
-            authToken.set(System.getenv("NPM_PUBLISHING_TOKEN"))
+            authToken.set(npmToken)
         }
     }
 }
