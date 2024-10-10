@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.kotlinCocoapods)
-    alias(libs.plugins.kmmBridge)
+    //alias(libs.plugins.kmmBridge)
     `maven-publish`
 }
 
