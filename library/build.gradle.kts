@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.kmmBridge)
     `maven-publish`
 }
 
@@ -64,6 +66,18 @@ kotlin {
         binaries.library()
         binaries.executable()
         generateTypeScriptDefinitions()
+    }
+
+    cocoapods {
+        summary = "Doordeck KMP SDK"
+        homepage = "https://www.doordeck.com/"
+        license = "Apache-2.0"
+        authors = "Doordeck"
+        ios.deploymentTarget = libs.versions.ios.minSdk.get()
+        name = "DoordeckSDKPod"
+        framework {
+            baseName = "DoordeckSDK"
+        }
     }
 
     sourceSets {
