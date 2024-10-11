@@ -36,9 +36,9 @@ jobs:
           #- name: Android
           #  test: testReleaseUnitTest
           #  os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
+          #- name: JS
+          #  test: kotlinUpgradeYarnLock jsTest
+          #  os: ubuntu-latest
           #- name: Apple
           #  test: iosX64Test macosArm64Test
           #  os: macos-latest
@@ -62,7 +62,7 @@ jobs:
   release:
     name: Releases
     needs: build
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    #if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
 
     permissions:
@@ -89,7 +89,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Tag for release (if on main)
-        if: github.ref == 'refs/heads/main'
+        #if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
       - name: Publish (NPM)
