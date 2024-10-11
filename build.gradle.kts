@@ -7,3 +7,7 @@ plugins {
     id("com.netflix.nebula.release") version "19.0.8"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
 }
+
+nebulaRelease {
+    releaseBranchPatterns.add("npm-publish")
+}
