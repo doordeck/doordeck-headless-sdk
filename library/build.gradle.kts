@@ -166,8 +166,8 @@ publishing {
 }
 
 npmPublish {
-    val npmToken = System.getenv("TEST_NPM_PUBLISHING_TOKEN")
-    dry = npmToken == null // When set to true, it doesn't make any modifications to local or remote files
+    val npmToken = System.getenv("NPM_PUBLISHING_TOKEN")
+    dry = (npmToken == null) // When set to true, it doesn't make any modifications to local or remote files
     readme.set(file("../README.md"))
     packages {
         named("js") {
