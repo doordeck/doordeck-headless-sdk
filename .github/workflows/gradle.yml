@@ -35,7 +35,7 @@ jobs:
             test: testReleaseUnitTest
             os: ubuntu-latest
           - name: JS
-            test: kotlinUpgradeYarnLock
+            test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
           - name: Apple
             test: iosX64Test macosArm64Test
