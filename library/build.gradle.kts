@@ -166,13 +166,13 @@ publishing {
 }
 
 npmPublish {
-    val npmToken = System.getenv("NPM_PUBLISHING_TOKEN")
+    val npmToken = System.getenv("TEST_NPM_PUBLISHING_TOKEN")
     dry = npmToken == null // When set to true, it doesn't make any modifications to local or remote files
     readme.set(file("../README.md"))
     packages {
         named("js") {
             packageJson {
-                name.set("@doordeck/doordeck-headless-sdk")
+                name.set("doordeck-headless-sdk")
                 license.set("Apache-2.0")
                 homepage.set("https://www.doordeck.com/")
                 keywords.set(setOf("doordeck", "sdk", "javascript", "access control"))

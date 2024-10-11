@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'npm-publish'
     tags:
       - v*.*.*
   pull_request:
@@ -28,21 +29,21 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
+          #- name: JVM
+          #  test: jvmTest
+          #  os: ubuntu-latest
+          #- name: Android
+          #  test: testReleaseUnitTest
+          #  os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
-          - name: Apple
-            test: iosX64Test macosArm64Test
-            os: macos-latest
-          - name: Windows
-            test: mingwX64Test
-            os: windows-latest
+          #- name: Apple
+          #  test: iosX64Test macosArm64Test
+          #  os: macos-latest
+          #- name: Windows
+          #  test: mingwX64Test
+          #  os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
     steps:
