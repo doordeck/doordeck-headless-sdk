@@ -4,13 +4,11 @@ on:
   push:
     branches:
       - 'main'
-      - 'npm-publish'
     tags:
       - v*.*.*
   pull_request:
     branches:
       - 'main'
-      - 'npm-publish'
 
 jobs:
   validation:
@@ -30,21 +28,21 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          #- name: JVM
-          #  test: jvmTest
-          #  os: ubuntu-latest
-          #- name: Android
-          #  test: testReleaseUnitTest
-          #  os: ubuntu-latest
+          - name: JVM
+            test: jvmTest
+            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
+            os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock
             os: ubuntu-latest
-          #- name: Apple
-          #  test: iosX64Test macosArm64Test
-          #  os: macos-latest
-          #- name: Windows
-          #  test: mingwX64Test
-          #  os: windows-latest
+          - name: Apple
+            test: iosX64Test macosArm64Test
+            os: macos-latest
+          - name: Windows
+            test: mingwX64Test
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
     steps:
@@ -62,7 +60,7 @@ jobs:
   release:
     name: Releases
     needs: build
-    #if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
 
     permissions:
@@ -89,18 +87,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Tag for release (if on main)
-        #if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
-
-      - name: Publish (NPM)
-        run: ./gradlew -Prelease.useLastTag=true publishJsPackageToNpmjsRegistry --stacktrace -x test
-        env:
-          NPM_PUBLISHING_TOKEN: ${{ secrets.TEST_NPM_PUBLISHING_TOKEN }}
 
       - name: Publish
         run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_PUBLISHING_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
 
       - name: Parse release version
         id: version_info
