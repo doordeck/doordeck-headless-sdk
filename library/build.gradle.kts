@@ -172,7 +172,7 @@ npmPublish {
     packages {
         named("js") {
             packageJson {
-                name.set("doordeck-headless-sdk")
+                name.set("@doordeck/doordeck-headless-sdk")
                 license.set("Apache-2.0")
                 homepage.set("https://www.doordeck.com/")
                 keywords.set(setOf("doordeck", "sdk", "javascript", "access control"))
