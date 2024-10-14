@@ -94,7 +94,19 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_PUBLISHING_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+
+      - name: Set up NodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.TEST_NPM_TOKEN }}
+        run: |
+          cd build/js/packages/doordeck-sdk
+          npm publish --access public
 
       - name: Parse release version
         id: version_info

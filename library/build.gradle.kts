@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.npmPublish)
     `maven-publish`
 }
 
@@ -65,6 +64,17 @@ kotlin {
         binaries.library()
         binaries.executable()
         generateTypeScriptDefinitions()
+
+        // Add more fields to the package.json file
+        compilations["main"].packageJson {
+            name = "doordeck-headless-sdk"
+            customField("homepage", "https://www.doordeck.com/")
+            customField("license", "Apache-2.0")
+            customField("author", mapOf("name" to "Doordeck Limited"))
+            customField("keywords", listOf("doordeck", "sdk", "javascript", "access control"))
+            customField("bugs", mapOf("url" to "https://github.com/doordeck/doordeck-headless-sdk/issues"))
+            customField("repository", mapOf("type" to "git", "url" to "git+https://github.com/doordeck/doordeck-headless-sdk.git"))
+        }
     }
 
     sourceSets {
@@ -161,38 +171,6 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
-        }
-    }
-}
-
-npmPublish {
-    val npmToken = System.getenv("NPM_PUBLISHING_TOKEN")
-    dry = (npmToken == null) // When set to true, it doesn't make any modifications to local or remote files
-    readme.set(file("../README.md"))
-    packages {
-        named("js") {
-            packageJson {
-                name.set("@doordeck/doordeck-headless-sdk")
-                license.set("Apache-2.0")
-                homepage.set("https://www.doordeck.com/")
-                keywords.set(setOf("doordeck", "sdk", "javascript", "access control"))
-                author {
-                    name.set("Doordeck")
-                }
-                repository {
-                    type.set("git")
-                    url.set("git+https://github.com/doordeck/doordeck-headless-sdk.git")
-                }
-                bugs {
-                    url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
-                }
-            }
-        }
-    }
-    registries {
-        npmjs {
-            uri.set("https://registry.npmjs.org")
-            authToken.set(npmToken)
         }
     }
 }
