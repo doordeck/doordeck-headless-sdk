@@ -184,10 +184,10 @@ tasks.register<Exec>("publishToNpm") {
     val outputDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
 
     // Set up npm authentication using the environment variable
-    environment("NODE_AUTH_TOKEN", System.getenv("TEST_NPM_TOKEN"))
+    //environment("NODE_AUTH_TOKEN", System.getenv("TEST_NPM_TOKEN"))
 
     // Define the command to publish to npm
-    commandLine("npm", "publish", "--access", "public")
+    commandLine("npm", "publish", "--access", "public", "--//registry.npmjs.org/:_authToken=${System.getenv("TEST_NPM_TOKEN")}")
 
     // Set the working directory to the package directory
     workingDir(outputDir)
