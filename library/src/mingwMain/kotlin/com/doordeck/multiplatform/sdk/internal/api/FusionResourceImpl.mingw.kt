@@ -1,7 +1,14 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.FusionResource
-import com.doordeck.multiplatform.sdk.api.model.*
+import com.doordeck.multiplatform.sdk.api.model.DeleteDoorData
+import com.doordeck.multiplatform.sdk.api.model.EnableDoorData
+import com.doordeck.multiplatform.sdk.api.model.Fusion
+import com.doordeck.multiplatform.sdk.api.model.FusionLoginData
+import com.doordeck.multiplatform.sdk.api.model.GetDoorStatusData
+import com.doordeck.multiplatform.sdk.api.model.GetIntegrationConfigurationData
+import com.doordeck.multiplatform.sdk.api.model.StartDoorData
+import com.doordeck.multiplatform.sdk.api.model.StopDoorData
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse

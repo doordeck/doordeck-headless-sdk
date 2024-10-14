@@ -132,35 +132,28 @@ class LockUserDetailsResponse(
 
 @JsExport
 @Serializable
-class UserAuditResponse(
+class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
     val type: AuditEvent,
-    val issuer: UserAuditIssuerResponse,
-    val subject: UserAuditSubjectResponse? = null,
+    val issuer: AuditIssuerResponse,
+    val subject: AuditSubjectResponse? = null,
+    val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
 @JsExport
 @Serializable
-class UserAuditIssuerResponse(
-    val userId: String
-)
-
-@JsExport
-@Serializable
-class UserAuditSubjectResponse(
+class AuditIssuerResponse(
     val userId: String,
-    val email: String
+    val email: String? = null,
+    val ip: String? = null
 )
 
 @JsExport
 @Serializable
-class LockAuditTrailResponse(
-    val timestamp: Double,
-    val type: AuditEvent,
-    val user: String? = null,
-    val email: String? = null,
-    val displayName: String? = null,
-    val message: String? = null
+class AuditSubjectResponse(
+    val userId: String,
+    val email: String,
+    val displayName: String
 )

@@ -2,11 +2,10 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -33,18 +32,18 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse>
+    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse>
 
-    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>>
+    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>>
 
     /**
      * Get audit for a user
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse>
+    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse>
 
-    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>>
+    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>>
 
     /**
      * Get users for a lock
