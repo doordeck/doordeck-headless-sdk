@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
-import com.doordeck.multiplatform.sdk.TestConstants
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_TILE_ID
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
 import kotlinx.coroutines.future.await

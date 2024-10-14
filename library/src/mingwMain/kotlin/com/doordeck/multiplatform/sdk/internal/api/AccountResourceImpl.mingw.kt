@@ -1,7 +1,13 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.AccountResource
-import com.doordeck.multiplatform.sdk.api.model.*
+import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
+import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
+import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
+import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
+import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
+import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
+import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
