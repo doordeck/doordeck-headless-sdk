@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - 'main'
+      - 'npm-publish'
+      - 'npm-publish-without-plugin'
     tags:
       - v*.*.*
   pull_request:
@@ -79,6 +81,12 @@ jobs:
           git config --global user.name "Doordeck Development"
           git config --global user.email "development@doordeck.com"
 
+      - name: Set up NodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -96,19 +104,7 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up NodeJs
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.TEST_NPM_TOKEN }}
-        run: |
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
+          TEST_NPM_TOKEN: ${{ secrets.TEST_NPM_TOKEN }}
 
       - name: Parse release version
         id: version_info

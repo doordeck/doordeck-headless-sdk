@@ -175,6 +175,27 @@ publishing {
     }
 }
 
+tasks.named("publish").configure {
+    finalizedBy("publishToNpm")
+}
+
+tasks.register<Exec>("publishToNpm") {
+    // Specify the directory where the Node artifact is generated
+    val outputDir = layout.buildDirectory.dir("js/packages/doordeck-sdk")
+
+    // Set up npm authentication using the environment variable
+    environment("NODE_AUTH_TOKEN", System.getenv("TEST_NPM_TOKEN"))
+
+    // Define the command to publish to npm
+    commandLine("npm", "publish", "--access", "public")
+
+    // Set the working directory to the package directory
+    workingDir(outputDir)
+
+    // Make sure the artifact is built before attempting to publish
+    dependsOn("jsBrowserProductionLibraryDistribution")
+}
+
 android {
     namespace = "com.doordeck.multiplatform.sdk"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
