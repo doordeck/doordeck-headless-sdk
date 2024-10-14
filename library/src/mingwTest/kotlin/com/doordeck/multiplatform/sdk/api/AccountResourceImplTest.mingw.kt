@@ -2,7 +2,12 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.api.model.*
+import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
+import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
+import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
+import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
+import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
+import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray

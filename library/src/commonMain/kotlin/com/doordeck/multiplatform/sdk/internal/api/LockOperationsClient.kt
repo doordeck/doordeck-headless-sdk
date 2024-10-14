@@ -24,11 +24,10 @@ import com.doordeck.multiplatform.sdk.api.requests.UpdateLockSettingTimeUsageReq
 import com.doordeck.multiplatform.sdk.api.requests.UpdateLockSettingUsageRequirementRequest
 import com.doordeck.multiplatform.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.UserPublicKeyRequest
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -62,7 +61,7 @@ internal open class LockOperationsClient(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<AuditResponse> {
         return httpClient.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -75,7 +74,7 @@ internal open class LockOperationsClient(
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<UserAuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<AuditResponse> {
         return httpClient.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)

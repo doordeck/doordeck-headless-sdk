@@ -1,11 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -31,14 +30,14 @@ actual interface LockOperationsResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<LockAuditTrailResponse>>
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<AuditResponse>>
 
     /**
      * Get audit for a user
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<UserAuditResponse>>
+    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<AuditResponse>>
 
     /**
      * Get users for a lock
