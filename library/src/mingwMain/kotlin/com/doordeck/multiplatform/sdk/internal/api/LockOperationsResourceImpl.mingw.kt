@@ -1,12 +1,49 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
-import com.doordeck.multiplatform.sdk.api.model.*
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
+import com.doordeck.multiplatform.sdk.api.model.GetAuditForUserData
+import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
+import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
+import com.doordeck.multiplatform.sdk.api.model.GetSingleLockData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByEmailData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByForeignKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByIdentityData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByLocalKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByTelephoneData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
+import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockOperationData
+import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockWithContextData
+import com.doordeck.multiplatform.sdk.api.model.SetLockSettingPermittedAddressesData
+import com.doordeck.multiplatform.sdk.api.model.SetLockSettingTimeRestrictionsData
+import com.doordeck.multiplatform.sdk.api.model.ShareLockOperationData
+import com.doordeck.multiplatform.sdk.api.model.ShareLockWithContextData
+import com.doordeck.multiplatform.sdk.api.model.UnlockOperationData
+import com.doordeck.multiplatform.sdk.api.model.UnlockWithContextData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockColourData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockFavouriteData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockNameData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingDefaultNameData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingHiddenData
+import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestrictionsData
+import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
+import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenWithContextData
+import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
+import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationWithContextData
+import com.doordeck.multiplatform.sdk.api.model.toLocationRequirement
+import com.doordeck.multiplatform.sdk.api.model.toRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.api.model.toShareLock
+import com.doordeck.multiplatform.sdk.api.model.toShareLockOperation
+import com.doordeck.multiplatform.sdk.api.model.toTimeRequirementList
+import com.doordeck.multiplatform.sdk.api.model.toUnlockBetween
+import com.doordeck.multiplatform.sdk.api.model.toUnlockOperation
+import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockDuration
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -30,7 +67,7 @@ internal class LockOperationsResourceImpl(
         return getSingleLock(getSingleLockData.lockId).toJson()
     }
 
-    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
+    override fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
         return runBlocking { getLockAuditTrailRequest(lockId, start, end) }
     }
 
@@ -39,7 +76,7 @@ internal class LockOperationsResourceImpl(
         return getLockAuditTrail(getLockAuditTrailData.lockId, getLockAuditTrailData.start, getLockAuditTrailData.end).toJson()
     }
 
-    override fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse> {
+    override fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
         return runBlocking { getAuditForUserRequest(userId, start, end) }
     }
 
