@@ -65,9 +65,9 @@ kotlin {
         binaries.executable()
         generateTypeScriptDefinitions()
 
-        // Add more fields to the package.json file
+        // Add the necessary fields to the package.json file
         compilations["main"].packageJson {
-            name = "doordeck-headless-sdk3"
+            name = "doordeck-headless-sdk"
             customField("homepage", "https://www.doordeck.com/")
             customField("license", "Apache-2.0")
             customField("author", mapOf("name" to "Doordeck Limited"))
@@ -175,23 +175,25 @@ publishing {
     }
 }
 
+// Run the task to publish the Node package as part of the publishing process
 tasks.named("publish").configure {
     finalizedBy("publishToNpm")
 }
 
+// Register a new task to publish the node package into NPM
 tasks.register<Exec>("publishToNpm") {
     // Specify the directory where the Node artifact is generated
     val outputDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
-
-    // Set up npm authentication using the environment variable
-    //environment("NODE_AUTH_TOKEN", System.getenv("TEST_NPM_TOKEN"))
-
+    // Copy the README file from the root project into the node package
+    copy {
+        from(rootProject.layout.projectDirectory.file("README.md"))
+        into(outputDir.get().asFile)
+    }
     // Define the command to publish to npm
-    commandLine("npm", "publish", "--access", "public", "--//registry.npmjs.org/:_authToken=${System.getenv("TEST_NPM_TOKEN")}")
-
+    commandLine("npm", "publish", "--access", "public",
+        "--//registry.npmjs.org/:_authToken=${System.getenv("TEST_NPM_TOKEN")}")
     // Set the working directory to the package directory
     workingDir(outputDir)
-
     // Make sure the artifact is built before attempting to publish
     dependsOn("jsBrowserProductionLibraryDistribution")
 }
