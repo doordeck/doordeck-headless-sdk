@@ -67,7 +67,7 @@ kotlin {
 
         // Add more fields to the package.json file
         compilations["main"].packageJson {
-            name = "doordeck-headless-sdk"
+            name = "doordeck-headless-sdk3"
             customField("homepage", "https://www.doordeck.com/")
             customField("license", "Apache-2.0")
             customField("author", mapOf("name" to "Doordeck Limited"))
@@ -181,7 +181,7 @@ tasks.named("publish").configure {
 
 tasks.register<Exec>("publishToNpm") {
     // Specify the directory where the Node artifact is generated
-    val outputDir = layout.buildDirectory.dir("js/packages/doordeck-sdk")
+    val outputDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
 
     // Set up npm authentication using the environment variable
     environment("NODE_AUTH_TOKEN", System.getenv("TEST_NPM_TOKEN"))

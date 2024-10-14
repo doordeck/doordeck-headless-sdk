@@ -81,12 +81,6 @@ jobs:
           git config --global user.name "Doordeck Development"
           git config --global user.email "development@doordeck.com"
 
-      - name: Set up NodeJs
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
