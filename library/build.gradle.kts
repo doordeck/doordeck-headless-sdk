@@ -72,7 +72,8 @@ kotlin {
         summary = "Doordeck KMP SDK"
         homepage = "https://www.doordeck.com/"
         license = "Apache-2.0"
-        authors = "Doordeck"
+        authors = "Doordeck Limited"
+        source = "https://github.com/doordeck/doordeck-headless-sdk"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
         name = "DoordeckSDKPod"
         framework {
