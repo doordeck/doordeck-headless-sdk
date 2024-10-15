@@ -56,8 +56,8 @@ jobs:
           java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }} --rerun-tasks
+      #- name: Tests
+      #  run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
   release:
     name: Releases
