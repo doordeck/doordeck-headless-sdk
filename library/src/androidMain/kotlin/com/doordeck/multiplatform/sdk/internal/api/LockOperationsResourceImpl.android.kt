@@ -2,11 +2,10 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -30,19 +29,19 @@ internal class LockOperationsResourceImpl(
         return GlobalScope.future(Dispatchers.IO) { getSingleLockRequest(lockId) }
     }
 
-    override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<LockAuditTrailResponse> {
+    override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
         return getLockAuditTrailRequest(lockId, start, end)
     }
 
-    override fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<LockAuditTrailResponse>> {
+    override fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getLockAuditTrailRequest(lockId, start, end) }
     }
 
-    override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<UserAuditResponse> {
+    override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
         return getAuditForUserRequest(userId, start, end)
     }
 
-    override fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<UserAuditResponse>> {
+    override fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return GlobalScope.future(Dispatchers.IO) { getAuditForUserRequest(userId, start, end) }
     }
 

@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.api.responses
 
 import com.doordeck.multiplatform.sdk.api.model.AuditEvent
+import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
+import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
@@ -30,7 +32,8 @@ class LockSettingsResponse(
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: List<String>,
     val hidden: Boolean,
-    val directAccessEndpoints: List<String> = emptyList()
+    val directAccessEndpoints: List<String> = emptyList(),
+    val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
 @JsExport
@@ -129,35 +132,28 @@ class LockUserDetailsResponse(
 
 @JsExport
 @Serializable
-class UserAuditResponse(
+class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
     val type: AuditEvent,
-    val issuer: UserAuditIssuerResponse,
-    val subject: UserAuditSubjectResponse? = null,
+    val issuer: AuditIssuerResponse,
+    val subject: AuditSubjectResponse? = null,
+    val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
 @JsExport
 @Serializable
-class UserAuditIssuerResponse(
-    val userId: String
-)
-
-@JsExport
-@Serializable
-class UserAuditSubjectResponse(
+class AuditIssuerResponse(
     val userId: String,
-    val email: String
+    val email: String? = null,
+    val ip: String? = null
 )
 
 @JsExport
 @Serializable
-class LockAuditTrailResponse(
-    val timestamp: Double,
-    val type: AuditEvent,
-    val user: String? = null,
-    val email: String? = null,
-    val displayName: String? = null,
-    val message: String? = null
+class AuditSubjectResponse(
+    val userId: String,
+    val email: String,
+    val displayName: String
 )

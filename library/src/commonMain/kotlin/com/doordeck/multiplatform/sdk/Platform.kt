@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.*
 import com.doordeck.multiplatform.sdk.util.addCloudInterceptor
 import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
@@ -10,6 +9,7 @@ import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
 import com.doordeck.multiplatform.sdk.util.installTimeout
+import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
 import io.ktor.http.URLProtocol
 import kotlinx.serialization.json.Json

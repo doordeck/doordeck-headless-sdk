@@ -14,6 +14,8 @@ import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditIssuerResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.EmailPreferencesResponse
@@ -21,7 +23,6 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
-import com.doordeck.multiplatform.sdk.api.responses.LockAuditTrailResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockSettingsResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockStateResponse
@@ -35,8 +36,6 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditIssuerResponse
-import com.doordeck.multiplatform.sdk.api.responses.UserAuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
@@ -77,8 +76,8 @@ private val TEST_ENGINE = MockEngine { request ->
                 FusionPaths.startDoorPathPath(DEFAULT_DEVICE_ID),
                 FusionPaths.stopDoorPathPath(DEFAULT_DEVICE_ID) -> respondOk()
                 Paths.getSingleLockPath(DEFAULT_LOCK_ID) -> respondContent(LOCK_RESPONSE)
-                Paths.getLockAuditTrailPath(DEFAULT_LOCK_ID) -> respondContent(LOCK_AUDIT_TRAIL_RESPONSE)
-                Paths.getAuditForUserPath(DEFAULT_USER_ID) -> respondContent(USER_AUDIT_RESPONSE)
+                Paths.getLockAuditTrailPath(DEFAULT_LOCK_ID) -> respondContent(AUDIT_RESPONSE)
+                Paths.getAuditForUserPath(DEFAULT_USER_ID) -> respondContent(AUDIT_RESPONSE)
                 Paths.getUsersForLockPath(DEFAULT_LOCK_ID) -> respondContent(USER_LOCK_RESPONSE)
                 Paths.getLocksForUserPath(DEFAULT_USER_ID) -> respondContent(LOCK_USER_RESPONSE)
                 Paths.getPinnedLocksPath() -> respondContent(PINNED_LOCKS_RESPONSE)
@@ -167,8 +166,7 @@ private val APPLICATION_RESPONSE = ApplicationResponse("", "", emailPreferences 
 private val APPLICATION_LIST_RESPONSE = listOf(ApplicationResponse("", "", emailPreferences = EmailPreferencesResponse(primaryColour = "", secondaryColour = ""), authKeys = mapOf("" to EcKeyResponse("EC", "use", "kid", crv = "crv", x = "x", y = "y")))).toJson()
 private val APPLICATION_OWNER_DETAILS_RESPONSE = listOf(ApplicationOwnerDetailsResponse("", "", null, false, false)).toJson()
 private val LOCK_RESPONSE = LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyList(), "", tiles = emptyList(), hidden = false), LockStateResponse(false, false), false).toJson()
-private val LOCK_AUDIT_TRAIL_RESPONSE = listOf(LockAuditTrailResponse(0.0, AuditEvent.DOOR_LOCK)).toJson()
-private val USER_AUDIT_RESPONSE = listOf(UserAuditResponse("", 0.0, AuditEvent.DOOR_LOCK, UserAuditIssuerResponse(""), rejected = false)).toJson()
+private val AUDIT_RESPONSE = listOf(AuditResponse("", 0.0, AuditEvent.DOOR_LOCK, AuditIssuerResponse(""), null, null, false)).toJson()
 private val USER_LOCK_RESPONSE = listOf(UserLockResponse("", "", "", null, false, false, UserRole.USER)).toJson()
 private val LOCK_USER_RESPONSE = LockUserResponse("", "", "", null, false, false, null, null, emptyList()).toJson()
 private val USER_PUBLIC_KEY_RESPONSE = UserPublicKeyResponse("", "").toJson()
