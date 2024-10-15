@@ -67,7 +67,7 @@ kotlin {
 
         // Add the necessary fields to the package.json file
         compilations["main"].packageJson {
-            name = "doordeck-headless-sdk6"
+            name = "@doordeck/doordeck-headless-sdk"
             customField("homepage", "https://www.doordeck.com/")
             customField("license", "Apache-2.0")
             customField("author", mapOf("name" to "Doordeck Limited"))
