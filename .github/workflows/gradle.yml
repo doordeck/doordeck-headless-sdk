@@ -11,15 +11,7 @@ on:
       - 'main'
 
 jobs:
-  validation:
-    name: "Gradle Wrapper Validation"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v2
-
   build:
-    needs: validation
     env:
       TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
       TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
@@ -53,7 +45,7 @@ jobs:
           distribution: corretto
           java-version: 21
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
@@ -92,7 +84,7 @@ jobs:
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Tag for release (if on main)
         if: github.ref == 'refs/heads/main'
@@ -103,6 +95,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+        run: |
+          cd build/js/packages/doordeck-sdk
+          npm publish --access public
+
       - name: Parse release version
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
@@ -112,10 +111,3 @@ jobs:
             GH_TOKEN: ${{ github.token }}
         run: |
           gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-        run: |
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
