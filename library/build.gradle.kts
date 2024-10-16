@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.npmPublish)
     `maven-publish`
 }
 
@@ -65,6 +64,17 @@ kotlin {
         binaries.library()
         binaries.executable()
         generateTypeScriptDefinitions()
+
+        // Add the necessary fields to the package.json file
+        compilations["main"].packageJson {
+            name = "@doordeck/doordeck-headless-sdk"
+            customField("homepage", "https://www.doordeck.com/")
+            customField("license", "Apache-2.0")
+            customField("author", mapOf("name" to "Doordeck Limited"))
+            customField("keywords", listOf("doordeck", "sdk", "javascript", "access control"))
+            customField("bugs", mapOf("url" to "https://github.com/doordeck/doordeck-headless-sdk/issues"))
+            customField("repository", mapOf("type" to "git", "url" to "git+https://github.com/doordeck/doordeck-headless-sdk.git"))
+        }
     }
 
     sourceSets {
@@ -165,34 +175,18 @@ publishing {
     }
 }
 
-npmPublish {
-    val npmToken = System.getenv("NPM_PUBLISHING_TOKEN")
-    dry = (npmToken == null) // When set to true, it doesn't make any modifications to local or remote files
-    readme.set(file("../README.md"))
-    packages {
-        named("js") {
-            packageJson {
-                name.set("@doordeck/doordeck-headless-sdk")
-                license.set("Apache-2.0")
-                homepage.set("https://www.doordeck.com/")
-                keywords.set(setOf("doordeck", "sdk", "javascript", "access control"))
-                author {
-                    name.set("Doordeck")
-                }
-                repository {
-                    type.set("git")
-                    url.set("git+https://github.com/doordeck/doordeck-headless-sdk.git")
-                }
-                bugs {
-                    url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
-                }
-            }
-        }
-    }
-    registries {
-        npmjs {
-            uri.set("https://registry.npmjs.org")
-            authToken.set(npmToken)
+tasks.named("publish").configure {
+    finalizedBy("jsBrowserProductionLibraryDistribution")
+}
+
+tasks.named("jsBrowserProductionLibraryDistribution").configure {
+    doLast {
+        // Specify the directory where the package is generated
+        val publishDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
+        // Copy the README file from the root project into the package folder
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(publishDir.get().asFile)
         }
     }
 }
