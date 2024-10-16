@@ -25,8 +25,8 @@ implementation("doordeck-headless-sdk:library-android:0.22.0")
 
 <details><summary>JS</summary>
 
-````js
-// TODO
+````cmd
+npm install @doordeck/doordeck-headless-sdk --save
 ````
 </details>
 
