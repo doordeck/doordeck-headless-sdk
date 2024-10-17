@@ -66,6 +66,17 @@ kotlin {
         binaries.library()
         binaries.executable()
         generateTypeScriptDefinitions()
+
+        // Add the necessary fields to the package.json file
+        compilations["main"].packageJson {
+            name = "@doordeck/doordeck-headless-sdk"
+            customField("homepage", "https://www.doordeck.com/")
+            customField("license", "Apache-2.0")
+            customField("author", mapOf("name" to "Doordeck Limited"))
+            customField("keywords", listOf("doordeck", "sdk", "javascript", "access control"))
+            customField("bugs", mapOf("url" to "https://github.com/doordeck/doordeck-headless-sdk/issues"))
+            customField("repository", mapOf("type" to "git", "url" to "git+https://github.com/doordeck/doordeck-headless-sdk.git"))
+        }
     }
 
     cocoapods {
@@ -175,6 +186,22 @@ publishing {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
             }
+        }
+    }
+}
+
+tasks.named("publish").configure {
+    finalizedBy("jsBrowserProductionLibraryDistribution")
+}
+
+tasks.named("jsBrowserProductionLibraryDistribution").configure {
+    doLast {
+        // Specify the directory where the package is generated
+        val publishDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
+        // Copy the README file from the root project into the package folder
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(publishDir.get().asFile)
         }
     }
 }

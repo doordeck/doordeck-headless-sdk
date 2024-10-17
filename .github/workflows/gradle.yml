@@ -11,15 +11,7 @@ on:
       - 'main'
 
 jobs:
-  validation:
-    name: "Gradle Wrapper Validation"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: gradle/wrapper-validation-action@v2
-
   build:
-    needs: validation
     env:
       TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
       TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
@@ -53,7 +45,7 @@ jobs:
           distribution: corretto
           java-version: 21
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
@@ -77,6 +69,14 @@ jobs:
           git config --global user.name "Doordeck Development"
           git config --global user.email "development@doordeck.com"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@doordeck'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -84,7 +84,7 @@ jobs:
           java-version: 21
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Tag for release (if on main)
         if: github.ref == 'refs/heads/main'
@@ -94,6 +94,13 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+        run: |
+          cd build/js/packages/doordeck-sdk
+          npm publish --access public
 
       - name: Parse release version
         id: version_info
