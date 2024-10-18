@@ -84,7 +84,7 @@ kotlin {
         homepage = "https://www.doordeck.com/"
         license = "Apache-2.0"
         authors = "Doordeck Limited"
-        source = "https://github.com/doordeck/doordeck-headless-sdk"
+        source = "{ :git => 'git@github.com:doordeck/doordeck-headless-sdk.git', :tag => '${project.version}' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
         name = "DoordeckSDKPod"
         framework {
