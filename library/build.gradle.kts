@@ -85,7 +85,7 @@ kotlin {
         authors = "Doordeck Limited"
         source = "{ :git => 'git@github.com:doordeck/doordeck-headless-sdk.git', :tag => '${project.version}' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
-        name = "DoordeckSDKPod"
+        name = "DoordeckSDK"
         framework {
             baseName = "DoordeckSDK"
         }
@@ -190,7 +190,7 @@ publishing {
 }
 
 tasks.named("publish").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution")
+    finalizedBy("jsBrowserProductionLibraryDistribution", "podPublishReleaseXCFramework")
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
