@@ -155,5 +155,5 @@ class AuditIssuerResponse(
 class AuditSubjectResponse(
     val userId: String,
     val email: String,
-    val displayName: String
+    val displayName: String? = null
 )
