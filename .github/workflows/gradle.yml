@@ -114,7 +114,7 @@ jobs:
       #    npm publish --access public
 
       - name: TEMP podPublishReleaseXCFramework
-        run: ./gradlew podPublishReleaseXCFramework -x test
+        run: ./gradlew -Prelease.useLastTag=true podPublishReleaseXCFramework -x test
 
       - name: Push to CocoaPods
         env:
