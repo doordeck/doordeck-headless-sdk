@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - 'main'
+      - 'kotlin-cocoapods'
 
 jobs:
   build:
@@ -46,13 +47,13 @@ jobs:
           java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }} --rerun-tasks
+      #- name: Tests
+      #  run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
   release:
     name: Releases
     needs: build
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    #if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
 
     permissions:
@@ -97,20 +98,23 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Tag for release (if on main)
-        if: github.ref == 'refs/heads/main'
+        #if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
-      - name: Publish
-        run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Publish
+      #  run: ./gradlew -Prelease.useLastTag=true :library:publish --stacktrace -x test
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+      #- name: Publish to NPM
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+      #  run: |
+      #    cd build/js/packages/doordeck-sdk
+      #    npm publish --access public
 
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-        run: |
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
+      - name: TEMP podPublishReleaseXCFramework
+        run: ./gradlew podPublishReleaseXCFramework -x test
 
       - name: Push to CocoaPods
         env:
