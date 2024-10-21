@@ -119,7 +119,7 @@ jobs:
       - name: Push to CocoaPods
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run:
+        run: |
           cd library/build/cocoapods/publish/release
           pod trunk push DoordeckSDK.podspec
 
