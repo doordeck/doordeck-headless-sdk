@@ -116,13 +116,6 @@ jobs:
       - name: TEMP podPublishReleaseXCFramework
         run: ./gradlew -Prelease.useLastTag=true podPublishReleaseXCFramework -x test
 
-      - name: Push to CocoaPods
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: |
-          cd library/build/cocoapods/publish/release
-          pod trunk push DoordeckSDK.podspec
-
       - name: Parse release version
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
@@ -132,3 +125,10 @@ jobs:
             GH_TOKEN: ${{ github.token }}
         run: |
           gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
+
+      - name: Push to CocoaPods
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: |
+          cd library/build/cocoapods/publish/release
+          pod trunk push DoordeckSDK.podspec
