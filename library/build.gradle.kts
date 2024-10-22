@@ -89,8 +89,7 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
-        //extraSpecAttributes["vendored_frameworks"] = "'DoordeckSDK.framework'"
-
+        extraSpecAttributes["vendored_frameworks"] = "'DoordeckSDK.xcframework'"
         //val sb = StringBuilder()
         //sb.appendLine("<<-SCRIPT")
         //sb.appendLine("        set -ev")
