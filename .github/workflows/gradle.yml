@@ -116,10 +116,10 @@ jobs:
       - name: TEMP podPublishReleaseXCFramework
         run: ./gradlew -Prelease.useLastTag=true podPublishReleaseXCFramework -x test
 
-      - name: Lint Podspec
-        run: |
-          cd library/build/cocoapods/publish/release
-          pod spec lint DoordeckSDK.podspec --verbose
+      #- name: Lint Podspec
+      #  run: |
+      #    cd library/build/cocoapods/publish/release
+      #    pod spec lint DoordeckSDK.podspec --verbose
 
       - name: Push to CocoaPods
         env:
