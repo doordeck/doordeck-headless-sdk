@@ -89,11 +89,14 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
+        extraSpecAttributes["vendored_frameworks"] = "library/build/cocoapods/framework/#{spec.name}.framework"
+
+
 
         val sb = StringBuilder()
         sb.appendLine("<<-SCRIPT")
         sb.appendLine("        set -ev")
-        sb.appendLine("        ./gradlew --no-daemon -Pframework=#{spec.name}.framework assembleDoordeckSDKReleaseXCFramework --stacktrace --info")
+        sb.appendLine("        ./gradlew --no-daemon -Pframework=#{spec.name}.framework :library:assembleDoordeckSDKReleaseXCFramework --stacktrace --info")
         sb.appendLine("    SCRIPT")
         extraSpecAttributes["prepare_command"] = sb.toString()
     }
