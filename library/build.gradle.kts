@@ -81,7 +81,7 @@ kotlin {
     cocoapods {
         summary = "Doordeck KMP SDK"
         homepage = "https://www.doordeck.com/"
-        license = "Apache-2.0"
+        license = "{ :type => 'Apache-2.0' }"
         authors = "Doordeck Limited"
         source = "{ :git => 'https://github.com/doordeck/doordeck-headless-sdk.git', :tag => 'v${project.version}' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
@@ -89,13 +89,14 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
-        extraSpecAttributes["vendored_frameworks"] = "'DoordeckSDK.framework'"
-        //val sb = StringBuilder()
-        //sb.appendLine("<<-SCRIPT")
-        //sb.appendLine("        set -ev")
-        //sb.appendLine("        ./gradlew --no-daemon -Pframework=#{spec.name}.framework :library:generateDummyFramework --stacktrace --info")
-        //sb.appendLine("    SCRIPT")
-        //extraSpecAttributes["prepare_command"] = sb.toString()
+
+        extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
+        val sb = StringBuilder()
+        sb.appendLine("<<-SCRIPT")
+        sb.appendLine("      set -ev")
+        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework --stacktrace --info")
+        sb.appendLine("    SCRIPT")
+        extraSpecAttributes["prepare_command"] = sb.toString()
     }
 
     sourceSets {
