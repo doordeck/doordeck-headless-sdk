@@ -1,6 +1,0 @@
-framework module DoordeckSDK {
-  umbrella header "placeholder.h"
-
-  export *
-  module * { export * }
-}
