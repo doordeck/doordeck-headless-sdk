@@ -113,8 +113,8 @@ jobs:
       #    cd build/js/packages/doordeck-sdk
       #    npm publish --access public
 
-      - name: TEMP podPublishReleaseXCFramework
-        run: ./gradlew -Prelease.useLastTag=true podPublishReleaseXCFramework -x test
+      - name: TEMP podSpecRelease
+        run: ./gradlew -Prelease.useLastTag=true podSpecRelease -x test
 
       #- name: Lint Podspec
       #  run: |
@@ -126,7 +126,7 @@ jobs:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         run: |
           cd library/build/cocoapods/publish/release
-          pod trunk push DoordeckSDK.podspec --verbose
+          pod trunk push DoordeckSDK.podspec --allow-warnings --verbose
 
       - name: Parse release version
         id: version_info

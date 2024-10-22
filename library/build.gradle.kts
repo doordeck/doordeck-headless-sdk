@@ -91,10 +91,11 @@ kotlin {
         }
 
         extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
+
         val sb = StringBuilder()
         sb.appendLine("<<-SCRIPT")
         sb.appendLine("      set -ev")
-        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework --stacktrace --info")
+        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework")
         sb.appendLine("    SCRIPT")
         extraSpecAttributes["prepare_command"] = sb.toString()
     }
@@ -198,7 +199,7 @@ publishing {
 }
 
 tasks.named("publish").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution", "podPublishReleaseXCFramework")
+    finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
