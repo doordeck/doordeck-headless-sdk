@@ -89,6 +89,13 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
+
+        val sb = StringBuilder()
+        sb.appendLine("<<-SCRIPT")
+        sb.appendLine("        set -ev")
+        sb.appendLine("        ./gradlew --no-daemon -Pframework=#{spec.name}.framework assembleDoordeckSDKReleaseXCFramework --stacktrace --info")
+        sb.appendLine("    SCRIPT")
+        extraSpecAttributes["prepare_command"] = sb.toString()
     }
 
     sourceSets {
