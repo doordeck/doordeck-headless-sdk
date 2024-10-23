@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
+    alias(libs.plugins.kotlinCocoapods)
     `maven-publish`
 }
 
@@ -75,6 +76,27 @@ kotlin {
             customField("bugs", mapOf("url" to "https://github.com/doordeck/doordeck-headless-sdk/issues"))
             customField("repository", mapOf("type" to "git", "url" to "git+https://github.com/doordeck/doordeck-headless-sdk.git"))
         }
+    }
+
+    cocoapods {
+        summary = "Doordeck Headless SDK"
+        homepage = "https://www.doordeck.com/"
+        license = "{ :type => 'Apache-2.0' }"
+        authors = "Doordeck Limited"
+        source = "{ :git => 'https://github.com/doordeck/doordeck-headless-sdk.git', :tag => 'v${project.version}' }"
+        ios.deploymentTarget = libs.versions.ios.minSdk.get()
+        name = "DoordeckSDK"
+        framework {
+            baseName = "DoordeckSDK"
+        }
+        extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
+
+        val sb = StringBuilder()
+        sb.appendLine("<<-SCRIPT")
+        sb.appendLine("      set -ev")
+        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework")
+        sb.appendLine("    SCRIPT")
+        extraSpecAttributes["prepare_command"] = sb.toString()
     }
 
     sourceSets {
@@ -176,7 +198,7 @@ publishing {
 }
 
 tasks.named("publish").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution")
+    finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
