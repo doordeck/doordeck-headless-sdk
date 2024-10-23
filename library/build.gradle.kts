@@ -79,7 +79,7 @@ kotlin {
     }
 
     cocoapods {
-        summary = "Doordeck KMP SDK"
+        summary = "Doordeck Headless SDK"
         homepage = "https://www.doordeck.com/"
         license = "{ :type => 'Apache-2.0' }"
         authors = "Doordeck Limited"

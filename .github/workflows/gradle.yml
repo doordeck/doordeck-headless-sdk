@@ -117,7 +117,7 @@ jobs:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         run: |
           cd library/build/cocoapods/publish/release
-          pod trunk push DoordeckSDK.podspec --allow-warnings --verbose
+          pod trunk push DoordeckSDK.podspec --allow-warnings
 
       - name: Parse release version
         id: version_info
