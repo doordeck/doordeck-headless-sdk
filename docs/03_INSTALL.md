@@ -2,7 +2,7 @@
 <details><summary>JVM</summary>
 
 ````kotlin
-implementation("doordeck-headless-sdk:library-jvm:0.22.0")
+implementation("doordeck-headless-sdk:library-jvm:[SDK_VERSION]")
 ````
 >:information_source: The JVM package requires at least Java SDK 1.8
 </details>
@@ -10,7 +10,7 @@ implementation("doordeck-headless-sdk:library-jvm:0.22.0")
 <details><summary>Android</summary>
 
 ````kotlin
-implementation("doordeck-headless-sdk:library-android:0.22.0")
+implementation("doordeck-headless-sdk:library-android:[SDK_VERSION]")
 ````
 >:information_source: The Android package requires at least Android SDK 21
 </details>
@@ -18,9 +18,9 @@ implementation("doordeck-headless-sdk:library-android:0.22.0")
 <details><summary>Swift</summary>
 
 ````swift
-// TODO
+pod 'DoordeckSDK', '~> [SDK_VERSION]'
 ````
->:information_source: The iOS package requires at least iOS version 15
+>:information_source: The iOS package requires at least iOS version 14
 </details>
 
 <details><summary>JS</summary>
