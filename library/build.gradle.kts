@@ -89,7 +89,7 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
-
+        extraSpecAttributes["readme"] = "'https://github.com/doordeck/doordeck-headless-sdk/blob/v${project.version}/README.md'";
         extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
 
         val sb = StringBuilder()
