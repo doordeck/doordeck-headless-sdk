@@ -98,4 +98,4 @@
 * [Tiles resource](14_API-TILES.md#tiles-resource)
     * [Get locks belonging to a tile](14_API-TILES.md#get-locks-belonging-to-a-tile)
     * [Associate multiple locks](14_API-TILES.md#associate-multiple-locks)
-* Samples
+* [Samples](15_SAMPLES.md#samples)
