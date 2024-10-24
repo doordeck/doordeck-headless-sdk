@@ -26,7 +26,7 @@ In JavaScript, we have a sample made with Angular that shows how the SDK can be 
 The sample represents a simple dashboard with the following functionalities provided by the SDK:
 <ul>
     <li>User login</li>
-    <li>Two-factor authentication</li>
+    <li>Register ephemeral key with secondary authentication</li>
     <li>List sites</li>
     <li>List locks for a site</li>
     <li>List users for a lock</li>
@@ -40,7 +40,9 @@ The sample represents a simple dashboard with the following functionalities prov
 </ul>
 
 ![angular-login.png](media/samples/angular/angular-login.png)
-![angular-login.png](media/samples/angular/main-dashboard.png)
+![angular-login.png](media/samples/angular/dashboard.png)
+![angular-login.png](media/samples/angular/revoke-access.png)
+![angular-login.png](media/samples/angular/activity.png)
 ![angular-login.png](media/samples/angular/share-lock.png)
 </details>
 
