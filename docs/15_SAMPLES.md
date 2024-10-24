@@ -39,11 +39,11 @@ The sample represents a simple dashboard with the following functionalities prov
     <li>Logout</li>
 </ul>
 
-![angular-login.png](media/samples/angular/angular-login.png)
-![angular-login.png](media/samples/angular/dashboard.png)
-![angular-login.png](media/samples/angular/revoke-access.png)
-![angular-login.png](media/samples/angular/activity.png)
-![angular-login.png](media/samples/angular/share-lock.png)
+![login.png](media/samples/angular/login.png)
+![dashboard.png](media/samples/angular/dashboard.png)
+![revoke-access.png](media/samples/angular/revoke-access.png)
+![activity.png](media/samples/angular/activity.png)
+![share-lock.png](media/samples/angular/share-lock.png)
 </details>
 
 <details><summary>C#</summary>
