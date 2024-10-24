@@ -1,0 +1,18 @@
+<div class="two-factor-verify-title-container">
+  <h2 mat-dialog-title>Enter 6-Digit Code</h2>
+</div>
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="two-factor-verify-input-full-width">
+      <mat-label>Code</mat-label>
+      <input matInput formControlName="code" maxlength="6" />
+      <mat-error *ngIf="form.get('code')?.hasError('invalid')">
+        Code must be exactly 6 digits
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end" class="two-factor-verify-action-buttons">
+  <button mat-flat-button color="primary" (click)="onCancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="form.invalid" (click)="submit()">Submit</button>
+</mat-dialog-actions>
