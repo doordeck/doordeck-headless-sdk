@@ -1,0 +1,19 @@
+.two-factor-verify-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.two-factor-verify-input-full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.two-factor-verify-action-buttons {
+  display: flex;
+  width: 100%;
+}
+
+.two-factor-verify-action-buttons button {
+  flex: 1;
+}

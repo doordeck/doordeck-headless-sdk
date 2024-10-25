@@ -1,0 +1,13 @@
+.change-display-name-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.change-display-name-action-buttons button {
+  flex: 1;
+}
+
+.change-display-name-input-full-width {
+  width: 100%;
+}

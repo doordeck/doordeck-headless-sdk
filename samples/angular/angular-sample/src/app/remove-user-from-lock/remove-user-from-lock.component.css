@@ -1,0 +1,9 @@
+.remove-user-from-lock-action-buttons button {
+  flex: 1;
+}
+
+.remove-user-from-lock-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

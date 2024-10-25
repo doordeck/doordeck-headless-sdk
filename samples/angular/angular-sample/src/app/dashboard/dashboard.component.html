@@ -1,0 +1,160 @@
+<!-- Toolbar -->
+<mat-toolbar>
+  <span class="dashboard-toolbar-spacer"></span>
+  <!-- Menu -->
+  <span>Hello {{ displayName }}</span>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <!-- Logout -->
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+    <!-- Change password -->
+    <button mat-menu-item (click)="changePassword()">
+      <mat-icon>password</mat-icon>
+      <span>Change password</span>
+    </button>
+    <!-- Change display name -->
+    <button mat-menu-item (click)="changeDisplayName()">
+      <mat-icon>settings</mat-icon>
+      <span>Change display name</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>
+<br/>
+<mat-card>
+  <mat-accordion>
+    <!-- Sites -->
+    <mat-expansion-panel *ngFor="let site of sites; let siteIndex = index">
+      <mat-expansion-panel-header (click)="selectSite(site.id, siteIndex)">
+        <mat-panel-title>
+          <mat-icon>domain</mat-icon>
+          {{ site.name }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <!-- Locks -->
+      <mat-card *ngIf="selectedSiteIndex === siteIndex">
+        <mat-accordion>
+          <mat-expansion-panel *ngFor="let lock of locksForSelectedSite; let lockIndex = index">
+            <mat-expansion-panel-header (click)="selectLock(lockIndex, lock.id)">
+              <mat-panel-title>
+                <mat-icon>lock</mat-icon>
+                {{ lock.name }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- Lock tabs -->
+            <mat-card *ngIf="selectedLockIndex === lockIndex">
+              <mat-card-content>
+                <mat-tab-group>
+                  <!-- Users -->
+                  <mat-tab label="Users">
+                    <mat-card-content>
+                      <!-- User search -->
+                      <mat-form-field class="dashboard-table-input-full-width">
+                        <input matInput type="text" placeholder="Search" [(ngModel)]="searchUserInput" (input)="applyUsersFilter()">
+                      </mat-form-field>
+                      <div class="dashboard-table-container">
+                        <div class="dashboard-users-table-wrapper">
+                          <!-- Admin list -->
+                          <table mat-table [dataSource]="adminsForSelectedLock" class="mat-elevation-z8 dashboard-table">
+                            <ng-container matColumnDef="user-email">
+                              <mat-header-cell *matHeaderCellDef>Admins</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="user-action">
+                              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                              <mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="removeUserFromLock(lock.id, lock.name, element.email, element.userId)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="usersDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: usersDisplayedColumns;"></mat-row>
+                          </table>
+                        </div>
+                        <div class="dashboard-users-table-wrapper">
+                          <!-- User list -->
+                          <mat-table [dataSource]="usersForSelectedLock" class="mat-elevation-z8 dashboard-table">
+                            <ng-container matColumnDef="user-email">
+                              <mat-header-cell *matHeaderCellDef>Users</mat-header-cell>
+                              <mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="user-action">
+                              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                              <mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary" (click)="removeUserFromLock(lock.id, lock.name, element.email, element.userId)">
+                                  <mat-icon>delete</mat-icon>
+                                </button>
+                              </mat-cell>
+                            </ng-container>
+                            <mat-header-row *matHeaderRowDef="usersDisplayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: usersDisplayedColumns;"></mat-row>
+                          </mat-table>
+                        </div>
+                      </div>
+                    </mat-card-content>
+                  </mat-tab>
+                  <!-- Activity tab -->
+                  <mat-tab label="Activity">
+                    <mat-card-content>
+                      <!-- Date range filer -->
+                      <mat-form-field class="dashboard-table-input-full-width">
+                        <mat-label>Enter a date range</mat-label>
+                        <mat-date-range-input
+                          [formGroup]="dateForm"
+                          [rangePicker]="picker"
+                          [comparisonStart]="dateForm.value.start"
+                          [comparisonEnd]="dateForm.value.end">
+                          <input matStartDate placeholder="Start date" formControlName="start">
+                          <input matEndDate placeholder="End date" formControlName="end">
+                        </mat-date-range-input>
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #picker></mat-date-range-picker>
+                      </mat-form-field>
+                      <div class="dashboard-activity-table-wrapper">
+                        <!-- Activity table -->
+                        <table mat-table [dataSource]="auditForSelectedLock" class="dashboard-table">
+                          <ng-container matColumnDef="activity-email">
+                            <mat-header-cell *matHeaderCellDef>Activity</mat-header-cell>
+                            <mat-cell *matCellDef="let element">{{getType(element.type)}} by {{element.issuer.email}}</mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="activity-date">
+                            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                              {{getUtcDate(element.timestamp)}}
+                            </mat-cell>
+                          </ng-container>
+                          <mat-header-row *matHeaderRowDef="activityDisplayedColumns"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: activityDisplayedColumns;"></mat-row>
+                        </table>
+                      </div>
+                    </mat-card-content>
+                  </mat-tab>
+                  <!-- Other tab -->
+                  <mat-tab label="Other">
+                    <button mat-icon-button color="primary" (click)="unlock(lock.id)">
+                      <mat-icon>{{!unlocking ? 'lock' : 'lock_open'}}</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="shareLock(lock.id)">
+                      <mat-icon>share</mat-icon>
+                    </button>
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-card-content>
+            </mat-card>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </mat-card>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-card>
+
+
+
+
+
+

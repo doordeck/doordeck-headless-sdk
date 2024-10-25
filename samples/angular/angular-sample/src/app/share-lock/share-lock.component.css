@@ -1,0 +1,28 @@
+.share-lock-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.share-lock-form-step {
+  margin-top: 16px;
+}
+
+.share-lock-email-addresses {
+  width: 100%;
+}
+
+.share-lock-form-step mat-slide-toggle {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.share-lock-action-buttons {
+  display: flex;
+  margin-top: 16px;
+  padding: 0 0;
+}
+
+.share-lock-action-buttons button {
+  flex: 1;
+}
