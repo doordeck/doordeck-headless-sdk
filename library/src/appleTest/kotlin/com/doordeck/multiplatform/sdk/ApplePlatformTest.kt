@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.doordeck.multiplatform.sdk.objclibs.kcrypto.KCrypto
+import com.ttypic.objclibs.kcrypto.KCrypto
 
 class IosPlatformTest {
     @Test
