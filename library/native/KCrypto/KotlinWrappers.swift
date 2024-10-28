@@ -15,7 +15,7 @@ import CryptoKit
 
         return [
             "privateKey": privateKeyBase64,
-             "publicKey": publicKeyBase64
+            "publicKey": publicKeyBase64
         ]
     }
 }
