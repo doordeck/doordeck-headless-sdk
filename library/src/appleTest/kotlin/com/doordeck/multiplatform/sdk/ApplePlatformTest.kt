@@ -7,7 +7,9 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import com.ttypic.objclibs.kcrypto.KCrypto
+//import com.ttypic.objclibs.kcrypto.KCrypto
+import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
+import kotlin.test.assertNotNull
 
 class IosPlatformTest {
     @Test
@@ -30,6 +32,7 @@ class IosPlatformTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        println(KCrypto.generateEd25519KeyPair())
+        val pair = KCrypto.generateEd25519KeyPair()
+        assertNotNull(pair)
     }
 }
