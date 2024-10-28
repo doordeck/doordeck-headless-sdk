@@ -3,8 +3,20 @@ import CryptoKit
 
 @objc public class KCrypto : NSObject {
 
-    // Generate Ed25519 Key Pair
-    @objc public class func generateEd25519KeyPair() -> [String: String] {
+    @objc public class func generateKeyPair() -> [String: Data] {
+        let privateKey = Curve25519.Signing.PrivateKey()
+        let publicKey = privateKey.publicKey
+
+        let privateKeyBase64 = privateKey.rawRepresentation
+        let publicKeyBase64 = publicKey.rawRepresentation
+
+        return [
+            "privateKey": privateKeyBase64,
+            "publicKey": publicKeyBase64
+        ]
+    }
+
+    /*@objc public class func generateKeyPair() -> [String: String] {
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
 
@@ -15,5 +27,5 @@ import CryptoKit
             "privateKey": privateKeyBase64,
             "publicKey": publicKeyBase64
         ]
-    }
+    }*/
 }
