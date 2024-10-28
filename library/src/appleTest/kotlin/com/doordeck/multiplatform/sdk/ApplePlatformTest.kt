@@ -10,6 +10,7 @@ import kotlin.test.assertTrue
 import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
 import kotlin.test.assertNotNull
 import com.doordeck.multiplatform.sdk.util.toByteArray
+import platform.Foundation.NSData
 
 class IosPlatformTest {
     @Test
@@ -32,7 +33,7 @@ class IosPlatformTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        val pair = KCrypto.generateKeyPair().toByteArray()
+        val pair = (KCrypto.generateKeyPair() as NSData).toByteArray()
         assertNotNull(pair)
     }
 }
