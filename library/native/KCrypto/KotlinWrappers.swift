@@ -4,7 +4,7 @@ import CryptoKit
 @objc public class KCrypto : NSObject {
 
     // Generate Ed25519 Key Pair
-    @objc public func generateEd25519KeyPair() -> [String: String] {
+    @objc(generateEd25519KeyPair:) public class func generateEd25519KeyPair() -> [String: String] {
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
 
