@@ -38,7 +38,7 @@ class IosPlatformTest {
         val publicKeyData = keyPair["publicKey"] as NSData
 
         assertNotNull(keyPair)
-        assertNotNull(privateKeyData)
-        assertNotNull(publicKeyData)
+        assertNotNull(privateKeyData.toByteArray())
+        assertNotNull(publicKeyData.toByteArray())
     }
 }
