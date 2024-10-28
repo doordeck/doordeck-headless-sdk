@@ -33,7 +33,12 @@ class IosPlatformTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        val pair = (KCrypto.generateKeyPair() as NSData).toByteArray()
-        assertNotNull(pair)
+        val keyPair = KCrypto.generateKeyPair()
+        val privateKeyData = keyPair["privateKey"] as NSData
+        val publicKeyData = keyPair["publicKey"] as NSData
+
+        assertNotNull(keyPair)
+        assertNotNull(privateKeyData)
+        assertNotNull(publicKeyData)
     }
 }
