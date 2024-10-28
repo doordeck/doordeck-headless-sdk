@@ -10,7 +10,7 @@ import CryptoKit
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
 
-                let privateKeyBase64 = privateKey.rawRepresentation.base64EncodedString()
+        let privateKeyBase64 = privateKey.rawRepresentation.base64EncodedString()
         let publicKeyBase64 = publicKey.rawRepresentation.base64EncodedString()
 
         return [

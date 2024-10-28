@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.swift.klib)
     `maven-publish`
 }
 
@@ -31,6 +32,14 @@ kotlin {
         it.binaries.framework {
             baseName = "DoordeckSDK"
             xcf.add(this)
+        }
+
+        it.compilations {
+            val main by getting {
+                cinterops {
+                    create("KCrypto")
+                }
+            }
         }
     }
 
@@ -221,3 +230,9 @@ android {
     }
 }
 
+swiftklib {
+    create("KCrypto") {
+        path = file("native/KCrypto")
+        packageName("com.ttypic.objclibs.kcrypto")
+    }
+}
