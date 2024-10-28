@@ -233,7 +233,6 @@ android {
 swiftklib {
     create("KCrypto") {
         path = file("native/KCrypto")
-        //packageName("com.ttypic.objclibs.kcrypto")
         packageName("com.doordeck.multiplatform.sdk.kcrypto")
     }
 }
