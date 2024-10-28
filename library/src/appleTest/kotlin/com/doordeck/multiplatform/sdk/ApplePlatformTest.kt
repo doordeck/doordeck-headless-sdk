@@ -30,6 +30,6 @@ class IosPlatformTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        println(KCrypto.generateKeyPair())
+        println(KCrypto.generateEd25519KeyPair())
     }
 }
