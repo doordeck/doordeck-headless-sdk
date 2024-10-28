@@ -1,9 +1,7 @@
-package com.doordeck.multiplatform.sdk.crypto
-
 import Foundation
 import CryptoKit
 
-@objc public class CryptoHelper: NSObject {
+@objc public class KCrypto : NSObject {
 
     // Generate Ed25519 Key Pair
     @objc public func generateEd25519KeyPair() -> [String: String] {
