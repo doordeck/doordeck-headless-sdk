@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import com.doordeck.multiplatform.sdk.objclibs.kcrypto.KCrypto
 
 class IosPlatformTest {
     @Test
@@ -25,5 +26,10 @@ class IosPlatformTest {
 
         // When
         assertEquals(platform, PlatformType.APPLE)
+    }
+
+    @Test
+    fun shouldGenerateCryptoKeyPair() = runTest {
+        println(KCrypto.generateKeyPair())
     }
 }
