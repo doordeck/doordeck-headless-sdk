@@ -16,7 +16,7 @@ import CryptoKit
         ]
     }
 
-    @objc public class func signWithPrivateKey(message: String, withPrivateKey privateKeyData: Data) -> Data? {
+    @objc(signWithPrivateKey:) public class func signWithPrivateKey(message: String, withPrivateKey privateKeyData: Data) -> Data? {
         do {
             // Convert the data into a private key object
             let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: privateKeyData)
