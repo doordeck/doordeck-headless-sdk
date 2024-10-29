@@ -7,12 +7,12 @@ import CryptoKit
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
 
-        let privateKey = privateKey.rawRepresentation
-        let publicKey = publicKey.rawRepresentation
+        let privateKeyRaw = privateKey.rawRepresentation
+        let publicKeyRaw = publicKey.rawRepresentation
 
         return [
-            "privateKey": privateKey,
-            "publicKey": publicKey
+            "privateKey": privateKeyRaw,
+            "publicKey": publicKeyRaw
         ]
     }
 
