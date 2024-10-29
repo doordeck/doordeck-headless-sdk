@@ -7,25 +7,26 @@ import CryptoKit
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
 
-        let privateKeyBase64 = privateKey.rawRepresentation
-        let publicKeyBase64 = publicKey.rawRepresentation
+        let privateKey = privateKey.rawRepresentation
+        let publicKey = publicKey.rawRepresentation
 
         return [
-            "privateKey": privateKeyBase64,
-            "publicKey": publicKeyBase64
+            "privateKey": privateKey,
+            "publicKey": publicKey
         ]
     }
 
-    /*@objc public class func generateKeyPair() -> [String: String] {
-        let privateKey = Curve25519.Signing.PrivateKey()
-        let publicKey = privateKey.publicKey
-
-        let privateKeyBase64 = privateKey.rawRepresentation.base64EncodedString()
-        let publicKeyBase64 = publicKey.rawRepresentation.base64EncodedString()
-
-        return [
-            "privateKey": privateKeyBase64,
-            "publicKey": publicKeyBase64
-        ]
-    }*/
+    @objc public class func signWithPrivateKey(message: String, withPrivateKey privateKeyData: Data) -> Data? {
+        do {
+            // Convert the data into a private key object
+            let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: privateKeyData)
+            // Convert the message to Data
+            let messageData = Data(message.utf8)
+            // Sign the message
+            let signature = try privateKey.signature(for: messageData)
+            return signature
+        } catch {
+           return nil
+        }
+    }
 }
