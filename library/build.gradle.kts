@@ -125,6 +125,7 @@ kotlin {
                 optIn("kotlin.uuid.ExperimentalUuidApi")
                 optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                optIn("kotlinx.cinterop.BetaInteropApi")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }
