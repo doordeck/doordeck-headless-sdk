@@ -26,7 +26,7 @@ actual object CryptoManager {
     }
 
     internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
-        KCrypto.signWithPrivateKey(content, privateKey.toNSData())?.toByteArray()
+        return KCrypto.signWithPrivateKey(content, privateKey.toNSData())?.toByteArray()
             ?: error("Signature is null")
     }
 }
