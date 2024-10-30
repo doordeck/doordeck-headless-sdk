@@ -4,10 +4,10 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
 import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
-import com.doordeck.multiplatform.sdk.util.toByteArray
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toByteArray
 import platform.Foundation.NSData
 
-class CryptoServiceTest {
+class CryptoManagerTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
