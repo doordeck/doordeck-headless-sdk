@@ -33,37 +33,31 @@ class AccountResourceImplTest {
         account.logoutAsync().await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
         account.registerEphemeralKey(byteArrayOf())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyAsync() = runTest {
         account.registerEphemeralKeyAsync(byteArrayOf()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationAsync() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthenticationAsync(byteArrayOf()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
         account.verifyEphemeralKeyRegistration("", byteArrayOf())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldVerifyEphemeralKeyRegistrationAsync() = runTest {
         account.verifyEphemeralKeyRegistrationAsync("", byteArrayOf()).await()

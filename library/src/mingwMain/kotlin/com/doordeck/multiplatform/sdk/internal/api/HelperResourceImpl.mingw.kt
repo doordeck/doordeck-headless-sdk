@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.model.UploadPlatformLogoData
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking

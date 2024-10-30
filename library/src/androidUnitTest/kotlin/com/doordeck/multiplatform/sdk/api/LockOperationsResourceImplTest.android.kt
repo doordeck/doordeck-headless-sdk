@@ -215,43 +215,36 @@ class LockOperationsResourceImplTest {
         lockOperations.getUserPublicKeyByIdentityAsync("").await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockWithContext() = runTest {
         lockOperations.unlockWithContext(DEFAULT_LOCK_ID)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockWithContextAsync() = runTest {
         lockOperations.unlockWithContextAsync(DEFAULT_LOCK_ID).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlock() = runTest {
         lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID)))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockAsync() = runTest {
         lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID))).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockWithContext() = runTest {
         lockOperations.shareLockWithContext(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockWithContextAsync() = runTest {
         lockOperations.shareLockWithContextAsync(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf())).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLock() = runTest {
         lockOperations.shareLock(
@@ -261,7 +254,6 @@ class LockOperationsResourceImplTest {
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockAsync() = runTest {
         lockOperations.shareLockAsync(
@@ -271,19 +263,16 @@ class LockOperationsResourceImplTest {
             )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockWithContext() = runTest {
         lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockWithContextAsync() = runTest {
         lockOperations.revokeAccessToLockWithContextAsync(DEFAULT_LOCK_ID, emptyList()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLock() = runTest {
         lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
@@ -292,7 +281,6 @@ class LockOperationsResourceImplTest {
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockAsync() = runTest {
         lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
@@ -301,19 +289,16 @@ class LockOperationsResourceImplTest {
         )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
         lockOperations.updateSecureSettingUnlockDurationWithContext(DEFAULT_LOCK_ID, 0)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContextAsync() = runTest {
         lockOperations.updateSecureSettingUnlockDurationWithContextAsync(DEFAULT_LOCK_ID, 0).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
@@ -322,7 +307,6 @@ class LockOperationsResourceImplTest {
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
         lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
@@ -331,19 +315,16 @@ class LockOperationsResourceImplTest {
         )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenWithContext() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenWithContext(DEFAULT_LOCK_ID, null)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenWithContextAsync() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenWithContextAsync(DEFAULT_LOCK_ID, null).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
         lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
@@ -352,7 +333,6 @@ class LockOperationsResourceImplTest {
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenAsync() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(

@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.PlatformResource
 import com.doordeck.multiplatform.sdk.api.SitesResource
 import com.doordeck.multiplatform.sdk.api.TilesResource
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import kotlin.js.JsExport
 
 @JsExport
@@ -32,4 +33,6 @@ interface Doordeck {
     fun fusion(): FusionResource
     @JsExport.Ignore
     fun helper(): HelperResource
+    @JsExport.Ignore
+    fun crypto(): CryptoManager
 }

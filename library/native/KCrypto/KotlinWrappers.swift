@@ -6,13 +6,9 @@ import CryptoKit
     @objc public class func generateKeyPair() -> [String: Data] {
         let privateKey = Curve25519.Signing.PrivateKey()
         let publicKey = privateKey.publicKey
-
-        let privateKeyRaw = privateKey.rawRepresentation
-        let publicKeyRaw = publicKey.rawRepresentation
-
         return [
-            "privateKey": privateKeyRaw,
-            "publicKey": publicKeyRaw
+            "privateKey": privateKey.rawRepresentation,
+            "publicKey": publicKey.rawRepresentation
         ]
     }
 

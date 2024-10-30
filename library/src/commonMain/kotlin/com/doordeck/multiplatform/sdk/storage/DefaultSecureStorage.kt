@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.storage
 
-import com.doordeck.multiplatform.sdk.util.Crypto.certificateChainToString
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.Crypto.stringToCertificateChain
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.russhwolf.settings.Settings
 
 internal class DefaultSecureStorage(private val settings: Settings) : SecureStorage {

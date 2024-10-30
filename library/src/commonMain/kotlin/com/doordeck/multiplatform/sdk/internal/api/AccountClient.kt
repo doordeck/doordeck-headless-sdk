@@ -9,9 +9,9 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
@@ -79,7 +79,7 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     suspend fun verifyEphemeralKeyRegistrationRequest(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
-        val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
+        val codeSignature = CryptoManager.signWithPrivateKey(code, privateKey).encodeByteArrayToBase64()
         return httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))

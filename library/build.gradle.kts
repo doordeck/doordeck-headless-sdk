@@ -137,7 +137,6 @@ kotlin {
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
-                implementation(libs.libsodium.bindings)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin)
                 implementation(libs.multiplatform.settings)
@@ -175,12 +174,14 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
+                implementation(libs.libsodium.bindings.js)
             }
         }
 
         val mingwMain by getting {
             dependencies {
                 implementation(libs.ktor.client.winhttp)
+                implementation(libs.libsodium.bindings.mingwx64)
             }
         }
     }
