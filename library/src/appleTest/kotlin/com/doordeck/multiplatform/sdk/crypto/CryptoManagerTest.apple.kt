@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
 import platform.Foundation.NSData
 
