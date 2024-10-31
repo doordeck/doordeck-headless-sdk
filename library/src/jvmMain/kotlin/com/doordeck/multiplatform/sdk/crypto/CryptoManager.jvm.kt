@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import com.doordeck.multiplatform.sdk.util.Utils.wrapEd25519KeyToPkcs8
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.Signature
@@ -23,10 +24,15 @@ actual object CryptoManager {
     }
 
     internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
-        val key = KeyFactory.getInstance(ALGORITHM)
-            .generatePrivate(PKCS8EncodedKeySpec(privateKey))
+        val key = if (privateKey.size == 64) {
+            wrapEd25519KeyToPkcs8(privateKey)
+        } else {
+            privateKey
+        }
+        val pkcs8Key = KeyFactory.getInstance(ALGORITHM)
+            .generatePrivate(PKCS8EncodedKeySpec(key))
         return Signature.getInstance(ALGORITHM).apply {
-            initSign(key)
+            initSign(pkcs8Key)
             update(content.toByteArray())
         }.sign()
     }
