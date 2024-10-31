@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
-import com.doordeck.multiplatform.sdk.util.Utils.wrapEd25519KeyToPkcs8
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.allocArrayOf
 import kotlinx.cinterop.memScoped
@@ -27,12 +26,7 @@ actual object CryptoManager {
     }
 
     internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
-        val key = if (privateKey.size == 64) {
-            wrapEd25519KeyToPkcs8(privateKey)
-        } else {
-            privateKey
-        }
-        return KCrypto.signWithPrivateKey(content, key.toNSData())?.toByteArray()
+        return KCrypto.signWithPrivateKey(content, privateKey.toNSData())?.toByteArray()
             ?: error("Signature is null")
     }
 }
