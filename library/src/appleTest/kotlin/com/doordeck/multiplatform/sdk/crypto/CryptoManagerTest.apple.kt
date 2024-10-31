@@ -29,4 +29,10 @@ class CryptoManagerTest {
         val signed = KCrypto.signWithPrivateKey(message, privateKeyData)
         assertNotNull(signed)
     }
+
+    @Test
+    fun x() = runTest {
+        val keyPair = KCrypto.generateKeyPair()
+        println("key example: ${keyPair["privateKey"].encodeByteArrayToBase64()}")
+    }
 }

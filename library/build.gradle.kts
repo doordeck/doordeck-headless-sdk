@@ -191,7 +191,7 @@ kotlin {
 // Display the test log events at all the platforms
 tasks.withType<AbstractTestTask>().configureEach {
     testLogging {
-        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
     }
 }
 
