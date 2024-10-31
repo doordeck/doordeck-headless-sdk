@@ -259,7 +259,7 @@ class LockOperationsResourceImplTest {
     fun shouldShareLockAsync() = runTest {
         lockOperations.shareLockAsync(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
             )).await()
     }
