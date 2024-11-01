@@ -33,7 +33,7 @@ class CryptoManagerTest {
 
     @Test
     fun x() = runTest {
-        val keyPair = KCrypto.generateKeyPair()
-        println("key example: ${keyPair["privateKey"].encodeByteArrayToBase64()}")
+        val keyPair = CryptoManager.generateKeyPair()
+        println("key example: ${keyPair.private.encodeByteArrayToBase64()}")
     }
 }
