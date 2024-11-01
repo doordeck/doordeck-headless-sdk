@@ -27,6 +27,11 @@ actual object CryptoManager {
     }
 
     @JsExport.Ignore
+    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
+        return this
+    }
+
+    @JsExport.Ignore
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return Signature.detached(
             message = toByteArray().toUByteArray(),
