@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.util
 
-import com.doordeck.multiplatform.sdk.SdkException
 import io.ktor.util.decodeBase64Bytes
 import io.ktor.util.encodeBase64
 import kotlin.js.JsExport
@@ -16,9 +15,9 @@ object Utils {
     fun String.stringToCertificateChain(): List<String> = split("|")
 }
 
-// TODO
 internal fun wrapEd25519KeyToPkcs8(privateKey: ByteArray): ByteArray {
-    if (privateKey.size == 64) {
+    // Libsodium & CryptoKit
+    if (privateKey.size == 64 || privateKey.size == 32) {
         val seed = privateKey.sliceArray(0 until 32)  // Extract the first 32 bytes as the seed
         return byteArrayOf(
             0x30, 0x2e,                     // ASN.1 SEQUENCE, length 46

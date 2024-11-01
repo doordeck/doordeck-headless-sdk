@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.assertDoesNotThrow
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -11,7 +12,26 @@ class CryptoManagerTest {
     private val CRYPTO_KIT_PRIVATE_KEY = "UDJNQXe8JXbt5tkLjCM8R9U9cSHh8builPRX4JwCtqs="
 
     @Test
-    fun shouldTestSignWithPrivateKey() = runTest {
+    fun shouldGenerateCryptoKeyPair() = runTest {
+        assertDoesNotThrow {
+            CryptoManager.generateKeyPair()
+        }
+    }
+
+    @Test
+    fun shouldSignWithPrivateKey() = runTest {
+        // Given
+        val content = "content"
+        val keyPair = CryptoManager.generateKeyPair()
+
+        // Then
+        assertDoesNotThrow {
+            CryptoManager.signWithPrivateKey(content, keyPair.private)
+        }
+    }
+
+    @Test
+    fun shouldSignWithMultiplePrivateKeys() = runTest {
         val content = "content"
         CryptoManager.signWithPrivateKey(content, JAVA_PRIVATE_KEY.decodeBase64ToByteArray())
         CryptoManager.signWithPrivateKey(content, LIBSODIUM_PRIVATE_KEY.decodeBase64ToByteArray())
