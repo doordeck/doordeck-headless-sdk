@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
 import kotlinx.cinterop.addressOf
@@ -34,7 +35,7 @@ actual object CryptoManager {
 
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return KCrypto.signWithPrivateKey(this, privateKey.toPlatformPrivateKey().toNSData())?.toByteArray()
-            ?: error("Signature is null")
+            ?: throw SdkException("Signature is null")
     }
 }
 
