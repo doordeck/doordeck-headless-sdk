@@ -30,7 +30,7 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
@@ -430,7 +430,7 @@ internal open class LockOperationsClient(
         )
         val headerB64 = operationHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
-        val signatureB64 = CryptoManager.signWithPrivateKey("$headerB64.$bodyB64", baseOperation.userPrivateKey).encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
 
         // Launch the calls to the direct access endpoints

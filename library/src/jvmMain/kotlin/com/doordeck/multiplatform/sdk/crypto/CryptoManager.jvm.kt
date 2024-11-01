@@ -23,11 +23,11 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
+    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return Signature.getInstance(ALGORITHM).apply {
             initSign(KeyFactory.getInstance(ALGORITHM)
                 .generatePrivate(PKCS8EncodedKeySpec(wrapEd25519KeyToPkcs8(privateKey))))
-            update(content.toByteArray())
+            update(toByteArray())
         }.sign()
     }
 }

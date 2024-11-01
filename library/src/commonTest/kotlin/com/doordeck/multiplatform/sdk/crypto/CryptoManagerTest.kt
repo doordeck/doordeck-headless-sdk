@@ -26,15 +26,15 @@ class CryptoManagerTest {
 
         // Then
         assertDoesNotThrow {
-            CryptoManager.signWithPrivateKey(content, keyPair.private)
+            content.signWithPrivateKey(keyPair.private)
         }
     }
 
     @Test
     fun shouldSignWithMultiplePrivateKeys() = runTest {
         val content = "content"
-        CryptoManager.signWithPrivateKey(content, JAVA_PRIVATE_KEY.decodeBase64ToByteArray())
-        CryptoManager.signWithPrivateKey(content, LIBSODIUM_PRIVATE_KEY.decodeBase64ToByteArray())
-        CryptoManager.signWithPrivateKey(content, CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray())
+        content.signWithPrivateKey(JAVA_PRIVATE_KEY.decodeBase64ToByteArray())
+        content.signWithPrivateKey(LIBSODIUM_PRIVATE_KEY.decodeBase64ToByteArray())
+        content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 }

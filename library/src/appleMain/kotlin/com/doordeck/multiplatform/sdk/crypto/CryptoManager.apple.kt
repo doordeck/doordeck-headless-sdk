@@ -25,8 +25,8 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
-        return KCrypto.signWithPrivateKey(content, privateKey.toNSData())?.toByteArray()
+    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
+        return KCrypto.signWithPrivateKey(this, privateKey.toNSData())?.toByteArray()
             ?: error("Signature is null")
     }
 }

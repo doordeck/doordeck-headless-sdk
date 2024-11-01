@@ -31,9 +31,9 @@ actual object CryptoManager {
         ).toJson()
     }
 
-    internal actual fun signWithPrivateKey(content: String, privateKey: ByteArray): ByteArray {
+    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return Signature.detached(
-            message = content.toByteArray().toUByteArray(),
+            message = toByteArray().toUByteArray(),
             secretKey = privateKey.toUByteArray()
         ).toByteArray()
     }
