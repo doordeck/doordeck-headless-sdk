@@ -35,7 +35,7 @@ actual object CryptoManager {
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return Signature.detached(
             message = toByteArray().toUByteArray(),
-            secretKey = privateKey.toUByteArray()
+            secretKey = privateKey.toPlatformPrivateKey().toUByteArray()
         ).toByteArray()
     }
 }

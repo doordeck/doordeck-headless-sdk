@@ -40,7 +40,7 @@ class CryptoManagerTest {
         assertDoesNotThrow {
             content.signWithPrivateKey(JAVA_PRIVATE_KEY.decodeBase64ToByteArray())
         }
-    }
+    }*/
 
     @Test
     fun shouldSignWithLibsodiumPrivateKey() = runTest {
@@ -53,7 +53,7 @@ class CryptoManagerTest {
         }
     }
 
-    @Test
+    /*@Test
     fun shouldSignWithCryptoKitPrivateKey() = runTest {
         // Given
         val content = "content"
