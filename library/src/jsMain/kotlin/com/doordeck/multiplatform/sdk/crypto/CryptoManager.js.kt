@@ -30,7 +30,7 @@ actual object CryptoManager {
     @JsExport.Ignore
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
         if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
-            return sliceArray(size - JAVA_PKCS8_PRIVATE_KEY_SIZE until size)
+            return sliceArray(size - 32 until size)
         }
         return this
     }
