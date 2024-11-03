@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.internal
 
-import com.benasher44.uuid.uuid4
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
@@ -9,17 +8,18 @@ import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertNull
+import kotlin.uuid.Uuid
 
 class ContextManagerTest {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
-        val cloudAuthToken = uuid4().toString()
-        val fusionAuthToken = uuid4().toString()
-        val userId = uuid4().toString()
-        val certificateChain = (1..3).map { uuid4().toString() }
-        val privateKey = uuid4().toString().encodeToByteArray()
+        val cloudAuthToken = Uuid.random().toString()
+        val fusionAuthToken = Uuid.random().toString()
+        val userId = Uuid.random().toString()
+        val certificateChain = (1..3).map { Uuid.random().toString() }
+        val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
@@ -43,11 +43,11 @@ class ContextManagerTest {
     @Test
     fun shouldClearContext() = runTest {
         // Given
-        val cloudAuthToken = uuid4().toString()
-        val fusionAuthToken = uuid4().toString()
-        val userId = uuid4().toString()
-        val certificateChain = (1..3).map { uuid4().toString() }
-        val privateKey = uuid4().toString().encodeToByteArray()
+        val cloudAuthToken = Uuid.random().toString()
+        val fusionAuthToken = Uuid.random().toString()
+        val userId = Uuid.random().toString()
+        val certificateChain = (1..3).map { Uuid.random().toString() }
+        val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
