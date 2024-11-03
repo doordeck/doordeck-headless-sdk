@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -32,13 +33,18 @@ actual object CryptoManager {
     }
 
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
+        if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
+            return sliceArray(size - JAVA_PKCS8_PRIVATE_KEY_SIZE until size)
+        }
         return this
     }
 
-    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
-        return Signature.detached(
+    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
+        Signature.detached(
             message = toByteArray().toUByteArray(),
             secretKey = privateKey.toPlatformPrivateKey().toUByteArray()
         ).toByteArray()
+    } catch (exception: Exception) {
+        throw SdkException("Failed to sign with private key", exception)
     }
 }

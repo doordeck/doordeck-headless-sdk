@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
@@ -23,8 +24,7 @@ actual object CryptoManager {
     }
 
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
-        // Libsodium
-        if (size == 64) {
+        if (size == SODIUM_PRIVATE_KEY_SIZE || size == CRYPTO_KIT_PRIVATE_KEY_SIZE) {
             val seed = sliceArray(0 until 32)  // Extract the first 32 bytes as the seed
             return byteArrayOf(
                 0x30, 0x2e,                     // ASN.1 SEQUENCE, length 46
@@ -38,11 +38,13 @@ actual object CryptoManager {
         return this
     }
 
-    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
-        return Signature.getInstance(ALGORITHM).apply {
+    internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
+        Signature.getInstance(ALGORITHM).apply {
             initSign(KeyFactory.getInstance(ALGORITHM)
                 .generatePrivate(PKCS8EncodedKeySpec(privateKey.toPlatformPrivateKey())))
             update(toByteArray())
         }.sign()
+    } catch (exception: Exception) {
+        throw SdkException("Failed to sign with private key", exception)
     }
 }

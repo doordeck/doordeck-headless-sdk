@@ -27,15 +27,15 @@ actual object CryptoManager {
     }
 
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
-        if (this.size == 64) {
-            return sliceArray(0 until 32)  // Extract the first 32 bytes as the seed
+        if (this.size == SODIUM_PRIVATE_KEY_SIZE) {
+            return sliceArray(0 until 32)
         }
         return this
     }
 
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return KCrypto.signWithPrivateKey(this, privateKey.toPlatformPrivateKey().toNSData())?.toByteArray()
-            ?: throw SdkException("Signature is null")
+            ?: throw SdkException("Failed to sign with private key")
     }
 }
 
