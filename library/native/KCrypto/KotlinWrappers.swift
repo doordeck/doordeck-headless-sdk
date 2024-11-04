@@ -25,4 +25,13 @@ import CryptoKit
            return nil
         }
     }
+
+    @obj(seedKeypair:) public class func seedKeypair(withPrivateKey privateKeyData: Data) -> Data? {
+        do {
+            let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: privateKeyData)
+            return privateKey.rawRepresentation
+        } catch {
+            return nil
+        }
+    }
 }

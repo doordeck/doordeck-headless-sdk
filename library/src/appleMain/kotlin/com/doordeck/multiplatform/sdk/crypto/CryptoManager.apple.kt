@@ -28,9 +28,9 @@ actual object CryptoManager {
 
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
         if (this.size == SODIUM_PRIVATE_KEY_SIZE) {
-            return sliceArray(0 until 32)
+            return (KCrypto.seedKeypair(sliceArray(0 until 32).toNSData()) as NSData).toByteArray()
         } else if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
-            return sliceArray(size - 32 until size)
+            return (KCrypto.seedKeypair(sliceArray(size - 32 until size)) as NSData).toByteArray()
         }
         return this
     }
