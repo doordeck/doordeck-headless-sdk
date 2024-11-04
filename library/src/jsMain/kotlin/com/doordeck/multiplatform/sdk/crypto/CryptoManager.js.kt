@@ -30,10 +30,11 @@ actual object CryptoManager {
     @JsExport.Ignore
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
         if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
-            return Signature.seedKeypair(sliceArray(size - 32 until size).toUByteArray()).secretKey.toByteArray()
+            val key = sliceArray(size - PRIVATE_KEY_SIZE until size)
+            return Signature.seedKeypair(key.toUByteArray()).secretKey.toByteArray()
         }
         if (size == CRYPTO_KIT_PRIVATE_KEY_SIZE) {
-            return Signature.seedKeypair(sliceArray(0 until 32).toUByteArray()).secretKey.toByteArray()
+            return Signature.seedKeypair(toUByteArray()).secretKey.toByteArray()
         }
         return this
     }
