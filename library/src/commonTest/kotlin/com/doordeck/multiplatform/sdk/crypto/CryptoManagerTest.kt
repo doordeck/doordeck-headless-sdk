@@ -43,6 +43,7 @@ class CryptoManagerTest {
         val result = content.signWithPrivateKey(JAVA_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
 
         // Then
+        println("shouldSignWithJavaPrivateKey: result: $result")
         assertEquals(signed, result)
     }
 
@@ -56,6 +57,7 @@ class CryptoManagerTest {
         val result = content.signWithPrivateKey(LIBSODIUM_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
 
         // Then
+        println("shouldSignWithLibsodiumPrivateKey: result: $result")
         assertEquals(signed, result)
     }
 
@@ -69,6 +71,7 @@ class CryptoManagerTest {
         val result = content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
 
         // Then
+        println("shouldSignWithCryptoKitPrivateKey: result: $result")
         assertEquals(signed, result)
     }
 }
