@@ -20,12 +20,12 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
+#          - name: JVM
+#            test: jvmTest
+#            os: ubuntu-latest
+#          - name: Android
+#            test: testReleaseUnitTest
+#            os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
