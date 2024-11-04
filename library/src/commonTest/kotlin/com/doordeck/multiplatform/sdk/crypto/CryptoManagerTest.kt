@@ -59,14 +59,16 @@ class CryptoManagerTest {
         assertEquals(signed, result)
     }
 
-    /*@Test
+    @Test
     fun shouldSignWithCryptoKitPrivateKey() = runTest {
         // Given
-        val content = "content"
+        val signed = "4SM7jgRkxPodsnLYjPZJUXmTA2ZscDUAeI5wKOZpJ5dKLVzCO8vR35TQaq2lY8KBPjr1kHDsqpYzTcNbDIPPAA=="
+        val content = "hello"
+
+        // When
+        val result = content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
 
         // Then
-        assertDoesNotThrow {
-            content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray())
-        }
-    }*/
+        assertEquals(signed, result)
+    }
 }

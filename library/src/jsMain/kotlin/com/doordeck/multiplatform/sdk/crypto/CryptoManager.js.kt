@@ -32,6 +32,9 @@ actual object CryptoManager {
         if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
             return Signature.seedKeypair(sliceArray(size - 32 until size).toUByteArray()).secretKey.toByteArray()
         }
+        if (size == CRYPTO_KIT_PRIVATE_KEY_SIZE) {
+            return Signature.seedKeypair(sliceArray(0 until 32).toUByteArray()).secretKey.toByteArray()
+        }
         return this
     }
 
