@@ -212,6 +212,10 @@ tasks.named("publish").configure {
     finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
+tasks.register("publishTest").configure {
+    finalizedBy( "podSpecRelease")
+}
+
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
     doLast {
         // Specify the directory where the package is generated
