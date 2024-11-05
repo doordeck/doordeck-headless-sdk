@@ -16,6 +16,7 @@ public abstract interface class com/doordeck/multiplatform/sdk/Doordeck {
 	public abstract fun account ()Lcom/doordeck/multiplatform/sdk/api/AccountResource;
 	public abstract fun accountless ()Lcom/doordeck/multiplatform/sdk/api/AccountlessResource;
 	public abstract fun contextManager ()Lcom/doordeck/multiplatform/sdk/api/ContextManager;
+	public abstract fun crypto ()Lcom/doordeck/multiplatform/sdk/crypto/CryptoManager;
 	public abstract fun fusion ()Lcom/doordeck/multiplatform/sdk/api/FusionResource;
 	public abstract fun helper ()Lcom/doordeck/multiplatform/sdk/api/HelperResource;
 	public abstract fun lockOperations ()Lcom/doordeck/multiplatform/sdk/api/LockOperationsResource;
@@ -413,6 +414,33 @@ public final class com/doordeck/multiplatform/sdk/api/model/AuditEvent$Companion
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/doordeck/multiplatform/sdk/api/model/CapabilityStatus : java/lang/Enum {
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/model/CapabilityStatus$Companion;
+	public static final field SUPPORTED Lcom/doordeck/multiplatform/sdk/api/model/CapabilityStatus;
+	public static final field UNSUPPORTED Lcom/doordeck/multiplatform/sdk/api/model/CapabilityStatus;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/api/model/CapabilityStatus;
+	public static fun values ()[Lcom/doordeck/multiplatform/sdk/api/model/CapabilityStatus;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/CapabilityStatus$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/CapabilityType : java/lang/Enum {
+	public static final field BATCH_SHARING_25 Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType;
+	public static final field CONFIGURABLE_UNLOCK_DURATION Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType;
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType$Companion;
+	public static final field OPEN_HOURS Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType;
+	public static fun values ()[Lcom/doordeck/multiplatform/sdk/api/model/CapabilityType;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/CapabilityType$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public final class com/doordeck/multiplatform/sdk/api/model/Context {
 	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/model/Context;
 }
@@ -445,6 +473,38 @@ public synthetic class com/doordeck/multiplatform/sdk/api/model/Context$Operatio
 
 public final class com/doordeck/multiplatform/sdk/api/model/Context$OperationContextData$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/Crypto {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/model/Crypto;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair {
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun getPrivate ()Ljava/lang/String;
+	public final fun getPublic ()Ljava/lang/String;
+}
+
+public synthetic class com/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/Crypto$EncodedKeyPair$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/model/Crypto$KeyPair {
+	public fun <init> ([B[B)V
+	public final fun getPrivate ()[B
+	public final fun getPublic ()[B
 }
 
 public final class com/doordeck/multiplatform/sdk/api/model/Fusion {
@@ -2427,6 +2487,82 @@ public final class com/doordeck/multiplatform/sdk/api/responses/ApplicationRespo
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse {
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getIp ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/String;
+}
+
+public synthetic class com/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditResponse {
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/AuditResponse$Companion;
+	public fun <init> (Ljava/lang/String;DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse;Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse;Ljava/lang/String;Z)V
+	public synthetic fun <init> (Ljava/lang/String;DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse;Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse;Ljava/lang/String;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDeviceId ()Ljava/lang/String;
+	public final fun getIssuer ()Lcom/doordeck/multiplatform/sdk/api/responses/AuditIssuerResponse;
+	public final fun getRejected ()Z
+	public final fun getRejectionReason ()Ljava/lang/String;
+	public final fun getSubject ()Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse;
+	public final fun getTimestamp ()D
+	public final fun getType ()Lcom/doordeck/multiplatform/sdk/api/model/AuditEvent;
+}
+
+public synthetic class com/doordeck/multiplatform/sdk/api/responses/AuditResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/AuditResponse$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/AuditResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/AuditResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse {
+	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getEmail ()Ljava/lang/String;
+	public final fun getUserId ()Ljava/lang/String;
+}
+
+public synthetic class com/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse$$serializer;
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/doordeck/multiplatform/sdk/api/responses/AuditSubjectResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
 public abstract interface class com/doordeck/multiplatform/sdk/api/responses/AuthKeyResponse {
 	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/AuthKeyResponse$Companion;
 	public abstract fun getAlg ()Ljava/lang/String;
@@ -2749,33 +2885,6 @@ public final class com/doordeck/multiplatform/sdk/api/responses/LocationRequirem
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class com/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse {
-	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse$Companion;
-	public fun <init> (DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public synthetic fun <init> (DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getDisplayName ()Ljava/lang/String;
-	public final fun getEmail ()Ljava/lang/String;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun getTimestamp ()D
-	public final fun getType ()Lcom/doordeck/multiplatform/sdk/api/model/AuditEvent;
-	public final fun getUser ()Ljava/lang/String;
-}
-
-public synthetic class com/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/LockAuditTrailResponse$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
 public final class com/doordeck/multiplatform/sdk/api/responses/LockResponse {
 	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/LockResponse$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/api/model/UserRole;Lcom/doordeck/multiplatform/sdk/api/responses/LockSettingsResponse;Lcom/doordeck/multiplatform/sdk/api/responses/LockStateResponse;ZLjava/lang/Double;)V
@@ -2809,8 +2918,9 @@ public final class com/doordeck/multiplatform/sdk/api/responses/LockResponse$Com
 
 public final class com/doordeck/multiplatform/sdk/api/responses/LockSettingsResponse {
 	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/LockSettingsResponse$Companion;
-	public fun <init> (DLjava/util/List;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/api/responses/UsageRequirementsResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UnlockBetweenSettingResponse;Ljava/util/List;ZLjava/util/List;)V
-	public synthetic fun <init> (DLjava/util/List;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/api/responses/UsageRequirementsResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UnlockBetweenSettingResponse;Ljava/util/List;ZLjava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (DLjava/util/List;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/api/responses/UsageRequirementsResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UnlockBetweenSettingResponse;Ljava/util/List;ZLjava/util/List;Ljava/util/Map;)V
+	public synthetic fun <init> (DLjava/util/List;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/api/responses/UsageRequirementsResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UnlockBetweenSettingResponse;Ljava/util/List;ZLjava/util/List;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCapabilities ()Ljava/util/Map;
 	public final fun getDefaultName ()Ljava/lang/String;
 	public final fun getDirectAccessEndpoints ()Ljava/util/List;
 	public final fun getHidden ()Z
@@ -3292,76 +3402,6 @@ public final class com/doordeck/multiplatform/sdk/api/responses/UsageRequirement
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse {
-	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse$Companion;
-	public fun <init> (Ljava/lang/String;)V
-	public final fun getUserId ()Ljava/lang/String;
-}
-
-public synthetic class com/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditResponse {
-	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditResponse$Companion;
-	public fun <init> (Ljava/lang/String;DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse;Z)V
-	public synthetic fun <init> (Ljava/lang/String;DLcom/doordeck/multiplatform/sdk/api/model/AuditEvent;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getDeviceId ()Ljava/lang/String;
-	public final fun getIssuer ()Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditIssuerResponse;
-	public final fun getRejected ()Z
-	public final fun getSubject ()Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse;
-	public final fun getTimestamp ()D
-	public final fun getType ()Lcom/doordeck/multiplatform/sdk/api/model/AuditEvent;
-}
-
-public synthetic class com/doordeck/multiplatform/sdk/api/responses/UserAuditResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditResponse$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditResponse;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditResponse;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditResponse$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse {
-	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun getEmail ()Ljava/lang/String;
-	public final fun getUserId ()Ljava/lang/String;
-}
-
-public synthetic class com/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/api/responses/UserAuditSubjectResponse$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
 public final class com/doordeck/multiplatform/sdk/api/responses/UserDetailsResponse {
 	public static final field Companion Lcom/doordeck/multiplatform/sdk/api/responses/UserDetailsResponse$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V
@@ -3464,6 +3504,12 @@ public final class com/doordeck/multiplatform/sdk/api/responses/UserPublicKeyRes
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/doordeck/multiplatform/sdk/crypto/CryptoManager {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/crypto/CryptoManager;
+	public final fun generateEncodedKeyPair ()Ljava/lang/String;
+	public final fun generateKeyPair ()Lcom/doordeck/multiplatform/sdk/api/model/Crypto$KeyPair;
+}
+
 public abstract interface class com/doordeck/multiplatform/sdk/storage/SecureStorage {
 	public abstract fun addCertificateChain (Ljava/util/List;)V
 	public abstract fun addCloudAuthToken (Ljava/lang/String;)V
@@ -3483,42 +3529,11 @@ public final class com/doordeck/multiplatform/sdk/storage/SecureStorage_jvmKt {
 	public static synthetic fun createSecureStorage$default (Lcom/doordeck/multiplatform/sdk/ApplicationContext;ILjava/lang/Object;)Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;
 }
 
-public final class com/doordeck/multiplatform/sdk/util/Crypto {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/util/Crypto;
+public final class com/doordeck/multiplatform/sdk/util/Utils {
+	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/util/Utils;
 	public final fun certificateChainToString (Ljava/util/List;)Ljava/lang/String;
 	public final fun decodeBase64ToByteArray (Ljava/lang/String;)[B
 	public final fun encodeByteArrayToBase64 ([B)Ljava/lang/String;
-	public final fun generateKeyPair ()Lcom/doordeck/multiplatform/sdk/util/Crypto$KeyPair;
-	public final fun generateKeyPairJson ()Ljava/lang/String;
-	public final fun signWithPrivateKey (Ljava/lang/String;[B)[B
 	public final fun stringToCertificateChain (Ljava/lang/String;)Ljava/util/List;
-}
-
-public final class com/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair {
-	public static final field Companion Lcom/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair$Companion;
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
-	public final fun getPrivate ()Ljava/lang/String;
-	public final fun getPublic ()Ljava/lang/String;
-}
-
-public synthetic class com/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/util/Crypto$EncodedKeyPair$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/doordeck/multiplatform/sdk/util/Crypto$KeyPair {
-	public fun <init> ([B[B)V
-	public final fun getPrivate ()[B
-	public final fun getPublic ()[B
 }
 
