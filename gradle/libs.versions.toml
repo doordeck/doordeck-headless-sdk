@@ -1,17 +1,18 @@
 [versions]
 agp = "8.2.0"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 multiplatform-settings = "1.2.0"
 nexus-publish = "2.0.0-rc-1"
 android-minSdk = "21"
 android-compileSdk = "34"
 ios-minSdk = "14"
-ktor-client = "3.0.0-beta-2"
+ktor-client = "3.0.1"
 libsodium = "0.9.2"
 security-crypto = "1.1.0-alpha06"
 kotlinx-datetime = "0.6.1"
-kotlin-coroutines-test = "1.9.0-RC.2"
-koin = "4.0.0-RC1"
+kotlin-coroutines-test = "1.9.0"
+koin = "4.0.0"
+swift-klib = "0.6.4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -37,7 +38,8 @@ ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor-client" }
 
 # Crypto
-libsodium-bindings = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings", version.ref = "libsodium" }
+libsodium-bindings-js = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings-js", version.ref = "libsodium" }
+libsodium-bindings-mingwx64 = { module = "com.ionspin.kotlin:multiplatform-crypto-libsodium-bindings-mingwx64", version.ref = "libsodium" }
 
 # Utils
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
@@ -48,3 +50,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+swift-klib = { id = "io.github.ttypic.swiftklib", version.ref = "swift-klib" }

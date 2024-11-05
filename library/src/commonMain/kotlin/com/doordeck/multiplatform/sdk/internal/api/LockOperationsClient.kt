@@ -30,9 +30,9 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.Crypto.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.Crypto.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient

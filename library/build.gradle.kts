@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.swift.klib)
     `maven-publish`
 }
 
@@ -31,6 +32,14 @@ kotlin {
         it.binaries.framework {
             baseName = "DoordeckSDK"
             xcf.add(this)
+        }
+
+        it.compilations {
+            val main by getting {
+                cinterops {
+                    create("KCrypto")
+                }
+            }
         }
     }
 
@@ -116,6 +125,7 @@ kotlin {
                 optIn("kotlin.uuid.ExperimentalUuidApi")
                 optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                optIn("kotlinx.cinterop.BetaInteropApi")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }
@@ -128,7 +138,6 @@ kotlin {
                 implementation(libs.ktor.serialization.kotlinx.json)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
-                implementation(libs.libsodium.bindings)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.koin)
                 implementation(libs.multiplatform.settings)
@@ -166,12 +175,14 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
+                implementation(libs.libsodium.bindings.js)
             }
         }
 
         val mingwMain by getting {
             dependencies {
                 implementation(libs.ktor.client.winhttp)
+                implementation(libs.libsodium.bindings.mingwx64)
             }
         }
     }
@@ -180,7 +191,7 @@ kotlin {
 // Display the test log events at all the platforms
 tasks.withType<AbstractTestTask>().configureEach {
     testLogging {
-        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_ERROR)
+        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
     }
 }
 
@@ -221,3 +232,9 @@ android {
     }
 }
 
+swiftklib {
+    create("KCrypto") {
+        path = file("native/KCrypto")
+        packageName("com.doordeck.multiplatform.sdk.kcrypto")
+    }
+}

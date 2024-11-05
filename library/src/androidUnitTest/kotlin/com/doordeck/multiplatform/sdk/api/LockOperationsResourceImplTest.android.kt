@@ -4,14 +4,15 @@ import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class LockOperationsResourceImplTest {
@@ -21,7 +22,7 @@ class LockOperationsResourceImplTest {
     private val lockOperations = LockOperationsResourceImpl(TEST_HTTP_CLIENT, contextManager, localUnlock)
 
     init {
-        contextManager.setOperationContext("", emptyList(), byteArrayOf())
+        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
@@ -215,148 +216,128 @@ class LockOperationsResourceImplTest {
         lockOperations.getUserPublicKeyByIdentityAsync("").await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockWithContext() = runTest {
         lockOperations.unlockWithContext(DEFAULT_LOCK_ID)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockWithContextAsync() = runTest {
         lockOperations.unlockWithContextAsync(DEFAULT_LOCK_ID).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlock() = runTest {
-        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID)))
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID)))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUnlockAsync() = runTest {
-        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID))).await()
+        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockWithContext() = runTest {
         lockOperations.shareLockWithContext(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockWithContextAsync() = runTest {
         lockOperations.shareLockWithContextAsync(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf())).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLock() = runTest {
         lockOperations.shareLock(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldShareLockAsync() = runTest {
         lockOperations.shareLockAsync(
             LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
             )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockWithContext() = runTest {
         lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockWithContextAsync() = runTest {
         lockOperations.revokeAccessToLockWithContextAsync(DEFAULT_LOCK_ID, emptyList()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLock() = runTest {
         lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             users = emptyList()
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRevokeAccessToLockAsync() = runTest {
         lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             users = emptyList()
         )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
         lockOperations.updateSecureSettingUnlockDurationWithContext(DEFAULT_LOCK_ID, 0)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationWithContextAsync() = runTest {
         lockOperations.updateSecureSettingUnlockDurationWithContextAsync(DEFAULT_LOCK_ID, 0).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
         lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenWithContext() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenWithContext(DEFAULT_LOCK_ID, null)
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenWithContextAsync() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenWithContextAsync(DEFAULT_LOCK_ID, null).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
         lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         ))
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenAsync() = runTest {
         lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), byteArrayOf(), DEFAULT_LOCK_ID),
+            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
     }

@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.api.PlatformResource
 import com.doordeck.multiplatform.sdk.api.SitesResource
 import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
 import io.ktor.client.HttpClient
@@ -53,6 +54,7 @@ internal class DoordeckImpl(
     private val platform: PlatformResource = com.doordeck.multiplatform.sdk.api.platform()
     private val fusion: FusionResource = com.doordeck.multiplatform.sdk.api.fusion()
     private val helper: HelperResource = com.doordeck.multiplatform.sdk.api.helper()
+    private val crypto: CryptoManager = CryptoManager
 
     override fun contextManager(): ContextManager = getKoin().get<ContextManagerImpl>()
     override fun accountless(): AccountlessResource = accountless
@@ -63,4 +65,5 @@ internal class DoordeckImpl(
     override fun platform(): PlatformResource = platform
     override fun fusion(): FusionResource = fusion
     override fun helper(): HelperResource = helper
+    override fun crypto(): CryptoManager = crypto
 }

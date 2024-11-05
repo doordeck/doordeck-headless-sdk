@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest

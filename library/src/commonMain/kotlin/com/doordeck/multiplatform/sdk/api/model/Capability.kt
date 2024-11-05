@@ -14,5 +14,6 @@ enum class CapabilityStatus {
 @Serializable
 enum class CapabilityType {
     CONFIGURABLE_UNLOCK_DURATION,
-    OPEN_HOURS
+    OPEN_HOURS,
+    BATCH_SHARING_25
 }

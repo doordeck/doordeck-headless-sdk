@@ -13,7 +13,7 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSeco
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient

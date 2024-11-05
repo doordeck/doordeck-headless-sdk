@@ -1,11 +1,12 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class AccountResourceImplTest {
@@ -33,40 +34,34 @@ class AccountResourceImplTest {
         account.logoutAsync().await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
         account.registerEphemeralKey(byteArrayOf())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyAsync() = runTest {
         account.registerEphemeralKeyAsync(byteArrayOf()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationAsync() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthenticationAsync(byteArrayOf()).await()
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        account.verifyEphemeralKeyRegistration("", byteArrayOf())
+        account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
-    @Ignore("Libsodium does not work with the android tests")
     @Test
     fun shouldVerifyEphemeralKeyRegistrationAsync() = runTest {
-        account.verifyEphemeralKeyRegistrationAsync("", byteArrayOf()).await()
+        account.verifyEphemeralKeyRegistrationAsync("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
     }
 
     @Test

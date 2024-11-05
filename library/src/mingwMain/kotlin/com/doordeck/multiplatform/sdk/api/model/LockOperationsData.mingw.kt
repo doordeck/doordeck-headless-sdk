@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.api.model
 import com.doordeck.multiplatform.sdk.api.model.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.api.model.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.api.model.LockOperations.UnlockBetween
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.serialization.Serializable
 
 @Serializable

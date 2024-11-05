@@ -1,14 +1,11 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.util.Crypto.decodeBase64ToByteArray
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,12 +14,6 @@ import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 internal class AccountClientTest : IntegrationTest() {
-
-    init {
-        if (getPlatform() != PlatformType.ANDROID) {
-            LibsodiumInitializer.initializeWithCallback {  }
-        }
-    }
 
     @Test
     fun shouldGetUserDetails() = runTest {
