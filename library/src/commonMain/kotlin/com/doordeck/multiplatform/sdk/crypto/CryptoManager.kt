@@ -2,11 +2,11 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 
-const val SODIUM_PRIVATE_KEY_SIZE = 64
-const val CRYPTO_KIT_PRIVATE_KEY_SIZE = 32
-const val JAVA_PKCS8_PRIVATE_KEY_SIZE = 48
-const val PRIVATE_KEY_SIZE = 32
-val KEY_ASN1_HEADER = byteArrayOf(
+internal const val SODIUM_PRIVATE_KEY_SIZE = 64
+internal const val CRYPTO_KIT_PRIVATE_KEY_SIZE = 32
+internal const val JAVA_PKCS8_PRIVATE_KEY_SIZE = 48
+internal const val PRIVATE_KEY_SIZE = 32
+internal val KEY_ASN1_HEADER = byteArrayOf(
     0x30, 0x2e,                     // ASN.1 SEQUENCE, length 46
     0x02, 0x01, 0x00,               // INTEGER 0
     0x30, 0x05,                     // ASN.1 SEQUENCE, length 5
