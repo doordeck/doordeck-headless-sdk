@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
-import com.doordeck.multiplatform.sdk.kcrypto.KCrypto
+import com.doordeck.multiplatform.sdk.kcryptokit.KCryptoKit
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.allocArrayOf
 import kotlinx.cinterop.memScoped
@@ -13,7 +13,7 @@ import platform.posix.memcpy
 actual object CryptoManager {
 
     actual fun generateKeyPair(): Crypto.KeyPair {
-        val key = KCrypto.generateKeyPair()
+        val key = KCryptoKit.generateKeyPair()
         val privateKeyData = key["privateKey"] as NSData
         val publicKeyData = key["publicKey"] as NSData
         return Crypto.KeyPair(
@@ -37,7 +37,7 @@ actual object CryptoManager {
     }
 
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
-        return KCrypto.signWithPrivateKey(this, privateKey.toPlatformPrivateKey().toNSData())?.toByteArray()
+        return KCryptoKit.signWithPrivateKey(this, privateKey.toPlatformPrivateKey().toNSData())?.toByteArray()
             ?: throw SdkException("Failed to sign with private key")
     }
 }
