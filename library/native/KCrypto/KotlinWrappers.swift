@@ -1,7 +1,7 @@
 import Foundation
 import CryptoKit
 
-@objc public class KCryptoKit : NSObject {
+@objc public class KCrypto : NSObject {
 
     @objc public class func generateKeyPair() -> [String: Data] {
         let privateKey = Curve25519.Signing.PrivateKey()
