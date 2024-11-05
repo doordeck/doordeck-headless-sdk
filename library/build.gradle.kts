@@ -233,8 +233,8 @@ android {
 }
 
 swiftklib {
-    create("KCryptoKit") {
-        path = file("native/KCryptoKit")
-        packageName("com.doordeck.multiplatform.sdk.kcryptokit")
+    create("KCrypto") {
+        path = file("native/KCrypto")
+        packageName("com.doordeck.multiplatform.sdk.kcrypto")
     }
 }
