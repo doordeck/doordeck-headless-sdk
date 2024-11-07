@@ -104,7 +104,7 @@ kotlin {
         val sb = StringBuilder()
         sb.appendLine("<<-SCRIPT")
         sb.appendLine("      set -ev")
-        sb.appendLine("      ./gradlew --no-daemon -Prelease.useLastTag=true podPublishReleaseXCFramework --debug")
+        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework")
         sb.appendLine("    SCRIPT")
         extraSpecAttributes["prepare_command"] = sb.toString()
     }
