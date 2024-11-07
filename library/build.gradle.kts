@@ -241,5 +241,8 @@ swiftklib {
     create("KCrypto") {
         path = file("native/KCrypto")
         packageName("com.doordeck.multiplatform.sdk.kcrypto")
+        minMacos = libs.versions.ios.minSdk.get().toInt()
+        minIos = libs.versions.ios.minSdk.get().toInt()
+        version = "${project.version}"
     }
 }
