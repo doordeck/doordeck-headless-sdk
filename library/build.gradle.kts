@@ -209,7 +209,7 @@ publishing {
 }
 
 tasks.named("publish").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
+    finalizedBy("jsBrowserProductionLibraryDistribution") // podSpecRelease
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
