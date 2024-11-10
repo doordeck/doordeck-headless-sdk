@@ -104,7 +104,7 @@ kotlin {
         val sb = StringBuilder()
         sb.appendLine("<<-SCRIPT")
         sb.appendLine("      set -ev")
-        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework")
+        sb.appendLine("      ./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework")
         sb.appendLine("    SCRIPT")
         extraSpecAttributes["prepare_command"] = sb.toString()
     }
@@ -214,7 +214,7 @@ tasks.named("publish").configure {
 }
 
 tasks.register("publishTest").configure {
-    finalizedBy( "podSpecRelease")
+    finalizedBy("podSpecRelease")
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
@@ -243,6 +243,5 @@ swiftklib {
         packageName("com.doordeck.multiplatform.sdk.kcrypto")
         minMacos = libs.versions.ios.minSdk.get().toInt()
         minIos = libs.versions.ios.minSdk.get().toInt()
-        version = "${project.version}"
     }
 }
