@@ -8,7 +8,6 @@ import {NgIf} from '@angular/common';
 import {Router} from '@angular/router';
 import {accountlessResource, doordeckSDK, accountResource, doordeckCrypto} from '../../main';
 import {com} from '@doordeck/doordeck-headless-sdk';
-import KeyPair = com.doordeck.multiplatform.sdk.util.Crypto.KeyPair;
 import {TwoFactorVerifyComponent} from '../two-factor-verify/two-factor-verify.component';
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
@@ -16,6 +15,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import ForbiddenException = com.doordeck.multiplatform.sdk.ForbiddenException;
 import UnauthorizedException = com.doordeck.multiplatform.sdk.UnauthorizedException;
 import TooManyRequestsException = com.doordeck.multiplatform.sdk.TooManyRequestsException;
+import KeyPair = com.doordeck.multiplatform.sdk.api.model.Crypto.KeyPair;
 
 @Component({
   selector: 'app-login',

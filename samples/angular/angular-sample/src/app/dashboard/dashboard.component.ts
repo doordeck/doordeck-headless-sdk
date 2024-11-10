@@ -15,7 +15,7 @@ import {
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {com, kotlin} from '@doordeck/doordeck-headless-sdk';
-import {accountResource, doordeckCrypto, lockOperationResource, sitesResource} from '../../main';
+import {accountResource, doordeckUtil, lockOperationResource, sitesResource} from '../../main';
 import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
 import {
   MatCell,
@@ -257,7 +257,7 @@ export class DashboardComponent implements OnInit  {
           const shareLock = new ShareLock(
             result.id,
             isAdmin ? UserRole.ADMIN : UserRole.USER,
-            doordeckCrypto.decodeBase64ToByteArray(result.publicKey),
+            doordeckUtil.decodeBase64ToByteArray(result.publicKey),
             null, null
           );
           await lockOperationResource.shareLockWithContext(lockId, shareLock);
