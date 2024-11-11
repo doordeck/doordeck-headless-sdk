@@ -92,6 +92,7 @@ kotlin {
         homepage = "https://www.doordeck.com/"
         license = "{ :type => 'Apache-2.0' }"
         authors = "Doordeck Limited"
+        version = "${project.version}"
         source = "{ :git => 'https://github.com/doordeck/doordeck-headless-sdk.git', :tag => 'v${project.version}' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
         name = "DoordeckSDK"
@@ -103,7 +104,7 @@ kotlin {
         val sb = StringBuilder()
         sb.appendLine("<<-SCRIPT")
         sb.appendLine("      set -ev")
-        sb.appendLine("      ./gradlew --no-daemon podPublishReleaseXCFramework")
+        sb.appendLine("      ./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework")
         sb.appendLine("    SCRIPT")
         extraSpecAttributes["prepare_command"] = sb.toString()
     }
@@ -209,7 +210,7 @@ publishing {
 }
 
 tasks.named("publish").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution") // podSpecRelease
+    finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
@@ -236,5 +237,7 @@ swiftklib {
     create("KCrypto") {
         path = file("native/KCrypto")
         packageName("com.doordeck.multiplatform.sdk.kcrypto")
+        minMacos = libs.versions.ios.minSdk.get().toInt()
+        minIos = libs.versions.ios.minSdk.get().toInt()
     }
 }
