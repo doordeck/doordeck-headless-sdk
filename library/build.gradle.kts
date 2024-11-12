@@ -228,7 +228,7 @@ publishing {
     
     repositories {
         maven {
-            name = "MavenCentral"
+            name = "sonatype"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
                 username = System.getenv("MAVEN_USERNAME")
@@ -239,15 +239,15 @@ publishing {
 }
 
 signing {
-    val signingKeyId = System.getenv("MAVEN_SIGN_KEY_ID")
     val signingKey = System.getenv("MAVEN_SIGN_KEY")
     val signingPassword = System.getenv("MAVEN_SIGN_PASSWORD")
 
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    useInMemoryPgpKeys(null, signingKey, signingPassword)
     sign(publishing.publications)
 }
 
-tasks.named("publish").configure {
+tasks.named("publishAllPublicationsToSonatypeRepository").configure {
+    dependsOn("kotlinUpgradeYarnLock")
     finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
