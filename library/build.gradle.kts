@@ -217,8 +217,7 @@ publishing {
                 url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
             }
             developers {
-                developer {
-                    id.set("DoordeckLimited")
+                organization {
                     name.set("Doordeck Limited")
                     url.set("https://github.com/doordeck")
                 }
