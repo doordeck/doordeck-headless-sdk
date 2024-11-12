@@ -200,6 +200,8 @@ tasks.withType<AbstractTestTask>().configureEach {
 publishing {
     publications.withType<MavenPublication>().configureEach {
         pom {
+            groupId = "com.doordeck.headless.sdk"
+            version = "${project.version}"
             name.set("Doordeck Headless SDK")
             description.set("The official Doordeck SDK for Kotlin Multiplatform")
             url.set("https://github.com/doordeck/doordeck-headless-sdk")
