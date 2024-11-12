@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.swift.klib)
     `maven-publish`
+    signing
 }
 
 kotlin {
@@ -197,16 +198,53 @@ tasks.withType<AbstractTestTask>().configureEach {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/doordeck/doordeck-headless-sdk")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+    publications.withType<MavenPublication>().configureEach {
+        pom {
+            name.set("Doordeck Headless SDK")
+            description.set("The official Doordeck SDK for Kotlin Multiplatform")
+            url.set("https://github.com/doordeck/doordeck-headless-sdk")
+            scm {
+                url.set("https://github.com/doordeck/doordeck-headless-sdk")
+            }
+            licenses {
+                license {
+                    name.set("Apache-2.0")
+                    url.set("https://github.com/doordeck/doordeck-headless-sdk/blob/main/LICENSE")
+                }
+            }
+            issueManagement {
+                system.set("Github")
+                url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
+            }
+            developers {
+                developer {
+                    id.set("DoordeckLimited")
+                    name.set("Doordeck Limited")
+                    url.set("https://github.com/doordeck")
+                }
             }
         }
     }
+    
+    repositories {
+        maven {
+            name = "MavenCentral"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_TOKEN")
+            }
+        }
+    }
+}
+
+signing {
+    val signingKeyId = System.getenv("MAVEN_SIGN_KEY_ID")
+    val signingKey = System.getenv("MAVEN_SIGN_KEY")
+    val signingPassword = System.getenv("MAVEN_SIGN_PASSWORD")
+
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign(publishing.publications)
 }
 
 tasks.named("publish").configure {
