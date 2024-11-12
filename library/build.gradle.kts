@@ -247,7 +247,6 @@ signing {
 }
 
 tasks.named("publishAllPublicationsToSonatypeRepository").configure {
-    dependsOn("kotlinUpgradeYarnLock")
     finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 
