@@ -99,7 +99,7 @@ kotlin {
         framework {
             baseName = "DoordeckSDK"
         }
-        extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
+        extraSpecAttributes["vendored_frameworks"] = "'doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
         extraSpecAttributes["prepare_command"] = "'./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework'"
     }
 
