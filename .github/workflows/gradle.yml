@@ -97,12 +97,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      #      - name: Tag for release (if on main)
-      #        #if: github.ref == 'refs/heads/main'
-      #        run: ./gradlew final -x test
+#      - name: Tag for release (if on main)
+#        if: github.ref == 'refs/heads/main'
+#        run: ./gradlew final -x test
 
       - name: Publish to Maven Central
-        run: ./gradlew -Pversion=0.36.0 kotlinUpgradeYarnLock library:publishAllPublicationsToSonatypeRepository -x test
+        run: ./gradlew -Pversion=0.36.0 kotlinUpgradeYarnLock doordeck-sdk:publishAllPublicationsToSonatypeRepository -x test
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
