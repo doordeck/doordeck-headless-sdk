@@ -14,8 +14,6 @@ plugins {
 }
 
 kotlin {
-    withSourcesJar(publish = false)
-
     applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
@@ -197,11 +195,9 @@ publishing {
             groupId = "com.doordeck.headless.sdk"
             version = "${project.version}"
             name.set("Doordeck Headless SDK")
+            inceptionYear.set("2024")
             description.set("The official Doordeck SDK for Kotlin Multiplatform")
             url.set("https://github.com/doordeck/doordeck-headless-sdk")
-            scm {
-                url.set("https://github.com/doordeck/doordeck-headless-sdk")
-            }
             licenses {
                 license {
                     name.set("Apache-2.0")
@@ -213,10 +209,20 @@ publishing {
                 url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
             }
             developers {
+                developer {
+                    id.set("doordeck")
+                    name.set("Doordeck Limited")
+                    url.set("https://github.com/doordeck")
+                }
                 organization {
                     name.set("Doordeck Limited")
                     url.set("https://github.com/doordeck")
                 }
+            }
+            scm {
+                url.set("https://github.com/doordeck/doordeck-headless-sdk")
+                connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
+                developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
             }
         }
     }
