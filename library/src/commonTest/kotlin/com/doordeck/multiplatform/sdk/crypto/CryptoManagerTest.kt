@@ -2,18 +2,23 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.assertDoesNotThrow
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class CryptoManagerTest {
 
-    private val JAVA_PRIVATE_KEY = "MC4CAQAwBQYDK2VwBCIEINbXN/9rPGQ1RvKOt693W9Yux6QxbwYWeAF97n2lWSvb" // 48
-    private val LIBSODIUM_PRIVATE_KEY = "Q7HNk4W6f1HjEbUjpCM1g6W1Te20Zs27gnPVprIaOsR4qtCq3fkamB+miQ06zG+A64Y7BIrI5RhI/FEHbKIi1A==" // 64
-    private val CRYPTO_KIT_PRIVATE_KEY = "UDJNQXe8JXbt5tkLjCM8R9U9cSHh8builPRX4JwCtqs=" // 32
+    private val JAVA_PUBLIC_KEY = "MCowBQYDK2VwAyEA2E8RSaHnxBpnr+RGneGfpdLFhYEPVldzHx1TxuuyjD8="
+    private val JAVA_PRIVATE_KEY = "MC4CAQAwBQYDK2VwBCIEIIgEWMf5XswAhA4SwRRNl8IH34+4329pQKBfwWPVtFat"
+
+    private val SODIUM_PUBLIC_KEY = "9vG/XmIT0JxFjjWmXzd5F7XVbWLBeIPWb2qHKnjSz8o="
+    private val SODIUM_PRIVATE_KEY = "OLPBsJ3zReQj2r2YNgnGMn/B8SW/U7qP9hMrd0mdP9j28b9eYhPQnEWONaZfN3kXtdVtYsF4g9ZvaocqeNLPyg=="
+
+    private val CRYPTO_KIT_PUBLIC_KEY = "VpXka4JVjIYQ969Yqo92+x4JgwZPh0QiJIKx/3XzAxs="
+    private val CRYPTO_KIT_PRIVATE_KEY = "GJsHlbSK/tdAGDL5+7QjB/aJx/AfKOWjMUGOpQ/1F9U="
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
@@ -25,54 +30,133 @@ class CryptoManagerTest {
     @Test
     fun shouldSignWithPrivateKey() = runTest {
         // Given
-        val content = "content"
+        val content = "hello"
         val keyPair = CryptoManager.generateKeyPair()
 
+        // When
+        val result = content.signWithPrivateKey(keyPair.private)
+
         // Then
-        assertDoesNotThrow {
-            content.signWithPrivateKey(keyPair.private)
-        }
+        assertTrue { result.verifySignature(keyPair.public, content) }
     }
 
     @Test
     fun shouldSignWithJavaPrivateKey() = runTest {
         // Given
-        val signed = "EzLHK2cCKTTA2gImXcx+lbOTITekJeU/TDdZDVWcGz/R+fD0YW+F2rFDg2R/rvhC+Nsl0bWIKBVKqhkZLnK4BA=="
         val content = "hello"
 
         // Then
-        val result = content.signWithPrivateKey(JAVA_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
+        val result = content.signWithPrivateKey(JAVA_PRIVATE_KEY.decodeBase64ToByteArray())
 
         // Then
-        //assertEquals(signed, result)
-        println("shouldSignWithJavaPrivateKey result: $result")
+        assertTrue {
+            result.verifySignature(JAVA_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+        }
+    }
+
+    @Test
+    fun shouldVerifyWithJavaPrivateKey() = runTest {
+        // Given
+        val signed = "HC/uACBwVVbDGkFm96raXEEkSB3EfgPoQw3UFA1IKgkGZdRMtpZKgP3ocg7iAvGk7ggYvO8qPn+q75ufyuP0AA=="
+        val content = "hello"
+
+        // Then
+        val result = signed.decodeBase64ToByteArray().verifySignature(JAVA_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldFailToVerifyWithJavaPrivateKey() = runTest {
+        // Given
+        val signed = "HC/uACBwVVbDGkFm96raXEkkSB3EfgPoQw3UFA1IKgkGZdRMtpZKgP3ocg7iAvGk7ggYvO8qPn+q75ufyuP0AA=="
+        val content = "hello"
+
+        // Then
+        val result = signed.decodeBase64ToByteArray().verifySignature(JAVA_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertFalse { result }
     }
 
     @Test
     fun shouldSignWithLibsodiumPrivateKey() = runTest {
         // Given
-        val signed = "XM2po4r/pJXUTcr77VabfHiC/1S7N/srtKc/ydUEMqkmGXMYeMovEL6sb4j0lcQOqC9U43ETQJHbCVqhx3jlCA=="
         val content = "hello"
 
         // When
-        val result = content.signWithPrivateKey(LIBSODIUM_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
+        val result = content.signWithPrivateKey(SODIUM_PRIVATE_KEY.decodeBase64ToByteArray())
 
         // Then
-        //assertEquals(signed, result)
-        println("shouldSignWithLibsodiumPrivateKey result: $result")
+        assertTrue {
+            result.verifySignature(SODIUM_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+        }
+    }
+
+    @Test
+    fun shouldVerifyWithLibsodiumPrivateKey() = runTest {
+        // Given
+        val signed = "oFCuWDPrOimX1yrptCq/6wg8SdlPJnnLwBURMhHp7wY3WSbgWbrc14+X5VS5CoRuBDbA/HvusfXx49YcUJbjCg=="
+        val content = "hello"
+
+        // When
+        val result = signed.decodeBase64ToByteArray().verifySignature(SODIUM_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldFailToVerifyWithLibsodiumPrivateKey() = runTest {
+        // Given
+        val signed = "FFCuWDPrOimX1yrptCq/6wg8SdlPJnnLwBURMhHp7wY3WSbgWbrc14+X5VS5CoRuBDbA/HvusfXx49YcUJbjCg=="
+        val content = "hello"
+
+        // When
+        val result = signed.decodeBase64ToByteArray().verifySignature(SODIUM_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertFalse { result }
     }
 
     @Test
     fun shouldSignWithCryptoKitPrivateKey() = runTest {
         // Given
-        val signed = "4SM7jgRkxPodsnLYjPZJUXmTA2ZscDUAeI5wKOZpJ5dKLVzCO8vR35TQaq2lY8KBPjr1kHDsqpYzTcNbDIPPAA=="
         val content = "hello"
 
         // When
-        val result = content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray()).encodeByteArrayToBase64()
+        val result = content.signWithPrivateKey(CRYPTO_KIT_PRIVATE_KEY.decodeBase64ToByteArray())
 
         // Then
-        //assertEquals(signed, result)
-        println("shouldSignWithCryptoKitPrivateKey result: $result")
+        assertTrue {
+            result.verifySignature(CRYPTO_KIT_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+        }
+    }
+
+    @Test
+    fun shouldVerifyWithCryptoKitPrivateKey() = runTest {
+        // Given
+        val signed = "nIv3lnqaUTc4u4VDyujr2BmsYDAMNvwGiutRGbMTril/B8tzZHvwsWtn03SgoQ3VuzyZ2ATq0CtNsRUdoI5UAg=="
+        val content = "hello"
+
+        // When
+        val result = signed.decodeBase64ToByteArray().verifySignature(CRYPTO_KIT_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldFailToVerifyWithCryptoKitPrivateKey() = runTest {
+        // Given
+        val signed = "IIv3lnqaUTc4u4VDyujr2BmsYDAMNvwGiutRGbMTril/B8tzZHvwsWtn03SgoQ3VuzyZ2ATq0CtNsRUdoI5UAg=="
+        val content = "hello"
+
+        // When
+        val result = signed.decodeBase64ToByteArray().verifySignature(CRYPTO_KIT_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertFalse { result }
     }
 }

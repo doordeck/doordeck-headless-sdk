@@ -1,7 +1,8 @@
 import Foundation
 import CryptoKit
+import Security
 
-@objc public class KCrypto : NSObject {
+@objc public class KCryptoKit : NSObject {
 
     @objc public class func generateKeyPair() -> [String: Data] {
         let privateKey = Curve25519.Signing.PrivateKey()
@@ -12,7 +13,7 @@ import CryptoKit
         ]
     }
 
-    @objc(signWithPrivateKey::) public class func signWithPrivateKey(message: String, withPrivateKey privateKeyData: Data) -> Data? {
+    @objc(signWithPrivateKey::) public class func signWithPrivateKey(message: String, privateKeyData: Data) -> Data? {
         do {
             // Convert the data into a private key object
             let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: privateKeyData)
@@ -23,6 +24,18 @@ import CryptoKit
             return signature
         } catch {
            return nil
+        }
+    }
+
+    @objc(verifySignature:::) public class func verifySignature(publicKeyData: Data, message: String, signatureData: Data) -> Bool {
+        do {
+            let signingPublicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
+            let messageData = Data(message.utf8)
+            let result = signingPublicKey.isValidSignature(signatureData, for: messageData)
+            return result
+        }
+        catch {
+            return false
         }
     }
 }

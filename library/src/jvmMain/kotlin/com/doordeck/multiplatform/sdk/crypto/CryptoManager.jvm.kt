@@ -6,6 +6,7 @@ import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.Signature
 import java.security.spec.PKCS8EncodedKeySpec
+import java.security.spec.X509EncodedKeySpec
 
 actual object CryptoManager {
 
@@ -23,12 +24,18 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
-        if (size == SODIUM_PRIVATE_KEY_SIZE || size == CRYPTO_KIT_PRIVATE_KEY_SIZE) {
-            val key = sliceArray(0 until PRIVATE_KEY_SIZE)
-            return KEY_ASN1_HEADER + key
-        }
-        return this
+    internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
+        CRYPTO_KIT_PUBLIC_KEY_SIZE,
+        SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
+        JAVA_PKCS8_PUBLIC_KEY_SIZE -> this
+        else -> throw SdkException("Unknown public key size: $size")
+    }
+
+    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when(size) {
+        CRYPTO_KIT_PRIVATE_KEY_SIZE,
+        SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
+        JAVA_PKCS8_PRIVATE_KEY_SIZE -> this
+        else -> throw SdkException("Unknown private key size: $size")
     }
 
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
@@ -39,5 +46,14 @@ actual object CryptoManager {
         }.sign()
     } catch (exception: Exception) {
         throw SdkException("Failed to sign with private key", exception)
+    }
+
+    internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
+        val signature = Signature.getInstance(ALGORITHM)
+        signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
+        signature.update(message.toByteArray())
+        signature.verify(this)
+    } catch (exception: Exception) {
+        false
     }
 }
