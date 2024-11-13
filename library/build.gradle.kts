@@ -37,7 +37,7 @@ kotlin {
         it.compilations {
             val main by getting {
                 cinterops {
-                    create("KCrypto")
+                    create("KCryptoKit")
                 }
             }
         }
@@ -100,13 +100,7 @@ kotlin {
             baseName = "DoordeckSDK"
         }
         extraSpecAttributes["vendored_frameworks"] = "'library/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
-
-        val sb = StringBuilder()
-        sb.appendLine("<<-SCRIPT")
-        sb.appendLine("      set -ev")
-        sb.appendLine("      ./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework")
-        sb.appendLine("    SCRIPT")
-        extraSpecAttributes["prepare_command"] = sb.toString()
+        extraSpecAttributes["prepare_command"] = "'./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework'"
     }
 
     sourceSets {
@@ -234,9 +228,9 @@ android {
 }
 
 swiftklib {
-    create("KCrypto") {
-        path = file("native/KCrypto")
-        packageName("com.doordeck.multiplatform.sdk.kcrypto")
+    create("KCryptoKit") {
+        path = file("native/KCryptoKit")
+        packageName("com.doordeck.multiplatform.sdk.kcryptokit")
         minMacos = libs.versions.ios.minSdk.get().toInt()
         minIos = libs.versions.ios.minSdk.get().toInt()
     }

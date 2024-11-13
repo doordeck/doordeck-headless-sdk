@@ -32,15 +32,18 @@ actual object CryptoManager {
         ).toJson()
     }
 
-    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray {
-        if (size == JAVA_PKCS8_PRIVATE_KEY_SIZE) {
-            val key = sliceArray(size - PRIVATE_KEY_SIZE until size)
-            return Signature.seedKeypair(key.toUByteArray()).secretKey.toByteArray()
-        }
-        if (size == CRYPTO_KIT_PRIVATE_KEY_SIZE) {
-            return Signature.seedKeypair(toUByteArray()).secretKey.toByteArray()
-        }
-        return this
+    internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
+        CRYPTO_KIT_PUBLIC_KEY_SIZE,
+        SODIUM_PUBLIC_KEY_SIZE -> this
+        JAVA_PKCS8_PUBLIC_KEY_SIZE -> sliceArray(size - RAW_KEY_SIZE until size)
+        else -> throw SdkException("Unknown public key size: $size")
+    }
+
+    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
+        CRYPTO_KIT_PRIVATE_KEY_SIZE -> Signature.seedKeypair(toUByteArray()).secretKey.toByteArray()
+        SODIUM_PRIVATE_KEY_SIZE -> this
+        JAVA_PKCS8_PRIVATE_KEY_SIZE -> Signature.seedKeypair(sliceArray(size - RAW_KEY_SIZE until size).toUByteArray()).secretKey.toByteArray()
+        else -> throw SdkException("Unknown private key size: $size")
     }
 
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
@@ -50,5 +53,12 @@ actual object CryptoManager {
         ).toByteArray()
     } catch (exception: Exception) {
         throw SdkException("Failed to sign with private key", exception)
+    }
+
+    internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
+        Signature.verifyDetached(toUByteArray(), message.toByteArray().toUByteArray(), publicKey.toPlatformPublicKey().toUByteArray())
+        true
+    } catch (exception: Exception) {
+        false
     }
 }
