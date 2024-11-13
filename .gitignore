@@ -80,5 +80,5 @@ qodana.yaml
 /convention-plugins/.gradle/
 /.gradle/
 /.kotlin/
-/library/build/
+/doordeck-sdk/build/
 local.properties

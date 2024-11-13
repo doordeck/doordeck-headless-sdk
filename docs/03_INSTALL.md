@@ -2,7 +2,7 @@
 <details><summary>JVM</summary>
 
 ````kotlin
-implementation("doordeck-headless-sdk:library-jvm:[SDK_VERSION]")
+implementation("doordeck-headless-sdk:doordeck-sdk-jvm:[SDK_VERSION]")
 ````
 >:information_source: The JVM package requires at least Java SDK 1.8
 </details>
@@ -10,7 +10,7 @@ implementation("doordeck-headless-sdk:library-jvm:[SDK_VERSION]")
 <details><summary>Android</summary>
 
 ````kotlin
-implementation("doordeck-headless-sdk:library-android:[SDK_VERSION]")
+implementation("doordeck-headless-sdk:doordeck-sdk-android:[SDK_VERSION]")
 ````
 >:information_source: The Android package requires at least Android SDK 21
 </details>
