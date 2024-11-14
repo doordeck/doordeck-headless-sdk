@@ -18,3 +18,5 @@ nexusPublishing {
         }
     }
 }
+
+group = "com.doordeck"
