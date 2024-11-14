@@ -112,7 +112,7 @@ jobs:
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         run: |
-          cd library/build/cocoapods/publish/release
+          cd doordeck-sdk/build/cocoapods/publish/release
           pod trunk push DoordeckSDK.podspec --allow-warnings
 
       - name: Publish to NPM
