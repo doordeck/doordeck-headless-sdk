@@ -189,12 +189,10 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
-val javadoc = tasks.named("javadoc")
-val javadocJar by tasks.creating(Jar::class) {
+val javadocJar by tasks.registering(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles java doc to jar"
     archiveClassifier.set("javadoc")
-    from(javadoc)
 }
 
 publishing {
@@ -235,7 +233,12 @@ publishing {
             }
         }
     }
-    
+
+    val signingTasks = tasks.withType<Sign>()
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        mustRunAfter(signingTasks)
+    }
+
     repositories {
         maven {
             name = "sonatype"
