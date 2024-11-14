@@ -9,50 +9,51 @@ on:
   pull_request:
     branches:
       - 'main'
+      - 'maven-publish'
 
 jobs:
-  build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple
-            test: iosX64Test macosArm64Test
-            os: macos-latest
-          - name: Windows
-            test: mingwX64Test
-            os: windows-latest
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.name }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: corretto
-          java-version: 21
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }} --rerun-tasks
+#  build:
+#    env:
+#      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+#      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+#      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+#    strategy:
+#      max-parallel: 1
+#      matrix:
+#        include:
+#          - name: JVM
+#            test: jvmTest
+#            os: ubuntu-latest
+#          - name: Android
+#            test: testReleaseUnitTest
+#            os: ubuntu-latest
+#          - name: JS
+#            test: kotlinUpgradeYarnLock jsTest
+#            os: ubuntu-latest
+#          - name: Apple
+#            test: iosX64Test macosArm64Test
+#            os: macos-latest
+#          - name: Windows
+#            test: mingwX64Test
+#            os: windows-latest
+#    runs-on: ${{ matrix.os }}
+#    name: ${{ matrix.name }}
+#    steps:
+#      - uses: actions/checkout@v4
+#      - name: Set up Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#      - name: Tests
+#        run: ./gradlew ${{ matrix.test }} --rerun-tasks
 
   release:
     name: Releases
-    needs: build
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    #needs: build
+    #if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
 
     permissions:
@@ -96,38 +97,38 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Tag for release (if on main)
-        if: github.ref == 'refs/heads/main'
-        run: ./gradlew final -x test
+#      - name: Tag for release (if on main)
+#        if: github.ref == 'refs/heads/main'
+#        run: ./gradlew final -x test
 
       - name: Publish to Maven Central
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
+        run: ./gradlew -Pversion=0.37.0 kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype -x test
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
           MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
-      - name: Publish to CocoaPods
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: |
-          cd doordeck-sdk/build/cocoapods/publish/release
-          pod trunk push DoordeckSDK.podspec --allow-warnings
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-        run: |
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
+#      - name: Publish to CocoaPods
+#        env:
+#          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#        run: |
+#          cd doordeck-sdk/build/cocoapods/publish/release
+#          pod trunk push DoordeckSDK.podspec --allow-warnings
+#
+#      - name: Publish to NPM
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+#        run: |
+#          cd build/js/packages/doordeck-sdk
+#          npm publish --access public
+#
+#      - name: Parse release version
+#        id: version_info
+#        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+#
+#      - name: Create GitHub Release
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+#        run: |
+#          gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
