@@ -189,13 +189,17 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
-val javadocJar by tasks.registering(Jar::class) {
+val javadoc = tasks.named("javadoc")
+val javadocJar by tasks.creating(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles java doc to jar"
     archiveClassifier.set("javadoc")
+    from(javadoc)
 }
 
 publishing {
     publications.withType<MavenPublication>().configureEach {
-        artifact(javadocJar.get())
+        artifact(javadocJar)
         pom {
             groupId = "com.doordeck.headless.sdk"
             version = "${project.version}"
