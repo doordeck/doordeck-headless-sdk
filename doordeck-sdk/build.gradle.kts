@@ -239,7 +239,7 @@ publishing {
         mustRunAfter(signingTasks)
     }
 
-    repositories {
+    /*repositories {
         maven {
             name = "sonatype"
             //url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
@@ -249,7 +249,7 @@ publishing {
                 password = System.getenv("MAVEN_TOKEN")
             }
         }
-    }
+    }*/
 }
 
 signing {

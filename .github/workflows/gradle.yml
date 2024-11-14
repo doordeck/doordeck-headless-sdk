@@ -102,7 +102,7 @@ jobs:
 #        run: ./gradlew final -x test
 
       - name: Publish to Maven Central
-        run: ./gradlew -Pversion=0.36.0 kotlinUpgradeYarnLock doordeck-sdk:publishAllPublicationsToSonatypeRepository -x test
+        run: ./gradlew -Pversion=0.36.0 kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype -x test
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
