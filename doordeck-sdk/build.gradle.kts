@@ -10,11 +10,10 @@ plugins {
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.swift.klib)
     `maven-publish`
+    signing
 }
 
 kotlin {
-    withSourcesJar(publish = false)
-
     applyDefaultHierarchyTemplate()
     jvm()
     androidTarget {
@@ -190,20 +189,67 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
+// Generates empty Javadoc JARs, which are required for publishing to Maven Central
+val javadocJar by tasks.registering(Jar::class) {
+    group = JavaBasePlugin.DOCUMENTATION_GROUP
+    description = "Assembles java doc to jar"
+    archiveClassifier.set("javadoc")
+}
+
 publishing {
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/doordeck/doordeck-headless-sdk")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+    publications.withType<MavenPublication>().configureEach {
+        artifact(javadocJar)
+        groupId = "com.doordeck.headless.sdk"
+        version = "${project.version}"
+        pom {
+            name.set("Doordeck Headless SDK")
+            inceptionYear.set("2024")
+            description.set("The official Doordeck SDK for Kotlin Multiplatform")
+            url.set("https://github.com/doordeck/doordeck-headless-sdk")
+            licenses {
+                license {
+                    name.set("Apache-2.0")
+                    url.set("https://github.com/doordeck/doordeck-headless-sdk/blob/main/LICENSE")
+                }
+            }
+            issueManagement {
+                system.set("Github")
+                url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
+            }
+            developers {
+                developer {
+                    id.set("doordeck")
+                    name.set("Doordeck Limited")
+                    url.set("https://github.com/doordeck")
+                }
+                organization {
+                    name.set("Doordeck Limited")
+                    url.set("https://github.com/doordeck")
+                }
+            }
+            scm {
+                url.set("https://github.com/doordeck/doordeck-headless-sdk")
+                connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
+                developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
             }
         }
     }
+
+    val signingTasks = tasks.withType<Sign>()
+    tasks.withType<AbstractPublishToMaven>().configureEach {
+        mustRunAfter(signingTasks)
+    }
 }
 
-tasks.named("publish").configure {
+signing {
+    val signingKey = System.getenv("MAVEN_SIGN_KEY")
+    val signingPassword = System.getenv("MAVEN_SIGN_PASSWORD")
+
+    useInMemoryPgpKeys(null, signingKey, signingPassword)
+    sign(publishing.publications)
+}
+
+tasks.named("publishToSonatype").configure {
     finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 

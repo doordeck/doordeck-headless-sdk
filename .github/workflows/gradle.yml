@@ -100,10 +100,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
-      - name: Publish
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock :doordeck-sdk:publish --stacktrace -x test
+      - name: Publish to Maven Central
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish to CocoaPods
         env:
