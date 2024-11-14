@@ -189,6 +189,7 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
+// Generates empty Javadoc JARs, which are required for publishing to Maven Central
 val javadocJar by tasks.registering(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles java doc to jar"
@@ -198,9 +199,9 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
     publications.withType<MavenPublication>().configureEach {
         artifact(javadocJar)
+        groupId = "com.doordeck.headless.sdk"
+        version = "${project.version}"
         pom {
-            groupId = "com.doordeck.headless.sdk"
-            version = "${project.version}"
             name.set("Doordeck Headless SDK")
             inceptionYear.set("2024")
             description.set("The official Doordeck SDK for Kotlin Multiplatform")
@@ -238,18 +239,6 @@ publishing {
     tasks.withType<AbstractPublishToMaven>().configureEach {
         mustRunAfter(signingTasks)
     }
-
-    /*repositories {
-        maven {
-            name = "sonatype"
-            //url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_TOKEN")
-            }
-        }
-    }*/
 }
 
 signing {
@@ -260,7 +249,7 @@ signing {
     sign(publishing.publications)
 }
 
-tasks.named("publishAllPublicationsToSonatypeRepository").configure {
+tasks.named("publishToSonatype").configure {
     finalizedBy("jsBrowserProductionLibraryDistribution", "podSpecRelease")
 }
 

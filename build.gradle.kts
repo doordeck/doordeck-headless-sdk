@@ -10,6 +10,8 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
 }
 
+group = "com.doordeck" // Required by nexusPublishing
+
 nexusPublishing {
     repositories {
         sonatype {
@@ -18,5 +20,3 @@ nexusPublishing {
         }
     }
 }
-
-group = "com.doordeck"
