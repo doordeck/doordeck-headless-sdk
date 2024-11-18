@@ -100,6 +100,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
       - name: Publish to Maven Central
         run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
         env:
@@ -107,6 +111,16 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
           MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish to SPM
+        run: |
+          ./gradlew assembleDoordeckSDKReleaseXCFramework
+          CHECKSUM=$(swift package compute-checksum doordeck-sdk/DoordeckSDK.xcframework.zip)
+          echo "checksum=$CHECKSUM" >> $GITHUB_ENV
+          ./gradlew updatePackageSwift -PpackageVersion=${{ steps.version_info.outputs.version }} -PpackageChecksum=$CHECKSUM
+          git add Package.swift
+          git commit -m "Update Package.swift for v${{ steps.version_info.outputs.version }} [skip actions]"
+          git push
 
       - name: Publish to CocoaPods
         env:
@@ -121,10 +135,6 @@ jobs:
         run: |
           cd build/js/packages/doordeck-sdk
           npm publish --access public
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         env:

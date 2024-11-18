@@ -30,6 +30,7 @@ kotlin {
     iosTargets.forEach {
         it.binaries.framework {
             baseName = "DoordeckSDK"
+            binaryOption("bundleId", "com.doordeck.DoordeckSDK")
             xcf.add(this)
         }
 
@@ -280,4 +281,15 @@ swiftklib {
         minMacos = libs.versions.ios.minSdk.get().toInt()
         minIos = libs.versions.ios.minSdk.get().toInt()
     }
+}
+
+tasks.register<Zip>("zipXCFramework") {
+    from("build/XCFrameworks/release/DoordeckSDK.xcframework")
+    archiveFileName.set("DoordeckSDK.xcframework.zip")
+    destinationDirectory.set(file("."))
+    include("**/*")
+}
+
+tasks.named("assembleDoordeckSDKReleaseXCFramework").configure {
+    finalizedBy("zipXCFramework")
 }
