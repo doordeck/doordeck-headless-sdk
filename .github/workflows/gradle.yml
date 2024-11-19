@@ -98,7 +98,7 @@ jobs:
 
       - name: Tag for release (if on main)
         if: github.ref == 'refs/heads/main'
-        run: ./gradlew final -x test
+        run: ./gradlew -Prelease.version=1.0.0 final -x test
 
       - name: Parse release version
         id: version_info
