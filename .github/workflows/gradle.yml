@@ -104,14 +104,6 @@ jobs:
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
 
-      - name: Publish to Maven Central
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-
       - name: Publish to SPM
         run: |
           ./gradlew assembleDoordeckSDKReleaseXCFramework
@@ -121,6 +113,21 @@ jobs:
           git add Package.swift
           git commit -m "Update Package.swift for v${{ steps.version_info.outputs.version }} [skip actions]"
           git push
+
+      - name: Update tag to point to latest commit
+        run: |
+          TAG=$(git describe --tags --abbrev=0)
+          git tag -d "$TAG"
+          git tag "$TAG"
+          git push origin "$TAG" --force
+
+      - name: Publish to Maven Central
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish to CocoaPods
         env:
