@@ -284,7 +284,7 @@ swiftklib {
 }
 
 tasks.register<Zip>("zipXCFramework") {
-    from("build/XCFrameworks/release/DoordeckSDK.xcframework")
+    from("build/XCFrameworks/release")
     archiveFileName.set("DoordeckSDK.xcframework.zip")
     destinationDirectory.set(file("."))
     include("**/*")
