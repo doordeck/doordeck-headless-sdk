@@ -93,14 +93,13 @@ kotlin {
         license = "{ :type => 'Apache-2.0' }"
         authors = "Doordeck Limited"
         version = "${project.version}"
-        source = "{ :git => 'https://github.com/doordeck/doordeck-headless-sdk.git', :tag => 'v${project.version}' }"
+        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/DoordeckSDK.xcframework.zip' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
         name = "DoordeckSDK"
         framework {
             baseName = "DoordeckSDK"
         }
-        extraSpecAttributes["vendored_frameworks"] = "'doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.xcframework'"
-        extraSpecAttributes["prepare_command"] = "'./gradlew --no-daemon -Pversion=${project.version} podPublishReleaseXCFramework'"
+        extraSpecAttributes["vendored_frameworks"] = "'DoordeckSDK.xcframework'"
     }
 
     sourceSets {
