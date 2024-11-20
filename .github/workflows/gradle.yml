@@ -109,7 +109,7 @@ jobs:
         #if: github.ref == 'refs/heads/main'
         run: |
           ./gradlew assembleDoordeckSDKReleaseXCFramework
-          aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/
+          aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v1.1.1/
 
 #      - name: Tag for release (if on main)
 #        if: github.ref == 'refs/heads/main'
