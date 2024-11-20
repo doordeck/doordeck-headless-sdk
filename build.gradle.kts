@@ -30,7 +30,7 @@ tasks.register("updatePackageSwift") {
             val packageFile = file("Package.swift")
             val content = packageFile.readText()
             val updatedContent = content
-                .replace(Regex("""url: ".*""""), """url: "https://github.com/doordeck/doordeck-headless-sdk/releases/download/v$packageVersion/DoordeckSDK.xcframework.zip"""")
+                .replace(Regex("""url: ".*""""), """url: "https://cdn.doordeck.com/xcframework/v$packageVersion/DoordeckSDK.xcframework.zip"""")
                 .replace(Regex("""checksum: ".*""""), """checksum: "$packageChecksum"""")
             packageFile.writeText(updatedContent)
         }
