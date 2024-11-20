@@ -71,23 +71,23 @@ jobs:
           git config --global user.name "Doordeck Development"
           git config --global user.email "development@doordeck.com"
 
-#      - name: Setup Node
-#        uses: actions/setup-node@v4
-#        with:
-#          node-version: 'latest'
-#          registry-url: 'https://registry.npmjs.org'
-#          scope: '@doordeck'
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-#
-#      - name: Setup Ruby
-#        uses: ruby/setup-ruby@v1
-#        with:
-#          ruby-version: '3.3'
-#
-#      - name: Install CocoaPods
-#        run: |
-#          sudo gem install cocoapods
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@doordeck'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Install CocoaPods
+        run: |
+          sudo gem install cocoapods
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -105,12 +105,6 @@ jobs:
           role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
           aws-region: eu-west-1
 
-      - name: Publish to SPM
-        #if: github.ref == 'refs/heads/main'
-        run: |
-          ./gradlew assembleDoordeckSDKReleaseXCFramework
-          aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v1.1.1/
-
 #      - name: Tag for release (if on main)
 #        if: github.ref == 'refs/heads/main'
 #        run: ./gradlew -Prelease.version=1.0.0 final -x test
@@ -118,24 +112,33 @@ jobs:
 #      - name: Parse release version
 #        id: version_info
 #        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
-#
-#      - name: Publish to SPM
-#        run: |
-#          ./gradlew assembleDoordeckSDKReleaseXCFramework
-#          CHECKSUM=$(swift package compute-checksum doordeck-sdk/DoordeckSDK.xcframework.zip)
-#          echo "checksum=$CHECKSUM" >> $GITHUB_ENV
+
+      - name: Publish to SPM
+        #if: github.ref == 'refs/heads/main'
+        run: |
+          ./gradlew assembleDoordeckSDKReleaseXCFramework
+          CHECKSUM=$(swift package compute-checksum doordeck-sdk/DoordeckSDK.xcframework.zip)
+          echo "checksum=$CHECKSUM" >> $GITHUB_ENV
+          aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v1.0.0/
 #          ./gradlew updatePackageSwift -PpackageVersion=${{ steps.version_info.outputs.version }} -PpackageChecksum=$CHECKSUM
 #          git add Package.swift
 #          git commit -m "Update Package.swift for v${{ steps.version_info.outputs.version }} [skip actions]"
 #          git push
-#
+
 #      - name: Update tag to point to latest commit
 #        run: |
 #          TAG=$(git describe --tags --abbrev=0)
 #          git tag -d "$TAG"
 #          git tag "$TAG"
 #          git push origin "$TAG" --force
-#
+
+      - name: Publish to CocoaPods
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: |
+          ./gradlew podSpecRelease
+          pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
+
 #      - name: Publish to Maven Central
 #        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
 #        env:
@@ -143,13 +146,6 @@ jobs:
 #          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
 #          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 #          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-#
-#      - name: Publish to CocoaPods
-#        env:
-#          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-#        run: |
-#          cd doordeck-sdk/build/cocoapods/publish/release
-#          pod trunk push DoordeckSDK.podspec --allow-warnings
 #
 #      - name: Publish to NPM
 #        env:
