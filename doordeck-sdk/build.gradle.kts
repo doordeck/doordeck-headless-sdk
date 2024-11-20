@@ -92,8 +92,8 @@ kotlin {
         homepage = "https://www.doordeck.com/"
         license = "{ :type => 'Apache-2.0' }"
         authors = "Doordeck Limited"
-        version = "1.0.0"//"${project.version}"
-        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v1.0.0/DoordeckSDK.xcframework.zip' }"
+        version = "${project.version}"
+        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/DoordeckSDK.xcframework.zip' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
         name = "DoordeckSDK"
         framework {
