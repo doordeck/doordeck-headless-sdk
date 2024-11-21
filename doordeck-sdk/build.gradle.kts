@@ -249,10 +249,6 @@ signing {
     sign(publishing.publications)
 }
 
-tasks.named("publishToSonatype").configure {
-    finalizedBy("jsBrowserProductionLibraryDistribution")
-}
-
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
     doLast {
         // Specify the directory where the package is generated

@@ -1,5 +1,4 @@
 plugins {
-    //trick: for the same plugin versions in all submodules
     alias(libs.plugins.androidLibrary).apply(false)
     alias(libs.plugins.kotlinMultiplatform).apply(false)
     alias(libs.plugins.kotlinxSerialization).apply(false)
@@ -17,22 +16,6 @@ nexusPublishing {
         sonatype {
             username = System.getenv("MAVEN_USERNAME")
             password = System.getenv("MAVEN_TOKEN")
-        }
-    }
-}
-
-tasks.register("updatePackageSwift") {
-    val packageVersion: String? by project
-    val packageChecksum: String? by project
-
-    doLast {
-        if (!packageVersion.isNullOrEmpty() && !packageChecksum.isNullOrEmpty()) {
-            val packageFile = file("Package.swift")
-            val content = packageFile.readText()
-            val updatedContent = content
-                .replace(Regex("""url: ".*""""), """url: "https://cdn.doordeck.com/xcframework/v$packageVersion/DoordeckSDK.xcframework.zip"""")
-                .replace(Regex("""checksum: ".*""""), """checksum: "$packageChecksum"""")
-            packageFile.writeText(updatedContent)
         }
     }
 }

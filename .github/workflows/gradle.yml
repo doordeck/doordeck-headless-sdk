@@ -106,7 +106,7 @@ jobs:
 
       - name: Tag for release (if on main)
         if: github.ref == 'refs/heads/main'
-        run: ./gradlew -Prelease.version=1.0.0 final -x test
+        run: ./gradlew final -x test
 
       - name: Parse release version
         id: version_info
@@ -116,26 +116,13 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           ./gradlew assembleDoordeckSDKReleaseXCFramework
-          CHECKSUM=$(swift package compute-checksum doordeck-sdk/DoordeckSDK.xcframework.zip)
-          echo "checksum=$CHECKSUM" >> $GITHUB_ENV
           aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ steps.version_info.outputs.version }}/
-          ./gradlew updatePackageSwift -PpackageVersion=${{ steps.version_info.outputs.version }} -PpackageChecksum=$CHECKSUM
-          git add Package.swift
-          git commit -m "Update Package.swift for v${{ steps.version_info.outputs.version }} [skip actions]"
-          git push
-
-      - name: Update tag to point to latest commit
-        run: |
-          TAG=$(git describe --tags --abbrev=0)
-          git tag -d "$TAG"
-          git tag "$TAG"
-          git push origin "$TAG" --force
 
       - name: Publish to CocoaPods
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         run: |
-          ./gradlew podSpecRelease
+          ./gradlew -Prelease.useLastTag=true podSpecRelease
           pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
 
       - name: Publish to Maven Central
@@ -150,6 +137,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
         run: |
+          ./gradlew -Prelease.useLastTag=true jsBrowserProductionLibraryDistribution
           cd build/js/packages/doordeck-sdk
           npm publish --access public
 
