@@ -54,7 +54,7 @@ pod 'DoordeckSDK', '~> [SDK_VERSION]'
 
 #### Swift package manager
 <ol>
-    <li>In Xcode, select "File" -> "Add Package Dependencies..."</li>
+    <li>In Xcode, select "File" and then select "Add Package Dependencies..."</li>
     <li>Enter <a href="https://github.com/doordeck/doordeck-headless-sdk-spm">https://github.com/doordeck/doordeck-headless-sdk-spm</a> in the search box</li>
     <li>Select "Up to next major version" from the dependency rule dropdown, and click "Add Package"</li>
 </ol>
