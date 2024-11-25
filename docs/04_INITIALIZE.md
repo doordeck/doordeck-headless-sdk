@@ -1,49 +1,60 @@
 # Initialize the SDK
-The SDK should be initialized as the first step. The simplest way to do this is by providing the `ApiEnvironment` and the auth token
 
-It can also be initialized without an auth token, but you will need to manually [set an auth token through the context manager](06_CONTEXT-MANAGER.md#set-auth-token) to use most of the SDK functionalities
+To get started with the SDK, the first step is to initialize it by providing the `ApiEnvironment` and an authentication token.
 
-<details><summary>JVM</summary>
+You can also initialize the SDK without an auth token, but in this case, you'll need to manually [set an auth token through the context manager](06_CONTEXT-MANAGER.md#set-auth-token) to access most SDK functionalities.
 
-````kotlin
+### JVM
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 val sdk = KDoordeckFactory.initialize(ApiEnvironment.PROD, "AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>Android</summary>
+### Android
+<details>
+<summary>Show Details</summary>
 
-In Android, the SDK requires you to pass the android application context
+In Android, you need to pass the Android application context to initialize the SDK:
 
-````kotlin
+```kotlin
 val applicationContext = ApplicationContext(context)
 val sdk = KDoordeckFactory.initialize(applicationContext, ApiEnvironment.PROD, "AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 let sdk = KDoordeckFactory().initialize(apiEnvironment: .prod, token: "AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 import doordeck from '@doordeck/doordeck-headless-sdk';
 const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
 const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.PROD, "AUTH_TOKEN");
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 doordeck_sdk_ExportedSymbols* symbols = Methods.doordeck_sdk_symbols();
 var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD.get();
 var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(factory, apiEnvironment, token.toSByte());
-````
+```
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)

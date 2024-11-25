@@ -1,56 +1,76 @@
 # Samples
-<details><summary>JVM</summary>
 
-````kotlin
+Below are the available samples and functionalities for different platforms.
+
+### JVM
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 // TODO
-````
+```
+
 </details>
 
-<details><summary>Android</summary>
+### Android
+<details>
+<summary>Show Details</summary>
 
-````kotlin
+```kotlin
 // TODO
-````
+```
+
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 // TODO
-````
+```
+
 </details>
 
-<details><summary>JS</summary>
-In JavaScript, we have a sample made with Angular that shows how the SDK can be integrated into a web application
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-The sample represents a simple dashboard with the following functionalities provided by the SDK:
-<ul>
-    <li>User login</li>
-    <li>Register ephemeral key with secondary authentication</li>
-    <li>List sites</li>
-    <li>List locks for a site</li>
-    <li>List users for a lock</li>
-    <li>List lock activity</li>
-    <li>Share a lock</li>
-    <li>Revoke access to a lock</li>
-    <li>Unlock a lock</li>
-    <li>Update user display name</li>
-    <li>Update user password</li>
-    <li>Logout</li>
-</ul>
+In JavaScript, we provide a sample built with **Angular** demonstrating how the SDK can be integrated into a web application.
 
-![login.png](media/samples/angular/login.png)
-![dashboard.png](media/samples/angular/dashboard.png)
-![revoke-access.png](media/samples/angular/revoke-access.png)
-![activity.png](media/samples/angular/activity.png)
-![share-lock.png](media/samples/angular/share-lock.png)
+#### Functionalities Included:
+- User login
+- Register ephemeral key with secondary authentication
+- List sites
+- List locks for a site
+- List users for a lock
+- List lock activity
+- Share a lock
+- Revoke access to a lock
+- Unlock a lock
+- Update user display name
+- Update user password
+- Logout
+
+#### Sample Screenshots:
+| Login Screen | Dashboard | Revoke Access |
+|--------------|-----------|---------------|
+| ![login.png](media/samples/angular/login.png) | ![dashboard.png](media/samples/angular/dashboard.png) | ![revoke-access.png](media/samples/angular/revoke-access.png) |
+
+| Activity Log | Share Lock |
+|--------------|------------|
+| ![activity.png](media/samples/angular/activity.png) | ![share-lock.png](media/samples/angular/share-lock.png) |
+
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 // TODO
-````
+```
+
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)
