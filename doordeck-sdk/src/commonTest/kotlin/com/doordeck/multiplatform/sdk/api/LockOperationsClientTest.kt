@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -246,6 +247,45 @@ internal class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { result.publicKey.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKey() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByLocalKeyRequest(TEST_MAIN_USER_ID)
+
+        // Then
+        assertTrue { result.publicKey.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByEmails() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByEmailsRequest(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL))
+
+        // Then
+        assertTrue { result.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeys() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByLocalKeysRequest(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID))
+
+        // Then
+        assertTrue { result.isNotEmpty() }
     }
 
     @Test
