@@ -8,6 +8,9 @@ interface SecureStorage {
     fun addCloudAuthToken(token: String)
     fun getCloudAuthToken(): String?
 
+    fun addCloudRefreshToken(token: String)
+    fun getCloudRefreshToken(): String?
+
     fun addFusionAuthToken(token: String)
     fun getFusionAuthToken(): String?
 

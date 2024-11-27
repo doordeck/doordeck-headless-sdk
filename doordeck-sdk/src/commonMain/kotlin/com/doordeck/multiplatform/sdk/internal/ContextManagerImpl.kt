@@ -16,7 +16,7 @@ internal class ContextManagerImpl(
 ): ContextManager {
 
     var currentToken: String? = token
-    var currentRefreshToken: String? = refreshToken // Probably to be removed
+    var currentRefreshToken: String? = refreshToken
     var currentFusionToken: String? = null
 
     private var currentUserId: String? = null
@@ -27,6 +27,10 @@ internal class ContextManagerImpl(
 
     override fun setAuthToken(token: String) {
         currentToken = token
+    }
+
+    override fun setRefreshToken(token: String) {
+        currentRefreshToken = token
     }
 
     internal fun setTokens(token: String, refreshToken: String) {
@@ -76,6 +80,7 @@ internal class ContextManagerImpl(
         initializeSecureStorage()
 
         currentToken =  currentToken ?: secureStorage?.getCloudAuthToken()
+        currentRefreshToken = currentRefreshToken ?: secureStorage?.getCloudRefreshToken()
         currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
         currentUserId = currentUserId ?: secureStorage?.getUserId()
         currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
@@ -86,6 +91,7 @@ internal class ContextManagerImpl(
         initializeSecureStorage()
 
         currentToken?.let { secureStorage?.addCloudAuthToken(it) }
+        currentRefreshToken?.let { secureStorage?.addCloudRefreshToken(it) }
         currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
         currentUserId?.let { secureStorage?.addUserId(it) }
         currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
