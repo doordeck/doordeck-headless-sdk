@@ -6,10 +6,14 @@ import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
 import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetSingleLockData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByEmailData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByEmailsData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByForeignKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByForeignKeysData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByIdentityData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByLocalKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByLocalKeysData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByTelephoneData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByTelephonesData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -41,6 +45,7 @@ import com.doordeck.multiplatform.sdk.api.model.toUnlockOperation
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -227,6 +232,42 @@ internal class LockOperationsResourceImpl(
     override fun getUserPublicKeyByIdentityJson(data: String): String {
         val getUserPublicKeyByIdentityData = data.fromJson<GetUserPublicKeyByIdentityData>()
         return getUserPublicKeyByIdentity(getUserPublicKeyByIdentityData.identity).toJson()
+    }
+
+    override fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
+        return runBlocking { getUserPublicKeyByEmailsRequest(emails) }
+    }
+
+    override fun getUserPublicKeyByEmailsJson(data: String): String {
+        val getUserPublicKeyByEmailsData = data.fromJson<GetUserPublicKeyByEmailsData>()
+        return getUserPublicKeyByEmails(getUserPublicKeyByEmailsData.emails).toJson()
+    }
+
+    override fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
+        return runBlocking { getUserPublicKeyByTelephonesRequest(telephones) }
+    }
+
+    override fun getUserPublicKeyByTelephonesJson(data: String): String {
+        val getUserPublicKeyByTelephonesData = data.fromJson<GetUserPublicKeyByTelephonesData>()
+        return getUserPublicKeyByTelephones(getUserPublicKeyByTelephonesData.telephones).toJson()
+    }
+
+    override fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
+        return runBlocking { getUserPublicKeyByLocalKeysRequest(localKeys) }
+    }
+
+    override fun getUserPublicKeyByLocalKeysJson(data: String): String {
+        val getUserPublicKeyByLocalKeysData = data.fromJson<GetUserPublicKeyByLocalKeysData>()
+        return getUserPublicKeyByLocalKeys(getUserPublicKeyByLocalKeysData.localKeys).toJson()
+    }
+
+    override fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
+        return runBlocking { getUserPublicKeyByForeignKeysRequest(foreignKeys) }
+    }
+
+    override fun getUserPublicKeyByForeignKeysJson(data: String): String {
+        val getUserPublicKeyByForeignKeysData = data.fromJson<GetUserPublicKeyByForeignKeysData>()
+        return getUserPublicKeyByForeignKeys(getUserPublicKeyByForeignKeysData.foreignKeys).toJson()
     }
 
     override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {

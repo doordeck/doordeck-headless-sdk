@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -120,37 +121,65 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByEmail(email: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by telephone
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByTelephone(telephone: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by local key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByLocalKey(localKey: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by foreign key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByForeignKey(foreignKey: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKeyResponse>
+
+    /**
+     * Get a user’s public key by email
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByEmails(emails: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by telephone
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByTelephones(telephones: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by local key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByLocalKeys(localKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by foreign key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>>
 
     /**
      * Unlock

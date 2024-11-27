@@ -11,10 +11,14 @@ import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
 import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetSingleLockData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByEmailData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByEmailsData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByForeignKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByForeignKeysData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByIdentityData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByLocalKeyData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByLocalKeysData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByTelephoneData
+import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyByTelephonesData
 import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -247,6 +251,46 @@ class LockOperationsResourceImplTest {
     @Test
     fun shouldGetUserPublicKeyByIdentityJson() = runTest {
         lockOperations.getUserPublicKeyByIdentityJson(GetUserPublicKeyByIdentityData("").toJson())
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByEmails() = runTest {
+        lockOperations.getUserPublicKeyByEmails(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByEmailsJson() = runTest {
+        lockOperations.getUserPublicKeyByEmailsJson(GetUserPublicKeyByEmailsData(listOf("", "")).toJson())
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByTelephones() = runTest {
+        lockOperations.getUserPublicKeyByTelephones(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByTelephonesJson() = runTest {
+        lockOperations.getUserPublicKeyByTelephonesJson(GetUserPublicKeyByTelephonesData(listOf("", "")).toJson())
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeys() = runTest {
+        lockOperations.getUserPublicKeyByLocalKeys(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeysJson() = runTest {
+        lockOperations.getUserPublicKeyByLocalKeysJson(GetUserPublicKeyByLocalKeysData(listOf("", "")).toJson())
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByForeignKeys() = runTest {
+        lockOperations.getUserPublicKeyByForeignKeys(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByForeignKeysJson() = runTest {
+        lockOperations.getUserPublicKeyByForeignKeysJson(GetUserPublicKeyByForeignKeysData(listOf("", "")).toJson())
     }
 
     @Test

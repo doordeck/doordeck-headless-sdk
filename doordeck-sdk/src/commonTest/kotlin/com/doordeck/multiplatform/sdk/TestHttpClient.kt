@@ -40,6 +40,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
@@ -49,7 +50,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondOk
-import io.ktor.client.request.HttpResponseData
+import io.ktor.client.request.*
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -109,7 +110,11 @@ private val TEST_ENGINE = MockEngine { request ->
                 Paths.getLogoUploadUrlPath(DEFAULT_APPLICATION_ID) -> respondContent(LOGO_UPLOAD_URL_RESPONSE)
                 FusionPaths.getLoginPath() -> respondContent(FUSION_LOGIN_RESPONSE)
                 FusionPaths.getIntegrationConfiguration() -> respondContent(INTEGRATION_CONFIGURATION_RESPONSE)
-                Paths.getUserPublicKeyPath(),
+                Paths.getUserPublicKeyPath() -> if (request.isVersionTwo()) {
+                    respondContent(BATCH_USER_PUBLIC_KEY_RESPONSE)
+                } else {
+                    respondContent(USER_PUBLIC_KEY_RESPONSE)
+                }
                 Paths.getUserPublicKeyPath(DEFAULT_USER_EMAIL) -> respondContent(USER_PUBLIC_KEY_RESPONSE)
                 else -> error("Unlinked ${request.method} request $request")
             }
@@ -149,6 +154,9 @@ private fun MockRequestHandleScope.respondContent(content: String): HttpResponse
         headers = headersOf(HttpHeaders.ContentType, "application/json")
     )
 
+private fun HttpRequestData.isVersionTwo(): Boolean =
+    headers.contains(HttpHeaders.Accept, "application/vnd.doordeck.api-v2+json")
+
 private val TOKEN_RESPONSE = TokenResponse("", "").toJson()
 private val TILE_LOCKS_RESPONSE = TileLocksResponse("", "", emptyList()).toJson()
 private val LIST_SITES_RESPONSE = listOf(SiteResponse("", "", "", 0.0, 0.0, 0, "", "", "")).toJson()
@@ -170,5 +178,6 @@ private val AUDIT_RESPONSE = listOf(AuditResponse("", 0.0, AuditEvent.DOOR_LOCK,
 private val USER_LOCK_RESPONSE = listOf(UserLockResponse("", "", "", null, false, false, UserRole.USER)).toJson()
 private val LOCK_USER_RESPONSE = LockUserResponse("", "", "", null, false, false, null, null, emptyList()).toJson()
 private val USER_PUBLIC_KEY_RESPONSE = UserPublicKeyResponse("", "").toJson()
+private val BATCH_USER_PUBLIC_KEY_RESPONSE = listOf(BatchUserPublicKeyResponse("", publicKey = "")).toJson()
 private val PINNED_LOCKS_RESPONSE = listOf(LockResponse("", "", null, null, null, UserRole.USER, LockSettingsResponse(0.0, emptyList(), "", tiles = emptyList(), hidden = false), LockStateResponse(false, false), false)).toJson()
 private val SHAREABLE_LOCKS_RESPONSE = listOf(ShareableLockResponse("", "")).toJson()

@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -94,6 +95,22 @@ internal class LockOperationsResourceImpl(
 
     override fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKeyResponse> {
         return GlobalScope.promise { getUserPublicKeyByIdentityRequest(identity) }
+    }
+
+    override fun getUserPublicKeyByEmails(emails: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
+        return GlobalScope.promise { getUserPublicKeyByEmailsRequest(emails) }
+    }
+
+    override fun getUserPublicKeyByTelephones(telephones: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
+        return GlobalScope.promise { getUserPublicKeyByTelephonesRequest(telephones) }
+    }
+
+    override fun getUserPublicKeyByLocalKeys(localKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
+        return GlobalScope.promise { getUserPublicKeyByLocalKeysRequest(localKeys) }
+    }
+
+    override fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
+        return GlobalScope.promise { getUserPublicKeyByForeignKeysRequest(foreignKeys) }
     }
 
     override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?): Promise<Unit> {

@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.api.requests.BatchUserPublicKeyRequest
 import com.doordeck.multiplatform.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.multiplatform.sdk.api.requests.LockOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.LockSettingsDefaultNameRequest
@@ -25,6 +26,7 @@ import com.doordeck.multiplatform.sdk.api.requests.UpdateLockSettingUsageRequire
 import com.doordeck.multiplatform.sdk.api.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.UserPublicKeyRequest
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -203,7 +205,7 @@ internal open class LockOperationsClient(
     /**
      * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByEmailRequest(email: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(email = email))
@@ -211,7 +213,7 @@ internal open class LockOperationsClient(
     /**
      * Get a user’s public key by telephone
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(telephone = telephone))
@@ -219,7 +221,7 @@ internal open class LockOperationsClient(
     /**
      * Get a user’s public key by local key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(localKey = localKey))
@@ -227,7 +229,7 @@ internal open class LockOperationsClient(
     /**
      * Get a user’s public key by foreign key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(foreignKey = foreignKey))
@@ -235,7 +237,7 @@ internal open class LockOperationsClient(
     /**
      * Get a user’s public key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByIdentityRequest(identity: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
@@ -243,6 +245,45 @@ internal open class LockOperationsClient(
     private suspend fun getUserPublicKey(request: UserPublicKeyRequest): UserPublicKeyResponse {
         return httpClient.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders()
+            setBody(request)
+        }
+    }
+
+    /**
+     * Get a user’s public key by email
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<BatchUserPublicKeyResponse> =
+        batchGetUserPublicKey(BatchUserPublicKeyRequest(email = emails))
+
+    /**
+     * Get a user’s public key by telephone
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<BatchUserPublicKeyResponse> =
+        batchGetUserPublicKey(BatchUserPublicKeyRequest(telephone = telephones))
+
+    /**
+     * Get a user’s public key by local key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<BatchUserPublicKeyResponse> =
+        batchGetUserPublicKey(BatchUserPublicKeyRequest(localKey = localKeys))
+
+    /**
+     * Get a user’s public key by foreign key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> =
+        batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
+
+    private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BatchUserPublicKeyResponse> {
+        return httpClient.post(Paths.getUserPublicKeyPath()) {
+            addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(request)
         }
     }

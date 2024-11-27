@@ -73,6 +73,14 @@ class UserPublicKeyRequest(
 )
 
 @Serializable
+class BatchUserPublicKeyRequest(
+    val email: List<String>? = null,
+    val telephone: List<String>? = null,
+    val localKey: List<String>? = null,
+    val foreignKey: List<String>? = null
+)
+
+@Serializable
 sealed interface UpdateLockPropertiesRequest
 
 @Serializable

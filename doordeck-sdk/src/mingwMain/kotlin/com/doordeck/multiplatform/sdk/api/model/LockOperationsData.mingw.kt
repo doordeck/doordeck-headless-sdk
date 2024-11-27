@@ -132,6 +132,26 @@ class GetUserPublicKeyByIdentityData(
 )
 
 @Serializable
+class GetUserPublicKeyByEmailsData(
+    val emails: List<String>
+)
+
+@Serializable
+class GetUserPublicKeyByTelephonesData(
+    val telephones: List<String>
+)
+
+@Serializable
+class GetUserPublicKeyByLocalKeysData(
+    val localKeys: List<String>
+)
+
+@Serializable
+class GetUserPublicKeyByForeignKeysData(
+    val foreignKeys: List<String>
+)
+
+@Serializable
 class UnlockWithContextData(
     val lockId: String,
     val directAccessEndpoints: List<String>? = null

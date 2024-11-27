@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -149,7 +150,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
 
@@ -158,7 +159,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by telephone
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
 
@@ -167,7 +168,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by local key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
 
@@ -176,7 +177,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by foreign key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
 
@@ -185,11 +186,47 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
 
     fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKeyResponse>
+
+    /**
+     * Get a user’s public key by email
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse>
+
+    fun getUserPublicKeyByEmailsAsync(emails: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by telephone
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse>
+
+    fun getUserPublicKeyByTelephonesAsync(telephones: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by local key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse>
+
+    fun getUserPublicKeyByLocalKeysAsync(localKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by foreign key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse>
+
+    fun getUserPublicKeyByForeignKeysAsync(foreignKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>>
 
     /**
      * Unlock
