@@ -214,6 +214,46 @@ class LockOperationsResourceImplTest {
     fun shouldGetUserPublicKeyByIdentityAsync() = runTest {
         lockOperations.getUserPublicKeyByIdentityAsync("").await()
     }
+    
+    @Test
+    fun shouldGetUserPublicKeyByEmails() = runTest {
+        lockOperations.getUserPublicKeyByEmails(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByEmailsAsync() = runTest {
+        lockOperations.getUserPublicKeyByEmailsAsync(listOf("", "")).await()
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByTelephones() = runTest {
+        lockOperations.getUserPublicKeyByTelephones(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByTelephonesAsync() = runTest {
+        lockOperations.getUserPublicKeyByTelephonesAsync(listOf("", "")).await()
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeys() = runTest {
+        lockOperations.getUserPublicKeyByLocalKeys(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeysAsync() = runTest {
+        lockOperations.getUserPublicKeyByLocalKeysAsync(listOf("", "")).await()
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByForeignKeys() = runTest {
+        lockOperations.getUserPublicKeyByForeignKeys(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByForeignKeysAsync() = runTest {
+        lockOperations.getUserPublicKeyByForeignKeysAsync(listOf("", "")).await()
+    }
 
     @Test
     fun shouldUnlockWithContext() = runTest {

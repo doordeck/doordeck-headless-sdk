@@ -120,6 +120,26 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
+    fun shouldGetUserPublicKeyByEmails() = runTest {
+        lockOperations.getUserPublicKeyByEmails(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByTelephones() = runTest {
+        lockOperations.getUserPublicKeyByTelephones(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeys() = runTest {
+        lockOperations.getUserPublicKeyByLocalKeys(listOf("", ""))
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByForeignKeys() = runTest {
+        lockOperations.getUserPublicKeyByForeignKeys(listOf("", ""))
+    }
+
+    @Test
     fun shouldUnlockWithContext() = runTest {
         lockOperations.unlockWithContext(DEFAULT_LOCK_ID)
     }

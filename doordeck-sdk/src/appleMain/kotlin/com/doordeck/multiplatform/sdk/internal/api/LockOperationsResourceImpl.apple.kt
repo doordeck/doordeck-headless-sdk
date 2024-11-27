@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -91,6 +92,22 @@ internal class LockOperationsResourceImpl(
 
     override suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
         return getUserPublicKeyByIdentityRequest(identity)
+    }
+
+    override suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
+        return getUserPublicKeyByEmailsRequest(emails)
+    }
+
+    override suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
+        return getUserPublicKeyByTelephonesRequest(telephones)
+    }
+
+    override suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
+        return getUserPublicKeyByLocalKeysRequest(localKeys)
+    }
+
+    override suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
+        return getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
     override suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
