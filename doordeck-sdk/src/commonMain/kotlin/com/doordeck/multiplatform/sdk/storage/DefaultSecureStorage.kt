@@ -12,6 +12,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
      * Storage Keys
      */
     private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
+    private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
     private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
     private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
     private val USER_ID_KEY = "USER_ID_KEY"
@@ -23,6 +24,14 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
 
     override fun getCloudAuthToken(): String? {
         return settings.getStringOrNull(CLOUD_AUTH_TOKEN_KEY)
+    }
+
+    override fun addCloudRefreshToken(token: String) {
+        return settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
+    }
+
+    override fun getCloudRefreshToken(): String? {
+        return settings.getStringOrNull(CLOUD_REFRESH_TOKEN_KEY)
     }
 
     override fun addFusionAuthToken(token: String) {
