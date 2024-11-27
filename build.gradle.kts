@@ -19,3 +19,10 @@ nexusPublishing {
         }
     }
 }
+
+rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
+    rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
+        lockFileDirectory = project.rootDir.resolve("kotlin-js-store")
+        resolution("cross-spawn", "7.0.6")
+    }
+}
