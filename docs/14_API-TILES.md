@@ -80,8 +80,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
-List<string> lockIdList = ["LOCK_ID"];
-var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", lockIdList).toData();
+var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"]).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
 ```
 </details>

@@ -406,8 +406,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> permittedAddresses = ["PERMITTED_ADDRESS"];
-var data = new SetLockSettingPermittedAddressesData("LOCK_ID", permittedAddresses).toData();
+var data = new SetLockSettingPermittedAddressesData("LOCK_ID", ["PERMITTED_ADDRESS"]).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingPermittedAddressesJson(resource, data);
 ```
 </details>
@@ -494,8 +493,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> days = ["MONDAY"];
-List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", days)];
+List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", ["MONDAY"])];
 var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingTimeRestrictionsJson(resource, data);
 ```
@@ -834,8 +832,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> emails = ["USER_EMAIL", "USER_EMAIL"];
-var data = new GetUserPublicKeyByEmailsData(emails).toData();
+var data = new GetUserPublicKeyByEmailsData(["USER_EMAIL", "USER_EMAIL"]).toData();
 var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByEmailsJson(resource, data));
 ```
 </details>
@@ -877,8 +874,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> telephones = ["USER_TELEPHONE", "USER_TELEPHONE"];
-var data = new GetUserPublicKeyByTelephonesData(telephones).toData();
+var data = new GetUserPublicKeyByTelephonesData(["USER_TELEPHONE", "USER_TELEPHONE"]).toData();
 var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByTelephonesJson(resource, data));
 ```
 </details>
@@ -920,8 +916,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> localKeys = ["USER_LOCAL_KEY", "USER_LOCAL_KEY"];
-var data = new GetUserPublicKeyByLocalKeysData(localKeys).toData();
+var data = new GetUserPublicKeyByLocalKeysData(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]).toData();
 var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByLocalKeysJson(resource, data));
 ```
 </details>
@@ -963,8 +958,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> foreignKeys = ["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"];
-var data = new GetUserPublicKeyByForeignKeysData(foreignKeys).toData();
+var data = new GetUserPublicKeyByForeignKeysData(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]).toData();
 var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByForeignKeysJson(resource, data));
 ```
 </details>
@@ -1210,9 +1204,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessT
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> userList = ["USER_ID"];
 var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var data = new RevokeAccessToLockOperationData(baseOperationData, userList).toData();
+var data = new RevokeAccessToLockOperationData(baseOperationData, ["USER_ID"]).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(resource, data);
 ```
 </details>
@@ -1257,8 +1250,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessT
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-List<string> userList = ["USER_ID"];
-var data = new RevokeAccessToLockWithContextData("LOCK_ID", userList).toData();
+var data = new RevokeAccessToLockWithContextData("LOCK_ID", ["USER_ID"]).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockWithContextJson(resource, data);
 ```
 </details>
