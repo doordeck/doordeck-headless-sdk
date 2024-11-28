@@ -7,6 +7,7 @@
 * [Context manager](06_CONTEXT-MANAGER.md#context-manager)
     * [Set operation context](06_CONTEXT-MANAGER.md#set-operation-context)
     * [Set auth token](06_CONTEXT-MANAGER.md#set-auth-token)
+    * [Set refresh token](06_CONTEXT-MANAGER.md#set-refresh-token)
     * [Set fusion auth token](06_CONTEXT-MANAGER.md#set-fusion-auth-token)
     * [Store context](06_CONTEXT-MANAGER.md#store-context)
     * [Load context](06_CONTEXT-MANAGER.md#load-context)

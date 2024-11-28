@@ -83,6 +83,45 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthTo
 ```
 </details>
 
+## Set refresh token
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+sdk.contextManager().setRefreshToken("REFRESH_TOKEN")
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+sdk.contextManager().setRefreshToken(token: "REFRESH_TOKEN")
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+sdk.contextManager().setRefreshToken("REFRESH_TOKEN");
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(contextManager, "REFRESH_TOKEN".toSByte());
+```
+</details>
+
 ## Set fusion auth token
 
 ### JVM & Android
@@ -124,7 +163,7 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusion
 
 ## Store context
 
-After setting the [operation context](#set-operation-context), [auth token](#set-auth-token), or [fusion auth token](#set-fusion-auth-token), you can store these values so they persist across sessions.
+After setting the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), or [fusion auth token](#set-fusion-auth-token), you can store these values so they persist across sessions.
 
 ### JVM
 <details>
@@ -183,6 +222,8 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeCont
 </details>
 
 ## Load context
+
+Loads the previously stored context, including the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), and [fusion auth token](#set-fusion-auth-token).
 
 ### JVM & Android
 <details>
