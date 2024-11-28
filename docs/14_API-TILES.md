@@ -70,8 +70,7 @@ sdk.tiles().associateMultipleLocks(tileId: "TILE_ID", siteId: "SITE_ID", lockIds
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const lockIdList = ktList.fromJsArray(["LOCK_ID"]);
-await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", lockIdList);
+await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks("TILE_ID", "SITE_ID", ktList.fromJsArray(["LOCK_ID"]));
 ```
 </details>
 

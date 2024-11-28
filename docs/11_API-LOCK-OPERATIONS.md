@@ -396,8 +396,7 @@ sdk.lockOperations().setLockSettingPermittedAddresses(lockId: "LOCK_ID", permitt
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const permittedAddresses = ktList.fromJsArray(["PERMITTED_ADDRESS"]);
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", permittedAddresses);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingPermittedAddresses("LOCK_ID", ktList.fromJsArray(["PERMITTED_ADDRESS"]));
 ```
 </details>
 
@@ -484,8 +483,8 @@ sdk.lockOperations().setLockSettingTimeRestrictions(lockId: "LOCK_ID", times: lo
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const timeRequirements = ktList.fromJsArray([new lockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", ktList.fromJsArray(["MONDAY"]))]);
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingTimeRestrictions("LOCK_ID", timeRequirements);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingTimeRestrictions("LOCK_ID",
+    ktList.fromJsArray([new lockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", ktList.fromJsArray(["MONDAY"]))]));
 ```
 </details>
 
@@ -1198,10 +1197,9 @@ sdk.lockOperations().revokeAccessToLock(revokeAccessToLockOperation: revokeAcces
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const userList = ktList.fromJsArray(["USER_ID"]);
 const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
-const revokeAccessToLockOperation = new lockOperations.RevokeAccessToLockOperation(baseOperation, userList);
+const revokeAccessToLockOperation = new lockOperations.RevokeAccessToLockOperation(baseOperation, ktList.fromJsArray(["USER_ID"]));
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLock(revokeAccessToLockOperation);
 ```
 </details>
@@ -1249,8 +1247,7 @@ sdk.lockOperations().revokeAccessToLockWithContext(lockId: "LOCK_ID", users: ["U
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const userList = ktList.fromJsArray(["USER_ID"]);
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLockWithContext("LOCK_ID", userList);
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLockWithContext("LOCK_ID", ktList.fromJsArray(["USER_ID"]));
 ```
 </details>
 
