@@ -592,7 +592,7 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 ```
 </details>
 
-## Get user public key by email
+## Lookup user public key by email
 
 ### JVM & Android
 <details>
@@ -633,7 +633,7 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 ```
 </details>
 
-## Get user public key by telephone
+## Lookup user public key by telephone
 
 ### JVM & Android
 <details>
@@ -674,7 +674,7 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 ```
 </details>
 
-## Get user public key by local key
+## Lookup user public key by local key
 
 ### JVM & Android
 <details>
@@ -715,7 +715,7 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 ```
 </details>
 
-## Get user public key by foreign key
+## Lookup user public key by foreign key
 
 ### JVM & Android
 <details>
@@ -756,7 +756,7 @@ var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.do
 ```
 </details>
 
-## Get user public key by identity
+## Lookup user public key by identity
 
 ### JVM & Android
 <details>
@@ -794,6 +794,179 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
 var data = new GetUserPublicKeyByIdentityData("USER_IDENTITY").toData();
 var response = Utils.fromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByIdentityJson(resource, data));
+```
+</details>
+
+
+## Batch lookup user public key by email
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val response = sdk.lockOperations().getUserPublicKeyByEmails(listOf("USER_EMAIL", "USER_EMAIL"))
+```
+💡 **Note:** In Java, use the `getUserPublicKeyByEmailsAsync` function, which returns a `CompletableFuture<List<BatchUserPublicKeyResponse>>` instead
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let response = sdk.lockOperations().getUserPublicKeyByEmails(emails: ["USER_EMAIL", "USER_EMAIL"])
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const ktList = doordeck.kotlin.collections.KtList;
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByEmails(ktList.fromJsArray(["USER_EMAIL", "USER_EMAIL"]));
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+List<string> emails = ["USER_EMAIL", "USER_EMAIL"];
+var data = new GetUserPublicKeyByEmailsData(emails).toData();
+var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByEmailsJson(resource, data));
+```
+</details>
+
+## Batch lookup user public key by telephone
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val response = sdk.lockOperations().getUserPublicKeyByTelephones(listOf("USER_TELEPHONE", "USER_TELEPHONE"))
+```
+💡 **Note:** In Java, use the `getUserPublicKeyByTelephonesAsync` function, which returns a `CompletableFuture<List<BatchUserPublicKeyResponse>>` instead
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let response = sdk.lockOperations().getUserPublicKeyByTelephones(telephones: ["USER_TELEPHONE", "USER_TELEPHONE"])
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const ktList = doordeck.kotlin.collections.KtList;
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByTelephones(ktList.fromJsArray(["USER_TELEPHONE", "USER_TELEPHONE"]));
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+List<string> telephones = ["USER_TELEPHONE", "USER_TELEPHONE"];
+var data = new GetUserPublicKeyByTelephonesData(telephones).toData();
+var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByTelephonesJson(resource, data));
+```
+</details>
+
+## Batch lookup user public key by local key
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val response = sdk.lockOperations().getUserPublicKeyByLocalKeys(listOf("USER_LOCAL_KEY"))
+```
+💡 **Note:** In Java, use the `getUserPublicKeyByLocalKeysAsync` function, which returns a `CompletableFuture<List<BatchUserPublicKeyResponse>>` instead
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let response = sdk.lockOperations().getUserPublicKeyByLocalKeys(localKeys: ["USER_LOCAL_KEY", "USER_LOCAL_KEY"])
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const ktList = doordeck.kotlin.collections.KtList;
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByLocalKeys(ktList.fromJsArray(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]));
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+List<string> localKeys = ["USER_LOCAL_KEY", "USER_LOCAL_KEY"];
+var data = new GetUserPublicKeyByLocalKeysData(localKeys).toData();
+var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByLocalKeysJson(resource, data));
+```
+</details>
+
+## Batch lookup user public key by foreign key
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val response = sdk.lockOperations().getUserPublicKeyByForeignKeys(listOf("USER_FOREIGN_KEY", "USER_FOREIGN_KEY"))
+```
+💡 **Note:** In Java, use the `getUserPublicKeyByForeignKeysAsync` function, which returns a `CompletableFuture<List<BatchUserPublicKeyResponse>>` instead
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let response = sdk.lockOperations().getUserPublicKeyByForeignKeys(foreignKeys: ["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"])
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const ktList = doordeck.kotlin.collections.KtList;
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().getUserPublicKeyByForeignKey(ktList.fromJsArray(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]));
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+List<string> foreignKeys = ["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"];
+var data = new GetUserPublicKeyByForeignKeysData(foreignKeys).toData();
+var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByForeignKeysJson(resource, data));
 ```
 </details>
 
