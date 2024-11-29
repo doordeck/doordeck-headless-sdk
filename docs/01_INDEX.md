@@ -12,6 +12,7 @@
     * [Store context](06_CONTEXT-MANAGER.md#store-context)
     * [Load context](06_CONTEXT-MANAGER.md#load-context)
     * [Clear context](06_CONTEXT-MANAGER.md#clear-context)
+    * [Set secure storage implementation](06_CONTEXT-MANAGER.md#set-secure-storage-implementation)
 * [Accountless resource](07_API-ACCOUNTLESS.md#accountless-resource)
     * [Login](07_API-ACCOUNTLESS.md#login)
     * [Register a new user](07_API-ACCOUNTLESS.md#register-a-new-user)

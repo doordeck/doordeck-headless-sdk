@@ -165,6 +165,9 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusion
 
 After setting the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), or [fusion auth token](#set-fusion-auth-token), you can store these values so they persist across sessions.
 
+> [!NOTE] 
+> You can override the default secure storage implementation with the [set secure storage implementation](#set-secure-storage-implementation) functionality
+
 ### JVM
 <details>
 <summary>Show Details</summary>
@@ -300,6 +303,209 @@ sdk.contextManager().clearContext();
 ```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
+```
+</details>
+
+## Set secure storage implementation
+
+This function enables you to provide your own storage implementation.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+class MyOwnSecureImplementation : SecureStorage {
+    override fun addCloudAuthToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getCloudAuthToken(): String? {
+        // Your implementation
+    }
+
+    override fun addCloudRefreshToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getCloudRefreshToken(): String? {
+        // Your implementation
+    }
+    
+    override fun addFusionAuthToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getFusionAuthToken(): String? {
+        // Your implementation
+    }
+
+    override fun addPrivateKey(byteArray: ByteArray) {
+        // Your implementation
+    }
+
+    override fun getPrivateKey(): ByteArray? {
+        // Your implementation
+    }
+
+    override fun addUserId(userId: String) {
+        // Your implementation
+    }
+
+    override fun getUserId(): String? {
+        // Your implementation
+    }
+
+    override fun addCertificateChain(certificateChain: List<String>) {
+        // Your implementation
+    }
+
+    override fun getCertificateChain(): List<String>? {
+        // Your implementation
+    }
+
+    override fun clear() {
+        // Your implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(MyOwnSecureImplementation())
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+class MyOwnSecureImplementation : SecureStorage {
+    func addCloudAuthToken(token: String) {
+        // Your Implementation
+    }
+
+    func getCloudAuthToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addCloudRefreshToken(token: String) {
+        // Your Implementation
+    }
+    
+    func getCloudRefreshToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addFusionAuthToken(token: String) {
+        // Your Implementation
+    }
+    
+    func getFusionAuthToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addPrivateKey(byteArray: KotlinByteArray) {
+        // Your Implementation
+    }
+    
+    func getPrivateKey() -> KotlinByteArray? {
+        // Your Implementation
+    }
+    
+    func addUserId(userId: String) {
+        // Your Implementation
+    }
+    
+    func getUserId() -> String? {
+        // Your Implementation
+    }
+    
+    func addCertificateChain(certificateChain: [String]) {
+        // Your Implementation
+    }
+    
+    func getCertificateChain() -> [String]? {
+        // Your Implementation
+    }
+    
+    func clear() {
+        // Your Implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(secureStorage: MyOwnSecureImplementation())
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+class MyOwnSecureImplementation implements com.doordeck.multiplatform.sdk.storage.SecureStorage {
+
+    addCloudAuthToken(token: string): void {
+        // Your implementation
+    }
+
+    getCloudAuthToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addCloudRefreshToken(token: string): void {
+        // Your implementation
+    }
+
+    getCloudRefreshToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addFusionAuthToken(token: string): void {
+        // Your implementation
+    }
+
+    getFusionAuthToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addPrivateKey(byteArray: Int8Array): void {
+        // Your implementation
+    }
+
+    getPrivateKey(): Nullable<Int8Array> {
+        // Your implementation
+    }
+
+    addUserId(userId: string): void {
+        // Your implementation
+    }
+
+    getUserId(): Nullable<string> {
+        // Your implementation
+    }
+
+    addCertificateChain(certificateChain: kotlin.collections.KtList<string>): void {
+        // Your implementation
+    }
+
+    getCertificateChain(): Nullable<kotlin.collections.KtList<string>> {
+        // Your implementation
+    }
+
+    clear(): void {
+        // Your implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(new MyOwnSecureImplementation());
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+// TODO
 ```
 </details>
 
