@@ -442,7 +442,6 @@ sdk.contextManager().setSecureStorageImpl(secureStorage: MyOwnSecureImplementati
 
 ```js
 class MyOwnSecureImplementation implements com.doordeck.multiplatform.sdk.storage.SecureStorage {
-
     addCloudAuthToken(token: string): void {
         // Your implementation
     }
