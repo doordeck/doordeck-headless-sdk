@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.api.AccountlessResource
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.Dispatchers
@@ -18,5 +19,10 @@ internal class HelperResourceImpl(
 
     override fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { uploadPlatformLogoRequest(applicationId, contentType, image) }
+    }
+
+    override suspend fun assistedLogin(email: String, password: String, loadContext: Boolean) {
+
+
     }
 }

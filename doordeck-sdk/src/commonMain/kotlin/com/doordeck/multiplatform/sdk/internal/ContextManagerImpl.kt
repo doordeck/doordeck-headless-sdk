@@ -21,6 +21,7 @@ internal class ContextManagerImpl(
 
     private var currentUserId: String? = null
     private var currentUserCertificateChain: List<String>? = null
+    private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
 
     private var secureStorage: SecureStorage? = null
@@ -55,9 +56,10 @@ internal class ContextManagerImpl(
         currentUserPrivateKey = null
     }
 
-    override fun setOperationContext(userId: String, certificateChain: List<String>, privateKey: ByteArray) {
+    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
         currentUserId = userId
         currentUserCertificateChain = certificateChain
+        currentUserPublicKey = publicKey
         currentUserPrivateKey = privateKey
     }
 
@@ -65,6 +67,7 @@ internal class ContextManagerImpl(
         val operationContextData = data.fromJson<Context.OperationContextData>()
         currentUserId = operationContextData.userId
         currentUserCertificateChain = operationContextData.userCertificateChain
+        currentUserPublicKey = operationContextData.userPublicKey.decodeBase64ToByteArray()
         currentUserPrivateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
     }
 
@@ -84,6 +87,7 @@ internal class ContextManagerImpl(
         currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
         currentUserId = currentUserId ?: secureStorage?.getUserId()
         currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
+        currentUserPublicKey = currentUserPublicKey ?: secureStorage?.getPublicKey()
         currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
     }
 
@@ -111,13 +115,15 @@ internal class ContextManagerImpl(
     internal fun getOperationContext(): Context.OperationContext {
         val actualUserId = currentUserId
         val actualUserCertificateChain = currentUserCertificateChain
+        val actualPublicKey = currentUserPublicKey
         val actualUserPrivateKey = currentUserPrivateKey
-        if (actualUserId == null || actualUserCertificateChain == null || actualUserPrivateKey == null) {
+        if (actualUserId == null || actualUserCertificateChain == null || actualPublicKey == null || actualUserPrivateKey == null) {
             throw MissingOperationContextException("Operation context is missing")
         }
         return Context.OperationContext(
             userId = actualUserId,
             userCertificateChain = actualUserCertificateChain,
+            userPublicKey = actualPublicKey,
             userPrivateKey = actualUserPrivateKey
         )
     }
