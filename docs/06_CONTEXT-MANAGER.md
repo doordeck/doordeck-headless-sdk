@@ -310,6 +310,9 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearCont
 
 This function enables you to provide your own storage implementation.
 
+> [!NOTE]
+> If you are looking to override the default secure storage with this option, you should set it before using the [load context](#load-context)
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
