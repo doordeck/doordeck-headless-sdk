@@ -34,7 +34,7 @@ internal open class HelperClient(
         platformClient.updateApplicationLogoUrlRequest(applicationId, cdnUrl)
     }
 
-    suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse {
+    suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val certificateChain = contextManagerImpl.getCertificateChain()
 
         // TODO Verify the certificate chain expire
@@ -65,7 +65,7 @@ internal open class HelperClient(
         return AssistedLoginResponse(loginResponse, keyPair, requireVerification)
     }
 
-    suspend fun completeAssistedLogin(code: String): RegisterEphemeralKeyResponse {
+    suspend fun completeAssistedLoginRequest(code: String): RegisterEphemeralKeyResponse {
         val privateKey = contextManagerImpl.getKeyPair()?.private
             ?: throw MissingContextFieldException("Key pair is missing in the context")
 
