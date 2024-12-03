@@ -1,200 +1,514 @@
 # Context manager
-### Set operation context
-By setting the operation context, the usage of the most complex functions from the SDK will be simplified, as you will need to use far fewer parameters with them
-<details><summary>JVM & Android</summary>
 
-````kotlin
+The **Context Manager** simplifies the usage of complex SDK functions by reducing the number of parameters required when setting the operation context, authentication tokens, and other session data.
+
+## Set operation context
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY)
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: USER_CERTIFICATE_CHAIN_LIST, privateKey: PRIVATE_KEY)
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY);
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY").toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
-````
+```
 </details>
 
-### Set auth token
-If you have initialized the SDK without providing an authentication token, you can provide one or update the existing token using this function
-<details><summary>JVM & Android</summary>
+## Set auth token
 
-````kotlin
+If the SDK was initialized without an authentication token, you can provide or update the token using this function.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().setAuthToken("AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().setAuthToken(token: "AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().setAuthToken("AUTH_TOKEN");
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(contextManager, "AUTH_TOKEN".toSByte());
-````
+```
 </details>
 
-### Set fusion auth token
-<details><summary>JVM & Android</summary>
+## Set refresh token
 
-````kotlin
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+sdk.contextManager().setRefreshToken("REFRESH_TOKEN")
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+sdk.contextManager().setRefreshToken(token: "REFRESH_TOKEN")
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+sdk.contextManager().setRefreshToken("REFRESH_TOKEN");
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(contextManager, "REFRESH_TOKEN".toSByte());
+```
+</details>
+
+## Set fusion auth token
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().setFusionAuthToken("FUSION_AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().setFusionAuthToken(token: "FUSION_AUTH_TOKEN")
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().setFusionAuthToken("FUSION_AUTH_TOKEN");
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusionAuthToken(contextManager, "FUSION_AUTH_TOKEN".toSByte());
-````
+```
 </details>
 
-### Store context
-If you have previously set the [operation context](#set-operation-context), [auth token](#set-auth-token) or the [fusion auth token](#set-fusion-auth-token), you can store those context fields in the system so they are persisted between sessions.
-<details><summary>JVM</summary>
+## Store context
 
-````kotlin
+After setting the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), or [fusion auth token](#set-fusion-auth-token), you can store these values so they persist across sessions.
+
+> [!NOTE] 
+> You can override the default secure storage implementation with the [set secure storage implementation](#set-secure-storage-implementation) functionality
+
+### JVM
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().storeContext()
-````
->:information_source: In the JVM, the context is stored using `properties`
+```
+
+💡 **Note:** In JVM, the context is stored using `properties`.
 </details>
 
-<details><summary>Android</summary>
+### Android
+<details>
+<summary>Show Details</summary>
 
-````kotlin
+```kotlin
 sdk.contextManager().storeContext()
-````
->:information_source: In Android, the context is stored using `shared preference settings`
+```
+
+💡 **Note:** In Android, the context is stored using `shared preference settings`.
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().storeContext()
-````
+```
 
->:information_source: In the JVM, the context is stored using `keychain`
+💡 **Note:** In Swift, the context is stored using `keychain`.
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().storeContext();
-````
->:information_source: In JS, the context is stored using `local storage`
+```
+
+💡 **Note:** In JavaScript, the context is stored using `local storage`.
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeContext(contextManager);
-````
->:information_source: In C#, the context is stored using `windows registry`
+```
+
+💡 **Note:** In C#, the context is stored using `windows registry`.
 </details>
 
-### Load context
-<details><summary>JVM & Android</summary>
+## Load context
 
-````kotlin
+Loads the previously stored context, including the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), and [fusion auth token](#set-fusion-auth-token).
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().loadContext()
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().loadContext()
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().loadContext();
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadContext(contextManager);
-````
+```
 </details>
 
-### Clear context
-Removes all the stored fields from the system; however, this function does not clear the fields from memory
-<details><summary>JVM & Android</summary>
+## Clear context
 
-````kotlin
+This function removes all stored context fields from the system but does not clear them from memory.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
 sdk.contextManager().clearContext()
-````
+```
 </details>
 
-<details><summary>Swift</summary>
+### Swift
+<details>
+<summary>Show Details</summary>
 
-````swift
+```swift
 sdk.contextManager().clearContext()
-````
+```
 </details>
 
-<details><summary>JS</summary>
+### JavaScript
+<details>
+<summary>Show Details</summary>
 
-````js
+```js
 sdk.contextManager().clearContext();
-````
+```
 </details>
 
-<details><summary>C#</summary>
+### C#
+<details>
+<summary>Show Details</summary>
 
-````csharp
+```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
-````
+```
+</details>
+
+## Set secure storage implementation
+
+This function enables you to provide your own storage implementation.
+
+> [!NOTE]
+> If you are looking to override the default secure storage with this option, you should set it before using the [load context](#load-context)
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+class MyOwnSecureImplementation : SecureStorage {
+    override fun addCloudAuthToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getCloudAuthToken(): String? {
+        // Your implementation
+    }
+
+    override fun addCloudRefreshToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getCloudRefreshToken(): String? {
+        // Your implementation
+    }
+    
+    override fun addFusionAuthToken(token: String) {
+        // Your implementation
+    }
+
+    override fun getFusionAuthToken(): String? {
+        // Your implementation
+    }
+
+    override fun addPrivateKey(byteArray: ByteArray) {
+        // Your implementation
+    }
+
+    override fun getPrivateKey(): ByteArray? {
+        // Your implementation
+    }
+
+    override fun addUserId(userId: String) {
+        // Your implementation
+    }
+
+    override fun getUserId(): String? {
+        // Your implementation
+    }
+
+    override fun addCertificateChain(certificateChain: List<String>) {
+        // Your implementation
+    }
+
+    override fun getCertificateChain(): List<String>? {
+        // Your implementation
+    }
+
+    override fun clear() {
+        // Your implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(MyOwnSecureImplementation())
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+class MyOwnSecureImplementation : SecureStorage {
+    func addCloudAuthToken(token: String) {
+        // Your Implementation
+    }
+
+    func getCloudAuthToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addCloudRefreshToken(token: String) {
+        // Your Implementation
+    }
+    
+    func getCloudRefreshToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addFusionAuthToken(token: String) {
+        // Your Implementation
+    }
+    
+    func getFusionAuthToken() -> String? {
+        // Your Implementation
+    }
+    
+    func addPrivateKey(byteArray: KotlinByteArray) {
+        // Your Implementation
+    }
+    
+    func getPrivateKey() -> KotlinByteArray? {
+        // Your Implementation
+    }
+    
+    func addUserId(userId: String) {
+        // Your Implementation
+    }
+    
+    func getUserId() -> String? {
+        // Your Implementation
+    }
+    
+    func addCertificateChain(certificateChain: [String]) {
+        // Your Implementation
+    }
+    
+    func getCertificateChain() -> [String]? {
+        // Your Implementation
+    }
+    
+    func clear() {
+        // Your Implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(secureStorage: MyOwnSecureImplementation())
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+class MyOwnSecureImplementation implements com.doordeck.multiplatform.sdk.storage.SecureStorage {
+    addCloudAuthToken(token: string): void {
+        // Your implementation
+    }
+
+    getCloudAuthToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addCloudRefreshToken(token: string): void {
+        // Your implementation
+    }
+
+    getCloudRefreshToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addFusionAuthToken(token: string): void {
+        // Your implementation
+    }
+
+    getFusionAuthToken(): Nullable<string> {
+        // Your implementation
+    }
+
+    addPrivateKey(byteArray: Int8Array): void {
+        // Your implementation
+    }
+
+    getPrivateKey(): Nullable<Int8Array> {
+        // Your implementation
+    }
+
+    addUserId(userId: string): void {
+        // Your implementation
+    }
+
+    getUserId(): Nullable<string> {
+        // Your implementation
+    }
+
+    addCertificateChain(certificateChain: kotlin.collections.KtList<string>): void {
+        // Your implementation
+    }
+
+    getCertificateChain(): Nullable<kotlin.collections.KtList<string>> {
+        // Your implementation
+    }
+
+    clear(): void {
+        // Your implementation
+    }
+}
+
+sdk.contextManager().setSecureStorageImpl(new MyOwnSecureImplementation());
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+// TODO
+```
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)
