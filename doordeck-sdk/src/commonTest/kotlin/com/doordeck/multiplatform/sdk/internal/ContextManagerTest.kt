@@ -36,6 +36,7 @@ class ContextManagerTest {
         val restored = contextManager.getOperationContext()
         assertEquals(userId, restored.userId)
         assertContentEquals(certificateChain, restored.userCertificateChain)
+        assertContentEquals(publicKey, restored.userPublicKey)
         assertContentEquals(privateKey, restored.userPrivateKey)
         assertEquals(cloudAuthToken, contextManager.currentToken)
         assertEquals(fusionAuthToken, contextManager.currentFusionToken)
