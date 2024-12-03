@@ -113,6 +113,7 @@ internal class ContextManagerImpl(
         currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
         currentUserId?.let { secureStorage?.addUserId(it) }
         currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
+        currentUserPublicKey?.let { secureStorage?.addPublicKey(it) }
         currentUserPrivateKey?.let { secureStorage?.addPrivateKey(it) }
     }
 
