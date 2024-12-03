@@ -19,12 +19,13 @@ class ContextManagerTest {
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, privateKey)
+        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
         contextManager.storeContext()
@@ -47,12 +48,13 @@ class ContextManagerTest {
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, privateKey)
+        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
         contextManager.storeContext()
 
         // When
