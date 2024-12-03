@@ -36,12 +36,15 @@ internal open class HelperClient(
 
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val certificateChain = contextManagerImpl.getCertificateChain()
-
-        // TODO Verify the certificate chain expire
+        val isCertificateChainAboutToExpire = true // TODO Verify the certificate chain expire
 
         // Get the stored key pair or create a new one
-        val keyPair = contextManagerImpl.getKeyPair()
-            ?: cryptoManager.generateKeyPair()
+        val keyPair = if (isCertificateChainAboutToExpire) {
+            cryptoManager.generateKeyPair()
+        } else {
+            contextManagerImpl.getKeyPair()
+                ?: cryptoManager.generateKeyPair()
+        }
 
         // Set the key pair
         contextManagerImpl.setKeyPair(keyPair.private, keyPair.public)
@@ -67,7 +70,7 @@ internal open class HelperClient(
 
     suspend fun completeAssistedLoginRequest(code: String): RegisterEphemeralKeyResponse {
         val privateKey = contextManagerImpl.getKeyPair()?.private
-            ?: throw MissingContextFieldException("Key pair is missing in the context")
+            ?: throw MissingContextFieldException("Key pair is missing")
 
         val response = accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
         contextManagerImpl.setUserId(response.userId)

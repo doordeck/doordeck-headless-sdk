@@ -21,9 +21,7 @@ import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesClient
-import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.mp.KoinPlatform.getKoin
 
@@ -53,7 +51,7 @@ internal class DoordeckImpl(
                 single<PlatformClient> { PlatformClient(httpClient) }
                 single<SitesClient> { SitesClient(httpClient) }
                 single<TilesClient> { TilesClient(httpClient) }
-                single<HelperClient> { HelperClient(httpClient, get(), get(), get(), get(), get()) }
+                single<HelperClient> { HelperClient(httpClient, get(), get(), get(), mainContextManager, get()) }
                 single<ContextManagerImpl> { mainContextManager }
             }))
         }
