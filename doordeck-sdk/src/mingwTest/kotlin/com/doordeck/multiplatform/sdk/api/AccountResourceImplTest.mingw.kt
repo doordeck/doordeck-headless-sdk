@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondar
 import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -20,7 +21,7 @@ import kotlin.test.Test
 class AccountResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(TEST_HTTP_CLIENT, contextManager)
+    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }

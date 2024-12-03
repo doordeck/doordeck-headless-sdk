@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
@@ -12,7 +13,7 @@ import kotlin.test.Test
 class AccountResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(TEST_HTTP_CLIENT, contextManager)
+    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
 
     @Test
     fun shouldRefreshToken() = runTest {

@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.api.model.Platform
+import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
@@ -10,7 +11,7 @@ import kotlin.test.Test
 
 class PlatformResourceImplTest {
 
-    private val platform = PlatformResourceImpl(TEST_HTTP_CLIENT)
+    private val platform = PlatformResourceImpl(PlatformClient(TEST_HTTP_CLIENT))
 
     @Test
     fun shouldCreateApplication() = runTest {
