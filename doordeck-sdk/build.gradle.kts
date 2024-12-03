@@ -13,6 +13,44 @@ plugins {
     signing
 }
 
+private sealed class PublishData(
+    val title: String = "Doordeck Headless SDK",
+    val description: String = "The official Doordeck SDK for Kotlin Multiplatform",
+    val issues: String = "https://github.com/doordeck/doordeck-headless-sdk/issues",
+    val repository: String = "https://github.com/doordeck/doordeck-headless-sdk",
+    val gitRepository: String = "https://github.com/doordeck/doordeck-headless-sdk.git",
+    val author: String = "Doordeck Limited",
+    val authorRepository: String = "https://github.com/doordeck",
+    val authorHomepage: String = "https://www.doordeck.com",
+    val licenseType: String = "Apache-2.0",
+    val licenseUrl: String = "https://github.com/doordeck/doordeck-headless-sdk/blob/main/LICENSE"
+)
+
+private data class NpmPublishData(
+    val packageName: String = "@doordeck/doordeck-headless-sdk",
+    val keywords: List<String> = listOf("doordeck", "sdk", "javascript", "access control")
+): PublishData()
+
+private data class CocoapodsPublishData(
+    val packageName: String = "DoordeckSDK",
+    val vendoredFrameworks: String = "$packageName.xcframework",
+    val bundleId: String = "com.doordeck.$packageName"
+): PublishData()
+
+private data class MavenPublishData(
+    val groupId: String = "com.doordeck.headless.sdk"
+) : PublishData()
+
+private data class NugetPublishData(
+    val packageName: String = "doordeck-headless-sdk",
+    val tags: List<String> = listOf("doordeck", "access control")
+) : PublishData()
+
+private val npmPublish = NpmPublishData()
+private val cocoapodsPublish = CocoapodsPublishData()
+private val mavenPublish = MavenPublishData()
+private val nugetPublish = NugetPublishData()
+
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm()
@@ -24,13 +62,13 @@ kotlin {
         }
     }
 
-    val xcf = XCFramework("DoordeckSDK")
+    val xcf = XCFramework(cocoapodsPublish.packageName)
     val iosTargets = listOf(iosX64(), iosArm64(), macosArm64(), iosSimulatorArm64())
 
     iosTargets.forEach {
         it.binaries.framework {
-            baseName = "DoordeckSDK"
-            binaryOption("bundleId", "com.doordeck.DoordeckSDK")
+            baseName = cocoapodsPublish.packageName
+            binaryOption("bundleId", cocoapodsPublish.bundleId)
             xcf.add(this)
         }
 
@@ -46,7 +84,7 @@ kotlin {
     mingwX64 {
         binaries {
             sharedLib {
-                baseName = "doordeck-sdk"
+                baseName = nugetPublish.packageName
             }
         }
     }
@@ -77,29 +115,29 @@ kotlin {
 
         // Add the necessary fields to the package.json file
         compilations["main"].packageJson {
-            name = "@doordeck/doordeck-headless-sdk"
-            customField("homepage", "https://www.doordeck.com/")
-            customField("license", "Apache-2.0")
-            customField("author", mapOf("name" to "Doordeck Limited"))
-            customField("keywords", listOf("doordeck", "sdk", "javascript", "access control"))
-            customField("bugs", mapOf("url" to "https://github.com/doordeck/doordeck-headless-sdk/issues"))
-            customField("repository", mapOf("type" to "git", "url" to "git+https://github.com/doordeck/doordeck-headless-sdk.git"))
+            name = npmPublish.packageName
+            customField("homepage", npmPublish.authorHomepage)
+            customField("license", npmPublish.licenseType)
+            customField("author", mapOf("name" to npmPublish.author))
+            customField("keywords", npmPublish.keywords)
+            customField("bugs", mapOf("url" to npmPublish.issues))
+            customField("repository", mapOf("type" to "git", "url" to "git+${npmPublish.gitRepository}"))
         }
     }
 
     cocoapods {
-        summary = "Doordeck Headless SDK"
-        homepage = "https://www.doordeck.com/"
-        license = "{ :type => 'Apache-2.0' }"
-        authors = "Doordeck Limited"
+        summary = cocoapodsPublish.title
+        homepage = cocoapodsPublish.authorHomepage
+        license = "{ :type => '${cocoapodsPublish.licenseType}' }"
+        authors = cocoapodsPublish.author
         version = "${project.version}"
-        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/DoordeckSDK.xcframework.zip' }"
+        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
         ios.deploymentTarget = libs.versions.ios.minSdk.get()
-        name = "DoordeckSDK"
+        name = cocoapodsPublish.packageName
         framework {
-            baseName = "DoordeckSDK"
+            baseName = cocoapodsPublish.packageName
         }
-        extraSpecAttributes["vendored_frameworks"] = "'DoordeckSDK.xcframework'"
+        extraSpecAttributes["vendored_frameworks"] = "'${cocoapodsPublish.vendoredFrameworks}'"
     }
 
     sourceSets {
@@ -182,13 +220,6 @@ kotlin {
     }
 }
 
-// Display the test log events at all the platforms
-tasks.withType<AbstractTestTask>().configureEach {
-    testLogging {
-        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
-    }
-}
-
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central
 val javadocJar by tasks.registering(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
@@ -199,36 +230,36 @@ val javadocJar by tasks.registering(Jar::class) {
 publishing {
     publications.withType<MavenPublication>().configureEach {
         artifact(javadocJar)
-        groupId = "com.doordeck.headless.sdk"
+        groupId = mavenPublish.groupId
         version = "${project.version}"
         pom {
-            name.set("Doordeck Headless SDK")
+            name.set(mavenPublish.title)
             inceptionYear.set("2024")
-            description.set("The official Doordeck SDK for Kotlin Multiplatform")
-            url.set("https://github.com/doordeck/doordeck-headless-sdk")
+            description.set(mavenPublish.description)
+            url.set(mavenPublish.repository)
             licenses {
                 license {
-                    name.set("Apache-2.0")
-                    url.set("https://github.com/doordeck/doordeck-headless-sdk/blob/main/LICENSE")
+                    name.set(mavenPublish.licenseType)
+                    url.set(mavenPublish.licenseUrl)
                 }
             }
             issueManagement {
                 system.set("Github")
-                url.set("https://github.com/doordeck/doordeck-headless-sdk/issues")
+                url.set(mavenPublish.issues)
             }
             developers {
                 developer {
                     id.set("doordeck")
-                    name.set("Doordeck Limited")
-                    url.set("https://github.com/doordeck")
+                    name.set(mavenPublish.author)
+                    url.set(mavenPublish.authorRepository)
                 }
                 organization {
-                    name.set("Doordeck Limited")
-                    url.set("https://github.com/doordeck")
+                    name.set(mavenPublish.author)
+                    url.set(mavenPublish.authorRepository)
                 }
             }
             scm {
-                url.set("https://github.com/doordeck/doordeck-headless-sdk")
+                url.set(mavenPublish.repository)
                 connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
                 developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
             }
@@ -249,18 +280,6 @@ signing {
     sign(publishing.publications)
 }
 
-tasks.named("jsBrowserProductionLibraryDistribution").configure {
-    doLast {
-        // Specify the directory where the package is generated
-        val publishDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
-        // Copy the README file from the root project into the package folder
-        copy {
-            from(rootProject.layout.projectDirectory.file("README.md"))
-            into(publishDir.get().asFile)
-        }
-    }
-}
-
 android {
     namespace = "com.doordeck.multiplatform.sdk"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
@@ -278,13 +297,64 @@ swiftklib {
     }
 }
 
+// Display the test log events at all the platforms
+tasks.withType<AbstractTestTask>().configureEach {
+    testLogging {
+        events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
+    }
+}
+
+tasks.named("jsBrowserProductionLibraryDistribution").configure {
+    doLast {
+        // Specify the directory where the package is generated
+        val publishDir = rootProject.layout.buildDirectory.dir("js/packages/doordeck-sdk")
+        // Copy the README file from the root project into the package folder
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(publishDir.get().asFile)
+        }
+    }
+}
+
 tasks.register<Zip>("zipXCFramework") {
     from("build/XCFrameworks/release")
-    archiveFileName.set("DoordeckSDK.xcframework.zip")
+    archiveFileName.set("${cocoapodsPublish.vendoredFrameworks}.zip")
     destinationDirectory.set(file("."))
     include("**/*")
 }
 
-tasks.named("assembleDoordeckSDKReleaseXCFramework").configure {
+tasks.named("assemble${cocoapodsPublish.packageName}ReleaseXCFramework").configure {
     finalizedBy("zipXCFramework")
+}
+
+val nuspecTemplate = """
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>${nugetPublish.packageName}</id>
+    <version>${project.version}</version>
+    <authors>${nugetPublish.author}</authors>
+    <owners>${nugetPublish.author}</owners>
+    <description>${nugetPublish.description}</description>
+    <projectUrl>${nugetPublish.authorHomepage}</projectUrl>
+    <repository type="git" url="${nugetPublish.gitRepository}" />
+    <tags>${nugetPublish.tags.joinToString(" ")}</tags>
+    <license type="expression">${nugetPublish.licenseType}</license>
+    <dependencies>
+      <!-- Add dependencies if any -->
+    </dependencies>
+    <files>
+      <!-- Repeat for other platform-specific files if applicable -->
+      <file src="runtimes\win-x64\native\doordeck_sdk.dll" target="runtimes\win-x64\native\doordeck_sdk.dll" />
+    </files>
+  </metadata>
+</package>
+"""
+
+tasks.named("mingwX64Binaries").configure {
+    doLast {
+        val outputDir = file("$projectDir/build/bin/mingwX64/releaseShared")
+        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
+        nuspecFile.writeText(nuspecTemplate.trim())
+    }
 }
