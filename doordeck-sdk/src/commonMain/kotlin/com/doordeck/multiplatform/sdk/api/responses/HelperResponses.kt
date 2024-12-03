@@ -8,6 +8,8 @@ import kotlin.js.JsExport
 @Serializable
 class AssistedLoginResponse(
     val tokenResponse: TokenResponse,
-    val keyPair: Crypto.KeyPair,
-    val requireVerification: Boolean
-)
+    val registerEphemeralKeyResponse: RegisterEphemeralKeyResponse? = null,
+    val keyPair: Crypto.KeyPair
+) {
+    fun requiresVerification() = registerEphemeralKeyResponse == null
+}
