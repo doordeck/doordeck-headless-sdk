@@ -8,5 +8,6 @@ import kotlin.js.JsExport
 @Serializable
 class AssistedLoginResponse(
     val tokenResponse: TokenResponse,
-    val keyPair: Crypto.KeyPair
+    val keyPair: Crypto.KeyPair,
+    val requireVerification: Boolean
 )

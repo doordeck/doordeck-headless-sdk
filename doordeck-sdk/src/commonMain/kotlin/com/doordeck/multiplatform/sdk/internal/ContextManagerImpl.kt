@@ -1,9 +1,11 @@
 package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
+import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
+import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -23,7 +25,6 @@ internal class ContextManagerImpl(
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
-
     private var secureStorage: SecureStorage? = null
 
     override fun setAuthToken(token: String) {
@@ -32,6 +33,23 @@ internal class ContextManagerImpl(
 
     override fun setRefreshToken(token: String) {
         currentRefreshToken = token
+    }
+
+    override fun setFusionAuthToken(token: String) {
+        currentFusionToken = token
+    }
+
+    override fun setUserId(userId: String) {
+        this.currentUserId = userId
+    }
+
+    override fun setCertificateChain(certificateChain: List<String>) {
+        this.currentUserCertificateChain = certificateChain
+    }
+
+    override fun setKeyPair(privateKey: ByteArray, publicKey: ByteArray) {
+        this.currentUserPrivateKey = privateKey
+        this.currentUserPublicKey = publicKey
     }
 
     internal fun setTokens(token: String, refreshToken: String) {
@@ -53,6 +71,7 @@ internal class ContextManagerImpl(
     internal fun resetOperationContext() {
         currentUserId = null
         currentUserCertificateChain = null
+        currentUserPublicKey = null
         currentUserPrivateKey = null
     }
 
@@ -69,10 +88,6 @@ internal class ContextManagerImpl(
         currentUserCertificateChain = operationContextData.userCertificateChain
         currentUserPublicKey = operationContextData.userPublicKey.decodeBase64ToByteArray()
         currentUserPrivateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
-    }
-
-    override fun setFusionAuthToken(token: String) {
-        currentFusionToken = token
     }
 
     override fun setSecureStorageImpl(secureStorage: SecureStorage) {
@@ -108,8 +123,13 @@ internal class ContextManagerImpl(
         secureStorage?.clear()
     }
 
-    private fun initializeSecureStorage() {
-        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+    internal fun getKeyPair(): Crypto.KeyPair {
+        val actualPublicKey = currentUserPublicKey
+        val actualUserPrivateKey = currentUserPrivateKey
+        if (actualPublicKey == null || actualUserPrivateKey == null) {
+            throw MissingContextFieldException("Operation context is missing")
+        }
+        return Crypto.KeyPair(actualUserPrivateKey, actualPublicKey)
     }
 
     internal fun getOperationContext(): Context.OperationContext {
@@ -126,5 +146,9 @@ internal class ContextManagerImpl(
             userPublicKey = actualPublicKey,
             userPrivateKey = actualUserPrivateKey
         )
+    }
+
+    private fun initializeSecureStorage() {
+        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
     }
 }
