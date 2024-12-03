@@ -12,20 +12,17 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class AccountResourceImpl(
-    httpClient: HttpClient,
-    contextManager: ContextManagerImpl
-) : AccountClient(httpClient, contextManager), AccountResource {
+    private val accountClient: AccountClient,
+) : AccountResource {
 
     override fun refreshToken(refreshToken: String): TokenResponse {
-        return runBlocking { refreshTokenRequest(refreshToken) }
+        return runBlocking { accountClient.refreshTokenRequest(refreshToken) }
     }
 
     override fun refreshTokenJson(data: String): String {
@@ -34,11 +31,11 @@ internal class AccountResourceImpl(
     }
 
     override fun logout() {
-        return runBlocking { logoutRequest() }
+        return runBlocking { accountClient.logoutRequest() }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
-        return runBlocking { registerEphemeralKeyRequest(publicKey) }
+        return runBlocking { accountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
     override fun registerEphemeralKeyJson(data: String): String {
@@ -47,7 +44,7 @@ internal class AccountResourceImpl(
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return runBlocking { registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
+        return runBlocking { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String): String {
@@ -56,7 +53,7 @@ internal class AccountResourceImpl(
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
-        return runBlocking { verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+        return runBlocking { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
     override fun verifyEphemeralKeyRegistrationJson(data: String): String {
@@ -65,11 +62,11 @@ internal class AccountResourceImpl(
     }
 
     override fun reverifyEmail() {
-        return runBlocking { reverifyEmailRequest() }
+        return runBlocking { accountClient.reverifyEmailRequest() }
     }
 
     override fun changePassword(oldPassword: String, newPassword: String) {
-        return runBlocking { changePasswordRequest(oldPassword, newPassword) }
+        return runBlocking { accountClient.changePasswordRequest(oldPassword, newPassword) }
     }
 
     override fun changePasswordJson(data: String) {
@@ -78,7 +75,7 @@ internal class AccountResourceImpl(
     }
 
     override fun getUserDetails(): UserDetailsResponse {
-        return runBlocking { getUserDetailsRequest() }
+        return runBlocking { accountClient.getUserDetailsRequest() }
     }
 
     override fun getUserDetailsJson(): String {
@@ -86,7 +83,7 @@ internal class AccountResourceImpl(
     }
 
     override fun updateUserDetails(displayName: String) {
-        return runBlocking { updateUserDetailsRequest(displayName) }
+        return runBlocking { accountClient.updateUserDetailsRequest(displayName) }
     }
 
     override fun updateUserDetailsJson(data: String) {
@@ -95,6 +92,6 @@ internal class AccountResourceImpl(
     }
 
     override fun deleteAccount() {
-        return runBlocking { deleteAccountRequest() }
+        return runBlocking { accountClient.deleteAccountRequest() }
     }
 }

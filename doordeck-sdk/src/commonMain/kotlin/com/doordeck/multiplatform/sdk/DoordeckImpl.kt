@@ -12,7 +12,15 @@ import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
+import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
+import com.doordeck.multiplatform.sdk.internal.api.FusionClient
+import com.doordeck.multiplatform.sdk.internal.api.HelperClient
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
+import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
+import com.doordeck.multiplatform.sdk.internal.api.SitesClient
+import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import io.ktor.client.HttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.named
@@ -34,11 +42,19 @@ internal class DoordeckImpl(
                 val httpClient = createHttpClient()
                 val cloudHttpClient = createCloudHttpClient(apiEnvironment, mainContextManager)
                 val fusionHttpClient = createFusionHttpClient(apiEnvironment.fusionHost, mainContextManager)
-                single<HttpClient>(named("httpClient")) { httpClient }
-                single<HttpClient>(named("cloudHttpClient")) { cloudHttpClient }
-                single<HttpClient>(named("fusionHttpClient")) { fusionHttpClient }
-                single<ContextManagerImpl> { mainContextManager }
+                single<CryptoManager> { CryptoManager }
+                single<AccountClient> { AccountClient(cloudHttpClient, mainContextManager) }
+                single<AccountlessClient> { AccountlessClient(cloudHttpClient) }
+                single<FusionClient> { FusionClient(fusionHttpClient) }
                 single<LocalUnlockClient> { LocalUnlockClient(httpClient) }
+                single<LockOperationsClient> {
+                    LockOperationsClient(httpClient, mainContextManager, get())
+                }
+                single<PlatformClient> { PlatformClient(httpClient) }
+                single<SitesClient> { SitesClient(httpClient) }
+                single<TilesClient> { TilesClient(httpClient) }
+                single<HelperClient> { HelperClient(httpClient, get(), get(), get(), get(), get()) }
+                single<ContextManagerImpl> { mainContextManager }
             }))
         }
     }
@@ -54,7 +70,6 @@ internal class DoordeckImpl(
     private val platform: PlatformResource = com.doordeck.multiplatform.sdk.api.platform()
     private val fusion: FusionResource = com.doordeck.multiplatform.sdk.api.fusion()
     private val helper: HelperResource = com.doordeck.multiplatform.sdk.api.helper()
-    private val crypto: CryptoManager = CryptoManager
 
     override fun contextManager(): ContextManager = getKoin().get<ContextManagerImpl>()
     override fun accountless(): AccountlessResource = accountless
@@ -65,5 +80,5 @@ internal class DoordeckImpl(
     override fun platform(): PlatformResource = platform
     override fun fusion(): FusionResource = fusion
     override fun helper(): HelperResource = helper
-    override fun crypto(): CryptoManager = crypto
+    override fun crypto(): CryptoManager = getKoin().get<CryptoManager>()
 }

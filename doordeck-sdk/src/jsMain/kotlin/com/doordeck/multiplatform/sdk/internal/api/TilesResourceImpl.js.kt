@@ -2,20 +2,19 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
 internal class TilesResourceImpl(
-    httpClient: HttpClient
-) : TilesClient(httpClient), TilesResource {
+    private val tilesClient: TilesClient
+) : TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): Promise<TileLocksResponse> {
-        return GlobalScope.promise { getLocksBelongingToTileRequest(tileId) }
+        return GlobalScope.promise { tilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<Unit> {
-        return GlobalScope.promise { associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return GlobalScope.promise { tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 }

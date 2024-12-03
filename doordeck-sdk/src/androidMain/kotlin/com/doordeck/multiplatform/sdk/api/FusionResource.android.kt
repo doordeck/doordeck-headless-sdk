@@ -5,9 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
+import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
@@ -30,4 +29,4 @@ actual interface FusionResource {
     suspend fun stopDoorAsync(deviceId: String): CompletableFuture<Unit>
 }
 
-actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<HttpClient>(named("fusionHttpClient")))
+actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<FusionClient>())

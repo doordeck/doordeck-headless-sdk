@@ -5,9 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsRespo
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
+import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
@@ -244,4 +243,4 @@ actual interface PlatformResource {
     fun getApplicationOwnersDetailsAsync(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>>
 }
 
-actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<PlatformClient>())

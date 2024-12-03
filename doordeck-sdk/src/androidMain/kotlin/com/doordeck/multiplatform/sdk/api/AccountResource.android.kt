@@ -5,11 +5,9 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
@@ -111,7 +109,4 @@ actual interface AccountResource {
     fun deleteAccountAsync(): CompletableFuture<Unit>
 }
 
-actual fun account(): AccountResource = AccountResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>()
-)
+actual fun account(): AccountResource = AccountResourceImpl(getKoin().get<AccountClient>())

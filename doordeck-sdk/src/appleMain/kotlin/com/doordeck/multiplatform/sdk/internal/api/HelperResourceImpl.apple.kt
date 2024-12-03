@@ -1,14 +1,12 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
-import io.ktor.client.HttpClient
 
 internal class HelperResourceImpl(
-    httpClient: HttpClient,
-    cloudHttpClient: HttpClient
-) : HelperClient(httpClient, cloudHttpClient), HelperResource {
+    private val helperClient: HelperClient
+) : HelperResource {
 
     override suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return uploadPlatformLogoRequest(applicationId, contentType, image)
+        return helperClient.uploadPlatformLogoRequest(applicationId, contentType, image)
     }
 }

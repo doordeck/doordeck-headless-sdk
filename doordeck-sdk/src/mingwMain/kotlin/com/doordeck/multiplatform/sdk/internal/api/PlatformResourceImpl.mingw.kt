@@ -30,15 +30,14 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class PlatformResourceImpl(
-    httpClient: HttpClient
-) : PlatformClient(httpClient), PlatformResource {
+    private val platformClient: PlatformClient
+) : PlatformResource {
 
     override fun createApplication(application: Platform.CreateApplication) {
-        return runBlocking { createApplicationRequest(application) }
+        return runBlocking { platformClient.createApplicationRequest(application) }
     }
 
     override fun createApplicationJson(data: String) {
@@ -47,7 +46,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun listApplications(): List<ApplicationResponse> {
-        return runBlocking { listApplicationsRequest() }
+        return runBlocking { platformClient.listApplicationsRequest() }
     }
 
     override fun listApplicationsJson(): String {
@@ -55,7 +54,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun getApplication(applicationId: String): ApplicationResponse {
-        return runBlocking { getApplicationRequest(applicationId) }
+        return runBlocking { platformClient.getApplicationRequest(applicationId) }
     }
 
     override fun getApplicationJson(data: String): String {
@@ -64,7 +63,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationName(applicationId: String, name: String) {
-        return runBlocking { updateApplicationNameRequest(applicationId, name) }
+        return runBlocking { platformClient.updateApplicationNameRequest(applicationId, name) }
     }
 
     override fun updateApplicationNameJson(data: String) {
@@ -73,7 +72,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return runBlocking { updateApplicationCompanyNameRequest(applicationId, companyName) }
+        return runBlocking { platformClient.updateApplicationCompanyNameRequest(applicationId, companyName) }
     }
 
     override fun updateApplicationCompanyNameJson(data: String) {
@@ -82,7 +81,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return runBlocking { updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
+        return runBlocking { platformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
     }
 
     override fun updateApplicationMailingAddressJson(data: String) {
@@ -91,7 +90,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return runBlocking { updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
+        return runBlocking { platformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
     }
 
     override fun updateApplicationPrivacyPolicyJson(data: String) {
@@ -100,7 +99,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return runBlocking { updateApplicationSupportContactRequest(applicationId, supportContact) }
+        return runBlocking { platformClient.updateApplicationSupportContactRequest(applicationId, supportContact) }
     }
 
     override fun updateApplicationSupportContactJson(data: String) {
@@ -109,7 +108,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return runBlocking { updateApplicationAppLinkRequest(applicationId, appLink) }
+        return runBlocking { platformClient.updateApplicationAppLinkRequest(applicationId, appLink) }
     }
 
     override fun updateApplicationAppLinkJson(data: String) {
@@ -118,7 +117,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        return runBlocking { updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
+        return runBlocking { platformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
     }
 
     override fun updateApplicationEmailPreferencesJson(data: String) {
@@ -127,7 +126,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return runBlocking { updateApplicationLogoUrlRequest(applicationId, logoUrl) }
+        return runBlocking { platformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl) }
     }
 
     override fun updateApplicationLogoUrlJson(data: String) {
@@ -136,7 +135,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun deleteApplication(applicationId: String) {
-        return runBlocking { deleteApplicationRequest(applicationId) }
+        return runBlocking { platformClient.deleteApplicationRequest(applicationId) }
     }
 
     override fun deleteApplicationJson(data: String) {
@@ -145,7 +144,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return runBlocking { getLogoUploadUrlRequest(applicationId, contentType) }
+        return runBlocking { platformClient.getLogoUploadUrlRequest(applicationId, contentType) }
     }
 
     override fun getLogoUploadUrlJson(data: String): String {
@@ -154,7 +153,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        return runBlocking { addAuthKeyRequest(applicationId, key) }
+        return runBlocking { platformClient.addAuthKeyRequest(applicationId, key) }
     }
 
     override fun addAuthKeyJson(data: String) {
@@ -163,7 +162,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun addAuthIssuer(applicationId: String, url: String) {
-        return runBlocking { addAuthIssuerRequest(applicationId, url) }
+        return runBlocking { platformClient.addAuthIssuerRequest(applicationId, url) }
     }
 
     override fun addAuthIssuerJson(data: String) {
@@ -172,7 +171,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun deleteAuthIssuer(applicationId: String, url: String) {
-        return runBlocking { deleteAuthIssuerRequest(applicationId, url) }
+        return runBlocking { platformClient.deleteAuthIssuerRequest(applicationId, url) }
     }
 
     override fun deleteAuthIssuerJson(data: String) {
@@ -181,7 +180,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun addCorsDomain(applicationId: String, url: String) {
-        return runBlocking { addCorsDomainRequest(applicationId, url) }
+        return runBlocking { platformClient.addCorsDomainRequest(applicationId, url) }
     }
 
     override fun addCorsDomainJson(data: String) {
@@ -190,7 +189,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun removeCorsDomain(applicationId: String, url: String) {
-        return runBlocking { removeCorsDomainRequest(applicationId, url) }
+        return runBlocking { platformClient.removeCorsDomainRequest(applicationId, url) }
     }
 
     override fun removeCorsDomainJson(data: String) {
@@ -199,7 +198,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun addApplicationOwner(applicationId: String, userId: String) {
-        return runBlocking { addApplicationOwnerRequest(applicationId, userId) }
+        return runBlocking { platformClient.addApplicationOwnerRequest(applicationId, userId) }
     }
 
     override fun addApplicationOwnerJson(data: String) {
@@ -208,7 +207,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun removeApplicationOwner(applicationId: String, userId: String) {
-        return runBlocking { removeApplicationOwnerRequest(applicationId, userId) }
+        return runBlocking { platformClient.removeApplicationOwnerRequest(applicationId, userId) }
     }
 
     override fun removeApplicationOwnerJson(data: String) {
@@ -217,7 +216,7 @@ internal class PlatformResourceImpl(
     }
 
     override fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return runBlocking { getApplicationOwnersDetailsRequest(applicationId) }
+        return runBlocking { platformClient.getApplicationOwnersDetailsRequest(applicationId) }
     }
 
     override fun getApplicationOwnersDetailsJson(data: String): String {

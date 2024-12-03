@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
@@ -123,13 +122,16 @@ internal class ContextManagerImpl(
         secureStorage?.clear()
     }
 
-    internal fun getKeyPair(): Crypto.KeyPair {
-        val actualPublicKey = currentUserPublicKey
+    internal fun getCertificateChain(): List<String>? {
+        return currentUserCertificateChain
+    }
+
+    internal fun getKeyPair(): Crypto.KeyPair? {
+        val actualUserPublicKey = currentUserPublicKey
         val actualUserPrivateKey = currentUserPrivateKey
-        if (actualPublicKey == null || actualUserPrivateKey == null) {
-            throw MissingContextFieldException("Operation context is missing")
-        }
-        return Crypto.KeyPair(actualUserPrivateKey, actualPublicKey)
+        return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
+            Crypto.KeyPair(actualUserPrivateKey, actualUserPublicKey)
+        } else null
     }
 
     internal fun getOperationContext(): Context.OperationContext {
