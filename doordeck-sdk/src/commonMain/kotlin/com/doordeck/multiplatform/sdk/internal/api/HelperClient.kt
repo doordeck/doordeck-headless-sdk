@@ -10,8 +10,6 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
-import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.days
 
 internal open class HelperClient(
     private val httpClient: HttpClient,
@@ -54,7 +52,7 @@ internal open class HelperClient(
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val certificateChain = contextManagerImpl.getCertificateChain()
         val isCertificateChainAboutToExpireOrInvalid = certificateChain?.firstOrNull()?.let {
-            cryptoManager.getCertificateExpirationDate(it) >= Clock.System.now() - 30.days
+            cryptoManager.isCertificateAboutToExpire(it)
         } ?: true
 
         // Get the stored key pair or create a new one

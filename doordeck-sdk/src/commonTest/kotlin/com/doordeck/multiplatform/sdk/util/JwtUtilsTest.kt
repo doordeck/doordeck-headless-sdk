@@ -43,4 +43,16 @@ class JwtUtilsTest {
         // Then
         assertTrue { result }
     }
+
+    @Test
+    fun shouldVerifyTokenExpirationNoExp() = runTest {
+        // Given
+        val token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjQwMzhmODE5MmZmMTZiMGQ4N2E3OWYyZjFlOTYyZWIwIn0.e30.u_rPJDKVGtpoPbpRnPL0Qju6lqBUYaskskptJuNIan0WwL91qMLXaSzGTnBPPDAdT9M3208oVyMlK3A4gKqc2w"
+
+        // When
+        val result = token.isJwtTokenAboutToExpire()
+
+        // Then
+        assertTrue { result }
+    }
 }

@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import io.ktor.util.decodeBase64Bytes
-import kotlinx.datetime.Instant
+import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
@@ -12,6 +12,7 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
+import kotlin.time.Duration.Companion.days
 
 actual object CryptoManager {
 
@@ -28,6 +29,12 @@ actual object CryptoManager {
 
     actual fun generateEncodedKeyPair(): String {
         throw NotImplementedError("Use generateKeyPair() instead")
+    }
+
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+        val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
+        val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+        return certificate.notAfter.toInstant().toKotlinInstant() >= Clock.System.now() - 7.days
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
@@ -61,11 +68,5 @@ actual object CryptoManager {
         signature.verify(this)
     } catch (exception: Exception) {
         false
-    }
-
-    internal actual fun getCertificateExpirationDate(base64Certificate: String): Instant {
-        val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
-        val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
-        return certificate.notAfter.toInstant().toKotlinInstant()
     }
 }

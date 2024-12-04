@@ -32,6 +32,11 @@ actual object CryptoManager {
         ).toJson()
     }
 
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+        // TODO
+        return true
+    }
+
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> this
