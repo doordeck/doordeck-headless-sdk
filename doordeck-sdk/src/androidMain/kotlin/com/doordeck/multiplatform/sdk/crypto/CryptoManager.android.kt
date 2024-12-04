@@ -34,7 +34,9 @@ actual object CryptoManager {
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
         val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
         val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
-        Clock.System.now() >= certificate.notAfter.toInstant().toKotlinInstant() - 30.days
+        certificate.notAfter?.let {
+            Clock.System.now() >= it.toInstant().toKotlinInstant() - 30.days
+        } ?: true
     } catch (exception: Exception) {
         true
     }
