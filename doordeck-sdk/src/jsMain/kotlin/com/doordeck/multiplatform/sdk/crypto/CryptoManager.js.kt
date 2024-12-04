@@ -35,12 +35,14 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
         val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)
         val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
-        return Clock.System.now() >= Instant.parse(notAfterDate) - 30.days
+        Clock.System.now() >= Instant.parse(notAfterDate) - 30.days
+    } catch (exception: Exception) {
+        true
     }
 
     @JsExport.Ignore

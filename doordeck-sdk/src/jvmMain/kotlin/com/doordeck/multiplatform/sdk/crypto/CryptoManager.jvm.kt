@@ -31,10 +31,14 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
         val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
         val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
-        return Clock.System.now() >= certificate.notAfter.toInstant().toKotlinInstant() - 30.days
+        certificate.notAfter?.let {
+            Clock.System.now() >= it.toInstant().toKotlinInstant() - 30.days
+        } ?: true
+    } catch (exception: Exception) {
+        true
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
