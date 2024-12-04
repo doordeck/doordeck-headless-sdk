@@ -34,7 +34,7 @@ actual object CryptoManager {
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
         val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
         val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
-        return certificate.notAfter.toInstant().toKotlinInstant() >= Clock.System.now() - 7.days
+        return Clock.System.now() >= certificate.notAfter.toInstant().toKotlinInstant() - 30.days
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
