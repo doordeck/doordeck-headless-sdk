@@ -11,7 +11,6 @@ import io.ktor.util.toJsArray
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Date
 import kotlin.time.Duration.Companion.days
 
@@ -80,4 +79,4 @@ actual object CryptoManager {
 }
 
 @JsExport
-fun crypto(): CryptoManager = getKoin().get<CryptoManager>()
+fun crypto(): CryptoManager = CryptoManager

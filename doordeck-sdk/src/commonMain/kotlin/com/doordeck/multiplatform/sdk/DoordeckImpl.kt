@@ -77,5 +77,5 @@ internal class DoordeckImpl(
     override fun platform(): PlatformResource = platform
     override fun fusion(): FusionResource = fusion
     override fun helper(): HelperResource = helper
-    override fun crypto(): CryptoManager = getKoin().get<CryptoManager>()
+    override fun crypto(): CryptoManager = CryptoManager
 }
