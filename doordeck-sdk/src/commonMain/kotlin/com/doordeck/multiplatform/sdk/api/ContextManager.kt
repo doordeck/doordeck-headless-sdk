@@ -7,10 +7,13 @@ import kotlin.js.JsExport
 interface ContextManager {
 
     fun setAuthToken(token: String)
+    fun isAuthTokenAboutToExpire(): Boolean
     fun setRefreshToken(token: String)
     fun setFusionAuthToken(token: String)
+    fun isFusionAuthTokenAboutToExpire(): Boolean
     fun setUserId(userId: String)
     fun setCertificateChain(certificateChain: List<String>)
+    fun isCertificateChainAboutToExpire(): Boolean
     fun setKeyPair(privateKey: ByteArray, publicKey: ByteArray)
     fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
     fun setOperationContextJson(data: String)

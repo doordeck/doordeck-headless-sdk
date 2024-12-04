@@ -5,8 +5,10 @@ import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 
@@ -30,6 +32,10 @@ internal class ContextManagerImpl(
         currentToken = token
     }
 
+    override fun isAuthTokenAboutToExpire(): Boolean {
+        return currentToken?.isJwtTokenAboutToExpire() ?: true
+    }
+
     override fun setRefreshToken(token: String) {
         currentRefreshToken = token
     }
@@ -38,12 +44,22 @@ internal class ContextManagerImpl(
         currentFusionToken = token
     }
 
+    override fun isFusionAuthTokenAboutToExpire(): Boolean {
+        return currentFusionToken?.isJwtTokenAboutToExpire() ?: true
+    }
+
     override fun setUserId(userId: String) {
         this.currentUserId = userId
     }
 
     override fun setCertificateChain(certificateChain: List<String>) {
         this.currentUserCertificateChain = certificateChain
+    }
+
+    override fun isCertificateChainAboutToExpire(): Boolean {
+        return currentUserCertificateChain?.firstOrNull()?.let {
+            CryptoManager.isCertificateAboutToExpire(it)
+        } ?: true
     }
 
     override fun setKeyPair(privateKey: ByteArray, publicKey: ByteArray) {

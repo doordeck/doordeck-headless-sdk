@@ -16,8 +16,7 @@ internal open class HelperClient(
     private val accountlessClient: AccountlessClient,
     private val accountClient: AccountClient,
     private val platformClient: PlatformClient,
-    private val contextManagerImpl: ContextManagerImpl,
-    private val cryptoManager: CryptoManager
+    private val contextManagerImpl: ContextManagerImpl
 ) : AbstractResourceImpl() {
 
     suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
@@ -50,17 +49,14 @@ internal open class HelperClient(
      * It is the responsibility of the developer to load and store the context when necessary.</p>
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
-        val certificateChain = contextManagerImpl.getCertificateChain()
-        val isCertificateChainAboutToExpireOrInvalid = certificateChain?.firstOrNull()?.let {
-            cryptoManager.isCertificateAboutToExpire(it)
-        } ?: true
+        val isCertificateChainAboutToExpireOrInvalid = contextManagerImpl.isCertificateChainAboutToExpire()
 
         // Get the stored key pair or create a new one
         val keyPair = if (isCertificateChainAboutToExpireOrInvalid) {
-            cryptoManager.generateKeyPair()
+            CryptoManager.generateKeyPair()
         } else {
             contextManagerImpl.getKeyPair()
-                ?: cryptoManager.generateKeyPair()
+                ?: CryptoManager.generateKeyPair()
         }
 
         // Set the key pair

@@ -24,8 +24,7 @@ class HelperResourceImplTest {
             accountlessClient = AccountlessClient(TEST_HTTP_CLIENT),
             accountClient = AccountClient(TEST_HTTP_CLIENT, contextManager),
             platformClient = PlatformClient(TEST_HTTP_CLIENT),
-            contextManagerImpl = contextManager,
-            cryptoManager = CryptoManager
+            contextManagerImpl = contextManager
         )
     )
 
