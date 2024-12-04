@@ -5,6 +5,8 @@ import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.datetime.Instant
+import org.koin.mp.KoinPlatform.getKoin
 
 @JsExport
 actual object CryptoManager {
@@ -60,7 +62,12 @@ actual object CryptoManager {
     } catch (exception: Exception) {
         false
     }
+
+    @JsExport.Ignore
+    internal actual fun getCertificateExpirationDate(base64Certificate: String): Instant {
+        TODO("")
+    }
 }
 
 @JsExport
-fun crypto(): CryptoManager = CryptoManager
+fun crypto(): CryptoManager = getKoin().get<CryptoManager>()

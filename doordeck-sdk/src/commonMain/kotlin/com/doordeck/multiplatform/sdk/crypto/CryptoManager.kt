@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import kotlinx.datetime.Instant
 
 internal const val SODIUM_PUBLIC_KEY_SIZE = 32
 internal const val SODIUM_PRIVATE_KEY_SIZE = 64
@@ -33,4 +34,5 @@ expect object CryptoManager {
     internal fun ByteArray.toPlatformPrivateKey(): ByteArray
     internal fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray
     internal fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean
+    internal fun getCertificateExpirationDate(base64Certificate: String): Instant
 }

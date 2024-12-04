@@ -2,15 +2,21 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import io.ktor.util.decodeBase64Bytes
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.Signature
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
 actual object CryptoManager {
 
     private const val ALGORITHM = "Ed25519"
+    private const val CERTIFICATE_TYPE = "X.509"
 
     actual fun generateKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
@@ -55,5 +61,11 @@ actual object CryptoManager {
         signature.verify(this)
     } catch (exception: Exception) {
         false
+    }
+
+    internal actual fun getCertificateExpirationDate(base64Certificate: String): Instant {
+        val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
+        val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+        return certificate.notAfter.toInstant().toKotlinInstant()
     }
 }
