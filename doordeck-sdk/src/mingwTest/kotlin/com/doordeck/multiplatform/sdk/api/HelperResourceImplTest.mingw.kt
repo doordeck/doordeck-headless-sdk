@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.api.model.UploadPlatformLogoData
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient

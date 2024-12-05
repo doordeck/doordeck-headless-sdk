@@ -14,4 +14,4 @@ actual interface HelperResource {
     fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse>
 }
 
-actual fun helper(): HelperResource = HelperResourceImpl(getKoin().get<HelperClient>(),)
+actual fun helper(): HelperResource = HelperResourceImpl(getKoin().get<HelperClient>())

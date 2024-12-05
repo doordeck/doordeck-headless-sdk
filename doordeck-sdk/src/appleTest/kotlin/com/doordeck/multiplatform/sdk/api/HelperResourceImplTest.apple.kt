@@ -18,7 +18,7 @@ class HelperResourceImplTest {
     private val helper = HelperResourceImpl(
         HelperClient(
             httpClient = TEST_HTTP_CLIENT,
-            accountlessClient = AccountlessClient(TEST_HTTP_CLIENT),
+            accountlessClient = AccountlessClient(TEST_HTTP_CLIENT, contextManager),
             accountClient = AccountClient(TEST_HTTP_CLIENT, contextManager),
             platformClient = PlatformClient(TEST_HTTP_CLIENT),
             contextManagerImpl = contextManager
