@@ -19,9 +19,19 @@ class RegisterEphemeralKeyWithSecondaryAuthenticationData(
 )
 
 @Serializable
+class RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData(
+    val method: TwoFactorMethod? = null
+)
+
+@Serializable
 class VerifyEphemeralKeyRegistrationData(
     val code: String,
     val privateKey: String
+)
+
+@Serializable
+class VerifyEphemeralKeyRegistrationWithContextData(
+    val code: String
 )
 
 @Serializable

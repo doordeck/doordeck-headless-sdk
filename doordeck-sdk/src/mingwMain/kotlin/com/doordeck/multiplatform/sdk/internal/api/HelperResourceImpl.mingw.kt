@@ -2,10 +2,8 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.model.AssistedLoginData
-import com.doordeck.multiplatform.sdk.api.model.CompleteAssistedLoginData
 import com.doordeck.multiplatform.sdk.api.model.UploadPlatformLogoData
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -31,14 +29,5 @@ internal class HelperResourceImpl(
     override fun assistedLoginJson(data: String): String {
         val assistedLoginData = data.fromJson<AssistedLoginData>()
         return runBlocking { helperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password) }.toJson()
-    }
-
-    override fun completeAssistedLogin(code: String): RegisterEphemeralKeyResponse {
-        return runBlocking { helperClient.completeAssistedLoginRequest(code) }
-    }
-
-    override fun completeAssistedLoginJson(data: String): String {
-        val completeAssistedLoginData = data.fromJson<CompleteAssistedLoginData>()
-        return runBlocking { helperClient.completeAssistedLoginRequest(completeAssistedLoginData.code) }.toJson()
     }
 }

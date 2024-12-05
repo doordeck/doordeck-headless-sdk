@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
@@ -26,13 +25,5 @@ internal class HelperResourceImpl(
 
     override fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse> {
         return GlobalScope.future(Dispatchers.IO) { helperClient.assistedLoginRequest(email, password) }
-    }
-
-    override suspend fun completeAssistedLogin(code: String): RegisterEphemeralKeyResponse {
-        return helperClient.completeAssistedLoginRequest(code)
-    }
-
-    override fun completeAssistedLoginAsync(code: String): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { helperClient.completeAssistedLoginRequest(code) }
     }
 }

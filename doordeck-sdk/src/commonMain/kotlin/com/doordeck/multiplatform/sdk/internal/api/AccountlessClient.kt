@@ -3,13 +3,15 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.api.requests.RegisterRequest
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
 internal open class AccountlessClient(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val contextManager: ContextManagerImpl
 ) : AbstractResourceImpl()  {
 
     /**
@@ -18,9 +20,12 @@ internal open class AccountlessClient(
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
     suspend fun loginRequest(email: String, password: String): TokenResponse {
-        return httpClient.post(Paths.getLoginPath()) {
+        return httpClient.post<TokenResponse>(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
+        }.also {
+            contextManager.setAuthToken(it.authToken)
+            contextManager.setRefreshToken(it.refreshToken)
         }
     }
 
@@ -30,7 +35,7 @@ internal open class AccountlessClient(
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
     suspend fun registrationRequest(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return httpClient.post(Paths.getRegistrationPath()) {
+        return httpClient.post<TokenResponse>(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(RegisterRequest(
                 email = email,
@@ -38,6 +43,9 @@ internal open class AccountlessClient(
                 displayName = displayName
             ))
             parameter(Params.FORCE, force)
+        }.also {
+            contextManager.setAuthToken(it.authToken)
+            contextManager.setRefreshToken(it.refreshToken)
         }
     }
 

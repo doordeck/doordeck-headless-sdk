@@ -62,9 +62,9 @@ internal class ContextManagerImpl(
         } ?: true
     }
 
-    override fun setKeyPair(privateKey: ByteArray, publicKey: ByteArray) {
-        this.currentUserPrivateKey = privateKey
+    override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         this.currentUserPublicKey = publicKey
+        this.currentUserPrivateKey = privateKey
     }
 
     internal fun setTokens(token: String, refreshToken: String) {
@@ -139,8 +139,12 @@ internal class ContextManagerImpl(
         secureStorage?.clear()
     }
 
-    internal fun getCertificateChain(): List<String>? {
-        return currentUserCertificateChain
+    internal fun getPublicKey(): ByteArray? {
+        return currentUserPublicKey
+    }
+
+    internal fun getPrivateKey(): ByteArray? {
+        return currentUserPrivateKey
     }
 
     internal fun getKeyPair(): Crypto.KeyPair? {
@@ -154,15 +158,15 @@ internal class ContextManagerImpl(
     internal fun getOperationContext(): Context.OperationContext {
         val actualUserId = currentUserId
         val actualUserCertificateChain = currentUserCertificateChain
-        val actualPublicKey = currentUserPublicKey
+        val actualUserPublicKey = currentUserPublicKey
         val actualUserPrivateKey = currentUserPrivateKey
-        if (actualUserId == null || actualUserCertificateChain == null || actualPublicKey == null || actualUserPrivateKey == null) {
+        if (actualUserId == null || actualUserCertificateChain == null || actualUserPublicKey == null || actualUserPrivateKey == null) {
             throw MissingOperationContextException("Operation context is missing")
         }
         return Context.OperationContext(
             userId = actualUserId,
             userCertificateChain = actualUserCertificateChain,
-            userPublicKey = actualPublicKey,
+            userPublicKey = actualUserPublicKey,
             userPrivateKey = actualUserPrivateKey
         )
     }

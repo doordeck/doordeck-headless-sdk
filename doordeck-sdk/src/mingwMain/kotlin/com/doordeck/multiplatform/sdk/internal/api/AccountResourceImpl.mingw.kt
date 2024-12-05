@@ -5,9 +5,11 @@ import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
 import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
+import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData
 import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
+import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationWithContextData
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
@@ -43,6 +45,14 @@ internal class AccountResourceImpl(
         return registerEphemeralKey(registerEphemeralKeyData.publicKey.decodeBase64ToByteArray()).toJson()
     }
 
+    override fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse {
+        return runBlocking { accountClient.registerEphemeralKeyWithContextRequest() }
+    }
+
+    override fun registerEphemeralKeyWithContextJson(): String {
+        return registerEphemeralKeyWithContext().toJson()
+    }
+
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         return runBlocking { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
@@ -52,6 +62,15 @@ internal class AccountResourceImpl(
         return registerEphemeralKeyWithSecondaryAuthentication(registerEphemeralKeyWithSecondaryAuthenticationData.publicKey.decodeBase64ToByteArray(), registerEphemeralKeyWithSecondaryAuthenticationData.method).toJson()
     }
 
+    override fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        return runBlocking { accountClient.registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(method) }
+    }
+
+    override fun registerEphemeralKeyWithSecondaryAuthenticationWithContextJson(data: String): String {
+        val registerEphemeralKeyWithSecondaryAuthenticationWithContextData = data.fromJson<RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData>()
+        return registerEphemeralKeyWithSecondaryAuthenticationWithContext(registerEphemeralKeyWithSecondaryAuthenticationWithContextData.method).toJson()
+    }
+
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
         return runBlocking { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
@@ -59,6 +78,15 @@ internal class AccountResourceImpl(
     override fun verifyEphemeralKeyRegistrationJson(data: String): String {
         val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
         return verifyEphemeralKeyRegistration(verifyEphemeralKeyRegistrationData.code, verifyEphemeralKeyRegistrationData.privateKey.decodeBase64ToByteArray()).toJson()
+    }
+
+    override fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse {
+        return runBlocking { accountClient.verifyEphemeralKeyRegistrationWithContextRequest(code) }
+    }
+
+    override fun verifyEphemeralKeyRegistrationWithContextJson(data: String): String {
+        val verifyEphemeralKeyRegistrationWithContextData = data.fromJson<VerifyEphemeralKeyRegistrationWithContextData>()
+        return verifyEphemeralKeyRegistrationWithContext(verifyEphemeralKeyRegistrationWithContextData.code).toJson()
     }
 
     override fun reverifyEmail() {

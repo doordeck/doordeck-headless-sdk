@@ -41,8 +41,8 @@ internal class DoordeckImpl(
                 val cloudHttpClient = createCloudHttpClient(apiEnvironment, mainContextManager)
                 val fusionHttpClient = createFusionHttpClient(apiEnvironment.fusionHost, mainContextManager)
                 single<AccountClient> { AccountClient(cloudHttpClient, mainContextManager) }
-                single<AccountlessClient> { AccountlessClient(cloudHttpClient) }
-                single<FusionClient> { FusionClient(fusionHttpClient) }
+                single<AccountlessClient> { AccountlessClient(cloudHttpClient, mainContextManager) }
+                single<FusionClient> { FusionClient(fusionHttpClient, mainContextManager) }
                 single<LocalUnlockClient> { LocalUnlockClient(httpClient) }
                 single<LockOperationsClient> {
                     LockOperationsClient(httpClient, mainContextManager, get())

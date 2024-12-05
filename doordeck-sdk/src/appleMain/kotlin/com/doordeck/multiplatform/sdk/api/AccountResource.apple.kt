@@ -35,6 +35,8 @@ actual interface AccountResource {
      */
     @Throws(Exception::class)
     suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    @Throws(Exception::class)
+    suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
 
     /**
      * Register ephemeral key with secondary authentication
@@ -44,6 +46,9 @@ actual interface AccountResource {
     @Throws(Exception::class)
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
+    @Throws(Exception::class)
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+
     /**
      * Verify ephemeral key registration
      *
@@ -51,6 +56,9 @@ actual interface AccountResource {
      */
     @Throws(Exception::class)
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+
+    @Throws(Exception::class)
+    suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
 
     /**
      * Reverify email

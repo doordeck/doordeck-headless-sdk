@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.Constants
 import com.doordeck.multiplatform.sdk.LockedException
-import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
@@ -36,12 +34,11 @@ internal open class HelperClient(
     /**
      * Encapsulates the standard login process into a single function. This method performs the following steps:
      * <ol>
-     *   <li>Reads the certificate chain from the context and checks if it is about to expire. If so, generates a new key pair.</li>
-     *   <li>Retrieves the key pair from the context or generates a new one if no key is found, or if the certificate chain is near expiration.</li>
+     *   <li>Reads the certificate chain from the context and checks if it is about to expire. If so, we will register the key pair again.</li>
+     *   <li>Retrieves the key pair from the context or generates a new one if no key is found.</li>
      *   <li>Adds the key pair to the context.</li>
      *   <li>Performs the login request using the provided credentials.</li>
-     *   <li>Stores the authentication token and refresh token in the context.</li>
-     *   <li>Attempts to register the key pair previously defined.</li>
+     *   <li>Attempts to register the key pair with context.</li>
      *   <li>If the previous step fails with a <code>LockedException</code>, retries registration with the secondary authentication endpoint.</li>
      * </ol>
      *
@@ -49,58 +46,31 @@ internal open class HelperClient(
      * It is the responsibility of the developer to load and store the context when necessary.</p>
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
-        val isCertificateChainAboutToExpireOrInvalid = contextManagerImpl.isCertificateChainAboutToExpire()
+        val currentKeyPair = contextManagerImpl.getKeyPair()
+        val requiresKeyRegister = currentKeyPair == null || contextManagerImpl.isCertificateChainAboutToExpire()
 
         // Get the stored key pair or create a new one
-        val keyPair = if (isCertificateChainAboutToExpireOrInvalid) {
-            CryptoManager.generateKeyPair()
-        } else {
-            contextManagerImpl.getKeyPair()
-                ?: CryptoManager.generateKeyPair()
-        }
+        val keyPair = currentKeyPair
+            ?: CryptoManager.generateKeyPair()
 
         // Set the key pair
-        contextManagerImpl.setKeyPair(keyPair.private, keyPair.public)
+        contextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
 
         // Perform the login
-        val loginResponse = accountlessClient.loginRequest(email, password)
+        accountlessClient.loginRequest(email, password)
 
-        // Set both tokens
-        contextManagerImpl.setAuthToken(loginResponse.authToken)
-        contextManagerImpl.setRefreshToken(loginResponse.refreshToken)
-
-        // Attempt to register the key pair
-        val registerEphemeralKeyResponse = try {
-            accountClient.registerEphemeralKeyRequest(keyPair.public)
-        } catch (exception: LockedException) {
-            // Attempt to register the key pair with secondary auth
-            accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(keyPair.public, null)
-            null
+        return if (requiresKeyRegister) {
+            // Attempt to register a key pair
+            val requiresVerification = try {
+                accountClient.registerEphemeralKeyWithContextRequest()
+                false
+            } catch (exception: LockedException) {
+                accountClient.registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(null)
+                true
+            }
+            AssistedLoginResponse(requiresVerification)
+        } else {
+            AssistedLoginResponse(false)
         }
-        return AssistedLoginResponse(loginResponse, registerEphemeralKeyResponse, keyPair)
-    }
-
-    /**
-     * Completes the assisted login process. This method is required only if the previous
-     * <code>assistedLoginRequest</code> response indicates that <code>requiresVerification()</code> is true.
-     *
-     * <p>This method performs the following steps:</p>
-     * <ol>
-     *   <li>Retrieves the key pair from the context.</li>
-     *   <li>Attempts to verify the ephemeral key registration using the provided code and private key.</li>
-     *   <li>Adds the user ID and certificate chain from the response to the context.</li>
-     * </ol>
-     *
-     * <p><b>Note:</b> This method interacts with the provided context by reading and writing data but does not handle
-     * context loading or storage. It is the responsibility of the developer to load and store the context when necessary.</p>
-     */
-    suspend fun completeAssistedLoginRequest(code: String): RegisterEphemeralKeyResponse {
-        val privateKey = contextManagerImpl.getKeyPair()?.private
-            ?: throw MissingContextFieldException("Key pair is missing")
-
-        val response = accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
-        contextManagerImpl.setUserId(response.userId)
-        contextManagerImpl.setCertificateChain(response.certificateChain)
-        return response
     }
 }

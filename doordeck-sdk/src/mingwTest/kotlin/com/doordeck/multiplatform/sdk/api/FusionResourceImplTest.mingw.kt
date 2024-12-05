@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.api.model.GetDoorStatusData
 import com.doordeck.multiplatform.sdk.api.model.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.api.model.StartDoorData
 import com.doordeck.multiplatform.sdk.api.model.StopDoorData
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -18,7 +19,8 @@ import kotlin.test.Test
 
 class FusionResourceImplTest {
 
-    private val fusion = FusionResourceImpl(FusionClient(TEST_HTTP_CLIENT))
+    private val contextManager = ContextManagerImpl()
+    private val fusion = FusionResourceImpl(FusionClient(TEST_HTTP_CLIENT, contextManager))
 
     @Test
     fun shouldLogin() = runTest {

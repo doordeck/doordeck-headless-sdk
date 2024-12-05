@@ -35,6 +35,8 @@ actual interface AccountResource {
      */
     fun registerEphemeralKey(publicKey: ByteArray): Promise<RegisterEphemeralKeyResponse>
 
+    fun registerEphemeralKeyWithContext(): Promise<RegisterEphemeralKeyResponse>
+
     /**
      * Register ephemeral key with secondary authentication
      *
@@ -42,12 +44,16 @@ actual interface AccountResource {
      */
     fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
 
+    fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): Promise<RegisterEphemeralKeyResponse>
+
+    fun verifyEphemeralKeyRegistrationWithContext(code: String): Promise<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email

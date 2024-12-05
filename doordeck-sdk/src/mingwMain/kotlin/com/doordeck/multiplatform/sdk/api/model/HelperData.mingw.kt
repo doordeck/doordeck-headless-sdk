@@ -14,8 +14,3 @@ class AssistedLoginData(
     val email: String,
     val password: String
 )
-
-@Serializable
-class CompleteAssistedLoginData(
-    val code: String
-)

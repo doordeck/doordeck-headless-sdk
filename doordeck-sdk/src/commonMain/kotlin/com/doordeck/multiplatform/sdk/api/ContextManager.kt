@@ -14,7 +14,7 @@ interface ContextManager {
     fun setUserId(userId: String)
     fun setCertificateChain(certificateChain: List<String>)
     fun isCertificateChainAboutToExpire(): Boolean
-    fun setKeyPair(privateKey: ByteArray, publicKey: ByteArray)
+    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray)
     fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
     fun setOperationContextJson(data: String)
     fun setSecureStorageImpl(secureStorage: SecureStorage)

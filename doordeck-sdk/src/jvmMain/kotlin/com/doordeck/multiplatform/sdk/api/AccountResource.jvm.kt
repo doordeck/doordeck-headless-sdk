@@ -41,6 +41,10 @@ actual interface AccountResource {
 
     fun registerEphemeralKeyAsync(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
 
+    suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
+
+    fun registerEphemeralKeyWithContextAsync(): CompletableFuture<RegisterEphemeralKeyResponse>
+
     /**
      * Register ephemeral key with secondary authentication
      *
@@ -50,6 +54,10 @@ actual interface AccountResource {
 
     fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
 
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+
+    fun registerEphemeralKeyWithSecondaryAuthenticationWithContextAsync(method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+
     /**
      * Verify ephemeral key registration
      *
@@ -58,6 +66,10 @@ actual interface AccountResource {
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
 
     fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
+
+    suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
+
+    fun verifyEphemeralKeyRegistrationWithContextAsync(code: String): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email

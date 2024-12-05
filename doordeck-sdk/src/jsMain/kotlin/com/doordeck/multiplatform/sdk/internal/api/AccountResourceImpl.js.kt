@@ -26,12 +26,24 @@ internal class AccountResourceImpl(
         return GlobalScope.promise { accountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
+    override fun registerEphemeralKeyWithContext(): Promise<RegisterEphemeralKeyResponse> {
+        return GlobalScope.promise { accountClient.registerEphemeralKeyWithContextRequest() }
+    }
+
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
         return GlobalScope.promise { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
+    override fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod?): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
+        return GlobalScope.promise { accountClient.registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(method) }
+    }
+
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): Promise<RegisterEphemeralKeyResponse> {
         return GlobalScope.promise { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+    }
+
+    override fun verifyEphemeralKeyRegistrationWithContext(code: String): Promise<RegisterEphemeralKeyResponse> {
+        return GlobalScope.promise { accountClient.verifyEphemeralKeyRegistrationWithContextRequest(code) }
     }
 
     override fun reverifyEmail(): Promise<Unit> {
