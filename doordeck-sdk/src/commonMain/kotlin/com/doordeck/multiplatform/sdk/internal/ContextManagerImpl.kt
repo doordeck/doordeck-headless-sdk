@@ -49,11 +49,11 @@ internal class ContextManagerImpl(
     }
 
     override fun setUserId(userId: String) {
-        this.currentUserId = userId
+        currentUserId = userId
     }
 
     override fun setCertificateChain(certificateChain: List<String>) {
-        this.currentUserCertificateChain = certificateChain
+        currentUserCertificateChain = certificateChain
     }
 
     override fun isCertificateChainAboutToExpire(): Boolean {
@@ -63,8 +63,8 @@ internal class ContextManagerImpl(
     }
 
     override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
-        this.currentUserPublicKey = publicKey
-        this.currentUserPrivateKey = privateKey
+        currentUserPublicKey = publicKey
+        currentUserPrivateKey = privateKey
     }
 
     internal fun setTokens(token: String, refreshToken: String) {

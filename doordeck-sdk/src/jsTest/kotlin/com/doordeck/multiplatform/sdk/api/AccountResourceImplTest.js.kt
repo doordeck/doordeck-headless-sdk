@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
@@ -18,6 +19,7 @@ class AccountResourceImplTest {
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
+        contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
@@ -36,13 +38,28 @@ class AccountResourceImplTest {
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyWithContext() = runTest {
+        account.registerEphemeralKeyWithContext().await()
+    }
+
+    @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf()).await()
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthenticationWithContext().await()
+    }
+
+    @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
         account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
+    }
+
+    @Test
+    fun shouldVerifyEphemeralKeyRegistrationWithContext() = runTest {
+        account.verifyEphemeralKeyRegistrationWithContext("").await()
     }
 
     @Test

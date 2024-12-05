@@ -6,7 +6,6 @@ import kotlin.js.JsExport
 @JsExport
 object Crypto {
 
-    @Serializable
     class KeyPair(
         val private: ByteArray,
         val public: ByteArray
