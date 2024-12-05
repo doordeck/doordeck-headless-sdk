@@ -41,7 +41,7 @@ actual object CryptoManager {
         certificate.fromSchema(asn1.result)
         val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
         Clock.System.now() >= Instant.parse(notAfterDate) - 30.days
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         true
     }
 
