@@ -10,7 +10,6 @@ interface ContextManager {
     fun isAuthTokenAboutToExpire(): Boolean
     fun setRefreshToken(token: String)
     fun setFusionAuthToken(token: String)
-    fun isFusionAuthTokenAboutToExpire(): Boolean
     fun setUserId(userId: String)
     fun setCertificateChain(certificateChain: List<String>)
     fun isCertificateChainAboutToExpire(): Boolean

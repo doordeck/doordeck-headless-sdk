@@ -44,10 +44,6 @@ internal class ContextManagerImpl(
         currentFusionToken = token
     }
 
-    override fun isFusionAuthTokenAboutToExpire(): Boolean {
-        return currentFusionToken?.isJwtTokenAboutToExpire() ?: true
-    }
-
     override fun setUserId(userId: String) {
         currentUserId = userId
     }
