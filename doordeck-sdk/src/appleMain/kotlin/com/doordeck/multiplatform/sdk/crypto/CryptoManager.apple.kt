@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.kcryptokit.KCryptoKit
+import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.allocArrayOf
 import kotlinx.cinterop.memScoped
@@ -27,8 +28,7 @@ actual object CryptoManager {
     }
 
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
-        // TODO
-        return true
+        return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
