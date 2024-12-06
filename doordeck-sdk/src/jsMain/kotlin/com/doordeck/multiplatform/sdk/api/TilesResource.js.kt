@@ -2,9 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
+import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
@@ -26,7 +25,7 @@ actual interface TilesResource {
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<dynamic>
 }
 
-private val tiles = TilesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+private val tiles = TilesResourceImpl(getKoin().get<TilesClient>())
 
 @JsExport
 actual fun tiles(): TilesResource = tiles

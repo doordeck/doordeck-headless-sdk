@@ -5,11 +5,9 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface AccountResource {
@@ -37,6 +35,8 @@ actual interface AccountResource {
      */
     @Throws(Exception::class)
     suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    @Throws(Exception::class)
+    suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
 
     /**
      * Register ephemeral key with secondary authentication
@@ -46,6 +46,9 @@ actual interface AccountResource {
     @Throws(Exception::class)
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
+    @Throws(Exception::class)
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+
     /**
      * Verify ephemeral key registration
      *
@@ -53,6 +56,9 @@ actual interface AccountResource {
      */
     @Throws(Exception::class)
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+
+    @Throws(Exception::class)
+    suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
 
     /**
      * Reverify email
@@ -97,7 +103,4 @@ actual interface AccountResource {
     suspend fun deleteAccount()
 }
 
-actual fun account(): AccountResource = AccountResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>()
-)
+actual fun account(): AccountResource = AccountResourceImpl(getKoin().get<AccountClient>())

@@ -9,6 +9,7 @@ object Context {
     class OperationContext(
         val userId: String,
         val userCertificateChain: List<String>,
+        val userPublicKey: ByteArray,
         val userPrivateKey: ByteArray
     )
 
@@ -16,6 +17,7 @@ object Context {
     class OperationContextData(
         val userId: String,
         val userCertificateChain: List<String>,
+        val userPublicKey: String,
         val userPrivateKey: String
     )
 }

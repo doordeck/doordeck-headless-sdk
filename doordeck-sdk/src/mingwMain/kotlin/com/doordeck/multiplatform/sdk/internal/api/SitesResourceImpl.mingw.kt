@@ -8,15 +8,14 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class SitesResourceImpl(
-    httpClient: HttpClient
-) : SitesClient(httpClient), SitesResource {
+    private val sitesClient: SitesClient
+) : SitesResource {
 
     override fun listSites(): List<SiteResponse> {
-        return runBlocking { listSitesRequest() }
+        return runBlocking { sitesClient.listSitesRequest() }
     }
 
     override fun listSitesJson(): String {
@@ -24,7 +23,7 @@ internal class SitesResourceImpl(
     }
 
     override fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
-        return runBlocking { getLocksForSiteRequest(siteId) }
+        return runBlocking { sitesClient.getLocksForSiteRequest(siteId) }
     }
 
     override fun getLocksForSiteJson(data: String): String {
@@ -33,7 +32,7 @@ internal class SitesResourceImpl(
     }
 
     override fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
-        return runBlocking { getUsersForSiteRequest(siteId) }
+        return runBlocking { sitesClient.getUsersForSiteRequest(siteId) }
     }
 
     override fun getUsersForSiteJson(data: String): String {

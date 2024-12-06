@@ -25,6 +25,7 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationMailingAddressD
 import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationNameData
 import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationPrivacyPolicyData
 import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationSupportContactData
+import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
@@ -32,7 +33,7 @@ import kotlin.test.Test
 
 class PlatformResourceImplTest {
     
-    private val platform = PlatformResourceImpl(TEST_HTTP_CLIENT)
+    private val platform = PlatformResourceImpl(PlatformClient(TEST_HTTP_CLIENT))
 
     @Test
     fun shouldCreateApplication() = runTest {

@@ -370,6 +370,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
@@ -436,6 +437,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
         val shareLock = LockOperations.ShareLock(
@@ -505,6 +507,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
@@ -598,6 +601,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 

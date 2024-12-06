@@ -3,9 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
@@ -33,7 +32,7 @@ actual interface SitesResource {
     fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>>
 }
 
-private val sites = SitesResourceImpl(getKoin().get<HttpClient>(named("cloudHttpClient")))
+private val sites = SitesResourceImpl(getKoin().get<SitesClient>())
 
 @JsExport
 actual fun sites(): SitesResource = sites

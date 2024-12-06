@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 
 internal open class IntegrationTest {
 
-    val ACCOUNTLESS_CLIENT = AccountlessClient(createCloudHttpClient(TEST_ENVIRONMENT, ContextManagerImpl()))
+    val ACCOUNTLESS_CLIENT = AccountlessClient(createCloudHttpClient(TEST_ENVIRONMENT, ContextManagerImpl()), ContextManagerImpl())
     val CONTEXT_MANAGER = ContextManagerImpl()
     val HTTP_CLIENT = createHttpClient()
     val CLOUD_HTTP_CLIENT = createCloudHttpClient(TEST_ENVIRONMENT, CONTEXT_MANAGER)

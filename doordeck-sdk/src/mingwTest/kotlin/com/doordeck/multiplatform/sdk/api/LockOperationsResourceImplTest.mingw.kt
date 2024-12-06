@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.BaseOperationData
 import com.doordeck.multiplatform.sdk.api.model.GetAuditForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
@@ -44,6 +45,7 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDuratio
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -56,11 +58,11 @@ class LockOperationsResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
     private val localUnlock = LocalUnlockClient(TEST_HTTP_CLIENT)
-    private val lockOperations = LockOperationsResourceImpl(TEST_HTTP_CLIENT, contextManager, localUnlock)
+    private val lockOperations = LockOperationsResourceImpl(LockOperationsClient(TEST_HTTP_CLIENT, contextManager, localUnlock))
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
-        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test

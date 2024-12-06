@@ -19,12 +19,13 @@ class ContextManagerTest {
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, privateKey)
+        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
         contextManager.storeContext()
@@ -35,6 +36,7 @@ class ContextManagerTest {
         val restored = contextManager.getOperationContext()
         assertEquals(userId, restored.userId)
         assertContentEquals(certificateChain, restored.userCertificateChain)
+        assertContentEquals(publicKey, restored.userPublicKey)
         assertContentEquals(privateKey, restored.userPrivateKey)
         assertEquals(cloudAuthToken, contextManager.currentToken)
         assertEquals(fusionAuthToken, contextManager.currentFusionToken)
@@ -47,12 +49,13 @@ class ContextManagerTest {
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, privateKey)
+        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
         contextManager.storeContext()
 
         // When

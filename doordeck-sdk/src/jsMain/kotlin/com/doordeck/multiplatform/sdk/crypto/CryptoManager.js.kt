@@ -2,9 +2,17 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import com.doordeck.multiplatform.sdk.jsmodule.ASN1
+import com.doordeck.multiplatform.sdk.jsmodule.PKI
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
+import io.ktor.util.decodeBase64Bytes
+import io.ktor.util.toJsArray
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlin.js.Date
+import kotlin.time.Duration.Companion.days
 
 @JsExport
 actual object CryptoManager {
@@ -25,6 +33,16 @@ actual object CryptoManager {
 
     actual fun generateEncodedKeyPair(): String {
         throw NotImplementedError("Use generateKeyPair() instead")
+    }
+
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
+        val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
+        val certificate = PKI.Certificate()
+        certificate.fromSchema(asn1.result)
+        val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
+        Clock.System.now() >= Instant.parse(notAfterDate) - 30.days
+    } catch (exception: Throwable) {
+        true
     }
 
     @JsExport.Ignore

@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.api.requests.ChangePasswordRequest
 import com.doordeck.multiplatform.sdk.api.requests.RegisterEphemeralKeyRequest
@@ -29,8 +30,11 @@ internal open class AccountClient(
      */
     @DoordeckOnly
     suspend fun refreshTokenRequest(refreshToken: String): TokenResponse {
-        return httpClient.post(Paths.getRefreshTokenPath()) {
+        return httpClient.post<TokenResponse>(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = refreshToken)
+        }.also {
+            contextManager.setAuthToken(it.authToken)
+            contextManager.setRefreshToken(it.refreshToken)
         }
     }
 
@@ -52,10 +56,23 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
     suspend fun registerEphemeralKeyRequest(publicKey: ByteArray): RegisterEphemeralKeyResponse {
+        return registerEphemeralKey(publicKey)
+    }
+
+    suspend fun registerEphemeralKeyWithContextRequest(): RegisterEphemeralKeyResponse {
+        val publicKey =  contextManager.getPublicKey()
+            ?: throw MissingContextFieldException("Key pair is missing")
+        return registerEphemeralKey(publicKey)
+    }
+
+    private suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
         val publicKeyEncoded =  publicKey.encodeByteArrayToBase64()
-        return httpClient.post(Paths.getRegisterEphemeralKeyPath()) {
+        return httpClient.post<RegisterEphemeralKeyResponse>(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
+        }.also {
+            contextManager.setUserId(it.userId)
+            contextManager.setCertificateChain(it.certificateChain)
         }
     }
 
@@ -65,8 +82,18 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        return registerEphemeralKeyWithSecondaryAuthentication(publicKey, method)
+    }
+
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        val publicKey = contextManager.getPublicKey()
+            ?: throw MissingContextFieldException("Key pair is missing")
+        return registerEphemeralKeyWithSecondaryAuthentication(publicKey, method)
+    }
+
+    private suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         val publicKeyEncoded =  publicKey.encodeByteArrayToBase64()
-        return httpClient.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
+        return httpClient.post<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
             method?.let { parameter(Params.METHOD, it.name) }
@@ -79,10 +106,23 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     suspend fun verifyEphemeralKeyRegistrationRequest(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
+        return verifyEphemeralKeyRegistration(code, privateKey)
+    }
+
+    suspend fun verifyEphemeralKeyRegistrationWithContextRequest(code: String): RegisterEphemeralKeyResponse {
+        val privateKey = contextManager.getPrivateKey()
+            ?: throw MissingContextFieldException("Key pair is missing")
+        return verifyEphemeralKeyRegistration(code, privateKey)
+    }
+
+    private suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
         val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
-        return httpClient.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
+        return httpClient.post<RegisterEphemeralKeyResponse>(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
+        }.also {
+            contextManager.setUserId(it.userId)
+            contextManager.setCertificateChain(it.certificateChain)
         }
     }
 

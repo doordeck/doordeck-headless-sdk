@@ -8,18 +8,22 @@ import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
 internal open class FusionClient(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    private val contextManager: ContextManagerImpl
 ) : AbstractResourceImpl() {
 
     suspend fun loginRequest(email: String, password: String): FusionLoginResponse {
-        return httpClient.post(FusionPaths.getLoginPath()) {
+        return httpClient.post<FusionLoginResponse>(FusionPaths.getLoginPath()) {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
+        }.also {
+            contextManager.setFusionAuthToken(it.authToken)
         }
     }
 

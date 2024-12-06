@@ -5,93 +5,92 @@ import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
-import io.ktor.client.HttpClient
 
 internal class PlatformResourceImpl(
-    httpClient: HttpClient
-) : PlatformClient(httpClient), PlatformResource {
+    private val platformClient: PlatformClient
+) : PlatformResource {
 
     override suspend fun createApplication(application: Platform.CreateApplication) {
-        return createApplicationRequest(application)
+        return platformClient.createApplicationRequest(application)
     }
 
     override suspend fun listApplications(): List<ApplicationResponse> {
-        return listApplicationsRequest()
+        return platformClient.listApplicationsRequest()
     }
 
     override suspend fun getApplication(applicationId: String): ApplicationResponse {
-        return getApplicationRequest(applicationId)
+        return platformClient.getApplicationRequest(applicationId)
     }
 
     override suspend fun updateApplicationName(applicationId: String, name: String) {
-        return updateApplicationNameRequest(applicationId, name)
+        return platformClient.updateApplicationNameRequest(applicationId, name)
     }
 
     override suspend fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return updateApplicationCompanyNameRequest(applicationId, companyName)
+        return platformClient.updateApplicationCompanyNameRequest(applicationId, companyName)
     }
 
     override suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return updateApplicationMailingAddressRequest(applicationId, mailingAddress)
+        return platformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress)
     }
 
     override suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
+        return platformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
     }
 
     override suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return updateApplicationSupportContactRequest(applicationId, supportContact)
+        return platformClient.updateApplicationSupportContactRequest(applicationId, supportContact)
     }
 
     override suspend fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return updateApplicationAppLinkRequest(applicationId, appLink)
+        return platformClient.updateApplicationAppLinkRequest(applicationId, appLink)
     }
 
     override suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        return updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
+        return platformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
     }
 
     override suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return updateApplicationLogoUrlRequest(applicationId, logoUrl)
+        return platformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl)
     }
 
     override suspend fun deleteApplication(applicationId: String) {
-        return deleteApplicationRequest(applicationId)
+        return platformClient.deleteApplicationRequest(applicationId)
     }
 
     override suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return getLogoUploadUrlRequest(applicationId, contentType)
+        return platformClient.getLogoUploadUrlRequest(applicationId, contentType)
     }
 
     override suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        return addAuthKeyRequest(applicationId, key)
+        return platformClient.addAuthKeyRequest(applicationId, key)
     }
 
     override suspend fun addAuthIssuer(applicationId: String, url: String) {
-        return addAuthIssuerRequest(applicationId, url)
+        return platformClient.addAuthIssuerRequest(applicationId, url)
     }
 
     override suspend fun deleteAuthIssuer(applicationId: String, url: String) {
-        return deleteAuthIssuerRequest(applicationId, url)
+        return platformClient.deleteAuthIssuerRequest(applicationId, url)
     }
 
     override suspend fun addCorsDomain(applicationId: String, url: String) {
-        return addCorsDomainRequest(applicationId, url)
+        return platformClient.addCorsDomainRequest(applicationId, url)
     }
 
     override suspend fun removeCorsDomain(applicationId: String, url: String) {
-        return removeCorsDomainRequest(applicationId, url)
+        return platformClient.removeCorsDomainRequest(applicationId, url)
     }
 
     override suspend fun addApplicationOwner(applicationId: String, userId: String) {
-        return addApplicationOwnerRequest(applicationId, userId)
+        return platformClient.addApplicationOwnerRequest(applicationId, userId)
     }
 
     override suspend fun removeApplicationOwner(applicationId: String, userId: String) {
-        return removeApplicationOwnerRequest(applicationId, userId)
+        return platformClient.removeApplicationOwnerRequest(applicationId, userId)
     }
 
     override suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return getApplicationOwnersDetailsRequest(applicationId)
+        return platformClient.getApplicationOwnersDetailsRequest(applicationId)
     }
 }

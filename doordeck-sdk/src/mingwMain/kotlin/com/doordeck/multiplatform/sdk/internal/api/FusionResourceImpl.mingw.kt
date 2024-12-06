@@ -15,15 +15,14 @@ import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResp
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class FusionResourceImpl(
-    httpClient: HttpClient
-) : FusionClient(httpClient), FusionResource {
+    private val fusionClient: FusionClient
+) : FusionResource {
 
     override fun login(email: String, password: String): FusionLoginResponse {
-        return runBlocking { loginRequest(email, password) }
+        return runBlocking { fusionClient.loginRequest(email, password) }
     }
 
     override fun loginJson(data: String): String {
@@ -32,7 +31,7 @@ internal class FusionResourceImpl(
     }
 
     override fun getIntegrationType(): IntegrationTypeResponse {
-        return runBlocking { getIntegrationTypeRequest() }
+        return runBlocking { fusionClient.getIntegrationTypeRequest() }
     }
 
     override fun getIntegrationTypeJson(): String {
@@ -40,7 +39,7 @@ internal class FusionResourceImpl(
     }
 
     override fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
-        return runBlocking { getIntegrationConfigurationRequest(type) }
+        return runBlocking { fusionClient.getIntegrationConfigurationRequest(type) }
     }
 
     override fun getIntegrationConfigurationJson(data: String): String {
@@ -49,7 +48,7 @@ internal class FusionResourceImpl(
     }
 
     override fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
-        return runBlocking { enableDoorRequest(name, siteId, controller) }
+        return runBlocking { fusionClient.enableDoorRequest(name, siteId, controller) }
     }
 
     override fun enableDoorJson(data: String) {
@@ -58,7 +57,7 @@ internal class FusionResourceImpl(
     }
 
     override fun deleteDoor(deviceId: String) {
-        return runBlocking { deleteDoorRequest(deviceId) }
+        return runBlocking { fusionClient.deleteDoorRequest(deviceId) }
     }
 
     override fun deleteDoorJson(data: String) {
@@ -67,7 +66,7 @@ internal class FusionResourceImpl(
     }
 
     override fun getDoorStatus(deviceId: String): DoorStateResponse {
-        return runBlocking { getDoorStatusRequest(deviceId) }
+        return runBlocking { fusionClient.getDoorStatusRequest(deviceId) }
     }
 
     override fun getDoorStatusJson(data: String): String {
@@ -76,7 +75,7 @@ internal class FusionResourceImpl(
     }
 
     override fun startDoor(deviceId: String) {
-        return runBlocking { startDoorRequest(deviceId) }
+        return runBlocking { fusionClient.startDoorRequest(deviceId) }
     }
 
     override fun startDoorJson(data: String) {
@@ -85,7 +84,7 @@ internal class FusionResourceImpl(
     }
 
     override fun stopDoor(deviceId: String) {
-        return runBlocking { stopDoorRequest(deviceId) }
+        return runBlocking { fusionClient.stopDoorRequest(deviceId) }
     }
 
     override fun stopDoorJson(data: String) {

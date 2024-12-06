@@ -27,7 +27,7 @@ internal class FusionClientTest : IntegrationTest() {
 
             // Given - shouldTestLogin
             val fusionContextManager = ContextManagerImpl()
-            val fusionClient = FusionClient(createFusionHttpClient(host, fusionContextManager))
+            val fusionClient = FusionClient(createFusionHttpClient(host, fusionContextManager), fusionContextManager)
 
             // When
             val login = fusionClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)

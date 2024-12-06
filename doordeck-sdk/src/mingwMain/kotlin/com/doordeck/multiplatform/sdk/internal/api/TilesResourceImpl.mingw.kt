@@ -6,15 +6,14 @@ import com.doordeck.multiplatform.sdk.api.model.GetLocksBelongingToTileData
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class TilesResourceImpl(
-    httpClient: HttpClient
-) : TilesClient(httpClient), TilesResource {
+    private val tilesClient: TilesClient
+) : TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return runBlocking { getLocksBelongingToTileRequest(tileId) }
+        return runBlocking { tilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     override fun getLocksBelongingToTileJson(data: String): String {
@@ -23,7 +22,7 @@ internal class TilesResourceImpl(
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>) {
-        return runBlocking { associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return runBlocking { tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 
     override fun associateMultipleLocksJson(data: String) {

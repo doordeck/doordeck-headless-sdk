@@ -2,15 +2,22 @@ package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import io.ktor.util.decodeBase64Bytes
+import kotlinx.datetime.Clock
+import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.Signature
+import java.security.cert.CertificateFactory
+import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
+import kotlin.time.Duration.Companion.days
 
 actual object CryptoManager {
 
     private const val ALGORITHM = "Ed25519"
+    private const val CERTIFICATE_TYPE = "X.509"
 
     actual fun generateKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
@@ -22,6 +29,16 @@ actual object CryptoManager {
 
     actual fun generateEncodedKeyPair(): String {
         throw NotImplementedError("Use generateKeyPair() instead")
+    }
+
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
+        val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
+        val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+        certificate.notAfter?.let {
+            Clock.System.now() >= it.toInstant().toKotlinInstant() - 30.days
+        } ?: true
+    } catch (exception: Exception) {
+        true
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
