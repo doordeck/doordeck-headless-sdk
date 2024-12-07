@@ -18,13 +18,10 @@ import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingPermittedAddressesData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingTimeRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.ShareLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.ShareLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UnlockOperationData
-import com.doordeck.multiplatform.sdk.api.model.UnlockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockColourData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockFavouriteData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockNameData
@@ -32,15 +29,11 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingDefaultNameData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingHiddenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationWithContextData
 import com.doordeck.multiplatform.sdk.api.model.toLocationRequirement
 import com.doordeck.multiplatform.sdk.api.model.toRevokeAccessToLockOperation
-import com.doordeck.multiplatform.sdk.api.model.toShareLock
 import com.doordeck.multiplatform.sdk.api.model.toShareLockOperation
 import com.doordeck.multiplatform.sdk.api.model.toTimeRequirementList
-import com.doordeck.multiplatform.sdk.api.model.toUnlockBetween
 import com.doordeck.multiplatform.sdk.api.model.toUnlockOperation
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockDuration
@@ -266,15 +259,6 @@ internal class LockOperationsResourceImpl(
         return getUserPublicKeyByForeignKeys(getUserPublicKeyByForeignKeysData.foreignKeys).toJson()
     }
 
-    override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
-        return runBlocking { lockOperationsClient.unlockWithContextRequest(lockId, directAccessEndpoints) }
-    }
-
-    override fun unlockWithContextJson(data: String) {
-        val unlockWithContextData = data.fromJson<UnlockWithContextData>()
-        return unlockWithContext(unlockWithContextData.lockId, unlockWithContextData.directAccessEndpoints)
-    }
-
     override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
         return runBlocking { lockOperationsClient.unlockRequest(unlockOperation) }
     }
@@ -282,15 +266,6 @@ internal class LockOperationsResourceImpl(
     override fun unlockJson(data: String) {
         val unlockOperationData = data.fromJson<UnlockOperationData>()
         return unlock(unlockOperationData.toUnlockOperation())
-    }
-
-    override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
-        return runBlocking { lockOperationsClient.shareLockWithContextRequest(lockId, shareLock) }
-    }
-
-    override fun shareLockWithContextJson(data: String) {
-        val shareLockWithContextData = data.fromJson<ShareLockWithContextData>()
-        return shareLockWithContext(shareLockWithContextData.lockId, shareLockWithContextData.shareLock.toShareLock())
     }
 
     override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
@@ -302,15 +277,6 @@ internal class LockOperationsResourceImpl(
         return shareLock(shareLockOperationData.toShareLockOperation())
     }
 
-    override fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
-        return runBlocking { lockOperationsClient.revokeAccessToLockWithContextRequest(lockId, users) }
-    }
-
-    override fun revokeAccessToLockWithContextJson(data: String) {
-        val revokeAccessToLockWithContextData = data.fromJson<RevokeAccessToLockWithContextData>()
-        return revokeAccessToLockWithContext(revokeAccessToLockWithContextData.lockId, revokeAccessToLockWithContextData.users)
-    }
-
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         return runBlocking { lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
@@ -320,15 +286,6 @@ internal class LockOperationsResourceImpl(
         return revokeAccessToLock(revokeAccessToLockOperationData.toRevokeAccessToLockOperation())
     }
 
-    override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
-        return runBlocking { lockOperationsClient.updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration) }
-    }
-
-    override fun updateSecureSettingUnlockDurationWithContextJson(data: String) {
-        val updateSecureSettingUnlockDurationWithContextData = data.fromJson<UpdateSecureSettingUnlockDurationWithContextData>()
-        return updateSecureSettingUnlockDurationWithContext(updateSecureSettingUnlockDurationWithContextData.lockId, updateSecureSettingUnlockDurationWithContextData.unlockDuration)
-    }
-
     override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
         return runBlocking { lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
@@ -336,15 +293,6 @@ internal class LockOperationsResourceImpl(
     override fun updateSecureSettingUnlockDurationJson(data: String) {
         val updateSecureSettingUnlockDurationData = data.fromJson<UpdateSecureSettingUnlockDurationData>()
         return updateSecureSettingUnlockDuration(updateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration())
-    }
-
-    override fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return runBlocking { lockOperationsClient.updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
-    }
-
-    override fun updateSecureSettingUnlockBetweenWithContextJson(data: String) {
-        val updateSecureSettingUnlockBetweenWithContextData = data.fromJson<UpdateSecureSettingUnlockBetweenWithContextData>()
-        return updateSecureSettingUnlockBetweenWithContext(updateSecureSettingUnlockBetweenWithContextData.lockId, updateSecureSettingUnlockBetweenWithContextData.unlockBetween?.toUnlockBetween())
     }
 
     override fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {

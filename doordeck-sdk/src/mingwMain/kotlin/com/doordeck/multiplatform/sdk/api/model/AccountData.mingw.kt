@@ -14,24 +14,14 @@ class RegisterEphemeralKeyData(
 
 @Serializable
 class RegisterEphemeralKeyWithSecondaryAuthenticationData(
-    val publicKey: String,
-    val method: TwoFactorMethod? = null
-)
-
-@Serializable
-class RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData(
+    val publicKey: String? = null,
     val method: TwoFactorMethod? = null
 )
 
 @Serializable
 class VerifyEphemeralKeyRegistrationData(
     val code: String,
-    val privateKey: String
-)
-
-@Serializable
-class VerifyEphemeralKeyRegistrationWithContextData(
-    val code: String
+    val privateKey: String? = null
 )
 
 @Serializable

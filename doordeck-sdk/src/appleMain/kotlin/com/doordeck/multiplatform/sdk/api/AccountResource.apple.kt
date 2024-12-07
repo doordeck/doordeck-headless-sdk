@@ -18,7 +18,7 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun refreshToken(refreshToken: String): TokenResponse
+    suspend fun refreshToken(refreshToken: String? = null): TokenResponse
 
     /**
      * Logout
@@ -34,9 +34,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
-    @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
     /**
      * Register ephemeral key with secondary authentication
@@ -44,10 +42,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-
-    @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
     /**
      * Verify ephemeral key registration
@@ -55,10 +50,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
-
-    @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
+    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
     /**
      * Reverify email

@@ -170,8 +170,8 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.js)
                 implementation(libs.libsodium.bindings.js)
-                implementation(npm("asn1js", "3.0.5"))
-                implementation(npm("pkijs", "3.2.4"))
+                implementation(npm("asn1js", libs.versions.asn1js.get()))
+                implementation(npm("pkijs", libs.versions.pkijs.get()))
             }
         }
 

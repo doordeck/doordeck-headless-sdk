@@ -19,7 +19,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    fun refreshToken(refreshToken: String): Promise<TokenResponse>
+    fun refreshToken(refreshToken: String? = null): Promise<TokenResponse>
 
     /**
      * Logout
@@ -33,27 +33,21 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    fun registerEphemeralKey(publicKey: ByteArray): Promise<RegisterEphemeralKeyResponse>
-
-    fun registerEphemeralKeyWithContext(): Promise<RegisterEphemeralKeyResponse>
+    fun registerEphemeralKey(publicKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse>
 
     /**
      * Register ephemeral key with secondary authentication
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
-
-    fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
 
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): Promise<RegisterEphemeralKeyResponse>
-
-    fun verifyEphemeralKeyRegistrationWithContext(code: String): Promise<RegisterEphemeralKeyResponse>
+    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email

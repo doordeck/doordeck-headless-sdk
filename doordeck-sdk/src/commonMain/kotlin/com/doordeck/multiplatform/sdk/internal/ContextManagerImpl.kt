@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.api.model.Crypto
@@ -18,10 +17,9 @@ internal class ContextManagerImpl(
     refreshToken: String? = null
 ): ContextManager {
 
-    var currentToken: String? = token
-    var currentRefreshToken: String? = refreshToken
-    var currentFusionToken: String? = null
-
+    private var currentToken: String? = token
+    private var currentRefreshToken: String? = refreshToken
+    private var currentFusionToken: String? = null
     private var currentUserId: String? = null
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
@@ -135,6 +133,26 @@ internal class ContextManagerImpl(
         secureStorage?.clear()
     }
 
+    internal fun getCertificateChain(): List<String>? {
+        return currentUserCertificateChain
+    }
+
+    internal fun getUserId(): String? {
+        return currentUserId
+    }
+
+    internal fun getAuthToken(): String? {
+        return currentToken
+    }
+
+    internal fun getRefreshToken(): String? {
+        return currentRefreshToken
+    }
+
+    internal fun getFusionAuthToken(): String? {
+        return currentFusionToken
+    }
+
     internal fun getPublicKey(): ByteArray? {
         return currentUserPublicKey
     }
@@ -149,22 +167,6 @@ internal class ContextManagerImpl(
         return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
             Crypto.KeyPair(actualUserPrivateKey, actualUserPublicKey)
         } else null
-    }
-
-    internal fun getOperationContext(): Context.OperationContext {
-        val actualUserId = currentUserId
-        val actualUserCertificateChain = currentUserCertificateChain
-        val actualUserPublicKey = currentUserPublicKey
-        val actualUserPrivateKey = currentUserPrivateKey
-        if (actualUserId == null || actualUserCertificateChain == null || actualUserPublicKey == null || actualUserPrivateKey == null) {
-            throw MissingOperationContextException("Operation context is missing")
-        }
-        return Context.OperationContext(
-            userId = actualUserId,
-            userCertificateChain = actualUserCertificateChain,
-            userPublicKey = actualUserPublicKey,
-            userPrivateKey = actualUserPrivateKey
-        )
     }
 
     private fun initializeSecureStorage() {
