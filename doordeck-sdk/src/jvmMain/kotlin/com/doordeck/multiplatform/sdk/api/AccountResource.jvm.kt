@@ -18,10 +18,10 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun refreshToken(refreshToken: String): TokenResponse
+    suspend fun refreshToken(refreshToken: String? = null): TokenResponse
 
     @DoordeckOnly
-    fun refreshTokenAsync(refreshToken: String): CompletableFuture<TokenResponse>
+    fun refreshTokenAsync(refreshToken: String? = null): CompletableFuture<TokenResponse>
 
     /**
      * Logout
@@ -37,39 +37,27 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
-    fun registerEphemeralKeyAsync(publicKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
-
-    suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
-
-    fun registerEphemeralKeyWithContextAsync(): CompletableFuture<RegisterEphemeralKeyResponse>
+    fun registerEphemeralKeyAsync(publicKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Register ephemeral key with secondary authentication
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
-    fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
-
-    suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-
-    fun registerEphemeralKeyWithSecondaryAuthenticationWithContextAsync(method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
+    fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>
 
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
-    fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray): CompletableFuture<RegisterEphemeralKeyResponse>
-
-    suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
-
-    fun verifyEphemeralKeyRegistrationWithContextAsync(code: String): CompletableFuture<RegisterEphemeralKeyResponse>
+    fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKeyResponse>
 
     /**
      * Reverify email

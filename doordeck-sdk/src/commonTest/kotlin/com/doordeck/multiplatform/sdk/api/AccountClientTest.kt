@@ -92,8 +92,8 @@ internal class AccountClientTest : IntegrationTest() {
         ACCOUNT_CLIENT.logoutRequest()
 
         // Then
-        assertNull(CONTEXT_MANAGER.currentToken)
-        assertNull(CONTEXT_MANAGER.currentRefreshToken)
-        assertNull(CONTEXT_MANAGER.currentFusionToken)
+        assertNull(CONTEXT_MANAGER.getAuthToken())
+        assertNull(CONTEXT_MANAGER.getRefreshToken())
+        assertNull(CONTEXT_MANAGER.getFusionAuthToken())
     }
 }

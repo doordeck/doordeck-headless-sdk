@@ -181,26 +181,10 @@ actual interface LockOperationsResource {
 
     /**
      * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
-     */
-    fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null): Promise<dynamic>
-
-    /**
-     * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     fun unlock(unlockOperation: LockOperations.UnlockOperation): Promise<dynamic>
-
-    /**
-     * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock): Promise<dynamic>
 
     /**
      * Share a lock
@@ -211,14 +195,6 @@ actual interface LockOperationsResource {
 
     /**
      * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    fun revokeAccessToLockWithContext(lockId: String, users: List<String>): Promise<dynamic>
-
-    /**
-     * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
@@ -226,26 +202,10 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int): Promise<dynamic>
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): Promise<dynamic>
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<dynamic>
 
     /**
      * Update secure settings - Unlock between

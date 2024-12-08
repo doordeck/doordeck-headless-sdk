@@ -6,7 +6,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertNull
 import kotlin.uuid.Uuid
 
@@ -16,6 +15,7 @@ class ContextManagerTest {
     fun shouldStoreAndLoadContext() = runTest {
         // Given
         val cloudAuthToken = Uuid.random().toString()
+        val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
@@ -24,6 +24,7 @@ class ContextManagerTest {
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
+        contextManager.setRefreshToken(cloudRefreshToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
         contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
@@ -33,19 +34,20 @@ class ContextManagerTest {
         contextManager.loadContext()
 
         // Then
-        val restored = contextManager.getOperationContext()
-        assertEquals(userId, restored.userId)
-        assertContentEquals(certificateChain, restored.userCertificateChain)
-        assertContentEquals(publicKey, restored.userPublicKey)
-        assertContentEquals(privateKey, restored.userPrivateKey)
-        assertEquals(cloudAuthToken, contextManager.currentToken)
-        assertEquals(fusionAuthToken, contextManager.currentFusionToken)
+        assertEquals(userId, contextManager.getUserId())
+        assertContentEquals(certificateChain, contextManager.getCertificateChain())
+        assertContentEquals(publicKey, contextManager.getPublicKey())
+        assertContentEquals(privateKey, contextManager.getPrivateKey())
+        assertEquals(cloudAuthToken, contextManager.getAuthToken())
+        assertEquals(cloudRefreshToken, contextManager.getRefreshToken())
+        assertEquals(fusionAuthToken, contextManager.getFusionAuthToken())
     }
 
     @Test
     fun shouldClearContext() = runTest {
         // Given
         val cloudAuthToken = Uuid.random().toString()
+        val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
         val certificateChain = (1..3).map { Uuid.random().toString() }
@@ -54,6 +56,7 @@ class ContextManagerTest {
         val contextManager = ContextManagerImpl()
         contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setAuthToken(cloudAuthToken)
+        contextManager.setRefreshToken(cloudRefreshToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
         contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
         contextManager.storeContext()
@@ -64,10 +67,12 @@ class ContextManagerTest {
         contextManager.loadContext()
 
         // Then
-        assertFails {
-            contextManager.getOperationContext()
-        }
-        assertNull(contextManager.currentToken)
-        assertNull(contextManager.currentFusionToken)
+        assertNull(contextManager.getUserId())
+        assertNull(contextManager.getCertificateChain())
+        assertNull(contextManager.getPublicKey())
+        assertNull(contextManager.getPrivateKey())
+        assertNull(contextManager.getAuthToken())
+        assertNull(contextManager.getRefreshToken())
+        assertNull(contextManager.getFusionAuthToken())
     }
 }

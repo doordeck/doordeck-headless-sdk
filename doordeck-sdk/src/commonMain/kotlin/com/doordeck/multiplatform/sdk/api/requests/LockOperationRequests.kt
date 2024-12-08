@@ -23,6 +23,18 @@ class OperationBodyRequest(
 )
 
 @Serializable
+class BaseOperationRequest(
+    val userId: String,
+    val userCertificateChain: List<String>,
+    val userPrivateKey: ByteArray,
+    val lockId: String,
+    val notBefore: Int,
+    val issuedAt: Int,
+    val expiresAt: Int,
+    val jti: String
+)
+
+@Serializable
 @SerialName("MUTATE_LOCK")
 class LockOperationRequest(
     val locked: Boolean

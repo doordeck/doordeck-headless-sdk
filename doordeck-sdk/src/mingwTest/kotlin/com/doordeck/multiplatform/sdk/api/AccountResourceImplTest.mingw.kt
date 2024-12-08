@@ -7,10 +7,8 @@ import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
 import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
-import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
-import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationWithContextData
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
@@ -29,6 +27,7 @@ class AccountResourceImplTest {
     init {
         LibsodiumInitializer.initializeWithCallback {  }
         contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setRefreshToken("")
     }
 
     @Test
@@ -39,6 +38,16 @@ class AccountResourceImplTest {
     @Test
     fun shouldRefreshTokenJson() = runTest {
         account.refreshTokenJson(RefreshTokenData("").toJson())
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContext() = runTest {
+        account.refreshToken()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContextJson() = runTest {
+        account.refreshTokenJson()
     }
 
     @Test
@@ -57,13 +66,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithContext() = runTest {
-        account.registerEphemeralKeyWithContext()
+    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
+        account.registerEphemeralKey()
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithContextJson() = runTest {
-        account.registerEphemeralKeyWithContextJson()
+    fun shouldRegisterEphemeralKeyUsingContextJson() = runTest {
+        account.registerEphemeralKeyJson()
     }
 
     @Test
@@ -77,13 +86,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContext() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationWithContext()
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthentication()
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContextJson() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationWithContextJson(RegisterEphemeralKeyWithSecondaryAuthenticationWithContextData().toJson())
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContextJson() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData().toJson())
     }
 
     @Test
@@ -97,13 +106,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationWithContext() = runTest {
-        account.verifyEphemeralKeyRegistrationWithContext("")
+    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
+        account.verifyEphemeralKeyRegistration("")
     }
 
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationWithContextJson() = runTest {
-        account.verifyEphemeralKeyRegistrationWithContextJson(VerifyEphemeralKeyRegistrationWithContextData("").toJson())
+    fun shouldVerifyEphemeralKeyRegistrationUsingContextJson() = runTest {
+        account.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("").toJson())
     }
 
     @Test

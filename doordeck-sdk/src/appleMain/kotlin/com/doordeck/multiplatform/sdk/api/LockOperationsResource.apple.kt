@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
@@ -202,29 +201,11 @@ actual interface LockOperationsResource {
 
     /**
      * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
-
-    /**
-     * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation)
-
-    /**
-     * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
 
     /**
      * Share a lock
@@ -236,15 +217,6 @@ actual interface LockOperationsResource {
 
     /**
      * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
-
-    /**
-     * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
@@ -253,29 +225,11 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
     /**
      * Update secure settings - Unlock between

@@ -66,9 +66,9 @@ object LockOperations {
     ): Operation
 
     class BaseOperation @JvmOverloads constructor(
-        val userId: String,
-        val userCertificateChain: List<String>,
-        val userPrivateKey: ByteArray,
+        val userId: String? = null,
+        val userCertificateChain: List<String>? = null,
+        val userPrivateKey: ByteArray? = null,
         val lockId: String,
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
         val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),

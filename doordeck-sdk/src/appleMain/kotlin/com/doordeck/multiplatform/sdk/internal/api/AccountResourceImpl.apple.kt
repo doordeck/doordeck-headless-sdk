@@ -11,7 +11,7 @@ internal class AccountResourceImpl(
     private val accountClient: AccountClient
 ) : AccountResource {
 
-    override suspend fun refreshToken(refreshToken: String): TokenResponse {
+    override suspend fun refreshToken(refreshToken: String?): TokenResponse {
         return accountClient.refreshTokenRequest(refreshToken)
     }
 
@@ -19,28 +19,16 @@ internal class AccountResourceImpl(
         return accountClient.logoutRequest()
     }
 
-    override suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
+    override suspend fun registerEphemeralKey(publicKey: ByteArray?): RegisterEphemeralKeyResponse {
         return accountClient.registerEphemeralKeyRequest(publicKey)
     }
 
-    override suspend fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse {
-        return accountClient.registerEphemeralKeyWithContextRequest()
-    }
-
-    override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+    override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         return accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
     }
 
-    override suspend fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return accountClient.registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(method)
-    }
-
-    override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
+    override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): RegisterEphemeralKeyResponse {
         return accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
-    }
-
-    override suspend fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse {
-        return accountClient.verifyEphemeralKeyRegistrationWithContextRequest(code)
     }
 
     override suspend fun reverifyEmail() {

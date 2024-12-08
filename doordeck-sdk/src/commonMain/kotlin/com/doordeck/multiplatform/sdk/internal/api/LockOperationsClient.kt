@@ -1,7 +1,8 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
+import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.api.requests.BaseOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchUserPublicKeyRequest
 import com.doordeck.multiplatform.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.multiplatform.sdk.api.requests.LockOperationRequest
@@ -290,46 +291,13 @@ internal open class LockOperationsClient(
 
     /**
      * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
-     */
-    suspend fun unlockWithContextRequest(lockId: String, directAccessEndpoints: List<String>?) {
-        val operationContext = contextManager.getOperationContext()
-        val baseOperation = LockOperations.BaseOperation(
-            userId = operationContext.userId,
-            userCertificateChain = operationContext.userCertificateChain,
-            userPrivateKey = operationContext.userPrivateKey,
-            lockId = lockId
-        )
-        unlockRequest(LockOperations.UnlockOperation(baseOperation, directAccessEndpoints))
-    }
-
-    /**
-     * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     suspend fun unlockRequest(unlockOperation: LockOperations.UnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
-        performOperation(unlockOperation.baseOperation, operationRequest, unlockOperation.directAccessEndpoints)
-    }
-
-    /**
-     * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    suspend fun shareLockWithContextRequest(lockId: String, shareLock: LockOperations.ShareLock) {
-        val operationContext = contextManager.getOperationContext()
-        val baseOperation = LockOperations.BaseOperation(
-            userId = operationContext.userId,
-            userCertificateChain = operationContext.userCertificateChain,
-            userPrivateKey = operationContext.userPrivateKey,
-            lockId = lockId
-        )
-        shareLock(baseOperation, shareLock)
+        val baseOperationRequest = unlockOperation.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest, unlockOperation.directAccessEndpoints)
     }
 
     /**
@@ -338,35 +306,15 @@ internal open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     suspend fun shareLockRequest(shareLockOperation: LockOperations.ShareLockOperation) {
-        shareLock(shareLockOperation.baseOperation, shareLockOperation.shareLock)
-    }
-
-    private suspend fun shareLock(baseOperation: LockOperations.BaseOperation, shareLock: LockOperations.ShareLock) {
         val operationRequest = ShareLockOperationRequest(
-            user = shareLock.targetUserId,
-            publicKey = shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
-            role = shareLock.targetUserRole,
-            start = shareLock.start?.toLong(),
-            end = shareLock.end?.toLong()
+            user = shareLockOperation.shareLock.targetUserId,
+            publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
+            role = shareLockOperation.shareLock.targetUserRole,
+            start = shareLockOperation.shareLock.start?.toLong(),
+            end = shareLockOperation.shareLock.end?.toLong()
         )
-        performOperation(baseOperation, operationRequest)
-    }
-
-    /**
-     * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    suspend fun revokeAccessToLockWithContextRequest(lockId: String, users: List<String>) {
-        val operationContext = contextManager.getOperationContext()
-        val baseOperation = LockOperations.BaseOperation(
-            userId = operationContext.userId,
-            userCertificateChain = operationContext.userCertificateChain,
-            userPrivateKey = operationContext.userPrivateKey,
-            lockId = lockId
-        )
-        revokeAccessToLock(baseOperation, users)
+        val baseOperationRequest = shareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest)
     }
 
     /**
@@ -375,29 +323,9 @@ internal open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        revokeAccessToLock(revokeAccessToLockOperation.baseOperation, revokeAccessToLockOperation.users)
-    }
-
-    private suspend fun revokeAccessToLock(baseOperation: LockOperations.BaseOperation, users: List<String>) {
-        val operationRequest = RevokeAccessToALockOperationRequest(users = users)
-        performOperation(baseOperation, operationRequest)
-    }
-
-    /**
-     * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    suspend fun updateSecureSettingUnlockDurationWithContextRequest(lockId: String, unlockDuration: Int) {
-        val operationContext = contextManager.getOperationContext()
-        val baseOperation = LockOperations.BaseOperation(
-            userId = operationContext.userId,
-            userCertificateChain = operationContext.userCertificateChain,
-            userPrivateKey = operationContext.userPrivateKey,
-            lockId = lockId
-        )
-        updateSecureSettingUnlockDuration(baseOperation, unlockDuration)
+        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
+        val baseOperationRequest = revokeAccessToLockOperation.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest)
     }
 
     /**
@@ -406,31 +334,11 @@ internal open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration.baseOperation, updateSecureSettingUnlockDuration.unlockDuration)
-    }
-
-    private suspend fun updateSecureSettingUnlockDuration(baseOperation: LockOperations.BaseOperation, unlockDuration: Int) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
-            unlockDuration = unlockDuration
+            unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
         )
-        performOperation(baseOperation, operationRequest)
-    }
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    suspend fun updateSecureSettingUnlockBetweenWithContextRequest(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        val operationContext = contextManager.getOperationContext()
-        val baseOperation = LockOperations.BaseOperation(
-            userId = operationContext.userId,
-            userCertificateChain = operationContext.userCertificateChain,
-            userPrivateKey = operationContext.userPrivateKey,
-            lockId = lockId
-        )
-        updateSecureSettingUnlockBetween(baseOperation, unlockBetween)
+        val baseOperationRequest = updateSecureSettingUnlockDuration.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest)
     }
 
     /**
@@ -439,12 +347,8 @@ internal open class LockOperationsClient(
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween.baseOperation, updateSecureSettingUnlockBetween.unlockBetween)
-    }
-
-    private suspend fun updateSecureSettingUnlockBetween(baseOperation: LockOperations.BaseOperation, unlockBetween: LockOperations.UnlockBetween?) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
-            unlockBetween = unlockBetween?.let {
+            unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
                     start = it.start,
                     end = it.end,
@@ -454,24 +358,25 @@ internal open class LockOperationsClient(
                 )
             }
         )
-        performOperation(baseOperation, operationRequest)
+        val baseOperationRequest = updateSecureSettingUnlockBetween.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest)
     }
 
-    private suspend fun performOperation(baseOperation: LockOperations.BaseOperation, operationRequest: OperationRequest,
+    private suspend fun performOperation(baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
                                  directAccessEndpoints: List<String>? = null) {
-        val operationHeader = OperationHeaderRequest(x5c = baseOperation.userCertificateChain)
+        val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
         val operationBody = OperationBodyRequest(
-            iss = baseOperation.userId,
-            sub = baseOperation.lockId,
-            nbf = baseOperation.notBefore.toLong(),
-            iat = baseOperation.issuedAt.toLong(),
-            exp = baseOperation.expiresAt.toLong(),
-            jti = baseOperation.jti,
+            iss = baseOperationRequest.userId,
+            sub = baseOperationRequest.lockId,
+            nbf = baseOperationRequest.notBefore.toLong(),
+            iat = baseOperationRequest.issuedAt.toLong(),
+            exp = baseOperationRequest.expiresAt.toLong(),
+            jti = baseOperationRequest.jti,
             operation = operationRequest
         )
         val headerB64 = operationHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
-        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperation.userPrivateKey).encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperationRequest.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
 
         // Launch the calls to the direct access endpoints
@@ -479,7 +384,7 @@ internal open class LockOperationsClient(
             localUnlockClient.unlock(directAccessEndpoints, body)
         }
 
-        httpClient.post<Unit>(Paths.getOperationPath(baseOperation.lockId)) {
+        httpClient.post<Unit>(Paths.getOperationPath(baseOperationRequest.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }
@@ -501,5 +406,27 @@ internal open class LockOperationsClient(
      */
     suspend fun getShareableLocksRequest(): List<ShareableLockResponse> {
         return httpClient.get(Paths.getShareableLocksPath())
+    }
+
+    private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
+        val userId = userId
+            ?: contextManager.getUserId()
+            ?: throw MissingContextFieldException("User id is missing")
+        val userCertificateChain = userCertificateChain
+            ?: contextManager.getCertificateChain()
+            ?: throw MissingContextFieldException("Certificate chain is missing")
+        val userPrivateKey = userPrivateKey
+            ?: contextManager.getPrivateKey()
+            ?: throw MissingContextFieldException("Private key is missing")
+        return BaseOperationRequest(
+            userId = userId,
+            userCertificateChain = userCertificateChain,
+            userPrivateKey = userPrivateKey,
+            lockId = lockId,
+            notBefore = notBefore,
+            issuedAt = issuedAt,
+            expiresAt = expiresAt,
+            jti = jti
+        )
     }
 }

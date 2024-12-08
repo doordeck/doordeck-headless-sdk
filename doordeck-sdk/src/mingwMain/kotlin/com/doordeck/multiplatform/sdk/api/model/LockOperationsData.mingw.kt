@@ -4,7 +4,10 @@ import com.doordeck.multiplatform.sdk.api.model.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.api.model.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.api.model.LockOperations.UnlockBetween
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
 @Serializable
 class GetSingleLockData(
@@ -152,12 +155,6 @@ class GetUserPublicKeyByForeignKeysData(
 )
 
 @Serializable
-class UnlockWithContextData(
-    val lockId: String,
-    val directAccessEndpoints: List<String>? = null
-)
-
-@Serializable
 class UnlockOperationData(
     val baseOperation: BaseOperationData,
     val directAccessEndpoints: List<String>? = null
@@ -165,20 +162,14 @@ class UnlockOperationData(
 
 @Serializable
 class BaseOperationData(
-    val userId: String,
-    val userCertificateChain: List<String>,
-    val userPrivateKey: String,
+    val userId: String? = null,
+    val userCertificateChain: List<String>? = null,
+    val userPrivateKey: String? = null,
     val lockId: String,
-    val notBefore: Int,
-    val issuedAt: Int,
-    val expiresAt: Int,
-    val jti: String
-)
-
-@Serializable
-class ShareLockWithContextData(
-    val lockId: String,
-    val shareLock: ShareLockData
+    val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
+    val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
+    val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+    val jti: String = Uuid.random().toString()
 )
 
 @Serializable
@@ -197,33 +188,15 @@ class ShareLockOperationData(
 )
 
 @Serializable
-class RevokeAccessToLockWithContextData(
-    val lockId: String,
-    val users: List<String>
-)
-
-@Serializable
 class RevokeAccessToLockOperationData(
     val baseOperation: BaseOperationData,
     val users: List<String>
 )
 
 @Serializable
-class UpdateSecureSettingUnlockDurationWithContextData(
-    val lockId: String,
-    val unlockDuration: Int
-)
-
-@Serializable
 class UpdateSecureSettingUnlockDurationData(
     val baseOperation: BaseOperationData,
     val unlockDuration: Int
-)
-
-@Serializable
-class UpdateSecureSettingUnlockBetweenWithContextData(
-    val lockId: String,
-    val unlockBetween: UnlockBetweenData? = null
 )
 
 @Serializable
@@ -266,7 +239,7 @@ internal fun UnlockOperationData.toUnlockOperation() = LockOperations.UnlockOper
 internal fun BaseOperationData.toBaseOperation() = BaseOperation(
     userId = userId,
     userCertificateChain = userCertificateChain,
-    userPrivateKey = userPrivateKey.decodeBase64ToByteArray(),
+    userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
     lockId = lockId,
     notBefore = notBefore,
     issuedAt = issuedAt,

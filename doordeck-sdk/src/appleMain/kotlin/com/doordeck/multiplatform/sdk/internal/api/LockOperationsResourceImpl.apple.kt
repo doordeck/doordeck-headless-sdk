@@ -106,40 +106,20 @@ internal class LockOperationsResourceImpl(
         return lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
-    override suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
-        return lockOperationsClient.unlockWithContextRequest(lockId, directAccessEndpoints)
-    }
-
     override suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
         return lockOperationsClient.unlockRequest(unlockOperation)
-    }
-
-    override suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
-        return lockOperationsClient.shareLockWithContextRequest(lockId, shareLock)
     }
 
     override suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
         return lockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
-    override suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
-        return lockOperationsClient.revokeAccessToLockWithContextRequest(lockId, users)
-    }
-
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         return lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
-    override suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
-        return lockOperationsClient.updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration)
-    }
-
     override suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
         return lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
-    }
-
-    override suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return lockOperationsClient.updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween)
     }
 
     override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {

@@ -19,12 +19,18 @@ class AccountResourceImplTest {
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
+        contextManager.setRefreshToken("")
         contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
     fun shouldRefreshToken() = runTest {
         account.refreshToken("").await()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContext() = runTest {
+        account.refreshToken().await()
     }
 
     @Test
@@ -38,8 +44,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithContext() = runTest {
-        account.registerEphemeralKeyWithContext().await()
+    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
+        account.registerEphemeralKey().await()
     }
 
     @Test
@@ -48,8 +54,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContext() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationWithContext().await()
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthentication().await()
     }
 
     @Test
@@ -58,8 +64,8 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationWithContext() = runTest {
-        account.verifyEphemeralKeyRegistrationWithContext("").await()
+    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
+        account.verifyEphemeralKeyRegistration("").await()
     }
 
     @Test

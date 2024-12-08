@@ -258,13 +258,13 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUnlockWithContext() = runTest {
-        lockOperations.unlockWithContext(DEFAULT_LOCK_ID)
+    fun shouldUnlockUsingContext() = runTest {
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
     }
 
     @Test
-    fun shouldUnlockWithContextAsync() = runTest {
-        lockOperations.unlockWithContextAsync(DEFAULT_LOCK_ID).await()
+    fun shouldUnlockUsingContextAsync() = runTest {
+        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
     }
 
     @Test
@@ -278,13 +278,21 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldShareLockWithContext() = runTest {
-        lockOperations.shareLockWithContext(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+    fun shouldShareLockUsingContext() = runTest {
+        lockOperations.shareLock(
+            LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            ))
     }
 
     @Test
-    fun shouldShareLockWithContextAsync() = runTest {
-        lockOperations.shareLockWithContextAsync(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf())).await()
+    fun shouldShareLockUsingContextAsync() = runTest {
+        lockOperations.shareLockAsync(
+            LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            )).await()
     }
 
     @Test
@@ -306,13 +314,19 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldRevokeAccessToLockWithContext() = runTest {
-        lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList())
+    fun shouldRevokeAccessToLockUsingContext() = runTest {
+        lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            users = emptyList()
+        ))
     }
 
     @Test
-    fun shouldRevokeAccessToLockWithContextAsync() = runTest {
-        lockOperations.revokeAccessToLockWithContextAsync(DEFAULT_LOCK_ID, emptyList()).await()
+    fun shouldRevokeAccessToLockUsingContextAsync() = runTest {
+        lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            users = emptyList()
+        )).await()
     }
 
     @Test
@@ -332,13 +346,19 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationWithContext(DEFAULT_LOCK_ID, 0)
+    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockDuration = 0
+        ))
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContextAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationWithContextAsync(DEFAULT_LOCK_ID, 0).await()
+    fun shouldUpdateSecureSettingUnlockDurationUsingContextAsync() = runTest {
+        lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockDuration = 0
+        )).await()
     }
 
     @Test
@@ -358,13 +378,19 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockBetweenWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenWithContext(DEFAULT_LOCK_ID, null)
+    fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockBetween = null
+        ))
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockBetweenWithContextAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenWithContextAsync(DEFAULT_LOCK_ID, null).await()
+    fun shouldUpdateSecureSettingUnlockBetweenUsingContextAsync() = runTest {
+        lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockBetween = null
+        )).await()
     }
 
     @Test

@@ -62,7 +62,7 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
 }
 
 internal fun HttpClientConfig<*>.installAuth(contextManager: ContextManagerImpl) {
-    val currentRefreshToken = contextManager.currentRefreshToken
+    val currentRefreshToken = contextManager.getRefreshToken()
     if (currentRefreshToken != null) {
         install(Auth) {
             bearer {
@@ -114,10 +114,9 @@ internal fun HttpClient.addCloudInterceptor(apiEnvironment: ApiEnvironment, cont
             && requestPath != Paths.getVerifyEmailPath()
             && !request.headers.contains(HttpHeaders.Authorization)
         ) {
-            val currentToken = contextManager.currentToken
-            if (currentToken != null) {
+            contextManager.getAuthToken()?.let {
                 request.headers {
-                    append(HttpHeaders.Authorization, "Bearer $currentToken")
+                    append(HttpHeaders.Authorization, "Bearer $it")
                 }
             }
         }
@@ -129,10 +128,9 @@ internal fun HttpClient.addFusionInterceptor(contextManager: ContextManagerImpl)
     plugin(HttpSend).intercept { request ->
         val requestPath = request.url.encodedPath
         if (requestPath != FusionPaths.getLoginPath() && !request.headers.contains(HttpHeaders.Authorization)) {
-            val currentToken = contextManager.currentFusionToken
-            if (currentToken != null) {
+            contextManager.getFusionAuthToken()?.let {
                 request.headers {
-                    append(HttpHeaders.Authorization, "Bearer $currentToken")
+                    append(HttpHeaders.Authorization, "Bearer $it")
                 }
             }
         }

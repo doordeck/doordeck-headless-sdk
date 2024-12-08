@@ -24,14 +24,11 @@ import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingPermittedAddressesData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingTimeRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.ShareLockData
 import com.doordeck.multiplatform.sdk.api.model.ShareLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.ShareLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UnlockOperationData
-import com.doordeck.multiplatform.sdk.api.model.UnlockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockColourData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockFavouriteData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockNameData
@@ -39,9 +36,7 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingDefaultNameData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingHiddenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
@@ -296,13 +291,13 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUnlockWithContext() = runTest {
-        lockOperations.unlockWithContext(DEFAULT_LOCK_ID)
+    fun shouldUnlockUsingContext() = runTest {
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
     }
 
     @Test
-    fun shouldUnlockWithContextJson() = runTest {
-        lockOperations.unlockWithContextJson(UnlockWithContextData(DEFAULT_LOCK_ID).toJson())
+    fun shouldUnlockUsingContextJson() = runTest {
+        lockOperations.unlockJson(UnlockOperationData(BaseOperationData(lockId = DEFAULT_LOCK_ID)).toJson())
     }
 
     @Test
@@ -316,13 +311,20 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldShareLockWithContext() = runTest {
-        lockOperations.shareLockWithContext(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+    fun shouldShareLockUsingContext() = runTest {
+        lockOperations.shareLock(
+            LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            ))
     }
 
     @Test
-    fun shouldShareLockWithContextJson() = runTest {
-        lockOperations.shareLockWithContextJson(ShareLockWithContextData(DEFAULT_LOCK_ID, ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())).toJson())
+    fun shouldShareLockUsingContextJson() = runTest {
+        lockOperations.shareLockJson(ShareLockOperationData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
+        ).toJson())
     }
 
     @Test
@@ -343,13 +345,19 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldRevokeAccessToLockWithContext() = runTest {
-        lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList())
+    fun shouldRevokeAccessToLockUsingContext() = runTest {
+        lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            users = emptyList()
+        ))
     }
 
     @Test
-    fun shouldRevokeAccessToLockWithContextJson() = runTest {
-        lockOperations.revokeAccessToLockWithContextJson(RevokeAccessToLockWithContextData(DEFAULT_LOCK_ID, emptyList()).toJson())
+    fun shouldRevokeAccessToLockUsingContextJson() = runTest {
+        lockOperations.revokeAccessToLockJson(RevokeAccessToLockOperationData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            users = emptyList()
+        ).toJson())
     }
 
     @Test
@@ -369,13 +377,20 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationWithContext(DEFAULT_LOCK_ID, 0)
+    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockDuration(
+            LockOperations.UpdateSecureSettingUnlockDuration(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                unlockDuration = 0
+            ))
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContextJson() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationWithContextJson(UpdateSecureSettingUnlockDurationWithContextData(DEFAULT_LOCK_ID, 0).toJson())
+    fun shouldUpdateSecureSettingUnlockDurationUsingContextJson() = runTest {
+        lockOperations.updateSecureSettingUnlockDurationJson(UpdateSecureSettingUnlockDurationData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            unlockDuration = 0
+        ).toJson())
     }
 
     @Test
@@ -396,13 +411,20 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockBetweenWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenWithContext(DEFAULT_LOCK_ID, null)
+    fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockBetween(
+            LockOperations.UpdateSecureSettingUnlockBetween(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                unlockBetween = null
+            ))
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockBetweenWithContextJson() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenWithContextJson(UpdateSecureSettingUnlockBetweenWithContextData(DEFAULT_LOCK_ID, null).toJson())
+    fun shouldUpdateSecureSettingUnlockBetweenUsingContextJson() = runTest {
+        lockOperations.updateSecureSettingUnlockBetweenJson(UpdateSecureSettingUnlockBetweenData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            unlockBetween = null
+        ).toJson())
     }
 
     @Test

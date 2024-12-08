@@ -62,10 +62,10 @@ internal open class HelperClient(
         return if (requiresKeyRegister) {
             // Attempt to register a key pair
             val requiresVerification = try {
-                accountClient.registerEphemeralKeyWithContextRequest()
+                accountClient.registerEphemeralKeyRequest()
                 false
             } catch (exception: LockedException) {
-                accountClient.registerEphemeralKeyWithSecondaryAuthenticationWithContextRequest(null)
+                accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest()
                 true
             }
             AssistedLoginResponse(requiresVerification)
