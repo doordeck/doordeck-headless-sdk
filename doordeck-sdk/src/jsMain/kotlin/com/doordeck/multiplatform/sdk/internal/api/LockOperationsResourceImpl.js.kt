@@ -109,40 +109,20 @@ internal class LockOperationsResourceImpl(
         return GlobalScope.promise { lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys) }
     }
 
-    override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?): Promise<Unit> {
-        return GlobalScope.promise { lockOperationsClient.unlockWithContextRequest(lockId, directAccessEndpoints) }
-    }
-
     override fun unlock(unlockOperation: LockOperations.UnlockOperation): Promise<Unit> {
         return GlobalScope.promise { lockOperationsClient.unlockRequest(unlockOperation) }
-    }
-
-    override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock): Promise<Unit> {
-        return GlobalScope.promise { lockOperationsClient.shareLockWithContextRequest(lockId, shareLock) }
     }
 
     override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): Promise<Unit> {
         return GlobalScope.promise { lockOperationsClient.shareLockRequest(shareLockOperation) }
     }
 
-    override fun revokeAccessToLockWithContext(lockId: String, users: List<String>): Promise<Unit> {
-        return GlobalScope.promise { lockOperationsClient.revokeAccessToLockWithContextRequest(lockId, users) }
-    }
-
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): Promise<Unit> {
         return GlobalScope.promise { lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
-    override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int): Promise<Unit> {
-        return GlobalScope.promise { lockOperationsClient.updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration) }
-    }
-
     override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): Promise<Unit> {
         return GlobalScope.promise { lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
-    }
-
-    override fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<Unit> {
-        return GlobalScope.promise { lockOperationsClient.updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
     }
 
     override fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): Promise<Unit> {

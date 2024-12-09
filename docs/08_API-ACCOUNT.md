@@ -5,6 +5,9 @@
 > [!IMPORTANT]  
 > This function is only available to users with Doordeck issued auth tokens.
 
+> [!NOTE]  
+> This function can be used with the [refresh token](06_CONTEXT-MANAGER.md#set-refresh-token) value from the context. To use the value from the context, you should pass null as the function parameter
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>

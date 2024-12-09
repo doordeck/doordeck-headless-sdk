@@ -17,9 +17,9 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    fun refreshToken(refreshToken: String): TokenResponse
+    fun refreshToken(refreshToken: String? = null): TokenResponse
     @DoordeckOnly
-    fun refreshTokenJson(data: String): String
+    fun refreshTokenJson(data: String? = null): String
 
     /**
      * Logout
@@ -33,30 +33,24 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
-    fun registerEphemeralKeyJson(data: String): String
-    fun registerEphemeralKeyWithContext(): RegisterEphemeralKeyResponse
-    fun registerEphemeralKeyWithContextJson(): String
+    fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
+    fun registerEphemeralKeyJson(data: String? = null): String
 
     /**
      * Register ephemeral key with secondary authentication
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-    fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String): String
-    fun registerEphemeralKeyWithSecondaryAuthenticationWithContext(method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-    fun registerEphemeralKeyWithSecondaryAuthenticationWithContextJson(data: String): String
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String? = null): String
 
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
     fun verifyEphemeralKeyRegistrationJson(data: String): String
-    fun verifyEphemeralKeyRegistrationWithContext(code: String): RegisterEphemeralKeyResponse
-    fun verifyEphemeralKeyRegistrationWithContextJson(data: String): String
 
     /**
      * Reverify email

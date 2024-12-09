@@ -18,6 +18,7 @@ class AccountResourceImplTest {
 
     init {
         contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setRefreshToken("")
     }
 
     @Test
@@ -28,6 +29,16 @@ class AccountResourceImplTest {
     @Test
     fun shouldRefreshTokenAsync() = runTest {
         account.refreshTokenAsync("").await()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContext() = runTest {
+        account.refreshToken()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContextAsync() = runTest {
+        account.refreshTokenAsync().await()
     }
 
     @Test
@@ -51,13 +62,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithContext() = runTest {
-        account.registerEphemeralKeyWithContext()
+    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
+        account.registerEphemeralKey()
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithContextAsync() = runTest {
-        account.registerEphemeralKeyWithContextAsync().await()
+    fun shouldRegisterEphemeralKeyUsingContextAsync() = runTest {
+        account.registerEphemeralKeyAsync().await()
     }
 
     @Test
@@ -71,13 +82,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContext() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationWithContext()
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthentication()
     }
 
     @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationWithContextAsync() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationWithContextAsync().await()
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContextAsync() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthenticationAsync().await()
     }
 
     @Test
@@ -91,13 +102,13 @@ class AccountResourceImplTest {
     }
 
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationWithContext() = runTest {
-        account.verifyEphemeralKeyRegistrationWithContext("")
+    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
+        account.verifyEphemeralKeyRegistration("")
     }
 
     @Test
-    fun shouldVerifyEphemeralKeyRegistrationWithContextAsync() = runTest {
-        account.verifyEphemeralKeyRegistrationWithContextAsync("").await()
+    fun shouldVerifyEphemeralKeyRegistrationUsingContextAsync() = runTest {
+        account.verifyEphemeralKeyRegistrationAsync("").await()
     }
 
     @Test
