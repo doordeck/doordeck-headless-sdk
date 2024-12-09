@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
@@ -13,7 +13,7 @@ class AccountlessResourceImplTest {
 
     init  {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        CloudHttpClient.overrideClient(TEST_HTTP_CLIENT)
+        CloudHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
     }
 
     @Test

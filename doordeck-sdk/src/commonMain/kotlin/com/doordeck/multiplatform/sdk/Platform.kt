@@ -59,6 +59,9 @@ internal fun createHttpClient(): HttpClient {
 internal object CloudHttpClient {
     var client = createCloudHttpClient()
 
+    init {
+        println("Init CloudHttpClient")
+    }
     internal fun overrideClient(httpClient: HttpClient) {
         this.client = httpClient
     }
@@ -67,6 +70,10 @@ internal object CloudHttpClient {
 internal object FusionHttpClient {
     var client = createFusionHttpClient()
 
+    init {
+        println("Init FusionHttpClient")
+    }
+
     internal fun overrideClient(httpClient: HttpClient) {
         this.client = httpClient
     }
@@ -74,6 +81,10 @@ internal object FusionHttpClient {
 
 internal object HttpClient {
     var client = createHttpClient()
+
+    init {
+        println("Init HttpClient")
+    }
 
     internal fun overrideClient(httpClient: HttpClient) {
         this.client = httpClient

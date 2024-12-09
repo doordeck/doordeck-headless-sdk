@@ -1,6 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
+import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.TEST_CLOUD_CLIENT
+import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -41,6 +45,8 @@ class LockOperationsClientTest {
 
     init {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+        CloudHttpClient.overrideClient(TEST_CLOUD_CLIENT)
+        HttpClient.overrideClient(TEST_HTTP_CLIENT)
     }
 
     @Test

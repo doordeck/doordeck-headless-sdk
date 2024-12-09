@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
+import com.doordeck.multiplatform.sdk.TEST_CLOUD_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
@@ -15,8 +17,10 @@ import kotlin.test.assertTrue
 
 class SitesClientTest {
 
+
     init {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+        CloudHttpClient.overrideClient(TEST_CLOUD_CLIENT)
     }
 
     @Test

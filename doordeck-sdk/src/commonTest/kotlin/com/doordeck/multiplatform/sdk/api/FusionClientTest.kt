@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.FusionHttpClient
+import com.doordeck.multiplatform.sdk.TEST_FUSION_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
@@ -21,6 +23,7 @@ class FusionClientTest {
 
     init {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+        FusionHttpClient.overrideClient(TEST_FUSION_CLIENT)
     }
 
     @Ignore

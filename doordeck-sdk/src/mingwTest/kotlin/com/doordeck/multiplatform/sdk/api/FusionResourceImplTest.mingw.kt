@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.api.model.DeleteDoorData
@@ -22,7 +22,7 @@ class FusionResourceImplTest {
 
     init {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        FusionHttpClient.overrideClient(TEST_HTTP_CLIENT)
+        FusionHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
     }
 
     @Test
