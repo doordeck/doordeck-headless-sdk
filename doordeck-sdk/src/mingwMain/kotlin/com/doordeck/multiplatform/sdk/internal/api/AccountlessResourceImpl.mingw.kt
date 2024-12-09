@@ -7,15 +7,14 @@ import com.doordeck.multiplatform.sdk.api.model.VerifyEmailData
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class AccountlessResourceImpl(
-    httpClient: HttpClient
-) : AccountlessClient(httpClient), AccountlessResource {
+    private val accountlessClient: AccountlessClient
+) : AccountlessResource {
 
     override fun login(email: String, password: String): TokenResponse {
-        return runBlocking { loginRequest(email, password) }
+        return runBlocking { accountlessClient.loginRequest(email, password) }
     }
 
     override fun loginJson(data: String): String {
@@ -24,7 +23,7 @@ internal class AccountlessResourceImpl(
     }
 
     override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return runBlocking { registrationRequest(email, password, displayName, force) }
+        return runBlocking { accountlessClient.registrationRequest(email, password, displayName, force) }
     }
 
     override fun registrationJson(data: String): String {
@@ -33,7 +32,7 @@ internal class AccountlessResourceImpl(
     }
 
     override fun verifyEmail(code: String) {
-        return runBlocking { verifyEmailRequest(code) }
+        return runBlocking { accountlessClient.verifyEmailRequest(code) }
     }
 
     override fun verifyEmailJson(data: String) {

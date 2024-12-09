@@ -18,13 +18,10 @@ import com.doordeck.multiplatform.sdk.api.model.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.api.model.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.RevokeAccessToLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingPermittedAddressesData
 import com.doordeck.multiplatform.sdk.api.model.SetLockSettingTimeRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.ShareLockOperationData
-import com.doordeck.multiplatform.sdk.api.model.ShareLockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UnlockOperationData
-import com.doordeck.multiplatform.sdk.api.model.UnlockWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockColourData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockFavouriteData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockNameData
@@ -32,15 +29,11 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingDefaultNameData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingHiddenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenWithContextData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
-import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationWithContextData
 import com.doordeck.multiplatform.sdk.api.model.toLocationRequirement
 import com.doordeck.multiplatform.sdk.api.model.toRevokeAccessToLockOperation
-import com.doordeck.multiplatform.sdk.api.model.toShareLock
 import com.doordeck.multiplatform.sdk.api.model.toShareLockOperation
 import com.doordeck.multiplatform.sdk.api.model.toTimeRequirementList
-import com.doordeck.multiplatform.sdk.api.model.toUnlockBetween
 import com.doordeck.multiplatform.sdk.api.model.toUnlockOperation
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.api.model.toUpdateSecureSettingUnlockDuration
@@ -51,20 +44,16 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
-import io.ktor.client.HttpClient
 import kotlinx.coroutines.runBlocking
 
 internal class LockOperationsResourceImpl(
-    httpClient: HttpClient,
-    contextManager: ContextManagerImpl,
-    localUnlock: LocalUnlockClient
-) : LockOperationsClient(httpClient, contextManager, localUnlock), LockOperationsResource {
+    private val lockOperationsClient: LockOperationsClient
+) : LockOperationsResource {
 
     override fun getSingleLock(lockId: String): LockResponse {
-        return runBlocking { getSingleLockRequest(lockId) }
+        return runBlocking { lockOperationsClient.getSingleLockRequest(lockId) }
     }
 
     override fun getSingleLockJson(data: String): String {
@@ -73,7 +62,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return runBlocking { getLockAuditTrailRequest(lockId, start, end) }
+        return runBlocking { lockOperationsClient.getLockAuditTrailRequest(lockId, start, end) }
     }
 
     override fun getLockAuditTrailJson(data: String): String {
@@ -82,7 +71,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return runBlocking { getAuditForUserRequest(userId, start, end) }
+        return runBlocking { lockOperationsClient.getAuditForUserRequest(userId, start, end) }
     }
 
     override fun getAuditForUserJson(data: String): String {
@@ -91,7 +80,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return runBlocking { getUsersForLockRequest(lockId) }
+        return runBlocking { lockOperationsClient.getUsersForLockRequest(lockId) }
     }
 
     override fun getUsersForLockJson(data: String): String {
@@ -100,7 +89,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getLocksForUser(userId: String): LockUserResponse {
-        return runBlocking { getLocksForUserRequest(userId) }
+        return runBlocking { lockOperationsClient.getLocksForUserRequest(userId) }
     }
 
     override fun getLocksForUserJson(data: String): String {
@@ -109,7 +98,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockName(lockId: String, name: String?) {
-        return runBlocking { updateLockNameRequest(lockId, name) }
+        return runBlocking { lockOperationsClient.updateLockNameRequest(lockId, name) }
     }
 
     override fun updateLockNameJson(data: String) {
@@ -118,7 +107,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockFavourite(lockId: String, favourite: Boolean?) {
-        return runBlocking { updateLockFavouriteRequest(lockId, favourite) }
+        return runBlocking { lockOperationsClient.updateLockFavouriteRequest(lockId, favourite) }
     }
 
     override fun updateLockFavouriteJson(data: String) {
@@ -127,7 +116,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockColour(lockId: String, colour: String?) {
-        return runBlocking { updateLockColourRequest(lockId, colour) }
+        return runBlocking { lockOperationsClient.updateLockColourRequest(lockId, colour) }
     }
 
     override fun updateLockColourJson(data: String) {
@@ -136,7 +125,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockSettingDefaultName(lockId: String, name: String?) {
-        return runBlocking { updateLockSettingDefaultNameRequest(lockId, name) }
+        return runBlocking { lockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name) }
     }
 
     override fun updateLockSettingDefaultNameJson(data: String) {
@@ -145,7 +134,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return runBlocking { setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
+        return runBlocking { lockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
     }
 
     override fun setLockSettingPermittedAddressesJson(data: String) {
@@ -154,7 +143,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return runBlocking { updateLockSettingHiddenRequest(lockId, hidden) }
+        return runBlocking { lockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden) }
     }
 
     override fun updateLockSettingHiddenJson(data: String) {
@@ -163,7 +152,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return runBlocking { setLockSettingTimeRestrictionsRequest(lockId, times) }
+        return runBlocking { lockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times) }
     }
 
     override fun setLockSettingTimeRestrictionsJson(data: String) {
@@ -172,7 +161,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
-        return runBlocking { updateLockSettingLocationRestrictionsRequest(lockId, location) }
+        return runBlocking { lockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location) }
     }
 
     override fun updateLockSettingLocationRestrictionsJson(data: String) {
@@ -181,7 +170,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyRequest(userEmail, visitor) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyRequest(userEmail, visitor) }
     }
 
     override fun getUserPublicKeyJson(data: String): String {
@@ -190,7 +179,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyByEmailRequest(email) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByEmailRequest(email) }
     }
 
     override fun getUserPublicKeyByEmailJson(data: String): String {
@@ -199,7 +188,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyByTelephoneRequest(telephone) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone) }
     }
 
     override fun getUserPublicKeyByTelephoneJson(data: String): String {
@@ -208,7 +197,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyByLocalKeyRequest(localKey) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey) }
     }
 
     override fun getUserPublicKeyByLocalKeyJson(data: String): String {
@@ -217,7 +206,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyByForeignKeyRequest(foreignKey) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey) }
     }
 
     override fun getUserPublicKeyByForeignKeyJson(data: String): String {
@@ -226,7 +215,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
-        return runBlocking { getUserPublicKeyByIdentityRequest(identity) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByIdentityRequest(identity) }
     }
 
     override fun getUserPublicKeyByIdentityJson(data: String): String {
@@ -235,7 +224,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { getUserPublicKeyByEmailsRequest(emails) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByEmailsRequest(emails) }
     }
 
     override fun getUserPublicKeyByEmailsJson(data: String): String {
@@ -244,7 +233,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { getUserPublicKeyByTelephonesRequest(telephones) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones) }
     }
 
     override fun getUserPublicKeyByTelephonesJson(data: String): String {
@@ -253,7 +242,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { getUserPublicKeyByLocalKeysRequest(localKeys) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys) }
     }
 
     override fun getUserPublicKeyByLocalKeysJson(data: String): String {
@@ -262,7 +251,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { getUserPublicKeyByForeignKeysRequest(foreignKeys) }
+        return runBlocking { lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys) }
     }
 
     override fun getUserPublicKeyByForeignKeysJson(data: String): String {
@@ -270,17 +259,8 @@ internal class LockOperationsResourceImpl(
         return getUserPublicKeyByForeignKeys(getUserPublicKeyByForeignKeysData.foreignKeys).toJson()
     }
 
-    override fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>?) {
-        return runBlocking { unlockWithContextRequest(lockId, directAccessEndpoints) }
-    }
-
-    override fun unlockWithContextJson(data: String) {
-        val unlockWithContextData = data.fromJson<UnlockWithContextData>()
-        return unlockWithContext(unlockWithContextData.lockId, unlockWithContextData.directAccessEndpoints)
-    }
-
     override fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return runBlocking { unlockRequest(unlockOperation) }
+        return runBlocking { lockOperationsClient.unlockRequest(unlockOperation) }
     }
 
     override fun unlockJson(data: String) {
@@ -288,17 +268,8 @@ internal class LockOperationsResourceImpl(
         return unlock(unlockOperationData.toUnlockOperation())
     }
 
-    override fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock) {
-        return runBlocking { shareLockWithContextRequest(lockId, shareLock) }
-    }
-
-    override fun shareLockWithContextJson(data: String) {
-        val shareLockWithContextData = data.fromJson<ShareLockWithContextData>()
-        return shareLockWithContext(shareLockWithContextData.lockId, shareLockWithContextData.shareLock.toShareLock())
-    }
-
     override fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return runBlocking { shareLockRequest(shareLockOperation) }
+        return runBlocking { lockOperationsClient.shareLockRequest(shareLockOperation) }
     }
 
     override fun shareLockJson(data: String) {
@@ -306,17 +277,8 @@ internal class LockOperationsResourceImpl(
         return shareLock(shareLockOperationData.toShareLockOperation())
     }
 
-    override fun revokeAccessToLockWithContext(lockId: String, users: List<String>) {
-        return runBlocking { revokeAccessToLockWithContextRequest(lockId, users) }
-    }
-
-    override fun revokeAccessToLockWithContextJson(data: String) {
-        val revokeAccessToLockWithContextData = data.fromJson<RevokeAccessToLockWithContextData>()
-        return revokeAccessToLockWithContext(revokeAccessToLockWithContextData.lockId, revokeAccessToLockWithContextData.users)
-    }
-
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return runBlocking { revokeAccessToLockRequest(revokeAccessToLockOperation) }
+        return runBlocking { lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
     override fun revokeAccessToLockJson(data: String) {
@@ -324,17 +286,8 @@ internal class LockOperationsResourceImpl(
         return revokeAccessToLock(revokeAccessToLockOperationData.toRevokeAccessToLockOperation())
     }
 
-    override fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int) {
-        return runBlocking { updateSecureSettingUnlockDurationWithContextRequest(lockId, unlockDuration) }
-    }
-
-    override fun updateSecureSettingUnlockDurationWithContextJson(data: String) {
-        val updateSecureSettingUnlockDurationWithContextData = data.fromJson<UpdateSecureSettingUnlockDurationWithContextData>()
-        return updateSecureSettingUnlockDurationWithContext(updateSecureSettingUnlockDurationWithContextData.lockId, updateSecureSettingUnlockDurationWithContextData.unlockDuration)
-    }
-
     override fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return runBlocking { updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
+        return runBlocking { lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
 
     override fun updateSecureSettingUnlockDurationJson(data: String) {
@@ -342,17 +295,8 @@ internal class LockOperationsResourceImpl(
         return updateSecureSettingUnlockDuration(updateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration())
     }
 
-    override fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?) {
-        return runBlocking { updateSecureSettingUnlockBetweenWithContextRequest(lockId, unlockBetween) }
-    }
-
-    override fun updateSecureSettingUnlockBetweenWithContextJson(data: String) {
-        val updateSecureSettingUnlockBetweenWithContextData = data.fromJson<UpdateSecureSettingUnlockBetweenWithContextData>()
-        return updateSecureSettingUnlockBetweenWithContext(updateSecureSettingUnlockBetweenWithContextData.lockId, updateSecureSettingUnlockBetweenWithContextData.unlockBetween?.toUnlockBetween())
-    }
-
     override fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return runBlocking { updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
+        return runBlocking { lockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
     override fun updateSecureSettingUnlockBetweenJson(data: String) {
@@ -361,7 +305,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getPinnedLocks(): List<LockResponse> {
-        return runBlocking { getPinnedLocksRequest() }
+        return runBlocking { lockOperationsClient.getPinnedLocksRequest() }
     }
 
     override fun getPinnedLocksJson(): String {
@@ -369,7 +313,7 @@ internal class LockOperationsResourceImpl(
     }
 
     override fun getShareableLocks(): List<ShareableLockResponse> {
-        return runBlocking { getShareableLocksRequest() }
+        return runBlocking { lockOperationsClient.getShareableLocksRequest() }
     }
 
     override fun getShareableLocksJson(): String {

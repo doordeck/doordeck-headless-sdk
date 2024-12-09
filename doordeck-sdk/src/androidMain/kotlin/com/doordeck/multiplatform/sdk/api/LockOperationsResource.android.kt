@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
@@ -9,12 +8,9 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
@@ -230,32 +226,12 @@ actual interface LockOperationsResource {
 
     /**
      * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
-     */
-    suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
-
-    fun unlockWithContextAsync(lockId: String, directAccessEndpoints: List<String>? = null): CompletableFuture<Unit>
-
-    /**
-     * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation)
 
     fun unlockAsync(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit>
-
-    /**
-     * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
-
-    fun shareLockWithContextAsync(lockId: String, shareLock: LockOperations.ShareLock): CompletableFuture<Unit>
 
     /**
      * Share a lock
@@ -268,16 +244,6 @@ actual interface LockOperationsResource {
 
     /**
      * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
-
-    fun revokeAccessToLockWithContextAsync(lockId: String, users: List<String>): CompletableFuture<Unit>
-
-    /**
-     * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
@@ -287,32 +253,12 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
-
-    fun updateSecureSettingUnlockDurationWithContextAsync(lockId: String, unlockDuration: Int): CompletableFuture<Unit>
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
 
     fun updateSecureSettingUnlockDurationAsync(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit>
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
-
-    fun updateSecureSettingUnlockBetweenWithContextAsync(lockId: String, unlockBetween: LockOperations.UnlockBetween?): CompletableFuture<Unit>
 
     /**
      * Update secure settings - Unlock between
@@ -342,8 +288,4 @@ actual interface LockOperationsResource {
     fun getShareableLocksAsync(): CompletableFuture<List<ShareableLockResponse>>
 }
 
-actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>(),
-    localUnlock = getKoin().get<LocalUnlockClient>()
-)
+actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())

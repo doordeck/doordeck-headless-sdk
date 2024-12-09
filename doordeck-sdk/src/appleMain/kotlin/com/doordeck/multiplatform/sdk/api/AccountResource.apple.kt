@@ -5,11 +5,9 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface AccountResource {
@@ -20,7 +18,7 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun refreshToken(refreshToken: String): TokenResponse
+    suspend fun refreshToken(refreshToken: String? = null): TokenResponse
 
     /**
      * Logout
@@ -36,7 +34,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
     /**
      * Register ephemeral key with secondary authentication
@@ -44,7 +42,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 
     /**
      * Verify ephemeral key registration
@@ -52,7 +50,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+    suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
 
     /**
      * Reverify email
@@ -97,7 +95,4 @@ actual interface AccountResource {
     suspend fun deleteAccount()
 }
 
-actual fun account(): AccountResource = AccountResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>()
-)
+actual fun account(): AccountResource = AccountResourceImpl(getKoin().get<AccountClient>())

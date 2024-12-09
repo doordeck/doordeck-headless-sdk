@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
@@ -9,12 +8,9 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface LockOperationsResource {
@@ -206,29 +202,11 @@ actual interface LockOperationsResource {
 
     /**
      * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
-     */
-    fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
-    fun unlockWithContextJson(data: String)
-
-    /**
-     * Unlock
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     fun unlock(unlockOperation: LockOperations.UnlockOperation)
     fun unlockJson(data: String)
-
-    /**
-     * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
-    fun shareLockWithContextJson(data: String)
 
     /**
      * Share a lock
@@ -240,15 +218,6 @@ actual interface LockOperationsResource {
 
     /**
      * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
-    fun revokeAccessToLockWithContextJson(data: String)
-
-    /**
-     * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
@@ -257,29 +226,11 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
-    fun updateSecureSettingUnlockDurationWithContextJson(data: String)
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
     fun updateSecureSettingUnlockDurationJson(data: String)
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
-    fun updateSecureSettingUnlockBetweenWithContextJson(data: String)
 
     /**
      * Update secure settings - Unlock between
@@ -306,8 +257,4 @@ actual interface LockOperationsResource {
     fun getShareableLocksJson(): String
 }
 
-actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>(),
-    localUnlock = getKoin().get<LocalUnlockClient>()
-)
+actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())

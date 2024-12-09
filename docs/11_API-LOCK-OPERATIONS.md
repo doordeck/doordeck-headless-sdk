@@ -965,6 +965,9 @@ var response = Utils.fromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.
 
 ## Unlock
 
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -1012,51 +1015,10 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 ```
 </details>
 
-## Unlock with context
-
-> [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-sdk.lockOperations().unlockWithContext("LOCK_ID")
-```
-💡 **Note:** In Java, use the `unlockWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-sdk.lockOperations().unlockWithContext(lockId: "LOCK_ID")
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlockWithContext("LOCK_ID", null);
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var data = new UnlockWithContextData("LOCK_ID").toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockWithContextJson(resource, data);
-```
-</details>
-
 ## Share lock
+
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
 
 ### JVM & Android
 <details>
@@ -1110,57 +1072,10 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.s
 ```
 </details>
 
-## Share lock with context
-
-> [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-val shareLock = LockOperations.ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, TARGET_PUBLIC_KEY)
-sdk.lockOperations().shareLockWithContext("LOCK_ID", shareLock)
-```
-💡 **Note:** In Java, use the `shareLockWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-let shareLock = LockOperations.ShareLock(targetUserId: "TARGET_USER_ID", targetUserRole: TARGET_USER_ROLE, targetUserPublicKey: TARGET_PUBLIC_KEY, start: null, end: null)
-sdk.lockOperations().shareLockWithContext(lockId: "LOCK_ID", shareLock: shareLock)
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
-const shareLock = new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null);
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLockWithContext("LOCK_ID", shareLock);
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
-var data = new ShareLockWithContextData("LOCK_ID", shareLockData).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockWithContextJson(resource, data);
-```
-</details>
-
 ## Revoke access to lock
+
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
 
 ### JVM & Android
 <details>
@@ -1210,52 +1125,10 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.r
 ```
 </details>
 
-## Revoke access to lock with context
-
-> [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-sdk.lockOperations().revokeAccessToLockWithContext("LOCK_ID", listOf("USER_ID"))
-```
-💡 **Note:** In Java, use the `revokeAccessToLockWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-sdk.lockOperations().revokeAccessToLockWithContext(lockId: "LOCK_ID", users: ["USER_ID"])
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-const ktList = doordeck.kotlin.collections.KtList;
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLockWithContext("LOCK_ID", ktList.fromJsArray(["USER_ID"]));
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var data = new RevokeAccessToLockWithContextData("LOCK_ID", ["USER_ID"]).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockWithContextJson(resource, data);
-```
-</details>
-
 ## Update secure setting unlock duration
+
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
 
 ### JVM & Android
 <details>
@@ -1304,51 +1177,10 @@ symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.u
 ```
 </details>
 
-## Update secure setting unlock duration with context
-
-> [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-sdk.lockOperations().updateSecureSettingUnlockDurationWithContext("LOCK_ID", UNLOCK_DURATION)
-```
-💡 **Note:** In Java, use the `updateSecureSettingUnlockDurationWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-sdk.lockOperations().updateSecureSettingUnlockDurationWithContext(lockId: "LOCK_ID", unlockDuration: UNLOCK_DURATION)
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockDurationWithContext("LOCK_ID", UNLOCK_DURATION);
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var data = new UpdateSecureSettingUnlockDurationWithContextData("LOCK_ID", UNLOCK_DURATION).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockDurationWithContextJson(resource, data);
-```
-</details>
-
 ## Update secure setting unlock between
+
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
 
 ### JVM & Android
 <details>
@@ -1398,55 +1230,6 @@ var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_
 var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
 var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData).toData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockBetweenJson(resource, data);
-```
-</details>
-
-## Update secure setting unlock between with context
-
-> [!IMPORTANT]  
-> This functionality requires you to have previously [set the operation context](06_CONTEXT-MANAGER.md#set-operation-context).
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-val unlockBetween = LockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST)
-sdk.lockOperations().updateSecureSettingUnlockBetweenWithContext("LOCK_ID", unlockBetween)
-```
-💡 **Note:** In Java, use the `updateSecureSettingUnlockBetweenWithContextAsync` function, which returns a `CompletableFuture<Void>` instead
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-let unlockBetween = LockOperations.UnlockBetween(start: "START_HH_MM", end: "END_HH_MM", timezone: "TIMEZONE", days: ["MONDAY"], exceptions: ["FRIDAY"])
-sdk.lockOperations().updateSecureSettingUnlockBetweenWithContext(lockId: "LOCK_ID", unlockBetween: unlockBetween)
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
-const unlockBetween = new lockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
-await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockBetweenWithContext("LOCK_ID", unlockBetween);
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
-var data = new UpdateSecureSettingUnlockBetweenWithContextData("LOCK_ID", unlockBetweenData).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockBetweenWithContextJson(resource, data);
 ```
 </details>
 

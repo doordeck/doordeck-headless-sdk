@@ -14,6 +14,9 @@ interface SecureStorage {
     fun addFusionAuthToken(token: String)
     fun getFusionAuthToken(): String?
 
+    fun addPublicKey(byteArray: ByteArray)
+    fun getPublicKey(): ByteArray?
+
     fun addPrivateKey(byteArray: ByteArray)
     fun getPrivateKey(): ByteArray?
 

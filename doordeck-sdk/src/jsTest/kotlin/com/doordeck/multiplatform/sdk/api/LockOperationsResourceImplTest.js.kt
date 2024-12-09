@@ -5,10 +5,12 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
@@ -20,11 +22,11 @@ class LockOperationsResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
     private val localUnlock = LocalUnlockClient(TEST_HTTP_CLIENT)
-    private val lockOperations = LockOperationsResourceImpl(TEST_HTTP_CLIENT, contextManager, localUnlock)
+    private val lockOperations = LockOperationsResourceImpl(LockOperationsClient(TEST_HTTP_CLIENT, contextManager, localUnlock))
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
-        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
@@ -143,8 +145,8 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUnlockWithContext() = runTest {
-        lockOperations.unlockWithContext(DEFAULT_LOCK_ID).await()
+    fun shouldUnlockUsingContext() = runTest {
+        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
     }
 
     @Test
@@ -153,8 +155,12 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldShareLockWithContext() = runTest {
-        lockOperations.shareLockWithContext(DEFAULT_LOCK_ID, LockOperations.ShareLock("", UserRole.USER, byteArrayOf())).await()
+    fun shouldShareLockUsingContext() = runTest {
+        lockOperations.shareLock(
+            LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            )).await()
     }
 
     @Test
@@ -167,8 +173,11 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldRevokeAccessToLockWithContext() = runTest {
-        lockOperations.revokeAccessToLockWithContext(DEFAULT_LOCK_ID, emptyList()).await()
+    fun shouldRevokeAccessToLockUsingContext() = runTest {
+        lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            users = emptyList()
+        )).await()
     }
 
     @Test
@@ -180,8 +189,11 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationWithContext(DEFAULT_LOCK_ID, 0).await()
+    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockDuration = 0
+        )).await()
     }
 
     @Test
@@ -193,8 +205,11 @@ class LockOperationsResourceImplTest {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockBetweenWithContext() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenWithContext(DEFAULT_LOCK_ID, null).await()
+    fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
+        lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            unlockBetween = null
+        )).await()
     }
 
     @Test
