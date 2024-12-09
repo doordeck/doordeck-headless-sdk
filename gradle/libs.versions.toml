@@ -2,7 +2,7 @@
 agp = "8.2.0"
 kotlin = "2.1.0"
 multiplatform-settings = "1.2.0"
-android-minSdk = "21"
+android-minSdk = "26"
 android-compileSdk = "34"
 ios-minSdk = "14"
 ktor-client = "3.0.2"
