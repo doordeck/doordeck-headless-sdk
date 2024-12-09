@@ -85,6 +85,8 @@ class AccountClientTest {
         // Then
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
+        assertEquals(ContextManagerImpl.getAuthToken(), response.authToken)
+        assertEquals(ContextManagerImpl.getRefreshToken(), response.refreshToken)
     }
 
     @Test

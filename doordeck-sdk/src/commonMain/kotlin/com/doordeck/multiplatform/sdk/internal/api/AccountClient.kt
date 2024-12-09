@@ -156,7 +156,7 @@ internal object AccountClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
     suspend fun deleteAccountRequest() {
-        //CloudHttpClient.client.delete<Unit>(Paths.getDeleteAccountPath())
+        CloudHttpClient.client.delete<Unit>(Paths.getDeleteAccountPath())
         ContextManagerImpl.reset()
     }
 }

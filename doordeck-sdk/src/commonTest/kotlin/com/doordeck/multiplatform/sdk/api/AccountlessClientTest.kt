@@ -48,7 +48,7 @@ class AccountlessClientTest {
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
         assertEquals(response.authToken, ContextManagerImpl.getAuthToken())
-        assertEquals(response.authToken, ContextManagerImpl.getAuthToken())
+        assertEquals(response.refreshToken, ContextManagerImpl.getRefreshToken())
 
         // Given - shouldDelete
         // When
@@ -56,7 +56,7 @@ class AccountlessClientTest {
 
         // Then
         assertNull(ContextManagerImpl.getAuthToken())
-        assertNull(ContextManagerImpl.getAuthToken())
+        assertNull(ContextManagerImpl.getRefreshToken())
         assertFails {
             AccountlessClient.loginRequest(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }
