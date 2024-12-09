@@ -1,25 +1,31 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
+import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-internal class SitesClientTest : IntegrationTest() {
+class SitesClientTest {
+
+    init {
+        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+    }
 
     @Test
     fun shouldListSites() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val sites = SITES_CLIENT.listSitesRequest()
+        val sites = SitesClient.listSitesRequest()
 
         // Then
         assertTrue { sites.isNotEmpty() }
@@ -28,11 +34,10 @@ internal class SitesClientTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSite() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val locksForSite = SITES_CLIENT.getLocksForSiteRequest(TEST_MAIN_SITE_ID)
+        val locksForSite = SitesClient.getLocksForSiteRequest(TEST_MAIN_SITE_ID)
 
         // Then
         assertTrue { locksForSite.isNotEmpty() }
@@ -42,11 +47,10 @@ internal class SitesClientTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSite() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val usersForSite = SITES_CLIENT.getUsersForSiteRequest(TEST_MAIN_SITE_ID)
+        val usersForSite = SitesClient.getUsersForSiteRequest(TEST_MAIN_SITE_ID)
 
         // Then
         assertTrue { usersForSite.isNotEmpty() }

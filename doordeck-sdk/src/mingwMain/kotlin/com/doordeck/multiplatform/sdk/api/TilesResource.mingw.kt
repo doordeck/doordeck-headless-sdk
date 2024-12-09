@@ -4,7 +4,6 @@ import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
 import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface TilesResource {
     /**
@@ -26,4 +25,4 @@ actual interface TilesResource {
     fun associateMultipleLocksJson(data: String)
 }
 
-actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<TilesClient>())
+actual fun tiles(): TilesResource = TilesResourceImpl

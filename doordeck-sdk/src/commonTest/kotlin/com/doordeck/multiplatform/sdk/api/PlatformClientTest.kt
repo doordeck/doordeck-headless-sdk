@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -10,6 +10,9 @@ import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
+import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,13 +21,16 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-internal class PlatformClientTest : IntegrationTest() {
+class PlatformClientTest {
+
+    init {
+        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+    }
 
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = Platform.CreateApplication(
             name = "Test Application ${getPlatform()} ${Uuid.random()}",
             companyName = Uuid.random().toString(),
@@ -34,10 +40,10 @@ internal class PlatformClientTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_CLIENT.createApplicationRequest(newApplication)
+        PlatformClient.createApplicationRequest(newApplication)
 
         // Then
-        var application = PLATFORM_CLIENT.listApplicationsRequest().firstOrNull {
+        var application = PlatformClient.listApplicationsRequest().firstOrNull {
             it.name.equals(newApplication.name, true)
         }
         assertNotNull(application)
@@ -46,60 +52,60 @@ internal class PlatformClientTest : IntegrationTest() {
         val updatedApplicationName = "Test Application ${Uuid.random()}"
 
         // When
-        PLATFORM_CLIENT.updateApplicationNameRequest(application.applicationId, updatedApplicationName)
+        PlatformClient.updateApplicationNameRequest(application.applicationId, updatedApplicationName)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationName, application.name)
 
         // Given - shouldUpdateApplicationCompanyName
         val updatedApplicationCompanyName = Uuid.random().toString()
 
         // When
-        PLATFORM_CLIENT.updateApplicationCompanyNameRequest(application.applicationId, updatedApplicationCompanyName)
+        PlatformClient.updateApplicationCompanyNameRequest(application.applicationId, updatedApplicationCompanyName)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationCompanyName, application.companyName)
 
         // Given - shouldUpdateApplicationMailingAddress
         val updatedApplicationMailingAddress = "test2@doordeck.com"
 
         // When
-        PLATFORM_CLIENT.updateApplicationMailingAddressRequest(application.applicationId, updatedApplicationMailingAddress)
+        PlatformClient.updateApplicationMailingAddressRequest(application.applicationId, updatedApplicationMailingAddress)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
 
         // Given - shouldUpdateApplicationPrivacyPolicy
         val updatedApplicationPrivacyPolicy = "https://www.doordeck.com/privacy2"
 
         // When
-        PLATFORM_CLIENT.updateApplicationPrivacyPolicyRequest(application.applicationId, updatedApplicationPrivacyPolicy)
+        PlatformClient.updateApplicationPrivacyPolicyRequest(application.applicationId, updatedApplicationPrivacyPolicy)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
 
         // Given - shouldUpdateApplicationSupportContact
         val updatedApplicationSupportContact = "https://www.doordeck2.com"
 
         // When
-        PLATFORM_CLIENT.updateApplicationSupportContactRequest(application.applicationId, updatedApplicationSupportContact)
+        PlatformClient.updateApplicationSupportContactRequest(application.applicationId, updatedApplicationSupportContact)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationSupportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationAppLink
         val updatedApplicationAppLink = "https://www.doordeck.com"
 
         // When
-        PLATFORM_CLIENT.updateApplicationAppLinkRequest(application.applicationId, updatedApplicationAppLink)
+        PlatformClient.updateApplicationAppLinkRequest(application.applicationId, updatedApplicationAppLink)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationAppLink, application.appLink)
 
         // Given - shouldUpdateApplicationEmailPreferences
@@ -117,10 +123,10 @@ internal class PlatformClientTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_CLIENT.updateApplicationEmailPreferencesRequest(application.applicationId, updatedApplicationEmailPreferences)
+        PlatformClient.updateApplicationEmailPreferencesRequest(application.applicationId, updatedApplicationEmailPreferences)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationEmailPreferences.senderEmail, application.emailPreferences.senderEmail)
         assertEquals(updatedApplicationEmailPreferences.senderName, application.emailPreferences.senderName)
         assertEquals(updatedApplicationEmailPreferences.primaryColour, application.emailPreferences.primaryColour)
@@ -134,20 +140,20 @@ internal class PlatformClientTest : IntegrationTest() {
         val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
 
         // When
-        PLATFORM_CLIENT.updateApplicationLogoUrlRequest(application.applicationId, updatedApplicationLogoUrl)
+        PlatformClient.updateApplicationLogoUrlRequest(application.applicationId, updatedApplicationLogoUrl)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
         val addedApplicationAuthIssuer = "https://test.com"
 
         // When
-        PLATFORM_CLIENT.addAuthIssuerRequest(application.applicationId, addedApplicationAuthIssuer)
+        PlatformClient.addAuthIssuerRequest(application.applicationId, addedApplicationAuthIssuer)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
         assertTrue { application!!.authDomains!!.any { it.equals(addedApplicationAuthIssuer, true) } }
 
@@ -155,10 +161,10 @@ internal class PlatformClientTest : IntegrationTest() {
         val removedApplicationAuthIssuer = "https://test.com"
 
         // When
-        PLATFORM_CLIENT.deleteAuthIssuerRequest(application.applicationId, removedApplicationAuthIssuer)
+        PlatformClient.deleteAuthIssuerRequest(application.applicationId, removedApplicationAuthIssuer)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
         assertFalse { application!!.authDomains!!.any { it.equals(removedApplicationAuthIssuer, true) } }
 
@@ -166,10 +172,10 @@ internal class PlatformClientTest : IntegrationTest() {
         val addedApplicationCorsDomain = "https://test.com"
 
         // When
-        PLATFORM_CLIENT.addCorsDomainRequest(application.applicationId, addedApplicationCorsDomain)
+        PlatformClient.addCorsDomainRequest(application.applicationId, addedApplicationCorsDomain)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
         assertTrue { application!!.corsDomains!!.any { it.equals(addedApplicationCorsDomain, true) } }
 
@@ -177,10 +183,10 @@ internal class PlatformClientTest : IntegrationTest() {
         val removedApplicationCorsDomain = "https://test.com"
 
         // When
-        PLATFORM_CLIENT.removeCorsDomainRequest(application.applicationId, removedApplicationCorsDomain)
+        PlatformClient.removeCorsDomainRequest(application.applicationId, removedApplicationCorsDomain)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
         assertFalse { application!!.corsDomains!!.any { it.equals(removedApplicationCorsDomain, true) } }
 
@@ -195,10 +201,10 @@ internal class PlatformClientTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_CLIENT.addAuthKeyRequest(application.applicationId, ed25519Key)
+        PlatformClient.addAuthKeyRequest(application.applicationId, ed25519Key)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.kid
         }?.value as? Ed25519KeyResponse
@@ -225,10 +231,10 @@ internal class PlatformClientTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_CLIENT.addAuthKeyRequest(application.applicationId, rsaKey)
+        PlatformClient.addAuthKeyRequest(application.applicationId, rsaKey)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.kid
         }?.value as? RsaKeyResponse
@@ -251,10 +257,10 @@ internal class PlatformClientTest : IntegrationTest() {
         )
 
         // When
-        PLATFORM_CLIENT.addAuthKeyRequest(application.applicationId, ecKey)
+        PlatformClient.addAuthKeyRequest(application.applicationId, ecKey)
 
         // Then
-        application = PLATFORM_CLIENT.getApplicationRequest(application.applicationId)
+        application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.kid
         }?.value as? EcKeyResponse
@@ -268,7 +274,7 @@ internal class PlatformClientTest : IntegrationTest() {
 
         // Given - shouldGetApplicationOwnersDetails
         // When
-        var applicationOwnerDetails = PLATFORM_CLIENT.getApplicationOwnersDetailsRequest(application.applicationId)
+        var applicationOwnerDetails = PlatformClient.getApplicationOwnersDetailsRequest(application.applicationId)
 
         // Then
         assertTrue { applicationOwnerDetails.isNotEmpty() }
@@ -276,28 +282,28 @@ internal class PlatformClientTest : IntegrationTest() {
 
         // Given - shouldAddApplicationOwner
         // When
-        PLATFORM_CLIENT.addApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        PlatformClient.addApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Then
-        applicationOwnerDetails  = PLATFORM_CLIENT.getApplicationOwnersDetailsRequest(application.applicationId)
+        applicationOwnerDetails  = PlatformClient.getApplicationOwnersDetailsRequest(application.applicationId)
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
         // Given - shouldAddApplicationOwner
         // When
-        PLATFORM_CLIENT.addApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        PlatformClient.addApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Then
-        applicationOwnerDetails = PLATFORM_CLIENT.getApplicationOwnersDetailsRequest(application.applicationId)
+        applicationOwnerDetails = PlatformClient.getApplicationOwnersDetailsRequest(application.applicationId)
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertTrue { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
         // Given - shouldRemoveApplicationOwner
         // When
-        PLATFORM_CLIENT.removeApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
+        PlatformClient.removeApplicationOwnerRequest(application.applicationId, TEST_SUPPLEMENTARY_USER_ID)
 
         // Then
-        applicationOwnerDetails = PLATFORM_CLIENT.getApplicationOwnersDetailsRequest(application.applicationId)
+        applicationOwnerDetails = PlatformClient.getApplicationOwnersDetailsRequest(application.applicationId)
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertFalse { applicationOwnerDetails.any { it.userId == TEST_SUPPLEMENTARY_USER_ID } }
 
@@ -305,17 +311,17 @@ internal class PlatformClientTest : IntegrationTest() {
         val contentType = "image/png"
 
         // When
-        val url = PLATFORM_CLIENT.getLogoUploadUrlRequest(application.applicationId, contentType)
+        val url = PlatformClient.getLogoUploadUrlRequest(application.applicationId, contentType)
 
         // Then
         assertTrue { url.uploadUrl.isNotEmpty() }
 
         // Given - shouldDeleteApplication
         // When
-        PLATFORM_CLIENT.deleteApplicationRequest(application.applicationId)
+        PlatformClient.deleteApplicationRequest(application.applicationId)
 
         // Then
-        val applications = PLATFORM_CLIENT.listApplicationsRequest()
+        val applications = PlatformClient.listApplicationsRequest()
         assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }

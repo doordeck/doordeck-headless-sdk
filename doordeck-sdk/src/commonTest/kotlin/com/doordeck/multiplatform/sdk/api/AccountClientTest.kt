@@ -1,10 +1,13 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
+import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -13,16 +16,19 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-internal class AccountClientTest : IntegrationTest() {
+class AccountClientTest {
+
+    init {
+        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+    }
 
     @Test
     fun shouldGetUserDetails() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val response = ACCOUNT_CLIENT.getUserDetailsRequest()
+        val response = AccountClient.getUserDetailsRequest()
 
         // Then
         assertEquals(TEST_MAIN_USER_EMAIL, response.email)
@@ -31,27 +37,25 @@ internal class AccountClientTest : IntegrationTest() {
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val updatedUserDisplayName = Uuid.random().toString()
 
         // When
-        ACCOUNT_CLIENT.updateUserDetailsRequest(updatedUserDisplayName)
+        AccountClient.updateUserDetailsRequest(updatedUserDisplayName)
 
         // Then
-        val result = ACCOUNT_CLIENT.getUserDetailsRequest()
+        val result = AccountClient.getUserDetailsRequest()
         assertEquals(updatedUserDisplayName, result.displayName)
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val key = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
 
         // When
-        val result = ACCOUNT_CLIENT.registerEphemeralKeyRequest(key)
+        val result = AccountClient.registerEphemeralKeyRequest(key)
 
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
@@ -61,21 +65,19 @@ internal class AccountClientTest : IntegrationTest() {
     @Test
     fun shouldChangePassword() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        ACCOUNT_CLIENT.changePasswordRequest(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
+        AccountClient.changePasswordRequest(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
     }
 
     @Test
     fun shouldRefreshToken() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        val login = AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val response = ACCOUNT_CLIENT.refreshTokenRequest(login.refreshToken)
+        val response = AccountClient.refreshTokenRequest(login.refreshToken)
 
         // Then
         assertTrue { response.authToken.isNotEmpty() }
@@ -85,15 +87,14 @@ internal class AccountClientTest : IntegrationTest() {
     @Test
     fun shouldLogout() = runTest {
         // Given
-        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        CONTEXT_MANAGER.setAuthToken(login.authToken)
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        ACCOUNT_CLIENT.logoutRequest()
+        AccountClient.logoutRequest()
 
         // Then
-        assertNull(CONTEXT_MANAGER.getAuthToken())
-        assertNull(CONTEXT_MANAGER.getRefreshToken())
-        assertNull(CONTEXT_MANAGER.getFusionAuthToken())
+        assertNull(ContextManagerImpl.getAuthToken())
+        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }

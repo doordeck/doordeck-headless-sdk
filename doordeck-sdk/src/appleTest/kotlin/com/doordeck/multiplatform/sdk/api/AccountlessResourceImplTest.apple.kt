@@ -1,29 +1,32 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
 class AccountlessResourceImplTest {
 
-    private val contextManager = ContextManagerImpl()
-    private val accountless = AccountlessResourceImpl(AccountlessClient(TEST_HTTP_CLIENT, contextManager))
+    init {
+        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+        CloudHttpClient.overrideClient(TEST_HTTP_CLIENT)
+    }
 
     @Test
     fun shouldLogin() = runTest {
-        accountless.login("", "")
+        AccountlessResourceImpl.login("", "")
     }
 
     @Test
     fun shouldRegister() = runTest {
-        accountless.registration("", "", "", false)
+        AccountlessResourceImpl.registration("", "", "", false)
     }
 
     @Test
     fun shouldVerifyEmail() = runTest {
-        accountless.verifyEmail("")
+        AccountlessResourceImpl.verifyEmail("")
     }
 }

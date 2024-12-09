@@ -11,7 +11,6 @@ import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface LockOperationsResource {
     /**
@@ -256,4 +255,4 @@ actual interface LockOperationsResource {
     suspend fun getShareableLocks(): List<ShareableLockResponse>
 }
 
-actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())
+actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl

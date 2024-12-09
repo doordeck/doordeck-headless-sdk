@@ -11,87 +11,85 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-internal class AccountResourceImpl(
-    private val accountClient: AccountClient
-) : AccountResource {
+internal object AccountResourceImpl : AccountResource {
 
     override suspend fun refreshToken(refreshToken: String?): TokenResponse {
-        return accountClient.refreshTokenRequest(refreshToken)
+        return AccountClient.refreshTokenRequest(refreshToken)
     }
 
     override fun refreshTokenAsync(refreshToken: String?): CompletableFuture<TokenResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.refreshTokenRequest(refreshToken) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.refreshTokenRequest(refreshToken) }
     }
 
     override suspend fun logout() {
-        return accountClient.logoutRequest()
+        return AccountClient.logoutRequest()
     }
 
     override fun logoutAsync(): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.logoutRequest() }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.logoutRequest() }
     }
 
     override suspend fun registerEphemeralKey(publicKey: ByteArray?): RegisterEphemeralKeyResponse {
-        return accountClient.registerEphemeralKeyRequest(publicKey)
+        return AccountClient.registerEphemeralKeyRequest(publicKey)
     }
 
     override fun registerEphemeralKeyAsync(publicKey: ByteArray?): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.registerEphemeralKeyRequest(publicKey) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
     override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthenticationAsync(publicKey: ByteArray?, method: TwoFactorMethod?): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
     override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): RegisterEphemeralKeyResponse {
-        return accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
+        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
     }
 
     override fun verifyEphemeralKeyRegistrationAsync(code: String, privateKey: ByteArray?): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
     override suspend fun reverifyEmail() {
-        return accountClient.reverifyEmailRequest()
+        return AccountClient.reverifyEmailRequest()
     }
 
     override fun reverifyEmailAsync(): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.reverifyEmailRequest() }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.reverifyEmailRequest() }
     }
 
     override suspend fun changePassword(oldPassword: String, newPassword: String) {
-        return accountClient.changePasswordRequest(oldPassword, newPassword)
+        return AccountClient.changePasswordRequest(oldPassword, newPassword)
     }
 
     override fun changePasswordAsync(oldPassword: String, newPassword: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.changePasswordRequest(oldPassword, newPassword) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.changePasswordRequest(oldPassword, newPassword) }
     }
 
     override suspend fun getUserDetails(): UserDetailsResponse {
-        return accountClient.getUserDetailsRequest()
+        return AccountClient.getUserDetailsRequest()
     }
 
     override fun getUserDetailsAsync(): CompletableFuture<UserDetailsResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.getUserDetailsRequest() }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.getUserDetailsRequest() }
     }
 
     override suspend fun updateUserDetails(displayName: String) {
-        return accountClient.updateUserDetailsRequest(displayName)
+        return AccountClient.updateUserDetailsRequest(displayName)
     }
 
     override fun updateUserDetailsAsync(displayName: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.updateUserDetailsRequest(displayName) }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.updateUserDetailsRequest(displayName) }
     }
 
     override suspend fun deleteAccount() {
-        return accountClient.deleteAccountRequest()
+        return AccountClient.deleteAccountRequest()
     }
 
     override fun deleteAccountAsync(): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountClient.deleteAccountRequest() }
+        return GlobalScope.future(Dispatchers.IO) { AccountClient.deleteAccountRequest() }
     }
 }

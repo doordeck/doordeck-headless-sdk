@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.api.requests.ChangePasswordRequest
@@ -14,14 +15,10 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
 
-internal open class AccountClient(
-    private val httpClient: HttpClient,
-    private val contextManager: ContextManagerImpl
-) : AbstractResourceImpl() {
+internal object AccountClient : AbstractResourceImpl() {
 
     /**
      * Refresh token
@@ -31,13 +28,13 @@ internal open class AccountClient(
     @DoordeckOnly
     suspend fun refreshTokenRequest(refreshToken: String? = null): TokenResponse {
         val token = refreshToken
-            ?: contextManager.getRefreshToken()
+            ?: ContextManagerImpl.getRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
-        return httpClient.post<TokenResponse>(Paths.getRefreshTokenPath()) {
+        return CloudHttpClient.client.post<TokenResponse>(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
         }.also {
-            contextManager.setAuthToken(it.authToken)
-            contextManager.setRefreshToken(it.refreshToken)
+            ContextManagerImpl.setAuthToken(it.authToken)
+            ContextManagerImpl.setRefreshToken(it.refreshToken)
         }
     }
 
@@ -47,10 +44,10 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
     suspend fun logoutRequest() {
-        httpClient.post<Unit>(Paths.getLogoutPath()) {
+        CloudHttpClient.client.post<Unit>(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
-        contextManager.reset()
+        ContextManagerImpl.reset()
     }
 
     /**
@@ -60,14 +57,14 @@ internal open class AccountClient(
      */
     suspend fun registerEphemeralKeyRequest(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
-            ?: contextManager.getPublicKey()?.encodeByteArrayToBase64()
+            ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
             ?: throw MissingContextFieldException("PublicKey is missing")
-        return httpClient.post<RegisterEphemeralKeyResponse>(Paths.getRegisterEphemeralKeyPath()) {
+        return CloudHttpClient.client.post<RegisterEphemeralKeyResponse>(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
         }.also {
-            contextManager.setUserId(it.userId)
-            contextManager.setCertificateChain(it.certificateChain)
+            ContextManagerImpl.setUserId(it.userId)
+            ContextManagerImpl.setCertificateChain(it.certificateChain)
         }
     }
 
@@ -78,9 +75,9 @@ internal open class AccountClient(
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         val publicKeyEncoded =  publicKey?.encodeByteArrayToBase64()
-            ?: contextManager.getPublicKey()?.encodeByteArrayToBase64()
+            ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
             ?: throw MissingContextFieldException("Public key is missing")
-        return httpClient.post<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
+        return CloudHttpClient.client.post<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
             method?.let { parameter(Params.METHOD, it.name) }
@@ -94,15 +91,15 @@ internal open class AccountClient(
      */
     suspend fun verifyEphemeralKeyRegistrationRequest(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         val key = privateKey
-            ?: contextManager.getPrivateKey()
+            ?: ContextManagerImpl.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         val codeSignature = code.signWithPrivateKey(key).encodeByteArrayToBase64()
-        return httpClient.post<RegisterEphemeralKeyResponse>(Paths.getVerifyEphemeralKeyRegistrationPath()) {
+        return CloudHttpClient.client.post<RegisterEphemeralKeyResponse>(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.also {
-            contextManager.setUserId(it.userId)
-            contextManager.setCertificateChain(it.certificateChain)
+            ContextManagerImpl.setUserId(it.userId)
+            ContextManagerImpl.setCertificateChain(it.certificateChain)
         }
     }
 
@@ -113,7 +110,7 @@ internal open class AccountClient(
      */
     @DoordeckOnly
     suspend fun reverifyEmailRequest() {
-        httpClient.post<Unit>(Paths.getReverifyEmailPath())
+        CloudHttpClient.client.post<Unit>(Paths.getReverifyEmailPath())
     }
 
     /**
@@ -123,7 +120,7 @@ internal open class AccountClient(
      */
     @DoordeckOnly
     suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
-        httpClient.post<Unit>(Paths.getChangePasswordPath()) {
+        CloudHttpClient.client.post<Unit>(Paths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(ChangePasswordRequest(
                 oldPassword = oldPassword,
@@ -138,7 +135,7 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
     suspend fun getUserDetailsRequest(): UserDetailsResponse {
-        return httpClient.get(Paths.getUserDetailsPath())
+        return CloudHttpClient.client.get(Paths.getUserDetailsPath())
     }
 
     /**
@@ -147,7 +144,7 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
     suspend fun updateUserDetailsRequest(displayName: String) {
-        httpClient.post<Unit>(Paths.getUpdateUserDetailsPath()) {
+        CloudHttpClient.client.post<Unit>(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
         }
@@ -159,7 +156,7 @@ internal open class AccountClient(
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
     suspend fun deleteAccountRequest() {
-        httpClient.delete<Unit>(Paths.getDeleteAccountPath())
-        contextManager.reset()
+        //CloudHttpClient.client.delete<Unit>(Paths.getDeleteAccountPath())
+        ContextManagerImpl.reset()
     }
 }

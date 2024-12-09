@@ -10,127 +10,125 @@ import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 
-internal class LockOperationsResourceImpl(
-    private val lockOperationsClient: LockOperationsClient
-) : LockOperationsResource {
+internal object LockOperationsResourceImpl : LockOperationsResource {
 
     override suspend fun getSingleLock(lockId: String): LockResponse {
-        return lockOperationsClient.getSingleLockRequest(lockId)
+        return LockOperationsClient.getSingleLockRequest(lockId)
     }
 
     override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return lockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
+        return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
     override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return lockOperationsClient.getAuditForUserRequest(userId, start, end)
+        return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 
     override suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return lockOperationsClient.getUsersForLockRequest(lockId)
+        return LockOperationsClient.getUsersForLockRequest(lockId)
     }
 
     override suspend fun getLocksForUser(userId: String): LockUserResponse {
-        return lockOperationsClient.getLocksForUserRequest(userId)
+        return LockOperationsClient.getLocksForUserRequest(userId)
     }
 
     override suspend fun updateLockName(lockId: String, name: String?) {
-        return lockOperationsClient.updateLockNameRequest(lockId, name)
+        return LockOperationsClient.updateLockNameRequest(lockId, name)
     }
 
     override suspend fun updateLockFavourite(lockId: String, favourite: Boolean?) {
-        return lockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
+        return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
     }
 
     override suspend fun updateLockColour(lockId: String, colour: String?) {
-        return lockOperationsClient.updateLockColourRequest(lockId, colour)
+        return LockOperationsClient.updateLockColourRequest(lockId, colour)
     }
 
     override suspend fun updateLockSettingDefaultName(lockId: String, name: String?) {
-        return lockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
+        return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
     }
 
     override suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return lockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
+        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
     }
 
     override suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return lockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
+        return LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
     }
 
     override suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return lockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
+        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
     }
 
     override suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
-        return lockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
+        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
     }
 
     override suspend fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
+        return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
     }
 
     override suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByEmailRequest(email)
+        return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
     }
 
     override suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
+        return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
     }
 
     override suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
+        return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
     }
 
     override suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
+        return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
     }
 
     override suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
+        return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
     }
 
     override suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
+        return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
     }
 
     override suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
+        return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
     }
 
     override suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
+        return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
     }
 
     override suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
+        return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
     override suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return lockOperationsClient.unlockRequest(unlockOperation)
+        return LockOperationsClient.unlockRequest(unlockOperation)
     }
 
     override suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return lockOperationsClient.shareLockRequest(shareLockOperation)
+        return LockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
+        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
     override suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
+        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
     }
 
     override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return lockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
     override suspend fun getPinnedLocks(): List<LockResponse> {
-        return lockOperationsClient.getPinnedLocksRequest()
+        return LockOperationsClient.getPinnedLocksRequest()
     }
 
     override suspend fun getShareableLocks(): List<ShareableLockResponse> {
-        return lockOperationsClient.getShareableLocksRequest()
+        return LockOperationsClient.getShareableLocksRequest()
     }
 }

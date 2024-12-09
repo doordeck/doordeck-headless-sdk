@@ -1,7 +1,5 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -12,7 +10,7 @@ class AndroidPlatformTest {
     @Test
     fun shouldTestPlatformEngine() = runTest {
         // Given
-        val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
+        val client = createCloudHttpClient()
 
         // When
         assertTrue { client.engine.config is OkHttpConfig }

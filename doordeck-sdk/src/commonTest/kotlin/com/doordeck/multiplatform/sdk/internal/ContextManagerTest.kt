@@ -21,26 +21,25 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setAuthToken(cloudAuthToken)
-        contextManager.setRefreshToken(cloudRefreshToken)
-        contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setAuthToken(cloudAuthToken)
+        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
+        ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertEquals(cloudAuthToken, contextManager.getAuthToken())
-        assertEquals(cloudRefreshToken, contextManager.getRefreshToken())
-        assertEquals(fusionAuthToken, contextManager.getFusionAuthToken())
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertEquals(cloudAuthToken, ContextManagerImpl.getAuthToken())
+        assertEquals(cloudRefreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
     }
 
     @Test
@@ -53,26 +52,25 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setAuthToken(cloudAuthToken)
-        contextManager.setRefreshToken(cloudRefreshToken)
-        contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
-        contextManager.storeContext()
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setAuthToken(cloudAuthToken)
+        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
+        ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        ContextManagerImpl.storeContext()
 
         // When
-        contextManager.clearContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.clearContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertNull(contextManager.getUserId())
-        assertNull(contextManager.getCertificateChain())
-        assertNull(contextManager.getPublicKey())
-        assertNull(contextManager.getPrivateKey())
-        assertNull(contextManager.getAuthToken())
-        assertNull(contextManager.getRefreshToken())
-        assertNull(contextManager.getFusionAuthToken())
+        assertNull(ContextManagerImpl.getUserId())
+        assertNull(ContextManagerImpl.getCertificateChain())
+        assertNull(ContextManagerImpl.getPublicKey())
+        assertNull(ContextManagerImpl.getPrivateKey())
+        assertNull(ContextManagerImpl.getAuthToken())
+        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }

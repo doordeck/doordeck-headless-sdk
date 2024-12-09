@@ -21,9 +21,6 @@ multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", vers
 multiplatform-settings-test = { module = "com.russhwolf:multiplatform-settings-test", version.ref = "multiplatform-settings" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-test" }
 
-#Dependency injection
-koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor-client" }

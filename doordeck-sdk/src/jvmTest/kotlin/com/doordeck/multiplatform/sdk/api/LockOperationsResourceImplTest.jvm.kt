@@ -1,16 +1,17 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
+import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
-import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
@@ -19,267 +20,266 @@ import kotlin.test.Test
 
 class LockOperationsResourceImplTest {
 
-    private val contextManager = ContextManagerImpl()
-    private val localUnlock = LocalUnlockClient(TEST_HTTP_CLIENT)
-    private val lockOperations = LockOperationsResourceImpl(LockOperationsClient(TEST_HTTP_CLIENT, contextManager, localUnlock))
-
     init {
-        contextManager.setOperationContext("", emptyList(), TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
+        ContextManagerImpl.setOperationContext("", emptyList(), TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        CloudHttpClient.overrideClient(TEST_HTTP_CLIENT)
+        HttpClient.overrideClient(TEST_HTTP_CLIENT)
     }
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        lockOperations.getSingleLock(DEFAULT_LOCK_ID)
+        LockOperationsResourceImpl.getSingleLock(DEFAULT_LOCK_ID)
     }
 
     @Test
     fun shouldGetSingleLockAsync() = runTest {
-        lockOperations.getSingleLockAsync(DEFAULT_LOCK_ID).await()
+        LockOperationsResourceImpl.getSingleLockAsync(DEFAULT_LOCK_ID).await()
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        lockOperations.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
+        LockOperationsResourceImpl.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
     }
 
     @Test
     fun shouldGetLockAuditTrailAsync() = runTest {
-        lockOperations.getLockAuditTrailAsync(DEFAULT_LOCK_ID, 0, 0).await()
+        LockOperationsResourceImpl.getLockAuditTrailAsync(DEFAULT_LOCK_ID, 0, 0).await()
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        lockOperations.getAuditForUser(DEFAULT_USER_ID, 0, 0)
+        LockOperationsResourceImpl.getAuditForUser(DEFAULT_USER_ID, 0, 0)
     }
 
     @Test
     fun shouldGetAuditForUserAsync() = runTest {
-        lockOperations.getAuditForUserAsync(DEFAULT_USER_ID, 0, 0).await()
+        LockOperationsResourceImpl.getAuditForUserAsync(DEFAULT_USER_ID, 0, 0).await()
     }
 
     @Test
     fun shouldGetUsersForLock() = runTest {
-        lockOperations.getUsersForLock(DEFAULT_LOCK_ID)
+        LockOperationsResourceImpl.getUsersForLock(DEFAULT_LOCK_ID)
     }
 
     @Test
     fun shouldGetUsersForLockAsync() = runTest {
-        lockOperations.getUsersForLockAsync(DEFAULT_LOCK_ID).await()
+        LockOperationsResourceImpl.getUsersForLockAsync(DEFAULT_LOCK_ID).await()
     }
 
     @Test
     fun shouldGetLocksForUser() = runTest {
-        lockOperations.getLocksForUser(DEFAULT_USER_ID)
+        LockOperationsResourceImpl.getLocksForUser(DEFAULT_USER_ID)
     }
 
     @Test
     fun shouldGetLocksForUserAsync() = runTest {
-        lockOperations.getLocksForUserAsync(DEFAULT_USER_ID).await()
+        LockOperationsResourceImpl.getLocksForUserAsync(DEFAULT_USER_ID).await()
     }
 
     @Test
     fun shouldUpdateLockName() = runTest {
-        lockOperations.updateLockName(DEFAULT_LOCK_ID, "")
+        LockOperationsResourceImpl.updateLockName(DEFAULT_LOCK_ID, "")
     }
 
     @Test
     fun shouldUpdateLockNameAsync() = runTest {
-        lockOperations.updateLockNameAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsResourceImpl.updateLockNameAsync(DEFAULT_LOCK_ID, "").await()
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
-        lockOperations.updateLockFavourite(DEFAULT_LOCK_ID, false)
+        LockOperationsResourceImpl.updateLockFavourite(DEFAULT_LOCK_ID, false)
     }
 
     @Test
     fun shouldUpdateLockFavouriteAsync() = runTest {
-        lockOperations.updateLockFavouriteAsync(DEFAULT_LOCK_ID, false).await()
+        LockOperationsResourceImpl.updateLockFavouriteAsync(DEFAULT_LOCK_ID, false).await()
     }
 
     @Test
     fun shouldUpdateLockColour() = runTest {
-        lockOperations.updateLockColour(DEFAULT_LOCK_ID, "")
+        LockOperationsResourceImpl.updateLockColour(DEFAULT_LOCK_ID, "")
     }
 
     @Test
     fun shouldUpdateLockColourAsync() = runTest {
-        lockOperations.updateLockColourAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsResourceImpl.updateLockColourAsync(DEFAULT_LOCK_ID, "").await()
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
-        lockOperations.updateLockSettingDefaultName(DEFAULT_LOCK_ID, "")
+        LockOperationsResourceImpl.updateLockSettingDefaultName(DEFAULT_LOCK_ID, "")
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultNameAsync() = runTest {
-        lockOperations.updateLockSettingDefaultNameAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsResourceImpl.updateLockSettingDefaultNameAsync(DEFAULT_LOCK_ID, "").await()
     }
 
     @Test
     fun shouldSetLockSettingPermittedAddresses() = runTest {
-        lockOperations.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, listOf("1.1.1.1"))
+        LockOperationsResourceImpl.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, listOf("1.1.1.1"))
     }
 
     @Test
     fun shouldSetLockSettingPermittedAddressesAsync() = runTest {
-        lockOperations.setLockSettingPermittedAddressesAsync(DEFAULT_LOCK_ID, listOf("1.1.1.1")).await()
+        LockOperationsResourceImpl.setLockSettingPermittedAddressesAsync(DEFAULT_LOCK_ID, listOf("1.1.1.1")).await()
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
-        lockOperations.updateLockSettingHidden(DEFAULT_LOCK_ID, true)
+        LockOperationsResourceImpl.updateLockSettingHidden(DEFAULT_LOCK_ID, true)
     }
 
     @Test
     fun shouldUpdateLockSettingHiddenAsync() = runTest {
-        lockOperations.updateLockSettingHiddenAsync(DEFAULT_LOCK_ID, true).await()
+        LockOperationsResourceImpl.updateLockSettingHiddenAsync(DEFAULT_LOCK_ID, true).await()
     }
 
     @Test
     fun shouldSetLockSettingTimeRestrictions() = runTest {
-        lockOperations.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyList())
+        LockOperationsResourceImpl.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyList())
     }
 
     @Test
     fun shouldSetLockSettingTimeRestrictionsAsync() = runTest {
-        lockOperations.setLockSettingTimeRestrictionsAsync(DEFAULT_LOCK_ID, emptyList()).await()
+        LockOperationsResourceImpl.setLockSettingTimeRestrictionsAsync(DEFAULT_LOCK_ID, emptyList()).await()
     }
 
     @Test
     fun shouldUpdateLockSettingLocationRestrictions() = runTest {
-        lockOperations.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID, null)
+        LockOperationsResourceImpl.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID, null)
     }
 
     @Test
     fun shouldUpdateLockSettingLocationRestrictionsAsync() = runTest {
-        lockOperations.updateLockSettingLocationRestrictionsAsync(DEFAULT_LOCK_ID, null).await()
+        LockOperationsResourceImpl.updateLockSettingLocationRestrictionsAsync(DEFAULT_LOCK_ID, null).await()
     }
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
-        lockOperations.getUserPublicKey(DEFAULT_USER_EMAIL)
+        LockOperationsResourceImpl.getUserPublicKey(DEFAULT_USER_EMAIL)
     }
 
     @Test
     fun shouldGetUserPublicKeyAsync() = runTest {
-        lockOperations.getUserPublicKeyAsync(DEFAULT_USER_EMAIL).await()
+        LockOperationsResourceImpl.getUserPublicKeyAsync(DEFAULT_USER_EMAIL).await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
-        lockOperations.getUserPublicKeyByEmail("")
+        LockOperationsResourceImpl.getUserPublicKeyByEmail("")
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmailAsync() = runTest {
-        lockOperations.getUserPublicKeyByEmailAsync("").await()
+        LockOperationsResourceImpl.getUserPublicKeyByEmailAsync("").await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephone() = runTest {
-        lockOperations.getUserPublicKeyByTelephone("")
+        LockOperationsResourceImpl.getUserPublicKeyByTelephone("")
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephoneAsync() = runTest {
-        lockOperations.getUserPublicKeyByTelephoneAsync("").await()
+        LockOperationsResourceImpl.getUserPublicKeyByTelephoneAsync("").await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
-        lockOperations.getUserPublicKeyByLocalKey("")
+        LockOperationsResourceImpl.getUserPublicKeyByLocalKey("")
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeyAsync() = runTest {
-        lockOperations.getUserPublicKeyByLocalKeyAsync("").await()
+        LockOperationsResourceImpl.getUserPublicKeyByLocalKeyAsync("").await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKey() = runTest {
-        lockOperations.getUserPublicKeyByForeignKey("")
+        LockOperationsResourceImpl.getUserPublicKeyByForeignKey("")
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKeyAsync() = runTest {
-        lockOperations.getUserPublicKeyByForeignKeyAsync("").await()
+        LockOperationsResourceImpl.getUserPublicKeyByForeignKeyAsync("").await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByIdentity() = runTest {
-        lockOperations.getUserPublicKeyByIdentity("")
+        LockOperationsResourceImpl.getUserPublicKeyByIdentity("")
     }
 
     @Test
     fun shouldGetUserPublicKeyByIdentityAsync() = runTest {
-        lockOperations.getUserPublicKeyByIdentityAsync("").await()
+        LockOperationsResourceImpl.getUserPublicKeyByIdentityAsync("").await()
     }
     
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
-        lockOperations.getUserPublicKeyByEmails(listOf("", ""))
+        LockOperationsResourceImpl.getUserPublicKeyByEmails(listOf("", ""))
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmailsAsync() = runTest {
-        lockOperations.getUserPublicKeyByEmailsAsync(listOf("", "")).await()
+        LockOperationsResourceImpl.getUserPublicKeyByEmailsAsync(listOf("", "")).await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephones() = runTest {
-        lockOperations.getUserPublicKeyByTelephones(listOf("", ""))
+        LockOperationsResourceImpl.getUserPublicKeyByTelephones(listOf("", ""))
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephonesAsync() = runTest {
-        lockOperations.getUserPublicKeyByTelephonesAsync(listOf("", "")).await()
+        LockOperationsResourceImpl.getUserPublicKeyByTelephonesAsync(listOf("", "")).await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
-        lockOperations.getUserPublicKeyByLocalKeys(listOf("", ""))
+        LockOperationsResourceImpl.getUserPublicKeyByLocalKeys(listOf("", ""))
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeysAsync() = runTest {
-        lockOperations.getUserPublicKeyByLocalKeysAsync(listOf("", "")).await()
+        LockOperationsResourceImpl.getUserPublicKeyByLocalKeysAsync(listOf("", "")).await()
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKeys() = runTest {
-        lockOperations.getUserPublicKeyByForeignKeys(listOf("", ""))
+        LockOperationsResourceImpl.getUserPublicKeyByForeignKeys(listOf("", ""))
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKeysAsync() = runTest {
-        lockOperations.getUserPublicKeyByForeignKeysAsync(listOf("", "")).await()
+        LockOperationsResourceImpl.getUserPublicKeyByForeignKeysAsync(listOf("", "")).await()
     }
 
     @Test
     fun shouldUnlockUsingContext() = runTest {
-        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
+        LockOperationsResourceImpl.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
     }
 
     @Test
     fun shouldUnlockUsingContextAsync() = runTest {
-        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
+        LockOperationsResourceImpl.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
     }
 
     @Test
     fun shouldUnlock() = runTest {
-        lockOperations.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID)))
+        LockOperationsResourceImpl.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID)))
     }
 
     @Test
     fun shouldUnlockAsync() = runTest {
-        lockOperations.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
+        LockOperationsResourceImpl.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
     }
 
     @Test
     fun shouldShareLockUsingContext() = runTest {
-        lockOperations.shareLock(
+        LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
@@ -288,7 +288,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldShareLockUsingContextAsync() = runTest {
-        lockOperations.shareLockAsync(
+        LockOperationsResourceImpl.shareLockAsync(
             LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
@@ -297,7 +297,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldShareLock() = runTest {
-        lockOperations.shareLock(
+        LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
@@ -306,7 +306,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldShareLockAsync() = runTest {
-        lockOperations.shareLockAsync(
+        LockOperationsResourceImpl.shareLockAsync(
             LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
@@ -315,7 +315,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldRevokeAccessToLockUsingContext() = runTest {
-        lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsResourceImpl.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             users = emptyList()
         ))
@@ -323,7 +323,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldRevokeAccessToLockUsingContextAsync() = runTest {
-        lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsResourceImpl.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             users = emptyList()
         )).await()
@@ -331,7 +331,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldRevokeAccessToLock() = runTest {
-        lockOperations.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsResourceImpl.revokeAccessToLock(LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             users = emptyList()
         ))
@@ -339,7 +339,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldRevokeAccessToLockAsync() = runTest {
-        lockOperations.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsResourceImpl.revokeAccessToLockAsync(LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             users = emptyList()
         )).await()
@@ -347,7 +347,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
-        lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+        LockOperationsResourceImpl.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockDuration = 0
         ))
@@ -355,7 +355,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContextAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
+        LockOperationsResourceImpl.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
@@ -363,7 +363,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
-        lockOperations.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
+        LockOperationsResourceImpl.updateSecureSettingUnlockDuration(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         ))
@@ -371,7 +371,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
+        LockOperationsResourceImpl.updateSecureSettingUnlockDurationAsync(LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
@@ -379,7 +379,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
-        lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsResourceImpl.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockBetween = null
         ))
@@ -387,7 +387,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenUsingContextAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsResourceImpl.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
@@ -395,7 +395,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
-        lockOperations.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsResourceImpl.updateSecureSettingUnlockBetween(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         ))
@@ -403,7 +403,7 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenAsync() = runTest {
-        lockOperations.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsResourceImpl.updateSecureSettingUnlockBetweenAsync(LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
@@ -411,21 +411,21 @@ class LockOperationsResourceImplTest {
 
     @Test
     fun shouldGetPinnedLocks() = runTest {
-        lockOperations.getPinnedLocks()
+        LockOperationsResourceImpl.getPinnedLocks()
     }
 
     @Test
     fun shouldGetPinnedLocksAsync() = runTest {
-        lockOperations.getPinnedLocksAsync().await()
+        LockOperationsResourceImpl.getPinnedLocksAsync().await()
     }
 
     @Test
     fun shouldGetShareableLocks() = runTest {
-        lockOperations.getShareableLocks()
+        LockOperationsResourceImpl.getShareableLocks()
     }
 
     @Test
     fun shouldGetShareableLocksAsync() = runTest {
-        lockOperations.getShareableLocksAsync().await()
+        LockOperationsResourceImpl.getShareableLocksAsync().await()
     }
 }

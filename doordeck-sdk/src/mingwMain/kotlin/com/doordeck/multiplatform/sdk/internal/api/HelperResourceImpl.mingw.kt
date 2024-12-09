@@ -9,25 +9,23 @@ import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
 
-internal class HelperResourceImpl(
-    private val helperClient: HelperClient
-) : HelperResource {
+internal object HelperResourceImpl : HelperResource {
 
     override fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return runBlocking { helperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
+        return runBlocking { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
     }
 
     override fun uploadPlatformLogoJson(data: String) {
         val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
-        return runBlocking { helperClient.uploadPlatformLogoRequest(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray()) }
+        return runBlocking { HelperClient.uploadPlatformLogoRequest(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray()) }
     }
 
     override fun assistedLogin(email: String, password: String): AssistedLoginResponse {
-        return runBlocking { helperClient.assistedLoginRequest(email, password) }
+        return runBlocking { HelperClient.assistedLoginRequest(email, password) }
     }
 
     override fun assistedLoginJson(data: String): String {
         val assistedLoginData = data.fromJson<AssistedLoginData>()
-        return runBlocking { helperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password) }.toJson()
+        return runBlocking { HelperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password) }.toJson()
     }
 }
