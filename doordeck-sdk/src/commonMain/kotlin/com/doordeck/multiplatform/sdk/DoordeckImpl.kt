@@ -45,11 +45,11 @@ internal class DoordeckImpl(
                 single<FusionClient> { FusionClient(fusionHttpClient, mainContextManager) }
                 single<LocalUnlockClient> { LocalUnlockClient(httpClient) }
                 single<LockOperationsClient> {
-                    LockOperationsClient(httpClient, mainContextManager, get())
+                    LockOperationsClient(cloudHttpClient, mainContextManager, get())
                 }
-                single<PlatformClient> { PlatformClient(httpClient) }
-                single<SitesClient> { SitesClient(httpClient) }
-                single<TilesClient> { TilesClient(httpClient) }
+                single<PlatformClient> { PlatformClient(cloudHttpClient) }
+                single<SitesClient> { SitesClient(cloudHttpClient) }
+                single<TilesClient> { TilesClient(cloudHttpClient) }
                 single<HelperClient> { HelperClient(httpClient, get(), get(), get(), mainContextManager) }
                 single<ContextManagerImpl> { mainContextManager }
             }))
