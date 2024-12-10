@@ -60,9 +60,7 @@ export class LoginComponent  {
 
       try {
         // Attempt to log-in
-        const loginResponse = await accountlessResource.login(username, password);
-        // Add the auth token in the context manager
-        doordeckSDK.contextManager().setAuthToken(loginResponse.authToken);
+        await accountlessResource.login(username, password);
       } catch (error) {
         if (error instanceof UnauthorizedException) {
           this.openSnackBar("Failed to login", "")
@@ -84,7 +82,7 @@ export class LoginComponent  {
             // Attempt to verify the key pair
             await accountResource.verifyEphemeralKeyRegistration(result, this.keyPair!.private).then(async (response) => {
               // Set the operation context
-              doordeckSDK.contextManager().setOperationContext(response.userId, response.certificateChain, this.keyPair!.private);
+              doordeckSDK.contextManager().setOperationContext(response.userId, response.certificateChain, this.keyPair!.public, this.keyPair!.private);
               // Redirect to the dashboard
               await this.router.navigate(['dashboard']);
             });
