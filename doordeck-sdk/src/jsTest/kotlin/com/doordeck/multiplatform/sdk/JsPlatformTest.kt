@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import io.ktor.client.engine.js.JsClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -12,7 +13,7 @@ class JsPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // When
+        // Then
         assertTrue { client.engine.config is JsClientEngineConfig }
     }
 
@@ -21,7 +22,15 @@ class JsPlatformTest {
         // Given
         val platform = getPlatform()
 
-        // When
+        // Then
         assertEquals(platform, PlatformType.JS)
+    }
+
+    @Test
+    fun shouldInitialize() {
+        // Then
+        assertDoesNotThrow {
+            KDoordeckFactory.initialize(TEST_ENVIRONMENT)
+        }
     }
 }
