@@ -2,7 +2,9 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
@@ -13,15 +15,22 @@ import kotlin.test.Test
 class AccountResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(TEST_HTTP_CLIENT, contextManager)
+    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
+        contextManager.setRefreshToken("")
+        contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
     fun shouldRefreshToken() = runTest {
         account.refreshToken("").await()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContext() = runTest {
+        account.refreshToken().await()
     }
 
     @Test
@@ -35,13 +44,28 @@ class AccountResourceImplTest {
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
+        account.registerEphemeralKey().await()
+    }
+
+    @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf()).await()
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthentication().await()
+    }
+
+    @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
         account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
+    }
+
+    @Test
+    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
+        account.verifyEphemeralKeyRegistration("").await()
     }
 
     @Test

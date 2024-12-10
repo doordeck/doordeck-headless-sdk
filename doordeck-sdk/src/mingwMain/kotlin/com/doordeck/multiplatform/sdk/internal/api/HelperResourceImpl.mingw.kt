@@ -1,23 +1,33 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
+import com.doordeck.multiplatform.sdk.api.model.AssistedLoginData
 import com.doordeck.multiplatform.sdk.api.model.UploadPlatformLogoData
+import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import io.ktor.client.HttpClient
+import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
 
 internal class HelperResourceImpl(
-    httpClient: HttpClient,
-    cloudHttpClient: HttpClient
-) : HelperClient(httpClient, cloudHttpClient), HelperResource {
+    private val helperClient: HelperClient
+) : HelperResource {
 
     override fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return runBlocking { uploadPlatformLogoRequest(applicationId, contentType, image) }
+        return runBlocking { helperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
     }
 
     override fun uploadPlatformLogoJson(data: String) {
         val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
-        return runBlocking { uploadPlatformLogoRequest(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray()) }
+        return runBlocking { helperClient.uploadPlatformLogoRequest(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray()) }
+    }
+
+    override fun assistedLogin(email: String, password: String): AssistedLoginResponse {
+        return runBlocking { helperClient.assistedLoginRequest(email, password) }
+    }
+
+    override fun assistedLoginJson(data: String): String {
+        val assistedLoginData = data.fromJson<AssistedLoginData>()
+        return runBlocking { helperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password) }.toJson()
     }
 }

@@ -9,7 +9,7 @@ open class SdkException(override val message: String, exception: Throwable? = nu
  * SDK Exceptions
  */
 @JsExport
-class MissingOperationContextException(override val message: String): SdkException(message)
+class MissingContextFieldException(override val message: String): SdkException(message)
 @JsExport
 class MissingAndroidContextException(override val message: String): SdkException(message)
 

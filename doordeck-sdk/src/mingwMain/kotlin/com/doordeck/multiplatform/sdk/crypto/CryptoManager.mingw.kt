@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.SdkException
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
@@ -30,6 +31,10 @@ actual object CryptoManager {
             private = keyPair.private.encodeByteArrayToBase64(),
             public = keyPair.public.encodeByteArrayToBase64()
         ).toJson()
+    }
+
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+        return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {

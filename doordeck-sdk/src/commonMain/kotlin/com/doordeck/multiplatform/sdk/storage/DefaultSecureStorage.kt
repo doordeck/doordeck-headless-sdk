@@ -12,7 +12,9 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
      * Storage Keys
      */
     private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
+    private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
     private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
+    private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
     private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
     private val USER_ID_KEY = "USER_ID_KEY"
     private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
@@ -25,12 +27,28 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
         return settings.getStringOrNull(CLOUD_AUTH_TOKEN_KEY)
     }
 
+    override fun addCloudRefreshToken(token: String) {
+        return settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
+    }
+
+    override fun getCloudRefreshToken(): String? {
+        return settings.getStringOrNull(CLOUD_REFRESH_TOKEN_KEY)
+    }
+
     override fun addFusionAuthToken(token: String) {
         return settings.putString(FUSION_AUTH_TOKEN_KEY, token)
     }
 
     override fun getFusionAuthToken(): String? {
         return settings.getStringOrNull(FUSION_AUTH_TOKEN_KEY)
+    }
+
+    override fun addPublicKey(byteArray: ByteArray) {
+        return settings.putString(PUBLIC_KEY_KEY, byteArray.encodeByteArrayToBase64())
+    }
+
+    override fun getPublicKey(): ByteArray? {
+        return settings.getStringOrNull(PUBLIC_KEY_KEY)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {

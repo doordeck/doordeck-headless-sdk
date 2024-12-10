@@ -5,11 +5,9 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface AccountResource {
@@ -19,9 +17,9 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    fun refreshToken(refreshToken: String): TokenResponse
+    fun refreshToken(refreshToken: String? = null): TokenResponse
     @DoordeckOnly
-    fun refreshTokenJson(data: String): String
+    fun refreshTokenJson(data: String? = null): String
 
     /**
      * Logout
@@ -35,23 +33,23 @@ actual interface AccountResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse
-    fun registerEphemeralKeyJson(data: String): String
+    fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
+    fun registerEphemeralKeyJson(data: String? = null): String
 
     /**
      * Register ephemeral key with secondary authentication
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-    fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String): String
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+    fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String? = null): String
 
     /**
      * Verify ephemeral key registration
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse
+    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
     fun verifyEphemeralKeyRegistrationJson(data: String): String
 
     /**
@@ -96,7 +94,4 @@ actual interface AccountResource {
     fun deleteAccount()
 }
 
-actual fun account(): AccountResource = AccountResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>()
-)
+actual fun account(): AccountResource = AccountResourceImpl(getKoin().get<AccountClient>())

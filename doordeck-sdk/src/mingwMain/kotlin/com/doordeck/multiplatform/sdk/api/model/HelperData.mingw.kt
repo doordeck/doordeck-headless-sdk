@@ -8,3 +8,9 @@ class UploadPlatformLogoData(
     val contentType: String,
     val image: String
 )
+
+@Serializable
+class AssistedLoginData(
+    val email: String,
+    val password: String
+)

@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
 import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
@@ -9,6 +10,7 @@ import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondar
 import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -20,10 +22,12 @@ import kotlin.test.Test
 class AccountResourceImplTest {
 
     private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(TEST_HTTP_CLIENT, contextManager)
+    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
 
     init {
         LibsodiumInitializer.initializeWithCallback {  }
+        contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        contextManager.setRefreshToken("")
     }
 
     @Test
@@ -34,6 +38,16 @@ class AccountResourceImplTest {
     @Test
     fun shouldRefreshTokenJson() = runTest {
         account.refreshTokenJson(RefreshTokenData("").toJson())
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContext() = runTest {
+        account.refreshToken()
+    }
+
+    @Test
+    fun shouldRefreshTokenUsingContextJson() = runTest {
+        account.refreshTokenJson()
     }
 
     @Test
@@ -52,6 +66,16 @@ class AccountResourceImplTest {
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
+        account.registerEphemeralKey()
+    }
+
+    @Test
+    fun shouldRegisterEphemeralKeyUsingContextJson() = runTest {
+        account.registerEphemeralKeyJson()
+    }
+
+    @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
     }
@@ -62,6 +86,16 @@ class AccountResourceImplTest {
     }
 
     @Test
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthentication()
+    }
+
+    @Test
+    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContextJson() = runTest {
+        account.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData().toJson())
+    }
+
+    @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
         account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
@@ -69,6 +103,16 @@ class AccountResourceImplTest {
     @Test
     fun shouldVerifyEphemeralKeyRegistrationJson() = runTest {
         account.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PRIVATE_KEY).toJson())
+    }
+
+    @Test
+    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
+        account.verifyEphemeralKeyRegistration("")
+    }
+
+    @Test
+    fun shouldVerifyEphemeralKeyRegistrationUsingContextJson() = runTest {
+        account.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("").toJson())
     }
 
     @Test

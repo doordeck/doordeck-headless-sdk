@@ -2,17 +2,16 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import io.ktor.client.*
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
@@ -120,45 +119,65 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByEmail(email: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by telephone
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByTelephone(telephone: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by local key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByLocalKey(localKey: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key by foreign key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByForeignKey(foreignKey: String): Promise<UserPublicKeyResponse>
 
     /**
      * Get a user’s public key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKeyResponse>
 
     /**
-     * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
+     * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null): Promise<dynamic>
+    fun getUserPublicKeyByEmails(emails: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by telephone
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByTelephones(telephones: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by local key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByLocalKeys(localKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>>
+
+    /**
+     * Get a user’s public key by foreign key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>>
 
     /**
      * Unlock
@@ -169,26 +188,10 @@ actual interface LockOperationsResource {
 
     /**
      * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock): Promise<dynamic>
-
-    /**
-     * Share a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): Promise<dynamic>
-
-    /**
-     * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    fun revokeAccessToLockWithContext(lockId: String, users: List<String>): Promise<dynamic>
 
     /**
      * Revoke access to a lock
@@ -199,26 +202,10 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int): Promise<dynamic>
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): Promise<dynamic>
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?): Promise<dynamic>
 
     /**
      * Update secure settings - Unlock between
@@ -242,11 +229,7 @@ actual interface LockOperationsResource {
     fun getShareableLocks(): Promise<List<ShareableLockResponse>>
 }
 
-private val lockOperations = LockOperationsResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>(),
-    localUnlock = getKoin().get<LocalUnlockClient>()
-)
+private val lockOperations = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())
 
 @JsExport
 actual fun lockOperations(): LockOperationsResource = lockOperations

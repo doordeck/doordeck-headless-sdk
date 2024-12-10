@@ -88,6 +88,16 @@ class UserPublicKeyResponse(
 
 @JsExport
 @Serializable
+class BatchUserPublicKeyResponse(
+    val id: String,
+    val email: String? = null,
+    val foreignKey: String? = null,
+    val phone: String? = null,
+    val publicKey: String
+)
+
+@JsExport
+@Serializable
 class ShareableLockResponse(
     val id: String,
     val name: String

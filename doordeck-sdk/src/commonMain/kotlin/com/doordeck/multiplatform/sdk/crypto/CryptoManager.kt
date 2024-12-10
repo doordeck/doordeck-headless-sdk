@@ -29,6 +29,7 @@ internal val PUBLIC_KEY_ASN1_HEADER = byteArrayOf(
 expect object CryptoManager {
     fun generateKeyPair(): Crypto.KeyPair
     fun generateEncodedKeyPair(): String
+    fun isCertificateAboutToExpire(base64Certificate: String): Boolean
     internal fun ByteArray.toPlatformPublicKey(): ByteArray
     internal fun ByteArray.toPlatformPrivateKey(): ByteArray
     internal fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray

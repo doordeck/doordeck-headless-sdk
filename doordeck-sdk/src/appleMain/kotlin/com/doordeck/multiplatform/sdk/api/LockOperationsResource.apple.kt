@@ -1,19 +1,16 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockResponse
 import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
+import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import io.ktor.client.HttpClient
-import org.koin.core.qualifier.named
 import org.koin.mp.KoinPlatform.getKoin
 
 actual interface LockOperationsResource {
@@ -133,7 +130,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse
@@ -141,7 +138,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by telephone
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse
@@ -149,7 +146,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by local key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse
@@ -157,7 +154,7 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key by foreign key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse
@@ -165,19 +162,42 @@ actual interface LockOperationsResource {
     /**
      * Get a user’s public key
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-user-s-public-key">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse
 
     /**
-     * Unlock
-     * @throws MissingOperationContextException if the operation context has not been set
+     * Get a user’s public key by email
      *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun unlockWithContext(lockId: String, directAccessEndpoints: List<String>? = null)
+    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse>
+
+    /**
+     * Get a user’s public key by telephone
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    @Throws(Exception::class)
+    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse>
+
+    /**
+     * Get a user’s public key by local key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    @Throws(Exception::class)
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse>
+
+    /**
+     * Get a user’s public key by foreign key
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     */
+    @Throws(Exception::class)
+    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse>
 
     /**
      * Unlock
@@ -189,29 +209,11 @@ actual interface LockOperationsResource {
 
     /**
      * Share a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun shareLockWithContext(lockId: String, shareLock: LockOperations.ShareLock)
-
-    /**
-     * Share a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
-
-    /**
-     * Revoke access to a lock
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun revokeAccessToLockWithContext(lockId: String, users: List<String>)
 
     /**
      * Revoke access to a lock
@@ -223,29 +225,11 @@ actual interface LockOperationsResource {
 
     /**
      * Update secure settings - Unlock duration
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockDurationWithContext(lockId: String, unlockDuration: Int)
-
-    /**
-     * Update secure settings - Unlock duration
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
-
-    /**
-     * Update secure settings - Unlock between
-     * @throws MissingOperationContextException if the operation context has not been set
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
-     */
-    @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockBetweenWithContext(lockId: String, unlockBetween: LockOperations.UnlockBetween?)
 
     /**
      * Update secure settings - Unlock between
@@ -272,8 +256,4 @@ actual interface LockOperationsResource {
     suspend fun getShareableLocks(): List<ShareableLockResponse>
 }
 
-actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(
-    httpClient = getKoin().get<HttpClient>(named("cloudHttpClient")),
-    contextManager = getKoin().get<ContextManagerImpl>(),
-    localUnlock = getKoin().get<LocalUnlockClient>()
-)
+actual fun lockOperations(): LockOperationsResource = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())

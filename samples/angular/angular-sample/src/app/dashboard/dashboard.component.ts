@@ -54,6 +54,10 @@ import ShareLock = com.doordeck.multiplatform.sdk.api.model.LockOperations.Share
 import {ChangeDisplayNameComponent} from '../change-display-name/change-display-name.component';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import UnlockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.UnlockOperation;
+import BaseOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.BaseOperation;
+import RevokeAccessToLockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.RevokeAccessToLockOperation;
+import ShareLockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.ShareLockOperation;
 
 @Component({
   selector: 'app-dashboard',
@@ -198,8 +202,9 @@ export class DashboardComponent implements OnInit  {
   }
 
   async unlock(lockId: string) {
-    // Unlock with context
-    await lockOperationResource.unlockWithContext(lockId, null).then(() => {
+    // Unlock
+    const operation = new UnlockOperation(new BaseOperation(null, null, null, lockId), null);
+    await lockOperationResource.unlock(operation).then(() => {
       this.openSnackBar("Successfully unlocked", "");
     });
 
@@ -234,7 +239,11 @@ export class DashboardComponent implements OnInit  {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         // Remove this user from the lock
-        await lockOperationResource.revokeAccessToLockWithContext(lockId, KtList.fromJsArray([userId])).then(() => {
+        const operation = new RevokeAccessToLockOperation(
+          new BaseOperation(null, null, null, lockId),
+          KtList.fromJsArray([userId])
+        );
+        await lockOperationResource.revokeAccessToLock(operation).then(() => {
           this.usersForSelectedLock.data = this.usersForSelectedLock.data.filter((u) => u.userId !== userId)
           this.adminsForSelectedLock.data = this.adminsForSelectedLock.data.filter((u) => u.userId !== userId)
         })
@@ -260,7 +269,11 @@ export class DashboardComponent implements OnInit  {
             doordeckUtil.decodeBase64ToByteArray(result.publicKey),
             null, null
           );
-          await lockOperationResource.shareLockWithContext(lockId, shareLock);
+          const operation = new ShareLockOperation(
+            new BaseOperation(null, null, null, lockId),
+            shareLock
+          );
+          await lockOperationResource.shareLock(operation);
         });
       }
     })

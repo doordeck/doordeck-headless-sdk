@@ -1,13 +1,14 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.MissingOperationContextException
+import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -249,6 +250,45 @@ internal class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldGetUserPublicKeyByLocalKey() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByLocalKeyRequest(TEST_MAIN_USER_ID)
+
+        // Then
+        assertTrue { result.publicKey.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByEmails() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByEmailsRequest(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL))
+
+        // Then
+        assertTrue { result.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetUserPublicKeyByLocalKeys() = runTest {
+        // Given
+        val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        CONTEXT_MANAGER.setAuthToken(login.authToken)
+
+        // When
+        val result = LOCK_OPERATIONS_CLIENT.getUserPublicKeyByLocalKeysRequest(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID))
+
+        // Then
+        assertTrue { result.isNotEmpty() }
+    }
+
+    @Test
     fun shouldGetUsersForLock() = runTest {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -320,7 +360,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldUnlockWithContext() = runTest {
+    fun shouldUnlockUsingContext() = runTest {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -330,11 +370,12 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
         // When
-        LOCK_OPERATIONS_CLIENT.unlockWithContextRequest(TEST_MAIN_LOCK_ID, emptyList())
+        LOCK_OPERATIONS_CLIENT.unlockRequest(LockOperations.UnlockOperation(baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID)))
     }
 
     @Test
@@ -386,8 +427,8 @@ internal class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldShareAndRevokeLockWithContext() = runTest {
-        // Given - shouldShareLockWithContext
+    fun shouldShareAndRevokeLockUsingContext() = runTest {
+        // Given - shouldShareLockUsingContext
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = ACCOUNT_CLIENT.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
@@ -396,6 +437,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
         val shareLock = LockOperations.ShareLock(
@@ -405,21 +447,21 @@ internal class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LOCK_OPERATIONS_CLIENT.shareLockWithContextRequest(
-            lockId = TEST_MAIN_LOCK_ID,
+        LOCK_OPERATIONS_CLIENT.shareLockRequest(LockOperations.ShareLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             shareLock = shareLock
-        )
+        ))
 
         // Then
         var locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
-        // Given - shouldRevokeAccessToLockWithContext
+        // Given - shouldRevokeAccessToLockUsingContext
         // When
-        LOCK_OPERATIONS_CLIENT.revokeAccessToLockWithContextRequest(
-            lockId = TEST_MAIN_LOCK_ID,
+        LOCK_OPERATIONS_CLIENT.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = listOf(TEST_SUPPLEMENTARY_USER_ID)
-        )
+        ))
 
         // Then
         locks = LOCK_OPERATIONS_CLIENT.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
@@ -454,7 +496,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldUpdateSecureSettingUnlockDurationWithContext() = runTest {
+    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -465,13 +507,16 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
         // When
-        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationWithContextRequest(
-            lockId = TEST_MAIN_LOCK_ID,
-            unlockDuration = updatedUnlockDuration
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationRequest(
+            LockOperations.UpdateSecureSettingUnlockDuration(
+                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                unlockDuration = updatedUnlockDuration
+            )
         )
 
         // Then
@@ -538,7 +583,7 @@ internal class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldUpdateAndRemoveSecureSettingUnlockBetweenWithContext() = runTest {
+    fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContext() = runTest {
         // Given
         val login = ACCOUNTLESS_CLIENT.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         CONTEXT_MANAGER.setAuthToken(login.authToken)
@@ -558,14 +603,15 @@ internal class LockOperationsClientTest : IntegrationTest() {
         CONTEXT_MANAGER.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
         )
 
         // When
-        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
-            lockId = TEST_MAIN_LOCK_ID,
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = updatedUnlockBetween
-        )
+        ))
 
         // Then
         var lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
@@ -576,10 +622,10 @@ internal class LockOperationsClientTest : IntegrationTest() {
         assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
 
         // Given
-        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
-            lockId = TEST_MAIN_LOCK_ID,
+        LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = null
-        )
+        ))
 
         // Then
         lock = LOCK_OPERATIONS_CLIENT.getSingleLockRequest(TEST_MAIN_LOCK_ID)
@@ -622,48 +668,55 @@ internal class LockOperationsClientTest : IntegrationTest() {
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
         // Given
         CONTEXT_MANAGER.resetOperationContext()
-        val exceptionMessage = "Operation context is missing"
 
         // When
-        val revokeAccessToLockWithContextException = assertFails {
-            LOCK_OPERATIONS_CLIENT.revokeAccessToLockWithContextRequest("", listOf())
+        val revokeAccessToLockUsingContextException = assertFails {
+            LOCK_OPERATIONS_CLIENT.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
         }
-        val shareLockWithContextException = assertFails {
-            LOCK_OPERATIONS_CLIENT.shareLockWithContextRequest("", LockOperations.ShareLock(
-                targetUserId = "",
-                targetUserRole = UserRole.USER,
-                targetUserPublicKey = byteArrayOf()
+        val shareLockUsingContextException = assertFails {
+            LOCK_OPERATIONS_CLIENT.shareLockRequest(LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                shareLock = LockOperations.ShareLock(
+                    targetUserId = "",
+                    targetUserRole = UserRole.USER,
+                    targetUserPublicKey = byteArrayOf()
+                )
             ))
         }
-        val unlockWithContextException = assertFails {
-            LOCK_OPERATIONS_CLIENT.unlockWithContextRequest("", emptyList())
+        val unlockUsingContextException = assertFails {
+            LOCK_OPERATIONS_CLIENT.unlockRequest(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
         }
-        val updateSecureSettingUnlockDurationWithContextException = assertFails {
-            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationWithContextRequest("", 0)
+        val updateSecureSettingUnlockDurationUsingContextException = assertFails {
+            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockDurationRequest(LockOperations.UpdateSecureSettingUnlockDuration(
+                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                unlockDuration = 0
+            ))
         }
-        val updateSecureSettingUnlockBetweenWithContextException = assertFails {
-            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenWithContextRequest(
-                lockId = TEST_MAIN_LOCK_ID,
-                unlockBetween = LockOperations.UnlockBetween(
-                    start = "",
-                    end = "",
-                    timezone = "",
-                    days = emptyList(),
-                    exceptions = emptyList()
+        val updateSecureSettingUnlockBetweenUsingContextException = assertFails {
+            LOCK_OPERATIONS_CLIENT.updateSecureSettingUnlockBetweenRequest(
+                updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                    baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                    unlockBetween = LockOperations.UnlockBetween(
+                        start = "",
+                        end = "",
+                        timezone = "",
+                        days = emptyList(),
+                        exceptions = emptyList()
+                    )
                 )
             )
         }
 
         // Then
-        assertTrue { revokeAccessToLockWithContextException is MissingOperationContextException }
-        assertEquals(exceptionMessage, revokeAccessToLockWithContextException.message)
-        assertTrue { shareLockWithContextException is MissingOperationContextException }
-        assertEquals(exceptionMessage, shareLockWithContextException.message)
-        assertTrue { unlockWithContextException is MissingOperationContextException }
-        assertEquals(exceptionMessage, unlockWithContextException.message)
-        assertTrue { updateSecureSettingUnlockDurationWithContextException is MissingOperationContextException }
-        assertEquals(exceptionMessage, updateSecureSettingUnlockDurationWithContextException.message)
-        assertTrue { updateSecureSettingUnlockBetweenWithContextException is MissingOperationContextException }
-        assertEquals(exceptionMessage, updateSecureSettingUnlockBetweenWithContextException.message)
+        assertTrue { revokeAccessToLockUsingContextException is MissingContextFieldException }
+        assertEquals("User id is missing", revokeAccessToLockUsingContextException.message)
+        assertTrue { shareLockUsingContextException is MissingContextFieldException }
+        assertEquals("User id is missing", shareLockUsingContextException.message)
+        assertTrue { unlockUsingContextException is MissingContextFieldException }
+        assertEquals("User id is missing", unlockUsingContextException.message)
+        assertTrue { updateSecureSettingUnlockDurationUsingContextException is MissingContextFieldException }
+        assertEquals("User id is missing", updateSecureSettingUnlockDurationUsingContextException.message)
+        assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
+        assertEquals("User id is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }

@@ -6,51 +6,48 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import io.ktor.client.HttpClient
 
 internal class AccountResourceImpl(
-    httpClient: HttpClient,
-    contextManager: ContextManagerImpl
-) : AccountClient(httpClient, contextManager), AccountResource {
+    private val accountClient: AccountClient
+) : AccountResource {
 
-    override suspend fun refreshToken(refreshToken: String): TokenResponse {
-        return refreshTokenRequest(refreshToken)
+    override suspend fun refreshToken(refreshToken: String?): TokenResponse {
+        return accountClient.refreshTokenRequest(refreshToken)
     }
 
     override suspend fun logout() {
-        return logoutRequest()
+        return accountClient.logoutRequest()
     }
 
-    override suspend fun registerEphemeralKey(publicKey: ByteArray): RegisterEphemeralKeyResponse {
-        return registerEphemeralKeyRequest(publicKey)
+    override suspend fun registerEphemeralKey(publicKey: ByteArray?): RegisterEphemeralKeyResponse {
+        return accountClient.registerEphemeralKeyRequest(publicKey)
     }
 
-    override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+    override suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        return accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
     }
 
-    override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray): RegisterEphemeralKeyResponse {
-        return verifyEphemeralKeyRegistrationRequest(code, privateKey)
+    override suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): RegisterEphemeralKeyResponse {
+        return accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
     }
 
     override suspend fun reverifyEmail() {
-        return reverifyEmailRequest()
+        return accountClient.reverifyEmailRequest()
     }
 
     override suspend fun changePassword(oldPassword: String, newPassword: String) {
-        return changePasswordRequest(oldPassword, newPassword)
+        return accountClient.changePasswordRequest(oldPassword, newPassword)
     }
 
     override suspend fun getUserDetails(): UserDetailsResponse {
-        return getUserDetailsRequest()
+        return accountClient.getUserDetailsRequest()
     }
 
     override suspend fun updateUserDetails(displayName: String) {
-        return updateUserDetailsRequest(displayName)
+        return accountClient.updateUserDetailsRequest(displayName)
     }
 
     override suspend fun deleteAccount() {
-        return deleteAccountRequest()
+        return accountClient.deleteAccountRequest()
     }
 }
