@@ -42,7 +42,7 @@ private data class MavenPublishData(
 ) : PublishData()
 
 private data class NugetPublishData(
-    val packageName: String = "doordeck-headless-sdk",
+    val packageName: String = "doordeck_headless_sdk",
     val tags: List<String> = listOf("doordeck", "access control")
 ) : PublishData()
 
@@ -328,6 +328,13 @@ tasks.named("assemble${cocoapodsPublish.packageName}ReleaseXCFramework").configu
     finalizedBy("zipXCFramework")
 }
 
+// Disable source map generation
+tasks.withType<KotlinJsCompile>().configureEach {
+    compilerOptions {
+        sourceMap = false
+    }
+}
+
 val nuspecTemplate = """
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
@@ -344,25 +351,18 @@ val nuspecTemplate = """
     <dependencies>
       <!-- Add dependencies if any -->
     </dependencies>
-    <files>
-      <!-- Repeat for other platform-specific files if applicable -->
-      <file src="runtimes\win-x64\native\doordeck_sdk.dll" target="runtimes\win-x64\native\doordeck_sdk.dll" />
-    </files>
   </metadata>
+  <files>
+    <!-- Repeat for other platform-specific files if applicable -->
+    <file src="${nugetPublish.packageName}.dll" target="lib\netstandard2.0\" />
+  </files>
 </package>
 """
 
-tasks.named("mingwX64Binaries").configure {
+tasks.register("mingwX64Pack").configure {
     doLast {
         val outputDir = file("$projectDir/build/bin/mingwX64/releaseShared")
         val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
         nuspecFile.writeText(nuspecTemplate.trim())
-    }
-}
-
-// Disable source map generation
-tasks.withType<KotlinJsCompile>().configureEach {
-    compilerOptions {
-        sourceMap = false
     }
 }
