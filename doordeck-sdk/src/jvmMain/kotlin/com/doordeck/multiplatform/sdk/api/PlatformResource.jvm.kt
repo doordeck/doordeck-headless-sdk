@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface PlatformResource {
@@ -243,4 +242,4 @@ actual interface PlatformResource {
     fun getApplicationOwnersDetailsAsync(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>>
 }
 
-actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<PlatformClient>())
+actual fun platform(): PlatformResource = PlatformResourceImpl

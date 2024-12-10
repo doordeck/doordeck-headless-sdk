@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.api.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.api.requests.AddAuthIssuerRequest
@@ -25,12 +26,9 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsRespo
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-internal open class PlatformClient(
-    private val httpClient: HttpClient
-) : AbstractResourceImpl() {
+internal object PlatformClient : AbstractResourceImpl() {
 
     /**
      * Create application
@@ -39,7 +37,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun createApplicationRequest(application: Platform.CreateApplication) {
-        httpClient.post<Unit>(Paths.getCreateApplicationPath()) {
+        CloudHttpClient.client.post<Unit>(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
@@ -52,7 +50,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun listApplicationsRequest(): List<ApplicationResponse> {
-        return httpClient.get(Paths.getListApplicationsPath())
+        return CloudHttpClient.client.get(Paths.getListApplicationsPath())
     }
 
     /**
@@ -62,7 +60,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun getApplicationRequest(applicationId: String): ApplicationResponse {
-        return httpClient.get(Paths.getApplicationPath(applicationId))
+        return CloudHttpClient.client.get(Paths.getApplicationPath(applicationId))
     }
 
     /**
@@ -159,7 +157,7 @@ internal open class PlatformClient(
     }
 
     private suspend fun updateApplication(applicationId: String, request: UpdateApplicationRequest) {
-        httpClient.post<Unit>(Paths.getUpdateApplicationPath(applicationId)) {
+        CloudHttpClient.client.post<Unit>(Paths.getUpdateApplicationPath(applicationId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -172,7 +170,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun deleteApplicationRequest(applicationId: String) {
-        httpClient.delete<Unit>(Paths.getDeleteApplicationPath(applicationId))
+        CloudHttpClient.client.delete<Unit>(Paths.getDeleteApplicationPath(applicationId))
     }
 
     /**
@@ -182,7 +180,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return httpClient.post(Paths.getLogoUploadUrlPath(applicationId)) {
+        return CloudHttpClient.client.post(Paths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
             setBody(GetLogoUploadUrlRequest(contentType))
         }
@@ -195,7 +193,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun addAuthKeyRequest(applicationId: String, key: Platform.AuthKey) {
-        httpClient.post<Unit>(Paths.getAddAuthKeyPath(applicationId)) {
+        CloudHttpClient.client.post<Unit>(Paths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())
         }
@@ -208,7 +206,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun addAuthIssuerRequest(applicationId: String, url: String) {
-        httpClient.post<Unit>(Paths.getAddAuthIssuerPath(applicationId)) {
+        CloudHttpClient.client.post<Unit>(Paths.getAddAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddAuthIssuerRequest(url))
         }
@@ -221,7 +219,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun deleteAuthIssuerRequest(applicationId: String, url: String) {
-        httpClient.delete<Unit>(Paths.getDeleteAuthIssuerPath(applicationId)) {
+        CloudHttpClient.client.delete<Unit>(Paths.getDeleteAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(DeleteAuthIssuerRequest(url))
         }
@@ -234,7 +232,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun addCorsDomainRequest(applicationId: String, url: String) {
-        httpClient.post<Unit>(Paths.getAddCorsDomainPath(applicationId)) {
+        CloudHttpClient.client.post<Unit>(Paths.getAddCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(AddCorsDomainRequest(url))
         }
@@ -247,7 +245,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun removeCorsDomainRequest(applicationId: String, url: String) {
-        httpClient.delete<Unit>(Paths.getRemoveCorsDomainPath(applicationId)) {
+        CloudHttpClient.client.delete<Unit>(Paths.getRemoveCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveCorsDomainRequest(url))
         }
@@ -260,7 +258,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun addApplicationOwnerRequest(applicationId: String, userId: String) {
-        httpClient.post<Unit>(Paths.getAddApplicationOwnerPath(applicationId)) {
+        CloudHttpClient.client.post<Unit>(Paths.getAddApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddApplicationOwnerRequest(userId))
         }
@@ -273,7 +271,7 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun removeApplicationOwnerRequest(applicationId: String, userId: String) {
-        httpClient.delete<Unit>(Paths.getRemoveApplicationOwnerPath(applicationId)) {
+        CloudHttpClient.client.delete<Unit>(Paths.getRemoveApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveApplicationOwnerRequest(userId))
         }
@@ -286,6 +284,6 @@ internal open class PlatformClient(
      */
     @DoordeckOnly
     suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return httpClient.get(Paths.getApplicationOwnersDetailsPath(applicationId))
+        return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId))
     }
 }

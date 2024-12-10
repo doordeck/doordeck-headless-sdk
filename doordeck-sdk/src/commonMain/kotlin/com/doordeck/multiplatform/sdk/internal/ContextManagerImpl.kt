@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.api.ContextManager
+import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -11,20 +12,26 @@ import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 
-internal class ContextManagerImpl(
-    private val applicationContext: ApplicationContext? = null,
-    token: String? = null,
-    refreshToken: String? = null
-): ContextManager {
+internal object ContextManagerImpl : ContextManager {
 
-    private var currentToken: String? = token
-    private var currentRefreshToken: String? = refreshToken
+    private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
+    private var applicationContext: ApplicationContext? = null
+    private var currentToken: String? = null
+    private var currentRefreshToken: String? = null
     private var currentFusionToken: String? = null
     private var currentUserId: String? = null
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
     private var secureStorage: SecureStorage? = null
+
+    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+        this.apiEnvironment = apiEnvironment
+    }
+
+    override fun setApplicationContext(applicationContext: ApplicationContext) {
+        this.applicationContext = applicationContext
+    }
 
     override fun setAuthToken(token: String) {
         currentToken = token
@@ -131,6 +138,10 @@ internal class ContextManagerImpl(
         initializeSecureStorage()
 
         secureStorage?.clear()
+    }
+
+    internal fun getApiEnvironment(): ApiEnvironment {
+        return apiEnvironment
     }
 
     internal fun getCertificateChain(): List<String>? {

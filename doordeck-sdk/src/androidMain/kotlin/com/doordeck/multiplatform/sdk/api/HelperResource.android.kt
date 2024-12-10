@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.internal.api.HelperClient
 import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface HelperResource {
@@ -14,4 +12,4 @@ actual interface HelperResource {
     fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse>
 }
 
-actual fun helper(): HelperResource = HelperResourceImpl(getKoin().get<HelperClient>())
+actual fun helper(): HelperResource = HelperResourceImpl

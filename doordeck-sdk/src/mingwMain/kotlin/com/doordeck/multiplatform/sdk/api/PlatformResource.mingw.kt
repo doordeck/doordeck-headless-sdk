@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
 import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface PlatformResource {
     /**
@@ -221,4 +220,4 @@ actual interface PlatformResource {
     fun getApplicationOwnersDetailsJson(data: String): String
 }
 
-actual fun platform(): PlatformResource = PlatformResourceImpl(getKoin().get<PlatformClient>())
+actual fun platform(): PlatformResource = PlatformResourceImpl

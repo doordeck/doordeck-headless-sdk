@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -9,9 +9,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 
-internal open class LocalUnlockClient(
-    private val httpClient: HttpClient
-) : AbstractResourceImpl() {
+internal object LocalUnlockClient : AbstractResourceImpl() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
@@ -20,7 +18,7 @@ internal open class LocalUnlockClient(
         val requests = directAccessEndpoints.map {
             coroutineScope.async {
                 try {
-                    httpClient.post<Unit>(it) {
+                    HttpClient.client.post<Unit>(it) {
                         addRequestHeaders(true)
                         setBody(request)
                     }

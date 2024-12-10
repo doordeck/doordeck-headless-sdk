@@ -6,15 +6,13 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-internal class TilesResourceImpl(
-    private val tilesClient: TilesClient
-) : TilesResource {
+internal object TilesResourceImpl : TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): Promise<TileLocksResponse> {
-        return GlobalScope.promise { tilesClient.getLocksBelongingToTileRequest(tileId) }
+        return GlobalScope.promise { TilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<Unit> {
-        return GlobalScope.promise { tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return GlobalScope.promise { TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 }

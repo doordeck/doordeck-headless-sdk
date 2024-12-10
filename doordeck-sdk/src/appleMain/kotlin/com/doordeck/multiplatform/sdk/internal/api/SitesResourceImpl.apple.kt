@@ -5,19 +5,17 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 
-internal class SitesResourceImpl(
-    private val sitesClient: SitesClient
-) : SitesResource {
+internal object SitesResourceImpl : SitesResource {
 
     override suspend fun listSites(): List<SiteResponse> {
-        return sitesClient.listSitesRequest()
+        return SitesClient.listSitesRequest()
     }
 
     override suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
-        return sitesClient.getLocksForSiteRequest(siteId)
+        return SitesClient.getLocksForSiteRequest(siteId)
     }
 
     override suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
-        return sitesClient.getUsersForSiteRequest(siteId)
+        return SitesClient.getUsersForSiteRequest(siteId)
     }
 }
