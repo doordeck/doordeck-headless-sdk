@@ -37,8 +37,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new LoginData("EMAIL", "PASSWORD").toData();
-var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
+var data = new LoginData("EMAIL", "PASSWORD").ToData();
+var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
 ```
 </details>
 
@@ -81,8 +81,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).toData();
-var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
+var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).ToData();
+var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
 ```
 </details>
 
@@ -123,7 +123,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("COD
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new VerifyEmailData("CODE").toData();
+var data = new VerifyEmailData("CODE").ToData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(resource, data);
 ```
 </details>

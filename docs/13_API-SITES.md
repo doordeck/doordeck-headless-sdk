@@ -37,7 +37,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().listS
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var response = Utils.fromData<List<SiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(resource));
+var response = Utils.FromData<List<SiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(resource));
 ```
 </details>
 
@@ -78,8 +78,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getLo
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var data = new GetLocksForSiteData("SITE_ID").toData();
-var response = Utils.fromData<List<SiteLocksResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(resource, data));
+var data = new GetLocksForSiteData("SITE_ID").ToData();
+var response = Utils.FromData<List<SiteLocksResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(resource, data));
 ```
 </details>
 
@@ -120,8 +120,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUs
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var data = new GetUsersForSiteData("SITE_ID").toData();
-var response = Utils.fromData<List<UserForSiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(resource, data));
+var data = new GetUsersForSiteData("SITE_ID").ToData();
+var response = Utils.FromData<List<UserForSiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(resource, data));
 ```
 </details>
 

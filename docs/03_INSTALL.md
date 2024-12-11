@@ -96,6 +96,7 @@ npm install @doordeck/doordeck-headless-sdk --save
 ```csharp
 // TODO
 ```
+💡 **Requirement:** In Visual Studio, it's necessary to enable the unsafe block with ```<AllowUnsafeBlocks>true</AllowUnsafeBlocks>```
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)

@@ -37,8 +37,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().logi
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new FusionLoginData("EMAIL", "PASSWORD").toData();
-var response = Utils.fromData<FusionLoginResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.loginJson(resource, data));
+var data = new FusionLoginData("EMAIL", "PASSWORD").ToData();
+var response = Utils.FromData<FusionLoginResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.loginJson(resource, data));
 ```
 </details>
 
@@ -79,7 +79,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var response = Utils.fromData<IntegrationTypeResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationTypeJson(resource));
+var response = Utils.FromData<IntegrationTypeResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationTypeJson(resource));
 ```
 </details>
 
@@ -121,7 +121,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
 var data = new GetIntegrationConfigurationData("TYPE");
-var response = Utils.fromData<List<IntegrationConfigurationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationConfigurationJson(resource, data));
+var response = Utils.FromData<List<IntegrationConfigurationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationConfigurationJson(resource, data));
 ```
 </details>
 
@@ -167,7 +167,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "S
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
 var controllerData = new DemoControllerData(8080);
-var data = new EnableDoorData("NAME", "SITE_ID", controllerData).toData();
+var data = new EnableDoorData("NAME", "SITE_ID", controllerData).ToData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.enableDoor(resource, data);
 ```
 </details>
@@ -252,7 +252,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getD
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
 var data = new GetDoorStatusData("DEVICE_ID");
-var response = Utils.fromData<DoorStateResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getDoorStatusJson(resource, data));
+var response = Utils.FromData<DoorStateResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getDoorStatusJson(resource, data));
 ```
 </details>
 

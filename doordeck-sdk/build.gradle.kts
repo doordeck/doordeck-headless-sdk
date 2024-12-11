@@ -348,13 +348,15 @@ val nuspecTemplate = """
     <repository type="git" url="${nugetPublish.gitRepository}" />
     <tags>${nugetPublish.tags.joinToString(" ")}</tags>
     <license type="expression">${nugetPublish.licenseType}</license>
+    <readme>README.md</readme>
     <dependencies>
-      <!-- Add dependencies if any -->
+      <group targetFramework=".NETStandard2.0" />
     </dependencies>
   </metadata>
   <files>
-    <!-- Repeat for other platform-specific files if applicable -->
+    <file src="README.md" target="\" />
     <file src="${nugetPublish.packageName}.dll" target="lib\netstandard2.0\" />
+    <file src="${nugetPublish.packageName}\**\*" target="contentFiles\cs\any\${nugetPublish.packageName}\" />
   </files>
 </package>
 """
@@ -364,5 +366,15 @@ tasks.register("mingwX64Pack").configure {
         val outputDir = file("$projectDir/build/bin/mingwX64/releaseShared")
         val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
         nuspecFile.writeText(nuspecTemplate.trim())
+        // Copy the readme file
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(outputDir)
+        }
+        // Copy the model folder from the mingwX64 resources
+        copy {
+            from(file("$projectDir/src/mingwMain/resources/doordeck_headless_sdk"))
+            into(file("$outputDir/doordeck_headless_sdk"))
+        }
     }
 }

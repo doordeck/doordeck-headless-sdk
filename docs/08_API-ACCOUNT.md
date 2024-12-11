@@ -43,8 +43,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ref
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RefreshTokenData("REFRESH_TOKEN").toData();
-var response = Utils.fromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(resource, data));
+var data = new RefreshTokenData("REFRESH_TOKEN").ToData();
+var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(resource, data));
 ```
 </details>
 
@@ -130,8 +130,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY").toData();
-var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
+var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY").ToData();
+var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
 ```
 </details>
 
@@ -174,8 +174,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY").toData();
-var response = Utils.fromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
+var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY").ToData();
+var response = Utils.FromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
 ```
 </details>
 
@@ -216,8 +216,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY").toData();
-var response = Utils.fromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
+var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY").ToData();
+var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
 ```
 </details>
 
@@ -305,7 +305,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().changePassword("OLD_
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD").toData();
+var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD").ToData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.changePasswordJson(resource, data);
 ```
 </details>
@@ -347,7 +347,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().get
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var response = Utils.fromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
+var response = Utils.FromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
 ```
 </details>
 
@@ -388,7 +388,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().updateUserDetails("D
 
 ```csharp
 var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new UpdateUserDetailsData("DISPLAY_NAME").toData();
+var data = new UpdateUserDetailsData("DISPLAY_NAME").ToData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.updateUserDetailsJson(resource, data);
 ```
 </details>
