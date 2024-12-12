@@ -104,6 +104,10 @@ jobs:
         run: |
             dotnet tool install --global ClangSharpPInvokeGenerator
 
+      - name: Install LLVM
+        run: |
+          brew install llvm
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
@@ -128,7 +132,7 @@ jobs:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
           ./gradlew mingwX64Binaries
-          dotnet tool run ClangSharpPInvokeGenerator -f -i doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs -n DoordeckHeadlessSDK
+          ClangSharpPInvokeGenerator -f -i doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs -n DoordeckHeadlessSDK
           sed -i 's/_\$$/_/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i 's/\$//g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i '/\[NativeTypeName/d' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
