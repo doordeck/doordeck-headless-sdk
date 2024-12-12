@@ -35,8 +35,11 @@ const keyPair = crypto.generateKeyPair();
 <summary>Show Details</summary>
 
 ```csharp
-var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto(sdk);
-var keyPair = Utils.FromData<EncodedKeyPair>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager.generateEncodedKeyPair(crypto));
+unsafe 
+{
+    var crypto = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto(sdk);
+    var keyPair = Utils.FromData<EncodedKeyPair>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager.generateEncodedKeyPair(crypto));
+}
 ```
 </details>
 

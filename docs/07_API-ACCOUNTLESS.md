@@ -36,9 +36,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new LoginData("EMAIL", "PASSWORD").ToData();
-var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+    var data = new LoginData("EMAIL", "PASSWORD").ToData();
+    var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
+}
 ```
 </details>
 
@@ -80,9 +83,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).ToData();
-var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+    var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).ToData();
+    var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
+}
 ```
 </details>
 
@@ -122,9 +128,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("COD
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-var data = new VerifyEmailData("CODE").ToData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+    var data = new VerifyEmailData("CODE").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(resource, data);
+}
 ```
 </details>
 

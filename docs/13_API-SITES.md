@@ -36,8 +36,11 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().listS
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var response = Utils.FromData<List<SiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(resource));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+    var response = Utils.FromData<List<SiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(resource));
+}
 ```
 </details>
 
@@ -77,9 +80,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getLo
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var data = new GetLocksForSiteData("SITE_ID").ToData();
-var response = Utils.FromData<List<SiteLocksResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+    var data = new GetLocksForSiteData("SITE_ID").ToData();
+    var response = Utils.FromData<List<SiteLocksResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(resource, data));
+}
 ```
 </details>
 
@@ -119,9 +125,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUs
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
-var data = new GetUsersForSiteData("SITE_ID").ToData();
-var response = Utils.FromData<List<UserForSiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+    var data = new GetUsersForSiteData("SITE_ID").ToData();
+    var response = Utils.FromData<List<UserForSiteResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(resource, data));
+}
 ```
 </details>
 

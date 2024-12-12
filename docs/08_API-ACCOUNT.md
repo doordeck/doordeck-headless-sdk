@@ -42,9 +42,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ref
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RefreshTokenData("REFRESH_TOKEN").ToData();
-var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new RefreshTokenData("REFRESH_TOKEN").ToData();
+    var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(resource, data));
+}
 ```
 </details>
 
@@ -87,8 +90,11 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().logout();
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.logout(resource);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.logout(resource);
+}
 ```
 </details>
 
@@ -129,9 +135,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY").ToData();
-var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY").ToData();
+    var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(resource, data));
+}
 ```
 </details>
 
@@ -173,9 +182,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY").ToData();
-var response = Utils.FromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY").ToData();
+    var response = Utils.FromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyWithSecondaryAuthenticationJson(resource, data));
+}
 ```
 </details>
 
@@ -215,9 +227,13 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY").ToData();
-var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY").ToData();
+    var response = Utils.FromData<RegisterEphemeralKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(resource, data));
+
+}
 ```
 </details>
 
@@ -260,8 +276,11 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().reverifyEmail();
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.reverifyEmail(resource);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.reverifyEmail(resource);
+}
 ```
 </details>
 
@@ -304,9 +323,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().changePassword("OLD_
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD").ToData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.changePasswordJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.changePasswordJson(resource, data);
+}
 ```
 </details>
 
@@ -346,8 +368,11 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().get
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var response = Utils.FromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var response = Utils.FromData<UserDetailsResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(resource));
+}
 ```
 </details>
 
@@ -387,9 +412,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().updateUserDetails("D
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-var data = new UpdateUserDetailsData("DISPLAY_NAME").ToData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.updateUserDetailsJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    var data = new UpdateUserDetailsData("DISPLAY_NAME").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.updateUserDetailsJson(resource, data);
+}
 ```
 </details>
 
@@ -432,8 +460,11 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().deleteAccount();
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAccount(resource);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAccount(resource);
+}
 ```
 </details>
 
