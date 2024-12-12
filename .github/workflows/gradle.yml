@@ -96,13 +96,13 @@ jobs:
           java-version: 21
 
       - name: Set up NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
             dotnet-version: 7.x
 
       - name: Install ClangSharpPInvokeGenerator
         run: |
-            dotnet tool install -g ClangSharpPInvokeGenerator
+            dotnet tool install --global ClangSharpPInvokeGenerator
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -135,7 +135,7 @@ jobs:
           sed -i 's/\[DllImport(""/\[DllImport("doordeck_headless_sdk.dll"/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           ./gradlew mingwX64Pack
           nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.nuspec -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
-#          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.${{ steps.version_info.outputs.version }}.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey $NUGET_TOKEN
+#          nuget push doordeck-sdk\build\bin\mingwX64\releaseShared\*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_TOKEN }}
 
 #      - name: Publish to SPM
 #        if: github.ref == 'refs/heads/main'
