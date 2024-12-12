@@ -128,7 +128,7 @@ jobs:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
           ./gradlew mingwX64Binaries
-          ClangSharpPInvokeGenerator -f -i doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs -n DoordeckHeadlessSDK
+          dotnet tool run ClangSharpPInvokeGenerator -f -i doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs -n DoordeckHeadlessSDK
           sed -i 's/_\$$/_/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i 's/\$//g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i '/\[NativeTypeName/d' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
