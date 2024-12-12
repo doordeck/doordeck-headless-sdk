@@ -9,7 +9,7 @@ The **Context Manager** simplifies the usage of complex SDK functions by reducin
 <summary>Show Details</summary>
 
 ```kotlin
-sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY)
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PUBLIC_KEY, PRIVATE_KEY)
 ```
 </details>
 
@@ -18,7 +18,7 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 <summary>Show Details</summary>
 
 ```swift
-sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: USER_CERTIFICATE_CHAIN_LIST, privateKey: PRIVATE_KEY)
+sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: USER_CERTIFICATE_CHAIN_LIST, publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY)
 ```
 </details>
 
@@ -27,7 +27,7 @@ sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: US
 <summary>Show Details</summary>
 
 ```js
-sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY);
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PUBLIC_KEY, PRIVATE_KEY);
 ```
 </details>
 
@@ -37,7 +37,7 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 
 ```csharp
 var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY").ToData();
+var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY").ToData();
 symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
 ```
 </details>

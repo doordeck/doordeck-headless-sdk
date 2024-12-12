@@ -2,8 +2,8 @@
 {
     public class LoginData
     {
-        public string email { get; }
-        public string password { get; }
+        public string email { get; set; }
+        public string password { get; set; }
 
         public LoginData(string email, string password)
         {
@@ -14,10 +14,10 @@
 
     public class RegistrationData
     {
-        public string email { get; }
-        public string password { get; }
-        public string? displayName { get; }
-        public bool force { get; }
+        public string email { get; set; }
+        public string password { get; set; }
+        public string? displayName { get; set; }
+        public bool force { get; set; }
 
         public RegistrationData(string email, string password, string? displayName = null, bool force = false)
         {
@@ -30,13 +30,11 @@
 
     public class VerifyEmailData
     {
-        public string code { get; }
-
+        public string code { get; set; }
 
         public VerifyEmailData(string code)
         {
             this.code = code;
         }
     }
-
 }

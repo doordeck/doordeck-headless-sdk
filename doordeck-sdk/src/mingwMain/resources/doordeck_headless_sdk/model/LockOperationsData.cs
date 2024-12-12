@@ -274,16 +274,16 @@
 
     public class BaseOperationData
     {
-        public string? userId { get; set; }
-        public List<string>? userCertificateChain { get; set; }
-        public string? userPrivateKey { get; set; }
+        public string? userId { get; set; } = null;
+        public List<string>? userCertificateChain { get; set; } = null;
+        public string? userPrivateKey { get; set; } = null;
         public string lockId { get; set; }
-        public int? notBefore { get; set; }
-        public int? issuedAt { get; set; }
-        public int? expiresAt { get; set; }
-        public string? jti { get; set; }
+        public int notBefore { get; set; }
+        public int issuedAt { get; set; }
+        public int expiresAt { get; set; }
+        public string jti { get; set; }
 
-        public BaseOperationData(string lockId, string? userId = null, List<string>? userCertificateChain = null, string? userPrivateKey = null, int? notBefore = null, int? issuedAt = null, int? expiresAt = null, string? jti = null)
+        public BaseOperationData(string userId, List<string> userCertificateChain, string userPrivateKey, string lockId, int notBefore, int issuedAt, int expiresAt, string jti)
         {
             this.userId = userId;
             this.userCertificateChain = userCertificateChain;
@@ -293,6 +293,15 @@
             this.issuedAt = issuedAt;
             this.expiresAt = expiresAt;
             this.jti = jti;
+        }
+
+        public BaseOperationData(string lockId)
+        {
+            this.lockId = lockId;
+            this.notBefore = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
+            this.issuedAt = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
+            this.expiresAt = (int)DateTimeOffset.Now.AddMinutes(1).ToUnixTimeSeconds();
+            this.jti = Guid.NewGuid().ToString();
         }
     }
 
