@@ -138,7 +138,7 @@ jobs:
           sed -i '' 's/\[DllImport(""/\[DllImport("doordeck_headless_sdk.dll"/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           ./gradlew mingwX64Pack
           nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.nuspec -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
-          nuget push doordeck-sdk\build\bin\mingwX64\releaseShared\*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_TOKEN }}
+          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.${{ steps.version_info.outputs.version }}.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_TOKEN }}
 
 #      - name: Publish to SPM
 #        if: github.ref == 'refs/heads/main'
