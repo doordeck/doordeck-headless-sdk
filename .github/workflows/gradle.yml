@@ -117,9 +117,9 @@ jobs:
 #          role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
 #          aws-region: eu-west-1
 #
-#      - name: Tag for release (if on main)
-#        if: github.ref == 'refs/heads/main'
-#        run: ./gradlew final -x test
+      - name: Tag for release (if on main)
+        #if: github.ref == 'refs/heads/main'
+        run: ./gradlew final -x test
 
       - name: Parse release version
         id: version_info
@@ -136,7 +136,7 @@ jobs:
           sed -i '' 's/\$//g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i '' '/\[NativeTypeName/d' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
           sed -i '' 's/\[DllImport(""/\[DllImport("doordeck_headless_sdk.dll"/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
-          ./gradlew mingwX64Pack
+          ./gradlew -Prelease.useLastTag=true mingwX64Pack
           nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.nuspec -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
           nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.${{ steps.version_info.outputs.version }}.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_TOKEN }}
 
