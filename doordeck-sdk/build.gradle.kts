@@ -352,6 +352,9 @@ val nuspecTemplate = """
     <dependencies>
       <group targetFramework=".NETStandard2.0" />
     </dependencies>
+    <packageTypes>
+      <packageType name="MSBuildSdk" />
+    </packageTypes>
   </metadata>
   <files>
     <file src="README.md" target="\" />
