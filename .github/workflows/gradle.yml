@@ -101,10 +101,22 @@ jobs:
 
       - name: Install ClangSharpPInvokeGenerator
         run: |
+          # Install ClangSharpPInvokeGenerator
           dotnet tool install --global ClangSharpPInvokeGenerator --version 18.1.0.2
-          nuget install libclang.runtime.osx-arm64 -Version 18.1.3
-          nuget install libClangSharp.runtime.osx-arm64 -Version 18.1.3.1
-          find /Users/runner/work/doordeck-headless-sdk/doordeck-headless-sdk -name "*.dylib" -exec cp {} /Users/runner/.dotnet/tools/.store/clangsharppinvokegenerator/18.1.0.2/clangsharppinvokegenerator/18.1.0.2/tools/net8.0/any/ \;
+          
+          # Install dependencies using nuget
+          nuget install libclang.runtime.osx-arm64 \
+            -Version 18.1.3 \
+            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
+          
+          nuget install libClangSharp.runtime.osx-arm64 \
+            -Version 18.1.3.1 \
+            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
+          
+          # Copy the dlls
+          find ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages \
+            -name "*.dylib" \
+            -exec cp {} ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator/18.1.0.2/clangsharppinvokegenerator/18.1.0.2/tools/net8.0/any/ \;
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -129,15 +141,34 @@ jobs:
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
+          # Generate the dll and header files
           ./gradlew mingwX64Binaries
-          ClangSharpPInvokeGenerator -f doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs -n DoordeckHeadlessSDK
-          sed -i '' 's/_\$$/_/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
-          sed -i '' 's/\$//g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
-          sed -i '' '/\[NativeTypeName/d' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
-          sed -i '' 's/\[DllImport(""/\[DllImport("doordeck_headless_sdk.dll"/g' doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs
+          
+          # Generate PInvoke bindings
+          ClangSharpPInvokeGenerator \
+            -f doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk_api.h \
+            -o doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs \
+            -n DoordeckHeadlessSDK
+          
+          # Adjust generated bindings
+          sed -i '' \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            -e '/\[NativeTypeName/d' \
+            -e 's/\[DllImport(""/\[DllImport("doordeck_headless_sdk.dll"/g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk/DoordeckHeadlessBindings.cs"
+          
+          # Create the .nuspec file
           ./gradlew -Prelease.useLastTag=true mingwX64Pack
-          nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.nuspec -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
-          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.${{ steps.version_info.outputs.version }}.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_TOKEN }}
+          
+          # Create the .nupkg file
+          nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.nuspec \
+            -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
+          
+          # Publish the package
+          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/doordeck_headless_sdk.${{ steps.version_info.outputs.version }}.nupkg \
+            -Source https://api.nuget.org/v3/index.json \
+            -ApiKey ${{ secrets.NUGET_TOKEN }}
 
       - name: Publish to SPM
         if: github.ref == 'refs/heads/main'
