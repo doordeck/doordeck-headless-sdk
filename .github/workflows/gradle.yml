@@ -102,21 +102,19 @@ jobs:
       - name: Install ClangSharpPInvokeGenerator
         run: |
           # Install ClangSharpPInvokeGenerator
-          dotnet tool install --global ClangSharpPInvokeGenerator --version 18.1.0.2
+          dotnet tool install --global ClangSharpPInvokeGenerator
           
           # Install dependencies using nuget
           nuget install libclang.runtime.osx-arm64 \
-            -Version 18.1.3 \
             -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
           
           nuget install libClangSharp.runtime.osx-arm64 \
-            -Version 18.1.3.1 \
             -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
           
           # Copy the dlls
           find ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages \
             -name "*.dylib" \
-            -exec cp {} ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator/18.1.0.2/clangsharppinvokegenerator/18.1.0.2/tools/net8.0/any/ \;
+            -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
