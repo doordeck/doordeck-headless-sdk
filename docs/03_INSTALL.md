@@ -56,7 +56,7 @@ repositories {
 implementation("com.doordeck.headless.sdk:doordeck-sdk-android:[SDK_VERSION]")
 ```
 
-💡 **Requirement:** Android SDK 21 or higher.
+💡 **Requirement:** Android SDK 26 or higher.
 </details>
 
 ### Swift

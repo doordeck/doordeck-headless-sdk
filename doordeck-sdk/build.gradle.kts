@@ -1,6 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -18,7 +18,6 @@ kotlin {
     jvm()
     androidTarget {
         publishLibraryVariants("release")
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
@@ -105,7 +104,6 @@ kotlin {
     sourceSets {
         all {
             // Remove the warning about using expect/actual in interfaces
-            @OptIn(ExperimentalKotlinGradlePluginApi::class)
             compilerOptions {
                 freeCompilerArgs.add("-Xexpect-actual-classes")
             }
@@ -171,6 +169,7 @@ kotlin {
                 implementation(libs.libsodium.bindings.js)
                 implementation(npm("asn1js", libs.versions.asn1js.get()))
                 implementation(npm("pkijs", libs.versions.pkijs.get()))
+                implementation(npm("ws", "8.17.1")) // Overrides the original version
             }
         }
 
@@ -289,3 +288,11 @@ tasks.register<Zip>("zipXCFramework") {
 tasks.named("assembleDoordeckSDKReleaseXCFramework").configure {
     finalizedBy("zipXCFramework")
 }
+
+// Disable source map generation
+tasks.withType<KotlinJsCompile>().configureEach {
+    compilerOptions {
+        sourceMap = false
+    }
+}
+
