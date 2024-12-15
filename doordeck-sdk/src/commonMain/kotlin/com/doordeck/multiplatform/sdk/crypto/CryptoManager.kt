@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.api.model.Crypto
+import kotlin.time.Duration.Companion.days
 
 internal const val SODIUM_PUBLIC_KEY_SIZE = 32
 internal const val SODIUM_PRIVATE_KEY_SIZE = 64
@@ -9,6 +10,7 @@ internal const val CRYPTO_KIT_PRIVATE_KEY_SIZE = 32
 internal const val JAVA_PKCS8_PUBLIC_KEY_SIZE = 44
 internal const val JAVA_PKCS8_PRIVATE_KEY_SIZE = 48
 internal const val RAW_KEY_SIZE = 32
+internal val MIN_CERTIFICATE_LIFETIME_DAYS = 7.days
 
 internal val PRIVATE_KEY_ASN1_HEADER = byteArrayOf(
     0x30, 0x2e,                     // ASN.1 SEQUENCE, length 46
