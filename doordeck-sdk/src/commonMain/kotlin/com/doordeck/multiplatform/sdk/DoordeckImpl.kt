@@ -9,21 +9,8 @@ import com.doordeck.multiplatform.sdk.api.LockOperationsResource
 import com.doordeck.multiplatform.sdk.api.PlatformResource
 import com.doordeck.multiplatform.sdk.api.SitesResource
 import com.doordeck.multiplatform.sdk.api.TilesResource
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
-import com.doordeck.multiplatform.sdk.internal.api.HelperClient
-import com.doordeck.multiplatform.sdk.internal.api.LocalUnlockClient
-import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
-import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
-import com.doordeck.multiplatform.sdk.internal.api.SitesClient
-import com.doordeck.multiplatform.sdk.internal.api.TilesClient
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
-import org.koin.mp.KoinPlatform.getKoin
 
 internal object DoordeckImpl : Doordeck {
 
