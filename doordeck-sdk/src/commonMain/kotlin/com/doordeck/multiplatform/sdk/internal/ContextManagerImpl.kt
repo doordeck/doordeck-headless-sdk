@@ -101,11 +101,11 @@ internal class ContextManagerImpl(
         } else null
     }
 
-    override fun getPublicKey(): ByteArray? {
+    internal fun getPublicKey(): ByteArray? {
         return currentUserPublicKey
     }
 
-    override fun getPrivateKey(): ByteArray? {
+    internal fun getPrivateKey(): ByteArray? {
         return currentUserPrivateKey
     }
 

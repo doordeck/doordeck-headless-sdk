@@ -23,8 +23,6 @@ interface ContextManager {
     fun isCertificateChainAboutToExpire(): Boolean
     fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray)
     fun getKeyPair(): Crypto.KeyPair?
-    fun getPublicKey(): ByteArray?
-    fun getPrivateKey(): ByteArray?
     fun isKeyPairValid(): Boolean
     fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
     fun setOperationContextJson(data: String)
