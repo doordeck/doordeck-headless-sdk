@@ -36,9 +36,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.tiles().getLo
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
-var data = new GetLocksBelongingToTileData("TILE_ID").toData();
-var response = Utils.fromData<TileLocksResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.getLocksBelongingToTileJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
+    var data = new GetLocksBelongingToTileData("TILE_ID").ToData();
+    var response = Utils.FromData<TileLocksResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.getLocksBelongingToTileJson(resource, data));
+}
 ```
 </details>
 
@@ -79,9 +82,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
-var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"]).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
+    var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"]).ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(resource, data);
+}
 ```
 </details>
 

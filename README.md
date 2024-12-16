@@ -9,7 +9,7 @@ We are publishing the packages to multiple repositories:
 | Multiplatform, Android, JVM | [Maven central](https://central.sonatype.com/namespace/com.doordeck.headless.sdk)                                    |
 |         iOS, macOS          | [Cocoapods](https://cocoapods.org/pods/DoordeckSDK), [SPM](https://github.com/doordeck/doordeck-headless-sdk-spm)    |
 |             JS              | [NPM](https://www.npmjs.com/package/@doordeck/doordeck-headless-sdk)                                                 |
-|           Windows           | //TODO                                                                                                               |
+|           Windows           | [NuGet](https://www.nuget.org/packages/doordeck_headless_sdk)                                                        |
 
 ## Supported platforms
 The SDK supports a range of targets for different platforms:
@@ -27,4 +27,4 @@ The SDK supports a range of targets for different platforms:
 To start using the Doordeck Headless SDK, refer to the [documentation index](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/01_INDEX.md#index) for detailed setup and usage instructions tailored to your platform.
 
 ## Samples
-We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](docs/15_SAMPLES.md).
+We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/15_SAMPLES.md).
