@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface AccountlessResource {
@@ -35,4 +33,4 @@ actual interface AccountlessResource {
     fun verifyEmailAsync(code: String): CompletableFuture<Unit>
 }
 
-actual fun accountless(): AccountlessResource = AccountlessResourceImpl(getKoin().get<AccountlessClient>())
+actual fun accountless(): AccountlessResource = AccountlessResourceImpl

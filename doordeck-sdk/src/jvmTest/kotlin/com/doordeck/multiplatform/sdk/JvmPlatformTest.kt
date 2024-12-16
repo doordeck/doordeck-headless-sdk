@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -12,9 +11,9 @@ class JvmPlatformTest {
     @Test
     fun shouldTestPlatformEngine() = runTest {
         // Given
-        val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
+        val client = createCloudHttpClient()
 
-        // When
+        // Then
         assertTrue { client.engine.config is OkHttpConfig }
     }
 
@@ -23,7 +22,15 @@ class JvmPlatformTest {
         // Given
         val platform = getPlatform()
 
-        // When
+        // Then
         assertEquals(platform, PlatformType.JVM)
+    }
+
+    @Test
+    fun shouldInitialize() {
+        // Then
+        assertDoesNotThrow {
+            KDoordeckFactory.initialize(TEST_ENVIRONMENT)
+        }
     }
 }

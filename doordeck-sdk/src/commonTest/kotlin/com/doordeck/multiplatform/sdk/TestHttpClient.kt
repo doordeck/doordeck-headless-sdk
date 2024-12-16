@@ -143,9 +143,12 @@ private val TEST_ENGINE = MockEngine { request ->
     }
 }
 
-val TEST_HTTP_CLIENT = HttpClient(TEST_ENGINE)  {
+val TEST_MOCK_HTTP_CLIENT = HttpClient(TEST_ENGINE)  {
     installContentNegotiation()
 }
+val TEST_FUSION_CLIENT = createFusionHttpClient()
+val TEST_CLOUD_CLIENT = createCloudHttpClient()
+val TEST_HTTP_CLIENT = createHttpClient()
 
 private fun MockRequestHandleScope.respondContent(content: String): HttpResponseData =
     respond(

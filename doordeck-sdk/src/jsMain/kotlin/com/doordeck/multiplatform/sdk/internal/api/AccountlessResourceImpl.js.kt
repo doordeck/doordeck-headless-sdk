@@ -6,19 +6,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-internal class AccountlessResourceImpl(
-    private val accountlessClient: AccountlessClient
-) : AccountlessResource {
+internal object AccountlessResourceImpl : AccountlessResource {
 
     override fun login(email: String, password: String): Promise<TokenResponse> {
-        return GlobalScope.promise { accountlessClient.loginRequest(email, password) }
+        return GlobalScope.promise { AccountlessClient.loginRequest(email, password) }
     }
 
     override fun registration(email: String, password: String, displayName: String?, force: Boolean): Promise<TokenResponse> {
-        return GlobalScope.promise { accountlessClient.registrationRequest(email, password, displayName, force) }
+        return GlobalScope.promise { AccountlessClient.registrationRequest(email, password, displayName, force) }
     }
 
     override fun verifyEmail(code: String): Promise<Unit> {
-        return GlobalScope.promise { accountlessClient.verifyEmailRequest(code) }
+        return GlobalScope.promise { AccountlessClient.verifyEmailRequest(code) }
     }
 }

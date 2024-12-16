@@ -5,7 +5,6 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -32,7 +31,7 @@ actual interface SitesResource {
     fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>>
 }
 
-private val sites = SitesResourceImpl(getKoin().get<SitesClient>())
+private val sites = SitesResourceImpl
 
 @JsExport
 actual fun sites(): SitesResource = sites

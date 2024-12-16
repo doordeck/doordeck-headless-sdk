@@ -5,7 +5,6 @@ import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface SitesResource {
@@ -37,4 +36,4 @@ actual interface SitesResource {
     fun getUsersForSiteAsync(siteId: String): CompletableFuture<List<UserForSiteResponse>>
 }
 
-actual fun sites(): SitesResource = SitesResourceImpl(getKoin().get<SitesClient>())
+actual fun sites(): SitesResource = SitesResourceImpl
