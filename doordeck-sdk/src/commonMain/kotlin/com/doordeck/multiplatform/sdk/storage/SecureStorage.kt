@@ -23,6 +23,9 @@ interface SecureStorage {
     fun addUserId(userId: String)
     fun getUserId(): String?
 
+    fun addUserEmail(email: String)
+    fun getUserEmail(): String?
+
     fun addCertificateChain(certificateChain: List<String>)
     fun getCertificateChain(): List<String>?
 
