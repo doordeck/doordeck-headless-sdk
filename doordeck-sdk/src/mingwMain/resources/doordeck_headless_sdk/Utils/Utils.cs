@@ -9,7 +9,8 @@ namespace Doordeck.Headless.Sdk.Utils
         {
             Converters = {
                 new AuthKeyResponseConverter()
-            }
+            },
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         public static sbyte* ToData<T>(this T input) =>

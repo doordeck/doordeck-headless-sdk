@@ -2,46 +2,46 @@
 {
     public class SiteResponse
     {
-        public string id { get; set; }
-        public string name { get; set; }
-        public string colour { get; set; }
-        public double longitude { get; set; }
-        public double latitude { get; set; }
-        public int radius { get; set; }
-        public string passBackground { get; set; }
-        public string created { get; set; }
-        public string updated { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Colour { get; set; } = string.Empty;
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public int Radius { get; set; }
+        public string PassBackground { get; set; } = string.Empty;
+        public string Created { get; set; } = string.Empty;
+        public string Updated { get; set; } = string.Empty;
     }
 
     public class SiteLocksResponse
     {
-        public string id { get; set; }
-        public string name { get; set; }
-        public string? colour { get; set; } = null;
-        public UserRole role { get; set; }
-        public SiteLockSettingsResponse settings { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string? Colour { get; set; } = null;
+        public UserRole Role { get; set; }
+        public SiteLockSettingsResponse Settings { get; set; } = new SiteLockSettingsResponse();
     }
 
     public class SiteLockSettingsResponse
     {
-        public double unlockTime { get; set; }
-        public List<string> permittedAddresses { get; set; }
-        public string defaultName { get; set; }
-        public List<string> tiles { get; set; }
-        public SiteStateResponse? state { get; set; } = null;
-        public bool? favourite { get; set; } = null;
+        public double UnlockTime { get; set; }
+        public List<string> PermittedAddresses { get; set; } = [];
+        public string DefaultName { get; set; } = string.Empty;
+        public List<string> Tiles { get; set; } = [];
+        public SiteStateResponse? State { get; set; } = null;
+        public bool? Favourite { get; set; } = null;
     }
 
     public class SiteStateResponse
     {
-        public bool connected { get; set; }
+        public bool Connected { get; set; }
     }
 
     public class UserForSiteResponse
     {
-        public string userId { get; set; }
-        public string email { get; set; }
-        public string? displayName { get; set; } = null;
-        public bool orphan { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? DisplayName { get; set; } = null;
+        public bool Orphan { get; set; }
     }
 }

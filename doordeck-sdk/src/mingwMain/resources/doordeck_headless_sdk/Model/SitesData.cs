@@ -2,19 +2,21 @@
 {
     public class GetLocksForSiteData
     {
-        public string siteId { get; set; }
+        public string SiteId { get; set; }
+
         public GetLocksForSiteData(string siteId)
         {
-            this.siteId = siteId;
+            SiteId = siteId;
         }
     }
 
     public class GetUsersForSiteData
     {
-        public string siteId { get; set; }
+        public string SiteId { get; set; }
+
         public GetUsersForSiteData(string siteId)
         {
-            this.siteId = siteId;
+            SiteId = siteId;
         }
     }
 }

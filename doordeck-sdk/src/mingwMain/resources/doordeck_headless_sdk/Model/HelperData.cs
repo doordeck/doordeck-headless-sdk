@@ -2,15 +2,15 @@
 {
     public class UploadPlatformLogoData
     {
-        public string applicationId { get; set; }
-        public string contentType { get; set; }
-        public string image { get; set; }
+        public string ApplicationId { get; set; }
+        public string ContentType { get; set; }
+        public string Image { get; set; }
 
         public UploadPlatformLogoData(string applicationId, string contentType, string image)
         {
-            this.applicationId = applicationId;
-            this.contentType = contentType;
-            this.image = image;
+            ApplicationId = applicationId;
+            ContentType = contentType;
+            Image = image;
         }
     }
 }

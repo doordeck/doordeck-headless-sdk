@@ -4,134 +4,134 @@ namespace Doordeck.Headless.Sdk.Model.Responses
 {
     public class ApplicationResponse
     {
-        public string applicationId { get; set; }
-        public string name { get; set; }
-        public double? lastUpdated { get; set; } = null;
-        public List<string>? owners { get; set; } = null;
-        public List<string>? corsDomains { get; set; } = null;
-        public List<string>? authDomains { get; set; } = null;
-        public string? logoUrl { get; set; } = null;
-        public string? privacyPolicy { get; set; } = null;
-        public string? mailingAddress { get; set; } = null;
-        public string? companyName { get; set; } = null;
-        public string? supportContact { get; set; } = null;
-        public string? appLink { get; set; } = null;
-        public string? slug { get; set; } = null;
-        public EmailPreferencesResponse emailPreferences { get; set; }
-        public Dictionary<string, AuthKeyResponse> authKeys { get; set; }
-        public OauthResponse? oauth { get; set; } = null;
-        public bool? isDoordeckApplication { get; set; } = null;
+        public string ApplicationId { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public double? LastUpdated { get; set; } = null;
+        public List<string>? Owners { get; set; } = null;
+        public List<string>? CorsDomains { get; set; } = null;
+        public List<string>? AuthDomains { get; set; } = null;
+        public string? LogoUrl { get; set; } = null;
+        public string? PrivacyPolicy { get; set; } = null;
+        public string? MailingAddress { get; set; } = null;
+        public string? CompanyName { get; set; } = null;
+        public string? SupportContact { get; set; } = null;
+        public string? AppLink { get; set; } = null;
+        public string? Slug { get; set; } = null;
+        public EmailPreferencesResponse EmailPreferences { get; set; } = new EmailPreferencesResponse();
+        public Dictionary<string, IAuthKeyResponse> AuthKeys { get; set; } = [];
+        public OauthResponse? Oauth { get; set; } = null;
+        public bool? IsDoordeckApplication { get; set; } = null;
     }
 
-    public interface AuthKeyResponse
+    public interface IAuthKeyResponse
     {
-        string kid { get; set; }
-        string use { get; set; }
-        string? alg { get; set; }
-        List<string>? ops { get; set; }
-        string? x5u { get; set; }
-        string? x5t { get; set; }
-        string? x5t256 { get; set; }
-        List<string>? x5c { get; set; }
-        int? exp { get; set; }
-        int? nbf { get; set; }
-        int? iat { get; set; }
+        string Kid { get; set; }
+        string Use { get; set; }
+        string? Alg { get; set; }
+        List<string>? Ops { get; set; }
+        string? X5u { get; set; }
+        string? X5t { get; set; }
+        string? X5t256 { get; set; }
+        List<string>? X5c { get; set; }
+        int? Exp { get; set; }
+        int? Nbf { get; set; }
+        int? Iat { get; set; }
     }
 
-    public class RsaKeyResponse : AuthKeyResponse
+    public class RsaKeyResponse : IAuthKeyResponse
     {
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
+        public string Use { get; set; } = string.Empty;
+        public string Kid { get; set; } = string.Empty;
+        public string? Alg { get; set; } = null;
         [JsonPropertyName("key_ops")]
-        public List<string>? ops { get; set; } = null;
-        public string? x5u { get; set; } = null;
-        public string? x5t { get; set; } = null;
-        public string? x5t256 { get; set; } = null;
+        public List<string>? Ops { get; set; } = null;
+        public string? X5u { get; set; } = null;
+        public string? X5t { get; set; } = null;
+        public string? X5t256 { get; set; } = null;
         [JsonPropertyName("x5t#S256")]
-        public List<string>? x5c { get; set; } = null;
-        public int? exp { get; set; } = null;
-        public int? nbf { get; set; } = null;
-        public int? iat { get; set; } = null;
-        public string e { get; set; }
-        public string n { get; set; }
+        public List<string>? X5c { get; set; } = null;
+        public int? Exp { get; set; } = null;
+        public int? Nbf { get; set; } = null;
+        public int? Iat { get; set; } = null;
+        public string E { get; set; } = string.Empty;
+        public string N { get; set; } = string.Empty;
     }
 
-    public class EcKeyResponse : AuthKeyResponse
+    public class EcKeyResponse : IAuthKeyResponse
     {
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
+        public string Use { get; set; }
+        public string Kid { get; set; }
+        public string? Alg { get; set; } = null;
         [JsonPropertyName("key_ops")]
-        public List<string>? ops { get; set; } = null;
-        public string? x5u { get; set; } = null;
-        public string? x5t { get; set; } = null;
+        public List<string>? Ops { get; set; } = null;
+        public string? X5u { get; set; } = null;
+        public string? X5t { get; set; } = null;
         [JsonPropertyName("x5t#S256")]
-        public string? x5t256 { get; set; } = null;
-        public List<string>? x5c { get; set; } = null;
-        public int? exp { get; set; } = null;
-        public int? nbf { get; set; } = null;
-        public int? iat { get; set; } = null;
-        public string crv { get; set; }
-        public string x { get; set; }
-        public string y { get; set; }
+        public string? X5t256 { get; set; } = null;
+        public List<string>? X5c { get; set; } = null;
+        public int? Exp { get; set; } = null;
+        public int? Nbf { get; set; } = null;
+        public int? Iat { get; set; } = null;
+        public string Crv { get; set; } = string.Empty;
+        public string X { get; set; } = string.Empty;
+        public string Y { get; set; } = string.Empty;
     }
 
-    public class Ed25519KeyResponse : AuthKeyResponse
+    public class Ed25519KeyResponse : IAuthKeyResponse
     {
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
+        public string Use { get; set; } = string.Empty;
+        public string Kid { get; set; } = string.Empty;
+        public string? Alg { get; set; } = null;
         [JsonPropertyName("key_ops")]
-        public List<string>? ops { get; set; } = null;
-        public string? x5u { get; set; } = null;
-        public string? x5t { get; set; } = null;
+        public List<string>? Ops { get; set; } = null;
+        public string? X5u { get; set; } = null;
+        public string? X5t { get; set; } = null;
         [JsonPropertyName("x5t#S256")]
-        public string? x5t256 { get; set; } = null;
-        public List<string>? x5c { get; set; } = null;
-        public int? exp { get; set; } = null;
-        public int? nbf { get; set; } = null;
-        public int? iat { get; set; } = null;
-        public string? d { get; set; } = null;
-        public string crv { get; set; }
-        public string x { get; set; }
+        public string? X5t256 { get; set; } = null;
+        public List<string>? X5c { get; set; } = null;
+        public int? Exp { get; set; } = null;
+        public int? Nbf { get; set; } = null;
+        public int? Iat { get; set; } = null;
+        public string? D { get; set; } = null;
+        public string Crv { get; set; } = string.Empty;
+        public string X { get; set; } = string.Empty;
     }
 
     public class EmailPreferencesResponse
     {
-        public string? senderEmail { get; set; } = null;
-        public string? senderName { get; set; } = null;
-        public string primaryColour { get; set; }
-        public string secondaryColour { get; set; }
-        public bool? onlySendEssentialEmails { get; set; } = null;
-        public EmailCallToActionResponse? callToAction { get; set; } = null;
+        public string? SenderEmail { get; set; } = null;
+        public string? SenderName { get; set; } = null;
+        public string PrimaryColour { get; set; } = string.Empty;
+        public string SecondaryColour { get; set; } = string.Empty;
+        public bool? OnlySendEssentialEmails { get; set; } = null;
+        public EmailCallToActionResponse? CallToAction { get; set; } = null;
     }
 
     public class EmailCallToActionResponse
     {
-        public string actionTarget { get; set; }
-        public string headline { get; set; }
-        public string actionText { get; set; }
+        public string ActionTarget { get; set; } = string.Empty;
+        public string Headline { get; set; } = string.Empty;
+        public string ActionText { get; set; } = string.Empty;
     }
 
     public class OauthResponse
     {
-        public string authorizationEndpoint { get; set; }
-        public string clientId { get; set; }
-        public string grantType { get; set; }
+        public string AuthorizationEndpoint { get; set; } = string.Empty;
+        public string ClientId { get; set; } = string.Empty;
+        public string GrantType { get; set; } = string.Empty;
     }
 
     public class ApplicationOwnerDetailsResponse
     {
-        public string userId { get; set; }
-        public string email { get; set; }
-        public string? displayName { get; set; } = null;
-        public bool orphan { get; set; }
-        public bool foreign { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string? DisplayName { get; set; } = null;
+        public bool Orphan { get; set; }
+        public bool Foreign { get; set; }
     }
 
     public class GetLogoUploadUrlResponse
     {
-        public string uploadUrl { get; set; }
+        public string UploadUrl { get; set; } = string.Empty;
     }
 }

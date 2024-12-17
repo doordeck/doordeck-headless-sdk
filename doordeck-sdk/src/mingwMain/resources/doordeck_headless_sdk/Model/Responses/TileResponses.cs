@@ -2,8 +2,8 @@
 {
     public class TileLocksResponse
     {
-        public string siteId { get; set; }
-        public string tileId { get; set; }
-        public List<string> deviceIds { get; set; }
+        public string SiteId { get; set; } = string.Empty;
+        public string TileId { get; set; } = string.Empty;
+        public List<string> DeviceIds { get; set; } = [];
     }
 }

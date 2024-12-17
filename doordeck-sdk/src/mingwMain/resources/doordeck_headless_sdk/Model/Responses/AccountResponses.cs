@@ -2,26 +2,26 @@
 {
     public class TokenResponse
     {
-        public string authToken { get; set; }
-        public string refreshToken { get; set; }
+        public string AuthToken { get; set; } = string.Empty;
+        public string RefreshToken { get; set; } = string.Empty;
     }
 
     public class UserDetailsResponse
     {
-        public string email { get; set; }
-        public string? displayName { get; set; } = null;
-        public bool emailVerified { get; set; }
-        public string publicKey { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string? DisplayName { get; set; } = null;
+        public bool EmailVerified { get; set; }
+        public string PublicKey { get; set; } = string.Empty;
     }
 
     public class RegisterEphemeralKeyResponse
     {
-        public List<string> certificateChain { get; set; }
-        public string userId { get; set; }
+        public List<string> CertificateChain { get; set; } = [];
+        public string UserId { get; set; } = string.Empty;
     }
 
     public class RegisterEphemeralKeyWithSecondaryAuthenticationResponse
     {
-        public TwoFactorMethod method { get; set; }
+        public TwoFactorMethod Method { get; set; }
     }
 }

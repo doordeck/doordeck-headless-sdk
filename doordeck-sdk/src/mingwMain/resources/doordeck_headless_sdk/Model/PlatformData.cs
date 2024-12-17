@@ -2,369 +2,369 @@
 {
     public class CreateApplicationData
     {
-        public string name { get; set; }
-        public string companyName { get; set; }
-        public string mailingAddress { get; set; }
-        public string? privacyPolicy { get; set; } = null;
-        public string? supportContact { get; set; } = null;
-        public string? appLink { get; set; } = null;
-        public EmailPreferencesData? emailPreferences { get; set; } = null;
-        public string? logoUrl { get; set; } = null;
+        public string Name { get; set; }
+        public string CompanyName { get; set; }
+        public string MailingAddress { get; set; }
+        public string? PrivacyPolicy { get; set; } = null;
+        public string? SupportContact { get; set; } = null;
+        public string? AppLink { get; set; } = null;
+        public EmailPreferencesData? EmailPreferences { get; set; } = null;
+        public string? LogoUrl { get; set; } = null;
 
         public CreateApplicationData(string name, string companyName, string mailingAddress,
                                       string? privacyPolicy = null, string? supportContact = null,
                                       string? appLink = null, EmailPreferencesData? emailPreferences = null,
                                       string? logoUrl = null)
         {
-            this.name = name;
-            this.companyName = companyName;
-            this.mailingAddress = mailingAddress;
-            this.privacyPolicy = privacyPolicy;
-            this.supportContact = supportContact;
-            this.appLink = appLink;
-            this.emailPreferences = emailPreferences;
-            this.logoUrl = logoUrl;
+            Name = name;
+            CompanyName = companyName;
+            MailingAddress = mailingAddress;
+            PrivacyPolicy = privacyPolicy;
+            SupportContact = supportContact;
+            AppLink = appLink;
+            EmailPreferences = emailPreferences;
+            LogoUrl = logoUrl;
         }
     }
 
     public class EmailPreferencesData
     {
-        public string? senderEmail { get; set; } = null;
-        public string? senderName { get; set; } = null;
-        public string? primaryColour { get; set; } = null;
-        public string? secondaryColour { get; set; } = null;
-        public bool? onlySendEssentialEmails { get; set; } = null;
-        public EmailCallToActionData? callToAction { get; set; } = null;
+        public string? SenderEmail { get; set; } = null;
+        public string? SenderName { get; set; } = null;
+        public string? PrimaryColour { get; set; } = null;
+        public string? SecondaryColour { get; set; } = null;
+        public bool? OnlySendEssentialEmails { get; set; } = null;
+        public EmailCallToActionData? CallToAction { get; set; } = null;
 
         public EmailPreferencesData(string? senderEmail = null, string? senderName = null,
                                     string? primaryColour = null, string? secondaryColour = null,
                                     bool? onlySendEssentialEmails = null, EmailCallToActionData? callToAction = null)
         {
-            this.senderEmail = senderEmail;
-            this.senderName = senderName;
-            this.primaryColour = primaryColour;
-            this.secondaryColour = secondaryColour;
-            this.onlySendEssentialEmails = onlySendEssentialEmails;
-            this.callToAction = callToAction;
+            SenderEmail = senderEmail;
+            SenderName = senderName;
+            PrimaryColour = primaryColour;
+            SecondaryColour = secondaryColour;
+            OnlySendEssentialEmails = onlySendEssentialEmails;
+            CallToAction = callToAction;
         }
     }
 
     public class EmailCallToActionData
     {
-        public string actionTarget { get; set; }
-        public string headline { get; set; }
-        public string actionText { get; set; }
+        public string ActionTarget { get; set; }
+        public string Headline { get; set; }
+        public string ActionText { get; set; }
 
         public EmailCallToActionData(string actionTarget, string headline, string actionText)
         {
-            this.actionTarget = actionTarget;
-            this.headline = headline;
-            this.actionText = actionText;
+            ActionTarget = actionTarget;
+            Headline = headline;
+            ActionText = actionText;
         }
     }
 
     public class GetApplicationData
     {
-        public string applicationId { get; set; }
+        public string ApplicationId { get; set; }
 
         public GetApplicationData(string applicationId)
         {
-            this.applicationId = applicationId;
+            ApplicationId = applicationId;
         }
     }
 
     public class UpdateApplicationNameData
     {
-        public string applicationId { get; set; }
-        public string name { get; set; }
+        public string ApplicationId { get; set; }
+        public string Name { get; set; }
 
         public UpdateApplicationNameData(string applicationId, string name)
         {
-            this.applicationId = applicationId;
-            this.name = name;
+            ApplicationId = applicationId;
+            Name = name;
         }
     }
 
     public class UpdateApplicationCompanyNameData
     {
-        public string applicationId { get; set; }
-        public string companyName { get; set; }
+        public string ApplicationId { get; set; }
+        public string CompanyName { get; set; }
 
         public UpdateApplicationCompanyNameData(string applicationId, string companyName)
         {
-            this.applicationId = applicationId;
-            this.companyName = companyName;
+            ApplicationId = applicationId;
+            CompanyName = companyName;
         }
     }
 
     public class UpdateApplicationMailingAddressData
     {
-        public string applicationId { get; set; }
-        public string mailingAddress { get; set; }
+        public string ApplicationId { get; set; }
+        public string MailingAddress { get; set; }
 
         public UpdateApplicationMailingAddressData(string applicationId, string mailingAddress)
         {
-            this.applicationId = applicationId;
-            this.mailingAddress = mailingAddress;
+            ApplicationId = applicationId;
+            MailingAddress = mailingAddress;
         }
     }
 
     public class UpdateApplicationPrivacyPolicyData
     {
-        public string applicationId { get; set; }
-        public string privacyPolicy { get; set; }
+        public string ApplicationId { get; set; }
+        public string PrivacyPolicy { get; set; }
 
         public UpdateApplicationPrivacyPolicyData(string applicationId, string privacyPolicy)
         {
-            this.applicationId = applicationId;
-            this.privacyPolicy = privacyPolicy;
+            ApplicationId = applicationId;
+            PrivacyPolicy = privacyPolicy;
         }
     }
 
     public class UpdateApplicationSupportContactData
     {
-        public string applicationId { get; set; }
-        public string supportContact { get; set; }
+        public string ApplicationId { get; set; }
+        public string SupportContact { get; set; }
 
         public UpdateApplicationSupportContactData(string applicationId, string supportContact)
         {
-            this.applicationId = applicationId;
-            this.supportContact = supportContact;
+            ApplicationId = applicationId;
+            SupportContact = supportContact;
         }
     }
 
     public class UpdateApplicationAppLinkData
     {
-        public string applicationId { get; set; }
-        public string appLink { get; set; }
+        public string ApplicationId { get; set; }
+        public string AppLink { get; set; }
 
         public UpdateApplicationAppLinkData(string applicationId, string appLink)
         {
-            this.applicationId = applicationId;
-            this.appLink = appLink;
+            ApplicationId = applicationId;
+            AppLink = appLink;
         }
     }
 
     public class UpdateApplicationEmailPreferencesData
     {
-        public string applicationId { get; set; }
-        public EmailPreferencesData emailPreferences { get; set; }
+        public string ApplicationId { get; set; }
+        public EmailPreferencesData EmailPreferences { get; set; }
 
         public UpdateApplicationEmailPreferencesData(string applicationId, EmailPreferencesData emailPreferences)
         {
-            this.applicationId = applicationId;
-            this.emailPreferences = emailPreferences;
+            ApplicationId = applicationId;
+            EmailPreferences = emailPreferences;
         }
     }
 
     public class UpdateApplicationLogoUrlData
     {
-        public string applicationId { get; set; }
-        public string logoUrl { get; set; }
+        public string ApplicationId { get; set; }
+        public string LogoUrl { get; set; }
 
         public UpdateApplicationLogoUrlData(string applicationId, string logoUrl)
         {
-            this.applicationId = applicationId;
-            this.logoUrl = logoUrl;
+            ApplicationId = applicationId;
+            LogoUrl = logoUrl;
         }
     }
 
     public class DeleteApplicationData
     {
-        public string applicationId { get; set; }
+        public string ApplicationId { get; set; }
 
         public DeleteApplicationData(string applicationId)
         {
-            this.applicationId = applicationId;
+            ApplicationId = applicationId;
         }
     }
 
     public class GetLogoUploadUrlData
     {
-        public string applicationId { get; set; }
-        public string contentType { get; set; }
+        public string ApplicationId { get; set; }
+        public string ContentType { get; set; }
 
         public GetLogoUploadUrlData(string applicationId, string contentType)
         {
-            this.applicationId = applicationId;
-            this.contentType = contentType;
+            ApplicationId = applicationId;
+            ContentType = contentType;
         }
     }
 
     public class AddAuthKeyData
     {
-        public string applicationId { get; set; }
-        public AuthKeyData key { get; set; }
+        public string ApplicationId { get; set; }
+        public AuthKeyData Key { get; set; }
 
         public AddAuthKeyData(string applicationId, AuthKeyData key)
         {
-            this.applicationId = applicationId;
-            this.key = key;
+            ApplicationId = applicationId;
+            Key = key;
         }
     }
 
     public interface AuthKeyData
     {
-        string kid { get; }
-        string kty { get; }
-        string use { get; }
-        string? alg { get; }
+        string Kid { get; }
+        string Kty { get; }
+        string Use { get; }
+        string? Alg { get; }
     }
 
     public class RsaKeyData : AuthKeyData
     {
-        public string kty { get; private set; } = "RSA";
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
-        public string p { get; set; }
-        public string q { get; set; }
-        public string d { get; set; }
-        public string e { get; set; }
-        public string qi { get; set; }
-        public string dp { get; set; }
-        public string dq { get; set; }
-        public string n { get; set; }
+        public string Kty { get; private set; } = "RSA";
+        public string Use { get; set; }
+        public string Kid { get; set; }
+        public string? Alg { get; set; } = null;
+        public string P { get; set; }
+        public string Q { get; set; }
+        public string D { get; set; }
+        public string E { get; set; }
+        public string Qi { get; set; }
+        public string Dp { get; set; }
+        public string Dq { get; set; }
+        public string N { get; set; }
 
         public RsaKeyData(string use, string kid, string p, string q, string d, string e, string qi, string dp, string dq, string n, string? alg = null)
         {
-            this.use = use;
-            this.kid = kid;
-            this.p = p;
-            this.q = q;
-            this.d = d;
-            this.e = e;
-            this.qi = qi;
-            this.dp = dp;
-            this.dq = dq;
-            this.n = n;
-            this.alg = alg;
+            Use = use;
+            Kid = kid;
+            P = p;
+            Q = q;
+            D = d;
+            E = e;
+            Qi = qi;
+            Dp = dp;
+            Dq = dq;
+            N = n;
+            Alg = alg;
         }
     }
 
     public class EcKeyData : AuthKeyData
     {
-        public string kty { get; private set; } = "EC";
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
-        public string d { get; set; }
-        public string crv { get; set; }
-        public string x { get; set; }
-        public string y { get; set; }
+        public string Kty { get; private set; } = "EC";
+        public string Use { get; set; }
+        public string Kid { get; set; }
+        public string? Alg { get; set; } = null;
+        public string D { get; set; }
+        public string Crv { get; set; }
+        public string X { get; set; }
+        public string Y { get; set; }
 
         public EcKeyData(string use, string kid, string d, string crv, string x, string y, string? alg = null)
         {
-            this.use = use;
-            this.kid = kid;
-            this.d = d;
-            this.crv = crv;
-            this.x = x;
-            this.y = y;
-            this.alg = alg;
+            Use = use;
+            Kid = kid;
+            D = d;
+            Crv = crv;
+            X = x;
+            Y = y;
+            Alg = alg;
         }
     }
 
     public class Ed25519KeyData : AuthKeyData
     {
-        public string kty { get; private set; } = "OKP";
-        public string use { get; set; }
-        public string kid { get; set; }
-        public string? alg { get; set; } = null;
-        public string d { get; set; }
-        public string crv { get; set; }
-        public string x { get; set; }
+        public string Kty { get; private set; } = "OKP";
+        public string Use { get; set; }
+        public string Kid { get; set; }
+        public string? Alg { get; set; } = null;
+        public string D { get; set; }
+        public string Crv { get; set; }
+        public string X { get; set; }
 
         public Ed25519KeyData(string use, string kid, string d, string crv, string x, string? alg = null)
         {
-            this.use = use;
-            this.kid = kid;
-            this.d = d;
-            this.crv = crv;
-            this.x = x;
-            this.alg = alg;
+            Use = use;
+            Kid = kid;
+            D = d;
+            Crv = crv;
+            X = x;
+            Alg = alg;
         }
     }
 
     public class AddAuthIssuerData
     {
-        public string applicationId { get; set; }
-        public string url { get; set; }
+        public string ApplicationId { get; set; }
+        public string Url { get; set; }
 
         public AddAuthIssuerData(string applicationId, string url)
         {
-            this.applicationId = applicationId;
-            this.url = url;
+            ApplicationId = applicationId;
+            Url = url;
         }
     }
 
     public class DeleteAuthIssuerData
     {
-        public string applicationId { get; set; }
-        public string url { get; set; }
+        public string ApplicationId { get; set; }
+        public string Url { get; set; }
 
         public DeleteAuthIssuerData(string applicationId, string url)
         {
-            this.applicationId = applicationId;
-            this.url = url;
+            ApplicationId = applicationId;
+            Url = url;
         }
     }
 
     public class AddCorsDomainData
     {
-        public string applicationId { get; set; }
-        public string url { get; set; }
+        public string ApplicationId { get; set; }
+        public string Url { get; set; }
 
         public AddCorsDomainData(string applicationId, string url)
         {
-            this.applicationId = applicationId;
-            this.url = url;
+            ApplicationId = applicationId;
+            Url = url;
         }
     }
 
     public class RemoveCorsDomainData
     {
-        public string applicationId { get; set; }
-        public string url { get; set; }
+        public string ApplicationId { get; set; }
+        public string Url { get; set; }
 
         public RemoveCorsDomainData(string applicationId, string url)
         {
-            this.applicationId = applicationId;
-            this.url = url;
+            ApplicationId = applicationId;
+            Url = url;
         }
     }
 
     public class AddApplicationOwnerData
     {
-        public string applicationId { get; set; }
-        public string userId { get; set; }
+        public string ApplicationId { get; set; }
+        public string UserId { get; set; }
 
         public AddApplicationOwnerData(string applicationId, string userId)
         {
-            this.applicationId = applicationId;
-            this.userId = userId;
+            ApplicationId = applicationId;
+            UserId = userId;
         }
     }
 
     public class RemoveApplicationOwnerData
     {
-        public string applicationId { get; set; }
-        public string userId { get; set; }
+        public string ApplicationId { get; set; }
+        public string UserId { get; set; }
 
         public RemoveApplicationOwnerData(string applicationId, string userId)
         {
-            this.applicationId = applicationId;
-            this.userId = userId;
+            ApplicationId = applicationId;
+            UserId = userId;
         }
     }
 
     public class GetApplicationOwnersDetailsData
     {
-        public string applicationId { get; set; }
+        public string ApplicationId { get; set; }
 
         public GetApplicationOwnersDetailsData(string applicationId)
         {
-            this.applicationId = applicationId;
+            ApplicationId = applicationId;
         }
     }
 }

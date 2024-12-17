@@ -2,7 +2,7 @@
 {
     public class EncodedKeyPair
     {
-        public string @private { get; set; }
-        public string @public { get; set; }
+        public string Private { get; set; }
+        public string Public { get; set; }
     }
 }

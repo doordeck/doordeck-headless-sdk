@@ -2,39 +2,39 @@
 {
     public class LoginData
     {
-        public string email { get; set; }
-        public string password { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
 
         public LoginData(string email, string password)
         {
-            this.email = email;
-            this.password = password;
+            Email = email;
+            Password = password;
         }
     }
 
     public class RegistrationData
     {
-        public string email { get; set; }
-        public string password { get; set; }
-        public string? displayName { get; set; }
-        public bool force { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string? DisplayName { get; set; }
+        public bool Force { get; set; }
 
         public RegistrationData(string email, string password, string? displayName = null, bool force = false)
         {
-            this.email = email;
-            this.password = password;
-            this.displayName = displayName;
-            this.force = force;
+            Email = email;
+            Password = password;
+            DisplayName = displayName;
+            Force = force;
         }
     }
 
     public class VerifyEmailData
     {
-        public string code { get; set; }
+        public string Code { get; set; }
 
         public VerifyEmailData(string code)
         {
-            this.code = code;
+            Code = code;
         }
     }
 }
