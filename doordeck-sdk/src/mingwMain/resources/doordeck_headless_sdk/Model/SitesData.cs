@@ -1,4 +1,4 @@
-﻿namespace Doordeck.Headless.Sdk.model
+﻿namespace Doordeck.Headless.Sdk.Model
 {
     public class GetLocksForSiteData
     {

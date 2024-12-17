@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Doordeck.Headless.Sdk.model.responses
+namespace Doordeck.Headless.Sdk.Model.Responses
 {
     public class ApplicationResponse
     {

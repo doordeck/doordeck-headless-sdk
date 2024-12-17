@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.Json;
 
-namespace Doordeck.Headless.Sdk.utils
+namespace Doordeck.Headless.Sdk.Utils
 {
     public static unsafe class Utils
     {
