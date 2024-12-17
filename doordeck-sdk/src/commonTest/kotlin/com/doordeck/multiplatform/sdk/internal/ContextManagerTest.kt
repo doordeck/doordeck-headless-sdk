@@ -103,6 +103,7 @@ class ContextManagerTest {
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
@@ -127,6 +128,7 @@ class ContextManagerTest {
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
         contextManager.setOperationContextJson(operationContextData.toJson())
 
@@ -148,6 +150,7 @@ class ContextManagerTest {
     fun shouldCheckAuthTokenNullValidity() = runTest {
         // Given
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
         val result = contextManager.isAuthTokenAboutToExpire()
@@ -160,6 +163,7 @@ class ContextManagerTest {
     fun shouldCheckCertificateChainNullValidity() = runTest {
         // Given
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
         val result = contextManager.isCertificateChainAboutToExpire()
@@ -172,6 +176,7 @@ class ContextManagerTest {
     fun shouldCheckKeyPairNullValidity() = runTest {
         // Given
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
         val result = contextManager.isKeyPairValid()
@@ -184,6 +189,7 @@ class ContextManagerTest {
     fun shouldCheckKeyPairInvalidValidity() = runTest {
         // Given
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         contextManager.setKeyPair(publicKey, privateKey)
@@ -199,6 +205,7 @@ class ContextManagerTest {
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
         val contextManager = ContextManagerImpl()
+        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val keyPair = CryptoManager.generateKeyPair()
         contextManager.setKeyPair(keyPair.public, keyPair.private)
 
