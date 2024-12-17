@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.api.model.Context
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -9,7 +10,9 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 class ContextManagerTest {
@@ -139,5 +142,70 @@ class ContextManagerTest {
         assertContentEquals(privateKey, contextManager.getPrivateKey())
         assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
         assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+    }
+
+    @Test
+    fun shouldCheckAuthTokenNullValidity() = runTest {
+        // Given
+        val contextManager = ContextManagerImpl()
+
+        // When
+        val result = contextManager.isAuthTokenAboutToExpire()
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldCheckCertificateChainNullValidity() = runTest {
+        // Given
+        val contextManager = ContextManagerImpl()
+
+        // When
+        val result = contextManager.isCertificateChainAboutToExpire()
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldCheckKeyPairNullValidity() = runTest {
+        // Given
+        val contextManager = ContextManagerImpl()
+
+        // When
+        val result = contextManager.isKeyPairValid()
+
+        // Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun shouldCheckKeyPairInvalidValidity() = runTest {
+        // Given
+        val contextManager = ContextManagerImpl()
+        val publicKey = Uuid.random().toString().encodeToByteArray()
+        val privateKey = Uuid.random().toString().encodeToByteArray()
+        contextManager.setKeyPair(publicKey, privateKey)
+
+        // When
+        val result = contextManager.isKeyPairValid()
+
+        // Then
+        assertFalse { result }
+    }
+
+    @Test
+    fun shouldCheckKeyPairValidity() = runTest {
+        // Given
+        val contextManager = ContextManagerImpl()
+        val keyPair = CryptoManager.generateKeyPair()
+        contextManager.setKeyPair(keyPair.public, keyPair.private)
+
+        // When
+        val result = contextManager.isKeyPairValid()
+
+        // Then
+        assertTrue { result }
     }
 }

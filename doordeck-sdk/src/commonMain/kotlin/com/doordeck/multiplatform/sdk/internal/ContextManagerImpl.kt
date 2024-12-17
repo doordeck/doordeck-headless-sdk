@@ -116,7 +116,11 @@ internal class ContextManagerImpl(
             return false
         }
         val text = Uuid.random().toString()
-        val signature = text.signWithPrivateKey(actualUserPrivateKey)
+        val signature = try {
+            text.signWithPrivateKey(actualUserPrivateKey)
+        } catch (exception: Exception) {
+            return false
+        }
         return signature.verifySignature(actualUserPublicKey, text)
     }
 
