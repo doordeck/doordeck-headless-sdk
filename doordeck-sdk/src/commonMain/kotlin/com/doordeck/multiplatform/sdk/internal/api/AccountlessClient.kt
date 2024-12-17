@@ -24,6 +24,7 @@ internal open class AccountlessClient(
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.also {
+            contextManager.setUserEmail(email)
             contextManager.setAuthToken(it.authToken)
             contextManager.setRefreshToken(it.refreshToken)
         }
@@ -44,6 +45,7 @@ internal open class AccountlessClient(
             ))
             parameter(Params.FORCE, force)
         }.also {
+            contextManager.setUserEmail(email)
             contextManager.setAuthToken(it.authToken)
             contextManager.setRefreshToken(it.refreshToken)
         }

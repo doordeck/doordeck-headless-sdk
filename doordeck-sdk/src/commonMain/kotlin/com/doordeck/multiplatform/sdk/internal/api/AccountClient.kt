@@ -61,7 +61,7 @@ internal open class AccountClient(
     suspend fun registerEphemeralKeyRequest(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
             ?: contextManager.getPublicKey()?.encodeByteArrayToBase64()
-            ?: throw MissingContextFieldException("PublicKey is missing")
+            ?: throw MissingContextFieldException("Public key is missing")
         return httpClient.post<RegisterEphemeralKeyResponse>(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))

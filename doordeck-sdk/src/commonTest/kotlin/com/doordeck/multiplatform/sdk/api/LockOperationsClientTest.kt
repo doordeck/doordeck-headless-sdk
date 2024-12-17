@@ -709,14 +709,14 @@ internal class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { revokeAccessToLockUsingContextException is MissingContextFieldException }
-        assertEquals("User id is missing", revokeAccessToLockUsingContextException.message)
+        assertEquals("User ID is missing", revokeAccessToLockUsingContextException.message)
         assertTrue { shareLockUsingContextException is MissingContextFieldException }
-        assertEquals("User id is missing", shareLockUsingContextException.message)
+        assertEquals("User ID is missing", shareLockUsingContextException.message)
         assertTrue { unlockUsingContextException is MissingContextFieldException }
-        assertEquals("User id is missing", unlockUsingContextException.message)
+        assertEquals("User ID is missing", unlockUsingContextException.message)
         assertTrue { updateSecureSettingUnlockDurationUsingContextException is MissingContextFieldException }
-        assertEquals("User id is missing", updateSecureSettingUnlockDurationUsingContextException.message)
+        assertEquals("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.message)
         assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
-        assertEquals("User id is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
+        assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }

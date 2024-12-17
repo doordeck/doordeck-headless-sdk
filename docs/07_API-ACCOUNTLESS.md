@@ -2,6 +2,9 @@
 
 ## Login
 
+> [!NOTE]  
+> When used successfully, the user email, auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -47,7 +50,10 @@ unsafe
 
 ## Register a new user
 
-After registration, you will need to [verify the email](#verify-email).
+After registration, you will need to [verify the email](#verify-email)
+
+> [!NOTE]  
+> When used successfully, the user email, auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
 
 ### JVM & Android
 <details>

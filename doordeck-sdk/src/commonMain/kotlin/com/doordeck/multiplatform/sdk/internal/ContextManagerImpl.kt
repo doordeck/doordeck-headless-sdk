@@ -5,11 +5,14 @@ import com.doordeck.multiplatform.sdk.api.ContextManager
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
+import kotlin.uuid.Uuid
 
 internal class ContextManagerImpl(
     private val applicationContext: ApplicationContext? = null,
@@ -21,6 +24,7 @@ internal class ContextManagerImpl(
     private var currentRefreshToken: String? = refreshToken
     private var currentFusionToken: String? = null
     private var currentUserId: String? = null
+    private var currentEmail: String? = null
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
@@ -28,6 +32,10 @@ internal class ContextManagerImpl(
 
     override fun setAuthToken(token: String) {
         currentToken = token
+    }
+
+    override fun getAuthToken(): String? {
+        return currentToken
     }
 
     override fun isAuthTokenAboutToExpire(): Boolean {
@@ -38,16 +46,40 @@ internal class ContextManagerImpl(
         currentRefreshToken = token
     }
 
+    override fun getRefreshToken(): String? {
+        return currentRefreshToken
+    }
+
     override fun setFusionAuthToken(token: String) {
         currentFusionToken = token
+    }
+
+    override fun getFusionAuthToken(): String? {
+        return currentFusionToken
     }
 
     override fun setUserId(userId: String) {
         currentUserId = userId
     }
 
+    override fun getUserId(): String? {
+        return currentUserId
+    }
+
+    override fun setUserEmail(email: String) {
+        currentEmail = email
+    }
+
+    override fun getUserEmail(): String? {
+        return currentEmail
+    }
+
     override fun setCertificateChain(certificateChain: List<String>) {
         currentUserCertificateChain = certificateChain
+    }
+
+    override fun getCertificateChain(): List<String>? {
+        return currentUserCertificateChain
     }
 
     override fun isCertificateChainAboutToExpire(): Boolean {
@@ -61,6 +93,37 @@ internal class ContextManagerImpl(
         currentUserPrivateKey = privateKey
     }
 
+    override fun getKeyPair(): Crypto.KeyPair? {
+        val actualUserPublicKey = currentUserPublicKey
+        val actualUserPrivateKey = currentUserPrivateKey
+        return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
+            Crypto.KeyPair(actualUserPrivateKey, actualUserPublicKey)
+        } else null
+    }
+
+    internal fun getPublicKey(): ByteArray? {
+        return currentUserPublicKey
+    }
+
+    internal fun getPrivateKey(): ByteArray? {
+        return currentUserPrivateKey
+    }
+
+    override fun isKeyPairValid(): Boolean {
+        val actualUserPublicKey = currentUserPublicKey
+        val actualUserPrivateKey = currentUserPrivateKey
+        if (actualUserPublicKey == null || actualUserPrivateKey == null) {
+            return false
+        }
+        val text = Uuid.random().toString()
+        val signature = try {
+            text.signWithPrivateKey(actualUserPrivateKey)
+        } catch (exception: Exception) {
+            return false
+        }
+        return signature.verifySignature(actualUserPublicKey, text)
+    }
+
     internal fun setTokens(token: String, refreshToken: String) {
         currentToken = token
         currentRefreshToken = refreshToken
@@ -69,6 +132,7 @@ internal class ContextManagerImpl(
     internal fun reset() {
         resetTokens()
         resetOperationContext()
+        currentEmail = null
     }
 
     private fun resetTokens() {
@@ -110,6 +174,7 @@ internal class ContextManagerImpl(
         currentRefreshToken = currentRefreshToken ?: secureStorage?.getCloudRefreshToken()
         currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
         currentUserId = currentUserId ?: secureStorage?.getUserId()
+        currentEmail = currentEmail ?: secureStorage?.getUserEmail()
         currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
         currentUserPublicKey = currentUserPublicKey ?: secureStorage?.getPublicKey()
         currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
@@ -122,6 +187,7 @@ internal class ContextManagerImpl(
         currentRefreshToken?.let { secureStorage?.addCloudRefreshToken(it) }
         currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
         currentUserId?.let { secureStorage?.addUserId(it) }
+        currentEmail?.let { secureStorage?.addUserEmail(it) }
         currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
         currentUserPublicKey?.let { secureStorage?.addPublicKey(it) }
         currentUserPrivateKey?.let { secureStorage?.addPrivateKey(it) }
@@ -131,42 +197,6 @@ internal class ContextManagerImpl(
         initializeSecureStorage()
 
         secureStorage?.clear()
-    }
-
-    internal fun getCertificateChain(): List<String>? {
-        return currentUserCertificateChain
-    }
-
-    internal fun getUserId(): String? {
-        return currentUserId
-    }
-
-    internal fun getAuthToken(): String? {
-        return currentToken
-    }
-
-    internal fun getRefreshToken(): String? {
-        return currentRefreshToken
-    }
-
-    internal fun getFusionAuthToken(): String? {
-        return currentFusionToken
-    }
-
-    internal fun getPublicKey(): ByteArray? {
-        return currentUserPublicKey
-    }
-
-    internal fun getPrivateKey(): ByteArray? {
-        return currentUserPrivateKey
-    }
-
-    internal fun getKeyPair(): Crypto.KeyPair? {
-        val actualUserPublicKey = currentUserPublicKey
-        val actualUserPrivateKey = currentUserPrivateKey
-        return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
-            Crypto.KeyPair(actualUserPrivateKey, actualUserPublicKey)
-        } else null
     }
 
     private fun initializeSecureStorage() {

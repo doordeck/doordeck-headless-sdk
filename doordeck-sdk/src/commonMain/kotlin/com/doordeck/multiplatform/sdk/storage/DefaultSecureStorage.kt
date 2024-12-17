@@ -17,6 +17,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
     private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
     private val USER_ID_KEY = "USER_ID_KEY"
+    private val USER_EMAIL_KEY = "USER_EMAIL_KEY"
     private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
 
     override fun addCloudAuthToken(token: String) {
@@ -65,6 +66,14 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
 
     override fun getUserId(): String? {
         return settings.getStringOrNull(USER_ID_KEY)
+    }
+
+    override fun addUserEmail(email: String) {
+        settings.putString(USER_EMAIL_KEY, email)
+    }
+
+    override fun getUserEmail(): String? {
+        return settings.getStringOrNull(USER_EMAIL_KEY)
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {

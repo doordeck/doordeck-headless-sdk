@@ -6,6 +6,9 @@
 > This function is only available to users with Doordeck issued auth tokens.
 
 > [!NOTE]  
+> When used successfully, the auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+
+> [!NOTE]  
 > This function can be used with the [refresh token](06_CONTEXT-MANAGER.md#set-refresh-token) value from the context. To use the value from the context, you should pass null as the function parameter
 
 ### JVM & Android
@@ -101,6 +104,9 @@ unsafe
 ## Register ephemeral key
 To register a new ephemeral key, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair).
 
+> [!NOTE]  
+> When used successfully, the user ID, and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -146,6 +152,9 @@ unsafe
 
 ## Register ephemeral key with secondary authentication
 To register a new ephemeral key with secondary authentication, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair). After the registration, you will need to [verify the ephemeral key registration](#verify-ephemeral-key-registration).
+
+> [!NOTE]  
+> When used successfully, the user ID, and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
 
 ### JVM & Android
 <details>

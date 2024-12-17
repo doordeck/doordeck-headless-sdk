@@ -411,7 +411,7 @@ internal open class LockOperationsClient(
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
             ?: contextManager.getUserId()
-            ?: throw MissingContextFieldException("User id is missing")
+            ?: throw MissingContextFieldException("User ID is missing")
         val userCertificateChain = userCertificateChain
             ?: contextManager.getCertificateChain()
             ?: throw MissingContextFieldException("Certificate chain is missing")
