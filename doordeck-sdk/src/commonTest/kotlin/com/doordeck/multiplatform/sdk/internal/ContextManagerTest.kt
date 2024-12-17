@@ -1,6 +1,9 @@
 package com.doordeck.multiplatform.sdk.internal
 
+import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.toJson
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -18,6 +21,7 @@ class ContextManagerTest {
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
+        val email = "${Uuid.random()}@doordeck.com"
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
@@ -26,7 +30,10 @@ class ContextManagerTest {
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setRefreshToken(cloudRefreshToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        contextManager.setUserId(userId)
+        contextManager.setCertificateChain(certificateChain)
+        contextManager.setKeyPair(publicKey, privateKey)
+        contextManager.setUserEmail(email)
 
         // When
         contextManager.storeContext()
@@ -35,9 +42,12 @@ class ContextManagerTest {
 
         // Then
         assertEquals(userId, contextManager.getUserId())
+        assertEquals(email, contextManager.getUserEmail())
         assertContentEquals(certificateChain, contextManager.getCertificateChain())
         assertContentEquals(publicKey, contextManager.getPublicKey())
         assertContentEquals(privateKey, contextManager.getPrivateKey())
+        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
+        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
         assertEquals(cloudAuthToken, contextManager.getAuthToken())
         assertEquals(cloudRefreshToken, contextManager.getRefreshToken())
         assertEquals(fusionAuthToken, contextManager.getFusionAuthToken())
@@ -50,6 +60,7 @@ class ContextManagerTest {
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
         val userId = Uuid.random().toString()
+        val email = "${Uuid.random()}@doordeck.com"
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
@@ -58,7 +69,10 @@ class ContextManagerTest {
         contextManager.setAuthToken(cloudAuthToken)
         contextManager.setRefreshToken(cloudRefreshToken)
         contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        contextManager.setUserId(userId)
+        contextManager.setCertificateChain(certificateChain)
+        contextManager.setKeyPair(publicKey, privateKey)
+        contextManager.setUserEmail(email)
         contextManager.storeContext()
 
         // When
@@ -68,11 +82,62 @@ class ContextManagerTest {
 
         // Then
         assertNull(contextManager.getUserId())
+        assertNull(contextManager.getUserEmail())
         assertNull(contextManager.getCertificateChain())
         assertNull(contextManager.getPublicKey())
         assertNull(contextManager.getPrivateKey())
+        assertNull(contextManager.getKeyPair())
         assertNull(contextManager.getAuthToken())
         assertNull(contextManager.getRefreshToken())
         assertNull(contextManager.getFusionAuthToken())
+    }
+
+    @Test
+    fun shouldStoreOperationContext() = runTest {
+        // Given
+        val userId = Uuid.random().toString()
+        val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
+        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val contextManager = ContextManagerImpl()
+        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+
+        // When
+        contextManager.storeContext()
+        contextManager.reset()
+        contextManager.loadContext()
+
+        // Then
+        assertEquals(userId, contextManager.getUserId())
+        assertContentEquals(certificateChain, contextManager.getCertificateChain())
+        assertContentEquals(publicKey, contextManager.getPublicKey())
+        assertContentEquals(privateKey, contextManager.getPrivateKey())
+        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
+        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+    }
+
+    @Test
+    fun shouldStoreJsonOperationContext() = runTest {
+        // Given
+        val userId = Uuid.random().toString()
+        val certificateChain = (1..3).map { Uuid.random().toString() }
+        val publicKey = Uuid.random().toString().encodeToByteArray()
+        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val contextManager = ContextManagerImpl()
+        val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
+        contextManager.setOperationContextJson(operationContextData.toJson())
+
+        // When
+        contextManager.storeContext()
+        contextManager.reset()
+        contextManager.loadContext()
+
+        // Then
+        assertEquals(userId, contextManager.getUserId())
+        assertContentEquals(certificateChain, contextManager.getCertificateChain())
+        assertContentEquals(publicKey, contextManager.getPublicKey())
+        assertContentEquals(privateKey, contextManager.getPrivateKey())
+        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
+        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
     }
 }

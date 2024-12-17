@@ -2,6 +2,9 @@
 
 ## Login
 
+> [!NOTE]  
+> When used successfully, the auth token from the response is added to the [context manager](06_CONTEXT-MANAGER.md).
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
