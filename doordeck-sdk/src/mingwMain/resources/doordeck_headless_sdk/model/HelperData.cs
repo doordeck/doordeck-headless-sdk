@@ -1,4 +1,4 @@
-﻿namespace DoordeckHeadlessSDK.model
+﻿namespace Doordeck.Headless.Sdk.model
 {
     public class UploadPlatformLogoData
     {

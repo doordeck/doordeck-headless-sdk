@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using DoordeckHeadlessSDK.model.responses;
+using Doordeck.Headless.Sdk.model.responses;
 
 public class AuthKeyResponseConverter : JsonConverter<AuthKeyResponse>
 {

@@ -1,4 +1,4 @@
-﻿namespace DoordeckHeadlessSDK.model.responses
+﻿namespace Doordeck.Headless.Sdk.model.responses
 {
     public class LockResponse
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DoordeckHeadlessSDK.model
+namespace Doordeck.Headless.Sdk.model
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum AuditEvent
