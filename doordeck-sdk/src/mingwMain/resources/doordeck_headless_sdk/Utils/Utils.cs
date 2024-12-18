@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.Json;
 
-namespace DoordeckHeadlessSDK.utils
+namespace Doordeck.Headless.Sdk.Utils
 {
     public static unsafe class Utils
     {
@@ -9,7 +9,8 @@ namespace DoordeckHeadlessSDK.utils
         {
             Converters = {
                 new AuthKeyResponseConverter()
-            }
+            },
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
         public static sbyte* ToData<T>(this T input) =>

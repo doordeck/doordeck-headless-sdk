@@ -52,7 +52,7 @@ const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeW
 ```csharp
 unsafe 
 {
-    doordeck_headless_sdk_ExportedSymbols* symbols = Methods.doordeck_headless_sdk_symbols();
+    Doordeck_Headless_Sdk_ExportedSymbols* symbols = Methods.Doordeck_Headless_Sdk_symbols();
     var apiEnvironment = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD.get();
     var factory = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
     var sdk = symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(factory, apiEnvironment, token.ToSByte());

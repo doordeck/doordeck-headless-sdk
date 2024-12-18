@@ -42,7 +42,7 @@ private data class MavenPublishData(
 ) : PublishData()
 
 private data class NugetPublishData(
-    val packageName: String = "doordeck_headless_sdk",
+    val packageName: String = "Doordeck.Headless.Sdk",
     val tags: List<String> = listOf("doordeck", "access control")
 ) : PublishData()
 
@@ -337,7 +337,7 @@ tasks.withType<KotlinJsCompile>().configureEach {
 
 val nuspecTemplate = """
 <?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata>
     <id>${nugetPublish.packageName}</id>
     <version>${project.version}</version>
@@ -352,9 +352,6 @@ val nuspecTemplate = """
     <dependencies>
       <group targetFramework=".NETStandard2.0" />
     </dependencies>
-    <packageTypes>
-      <packageType name="MSBuildSdk" />
-    </packageTypes>
   </metadata>
   <files>
     <file src="README.md" target="\" />
@@ -377,7 +374,7 @@ tasks.register("mingwX64Pack").configure {
         // Copy the model folder from the mingwX64 resources
         copy {
             from(file("$projectDir/src/mingwMain/resources/doordeck_headless_sdk"))
-            into(file("$outputDir/doordeck_headless_sdk"))
+            into(file("$outputDir/${nugetPublish.packageName}"))
         }
     }
 }

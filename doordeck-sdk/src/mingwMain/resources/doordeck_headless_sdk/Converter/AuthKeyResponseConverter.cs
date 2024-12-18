@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using DoordeckHeadlessSDK.model.responses;
+using Doordeck.Headless.Sdk.Model.Responses;
 
-public class AuthKeyResponseConverter : JsonConverter<AuthKeyResponse>
+public class AuthKeyResponseConverter : JsonConverter<IAuthKeyResponse>
 {
-    public override AuthKeyResponse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override IAuthKeyResponse Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         using (var jsonDocument = JsonDocument.ParseValue(ref reader))
         {
@@ -17,16 +17,15 @@ public class AuthKeyResponseConverter : JsonConverter<AuthKeyResponse>
                     return JsonSerializer.Deserialize<EcKeyResponse>(jsonObject.GetRawText(), options); ;
                 case "OKP":
                     return JsonSerializer.Deserialize<Ed25519KeyResponse>(jsonObject.GetRawText(), options);
-                default: 
+                default:
                     throw new JsonException("Unknown kty value");
 
             }
         }
     }
 
-    public override void Write(Utf8JsonWriter writer, AuthKeyResponse value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, IAuthKeyResponse value, JsonSerializerOptions options)
     {
         JsonSerializer.Serialize(writer, (object)value, value.GetType(), options);
     }
 }
-
