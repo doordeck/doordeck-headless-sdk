@@ -4,12 +4,12 @@ A cross-platform SDK for seamless access to Doordeck’s services. This SDK supp
 ## Packages
 We are publishing the packages to multiple repositories:
 
-|          Platform           | Repository                                                                                                           |
-|:---------------------------:|----------------------------------------------------------------------------------------------------------------------|
-| Multiplatform, Android, JVM | [Maven central](https://central.sonatype.com/namespace/com.doordeck.headless.sdk)                                    |
-|         iOS, macOS          | [Cocoapods](https://cocoapods.org/pods/DoordeckSDK), [SPM](https://github.com/doordeck/doordeck-headless-sdk-spm)    |
-|             JS              | [NPM](https://www.npmjs.com/package/@doordeck/doordeck-headless-sdk)                                                 |
-|           Windows           | [NuGet](https://www.nuget.org/packages/doordeck_headless_sdk)                                                        |
+|          Platform           | Repository                                                                                                          |
+|:---------------------------:|---------------------------------------------------------------------------------------------------------------------|
+| Multiplatform, Android, JVM | [Maven central](https://central.sonatype.com/namespace/com.doordeck.headless.sdk)                                   |
+|         iOS, macOS          | [Cocoapods](https://cocoapods.org/pods/DoordeckSDK), [SPM](https://github.com/doordeck/doordeck-headless-sdk-spm)   |
+|             JS              | [NPM](https://www.npmjs.com/package/@doordeck/doordeck-headless-sdk)                                                |
+|           Windows           | [NuGet](https://www.nuget.org/packages/Doordeck.Headless.Sdk)                                                       |
 
 ## Supported platforms
 The SDK supports a range of targets for different platforms:

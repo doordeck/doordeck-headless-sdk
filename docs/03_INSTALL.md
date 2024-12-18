@@ -93,7 +93,7 @@ npm install @doordeck/doordeck-headless-sdk --save
 <details>
 <summary>Show Details</summary>
 
-The Windows artifacts are available on [NuGet](https://www.nuget.org/packages/doordeck_headless_sdk).
+The Windows artifacts are available on [NuGet](https://www.nuget.org/packages/Doordeck.Headless.Sdk).
 
 ```csharp
 dotnet add package doordeck_headless_sdk
