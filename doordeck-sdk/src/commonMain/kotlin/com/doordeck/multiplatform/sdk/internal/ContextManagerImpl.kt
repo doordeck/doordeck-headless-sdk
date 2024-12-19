@@ -33,6 +33,10 @@ internal object ContextManagerImpl : ContextManager {
         this.apiEnvironment = apiEnvironment
     }
 
+    override fun getApiEnvironment(): ApiEnvironment {
+        return apiEnvironment
+    }
+
     override fun setApplicationContext(applicationContext: ApplicationContext) {
         this.applicationContext = applicationContext
     }

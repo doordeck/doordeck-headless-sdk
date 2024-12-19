@@ -100,22 +100,21 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
     }
 
     @Test
@@ -125,33 +124,31 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
-        contextManager.setOperationContextJson(operationContextData.toJson())
+        ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
     }
 
     @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
-        val result = contextManager.isAuthTokenAboutToExpire()
+        val result = ContextManagerImpl.isAuthTokenAboutToExpire()
 
         // Then
         assertTrue { result }
@@ -160,11 +157,10 @@ class ContextManagerTest {
     @Test
     fun shouldCheckCertificateChainNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
-        val result = contextManager.isCertificateChainAboutToExpire()
+        val result = ContextManagerImpl.isCertificateChainAboutToExpire()
 
         // Then
         assertTrue { result }
@@ -173,11 +169,10 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertFalse { result }
@@ -186,14 +181,13 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairInvalidValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        contextManager.setKeyPair(publicKey, privateKey)
+        ContextManagerImpl.setKeyPair(publicKey, privateKey)
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertFalse { result }
@@ -202,13 +196,12 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val keyPair = CryptoManager.generateKeyPair()
-        contextManager.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertTrue { result }

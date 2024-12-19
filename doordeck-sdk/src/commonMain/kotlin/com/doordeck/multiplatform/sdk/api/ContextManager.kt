@@ -10,6 +10,7 @@ import kotlin.js.JsExport
 interface ContextManager {
 
     fun setApiEnvironment(apiEnvironment: ApiEnvironment)
+    fun getApiEnvironment(): ApiEnvironment
     @JsExport.Ignore
     fun setApplicationContext(applicationContext: ApplicationContext)
     fun setAuthToken(token: String)
