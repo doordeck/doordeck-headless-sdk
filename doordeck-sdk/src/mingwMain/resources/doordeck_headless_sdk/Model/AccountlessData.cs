@@ -20,7 +20,7 @@
         public bool Force { get; set; }
         public string? PublicKey { get; set; }
 
-        public RegistrationData(string email, string password, string? displayName = null, bool force = false, string? publicKey = null,)
+        public RegistrationData(string email, string password, string? displayName = null, bool force = false, string? publicKey = null)
         {
             Email = email;
             Password = password;
