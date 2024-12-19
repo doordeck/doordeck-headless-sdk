@@ -27,7 +27,7 @@ class MingwPlatformTest {
     }
 
     @Test
-    fun shouldInitialize() {
+    fun shouldInitialize() = runTest {
         // Then
         assertDoesNotThrow {
             KDoordeckFactory.initialize(TEST_ENVIRONMENT)

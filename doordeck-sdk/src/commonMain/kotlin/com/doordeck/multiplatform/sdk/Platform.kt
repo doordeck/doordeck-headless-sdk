@@ -1,12 +1,13 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.util.addCloudInterceptor
-import com.doordeck.multiplatform.sdk.util.addFusionInterceptor
+import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
+import com.doordeck.multiplatform.sdk.internal.api.Paths
+import com.doordeck.multiplatform.sdk.util.addInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
 import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
-import com.doordeck.multiplatform.sdk.util.installDefaultCloudRequest
-import com.doordeck.multiplatform.sdk.util.installDefaultFusionRequest
+import com.doordeck.multiplatform.sdk.util.installDefaultRequest
 import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
@@ -33,9 +34,16 @@ internal fun createCloudHttpClient(): HttpClient {
         installAuth()
         installCertificatePinner()
         installUserAgent()
-        installDefaultCloudRequest()
+        installDefaultRequest(
+            determineHost = {
+                ContextManagerImpl.getApiEnvironment().cloudHost
+            }
+        )
     }.also {
-        it.addCloudInterceptor()
+        it.addInterceptor(
+            requiresAuth = Paths::requiresAuth,
+            getAuthToken = ContextManagerImpl::getAuthToken
+        )
     }
 }
 
@@ -44,9 +52,14 @@ internal fun createFusionHttpClient(): HttpClient {
         installContentNegotiation()
         installTimeout()
         installUserAgent()
-        installDefaultFusionRequest()
+        installDefaultRequest(determineHost = {
+            ContextManagerImpl.getApiEnvironment().fusionHost
+        })
     }.also {
-        it.addFusionInterceptor()
+        it.addInterceptor(
+            requiresAuth = FusionPaths::requiresAuth,
+            getAuthToken = ContextManagerImpl::getFusionAuthToken
+        )
     }
 }
 
@@ -57,26 +70,35 @@ internal fun createHttpClient(): HttpClient {
 }
 
 internal object CloudHttpClient {
-    var client = createCloudHttpClient()
+    private var _client = createCloudHttpClient()
+
+    val client: HttpClient
+        get() = _client
 
     internal fun overrideClient(httpClient: HttpClient) {
-        this.client = httpClient
+        this._client = httpClient
     }
 }
 
 internal object FusionHttpClient {
-    var client = createFusionHttpClient()
+    private var _client = createFusionHttpClient()
+
+    val client: HttpClient
+        get() = _client
 
     internal fun overrideClient(httpClient: HttpClient) {
-        this.client = httpClient
+        this._client = httpClient
     }
 }
 
 internal object HttpClient {
-    var client = createHttpClient()
+    private var _client = createHttpClient()
+
+    val client: HttpClient
+        get() = _client
 
     internal fun overrideClient(httpClient: HttpClient) {
-        this.client = httpClient
+        this._client = httpClient
     }
 }
 

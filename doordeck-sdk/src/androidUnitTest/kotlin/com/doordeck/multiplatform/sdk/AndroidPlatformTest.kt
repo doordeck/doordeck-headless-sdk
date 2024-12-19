@@ -28,7 +28,7 @@ class AndroidPlatformTest {
     }
 
     @Test
-    fun shouldInitialize() {
+    fun shouldInitialize() = runTest {
         // Given
         val context = ApplicationContext.apply {
             set(Application())
