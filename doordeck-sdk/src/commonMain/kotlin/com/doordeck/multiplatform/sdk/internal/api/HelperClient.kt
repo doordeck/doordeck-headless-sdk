@@ -97,25 +97,21 @@ internal open class HelperClient(
 
     /**
      * Performs the standard registration process in a single function. This function performs the following steps:
-     *  * Registers a new account using the provided details.
      *  * Generates a new key pair.
+     *  * Registers a new account using the provided details.
      *  * Adds the key pair to the context manager.
-     *  * Registers the key pair for use with the account.
      *
      * Note: This function interacts with the context manager to store key pair data but does not manage context persistence.
      *  Ensure the context is properly loaded and stored outside this function as required.
      */
     suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
-        // Register the account with the provided details
-        accountlessClient.registrationRequest(email, password, displayName, force)
-
         // Generate a new cryptographic key pair
         val keyPair = CryptoManager.generateKeyPair()
 
+        // Register the account with the provided details
+        accountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)
+
         // Add the key pair to the context manager
         contextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
-
-        // Register the key pair with the account; no 2FA needed for a new account
-        accountClient.registerEphemeralKeyRequest()
     }
 }

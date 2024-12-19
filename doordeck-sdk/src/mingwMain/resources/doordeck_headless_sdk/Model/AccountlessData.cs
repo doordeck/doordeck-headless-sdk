@@ -18,13 +18,15 @@
         public string Password { get; set; }
         public string? DisplayName { get; set; }
         public bool Force { get; set; }
+        public string? PublicKey { get; set; }
 
-        public RegistrationData(string email, string password, string? displayName = null, bool force = false)
+        public RegistrationData(string email, string password, string? displayName = null, bool force = false, string? publicKey = null,)
         {
             Email = email;
             Password = password;
             DisplayName = displayName;
             Force = force;
+            PublicKey = publicKey;
         }
     }
 
