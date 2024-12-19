@@ -11,8 +11,8 @@ internal class AccountlessResourceImpl(
         return accountlessClient.loginRequest(email, password)
     }
 
-    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return accountlessClient.registrationRequest(email, password, displayName, force)
+    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
+        return accountlessClient.registrationRequest(email, password, displayName, force, publicKey)
     }
 
     override suspend fun verifyEmail(code: String) {

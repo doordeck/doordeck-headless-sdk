@@ -20,7 +20,7 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
     @Throws(Exception::class)
-    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): TokenResponse
+    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse
 
     /**
      * Verify email

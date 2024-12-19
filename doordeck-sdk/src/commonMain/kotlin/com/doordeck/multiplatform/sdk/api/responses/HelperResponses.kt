@@ -8,3 +8,9 @@ import kotlin.js.JsExport
 class AssistedLoginResponse(
     val requiresVerification: Boolean
 )
+
+@JsExport
+@Serializable
+class AssistedRegisterEphemeralKeyResponse(
+    val requiresVerification: Boolean
+)
