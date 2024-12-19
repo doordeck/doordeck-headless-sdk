@@ -1,21 +1,13 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.api.model.Platform
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class PlatformResourceImplTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        CloudHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-    }
+class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldCreateApplication() = runTest {

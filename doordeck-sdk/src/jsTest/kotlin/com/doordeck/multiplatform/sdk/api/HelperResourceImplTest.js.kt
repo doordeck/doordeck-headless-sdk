@@ -1,23 +1,13 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.HttpClient
-import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class HelperResourceImplTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        HttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-        CloudHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-    }
+class HelperResourceImplTest : MockTest() {
 
     @Test
     fun shouldUploadPlatformLogo() = runTest {

@@ -1,8 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.TEST_CLOUD_CLIENT
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.getPlatform
@@ -17,12 +15,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class AccountlessClientTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        CloudHttpClient.overrideClient(TEST_CLOUD_CLIENT)
-    }
+class AccountlessClientTest : IntegrationTest() {
 
     @Test
     fun shouldLogin() = runTest {

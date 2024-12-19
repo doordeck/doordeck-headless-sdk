@@ -1,8 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.TEST_CLOUD_CLIENT
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -12,7 +10,6 @@ import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.PlatformClient
 import kotlinx.coroutines.test.runTest
@@ -23,12 +20,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class PlatformClientTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        CloudHttpClient.overrideClient(TEST_CLOUD_CLIENT)
-    }
+class PlatformClientTest : IntegrationTest() {
 
     @Test
     fun shouldTestPlatform() = runTest {

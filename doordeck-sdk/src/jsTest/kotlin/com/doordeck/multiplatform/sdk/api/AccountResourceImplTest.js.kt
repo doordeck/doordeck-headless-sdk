@@ -1,27 +1,14 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class AccountResourceImplTest {
-
-    init {
-        LibsodiumInitializer.initializeWithCallback {  }
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        ContextManagerImpl.setRefreshToken("")
-        ContextManagerImpl.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
-        CloudHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-    }
+class AccountResourceImplTest : MockTest() {
 
     @Test
     fun shouldRefreshToken() = runTest {

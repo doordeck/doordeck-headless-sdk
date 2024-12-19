@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.FusionHttpClient
-import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.api.model.DeleteDoorData
 import com.doordeck.multiplatform.sdk.api.model.EnableDoorData
 import com.doordeck.multiplatform.sdk.api.model.Fusion
@@ -12,18 +10,12 @@ import com.doordeck.multiplatform.sdk.api.model.GetDoorStatusData
 import com.doordeck.multiplatform.sdk.api.model.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.api.model.StartDoorData
 import com.doordeck.multiplatform.sdk.api.model.StopDoorData
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class FusionResourceImplTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        FusionHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-    }
+class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {

@@ -1,22 +1,14 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.FusionHttpClient
-import com.doordeck.multiplatform.sdk.TEST_MOCK_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.api.model.Fusion
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class FusionResourceImplTest {
-
-    init {
-        ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
-        FusionHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
-    }
+class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {

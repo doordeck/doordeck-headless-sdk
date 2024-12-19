@@ -1,11 +1,10 @@
 package com.doordeck.multiplatform.sdk.internal
 
+import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -15,7 +14,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class ContextManagerTest {
+class ContextManagerTest : IntegrationTest() {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {
@@ -28,7 +27,6 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         ContextManagerImpl.setAuthToken(cloudAuthToken)
         ContextManagerImpl.setRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
@@ -66,7 +64,6 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         ContextManagerImpl.setAuthToken(cloudAuthToken)
         ContextManagerImpl.setRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
@@ -100,7 +97,6 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
@@ -124,7 +120,6 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
         ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
@@ -145,7 +140,7 @@ class ContextManagerTest {
     @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
         // Given
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
         val result = ContextManagerImpl.isAuthTokenAboutToExpire()
@@ -157,7 +152,7 @@ class ContextManagerTest {
     @Test
     fun shouldCheckCertificateChainNullValidity() = runTest {
         // Given
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
         val result = ContextManagerImpl.isCertificateChainAboutToExpire()
@@ -169,7 +164,7 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairNullValidity() = runTest {
         // Given
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
         val result = ContextManagerImpl.isKeyPairValid()
@@ -181,7 +176,6 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairInvalidValidity() = runTest {
         // Given
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         ContextManagerImpl.setKeyPair(publicKey, privateKey)
@@ -196,7 +190,6 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val keyPair = CryptoManager.generateKeyPair()
         ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
 
