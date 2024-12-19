@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.Constants
 import com.doordeck.multiplatform.sdk.LockedException
+import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -65,7 +66,7 @@ internal open class HelperClient(
 
         val requiresVerification = if (requiresKeyRegister) {
             // Register the key pair
-            val assistedRegisterEphemeralKeyRequest = assistedRegisterEphemeralKeyRequest()
+            val assistedRegisterEphemeralKeyRequest = assistedRegisterEphemeralKeyRequest(keyPair.public)
             assistedRegisterEphemeralKeyRequest.requiresVerification
         } else {
             // No key pair registration required; verification is not needed
@@ -83,13 +84,17 @@ internal open class HelperClient(
      *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     suspend fun assistedRegisterEphemeralKeyRequest(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
+        // Define which key should be registered
+        val key = publicKey
+            ?: contextManagerImpl.getPublicKey()
+            ?: throw MissingContextFieldException("Public key is missing")
         val requiresVerification = try {
             // Attempt to register the provided or default public key
-            accountClient.registerEphemeralKeyRequest(publicKey)
+            accountClient.registerEphemeralKeyRequest(key)
             false
         } catch (exception: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
-            accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey)
+            accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
             true
         }
         return AssistedRegisterEphemeralKeyResponse(requiresVerification)
@@ -98,7 +103,7 @@ internal open class HelperClient(
     /**
      * Performs the standard registration process in a single function. This function performs the following steps:
      *  * Generates a new key pair.
-     *  * Registers a new account using the provided details.
+     *  * Registers a new account using the provided details, including the key pair.
      *  * Adds the key pair to the context manager.
      *
      * Note: This function interacts with the context manager to store key pair data but does not manage context persistence.
