@@ -79,8 +79,8 @@ internal open class HelperClient(
      * The method attempts registration with a simple approach first and, if it fails, retries using secondary authentication.
      *
      * Note: If the response indicates that verification is required
-     * (`AssistedRegisterEphemeralKeyResponse.requiresVerification` is true),
-     * the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
+     *  (`AssistedRegisterEphemeralKeyResponse.requiresVerification` is true),
+     *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     suspend fun assistedRegisterEphemeralKeyRequest(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
         val requiresVerification = try {
@@ -103,7 +103,7 @@ internal open class HelperClient(
      *  * Registers the key pair for use with the account.
      *
      * Note: This function interacts with the context manager to store key pair data but does not manage context persistence.
-     * Ensure the context is properly loaded and stored outside this function as required.
+     *  Ensure the context is properly loaded and stored outside this function as required.
      */
     suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Register the account with the provided details
