@@ -60,7 +60,7 @@ After registration, you will need to [verify the email](#verify-email)
 <summary>Show Details</summary>
 
 ```kotlin
-val response = sdk.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false)
+val response = sdk.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false, PUBLIC_KEY)
 ```
 
 💡 **Note:**  In Java, use the `registrationAsync` function, which returns a `CompletableFuture<TokenResponse>` instead.
@@ -71,7 +71,7 @@ val response = sdk.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME
 <summary>Show Details</summary>
 
 ```swift
-let response = sdk.accountless().registration(email: "EMAIL", password: "PASSWORD", displayName: "DISPLAY_NAME", force: false)
+let response = sdk.accountless().registration(email: "EMAIL", password: "PASSWORD", displayName: "DISPLAY_NAME", force: false, publicKey: PUBLIC_KEY)
 ```
 </details>
 
@@ -80,7 +80,7 @@ let response = sdk.accountless().registration(email: "EMAIL", password: "PASSWOR
 <summary>Show Details</summary>
 
 ```js
-const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false);
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless().registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false, PUBLIC_KEY);
 ```
 </details>
 
@@ -92,7 +92,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 unsafe
 {
     var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false).ToData();
+    var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY").ToData();
     var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
 }
 ```
