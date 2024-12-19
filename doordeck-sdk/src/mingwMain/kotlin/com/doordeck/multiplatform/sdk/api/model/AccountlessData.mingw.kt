@@ -13,7 +13,8 @@ class RegistrationData(
     val email: String,
     val password: String,
     val displayName: String? = null,
-    val force: Boolean
+    val force: Boolean,
+    val publicKey: String? = null
 )
 
 @Serializable

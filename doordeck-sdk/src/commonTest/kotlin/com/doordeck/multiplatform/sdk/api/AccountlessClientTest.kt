@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.createCloudHttpClient
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.AccountClient
@@ -29,10 +30,11 @@ internal class AccountlessClientTest : IntegrationTest() {
     @Test
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
-         val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${Uuid.random()}@")
+        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${Uuid.random()}@")
+        val keyPair = CryptoManager.generateKeyPair()
 
         // When
-        val response = ACCOUNTLESS_CLIENT.registrationRequest(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false)
+        val response = ACCOUNTLESS_CLIENT.registrationRequest(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false, keyPair.public)
 
         // When
         assertTrue { response.authToken.isNotEmpty() }

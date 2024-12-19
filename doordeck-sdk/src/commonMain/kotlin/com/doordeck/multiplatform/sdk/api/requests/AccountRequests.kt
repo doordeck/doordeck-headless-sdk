@@ -12,7 +12,8 @@ class LoginRequest(
 class RegisterRequest(
     val email: String,
     val password: String,
-    val displayName: String? = null
+    val displayName: String? = null,
+    val ephemeralKey: String? = null
 )
 
 @Serializable

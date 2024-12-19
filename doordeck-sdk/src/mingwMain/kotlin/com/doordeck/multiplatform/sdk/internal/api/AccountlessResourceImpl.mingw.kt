@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.api.model.LoginData
 import com.doordeck.multiplatform.sdk.api.model.RegistrationData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEmailData
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
@@ -22,13 +23,13 @@ internal class AccountlessResourceImpl(
         return login(loginData.email, loginData.password).toJson()
     }
 
-    override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return runBlocking { accountlessClient.registrationRequest(email, password, displayName, force) }
+    override fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
+        return runBlocking { accountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
     }
 
     override fun registrationJson(data: String): String {
         val registrationData = data.fromJson<RegistrationData>()
-        return registration(registrationData.email, registrationData.password, registrationData.displayName, registrationData.force).toJson()
+        return registration(registrationData.email, registrationData.password, registrationData.displayName, registrationData.force, registrationData.publicKey?.decodeBase64ToByteArray()).toJson()
     }
 
     override fun verifyEmail(code: String) {

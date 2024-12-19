@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.api.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.api.requests.RegisterRequest
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.HttpClient
 import io.ktor.client.request.parameter
@@ -35,13 +36,14 @@ internal open class AccountlessClient(
      *
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
-    suspend fun registrationRequest(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
+    suspend fun registrationRequest(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
         return httpClient.post<TokenResponse>(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(RegisterRequest(
                 email = email,
                 password = password,
-                displayName = displayName
+                displayName = displayName,
+                ephemeralKey = publicKey?.encodeByteArrayToBase64()
             ))
             parameter(Params.FORCE, force)
         }.also {

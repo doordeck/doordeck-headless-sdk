@@ -24,5 +24,8 @@ namespace Doordeck.Headless.Sdk.Utils
 
         public static unsafe string ConvertSByteToString(sbyte* input) =>
             Marshal.PtrToStringAnsi((IntPtr)input)!;
+
+        public static bool ToBoolean(this byte input) =>
+            Convert.ToBoolean(input);
     }
 }
