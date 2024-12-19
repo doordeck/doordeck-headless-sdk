@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
 
 actual interface AccountlessResource {

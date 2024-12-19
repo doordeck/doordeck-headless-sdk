@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
-import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
 
 actual interface TilesResource {

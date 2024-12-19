@@ -1,13 +1,13 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.Constants
+import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.LockedException
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import com.doordeck.multiplatform.sdk.HttpClient
-import io.ktor.client.request.*
+import io.ktor.client.request.setBody
 
 internal object HelperClient : AbstractResourceImpl() {
 

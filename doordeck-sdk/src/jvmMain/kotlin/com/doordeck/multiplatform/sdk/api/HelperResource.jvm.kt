@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.internal.api.HelperClient
 import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
 import java.util.concurrent.CompletableFuture
 

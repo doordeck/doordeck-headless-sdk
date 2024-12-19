@@ -16,6 +16,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsRespo
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.AuditIssuerResponse
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.EmailPreferencesResponse
@@ -40,7 +41,6 @@ import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
@@ -50,7 +50,8 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondOk
-import io.ktor.client.request.*
+import io.ktor.client.request.HttpRequestData
+import io.ktor.client.request.HttpResponseData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
