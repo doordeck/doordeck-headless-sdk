@@ -1,44 +1,41 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
-import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class SitesResourceImplTest {
-
-    private val sites = SitesResourceImpl(SitesClient(TEST_HTTP_CLIENT))
+class SitesResourceImplTest : MockTest() {
 
     @Test
     fun shouldListSites() = runTest {
-        sites.listSites()
+        SitesResourceImpl.listSites()
     }
 
     @Test
     fun shouldListSitesAsync() = runTest {
-        sites.listSitesAsync().await()
+        SitesResourceImpl.listSitesAsync().await()
     }
 
     @Test
     fun shouldGetLocksForSite() = runTest {
-        sites.getLocksForSite(DEFAULT_SITE_ID)
+        SitesResourceImpl.getLocksForSite(DEFAULT_SITE_ID)
     }
 
     @Test
     fun shouldGetLocksForSiteAsync() = runTest {
-        sites.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
+        SitesResourceImpl.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
     }
 
     @Test
     fun shouldGetUsersForSite() = runTest {
-        sites.getUsersForSite(DEFAULT_SITE_ID)
+        SitesResourceImpl.getUsersForSite(DEFAULT_SITE_ID)
     }
 
     @Test
     fun shouldGetUsersForSiteAsync() = runTest {
-        sites.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
+        SitesResourceImpl.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
     }
 }

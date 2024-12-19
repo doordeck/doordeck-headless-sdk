@@ -53,6 +53,9 @@ internal object Paths {
     fun getAddApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
+
+    internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
+            path != getVerifyEmailPath()
 }
 
 internal object FusionPaths {
@@ -64,4 +67,6 @@ internal object FusionPaths {
     fun getDoorStatusPath(deviceId: String) = "/api/controller/state/$deviceId"
     fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
     fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"
+
+    internal fun requiresAuth(path: String) = path != getLoginPath()
 }

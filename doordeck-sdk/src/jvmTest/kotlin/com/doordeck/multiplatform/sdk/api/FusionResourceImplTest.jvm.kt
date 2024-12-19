@@ -1,97 +1,92 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.api.model.Fusion
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class FusionResourceImplTest {
-
-    private val contextManager = ContextManagerImpl()
-    private val fusion = FusionResourceImpl(FusionClient(TEST_HTTP_CLIENT, contextManager))
+class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        fusion.login("", "")
+        FusionResourceImpl.login("", "")
     }
 
     @Test
     fun shouldLoginAsync() = runTest {
-        fusion.loginAsync("", "").await()
+        FusionResourceImpl.loginAsync("", "").await()
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        fusion.getIntegrationType()
+        FusionResourceImpl.getIntegrationType()
     }
 
     @Test
     fun shouldGetIntegrationTypeAsync() = runTest {
-        fusion.getIntegrationTypeAsync().await()
+        FusionResourceImpl.getIntegrationTypeAsync().await()
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        fusion.getIntegrationConfiguration("")
+        FusionResourceImpl.getIntegrationConfiguration("")
     }
 
     @Test
     fun shouldGetIntegrationConfigurationAsync() = runTest {
-        fusion.getIntegrationConfigurationAsync("").await()
+        FusionResourceImpl.getIntegrationConfigurationAsync("").await()
     }
 
     @Test
     fun shouldEnableDoor() = runTest {
-        fusion.enableDoor("", "", Fusion.DemoController())
+        FusionResourceImpl.enableDoor("", "", Fusion.DemoController())
     }
 
     @Test
     fun shouldEnableDoorAsync() = runTest {
-        fusion.enableDoorAsync("", "", Fusion.DemoController()).await()
+        FusionResourceImpl.enableDoorAsync("", "", Fusion.DemoController()).await()
     }
 
     @Test
     fun shouldDeleteDoor() = runTest {
-        fusion.deleteDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.deleteDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldDeleteDoorAsync() = runTest {
-        fusion.deleteDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionResourceImpl.deleteDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        fusion.getDoorStatus(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldGetDoorStatusAsync() = runTest {
-        fusion.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
+        FusionResourceImpl.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
     fun shouldStartDoor() = runTest {
-        fusion.startDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.startDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldStartDoorAsync() = runTest {
-        fusion.startDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionResourceImpl.startDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 
     @Test
     fun shouldStopDoor() = runTest {
-        fusion.stopDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.stopDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldStopDoorAsync() = runTest {
-        fusion.stopDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionResourceImpl.stopDoorAsync(DEFAULT_DEVICE_ID).await()
     }
 }

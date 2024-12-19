@@ -1,92 +1,81 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class AccountResourceImplTest {
-
-    private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
-
-    init {
-        contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
-        contextManager.setRefreshToken("")
-    }
+class AccountResourceImplTest : MockTest() {
 
     @Test
     fun shouldRefreshToken() = runTest {
-        account.refreshToken("")
+        AccountResourceImpl.refreshToken("")
     }
 
     @Test
     fun shouldRefreshTokenUsingContext() = runTest {
-        account.refreshToken()
+        AccountResourceImpl.refreshToken()
     }
 
     @Test
     fun shouldLogout() = runTest {
-        account.logout()
+        AccountResourceImpl.logout()
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        account.registerEphemeralKey(byteArrayOf())
+        AccountResourceImpl.registerEphemeralKey(byteArrayOf())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyUsingContext() = runTest {
-        account.registerEphemeralKey()
+        AccountResourceImpl.registerEphemeralKey()
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthentication()
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthentication()
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        AccountResourceImpl.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
-        account.verifyEphemeralKeyRegistration("")
+        AccountResourceImpl.verifyEphemeralKeyRegistration("")
     }
 
     @Test
     fun shouldReverifyEmail() = runTest {
-        account.reverifyEmail()
+        AccountResourceImpl.reverifyEmail()
     }
 
     @Test
     fun shouldChangePassword() = runTest {
-        account.changePassword("", "")
+        AccountResourceImpl.changePassword("", "")
     }
 
     @Test
     fun shouldGetUserDetails() = runTest {
-        account.getUserDetails()
+        AccountResourceImpl.getUserDetails()
     }
 
     @Test
     fun shouldUpdateUserDetails() = runTest {
-        account.updateUserDetails("")
+        AccountResourceImpl.updateUserDetails("")
     }
 
     @Test
     fun shouldDeleteAccount() = runTest {
-        account.deleteAccount()
+        AccountResourceImpl.deleteAccount()
     }
 }

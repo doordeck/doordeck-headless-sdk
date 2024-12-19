@@ -5,10 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface AccountResource {
     /**
@@ -95,4 +93,4 @@ actual interface AccountResource {
     suspend fun deleteAccount()
 }
 
-actual fun account(): AccountResource = AccountResourceImpl(getKoin().get<AccountClient>())
+actual fun account(): AccountResource = AccountResourceImpl

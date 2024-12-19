@@ -9,12 +9,10 @@ import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
 
-internal class AccountlessResourceImpl(
-    private val accountlessClient: AccountlessClient
-) : AccountlessResource {
+internal object AccountlessResourceImpl : AccountlessResource {
 
     override fun login(email: String, password: String): TokenResponse {
-        return runBlocking { accountlessClient.loginRequest(email, password) }
+        return runBlocking { AccountlessClient.loginRequest(email, password) }
     }
 
     override fun loginJson(data: String): String {
@@ -23,7 +21,7 @@ internal class AccountlessResourceImpl(
     }
 
     override fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return runBlocking { accountlessClient.registrationRequest(email, password, displayName, force) }
+        return runBlocking { AccountlessClient.registrationRequest(email, password, displayName, force) }
     }
 
     override fun registrationJson(data: String): String {
@@ -32,7 +30,7 @@ internal class AccountlessResourceImpl(
     }
 
     override fun verifyEmail(code: String) {
-        return runBlocking { accountlessClient.verifyEmailRequest(code) }
+        return runBlocking { AccountlessClient.verifyEmailRequest(code) }
     }
 
     override fun verifyEmailJson(data: String) {

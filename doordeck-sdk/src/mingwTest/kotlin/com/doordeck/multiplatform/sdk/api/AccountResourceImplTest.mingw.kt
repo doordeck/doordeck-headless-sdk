@@ -1,157 +1,144 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.api.model.ChangePasswordData
 import com.doordeck.multiplatform.sdk.api.model.RefreshTokenData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.api.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
 import com.doordeck.multiplatform.sdk.api.model.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEphemeralKeyRegistrationData
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class AccountResourceImplTest {
-
-    private val contextManager = ContextManagerImpl()
-    private val account = AccountResourceImpl(AccountClient(TEST_HTTP_CLIENT, contextManager))
-
-    init {
-        LibsodiumInitializer.initializeWithCallback {  }
-        contextManager.setKeyPair(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
-        contextManager.setRefreshToken("")
-    }
+class AccountResourceImplTest : MockTest() {
 
     @Test
     fun shouldRefreshToken() = runTest {
-        account.refreshToken("")
+        AccountResourceImpl.refreshToken("")
     }
 
     @Test
     fun shouldRefreshTokenJson() = runTest {
-        account.refreshTokenJson(RefreshTokenData("").toJson())
+        AccountResourceImpl.refreshTokenJson(RefreshTokenData("").toJson())
     }
 
     @Test
     fun shouldRefreshTokenUsingContext() = runTest {
-        account.refreshToken()
+        AccountResourceImpl.refreshToken()
     }
 
     @Test
     fun shouldRefreshTokenUsingContextJson() = runTest {
-        account.refreshTokenJson()
+        AccountResourceImpl.refreshTokenJson()
     }
 
     @Test
     fun shouldLogout() = runTest {
-        account.logout()
+        AccountResourceImpl.logout()
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        account.registerEphemeralKey(byteArrayOf())
+        AccountResourceImpl.registerEphemeralKey(byteArrayOf())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyJson() = runTest {
-        account.registerEphemeralKeyJson(RegisterEphemeralKeyData(byteArrayOf().encodeByteArrayToBase64()).toJson())
+        AccountResourceImpl.registerEphemeralKeyJson(RegisterEphemeralKeyData(byteArrayOf().encodeByteArrayToBase64()).toJson())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyUsingContext() = runTest {
-        account.registerEphemeralKey()
+        AccountResourceImpl.registerEphemeralKey()
     }
 
     @Test
     fun shouldRegisterEphemeralKeyUsingContextJson() = runTest {
-        account.registerEphemeralKeyJson()
+        AccountResourceImpl.registerEphemeralKeyJson()
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationJson() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData(byteArrayOf().encodeByteArrayToBase64()).toJson())
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData(byteArrayOf().encodeByteArrayToBase64()).toJson())
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthentication()
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthentication()
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContextJson() = runTest {
-        account.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData().toJson())
+        AccountResourceImpl.registerEphemeralKeyWithSecondaryAuthenticationJson(RegisterEphemeralKeyWithSecondaryAuthenticationData().toJson())
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        account.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        AccountResourceImpl.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationJson() = runTest {
-        account.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PRIVATE_KEY).toJson())
+        AccountResourceImpl.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PRIVATE_KEY).toJson())
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
-        account.verifyEphemeralKeyRegistration("")
+        AccountResourceImpl.verifyEphemeralKeyRegistration("")
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationUsingContextJson() = runTest {
-        account.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("").toJson())
+        AccountResourceImpl.verifyEphemeralKeyRegistrationJson(VerifyEphemeralKeyRegistrationData("").toJson())
     }
 
     @Test
     fun shouldReverifyEmail() = runTest {
-        account.reverifyEmail()
+        AccountResourceImpl.reverifyEmail()
     }
 
     @Test
     fun shouldChangePassword() = runTest {
-        account.changePassword("", "")
+        AccountResourceImpl.changePassword("", "")
     }
 
     @Test
     fun shouldChangePasswordJson() = runTest {
-        account.changePasswordJson(ChangePasswordData("", "").toJson())
+        AccountResourceImpl.changePasswordJson(ChangePasswordData("", "").toJson())
     }
 
     @Test
     fun shouldGetUserDetails() = runTest {
-        account.getUserDetails()
+        AccountResourceImpl.getUserDetails()
     }
 
     @Test
     fun shouldGetUserDetailsJson() = runTest {
-        account.getUserDetailsJson()
+        AccountResourceImpl.getUserDetailsJson()
     }
 
     @Test
     fun shouldUpdateUserDetails() = runTest {
-        account.updateUserDetails("")
+        AccountResourceImpl.updateUserDetails("")
     }
 
     @Test
     fun shouldUpdateUserDetailsJson() = runTest {
-        account.updateUserDetailsJson(UpdateUserDetailsData("").toJson())
+        AccountResourceImpl.updateUserDetailsJson(UpdateUserDetailsData("").toJson())
     }
 
     @Test
     fun shouldDeleteAccount() = runTest {
-        account.deleteAccount()
+        AccountResourceImpl.deleteAccount()
     }
 }

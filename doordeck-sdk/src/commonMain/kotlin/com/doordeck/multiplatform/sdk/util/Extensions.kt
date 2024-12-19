@@ -2,12 +2,10 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
-import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -23,7 +21,6 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
-import io.ktor.client.request.host
 import io.ktor.client.request.post
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -61,20 +58,23 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
     }
 }
 
-internal fun HttpClientConfig<*>.installAuth(contextManager: ContextManagerImpl) {
-    val currentRefreshToken = contextManager.getRefreshToken()
-    if (currentRefreshToken != null) {
-        install(Auth) {
-            bearer {
-                // Automatically refresh the tokens if a refresh token has been provided during the initialization
-                refreshTokens {
+internal fun HttpClientConfig<*>.installAuth() {
+    install(Auth) {
+        bearer {
+            refreshTokens {
+                ContextManagerImpl.getRefreshToken()?.let { currentRefreshToken ->
                     val refreshTokens: TokenResponse = client.post(Paths.getRefreshTokenPath()) {
+                        url {
+                            protocol = URLProtocol.HTTPS
+                            host = ContextManagerImpl.getApiEnvironment().cloudHost
+                        }
                         headers {
                             append(HttpHeaders.ContentType, ContentType.Application.Json)
                             append(HttpHeaders.Authorization, "Bearer $currentRefreshToken")
                         }
+                        markAsRefreshTokenRequest()
                     }.body()
-                    contextManager.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                    ContextManagerImpl.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                     BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                 }
             }
@@ -82,11 +82,11 @@ internal fun HttpClientConfig<*>.installAuth(contextManager: ContextManagerImpl)
     }
 }
 
-internal fun HttpClientConfig<*>.installDefaultRequest(protocol: URLProtocol, host: String) {
+internal fun HttpClientConfig<*>.installDefaultRequest(determineHost: () -> String) {
     defaultRequest {
         url {
-            this.protocol = protocol
-            this.host = host
+            protocol = URLProtocol.HTTPS
+            host = determineHost()
         }
     }
 }
@@ -105,30 +105,13 @@ internal fun HttpClientConfig<*>.installTimeout() {
     }
 }
 
-internal fun HttpClient.addCloudInterceptor(apiEnvironment: ApiEnvironment, contextManager: ContextManagerImpl) {
+internal fun HttpClient.addInterceptor(
+    requiresAuth: (String) -> Boolean,
+    getAuthToken: () -> String?
+) {
     plugin(HttpSend).intercept { request ->
-        val requestPath = request.url.encodedPath
-        if (request.host == apiEnvironment.cloudHost
-            && requestPath != Paths.getLoginPath()
-            && requestPath != Paths.getRegistrationPath()
-            && requestPath != Paths.getVerifyEmailPath()
-            && !request.headers.contains(HttpHeaders.Authorization)
-        ) {
-            contextManager.getAuthToken()?.let {
-                request.headers {
-                    append(HttpHeaders.Authorization, "Bearer $it")
-                }
-            }
-        }
-        execute(request)
-    }
-}
-
-internal fun HttpClient.addFusionInterceptor(contextManager: ContextManagerImpl) {
-    plugin(HttpSend).intercept { request ->
-        val requestPath = request.url.encodedPath
-        if (requestPath != FusionPaths.getLoginPath() && !request.headers.contains(HttpHeaders.Authorization)) {
-            contextManager.getFusionAuthToken()?.let {
+        if (requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
+            getAuthToken()?.let {
                 request.headers {
                     append(HttpHeaders.Authorization, "Bearer $it")
                 }

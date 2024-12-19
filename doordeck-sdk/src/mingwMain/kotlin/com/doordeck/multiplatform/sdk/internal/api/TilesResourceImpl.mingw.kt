@@ -8,12 +8,10 @@ import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
 
-internal class TilesResourceImpl(
-    private val tilesClient: TilesClient
-) : TilesResource {
+internal object TilesResourceImpl : TilesResource {
 
     override fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return runBlocking { tilesClient.getLocksBelongingToTileRequest(tileId) }
+        return runBlocking { TilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     override fun getLocksBelongingToTileJson(data: String): String {
@@ -22,7 +20,7 @@ internal class TilesResourceImpl(
     }
 
     override fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>) {
-        return runBlocking { tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return runBlocking { TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 
     override fun associateMultipleLocksJson(data: String) {
