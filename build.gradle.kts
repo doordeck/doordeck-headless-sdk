@@ -26,5 +26,6 @@ rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlu
         resolution("cross-spawn", "7.0.6")
         resolution("ws", "8.17.1")
         resolution("webpack", "5.94.0")
+        resolution("path-to-regexp", "0.1.12")
     }
 }

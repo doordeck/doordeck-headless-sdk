@@ -94,6 +94,28 @@ jobs:
           distribution: corretto
           java-version: 21
 
+      - name: Set up NET
+        uses: actions/setup-dotnet@v4
+        with:
+            dotnet-version: 7.x
+
+      - name: Install ClangSharpPInvokeGenerator
+        run: |
+          # Install ClangSharpPInvokeGenerator
+          dotnet tool install --global ClangSharpPInvokeGenerator
+          
+          # Install dependencies using nuget
+          nuget install libclang.runtime.osx-arm64 \
+            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
+          
+          nuget install libClangSharp.runtime.osx-arm64 \
+            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
+          
+          # Copy the dlls
+          find ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages \
+            -name "*.dylib" \
+            -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
@@ -111,6 +133,40 @@ jobs:
       - name: Parse release version
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Publish to NuGet
+        if: github.ref == 'refs/heads/main'
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+        run: |
+          # Generate the dll and header files
+          ./gradlew mingwX64Binaries
+          
+          # Generate PInvoke bindings
+          ClangSharpPInvokeGenerator \
+            -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
+            -o doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
+            -n Doordeck.Headless.Sdk
+          
+          # Adjust generated bindings
+          sed -i '' \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            -e '/\[NativeTypeName/d' \
+            -e 's/\[DllImport(""/\[DllImport("Doordeck.Headless.Sdk.dll"/g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+          
+          # Create the .nuspec file
+          ./gradlew -Prelease.useLastTag=true mingwX64Pack
+          
+          # Create the .nupkg file
+          nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.nuspec \
+            -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
+          
+          # Publish the package
+          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
+            -Source https://api.nuget.org/v3/index.json \
+            -ApiKey ${{ secrets.NUGET_TOKEN }}
 
       - name: Publish to SPM
         if: github.ref == 'refs/heads/main'

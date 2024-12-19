@@ -12,7 +12,6 @@ import io.ktor.utils.io.core.toByteArray
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.js.Date
-import kotlin.time.Duration.Companion.days
 
 @JsExport
 actual object CryptoManager {
@@ -40,7 +39,7 @@ actual object CryptoManager {
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)
         val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
-        Clock.System.now() >= Instant.parse(notAfterDate) - 30.days
+        Clock.System.now() >= Instant.parse(notAfterDate) - MIN_CERTIFICATE_LIFETIME_DAYS
     } catch (exception: Throwable) {
         true
     }

@@ -2,6 +2,9 @@
 
 ## Login
 
+> [!NOTE]  
+> When used successfully, the auth token from the response is added to the [context manager](06_CONTEXT-MANAGER.md).
+
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -36,9 +39,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().logi
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new FusionLoginData("EMAIL", "PASSWORD").toData();
-var response = Utils.fromData<FusionLoginResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.loginJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new FusionLoginData("EMAIL", "PASSWORD").ToData();
+    var response = Utils.FromData<FusionLoginResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.loginJson(resource, data));
+}
 ```
 </details>
 
@@ -78,8 +84,11 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var response = Utils.fromData<IntegrationTypeResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationTypeJson(resource));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var response = Utils.FromData<IntegrationTypeResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationTypeJson(resource));
+}
 ```
 </details>
 
@@ -119,9 +128,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new GetIntegrationConfigurationData("TYPE");
-var response = Utils.fromData<List<IntegrationConfigurationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationConfigurationJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new GetIntegrationConfigurationData("TYPE");
+    var response = Utils.FromData<List<IntegrationConfigurationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getIntegrationConfigurationJson(resource, data));
+}
 ```
 </details>
 
@@ -165,10 +177,13 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "S
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var controllerData = new DemoControllerData(8080);
-var data = new EnableDoorData("NAME", "SITE_ID", controllerData).toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.enableDoor(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var controllerData = new DemoControllerData(8080);
+    var data = new EnableDoorData("NAME", "SITE_ID", controllerData).ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.enableDoor(resource, data);
+}
 ```
 </details>
 
@@ -208,9 +223,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new DeleteDoorData("DEVICE_ID");
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.deleteDoorJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new DeleteDoorData("DEVICE_ID");
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.deleteDoorJson(resource, data);
+}
 ```
 </details>
 
@@ -250,9 +268,12 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getD
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new GetDoorStatusData("DEVICE_ID");
-var response = Utils.fromData<DoorStateResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getDoorStatusJson(resource, data));
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new GetDoorStatusData("DEVICE_ID");
+    var response = Utils.FromData<DoorStateResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.getDoorStatusJson(resource, data));
+}
 ```
 </details>
 
@@ -292,9 +313,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().startDoor("DEVICE_ID"
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new StartDoorData("DEVICE_ID");
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.startDoorJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new StartDoorData("DEVICE_ID");
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.startDoorJson(resource, data);
+}
 ```
 </details>
 
@@ -334,9 +358,12 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID")
 <summary>Show Details</summary>
 
 ```csharp
-var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
-var data = new StopDoorData("DEVICE_ID");
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.stopDoorJson(resource, data);
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+    var data = new StopDoorData("DEVICE_ID");
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource.stopDoorJson(resource, data);
+}
 ```
 </details>
 

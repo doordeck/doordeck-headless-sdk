@@ -1,17 +1,17 @@
 package com.doordeck.multiplatform.sdk.util
 
+import com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import kotlin.time.Duration.Companion.days
 
 internal fun String.isCertificateAboutToExpire(): Boolean = try {
     val notAfter = extractNotAfter(decodeBase64ToByteArray())
     val notAfterInstant = parseNotAfter(notAfter.decodeToString())
-    Clock.System.now() >= notAfterInstant - 30.days
+    Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
 } catch (exception: Exception) {
     true
 }

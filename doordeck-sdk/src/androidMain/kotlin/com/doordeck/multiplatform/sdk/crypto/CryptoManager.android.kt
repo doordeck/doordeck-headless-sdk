@@ -12,7 +12,6 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
-import kotlin.time.Duration.Companion.days
 
 actual object CryptoManager {
 
@@ -35,7 +34,7 @@ actual object CryptoManager {
         val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
         val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
         certificate.notAfter?.let {
-            Clock.System.now() >= it.toInstant().toKotlinInstant() - 30.days
+            Clock.System.now() >= it.toInstant().toKotlinInstant() - MIN_CERTIFICATE_LIFETIME_DAYS
         } ?: true
     } catch (exception: Exception) {
         true

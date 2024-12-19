@@ -21,6 +21,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.also {
+            ContextManagerImpl.setUserEmail(email)
             ContextManagerImpl.setAuthToken(it.authToken)
             ContextManagerImpl.setRefreshToken(it.refreshToken)
         }
@@ -41,6 +42,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
             ))
             parameter(Params.FORCE, force)
         }.also {
+            ContextManagerImpl.setUserEmail(email)
             ContextManagerImpl.setAuthToken(it.authToken)
             ContextManagerImpl.setRefreshToken(it.refreshToken)
         }

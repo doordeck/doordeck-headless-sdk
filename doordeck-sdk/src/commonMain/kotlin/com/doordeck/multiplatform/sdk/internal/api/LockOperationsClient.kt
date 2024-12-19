@@ -407,7 +407,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
             ?: ContextManagerImpl.getUserId()
-            ?: throw MissingContextFieldException("User id is missing")
+            ?: throw MissingContextFieldException("User ID is missing")
         val userCertificateChain = userCertificateChain
             ?: ContextManagerImpl.getCertificateChain()
             ?: throw MissingContextFieldException("Certificate chain is missing")

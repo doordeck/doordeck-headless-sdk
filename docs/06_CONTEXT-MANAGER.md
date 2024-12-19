@@ -9,7 +9,7 @@ The **Context Manager** simplifies the usage of complex SDK functions by reducin
 <summary>Show Details</summary>
 
 ```kotlin
-sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY)
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PUBLIC_KEY, PRIVATE_KEY)
 ```
 </details>
 
@@ -18,7 +18,7 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 <summary>Show Details</summary>
 
 ```swift
-sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: USER_CERTIFICATE_CHAIN_LIST, privateKey: PRIVATE_KEY)
+sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: USER_CERTIFICATE_CHAIN_LIST, publicKey: PUBLIC_KEY, privateKey: PRIVATE_KEY)
 ```
 </details>
 
@@ -27,7 +27,7 @@ sdk.contextManager().setOperationContext(userId: "USER_ID", certificateChain: US
 <summary>Show Details</summary>
 
 ```js
-sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY);
+sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PUBLIC_KEY, PRIVATE_KEY);
 ```
 </details>
 
@@ -36,9 +36,12 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY").toData();
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(contextManager, data);
+}
 ```
 </details>
 
@@ -78,8 +81,11 @@ sdk.contextManager().setAuthToken("AUTH_TOKEN");
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(contextManager, "AUTH_TOKEN".toSByte());
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(contextManager, "AUTH_TOKEN".ToSByte());
+}
 ```
 </details>
 
@@ -117,8 +123,11 @@ sdk.contextManager().setRefreshToken("REFRESH_TOKEN");
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(contextManager, "REFRESH_TOKEN".toSByte());
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(contextManager, "REFRESH_TOKEN".ToSByte());
+}
 ```
 </details>
 
@@ -156,8 +165,11 @@ sdk.contextManager().setFusionAuthToken("FUSION_AUTH_TOKEN");
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusionAuthToken(contextManager, "FUSION_AUTH_TOKEN".toSByte());
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusionAuthToken(contextManager, "FUSION_AUTH_TOKEN".ToSByte());
+}
 ```
 </details>
 
@@ -217,8 +229,11 @@ sdk.contextManager().storeContext();
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeContext(contextManager);
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeContext(contextManager);
+}
 ```
 
 💡 **Note:** In C#, the context is stored using `windows registry`.
@@ -260,8 +275,11 @@ sdk.contextManager().loadContext();
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadContext(contextManager);
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadContext(contextManager);
+}
 ```
 </details>
 
@@ -301,8 +319,11 @@ sdk.contextManager().clearContext();
 <summary>Show Details</summary>
 
 ```csharp
-var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
-symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(contextManager);
+}
 ```
 </details>
 
