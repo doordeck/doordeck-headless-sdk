@@ -1,12 +1,16 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
+import com.doordeck.multiplatform.sdk.createFusionHttpClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionClient
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.http.URLProtocol
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -24,7 +28,15 @@ class FusionClientTest : IntegrationTest() {
         FUSION_INTEGRATIONS.filter { it.value.enabled }.forEach { (host, testController) ->
 
             // Given - shouldTestLogin
-           // FusionHttpClient.overrideClient(createFusionHttpClient())
+            val fusionClient = createFusionHttpClient().config {
+                defaultRequest {
+                    url {
+                        protocol = URLProtocol.HTTPS
+                        this.host = host
+                    }
+                }
+            }
+            FusionHttpClient.overrideClient(fusionClient)
 
             // When
             val login = FusionClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
