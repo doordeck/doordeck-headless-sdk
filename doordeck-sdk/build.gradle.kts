@@ -169,7 +169,6 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.kotlinx.datetime)
-                implementation(libs.koin)
                 implementation(libs.multiplatform.settings)
             }
         }

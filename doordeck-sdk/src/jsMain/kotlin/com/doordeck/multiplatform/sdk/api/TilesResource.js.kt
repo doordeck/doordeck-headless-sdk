@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
-import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -25,7 +23,7 @@ actual interface TilesResource {
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<dynamic>
 }
 
-private val tiles = TilesResourceImpl(getKoin().get<TilesClient>())
+private val tiles = TilesResourceImpl
 
 @JsExport
 actual fun tiles(): TilesResource = tiles

@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.ApplicationContext
+import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.model.Crypto
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import kotlin.js.JsExport
@@ -7,6 +9,10 @@ import kotlin.js.JsExport
 @JsExport
 interface ContextManager {
 
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment)
+    fun getApiEnvironment(): ApiEnvironment
+    @JsExport.Ignore
+    fun setApplicationContext(applicationContext: ApplicationContext)
     fun setAuthToken(token: String)
     fun getAuthToken(): String?
     fun isAuthTokenAboutToExpire(): Boolean

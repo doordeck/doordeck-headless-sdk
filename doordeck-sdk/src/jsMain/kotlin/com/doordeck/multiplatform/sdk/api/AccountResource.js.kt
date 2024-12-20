@@ -5,10 +5,8 @@ import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountResourceImpl
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -87,7 +85,7 @@ actual interface AccountResource {
     fun deleteAccount(): Promise<dynamic>
 }
 
-private val account = AccountResourceImpl(getKoin().get<AccountClient>())
+private val account = AccountResourceImpl
 
 @JsExport
 actual fun account(): AccountResource = account

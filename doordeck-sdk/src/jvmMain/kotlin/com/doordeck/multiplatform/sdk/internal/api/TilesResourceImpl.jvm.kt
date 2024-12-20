@@ -7,23 +7,21 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-internal class TilesResourceImpl(
-    private val tilesClient: TilesClient
-) : TilesResource {
+internal object TilesResourceImpl : TilesResource {
 
     override suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return tilesClient.getLocksBelongingToTileRequest(tileId)
+        return TilesClient.getLocksBelongingToTileRequest(tileId)
     }
 
     override fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse> {
-        return GlobalScope.future(Dispatchers.IO) { tilesClient.getLocksBelongingToTileRequest(tileId) }
+        return GlobalScope.future(Dispatchers.IO) { TilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     override suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>) {
-        return tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds)
+        return TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds)
     }
 
     override fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { tilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return GlobalScope.future(Dispatchers.IO) { TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
     }
 }

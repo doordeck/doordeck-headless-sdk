@@ -10,47 +10,45 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-internal class AccountResourceImpl(
-    private val accountClient: AccountClient,
-) : AccountResource {
+internal object AccountResourceImpl : AccountResource {
 
     override fun refreshToken(refreshToken: String?): Promise<TokenResponse> {
-        return GlobalScope.promise { accountClient.refreshTokenRequest(refreshToken) }
+        return GlobalScope.promise { AccountClient.refreshTokenRequest(refreshToken) }
     }
 
     override fun logout(): Promise<Unit> {
-        return GlobalScope.promise { accountClient.logoutRequest() }
+        return GlobalScope.promise { AccountClient.logoutRequest() }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray?): Promise<RegisterEphemeralKeyResponse> {
-        return GlobalScope.promise { accountClient.registerEphemeralKeyRequest(publicKey) }
+        return GlobalScope.promise { AccountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
-        return GlobalScope.promise { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
+        return GlobalScope.promise { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): Promise<RegisterEphemeralKeyResponse> {
-        return GlobalScope.promise { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+        return GlobalScope.promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
     override fun reverifyEmail(): Promise<Unit> {
-        return GlobalScope.promise { accountClient.reverifyEmailRequest() }
+        return GlobalScope.promise { AccountClient.reverifyEmailRequest() }
     }
 
     override fun changePassword(oldPassword: String, newPassword: String): Promise<Unit> {
-        return GlobalScope.promise { accountClient.changePasswordRequest(oldPassword, newPassword) }
+        return GlobalScope.promise { AccountClient.changePasswordRequest(oldPassword, newPassword) }
     }
 
     override fun getUserDetails(): Promise<UserDetailsResponse> {
-        return GlobalScope.promise { accountClient.getUserDetailsRequest() }
+        return GlobalScope.promise { AccountClient.getUserDetailsRequest() }
     }
 
     override fun updateUserDetails(displayName: String): Promise<Unit> {
-        return GlobalScope.promise { accountClient.updateUserDetailsRequest(displayName) }
+        return GlobalScope.promise { AccountClient.updateUserDetailsRequest(displayName) }
     }
 
     override fun deleteAccount(): Promise<Unit> {
-        return GlobalScope.promise { accountClient.deleteAccountRequest() }
+        return GlobalScope.promise { AccountClient.deleteAccountRequest() }
     }
 }

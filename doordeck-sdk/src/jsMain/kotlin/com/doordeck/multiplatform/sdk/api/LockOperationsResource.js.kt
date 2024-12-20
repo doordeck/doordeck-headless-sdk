@@ -9,10 +9,7 @@ import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
-import io.ktor.client.*
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -229,7 +226,7 @@ actual interface LockOperationsResource {
     fun getShareableLocks(): Promise<List<ShareableLockResponse>>
 }
 
-private val lockOperations = LockOperationsResourceImpl(getKoin().get<LockOperationsClient>())
+private val lockOperations = LockOperationsResourceImpl
 
 @JsExport
 actual fun lockOperations(): LockOperationsResource = lockOperations
