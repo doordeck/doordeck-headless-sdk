@@ -69,38 +69,21 @@ internal fun createHttpClient(): HttpClient {
     }
 }
 
-internal object CloudHttpClient {
-    private var _client = createCloudHttpClient()
+internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
+
+    private var _client: HttpClient = clientProvider()
 
     val client: HttpClient
         get() = _client
 
     internal fun overrideClient(httpClient: HttpClient) {
-        this._client = httpClient
+        _client = httpClient
     }
 }
 
-internal object FusionHttpClient {
-    private var _client = createFusionHttpClient()
-
-    val client: HttpClient
-        get() = _client
-
-    internal fun overrideClient(httpClient: HttpClient) {
-        this._client = httpClient
-    }
-}
-
-internal object HttpClient {
-    private var _client = createHttpClient()
-
-    val client: HttpClient
-        get() = _client
-
-    internal fun overrideClient(httpClient: HttpClient) {
-        this._client = httpClient
-    }
-}
+internal object CloudHttpClient : BaseHttpClient(::createCloudHttpClient)
+internal object FusionHttpClient : BaseHttpClient(::createFusionHttpClient)
+internal object HttpClient : BaseHttpClient(::createHttpClient)
 
 expect fun getPlatform(): PlatformType
 

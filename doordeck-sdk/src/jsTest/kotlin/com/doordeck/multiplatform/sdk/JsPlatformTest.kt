@@ -6,6 +6,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class JsPlatformTest {
     @Test
@@ -28,9 +29,16 @@ class JsPlatformTest {
 
     @Test
     fun shouldInitialize() = runTest {
+        // Given
+        val token = Uuid.random().toString()
+        val refreshToken = Uuid.random().toString()
+
+        // When
+        val sdk = KDoordeckFactory.initializeWithAuthAndRefreshTokens(TEST_ENVIRONMENT, token, refreshToken)
+
         // Then
-        assertDoesNotThrow {
-            KDoordeckFactory.initialize(TEST_ENVIRONMENT)
-        }
+        assertEquals(token, sdk.contextManager().getAuthToken())
+        assertEquals(refreshToken, sdk.contextManager().getRefreshToken())
+        assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
     }
 }

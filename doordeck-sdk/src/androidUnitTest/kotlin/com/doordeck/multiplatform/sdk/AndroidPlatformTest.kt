@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class AndroidPlatformTest {
     @Test
@@ -33,10 +34,15 @@ class AndroidPlatformTest {
         val context = ApplicationContext.apply {
             set(Application())
         }
+        val token = Uuid.random().toString()
+        val refreshToken = Uuid.random().toString()
+
+        // When
+        val sdk = KDoordeckFactory.initialize(context, TEST_ENVIRONMENT, token, refreshToken)
 
         // Then
-        assertDoesNotThrow {
-            KDoordeckFactory.initialize(context, TEST_ENVIRONMENT)
-        }
+        assertEquals(token, sdk.contextManager().getAuthToken())
+        assertEquals(refreshToken, sdk.contextManager().getRefreshToken())
+        assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
     }
 }
