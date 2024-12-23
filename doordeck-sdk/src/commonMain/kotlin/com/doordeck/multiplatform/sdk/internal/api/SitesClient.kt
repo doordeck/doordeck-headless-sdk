@@ -13,7 +13,7 @@ internal object SitesClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
     suspend fun listSitesRequest(): List<SiteResponse> {
-        return CloudHttpClient.client.get(Paths.getListSites())
+        return CloudHttpClient.get(Paths.getListSites())
     }
 
     /**
@@ -22,7 +22,7 @@ internal object SitesClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
     suspend fun getLocksForSiteRequest(siteId: String): List<SiteLocksResponse> {
-        return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId))
+        return CloudHttpClient.get(Paths.getLocksForSitePath(siteId))
     }
 
     /**
@@ -31,6 +31,6 @@ internal object SitesClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
     suspend fun getUsersForSiteRequest(siteId: String): List<UserForSiteResponse> {
-        return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId))
+        return CloudHttpClient.get(Paths.getUsersForSitePath(siteId))
     }
 }

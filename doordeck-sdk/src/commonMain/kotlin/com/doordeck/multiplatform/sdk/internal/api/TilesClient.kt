@@ -14,7 +14,7 @@ internal object TilesClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
     suspend fun getLocksBelongingToTileRequest(tileId: String): TileLocksResponse {
-        return CloudHttpClient.client.get(Paths.getLocksBelongingToTilePath(tileId)) {
+        return CloudHttpClient.get(Paths.getLocksBelongingToTilePath(tileId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }
     }
@@ -26,7 +26,7 @@ internal object TilesClient : AbstractResourceImpl() {
      */
     @SiteAdmin
     suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
-        CloudHttpClient.client.put<Unit>(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
+        CloudHttpClient.put<Unit>(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))
         }

@@ -15,7 +15,7 @@ internal object HelperClient : AbstractResourceImpl() {
         // Generate a new presigned URL
         val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
         // Upload the image into the presigned URL
-        HttpClient.client.put<Unit>(url.uploadUrl) {
+        HttpClient.put<Unit>(url.uploadUrl) {
             addRequestHeaders(contentType = contentType)
             setBody(image)
         }

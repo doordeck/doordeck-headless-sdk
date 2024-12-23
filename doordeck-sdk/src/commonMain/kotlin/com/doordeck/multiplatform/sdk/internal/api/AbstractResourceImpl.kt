@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.BadRequestException
+import com.doordeck.multiplatform.sdk.BaseHttpClient
 import com.doordeck.multiplatform.sdk.ConflictException
 import com.doordeck.multiplatform.sdk.ForbiddenException
 import com.doordeck.multiplatform.sdk.GatewayTimeoutException
@@ -32,32 +33,32 @@ import kotlinx.serialization.Serializable
 
 internal abstract class AbstractResourceImpl {
 
-    protected suspend inline fun <reified T>HttpClient.post(
+    protected suspend inline fun <reified T>BaseHttpClient.post(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = handleRequest {
-        post { url(urlString); block() }
+        client.post { url(urlString); block() }
     }
 
-    protected suspend inline fun <reified T>HttpClient.get(
+    protected suspend inline fun <reified T>BaseHttpClient.get(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = handleRequest {
-        get { url(urlString); block() }
+        client.get { url(urlString); block() }
     }
 
-    protected suspend inline fun <reified T>HttpClient.put(
+    protected suspend inline fun <reified T>BaseHttpClient.put(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = handleRequest {
-        put { url(urlString); block() }
+        client.put { url(urlString); block() }
     }
 
-    protected suspend inline fun <reified T>HttpClient.delete(
+    protected suspend inline fun <reified T>BaseHttpClient.delete(
         urlString: String,
         crossinline block: HttpRequestBuilder.() -> Unit = {}
     ): T = handleRequest {
-        delete { url(urlString); block() }
+        client.delete { url(urlString); block() }
     }
 
     protected suspend inline fun <reified T>handleRequest(function: () -> HttpResponse): T {

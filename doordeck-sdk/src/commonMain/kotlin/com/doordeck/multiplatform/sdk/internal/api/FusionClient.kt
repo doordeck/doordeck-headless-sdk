@@ -16,7 +16,7 @@ import io.ktor.client.request.setBody
 internal object FusionClient : AbstractResourceImpl() {
 
     suspend fun loginRequest(email: String, password: String): FusionLoginResponse {
-        return FusionHttpClient.client.post<FusionLoginResponse>(FusionPaths.getLoginPath()) {
+        return FusionHttpClient.post<FusionLoginResponse>(FusionPaths.getLoginPath()) {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
         }.also {
@@ -25,36 +25,36 @@ internal object FusionClient : AbstractResourceImpl() {
     }
 
     suspend fun getIntegrationTypeRequest(): IntegrationTypeResponse {
-        return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath())
+        return FusionHttpClient.get(FusionPaths.getConfigurationTypePath())
     }
 
     suspend fun getIntegrationConfigurationRequest(type: String): List<IntegrationConfigurationResponse> {
-        return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
+        return FusionHttpClient.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
             setBody(IntegrationConfigurationRequest(type))
         }
     }
 
     suspend fun enableDoorRequest(name: String, siteId: String, controller: Fusion.LockController) {
-        FusionHttpClient.client.post<Unit>(FusionPaths.getEnableDoorPath()) {
+        FusionHttpClient.post<Unit>(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId , controller))
         }
     }
 
     suspend fun deleteDoorRequest(deviceId: String) {
-        FusionHttpClient.client.delete<Unit>(FusionPaths.getDeleteDoorPath(deviceId))
+        FusionHttpClient.delete<Unit>(FusionPaths.getDeleteDoorPath(deviceId))
     }
 
     suspend fun getDoorStatusRequest(deviceId: String): DoorStateResponse {
-        return FusionHttpClient.client.get(FusionPaths.getDoorStatusPath(deviceId))
+        return FusionHttpClient.get(FusionPaths.getDoorStatusPath(deviceId))
     }
 
     suspend fun startDoorRequest(deviceId: String) {
-        FusionHttpClient.client.get<Unit>(FusionPaths.startDoorPathPath(deviceId))
+        FusionHttpClient.get<Unit>(FusionPaths.startDoorPathPath(deviceId))
     }
 
     suspend fun stopDoorRequest(deviceId: String) {
-        FusionHttpClient.client.get<Unit>(FusionPaths.stopDoorPathPath(deviceId))
+        FusionHttpClient.get<Unit>(FusionPaths.stopDoorPathPath(deviceId))
     }
 }

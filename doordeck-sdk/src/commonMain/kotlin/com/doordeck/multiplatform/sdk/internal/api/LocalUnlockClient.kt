@@ -13,12 +13,12 @@ internal object LocalUnlockClient : AbstractResourceImpl() {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
-    suspend fun unlock(directAccessEndpoints: List<String>, request: String) {
+    fun unlock(directAccessEndpoints: List<String>, request: String) {
         // Launch the request at the direct access endpoints
         val requests = directAccessEndpoints.map {
             coroutineScope.async {
                 try {
-                    HttpClient.client.post<Unit>(it) {
+                    HttpClient.post<Unit>(it) {
                         addRequestHeaders(true)
                         setBody(request)
                     }

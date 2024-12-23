@@ -17,7 +17,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
     suspend fun loginRequest(email: String, password: String): TokenResponse {
-        return CloudHttpClient.client.post<TokenResponse>(Paths.getLoginPath()) {
+        return CloudHttpClient.post<TokenResponse>(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.also {
@@ -33,7 +33,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
     suspend fun registrationRequest(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return CloudHttpClient.client.post<TokenResponse>(Paths.getRegistrationPath()) {
+        return CloudHttpClient.post<TokenResponse>(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(RegisterRequest(
                 email = email,
@@ -54,7 +54,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
     suspend fun verifyEmailRequest(code: String) {
-        return CloudHttpClient.client.put<Unit>(Paths.getVerifyEmailPath()) {
+        return CloudHttpClient.put<Unit>(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(Params.CODE, code)
         }
