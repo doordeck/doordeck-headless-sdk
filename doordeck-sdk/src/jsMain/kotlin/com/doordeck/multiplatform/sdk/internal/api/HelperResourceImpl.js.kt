@@ -18,10 +18,10 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedRegisterEphemeralKey(publicKey: ByteArray?): Promise<AssistedRegisterEphemeralKeyResponse> {
-        return GlobalScope.promise { helperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+        return GlobalScope.promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
     }
 
     override fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean): Promise<dynamic> {
-        return GlobalScope.promise { helperClient.assistedRegisterRequest(email, password, displayName, force) }
+        return GlobalScope.promise { HelperClient.assistedRegisterRequest(email, password, displayName, force) }
     }
 }

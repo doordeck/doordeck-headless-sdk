@@ -15,10 +15,10 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
-        return helperClient.assistedRegisterEphemeralKeyRequest(publicKey)
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey)
     }
 
     override suspend fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
-        return helperClient.assistedRegisterRequest(email, password, displayName, force)
+        return HelperClient.assistedRegisterRequest(email, password, displayName, force)
     }
 }

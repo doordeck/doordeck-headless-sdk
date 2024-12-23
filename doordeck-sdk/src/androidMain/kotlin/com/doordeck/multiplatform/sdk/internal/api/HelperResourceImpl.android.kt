@@ -27,18 +27,18 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
-        return helperClient.assistedRegisterEphemeralKeyRequest(publicKey)
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey)
     }
 
     override fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray?): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { helperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
     }
 
     override suspend fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
-        return helperClient.assistedRegisterRequest(email, password, displayName, force)
+        return HelperClient.assistedRegisterRequest(email, password, displayName, force)
     }
 
     override fun assistedRegisterAsync(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { helperClient.assistedRegisterRequest(email, password, displayName, force) }
+        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterRequest(email, password, displayName, force) }
     }
 }

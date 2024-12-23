@@ -33,17 +33,17 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
-        return runBlocking { helperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+        return runBlocking { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
     }
 
     override fun assistedRegisterEphemeralKeyJson(data: String?): String {
         val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
-        return runBlocking { helperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray()) }.toJson()
+        return runBlocking { HelperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray()) }.toJson()
     }
 
     override fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
         return runBlocking {
-            helperClient.assistedRegisterRequest(
+            HelperClient.assistedRegisterRequest(
                 email = email,
                 password = password,
                 displayName = displayName,
@@ -55,7 +55,7 @@ internal object HelperResourceImpl : HelperResource {
     override fun assistedRegisterJson(data: String) {
         val assistedRegisterData = data.fromJson<AssistedRegisterData>()
         return runBlocking {
-            helperClient.assistedRegisterRequest(
+            HelperClient.assistedRegisterRequest(
                 email = assistedRegisterData.email,
                 password = assistedRegisterData.password,
                 displayName = assistedRegisterData.displayName,
