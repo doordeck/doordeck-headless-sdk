@@ -12,8 +12,8 @@ internal object AccountlessResourceImpl : AccountlessResource {
         return GlobalScope.promise { AccountlessClient.loginRequest(email, password) }
     }
 
-    override fun registration(email: String, password: String, displayName: String?, force: Boolean): Promise<TokenResponse> {
-        return GlobalScope.promise { AccountlessClient.registrationRequest(email, password, displayName, force) }
+    override fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): Promise<TokenResponse> {
+        return GlobalScope.promise { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
     }
 
     override fun verifyEmail(code: String): Promise<Unit> {

@@ -4,4 +4,9 @@ namespace Doordeck.Headless.Sdk.Model.Responses
     {
         public bool RequiresVerification { get; set; }
     }
+
+    public class AssistedRegisterEphemeralKeyResponse
+    {
+        public bool RequiresVerification { get; set; }
+    }
 }

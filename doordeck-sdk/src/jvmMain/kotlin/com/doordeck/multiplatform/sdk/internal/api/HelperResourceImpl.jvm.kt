@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
+import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
@@ -23,5 +24,21 @@ internal object HelperResourceImpl : HelperResource {
 
     override fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse> {
         return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedLoginRequest(email, password) }
+    }
+
+    override suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey)
+    }
+
+    override fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray?): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
+        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+    }
+
+    override suspend fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
+        return HelperClient.assistedRegisterRequest(email, password, displayName, force)
+    }
+
+    override fun assistedRegisterAsync(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<Unit> {
+        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterRequest(email, password, displayName, force) }
     }
 }

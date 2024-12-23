@@ -9,8 +9,8 @@ internal object AccountlessResourceImpl : AccountlessResource {
         return AccountlessClient.loginRequest(email, password)
     }
 
-    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return AccountlessClient.registrationRequest(email, password, displayName, force)
+    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
+        return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
     }
 
     override suspend fun verifyEmail(code: String) {

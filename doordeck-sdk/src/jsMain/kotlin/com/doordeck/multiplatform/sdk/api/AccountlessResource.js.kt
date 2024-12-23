@@ -18,7 +18,7 @@ actual interface AccountlessResource {
      *
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
-    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false): Promise<TokenResponse>
+    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): Promise<TokenResponse>
 
     /**
      * Verify email

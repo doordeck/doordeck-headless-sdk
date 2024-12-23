@@ -17,12 +17,12 @@ internal object AccountlessResourceImpl : AccountlessResource {
         return GlobalScope.future(Dispatchers.IO) { AccountlessClient.loginRequest(email, password) }
     }
 
-    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean): TokenResponse {
-        return AccountlessClient.registrationRequest(email, password, displayName, force)
+    override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
+        return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
     }
 
-    override fun registrationAsync(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<TokenResponse> {
-        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.registrationRequest(email, password, displayName, force) }
+    override fun registrationAsync(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): CompletableFuture<TokenResponse> {
+        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
     }
 
     override suspend fun verifyEmail(code: String) {

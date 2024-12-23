@@ -45,6 +45,94 @@ unsafe
 ```
 </details>
 
+## Is certificate chain about to expire
+
+Checks if the current certificate chain from the context is about to expire within the next 7 days.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val result = sdk.contextManager().isCertificateChainAboutToExpire()
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let result = sdk.contextManager().isCertificateChainAboutToExpire()
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const result = sdk.contextManager().isCertificateChainAboutToExpire();
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    var result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.isCertificateChainAboutToExpire(contextManager).ToBoolean();
+}
+```
+</details>
+
+## Is key pair valid
+
+Checks if the current key pair from the context is valid.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val result = sdk.contextManager().isKeyPairValid()
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let result = sdk.contextManager().isKeyPairValid()
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const result = sdk.contextManager().isKeyPairValid();
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    var result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.isKeyPairValid(contextManager).ToBoolean();
+}
+```
+</details>
+
 ## Set auth token
 
 If the SDK was initialized without an authentication token, you can provide or update the token using this function.
@@ -85,6 +173,50 @@ unsafe
 {
     var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
     symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(contextManager, "AUTH_TOKEN".ToSByte());
+}
+```
+</details>
+
+## Is auth token about to expire
+
+Checks if the current [auth token](#set-auth-token) from the context is about to expire within the next 24 hours
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val result = sdk.contextManager().isAuthTokenAboutToExpire()
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let result = sdk.contextManager().isAuthTokenAboutToExpire()
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const result = sdk.contextManager().isAuthTokenAboutToExpire();
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var contextManager = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+    var result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.isAuthTokenAboutToExpire(contextManager).ToBoolean();
 }
 ```
 </details>
