@@ -17,12 +17,10 @@ import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.runBlocking
 
-internal class AccountResourceImpl(
-    private val accountClient: AccountClient,
-) : AccountResource {
+internal object AccountResourceImpl : AccountResource {
 
     override fun refreshToken(refreshToken: String?): TokenResponse {
-        return runBlocking { accountClient.refreshTokenRequest(refreshToken) }
+        return runBlocking { AccountClient.refreshTokenRequest(refreshToken) }
     }
 
     override fun refreshTokenJson(data: String?): String {
@@ -31,11 +29,11 @@ internal class AccountResourceImpl(
     }
 
     override fun logout() {
-        return runBlocking { accountClient.logoutRequest() }
+        return runBlocking { AccountClient.logoutRequest() }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray?): RegisterEphemeralKeyResponse {
-        return runBlocking { accountClient.registerEphemeralKeyRequest(publicKey) }
+        return runBlocking { AccountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
     override fun registerEphemeralKeyJson(data: String?): String {
@@ -44,7 +42,7 @@ internal class AccountResourceImpl(
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return runBlocking { accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
+        return runBlocking { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String?): String {
@@ -53,7 +51,7 @@ internal class AccountResourceImpl(
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): RegisterEphemeralKeyResponse {
-        return runBlocking { accountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+        return runBlocking { AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
     override fun verifyEphemeralKeyRegistrationJson(data: String): String {
@@ -62,11 +60,11 @@ internal class AccountResourceImpl(
     }
 
     override fun reverifyEmail() {
-        return runBlocking { accountClient.reverifyEmailRequest() }
+        return runBlocking { AccountClient.reverifyEmailRequest() }
     }
 
     override fun changePassword(oldPassword: String, newPassword: String) {
-        return runBlocking { accountClient.changePasswordRequest(oldPassword, newPassword) }
+        return runBlocking { AccountClient.changePasswordRequest(oldPassword, newPassword) }
     }
 
     override fun changePasswordJson(data: String) {
@@ -75,7 +73,7 @@ internal class AccountResourceImpl(
     }
 
     override fun getUserDetails(): UserDetailsResponse {
-        return runBlocking { accountClient.getUserDetailsRequest() }
+        return runBlocking { AccountClient.getUserDetailsRequest() }
     }
 
     override fun getUserDetailsJson(): String {
@@ -83,7 +81,7 @@ internal class AccountResourceImpl(
     }
 
     override fun updateUserDetails(displayName: String) {
-        return runBlocking { accountClient.updateUserDetailsRequest(displayName) }
+        return runBlocking { AccountClient.updateUserDetailsRequest(displayName) }
     }
 
     override fun updateUserDetailsJson(data: String) {
@@ -92,6 +90,6 @@ internal class AccountResourceImpl(
     }
 
     override fun deleteAccount() {
-        return runBlocking { accountClient.deleteAccountRequest() }
+        return runBlocking { AccountClient.deleteAccountRequest() }
     }
 }

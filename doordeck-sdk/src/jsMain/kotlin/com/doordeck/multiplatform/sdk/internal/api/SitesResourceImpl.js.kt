@@ -8,19 +8,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-internal class SitesResourceImpl(
-    private val sitesClient: SitesClient
-) : SitesResource {
+internal object SitesResourceImpl : SitesResource {
 
     override fun listSites(): Promise<List<SiteResponse>> {
-        return GlobalScope.promise { sitesClient.listSitesRequest() }
+        return GlobalScope.promise { SitesClient.listSitesRequest() }
     }
 
     override fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>> {
-        return GlobalScope.promise { sitesClient.getLocksForSiteRequest(siteId) }
+        return GlobalScope.promise { SitesClient.getLocksForSiteRequest(siteId) }
     }
 
     override fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>> {
-        return GlobalScope.promise { sitesClient.getUsersForSiteRequest(siteId) }
+        return GlobalScope.promise { SitesClient.getUsersForSiteRequest(siteId) }
     }
 }

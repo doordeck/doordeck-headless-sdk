@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.internal.api.SiteAdmin
-import com.doordeck.multiplatform.sdk.internal.api.TilesClient
 import com.doordeck.multiplatform.sdk.internal.api.TilesResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import java.util.concurrent.CompletableFuture
 
 actual interface TilesResource {
@@ -29,4 +27,4 @@ actual interface TilesResource {
     fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit>
 }
 
-actual fun tiles(): TilesResource = TilesResourceImpl(getKoin().get<TilesClient>())
+actual fun tiles(): TilesResource = TilesResourceImpl

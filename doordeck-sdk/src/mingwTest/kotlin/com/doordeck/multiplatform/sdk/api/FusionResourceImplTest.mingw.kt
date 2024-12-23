@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.api.model.DeleteDoorData
 import com.doordeck.multiplatform.sdk.api.model.EnableDoorData
@@ -10,95 +10,90 @@ import com.doordeck.multiplatform.sdk.api.model.GetDoorStatusData
 import com.doordeck.multiplatform.sdk.api.model.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.api.model.StartDoorData
 import com.doordeck.multiplatform.sdk.api.model.StopDoorData
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class FusionResourceImplTest {
-
-    private val contextManager = ContextManagerImpl()
-    private val fusion = FusionResourceImpl(FusionClient(TEST_HTTP_CLIENT, contextManager))
+class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        fusion.login("", "")
+        FusionResourceImpl.login("", "")
     }
 
     @Test
     fun shouldLoginJson() = runTest {
-        fusion.loginJson(FusionLoginData("", "").toJson())
+        FusionResourceImpl.loginJson(FusionLoginData("", "").toJson())
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        fusion.getIntegrationType()
+        FusionResourceImpl.getIntegrationType()
     }
 
     @Test
     fun shouldGetIntegrationTypeJson() = runTest {
-        fusion.getIntegrationTypeJson()
+        FusionResourceImpl.getIntegrationTypeJson()
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        fusion.getIntegrationConfiguration("")
+        FusionResourceImpl.getIntegrationConfiguration("")
     }
 
     @Test
     fun shouldGetIntegrationConfigurationJson() = runTest {
-        fusion.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
+        FusionResourceImpl.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
     }
 
     @Test
     fun shouldEnableDoor() = runTest {
-        fusion.enableDoor("", "", Fusion.DemoController())
+        FusionResourceImpl.enableDoor("", "", Fusion.DemoController())
     }
 
     @Test
     fun shouldEnableDoorJson() = runTest {
-        fusion.enableDoorJson(EnableDoorData("", "", Fusion.DemoController()).toJson())
+        FusionResourceImpl.enableDoorJson(EnableDoorData("", "", Fusion.DemoController()).toJson())
     }
 
     @Test
     fun shouldDeleteDoor() = runTest {
-        fusion.deleteDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.deleteDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldDeleteDoorJson() = runTest {
-        fusion.deleteDoorJson(DeleteDoorData(DEFAULT_DEVICE_ID).toJson())
+        FusionResourceImpl.deleteDoorJson(DeleteDoorData(DEFAULT_DEVICE_ID).toJson())
     }
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        fusion.getDoorStatus(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldGetDoorStatusJson() = runTest {
-        fusion.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
+        FusionResourceImpl.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
     }
 
     @Test
     fun shouldStartDoor() = runTest {
-        fusion.startDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.startDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldStartDoorJson() = runTest {
-        fusion.startDoorJson(StartDoorData(DEFAULT_DEVICE_ID).toJson())
+        FusionResourceImpl.startDoorJson(StartDoorData(DEFAULT_DEVICE_ID).toJson())
     }
 
     @Test
     fun shouldStopDoor() = runTest {
-        fusion.stopDoor(DEFAULT_DEVICE_ID)
+        FusionResourceImpl.stopDoor(DEFAULT_DEVICE_ID)
     }
 
     @Test
     fun shouldStopDoorJson() = runTest {
-        fusion.stopDoorJson(StopDoorData(DEFAULT_DEVICE_ID).toJson())
+        FusionResourceImpl.stopDoorJson(StopDoorData(DEFAULT_DEVICE_ID).toJson())
     }
 }

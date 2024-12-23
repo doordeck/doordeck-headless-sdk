@@ -1,20 +1,20 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class IosPlatformTest {
     @Test
     fun shouldTestPlatformEngine() = runTest {
         // Given
-        val client = createCloudHttpClient(ApiEnvironment.DEV, ContextManagerImpl())
+        val client = createCloudHttpClient()
 
-        // When
+        // Then
         assertTrue { client.engine.config is DarwinClientEngineConfig }
     }
 
@@ -23,7 +23,22 @@ class IosPlatformTest {
         // Given
         val platform = getPlatform()
 
-        // When
+        // Then
         assertEquals(platform, PlatformType.APPLE)
+    }
+
+    @Test
+    fun shouldInitialize() = runTest {
+        // Given
+        val token = Uuid.random().toString()
+        val refreshToken = Uuid.random().toString()
+
+        // When
+        val sdk = KDoordeckFactory.initialize(TEST_ENVIRONMENT, token, refreshToken)
+
+        // Then
+        assertEquals(token, sdk.contextManager().getAuthToken())
+        assertEquals(refreshToken, sdk.contextManager().getRefreshToken())
+        assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
     }
 }

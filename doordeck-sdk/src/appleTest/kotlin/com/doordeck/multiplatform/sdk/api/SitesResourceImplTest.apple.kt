@@ -1,28 +1,25 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
-import com.doordeck.multiplatform.sdk.internal.api.SitesClient
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class SitesResourceImplTest {
-
-    private val sites = SitesResourceImpl(SitesClient(TEST_HTTP_CLIENT))
+class SitesResourceImplTest : MockTest() {
 
     @Test
     fun shouldListSites() = runTest {
-        sites.listSites()
+        SitesResourceImpl.listSites()
     }
 
     @Test
     fun shouldGetLocksForSite() = runTest {
-        sites.getLocksForSite(DEFAULT_SITE_ID)
+        SitesResourceImpl.getLocksForSite(DEFAULT_SITE_ID)
     }
 
     @Test
     fun shouldGetUsersForSite() = runTest {
-        sites.getUsersForSite(DEFAULT_SITE_ID)
+        SitesResourceImpl.getUsersForSite(DEFAULT_SITE_ID)
     }
 }

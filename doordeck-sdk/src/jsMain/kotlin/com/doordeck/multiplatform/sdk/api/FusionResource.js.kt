@@ -6,9 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -38,7 +36,7 @@ actual interface FusionResource {
     fun stopDoor(deviceId: String): Promise<dynamic>
 }
 
-private val fusion = FusionResourceImpl(getKoin().get<FusionClient>())
+private val fusion = FusionResourceImpl
 
 @JsExport
 actual fun fusion(): FusionResource = fusion
