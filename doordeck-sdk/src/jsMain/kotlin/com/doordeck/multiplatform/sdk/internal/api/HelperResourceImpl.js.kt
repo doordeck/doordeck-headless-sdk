@@ -7,16 +7,14 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
 
-internal class HelperResourceImpl(
-    private val helperClient: HelperClient
-) : HelperResource {
+internal object HelperResourceImpl : HelperResource {
 
     override fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<Unit> {
-        return GlobalScope.promise { helperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
+        return GlobalScope.promise { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
     }
 
     override fun assistedLogin(email: String, password: String): Promise<AssistedLoginResponse> {
-        return GlobalScope.promise { helperClient.assistedLoginRequest(email, password) }
+        return GlobalScope.promise { HelperClient.assistedLoginRequest(email, password) }
     }
 
     override fun assistedRegisterEphemeralKey(publicKey: ByteArray?): Promise<AssistedRegisterEphemeralKeyResponse> {

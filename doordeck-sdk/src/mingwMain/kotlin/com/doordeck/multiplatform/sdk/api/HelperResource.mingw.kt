@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.internal.api.HelperClient
 import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface HelperResource {
     fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
@@ -20,4 +18,4 @@ actual interface HelperResource {
     fun assistedRegisterJson(data: String)
 }
 
-actual fun helper(): HelperResource = HelperResourceImpl(getKoin().get<HelperClient>())
+actual fun helper(): HelperResource = HelperResourceImpl

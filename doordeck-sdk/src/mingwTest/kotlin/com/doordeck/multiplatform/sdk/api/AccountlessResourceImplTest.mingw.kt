@@ -1,48 +1,43 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.api.model.LoginData
 import com.doordeck.multiplatform.sdk.api.model.RegistrationData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEmailData
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 
-class AccountlessResourceImplTest {
+class AccountlessResourceImplTest : MockTest() {
 
-    private val contextManager = ContextManagerImpl()
-    private val accountless = AccountlessResourceImpl(AccountlessClient(TEST_HTTP_CLIENT, contextManager))
-
-    @Test
+     @Test
     fun shouldLogin() = runTest {
-        accountless.login("", "")
+        AccountlessResourceImpl.login("", "")
     }
 
     @Test
     fun shouldLoginJson() = runTest {
-        accountless.loginJson(LoginData("", "").toJson())
+        AccountlessResourceImpl.loginJson(LoginData("", "").toJson())
     }
 
     @Test
     fun shouldRegister() = runTest {
-        accountless.registration("", "", "", false)
+        AccountlessResourceImpl.registration("", "", "", false)
     }
 
     @Test
     fun shouldRegisterJson() = runTest {
-        accountless.registrationJson(RegistrationData("", "", "", false).toJson())
+        AccountlessResourceImpl.registrationJson(RegistrationData("", "", "", false).toJson())
     }
 
     @Test
     fun shouldVerifyEmail() = runTest {
-        accountless.verifyEmail("")
+        AccountlessResourceImpl.verifyEmail("")
     }
 
     @Test
     fun shouldVerifyEmailJson() = runTest {
-        accountless.verifyEmailJson(VerifyEmailData("").toJson())
+        AccountlessResourceImpl.verifyEmailJson(VerifyEmailData("").toJson())
     }
 }

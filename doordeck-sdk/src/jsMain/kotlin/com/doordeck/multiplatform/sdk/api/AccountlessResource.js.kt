@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 import kotlin.js.Promise
 
 @JsExport
@@ -30,7 +28,7 @@ actual interface AccountlessResource {
     fun verifyEmail(code: String): Promise<dynamic>
 }
 
-private val accountless = AccountlessResourceImpl(getKoin().get<AccountlessClient>())
+private val accountless = AccountlessResourceImpl
 
 @JsExport
 actual fun accountless(): AccountlessResource = accountless

@@ -4,16 +4,14 @@ import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
 
-internal class HelperResourceImpl(
-    private val helperClient: HelperClient
-) : HelperResource {
+internal object HelperResourceImpl : HelperResource {
 
     override suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return helperClient.uploadPlatformLogoRequest(applicationId, contentType, image)
+        return HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image)
     }
 
     override suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse {
-        return helperClient.assistedLoginRequest(email, password)
+        return HelperClient.assistedLoginRequest(email, password)
     }
 
     override suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {

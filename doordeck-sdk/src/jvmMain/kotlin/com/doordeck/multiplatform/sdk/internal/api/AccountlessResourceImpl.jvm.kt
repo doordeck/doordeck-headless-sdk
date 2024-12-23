@@ -7,31 +7,29 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-internal class AccountlessResourceImpl(
-    private val accountlessClient: AccountlessClient
-) : AccountlessResource {
+internal object AccountlessResourceImpl : AccountlessResource {
 
     override suspend fun login(email: String, password: String): TokenResponse {
-        return accountlessClient.loginRequest(email, password)
+        return AccountlessClient.loginRequest(email, password)
     }
 
     override fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountlessClient.loginRequest(email, password) }
+        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.loginRequest(email, password) }
     }
 
     override suspend fun registration(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
-        return accountlessClient.registrationRequest(email, password, displayName, force, publicKey)
+        return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
     }
 
     override fun registrationAsync(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): CompletableFuture<TokenResponse> {
-        return GlobalScope.future(Dispatchers.IO) { accountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
+        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
     }
 
     override suspend fun verifyEmail(code: String) {
-        return accountlessClient.verifyEmailRequest(code)
+        return AccountlessClient.verifyEmailRequest(code)
     }
 
     override fun verifyEmailAsync(code: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { accountlessClient.verifyEmailRequest(code) }
+        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.verifyEmailRequest(code) }
     }
 }

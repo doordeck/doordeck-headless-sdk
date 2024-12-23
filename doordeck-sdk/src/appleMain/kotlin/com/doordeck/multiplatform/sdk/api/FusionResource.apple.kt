@@ -6,9 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.internal.api.DoordeckOnly
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface FusionResource {
     @DoordeckOnly
@@ -44,4 +42,4 @@ actual interface FusionResource {
     suspend fun stopDoor(deviceId: String)
 }
 
-actual fun fusion(): FusionResource = FusionResourceImpl(getKoin().get<FusionClient>())
+actual fun fusion(): FusionResource = FusionResourceImpl

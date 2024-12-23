@@ -1,11 +1,10 @@
 package com.doordeck.multiplatform.sdk.internal
 
+import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -15,7 +14,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class ContextManagerTest {
+class ContextManagerTest : IntegrationTest() {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {
@@ -28,32 +27,30 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setAuthToken(cloudAuthToken)
-        contextManager.setRefreshToken(cloudRefreshToken)
-        contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setUserId(userId)
-        contextManager.setCertificateChain(certificateChain)
-        contextManager.setKeyPair(publicKey, privateKey)
-        contextManager.setUserEmail(email)
+        ContextManagerImpl.setAuthToken(cloudAuthToken)
+        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
+        ContextManagerImpl.setUserId(userId)
+        ContextManagerImpl.setCertificateChain(certificateChain)
+        ContextManagerImpl.setKeyPair(publicKey, privateKey)
+        ContextManagerImpl.setUserEmail(email)
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertEquals(email, contextManager.getUserEmail())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
-        assertEquals(cloudAuthToken, contextManager.getAuthToken())
-        assertEquals(cloudRefreshToken, contextManager.getRefreshToken())
-        assertEquals(fusionAuthToken, contextManager.getFusionAuthToken())
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertEquals(email, ContextManagerImpl.getUserEmail())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
+        assertEquals(cloudAuthToken, ContextManagerImpl.getAuthToken())
+        assertEquals(cloudRefreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
     }
 
     @Test
@@ -67,32 +64,30 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setAuthToken(cloudAuthToken)
-        contextManager.setRefreshToken(cloudRefreshToken)
-        contextManager.setFusionAuthToken(fusionAuthToken)
-        contextManager.setUserId(userId)
-        contextManager.setCertificateChain(certificateChain)
-        contextManager.setKeyPair(publicKey, privateKey)
-        contextManager.setUserEmail(email)
-        contextManager.storeContext()
+        ContextManagerImpl.setAuthToken(cloudAuthToken)
+        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
+        ContextManagerImpl.setUserId(userId)
+        ContextManagerImpl.setCertificateChain(certificateChain)
+        ContextManagerImpl.setKeyPair(publicKey, privateKey)
+        ContextManagerImpl.setUserEmail(email)
+        ContextManagerImpl.storeContext()
 
         // When
-        contextManager.clearContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.clearContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertNull(contextManager.getUserId())
-        assertNull(contextManager.getUserEmail())
-        assertNull(contextManager.getCertificateChain())
-        assertNull(contextManager.getPublicKey())
-        assertNull(contextManager.getPrivateKey())
-        assertNull(contextManager.getKeyPair())
-        assertNull(contextManager.getAuthToken())
-        assertNull(contextManager.getRefreshToken())
-        assertNull(contextManager.getFusionAuthToken())
+        assertNull(ContextManagerImpl.getUserId())
+        assertNull(ContextManagerImpl.getUserEmail())
+        assertNull(ContextManagerImpl.getCertificateChain())
+        assertNull(ContextManagerImpl.getPublicKey())
+        assertNull(ContextManagerImpl.getPrivateKey())
+        assertNull(ContextManagerImpl.getKeyPair())
+        assertNull(ContextManagerImpl.getAuthToken())
+        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 
     @Test
@@ -102,22 +97,20 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
-        contextManager.setOperationContext(userId, certificateChain, publicKey, privateKey)
+        ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
     }
 
     @Test
@@ -127,33 +120,30 @@ class ContextManagerTest {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
-        contextManager.setOperationContextJson(operationContextData.toJson())
+        ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When
-        contextManager.storeContext()
-        contextManager.reset()
-        contextManager.loadContext()
+        ContextManagerImpl.storeContext()
+        ContextManagerImpl.reset()
+        ContextManagerImpl.loadContext()
 
         // Then
-        assertEquals(userId, contextManager.getUserId())
-        assertContentEquals(certificateChain, contextManager.getCertificateChain())
-        assertContentEquals(publicKey, contextManager.getPublicKey())
-        assertContentEquals(privateKey, contextManager.getPrivateKey())
-        assertContentEquals(publicKey, contextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, contextManager.getKeyPair()?.private)
+        assertEquals(userId, ContextManagerImpl.getUserId())
+        assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
     }
 
     @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
-        val result = contextManager.isAuthTokenAboutToExpire()
+        val result = ContextManagerImpl.isAuthTokenAboutToExpire()
 
         // Then
         assertTrue { result }
@@ -162,11 +152,10 @@ class ContextManagerTest {
     @Test
     fun shouldCheckCertificateChainNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
-        val result = contextManager.isCertificateChainAboutToExpire()
+        val result = ContextManagerImpl.isCertificateChainAboutToExpire()
 
         // Then
         assertTrue { result }
@@ -175,11 +164,10 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairNullValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
+        ContextManagerImpl.reset()
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertFalse { result }
@@ -188,14 +176,12 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairInvalidValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        contextManager.setKeyPair(publicKey, privateKey)
+        ContextManagerImpl.setKeyPair(publicKey, privateKey)
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertFalse { result }
@@ -204,13 +190,11 @@ class ContextManagerTest {
     @Test
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
-        val contextManager = ContextManagerImpl()
-        contextManager.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         val keyPair = CryptoManager.generateKeyPair()
-        contextManager.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
 
         // When
-        val result = contextManager.isKeyPairValid()
+        val result = ContextManagerImpl.isKeyPairValid()
 
         // Then
         assertTrue { result }

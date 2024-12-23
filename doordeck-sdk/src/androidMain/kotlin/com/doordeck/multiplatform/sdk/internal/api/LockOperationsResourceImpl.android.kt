@@ -14,247 +14,245 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-internal class LockOperationsResourceImpl(
-    private val lockOperationsClient: LockOperationsClient
-) : LockOperationsResource {
+internal object LockOperationsResourceImpl : LockOperationsResource {
     
     override suspend fun getSingleLock(lockId: String): LockResponse {
-        return lockOperationsClient.getSingleLockRequest(lockId)
+        return LockOperationsClient.getSingleLockRequest(lockId)
     }
 
     override fun getSingleLockAsync(lockId: String): CompletableFuture<LockResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getSingleLockRequest(lockId) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getSingleLockRequest(lockId) }
     }
 
     override suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return lockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
+        return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
     override fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getLockAuditTrailRequest(lockId, start, end) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getLockAuditTrailRequest(lockId, start, end) }
     }
 
     override suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return lockOperationsClient.getAuditForUserRequest(userId, start, end)
+        return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 
     override fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getAuditForUserRequest(userId, start, end) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getAuditForUserRequest(userId, start, end) }
     }
 
     override suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return lockOperationsClient.getUsersForLockRequest(lockId)
+        return LockOperationsClient.getUsersForLockRequest(lockId)
     }
 
     override fun getUsersForLockAsync(lockId: String): CompletableFuture<List<UserLockResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUsersForLockRequest(lockId) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUsersForLockRequest(lockId) }
     }
 
     override suspend fun getLocksForUser(userId: String): LockUserResponse {
-        return lockOperationsClient.getLocksForUserRequest(userId)
+        return LockOperationsClient.getLocksForUserRequest(userId)
     }
 
     override fun getLocksForUserAsync(userId: String): CompletableFuture<LockUserResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getLocksForUserRequest(userId) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getLocksForUserRequest(userId) }
     }
 
     override suspend fun updateLockName(lockId: String, name: String?) {
-        return lockOperationsClient.updateLockNameRequest(lockId, name)
+        return LockOperationsClient.updateLockNameRequest(lockId, name)
     }
 
     override fun updateLockNameAsync(lockId: String, name: String?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockNameRequest(lockId, name) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockNameRequest(lockId, name) }
     }
 
     override suspend fun updateLockFavourite(lockId: String, favourite: Boolean?) {
-        return lockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
+        return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
     }
 
     override fun updateLockFavouriteAsync(lockId: String, favourite: Boolean?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockFavouriteRequest(lockId, favourite) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockFavouriteRequest(lockId, favourite) }
     }
 
     override suspend fun updateLockColour(lockId: String, colour: String?) {
-        return lockOperationsClient.updateLockColourRequest(lockId, colour)
+        return LockOperationsClient.updateLockColourRequest(lockId, colour)
     }
 
     override fun updateLockColourAsync(lockId: String, colour: String?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockColourRequest(lockId, colour) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockColourRequest(lockId, colour) }
     }
 
     override suspend fun updateLockSettingDefaultName(lockId: String, name: String?) {
-        return lockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
+        return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
     }
 
     override fun updateLockSettingDefaultNameAsync(lockId: String, name: String?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name) }
     }
 
     override suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return lockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
+        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
     }
 
     override fun setLockSettingPermittedAddressesAsync(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
     }
 
     override suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return lockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
+        return LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
     }
 
     override fun updateLockSettingHiddenAsync(lockId: String, hidden: Boolean): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden) }
     }
 
     override suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return lockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
+        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
     }
 
     override fun setLockSettingTimeRestrictionsAsync(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times) }
     }
 
     override suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement?) {
-        return lockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
+        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
     }
 
     override fun updateLockSettingLocationRestrictionsAsync(lockId: String, location: LockOperations.LocationRequirement?): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location) }
     }
 
     override suspend fun getUserPublicKey(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
+        return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
     }
 
     override suspend fun getUserPublicKeyAsync(userEmail: String, visitor: Boolean): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyRequest(userEmail, visitor) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor) }
     }
 
     override suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByEmailRequest(email)
+        return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
     }
 
     override fun getUserPublicKeyByEmailAsync(email: String): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByEmailRequest(email) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByEmailRequest(email) }
     }
 
     override suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
+        return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
     }
 
     override fun getUserPublicKeyByTelephoneAsync(telephone: String): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone) }
     }
 
     override suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
+        return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
     }
 
     override fun getUserPublicKeyByLocalKeyAsync(localKey: String): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey) }
     }
 
     override suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
+        return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
     }
 
     override fun getUserPublicKeyByForeignKeyAsync(foreignKey: String): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey) }
     }
 
     override suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
-        return lockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
+        return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
     }
 
     override fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByIdentityRequest(identity) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByIdentityRequest(identity) }
     }
 
     override suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
+        return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
     }
 
     override fun getUserPublicKeyByEmailsAsync(emails: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByEmailsRequest(emails) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByEmailsRequest(emails) }
     }
 
     override suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
+        return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
     }
 
     override fun getUserPublicKeyByTelephonesAsync(telephones: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones) }
     }
 
     override suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
+        return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
     }
 
     override fun getUserPublicKeyByLocalKeysAsync(localKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys) }
     }
 
     override suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
+        return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
     override fun getUserPublicKeyByForeignKeysAsync(foreignKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys) }
     }
 
     override suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return lockOperationsClient.unlockRequest(unlockOperation)
+        return LockOperationsClient.unlockRequest(unlockOperation)
     }
 
     override fun unlockAsync(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.unlockRequest(unlockOperation) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.unlockRequest(unlockOperation) }
     }
 
     override suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return lockOperationsClient.shareLockRequest(shareLockOperation)
+        return LockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
     override fun shareLockAsync(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.shareLockRequest(shareLockOperation) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.shareLockRequest(shareLockOperation) }
     }
 
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
+        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
     override fun revokeAccessToLockAsync(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
     }
 
     override suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
+        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
     }
 
     override fun updateSecureSettingUnlockDurationAsync(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
     }
 
     override suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return lockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
     override fun updateSecureSettingUnlockBetweenAsync(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
     }
 
     override suspend fun getPinnedLocks(): List<LockResponse> {
-        return lockOperationsClient.getPinnedLocksRequest()
+        return LockOperationsClient.getPinnedLocksRequest()
     }
 
     override fun getPinnedLocksAsync(): CompletableFuture<List<LockResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getPinnedLocksRequest() }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getPinnedLocksRequest() }
     }
 
     override suspend fun getShareableLocks(): List<ShareableLockResponse> {
-        return lockOperationsClient.getShareableLocksRequest()
+        return LockOperationsClient.getShareableLocksRequest()
     }
 
     override fun getShareableLocksAsync(): CompletableFuture<List<ShareableLockResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { lockOperationsClient.getShareableLocksRequest() }
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.getShareableLocksRequest() }
     }
 }

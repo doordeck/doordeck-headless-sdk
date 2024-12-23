@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
-import org.koin.mp.KoinPlatform.getKoin
 
 actual interface AccountlessResource {
     /**
@@ -31,4 +29,4 @@ actual interface AccountlessResource {
     fun verifyEmailJson(data: String)
 }
 
-actual fun accountless(): AccountlessResource = AccountlessResourceImpl(getKoin().get<AccountlessClient>())
+actual fun accountless(): AccountlessResource = AccountlessResourceImpl

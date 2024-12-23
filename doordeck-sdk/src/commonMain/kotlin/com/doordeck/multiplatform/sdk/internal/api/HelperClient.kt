@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.Constants
+import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.LockedException
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
@@ -8,29 +9,22 @@ import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
-import io.ktor.client.HttpClient
 import io.ktor.client.request.setBody
 
-internal open class HelperClient(
-    private val httpClient: HttpClient,
-    private val accountlessClient: AccountlessClient,
-    private val accountClient: AccountClient,
-    private val platformClient: PlatformClient,
-    private val contextManagerImpl: ContextManagerImpl
-) : AbstractResourceImpl() {
+internal object HelperClient : AbstractResourceImpl() {
 
     suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
         // Generate a new presigned URL
-        val url = platformClient.getLogoUploadUrlRequest(applicationId, contentType)
+        val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
         // Upload the image into the presigned URL
-        httpClient.put<Unit>(url.uploadUrl) {
+        HttpClient.put<Unit>(url.uploadUrl) {
             addRequestHeaders(contentType = contentType)
             setBody(image)
         }
         // Build the right url
         val cdnUrl = Constants.CDN_URL + url.uploadUrl.split("?")[0].split(".com")[1]
         // Updates the application
-        platformClient.updateApplicationLogoUrlRequest(applicationId, cdnUrl)
+        PlatformClient.updateApplicationLogoUrlRequest(applicationId, cdnUrl)
     }
 
     /**
@@ -51,18 +45,18 @@ internal open class HelperClient(
      *      Ensure the context is properly loaded and stored outside this function as required.
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
-        val currentKeyPair = contextManagerImpl.getKeyPair()
-        val requiresKeyRegister = currentKeyPair == null || contextManagerImpl.isCertificateChainAboutToExpire()
+        val currentKeyPair = ContextManagerImpl.getKeyPair()
+        val requiresKeyRegister = currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire()
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair
             ?: CryptoManager.generateKeyPair()
 
         // Add the key pair to the context manager
-        contextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
 
         // Perform the login
-        accountlessClient.loginRequest(email, password)
+        AccountlessClient.loginRequest(email, password)
 
         val requiresVerification = if (requiresKeyRegister) {
             // Register the key pair
@@ -86,15 +80,15 @@ internal open class HelperClient(
     suspend fun assistedRegisterEphemeralKeyRequest(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
         // Define which key should be registered
         val key = publicKey
-            ?: contextManagerImpl.getPublicKey()
+            ?: ContextManagerImpl.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         val requiresVerification = try {
             // Attempt to register the provided or default public key
-            accountClient.registerEphemeralKeyRequest(key)
+            AccountClient.registerEphemeralKeyRequest(key)
             false
         } catch (exception: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
-            accountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
+            AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
             true
         }
         return AssistedRegisterEphemeralKeyResponse(requiresVerification)
@@ -114,9 +108,9 @@ internal open class HelperClient(
         val keyPair = CryptoManager.generateKeyPair()
 
         // Register the account with the provided details
-        accountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)
+        AccountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)
 
         // Add the key pair to the context manager
-        contextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
     }
 }
