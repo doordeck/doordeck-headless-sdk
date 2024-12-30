@@ -36,3 +36,15 @@ class ChangePasswordRequest(
     val oldPassword: String,
     val newPassword: String
 )
+
+@Serializable
+class PasswordResetRequest(
+    val email: String
+)
+
+@Serializable
+class PasswordResetVerifyRequest(
+    val userId: String,
+    val token: String,
+    val password: String
+)

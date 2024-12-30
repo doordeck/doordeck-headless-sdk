@@ -143,4 +143,94 @@ unsafe
 ```
 </details>
 
+## Password reset
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+sdk.accountless().passwordReset("EMAIL")
+```
+
+💡 **Note:**  In Java, use the `passwordResetAsync` function, which returns a `CompletableFuture<Void>` instead.
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+sdk.accountless().passwordReset(email: "EMAIL")
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordReset("EMAIL");
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+    var data = new PasswordResetData("EMAIL").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetJson(resource, data);
+}
+```
+</details>
+
+## Password reset verify
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+sdk.accountless().passwordResetVerify("USERID", "TOKEN", "EMAIL")
+```
+
+💡 **Note:**  In Java, use the `passwordResetVerify` function, which returns a `CompletableFuture<Void>` instead.
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+sdk.accountless().passwordResetVerify(userId: "USERID", token: "TOKEN", email: "EMAIL")
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordResetVerify("USERID", "TOKEN", "EMAIL");
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+    var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL").ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetVerifyJson(resource, data);
+}
+```
+</details>
+
 :arrow_left: [Back to index](01_INDEX.md)

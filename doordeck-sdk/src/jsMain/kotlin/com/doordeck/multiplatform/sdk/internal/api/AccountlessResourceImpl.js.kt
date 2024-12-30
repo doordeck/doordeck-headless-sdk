@@ -19,4 +19,12 @@ internal object AccountlessResourceImpl : AccountlessResource {
     override fun verifyEmail(code: String): Promise<Unit> {
         return GlobalScope.promise { AccountlessClient.verifyEmailRequest(code) }
     }
+
+    override fun passwordReset(email: String): Promise<dynamic> {
+        return GlobalScope.promise { AccountlessClient.passwordResetRequest(email) }
+    }
+
+    override fun passwordResetVerify(userId: String, token: String, password: String): Promise<dynamic> {
+        return GlobalScope.promise { AccountlessClient.passwordResetVerifyRequest(userId, token, password) }
+    }
 }

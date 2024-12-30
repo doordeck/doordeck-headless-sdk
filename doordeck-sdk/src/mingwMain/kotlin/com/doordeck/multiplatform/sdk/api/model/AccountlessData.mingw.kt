@@ -21,3 +21,15 @@ class RegistrationData(
 class VerifyEmailData(
     val code: String
 )
+
+@Serializable
+class PasswordResetData(
+    val email: String
+)
+
+@Serializable
+class PasswordResetVerifyData(
+    val userId: String,
+    val token: String,
+    val password: String
+)

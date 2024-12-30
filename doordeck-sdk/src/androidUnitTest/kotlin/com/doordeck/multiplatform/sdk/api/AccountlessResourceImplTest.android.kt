@@ -37,4 +37,24 @@ class AccountlessResourceImplTest : MockTest() {
     fun shouldVerifyEmailAsync() = runTest {
         AccountlessResourceImpl.verifyEmailAsync("").await()
     }
+
+    @Test
+    fun shouldResetPassword() = runTest {
+        AccountlessResourceImpl.passwordReset("")
+    }
+
+    @Test
+    fun shouldResetPasswordAsync() = runTest {
+        AccountlessResourceImpl.passwordResetAsync("").await()
+    }
+
+    @Test
+    fun shouldVerifyResetPassword() = runTest {
+        AccountlessResourceImpl.passwordResetVerify("", "", "")
+    }
+
+    @Test
+    fun shouldVerifyResetPasswordAsync() = runTest {
+        AccountlessResourceImpl.passwordResetVerifyAsync("", "", "").await()
+    }
 }

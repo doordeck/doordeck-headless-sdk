@@ -27,6 +27,18 @@ actual interface AccountlessResource {
      */
     @Throws(Exception::class)
     suspend fun verifyEmail(code: String)
+
+    /**
+     * Password reset
+     */
+    @Throws(Exception::class)
+    suspend fun passwordReset(email: String)
+
+    /**
+     * Password reset verify
+     */
+    @Throws(Exception::class)
+    suspend fun passwordResetVerify(userId: String, token: String, password: String)
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl

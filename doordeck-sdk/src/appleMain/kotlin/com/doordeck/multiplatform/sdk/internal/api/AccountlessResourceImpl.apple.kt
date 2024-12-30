@@ -16,4 +16,12 @@ internal object AccountlessResourceImpl : AccountlessResource {
     override suspend fun verifyEmail(code: String) {
         return AccountlessClient.verifyEmailRequest(code)
     }
+
+    override suspend fun passwordReset(email: String) {
+        return AccountlessClient.passwordResetRequest(email)
+    }
+
+    override suspend fun passwordResetVerify(userId: String, token: String, password: String) {
+        return AccountlessClient.passwordResetVerifyRequest(userId, token, password)
+    }
 }

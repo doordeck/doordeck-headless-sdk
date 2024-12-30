@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.api.requests.LoginRequest
+import com.doordeck.multiplatform.sdk.api.requests.PasswordResetRequest
+import com.doordeck.multiplatform.sdk.api.requests.PasswordResetVerifyRequest
 import com.doordeck.multiplatform.sdk.api.requests.RegisterRequest
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
@@ -59,6 +61,23 @@ internal object AccountlessClient : AbstractResourceImpl()  {
         return CloudHttpClient.put<Unit>(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(Params.CODE, code)
+        }
+    }
+
+    /**
+     * Password reset
+     */
+    suspend fun passwordResetRequest(email: String) {
+        return CloudHttpClient.post(Paths.getPasswordResetPath()) {
+            addRequestHeaders()
+            setBody(PasswordResetRequest(email))
+        }
+    }
+
+    suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
+        return CloudHttpClient.post(Paths.getPasswordResetVerifyPath()) {
+            addRequestHeaders()
+            setBody(PasswordResetVerifyRequest(userId, token, password))
         }
     }
 }
