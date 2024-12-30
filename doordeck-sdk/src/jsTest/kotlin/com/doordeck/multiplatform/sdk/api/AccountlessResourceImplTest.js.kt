@@ -27,4 +27,9 @@ class AccountlessResourceImplTest : MockTest() {
     fun shouldResetPassword() = runTest {
         AccountlessResourceImpl.passwordReset("").await()
     }
+
+    @Test
+    fun shouldVerifyResetPassword() = runTest {
+        AccountlessResourceImpl.passwordResetVerify("", "", "").await()
+    }
 }

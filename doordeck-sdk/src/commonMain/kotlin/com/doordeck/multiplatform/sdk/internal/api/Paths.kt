@@ -16,6 +16,7 @@ internal object Paths {
     fun getUpdateUserDetailsPath() = "/account"
     fun getDeleteAccountPath() = "/account"
     fun getPasswordResetPath() = "/account/password/reset/initialize"
+    fun getPasswordResetVerifyPath() = "/account/password/reset/verify"
 
     // Sites
     fun getListSites() = "/site"

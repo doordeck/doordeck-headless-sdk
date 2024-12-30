@@ -17,6 +17,8 @@
     * [Login](07_API-ACCOUNTLESS.md#login)
     * [Register a new user](07_API-ACCOUNTLESS.md#register-a-new-user)
     * [Verify email](07_API-ACCOUNTLESS.md#verify-email)
+    * [Password reset](07_API-ACCOUNTLESS.md#password-reset)
+    * [Password reset verify](07_API-ACCOUNTLESS.md#password-reset-verify)
 * [Account resource](08_API-ACCOUNT.md#account-resource)
     * [Request a new refresh token](08_API-ACCOUNT.md#request-a-new-refresh-token)
     * [Logout](08_API-ACCOUNT.md#logout)

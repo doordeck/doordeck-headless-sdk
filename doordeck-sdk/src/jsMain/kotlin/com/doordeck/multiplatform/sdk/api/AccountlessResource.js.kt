@@ -31,6 +31,11 @@ actual interface AccountlessResource {
      * Password reset
      */
     fun passwordReset(email: String): Promise<dynamic>
+
+    /**
+     * Password reset verify
+     */
+    fun passwordResetVerify(userId: String, token: String, password: String): Promise<dynamic>
 }
 
 private val accountless = AccountlessResourceImpl
