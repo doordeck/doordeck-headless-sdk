@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.api.model.LoginData
+import com.doordeck.multiplatform.sdk.api.model.PasswordResetData
 import com.doordeck.multiplatform.sdk.api.model.RegistrationData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEmailData
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
@@ -39,5 +40,15 @@ class AccountlessResourceImplTest : MockTest() {
     @Test
     fun shouldVerifyEmailJson() = runTest {
         AccountlessResourceImpl.verifyEmailJson(VerifyEmailData("").toJson())
+    }
+
+    @Test
+    fun shouldResetPassword() = runTest {
+        AccountlessResourceImpl.passwordReset("")
+    }
+
+    @Test
+    fun shouldResetPasswordJson() = runTest {
+        AccountlessResourceImpl.passwordResetJson(PasswordResetData("").toJson())
     }
 }

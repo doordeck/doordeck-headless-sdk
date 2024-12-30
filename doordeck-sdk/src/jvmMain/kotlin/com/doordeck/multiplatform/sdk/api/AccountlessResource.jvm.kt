@@ -31,6 +31,13 @@ actual interface AccountlessResource {
     suspend fun verifyEmail(code: String)
 
     fun verifyEmailAsync(code: String): CompletableFuture<Unit>
+
+    /**
+     * Password reset
+     */
+    suspend fun passwordReset(email: String)
+
+    fun passwordResetAsync(email: String): CompletableFuture<Unit>
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl

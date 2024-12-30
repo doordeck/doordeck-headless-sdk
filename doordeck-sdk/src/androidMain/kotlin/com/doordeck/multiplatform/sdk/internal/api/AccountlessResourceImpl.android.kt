@@ -32,4 +32,12 @@ internal object AccountlessResourceImpl : AccountlessResource {
     override fun verifyEmailAsync(code: String): CompletableFuture<Unit> {
         return GlobalScope.future(Dispatchers.IO) { AccountlessClient.verifyEmailRequest(code) }
     }
+
+    override suspend fun passwordReset(email: String) {
+        return AccountlessClient.passwordResetRequest(email)
+    }
+
+    override fun passwordResetAsync(email: String): CompletableFuture<Unit> {
+        return GlobalScope.future(Dispatchers.IO) { AccountlessClient.passwordResetRequest(email) }
+    }
 }

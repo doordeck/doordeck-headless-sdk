@@ -26,6 +26,11 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
     fun verifyEmail(code: String): Promise<dynamic>
+
+    /**
+     * Password reset
+     */
+    fun passwordReset(email: String): Promise<dynamic>
 }
 
 private val accountless = AccountlessResourceImpl

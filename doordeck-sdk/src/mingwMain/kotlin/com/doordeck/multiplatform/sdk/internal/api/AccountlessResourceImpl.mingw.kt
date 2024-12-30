@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.AccountlessResource
 import com.doordeck.multiplatform.sdk.api.model.LoginData
+import com.doordeck.multiplatform.sdk.api.model.PasswordResetData
 import com.doordeck.multiplatform.sdk.api.model.RegistrationData
 import com.doordeck.multiplatform.sdk.api.model.VerifyEmailData
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
@@ -37,5 +38,14 @@ internal object AccountlessResourceImpl : AccountlessResource {
     override fun verifyEmailJson(data: String) {
         val verifyEmailData = data.fromJson<VerifyEmailData>()
         return verifyEmail(verifyEmailData.code)
+    }
+
+    override fun passwordReset(email: String) {
+        return runBlocking { AccountlessClient.passwordResetRequest(email) }
+    }
+
+    override fun passwordResetJson(data: String) {
+        val passwordResetData = data.fromJson<PasswordResetData>()
+        return passwordReset(passwordResetData.email)
     }
 }

@@ -39,4 +39,14 @@
             Code = code;
         }
     }
+
+    public class PasswordResetData
+    {
+        public string Email { get; set; }
+
+        public PasswordResetData(string email)
+        {
+            Email = email;
+        }
+    }
 }

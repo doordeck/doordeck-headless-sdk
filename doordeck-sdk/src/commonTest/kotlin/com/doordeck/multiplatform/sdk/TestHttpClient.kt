@@ -104,7 +104,8 @@ private val TEST_ENGINE = MockEngine { request ->
                 Paths.getAddAuthIssuerPath(DEFAULT_APPLICATION_ID),
                 Paths.getAddCorsDomainPath(DEFAULT_APPLICATION_ID),
                 Paths.getAddApplicationOwnerPath(DEFAULT_APPLICATION_ID),
-                Paths.getOperationPath(DEFAULT_LOCK_ID) -> respondOk()
+                Paths.getOperationPath(DEFAULT_LOCK_ID),
+                Paths.getPasswordResetPath() -> respondOk()
                 Paths.getRegisterEphemeralKeyPath(),
                 Paths.getVerifyEphemeralKeyRegistrationPath() -> respondContent(REGISTER_EPHEMERAL_KEY_RESPONSE)
                 Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath() -> respondContent(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE)

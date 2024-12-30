@@ -27,6 +27,12 @@ actual interface AccountlessResource {
      */
     fun verifyEmail(code: String)
     fun verifyEmailJson(data: String)
+
+    /**
+     * Password reset
+     */
+    fun passwordReset(email: String)
+    fun passwordResetJson(data: String)
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl

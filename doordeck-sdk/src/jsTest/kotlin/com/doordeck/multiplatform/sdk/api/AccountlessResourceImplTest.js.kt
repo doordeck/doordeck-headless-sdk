@@ -22,4 +22,9 @@ class AccountlessResourceImplTest : MockTest() {
     fun shouldVerifyEmail() = runTest {
         AccountlessResourceImpl.verifyEmail("").await()
     }
+
+    @Test
+    fun shouldResetPassword() = runTest {
+        AccountlessResourceImpl.passwordReset("").await()
+    }
 }
