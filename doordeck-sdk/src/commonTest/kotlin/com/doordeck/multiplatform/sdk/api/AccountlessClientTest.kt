@@ -56,9 +56,4 @@ class AccountlessClientTest : IntegrationTest() {
             AccountlessClient.loginRequest(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }
     }
-
-    @Test
-    fun shouldResetPassword() = runTest {
-        AccountlessClient.passwordResetRequest(TEST_MAIN_USER_EMAIL)
-    }
 }

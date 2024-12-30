@@ -48,7 +48,6 @@ class AccountlessResourceImplTest : MockTest() {
         AccountlessResourceImpl.passwordResetAsync("").await()
     }
 
-
     @Test
     fun shouldVerifyResetPassword() = runTest {
         AccountlessResourceImpl.passwordResetVerify("", "", "")
