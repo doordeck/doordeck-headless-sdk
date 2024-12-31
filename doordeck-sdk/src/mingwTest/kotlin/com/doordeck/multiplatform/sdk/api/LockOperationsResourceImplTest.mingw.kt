@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.api.model.BaseOperationData
+import com.doordeck.multiplatform.sdk.api.model.BatchShareLockOperationData
 import com.doordeck.multiplatform.sdk.api.model.GetAuditForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
 import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
@@ -314,6 +315,23 @@ class LockOperationsResourceImplTest : MockTest() {
     }
 
     @Test
+    fun shouldBatchShareLockUsingContext() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            ))
+    }
+
+    @Test
+    fun shouldBatchShareLockUsingContextJson() = runTest {
+        LockOperationsResourceImpl.batchShareLockJson(BatchShareLockOperationData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
+        ).toJson())
+    }
+
+    @Test
     fun shouldShareLock() = runTest {
         LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
@@ -327,6 +345,23 @@ class LockOperationsResourceImplTest : MockTest() {
         LockOperationsResourceImpl.shareLockJson(ShareLockOperationData(
             baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
             shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
+        ).toJson())
+    }
+
+    @Test
+    fun shouldBatchShareLock() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            ))
+    }
+
+    @Test
+    fun shouldBatchShareLockJson() = runTest {
+        LockOperationsResourceImpl.batchShareLockJson(BatchShareLockOperationData(
+            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
         ).toJson())
     }
 

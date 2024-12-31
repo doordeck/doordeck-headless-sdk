@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
-import com.doordeck.multiplatform.sdk.api.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.requests.BaseOperationRequest
@@ -327,7 +327,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
          */
         val isSupported = CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
             ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
-                CapabilityCache.addCapabilities(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
+                CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
             }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
 
         /**

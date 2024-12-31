@@ -149,12 +149,32 @@ class LockOperationsResourceImplTest : MockTest() {
     }
 
     @Test
+    fun shouldBatchShareLockUsingContext() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        )
+    }
+
+    @Test
     fun shouldShareLock() = runTest {
         LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
         ))
+    }
+
+    @Test
+    fun shouldBatchShareLock() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        )
     }
 
     @Test

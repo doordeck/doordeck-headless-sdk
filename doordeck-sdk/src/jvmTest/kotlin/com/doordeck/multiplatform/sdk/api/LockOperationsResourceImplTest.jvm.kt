@@ -284,6 +284,26 @@ class LockOperationsResourceImplTest : MockTest() {
     }
 
     @Test
+    fun shouldBatchShareLockUsingContext() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        )
+    }
+
+    @Test
+    fun shouldBatchShareLockUsingContextAsync() = runTest {
+        LockOperationsResourceImpl.batchShareLockAsync(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        ).await()
+    }
+
+    @Test
     fun shouldShareLock() = runTest {
         LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
@@ -299,6 +319,26 @@ class LockOperationsResourceImplTest : MockTest() {
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
                 shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
             )).await()
+    }
+
+    @Test
+    fun shouldBatchShareLock() = runTest {
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        )
+    }
+
+    @Test
+    fun shouldBatchShareLockAsync() = runTest {
+        LockOperationsResourceImpl.batchShareLockAsync(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            )
+        ).await()
     }
 
     @Test
