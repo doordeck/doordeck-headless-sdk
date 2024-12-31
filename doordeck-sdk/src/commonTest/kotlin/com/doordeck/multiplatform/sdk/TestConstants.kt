@@ -12,10 +12,10 @@ internal object TestConstants {
     const val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
     const val TEST_MAIN_USER_ID = "05cf8ff0-1285-11e9-9f69-170748b9fca8"
     const val TEST_MAIN_USER_PUBLIC_KEY = "mu05vzawHt27GfLUe9JmvYNYCaB+uarf/U+StgMxiC0="
-    const val TEST_SUPPLEMENTARY_USER_EMAIL = "training-tests@doordeck.com"
-    const val TEST_SUPPLEMENTARY_USER_ID = "98b7c430-c761-11ef-b34b-75fe33822921"
+    const val TEST_SUPPLEMENTARY_USER_EMAIL = "training+tests@doordeck.com"
+    const val TEST_SUPPLEMENTARY_USER_ID = "22c75ac0-c7ab-11ef-b34b-75fe33822921"
     const val TEST_SUPPLEMENTARY_USER_PUBLIC_KEY =
-        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0rEhtSxLMQZwjJwqkCSaAhPrWse0gmnO93qB0EK7/zPdI9Pg+iI95jleCo4xxfXkBXgc8MHvX2m4r0W5Dgg8yEUB09Wfx4AlS293UO2SyJAI1S+FDjcbsVzl0U1RWwbXcYdcSUrxklmkRL2Hrq4s2kJPghiO1cmpY2Km6UXNvmz/EiLoqpeCjvSwwovlJl41fu1Qm6s+ItjdwRJzJK4N3C2szS5/yayXc9DIeXJGhfuNFvA0xCeSeaaS+lrEJfFFG5VGXWhUqkPV5HhF0mj2US4PEnZx7feimtNZ6rqk8MO1c/WIAikFVqARuUwSV4uJodqiHKh0L8gWtRLp32ln0QIDAQAB"
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlwQVOr+frEg3hRpP6OcHrwuwChwwYxca4sXmUxh3byqL0ZKgUhoNKtTl+06HiFQvqWSgeSy3fYvN/XGtG4IMG0/iY11IyqDC0zgWnWxq/cVbTizne67MSTHrtfqVnx92HrD3zIFepTxW+aIhruHyNIv+OFbsUGxd5pUHwdltMHQ1TiIZF49I/XtNEt9hb6jUxwqlxUP4FhlwsRtL5g7fIZt3BFN1m3W5XOo8ITBwPVI2nH8h+dLaIe0b9u1QCdTzL10qOxWYzoGV0drkV0mPt9p0z4sCWJwvjAwp+g9fkuNcw7ZCA7Nidzkyh+4QRuUWtwhERs7OxyihSqf1nODG+QIDAQAB"
     const val TEST_MAIN_TILE_ID = "00a17f9f-9319-4712-87d7-ff21a4369809"
     const val TEST_MAIN_LOCK_ID = "ad8fb900-4def-11e8-9370-170748b9fca8"
     const val TEST_MAIN_SITE_ID = "7659e430-4a28-11e8-bf0b-bffab372a82e"

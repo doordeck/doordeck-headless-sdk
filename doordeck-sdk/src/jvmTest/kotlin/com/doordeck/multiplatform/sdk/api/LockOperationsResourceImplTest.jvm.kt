@@ -5,8 +5,11 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
+import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
 import com.doordeck.multiplatform.sdk.api.model.UserRole
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
@@ -285,6 +288,7 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldBatchShareLockUsingContext() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsResourceImpl.batchShareLock(
             LockOperations.BatchShareLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
@@ -295,6 +299,7 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldBatchShareLockUsingContextAsync() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsResourceImpl.batchShareLockAsync(
             LockOperations.BatchShareLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
@@ -323,6 +328,7 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldBatchShareLock() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsResourceImpl.batchShareLock(
             LockOperations.BatchShareLockOperation(
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
@@ -333,6 +339,7 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldBatchShareLockAsync() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsResourceImpl.batchShareLockAsync(
             LockOperations.BatchShareLockOperation(
                 baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
