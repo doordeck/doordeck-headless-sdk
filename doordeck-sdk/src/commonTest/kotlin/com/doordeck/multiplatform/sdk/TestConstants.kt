@@ -3,22 +3,22 @@ package com.doordeck.multiplatform.sdk
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.model.Fusion
 
-object TestConstants {
+internal object TestConstants {
+    val TEST_ENVIRONMENT = ApiEnvironment.DEV
     val TEST_MAIN_USER_PASSWORD = getEnvironmentVariable("TEST_MAIN_USER_PASSWORD")
         ?: ""
     val TEST_MAIN_USER_PRIVATE_KEY = getEnvironmentVariable("TEST_MAIN_USER_PRIVATE_KEY")
         ?: ""
-    val TEST_ENVIRONMENT = ApiEnvironment.DEV
-    val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
-    val TEST_MAIN_USER_ID = "05cf8ff0-1285-11e9-9f69-170748b9fca8"
-    val TEST_MAIN_USER_PUBLIC_KEY = "mu05vzawHt27GfLUe9JmvYNYCaB+uarf/U+StgMxiC0="
-    val TEST_SUPPLEMENTARY_USER_EMAIL = "bernat@doordeck.com"
-    val TEST_SUPPLEMENTARY_USER_ID = "16ea0fe0-c505-11ed-a6aa-b9ad18da3daf"
-    val TEST_SUPPLEMENTARY_USER_PUBLIC_KEY =
-        "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmoQmPVxa/O0+tVYNTA1DEr7Ah5H+zBwpat+jd3S7L4cqmMh+cHbB3w8L6x6VDvglBWXxzo8UFum6+KJaGQd4JVZAlou2YidhkK6/C5Zy4A4U1i3QGPdvFiJQas026PGla86J17ClKH3rNRE4Sa3DRONXu1piri6XtKeT1mfOqroTncl3hMQz7rwQA9BmkeAHwDpJ3cvaT8zGdZOTwNZNLcfyoP2gBV9fM6Qmp5QOM64SMHPQq7mob46My88ZaGvGY5uyEOgPm2ITiuaKvf9lIeWSJ8GD03BKadOKeEeCDDHZOiiougRc4rDBqVPZYZUapmJuEgRdkjnb7DIt7PCyB3Q5A5elqAci9saPrFkVjwwQ3sjHBYOkBEkULUzB5UJL6evYQcHdviT3XifJDx5iNjuhUa6Ifd8RI9T8thDDGBbGXXrfxlz/ywhSboHcorWcB4QpKaKWWSmjTsctwbYmPZ25x687/Q2R/EsomklFLn+mfMPVt1PHyQP5/7sOi9SCxl1m5f+FnLBILCCi/2ADAD7nSG3GmIHznDFZEXg+K2hDEuh7cvdr67Ae5c57Wp+82C8oAE0f1RlRC30c1pqTb55wFzffwhElYpcMNf6T0kaGuD8aQxfMo/DrqCaoJiMS/cAr4rmN7/81l86k7I981fbs6+CiHYfRp8KtjZeuXOECAwEAAQ=="
-    val TEST_MAIN_TILE_ID = "00a17f9f-9319-4712-87d7-ff21a4369809"
-    val TEST_MAIN_LOCK_ID = "ad8fb900-4def-11e8-9370-170748b9fca8"
-    val TEST_MAIN_SITE_ID = "7659e430-4a28-11e8-bf0b-bffab372a82e"
+    const val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
+    const val TEST_MAIN_USER_ID = "05cf8ff0-1285-11e9-9f69-170748b9fca8"
+    const val TEST_MAIN_USER_PUBLIC_KEY = "mu05vzawHt27GfLUe9JmvYNYCaB+uarf/U+StgMxiC0="
+    const val TEST_SUPPLEMENTARY_USER_EMAIL = "training-tests@doordeck.com"
+    const val TEST_SUPPLEMENTARY_USER_ID = "98b7c430-c761-11ef-b34b-75fe33822921"
+    const val TEST_SUPPLEMENTARY_USER_PUBLIC_KEY =
+        "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0rEhtSxLMQZwjJwqkCSaAhPrWse0gmnO93qB0EK7/zPdI9Pg+iI95jleCo4xxfXkBXgc8MHvX2m4r0W5Dgg8yEUB09Wfx4AlS293UO2SyJAI1S+FDjcbsVzl0U1RWwbXcYdcSUrxklmkRL2Hrq4s2kJPghiO1cmpY2Km6UXNvmz/EiLoqpeCjvSwwovlJl41fu1Qm6s+ItjdwRJzJK4N3C2szS5/yayXc9DIeXJGhfuNFvA0xCeSeaaS+lrEJfFFG5VGXWhUqkPV5HhF0mj2US4PEnZx7feimtNZ6rqk8MO1c/WIAikFVqARuUwSV4uJodqiHKh0L8gWtRLp32ln0QIDAQAB"
+    const val TEST_MAIN_TILE_ID = "00a17f9f-9319-4712-87d7-ff21a4369809"
+    const val TEST_MAIN_LOCK_ID = "ad8fb900-4def-11e8-9370-170748b9fca8"
+    const val TEST_MAIN_SITE_ID = "7659e430-4a28-11e8-bf0b-bffab372a82e"
 
     val FUSION_INTEGRATIONS: Map<String, TestController> = mapOf(
         "192.168.202.54:27700" to TestController("demo", Fusion.DemoController(1)),
@@ -43,13 +43,13 @@ object TestConstants {
     )
 
     // Default values used on the Mock http client
-    val DEFAULT_TILE_ID = "TILE_ID"
-    val DEFAULT_SITE_ID = "SITE_ID"
-    val DEFAULT_APPLICATION_ID = "APPLICATION_ID"
-    val DEFAULT_DEVICE_ID = "DEVICE_ID"
-    val DEFAULT_LOCK_ID = "LOCK_ID"
-    val DEFAULT_USER_ID = "USER_ID"
-    val DEFAULT_USER_EMAIL = "USER_EMAIL"
-    val DEFAULT_UPLOAD_URL_PATH = "/upload"
-    val DEFAULT_UPLOAD_URL = "https://cute-upload-url.com$DEFAULT_UPLOAD_URL_PATH"
+    const val DEFAULT_TILE_ID = "TILE_ID"
+    const val DEFAULT_SITE_ID = "SITE_ID"
+    const val DEFAULT_APPLICATION_ID = "APPLICATION_ID"
+    const val DEFAULT_DEVICE_ID = "DEVICE_ID"
+    const val DEFAULT_LOCK_ID = "LOCK_ID"
+    const val DEFAULT_USER_ID = "USER_ID"
+    const val DEFAULT_USER_EMAIL = "USER_EMAIL"
+    const val DEFAULT_UPLOAD_URL_PATH = "/upload"
+    const val DEFAULT_UPLOAD_URL = "https://cute-upload-url.com$DEFAULT_UPLOAD_URL_PATH"
 }

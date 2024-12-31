@@ -50,6 +50,11 @@ object LockOperations {
         val end: Int? = null
     )
 
+    class BatchShareLockOperation(
+        val baseOperation: BaseOperation,
+        val users: List<ShareLock>
+    ): Operation
+
     class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
         val users: List<String>

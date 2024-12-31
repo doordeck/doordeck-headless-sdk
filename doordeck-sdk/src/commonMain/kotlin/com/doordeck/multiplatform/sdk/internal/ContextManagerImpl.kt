@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.internal
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.api.ContextManager
+import com.doordeck.multiplatform.sdk.api.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.api.model.Crypto
@@ -144,6 +145,7 @@ internal object ContextManagerImpl : ContextManager {
         resetTokens()
         resetOperationContext()
         currentEmail = null
+        CapabilityCache.reset()
     }
 
     private fun resetTokens() {

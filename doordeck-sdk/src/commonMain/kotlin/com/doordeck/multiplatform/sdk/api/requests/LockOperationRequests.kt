@@ -51,13 +51,19 @@ class ShareLockOperationRequest(
 ): OperationRequest
 
 @Serializable
+@SerialName("BATCH_ADD_USER")
+class BatchShareLockOperationRequest(
+    val users: List<ShareLockOperationRequest>
+): OperationRequest
+
+@Serializable
 @SerialName("REMOVE_USER")
 class RevokeAccessToALockOperationRequest(
     val users: List<String>
 ): OperationRequest
 
-@SerialName("MUTATE_SETTING")
 @Serializable
+@SerialName("MUTATE_SETTING")
 class UpdateSecureSettingsOperationRequest(
     val unlockDuration: Int? = null,
     val unlockBetween: UnlockBetweenSettingRequest? = null
