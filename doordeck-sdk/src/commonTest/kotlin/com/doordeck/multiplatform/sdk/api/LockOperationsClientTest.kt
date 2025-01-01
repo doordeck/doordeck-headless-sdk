@@ -8,6 +8,8 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
@@ -410,6 +412,68 @@ class LockOperationsClientTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldBatchShareAndRevokeLock() = runTest {
+        // Given - shouldShareLockUsingContext
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+            .certificateChain
+            .certificateChainToString()
+        ContextManagerImpl.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+        val batchShareLock = listOf(
+            LockOperations.ShareLock(
+                targetUserId = TEST_SUPPLEMENTARY_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            ),
+            LockOperations.ShareLock(
+                targetUserId = TEST_SUPPLEMENTARY_SECOND_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            )
+        )
+
+        // When
+        LockOperationsClient.batchShareLockRequest(LockOperations.BatchShareLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            users = batchShareLock
+        ))
+
+        // Then
+        assertTrue {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID
+            }
+        }
+        assertTrue {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID
+            }
+        }
+
+        // Given - shouldRevokeAccessToLockUsingContext
+        // When
+        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
+        ))
+
+        // Then
+        assertFalse {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID }
+        }
+        assertFalse {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID }
+        }
+    }
+
+    @Test
     fun shouldShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -448,6 +512,68 @@ class LockOperationsClientTest : IntegrationTest() {
         // Then
         locks = LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
         assertFalse { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
+    }
+
+    @Test
+    fun shouldBatchShareAndRevokeLockUsingContext() = runTest {
+        // Given - shouldShareLockUsingContext
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+            .certificateChain
+            .certificateChainToString()
+        ContextManagerImpl.setOperationContext(
+            userId = TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
+        val batchShareLock = listOf(
+            LockOperations.ShareLock(
+                targetUserId = TEST_SUPPLEMENTARY_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            ),
+            LockOperations.ShareLock(
+                targetUserId = TEST_SUPPLEMENTARY_SECOND_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+            )
+        )
+
+        // When
+        LockOperationsClient.batchShareLockRequest(LockOperations.BatchShareLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            users = batchShareLock
+        ))
+
+        // Then
+        assertTrue {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID
+            }
+        }
+        assertTrue {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID
+            }
+        }
+
+        // Given - shouldRevokeAccessToLockUsingContext
+        // When
+        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            users = listOf(TEST_SUPPLEMENTARY_USER_ID)
+        ))
+
+        // Then
+        assertFalse {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID }
+        }
+        assertFalse {
+            LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == TEST_MAIN_LOCK_ID }
+        }
     }
 
     @Test

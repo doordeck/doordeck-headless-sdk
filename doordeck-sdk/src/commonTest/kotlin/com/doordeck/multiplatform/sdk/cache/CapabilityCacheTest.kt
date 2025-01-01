@@ -65,7 +65,6 @@ class CapabilityCacheTest {
         // Given
         val capabilities = emptyMap<CapabilityType, CapabilityStatus>()
 
-
         // When
         CapabilityCache.put(TEST_MAIN_LOCK_ID, capabilities)
 
