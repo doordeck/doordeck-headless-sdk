@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.api.model.withNewJti
 import com.doordeck.multiplatform.sdk.api.requests.BaseOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchShareLockOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchUserPublicKeyRequest
@@ -334,8 +335,9 @@ internal object LockOperationsClient : AbstractResourceImpl() {
          * If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually
          */
         if (!isSupported) {
-            batchShareLockOperation.users.forEach {
-                shareLockRequest(LockOperations.ShareLockOperation(batchShareLockOperation.baseOperation, it))
+            batchShareLockOperation.users.forEach { shareLock ->
+                // Recreate the base operation because we need to use a different JTI for each user
+                shareLockRequest(LockOperations.ShareLockOperation(batchShareLockOperation.baseOperation.withNewJti(), shareLock))
             }
             return
         }

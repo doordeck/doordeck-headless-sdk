@@ -83,3 +83,14 @@ object LockOperations {
 
     sealed interface Operation
 }
+
+internal fun LockOperations.BaseOperation.withNewJti() = LockOperations.BaseOperation(
+    userId = userId,
+    userCertificateChain = userCertificateChain,
+    userPrivateKey = userPrivateKey,
+    lockId = lockId,
+    notBefore = notBefore,
+    issuedAt = issuedAt,
+    expiresAt = expiresAt,
+    jti = Uuid.random().toString()
+)
