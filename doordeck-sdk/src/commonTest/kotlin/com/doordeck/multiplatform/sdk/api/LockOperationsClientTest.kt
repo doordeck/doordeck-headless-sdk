@@ -418,11 +418,11 @@ class LockOperationsClientTest : IntegrationTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainToString()
-        ContextManagerImpl.setOperationContext(
+        val shareBaseOperation = LockOperations.BaseOperation(
             userId = TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
-            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
         )
         val batchShareLock = listOf(
             LockOperations.ShareLock(
@@ -439,7 +439,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.batchShareLockRequest(LockOperations.BatchShareLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            baseOperation = shareBaseOperation,
             users = batchShareLock
         ))
 
@@ -455,10 +455,16 @@ class LockOperationsClientTest : IntegrationTest() {
             }
         }
 
-        // Given - shouldRevokeAccessToLockUsingContext
         // When
+        // Given - shouldRevokeAccessToLock
+        val revokeBaseOperation = LockOperations.BaseOperation(
+            userId = TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
+            userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            lockId = TEST_MAIN_LOCK_ID
+        )
         LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            baseOperation = revokeBaseOperation,
             users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
 
@@ -562,7 +568,7 @@ class LockOperationsClientTest : IntegrationTest() {
         // When
         LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-            users = listOf(TEST_SUPPLEMENTARY_USER_ID)
+            users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
 
         // Then
