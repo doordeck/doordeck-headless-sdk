@@ -4,9 +4,7 @@ import com.doordeck.multiplatform.sdk.api.SitesResource
 import com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.api.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
 internal object SitesResourceImpl : SitesResource {
@@ -16,7 +14,7 @@ internal object SitesResourceImpl : SitesResource {
     }
 
     override fun listSitesAsync(): CompletableFuture<List<SiteResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { SitesClient.listSitesRequest() }
+        return completableFuture { listSites() }
     }
 
     override suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
@@ -24,7 +22,7 @@ internal object SitesResourceImpl : SitesResource {
     }
 
     override fun getLocksForSiteAsync(siteId: String): CompletableFuture<List<SiteLocksResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { SitesClient.getLocksForSiteRequest(siteId) }
+        return completableFuture { getLocksForSite(siteId) }
     }
 
     override suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
@@ -32,6 +30,6 @@ internal object SitesResourceImpl : SitesResource {
     }
 
     override fun getUsersForSiteAsync(siteId: String): CompletableFuture<List<UserForSiteResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { SitesClient.getUsersForSiteRequest(siteId) }
+        return completableFuture { getUsersForSite(siteId) }
     }
 }

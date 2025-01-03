@@ -5,9 +5,7 @@ import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.GetLogoUploadUrlResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
 internal object PlatformResourceImpl : PlatformResource {
@@ -17,7 +15,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun createApplicationAsync(application: Platform.CreateApplication): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.createApplicationRequest(application) }
+        return completableFuture { createApplication(application) }
     }
 
     override suspend fun listApplications(): List<ApplicationResponse> {
@@ -25,7 +23,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun listApplicationsAsync(): CompletableFuture<List<ApplicationResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.listApplicationsRequest() }
+        return completableFuture { listApplications() }
     }
 
     override suspend fun getApplication(applicationId: String): ApplicationResponse {
@@ -33,7 +31,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun getApplicationAsync(applicationId: String): CompletableFuture<ApplicationResponse> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.getApplicationRequest(applicationId) }
+        return completableFuture { getApplication(applicationId) }
     }
 
     override suspend fun updateApplicationName(applicationId: String, name: String) {
@@ -41,7 +39,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationNameAsync(applicationId: String, name: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationNameRequest(applicationId, name) }
+        return completableFuture { updateApplicationName(applicationId, name) }
     }
 
     override suspend fun updateApplicationCompanyName(applicationId: String, companyName: String) {
@@ -49,7 +47,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationCompanyNameAsync(applicationId: String, companyName: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationCompanyNameRequest(applicationId, companyName) }
+        return completableFuture { updateApplicationCompanyName(applicationId, companyName) }
     }
 
     override suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
@@ -57,7 +55,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationMailingAddressAsync(applicationId: String, mailingAddress: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
+        return completableFuture { updateApplicationMailingAddress(applicationId, mailingAddress) }
     }
 
     override suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
@@ -65,7 +63,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationPrivacyPolicyAsync(applicationId: String, privacyPolicy: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
+        return completableFuture { updateApplicationPrivacyPolicy(applicationId, privacyPolicy) }
     }
 
     override suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
@@ -73,7 +71,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationSupportContactAsync(applicationId: String, supportContact: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationSupportContactRequest(applicationId, supportContact) }
+        return completableFuture { updateApplicationSupportContact(applicationId, supportContact) }
     }
 
     override suspend fun updateApplicationAppLink(applicationId: String, appLink: String) {
@@ -81,7 +79,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationAppLinkAsync(applicationId: String, appLink: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationAppLinkRequest(applicationId, appLink) }
+        return completableFuture { updateApplicationAppLink(applicationId, appLink) }
     }
 
     override suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
@@ -89,7 +87,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationEmailPreferencesAsync(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
+        return completableFuture { updateApplicationEmailPreferences(applicationId, emailPreferences) }
     }
 
     override suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
@@ -97,7 +95,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun updateApplicationLogoUrlAsync(applicationId: String, logoUrl: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl) }
+        return completableFuture { updateApplicationLogoUrl(applicationId, logoUrl) }
     }
 
     override suspend fun deleteApplication(applicationId: String) {
@@ -105,7 +103,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun deleteApplicationAsync(applicationId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.deleteApplicationRequest(applicationId) }
+        return completableFuture { deleteApplication(applicationId) }
     }
 
     override suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
@@ -113,7 +111,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun getLogoUploadUrlAsync(applicationId: String, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType) }
+        return completableFuture { getLogoUploadUrl(applicationId, contentType) }
     }
 
     override suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
@@ -121,7 +119,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun addAuthKeyAsync(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.addAuthKeyRequest(applicationId, key) }
+        return completableFuture { addAuthKey(applicationId, key) }
     }
 
     override suspend fun addAuthIssuer(applicationId: String, url: String) {
@@ -129,7 +127,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun addAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.addAuthIssuerRequest(applicationId, url) }
+        return completableFuture { addAuthIssuer(applicationId, url) }
     }
 
     override suspend fun deleteAuthIssuer(applicationId: String, url: String) {
@@ -137,7 +135,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun deleteAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.deleteAuthIssuerRequest(applicationId, url) }
+        return completableFuture { deleteAuthIssuer(applicationId, url) }
     }
 
     override suspend fun addCorsDomain(applicationId: String, url: String) {
@@ -145,7 +143,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun addCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.addCorsDomainRequest(applicationId, url) }
+        return completableFuture { addCorsDomain(applicationId, url) }
     }
 
     override suspend fun removeCorsDomain(applicationId: String, url: String) {
@@ -153,7 +151,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun removeCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.removeCorsDomainRequest(applicationId, url) }
+        return completableFuture { removeCorsDomain(applicationId, url) }
     }
 
     override suspend fun addApplicationOwner(applicationId: String, userId: String) {
@@ -161,7 +159,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun addApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.addApplicationOwnerRequest(applicationId, userId) }
+        return completableFuture { addApplicationOwner(applicationId, userId) }
     }
 
     override suspend fun removeApplicationOwner(applicationId: String, userId: String) {
@@ -169,7 +167,7 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun removeApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.removeApplicationOwnerRequest(applicationId, userId) }
+        return completableFuture { removeApplicationOwner(applicationId, userId) }
     }
 
     override suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
@@ -177,6 +175,6 @@ internal object PlatformResourceImpl : PlatformResource {
     }
 
     override fun getApplicationOwnersDetailsAsync(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { PlatformClient.getApplicationOwnersDetailsRequest(applicationId) }
+        return completableFuture { getApplicationOwnersDetails(applicationId) }
     }
 }
