@@ -1,9 +1,14 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
+import com.doordeck.multiplatform.sdk.api.model.withNewJti
 import com.doordeck.multiplatform.sdk.api.requests.BaseOperationRequest
+import com.doordeck.multiplatform.sdk.api.requests.BatchShareLockOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchUserPublicKeyRequest
 import com.doordeck.multiplatform.sdk.api.requests.LocationRequirementRequest
 import com.doordeck.multiplatform.sdk.api.requests.LockOperationRequest
@@ -310,6 +315,57 @@ internal object LockOperationsClient : AbstractResourceImpl() {
             end = shareLockOperation.shareLock.end?.toLong()
         )
         val baseOperationRequest = shareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
+        performOperation(baseOperationRequest, operationRequest)
+    }
+
+    /**
+     * Batch share a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     */
+    suspend fun batchShareLockRequest(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
+        /**
+         * Verify whether the operation device currently supports the batch sharing operation
+         */
+        val isSupported = CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
+            ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
+                CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
+            }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
+
+        /**
+         * If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually
+         */
+        if (!isSupported) {
+            val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
+                try {
+                    shareLockRequest(LockOperations.ShareLockOperation(
+                        baseOperation = batchShareLockOperation.baseOperation.withNewJti(), // Recreate the base operation because we need to use a different JTI for each user
+                        shareLock = shareLock
+                    ))
+                    null
+                } catch (exception: Exception) {
+                    shareLock
+                }
+            }
+
+            if (failedOperations.isNotEmpty()) {
+                throw BatchShareFailedException("Batch share failed", failedOperations.map { it.targetUserId })
+            }
+            return
+        }
+
+        val operationRequest = BatchShareLockOperationRequest(
+            users = batchShareLockOperation.users.map {
+                ShareLockOperationRequest(
+                    user = it.targetUserId,
+                    publicKey = it.targetUserPublicKey.encodeByteArrayToBase64(),
+                    role = it.targetUserRole,
+                    start = it.start?.toLong(),
+                    end = it.end?.toLong()
+                )
+            }
+        )
+        val baseOperationRequest = batchShareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
     }
 

@@ -188,6 +188,12 @@ class ShareLockOperationData(
 )
 
 @Serializable
+class BatchShareLockOperationData(
+    val baseOperation: BaseOperationData,
+    val users: List<ShareLockData>
+)
+
+@Serializable
 class RevokeAccessToLockOperationData(
     val baseOperation: BaseOperationData,
     val users: List<String>
@@ -258,6 +264,11 @@ internal fun ShareLockData.toShareLock() = ShareLock(
 internal fun ShareLockOperationData.toShareLockOperation() = LockOperations.ShareLockOperation(
     baseOperation = baseOperation.toBaseOperation(),
     shareLock = shareLock.toShareLock()
+)
+
+internal fun BatchShareLockOperationData.toBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
+    baseOperation = baseOperation.toBaseOperation(),
+    users = users.map { it.toShareLock() }
 )
 
 internal fun RevokeAccessToLockOperationData.toRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(

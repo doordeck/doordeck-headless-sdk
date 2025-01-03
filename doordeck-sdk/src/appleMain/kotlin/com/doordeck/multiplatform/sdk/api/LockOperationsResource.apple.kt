@@ -214,6 +214,14 @@ actual interface LockOperationsResource {
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
 
     /**
+     * Batch share a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     */
+    @Throws(Exception::class)
+    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation)
+
+    /**
      * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>

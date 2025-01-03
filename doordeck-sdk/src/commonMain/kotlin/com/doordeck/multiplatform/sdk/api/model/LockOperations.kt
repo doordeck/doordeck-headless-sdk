@@ -50,6 +50,11 @@ object LockOperations {
         val end: Int? = null
     )
 
+    class BatchShareLockOperation(
+        val baseOperation: BaseOperation,
+        val users: List<ShareLock>
+    ): Operation
+
     class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
         val users: List<String>
@@ -78,3 +83,14 @@ object LockOperations {
 
     sealed interface Operation
 }
+
+internal fun LockOperations.BaseOperation.withNewJti() = LockOperations.BaseOperation(
+    userId = userId,
+    userCertificateChain = userCertificateChain,
+    userPrivateKey = userPrivateKey,
+    lockId = lockId,
+    notBefore = notBefore,
+    issuedAt = issuedAt,
+    expiresAt = expiresAt,
+    jti = Uuid.random().toString()
+)
