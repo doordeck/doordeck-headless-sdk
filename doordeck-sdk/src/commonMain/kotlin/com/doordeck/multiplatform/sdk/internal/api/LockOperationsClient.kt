@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
+import com.doordeck.multiplatform.sdk.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
@@ -335,9 +336,20 @@ internal object LockOperationsClient : AbstractResourceImpl() {
          * If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually
          */
         if (!isSupported) {
-            batchShareLockOperation.users.forEach { shareLock ->
-                // Recreate the base operation because we need to use a different JTI for each user
-                shareLockRequest(LockOperations.ShareLockOperation(batchShareLockOperation.baseOperation.withNewJti(), shareLock))
+            val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
+                try {
+                    shareLockRequest(LockOperations.ShareLockOperation(
+                        baseOperation = batchShareLockOperation.baseOperation.withNewJti(), // Recreate the base operation because we need to use a different JTI for each user
+                        shareLock = shareLock
+                    ))
+                    null
+                } catch (exception: Exception) {
+                    shareLock
+                }
+            }
+
+            if (failedOperations.isNotEmpty()) {
+                throw BatchShareFailedException("Batch share failed", failedOperations.map { it.targetUserId })
             }
             return
         }

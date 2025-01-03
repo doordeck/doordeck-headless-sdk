@@ -55,5 +55,5 @@ internal object TestConstants {
     const val DEFAULT_USER_ID = "USER_ID"
     const val DEFAULT_USER_EMAIL = "USER_EMAIL"
     const val DEFAULT_UPLOAD_URL_PATH = "/upload"
-    const val DEFAULT_UPLOAD_URL = "https://cute-upload-url.com$DEFAULT_UPLOAD_URL_PATH"
+    const val DEFAULT_UPLOAD_URL = "https://example.com$DEFAULT_UPLOAD_URL_PATH"
 }
