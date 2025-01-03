@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.TilesResource
 import com.doordeck.multiplatform.sdk.api.responses.TileLocksResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
 internal object TilesResourceImpl : TilesResource {
@@ -14,7 +12,7 @@ internal object TilesResourceImpl : TilesResource {
     }
 
     override fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse> {
-        return GlobalScope.future(Dispatchers.IO) { TilesClient.getLocksBelongingToTileRequest(tileId) }
+        return completableFuture { getLocksBelongingToTile(tileId) }
     }
 
     override suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>) {
@@ -22,6 +20,6 @@ internal object TilesResourceImpl : TilesResource {
     }
 
     override fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds) }
+        return completableFuture { associateMultipleLocks(tileId, siteId, lockIds) }
     }
 }

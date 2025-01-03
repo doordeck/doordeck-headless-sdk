@@ -3,9 +3,7 @@ package com.doordeck.multiplatform.sdk.internal.api
 import com.doordeck.multiplatform.sdk.api.HelperResource
 import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
 internal object HelperResourceImpl : HelperResource {
@@ -15,7 +13,7 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
+        return completableFuture { uploadPlatformLogo(applicationId, contentType, image) }
     }
 
     override suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse {
@@ -23,7 +21,7 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse> {
-        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedLoginRequest(email, password) }
+        return completableFuture { assistedLogin(email, password) }
     }
 
     override suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
@@ -31,7 +29,7 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray?): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
-        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+        return completableFuture { assistedRegisterEphemeralKey(publicKey) }
     }
 
     override suspend fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
@@ -39,6 +37,6 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedRegisterAsync(email: String, password: String, displayName: String?, force: Boolean): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { HelperClient.assistedRegisterRequest(email, password, displayName, force) }
+        return completableFuture { assistedRegister(email, password, displayName, force) }
     }
 }

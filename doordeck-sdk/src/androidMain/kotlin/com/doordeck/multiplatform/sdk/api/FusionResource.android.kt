@@ -56,7 +56,7 @@ actual interface FusionResource {
     suspend fun stopDoor(deviceId: String)
 
     @DoordeckOnly
-    suspend fun stopDoorAsync(deviceId: String): CompletableFuture<Unit>
+    fun stopDoorAsync(deviceId: String): CompletableFuture<Unit>
 }
 
 actual fun fusion(): FusionResource = FusionResourceImpl
