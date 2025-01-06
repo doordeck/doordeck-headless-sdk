@@ -115,7 +115,7 @@ internal object LockOperationsResourceImpl : LockOperationsResource {
     }
 
     override fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): Promise<dynamic> {
-        return GlobalScope.promise { LockOperationsClient.batchShareLockRequest(batchShareLockOperation) }
+        return promise { LockOperationsClient.batchShareLockRequest(batchShareLockOperation) }
     }
 
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): Promise<Unit> {
