@@ -6,9 +6,7 @@ import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.future.future
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
 internal object FusionResourceImpl : FusionResource {
@@ -18,7 +16,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun loginAsync(email: String, password: String): CompletableFuture<FusionLoginResponse> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.loginRequest(email, password) }
+        return completableFuture { login(email, password) }
     }
 
     override suspend fun getIntegrationType(): IntegrationTypeResponse {
@@ -26,7 +24,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getIntegrationTypeAsync(): CompletableFuture<IntegrationTypeResponse> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.getIntegrationTypeRequest() }
+        return completableFuture { getIntegrationType() }
     }
 
     override suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
@@ -34,7 +32,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getIntegrationConfigurationAsync(type: String): CompletableFuture<List<IntegrationConfigurationResponse>> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.getIntegrationConfigurationRequest(type) }
+        return completableFuture { getIntegrationConfiguration(type) }
     }
 
     override suspend fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
@@ -42,7 +40,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun enableDoorAsync(name: String, siteId: String, controller: Fusion.LockController): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.enableDoorRequest(name, siteId, controller) }
+        return completableFuture { enableDoor(name, siteId, controller) }
     }
 
     override suspend fun deleteDoor(deviceId: String) {
@@ -50,7 +48,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun deleteDoorAsync(deviceId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.deleteDoorRequest(deviceId) }
+        return completableFuture { deleteDoor(deviceId) }
     }
 
     override suspend fun getDoorStatus(deviceId: String): DoorStateResponse {
@@ -58,7 +56,7 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getDoorStatusAsync(deviceId: String): CompletableFuture<DoorStateResponse> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.getDoorStatusRequest(deviceId) }
+        return completableFuture { getDoorStatus(deviceId) }
     }
 
     override suspend fun startDoor(deviceId: String) {
@@ -66,14 +64,14 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun startDoorAsync(deviceId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.startDoorRequest(deviceId) }
+        return completableFuture { startDoor(deviceId) }
     }
 
     override suspend fun stopDoor(deviceId: String) {
         return FusionClient.stopDoorRequest(deviceId)
     }
 
-    override suspend fun stopDoorAsync(deviceId: String): CompletableFuture<Unit> {
-        return GlobalScope.future(Dispatchers.IO) { FusionClient.stopDoorRequest(deviceId) }
+    override fun stopDoorAsync(deviceId: String): CompletableFuture<Unit> {
+        return completableFuture { stopDoor(deviceId) }
     }
 }
