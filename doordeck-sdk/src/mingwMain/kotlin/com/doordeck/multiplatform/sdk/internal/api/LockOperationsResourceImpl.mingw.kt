@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.internal.api
 
 import com.doordeck.multiplatform.sdk.api.LockOperationsResource
+import com.doordeck.multiplatform.sdk.api.model.BatchShareLockOperationData
 import com.doordeck.multiplatform.sdk.api.model.GetAuditForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
 import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
@@ -30,6 +31,7 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingHiddenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestrictionsData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
+import com.doordeck.multiplatform.sdk.api.model.toBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.api.model.toLocationRequirement
 import com.doordeck.multiplatform.sdk.api.model.toRevokeAccessToLockOperation
 import com.doordeck.multiplatform.sdk.api.model.toShareLockOperation
@@ -273,6 +275,15 @@ internal object LockOperationsResourceImpl : LockOperationsResource {
     override fun shareLockJson(data: String) {
         val shareLockOperationData = data.fromJson<ShareLockOperationData>()
         return shareLock(shareLockOperationData.toShareLockOperation())
+    }
+
+    override suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
+        return runBlocking { LockOperationsClient.batchShareLockRequest(batchShareLockOperation) }
+    }
+
+    override fun batchShareLockJson(data: String) {
+        val batchShareLockOperationData = data.fromJson<BatchShareLockOperationData>()
+        return runBlocking { LockOperationsClient.batchShareLockRequest(batchShareLockOperationData.toBatchShareLockOperation()) }
     }
 
     override fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {

@@ -215,6 +215,14 @@ actual interface LockOperationsResource {
     fun shareLockJson(data: String)
 
     /**
+     * Batch share a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     */
+    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation)
+    fun batchShareLockJson(data: String)
+
+    /**
      * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>

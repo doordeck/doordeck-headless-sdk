@@ -241,6 +241,15 @@ actual interface LockOperationsResource {
     fun shareLockAsync(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit>
 
     /**
+     * Batch share a lock
+     *
+     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     */
+    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation)
+
+    fun batchShareLockAsync(batchShareLockOperation: LockOperations.BatchShareLockOperation): CompletableFuture<Unit>
+
+    /**
      * Revoke access to a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>

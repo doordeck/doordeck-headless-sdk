@@ -335,6 +335,18 @@
         }
     }
 
+    public class BatchShareLockOperationData
+    {
+        public BaseOperationData BaseOperation { get; set; }
+        public List<ShareLockData> Users { get; set; }
+
+        public BatchShareLockOperationData(BaseOperationData baseOperation, List<ShareLockData> users)
+        {
+            BaseOperation = baseOperation;
+            Users = users;
+        }
+    }
+
     public class RevokeAccessToLockOperationData
     {
         public BaseOperationData BaseOperation { get; set; }
