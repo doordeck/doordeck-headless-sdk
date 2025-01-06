@@ -112,6 +112,10 @@ internal object LockOperationsResourceImpl : LockOperationsResource {
         return LockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
+    override suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
+        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
+    }
+
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }

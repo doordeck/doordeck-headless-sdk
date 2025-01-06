@@ -50,6 +50,11 @@ object LockOperations {
         val end: Int? = null
     )
 
+    class BatchShareLockOperation(
+        val baseOperation: BaseOperation,
+        val users: List<ShareLock>
+    ): Operation
+
     class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
         val users: List<String>
@@ -78,3 +83,23 @@ object LockOperations {
 
     sealed interface Operation
 }
+
+/**
+ * Creates a new instance of `LockOperations.BaseOperation` with a newly generated JTI (JSON Token Identifier).
+ *
+ * The new instance retains all the properties of the original operation except for the JTI,
+ * which is replaced with a randomly generated UUID.
+ *
+ * @receiver The original `LockOperations.BaseOperation` instance.
+ * @return A new `LockOperations.BaseOperation` instance with the same properties as the receiver but with a new JTI.
+ */
+internal fun LockOperations.BaseOperation.withNewJti() = LockOperations.BaseOperation(
+    userId = userId,
+    userCertificateChain = userCertificateChain,
+    userPrivateKey = userPrivateKey,
+    lockId = lockId,
+    notBefore = notBefore,
+    issuedAt = issuedAt,
+    expiresAt = expiresAt,
+    jti = Uuid.random().toString()
+)

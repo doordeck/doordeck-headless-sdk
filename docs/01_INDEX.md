@@ -67,6 +67,7 @@
     * [Batch lookup user public key by foreign key](11_API-LOCK-OPERATIONS.md#batch-lookup-user-public-key-by-foreign-key)
     * [Unlock](11_API-LOCK-OPERATIONS.md#unlock)
     * [Share lock](11_API-LOCK-OPERATIONS.md#share-lock)
+    * [Batch share lock](11_API-LOCK-OPERATIONS.md#batch-share-lock)
     * [Revoke access to lock](11_API-LOCK-OPERATIONS.md#revoke-access-to-lock)
     * [Update secure setting unlock duration](11_API-LOCK-OPERATIONS.md#update-secure-setting-unlock-duration)
     * [Update secure setting unlock between](11_API-LOCK-OPERATIONS.md#update-secure-setting-unlock-between)
