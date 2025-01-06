@@ -1126,7 +1126,7 @@ const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOpe
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
 const shareLock = new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null);
-const shareLockOperation = new lockOperations.shareLockOperation(baseOperation, shareLock);
+const shareLockOperation = new lockOperations.ShareLockOperation(baseOperation, shareLock);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock(shareLockOperation);
 ```
 </details>
@@ -1143,6 +1143,69 @@ unsafe
     var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
     var data = new ShareLockOperationData(baseOperationData, shareLockData).ToData();
     symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(resource, data);
+}
+```
+</details>
+
+## Batch share lock
+> [!NOTE]
+> This functionality requires the device to support the batch sharing feature. The function will retrieve the device's capabilities, store them in a cache, and perform the batch operation if supported. Otherwise, it will default to the standard device sharing process.
+
+> [!NOTE]
+> This function can be used with the [user ID, certificate chain, and private key](06_CONTEXT-MANAGER.md#set-operation-context) values from the context. To use these values from the context, you should set those parameters to null in the ```BaseOperation``` object.
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val baseOperation = LockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID")
+val users = listOf(LockOperations.ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, TARGET_PUBLIC_KEY))
+val shareLockOperation = LockOperations.BatchShareLockOperation(baseOperation, users)
+sdk.lockOperations().batchShareLock(shareLockOperation)
+```
+💡 **Note:** In Java, use the `batchShareLockAsync` function, which returns a `CompletableFuture<Void>` instead
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let baseOperation = LockOperations.BaseOperation(userId: "USER_ID", userCertificateChain: USER_CERTIFICATE_CHAIN_LIST, userPrivateKey: PRIVATE_KEY, lockId: "LOCK_ID", notBefore: NOT_BEFORE, issuedAt: ISSUED_AT, expiresAt: EXPIRES_AT, jti: UUID)
+let users = [LockOperations.ShareLock(targetUserId: "TARGET_USER_ID", targetUserRole: TARGET_USER_ROLE, targetUserPublicKey: TARGET_PUBLIC_KEY, start: null, end: null)]
+let shareLockOperation = LockOperations.BatchShareLockOperation(baseOperation: baseOperation, users: users)
+sdk.lockOperations().batchShareLock(shareLockOperation: shareLockOperation)
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const ktList = doordeck.kotlin.collections.KtList;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
+const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
+const users = [new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null)];
+const shareLockOperation = new lockOperations.BatchShareLockOperation(baseOperation, ktList.fromJsArray(users));
+await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().batchShareLock(shareLockOperation);
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+unsafe
+{
+    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
+    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+    var users = [new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")];
+    var data = new BatchShareLockOperationData(baseOperationData, users).ToData();
+    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.batchShareLockJson(resource, data);
 }
 ```
 </details>

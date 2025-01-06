@@ -9,37 +9,54 @@ open class SdkException(override val message: String, exception: Throwable? = nu
  * SDK Exceptions
  */
 @JsExport
-class MissingContextFieldException(override val message: String): SdkException(message)
-class MissingAndroidContextException(override val message: String): SdkException(message)
+class MissingContextFieldException(override val message: String) : SdkException(message)
+
+class MissingAndroidContextException(override val message: String) : SdkException(message)
+
+@JsExport
+class BatchShareFailedException(override val message: String, userIds: List<String>) : SdkException(message)
 
 /**
  * API Exceptions
  */
 @JsExport
-class BadRequestException(override val message: String): SdkException(message)
+class BadRequestException(override val message: String) : SdkException(message)
+
 @JsExport
-class UnauthorizedException(override val message: String): SdkException(message)
+class UnauthorizedException(override val message: String) : SdkException(message)
+
 @JsExport
-class ForbiddenException(override val message: String): SdkException(message)
+class ForbiddenException(override val message: String) : SdkException(message)
+
 @JsExport
-class NotFoundException(override val message: String): SdkException(message)
+class NotFoundException(override val message: String) : SdkException(message)
+
 @JsExport
-class MethodNotAllowedException(override val message: String): SdkException(message)
+class MethodNotAllowedException(override val message: String) : SdkException(message)
+
 @JsExport
-class NotAcceptableException(override val message: String): SdkException(message)
+class NotAcceptableException(override val message: String) : SdkException(message)
+
 @JsExport
-class ConflictException(override val message: String): SdkException(message)
+class ConflictException(override val message: String) : SdkException(message)
+
 @JsExport
-class GoneException(override val message: String): SdkException(message)
+class GoneException(override val message: String) : SdkException(message)
+
 @JsExport
-class LockedException(override val message: String): SdkException(message)
+class LockedException(override val message: String) : SdkException(message)
+
 @JsExport
-class TooEarlyException(override val message: String): SdkException(message)
+class TooEarlyException(override val message: String) : SdkException(message)
+
 @JsExport
-class TooManyRequestsException(override val message: String): SdkException(message)
+class TooManyRequestsException(override val message: String) : SdkException(message)
+
 @JsExport
-class InternalServerErrorException(override val message: String): SdkException(message)
+class InternalServerErrorException(override val message: String) : SdkException(message)
+
 @JsExport
-class ServiceUnavailableException(override val message: String): SdkException(message)
+class ServiceUnavailableException(override val message: String) : SdkException(message)
+
 @JsExport
-class GatewayTimeoutException(override val message: String): SdkException(message)
+class GatewayTimeoutException(override val message: String) : SdkException(message)

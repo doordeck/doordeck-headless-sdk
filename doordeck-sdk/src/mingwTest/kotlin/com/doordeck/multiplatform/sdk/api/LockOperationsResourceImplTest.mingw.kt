@@ -6,6 +6,9 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.api.model.BaseOperationData
+import com.doordeck.multiplatform.sdk.api.model.BatchShareLockOperationData
+import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
+import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.GetAuditForUserData
 import com.doordeck.multiplatform.sdk.api.model.GetLockAuditTrailData
 import com.doordeck.multiplatform.sdk.api.model.GetLocksForUserData
@@ -37,6 +40,7 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateLockSettingLocationRestric
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockBetweenData
 import com.doordeck.multiplatform.sdk.api.model.UpdateSecureSettingUnlockDurationData
 import com.doordeck.multiplatform.sdk.api.model.UserRole
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -314,6 +318,25 @@ class LockOperationsResourceImplTest : MockTest() {
     }
 
     @Test
+    fun shouldBatchShareLockUsingContext() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            ))
+    }
+
+    @Test
+    fun shouldBatchShareLockUsingContextJson() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+        LockOperationsResourceImpl.batchShareLockJson(BatchShareLockOperationData(
+            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
+        ).toJson())
+    }
+
+    @Test
     fun shouldShareLock() = runTest {
         LockOperationsResourceImpl.shareLock(
             LockOperations.ShareLockOperation(
@@ -327,6 +350,25 @@ class LockOperationsResourceImplTest : MockTest() {
         LockOperationsResourceImpl.shareLockJson(ShareLockOperationData(
             baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
             shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
+        ).toJson())
+    }
+
+    @Test
+    fun shouldBatchShareLock() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+        LockOperationsResourceImpl.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            ))
+    }
+
+    @Test
+    fun shouldBatchShareLockJson() = runTest {
+        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+        LockOperationsResourceImpl.batchShareLockJson(BatchShareLockOperationData(
+            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
         ).toJson())
     }
 

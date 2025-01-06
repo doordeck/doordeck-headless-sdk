@@ -216,6 +216,14 @@ internal object LockOperationsResourceImpl : LockOperationsResource {
         return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.shareLockRequest(shareLockOperation) }
     }
 
+    override suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
+        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
+    }
+
+    override fun batchShareLockAsync(batchShareLockOperation: LockOperations.BatchShareLockOperation): CompletableFuture<Unit> {
+        return GlobalScope.future(Dispatchers.IO) { LockOperationsClient.batchShareLockRequest(batchShareLockOperation) }
+    }
+
     override suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
