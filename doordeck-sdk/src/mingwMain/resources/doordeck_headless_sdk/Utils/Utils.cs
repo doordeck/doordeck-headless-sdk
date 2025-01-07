@@ -16,7 +16,7 @@ namespace Doordeck.Headless.Sdk.Utils
         public static sbyte* ToData<T>(this T input) =>
             JsonSerializer.Serialize(input, JsonSerializerOptions).ToSByte();
 
-        public static T? FromData<T>(sbyte* input) =>
+        public static T FromData<T>(sbyte* input) =>
             JsonSerializer.Deserialize<T>(ConvertSByteToString(input), JsonSerializerOptions);
 
         public static unsafe sbyte* ToSByte(this string input) =>

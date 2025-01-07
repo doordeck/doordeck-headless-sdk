@@ -97,7 +97,7 @@ unsafe
 ```kotlin
 val response = sdk.lockOperations().getAuditForUser("USER_ID", START_EPOCH, END_EPOCH)
 ```
-💡 **Note:** In Java, use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<UserAuditResponse>>` instead
+💡 **Note:** In Java, use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<AuditResponse>>` instead
 </details>
 
 ### Swift
@@ -127,7 +127,7 @@ unsafe
 {
     var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
     var data = new GetAuditForUserData("USER_ID", START_EPOCH, END_EPOCH).ToData();
-    var response = Utils.FromData<List<UserAuditResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getAuditForUserJson(resource, data));
+    var response = Utils.FromData<List<AuditResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getAuditForUserJson(resource, data));
 }
 ```
 </details>
