@@ -1,5 +1,4 @@
 ﻿using System.Runtime.InteropServices;
-using Doordeck.Headless.Sdk;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using Doordeck.Headless.Sdk.Utils;
@@ -11,17 +10,49 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     private readonly Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource _account;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource _accountless;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountlessResource_e__Struct _accountlessResource;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountResource_e__Struct _accountResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_model_ApiEnvironment _apiEnvironment;
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_ContextManager _contextManager;
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_crypto_CryptoManager _cryptoManager;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_ContextManager _context;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._ContextManager_e__Struct _contextManager;
+
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_crypto_CryptoManager _crypto;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._crypto_e__Struct._CryptoManager_e__Struct _cryptoManager;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory _factory;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource _fusion;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource _helper;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource _lockOperations;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsResource_e__Struct
+        _lockOperationsResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource _platform;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformResource_e__Struct _platformResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck _sdk;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource _sites;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._SitesResource_e__Struct _sitesResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource _tiles;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesResource_e__Struct _tilesResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_util_Utils _utils;
 
     public void Initialize()
@@ -48,215 +79,160 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         _platform = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(_sdk);
         _sites = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(_sdk);
         _tiles = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(_sdk);
-        _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(_sdk);
-        _cryptoManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto(_sdk);
+        _context = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(_sdk);
+        _crypto = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto(_sdk);
         _utils = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.Utils._instance();
+
+        _accountlessResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource;
+        _accountResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource;
+        _lockOperationsResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource;
+        _platformResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource;
+        _sitesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource;
+        _tilesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource;
+        _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager;
+        _cryptoManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager;
     }
 
     /**
      * Accountless
      */
-    public TokenResponse Login(LoginData loginData)
+    public TokenResponse Login(LoginData data)
     {
-        var data = loginData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(_accountless,
-                    data);
-            return Utils.FromData<TokenResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessAccountlessResource<TokenResponse>(
+            _accountlessResource.loginJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public TokenResponse Registration(RegistrationData registrationData)
+    public TokenResponse Registration(RegistrationData data)
     {
-        var data = registrationData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(
-                    _accountless, data);
-            return Utils.FromData<TokenResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessAccountlessResource<TokenResponse>(
+            _accountlessResource.registrationJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void VerifyEmail(VerifyEmailData verifyEmailData)
+    public void VerifyEmail(VerifyEmailData data)
     {
-        var data = verifyEmailData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(_accountless,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessAccountlessResource<object>(
+            null,
+            _accountlessResource.verifyEmailJson,
+            null,
+            data
+        );
     }
 
-    public void PasswordReset(PasswordResetData passwordResetData)
+    public void PasswordReset(PasswordResetData data)
     {
-        var data = passwordResetData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetJson(_accountless,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessAccountlessResource<object>(
+            null,
+            _accountlessResource.passwordResetJson,
+            null,
+            data
+        );
     }
 
-    public void PasswordResetVerify(PasswordResetVerifyData passwordResetVerifyData)
+    public void PasswordResetVerify(PasswordResetVerifyData data)
     {
-        var data = passwordResetVerifyData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetVerifyJson(
-                _accountless, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessAccountlessResource<object>(
+            null,
+            _accountlessResource.passwordResetVerifyJson,
+            null,
+            data
+        );
     }
 
     /**
      * Account
      */
-    public TokenResponse RefreshToken(RefreshTokenData? refreshTokenData)
+    public TokenResponse RefreshToken(RefreshTokenData? data)
     {
-        var data = refreshTokenData != null ? refreshTokenData.ToData() : null;
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.refreshTokenJson(_account,
-                null);
-            return Utils.FromData<TokenResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessAccountResource<TokenResponse>(
+            _accountResource.refreshTokenJson,
+            null,
+            null,
+            data
+        );
     }
 
     public void Logout()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.logout(_account);
+        _accountResource.logout(_account);
     }
 
-    public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(
-        RegisterEphemeralKeyData? registerEphemeralKeyData)
+    public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
-        var data = registerEphemeralKeyData != null ? registerEphemeralKeyData.ToData() : null;
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.registerEphemeralKeyJson(
-                    _account, data);
-            return Utils.FromData<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessAccountResource<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
+            _accountResource.registerEphemeralKeyJson,
+            null,
+            null,
+            data
+        );
     }
 
     public RegisterEphemeralKeyResponse RegisterEphemeralKeyWithSecondaryAuthentication(
-        RegisterEphemeralKeyWithSecondaryAuthenticationData? registerEphemeralKeyWithSecondaryAuthenticationData)
+        RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
     {
-        var data = registerEphemeralKeyWithSecondaryAuthenticationData != null
-            ? registerEphemeralKeyWithSecondaryAuthenticationData.ToData()
-            : null;
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource
-                .registerEphemeralKeyWithSecondaryAuthenticationJson(_account, data);
-            return Utils.FromData<RegisterEphemeralKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessAccountResource<RegisterEphemeralKeyResponse>(
+            _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData verifyEphemeralKeyRegistrationData)
+    public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
     {
-        var data = verifyEphemeralKeyRegistrationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.verifyEphemeralKeyRegistrationJson(
-                _account, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        return ProcessAccountResource<RegisterEphemeralKeyResponse>(
+            _accountResource.verifyEphemeralKeyRegistrationJson,
+            null,
+            null,
+            data
+        );
     }
 
     public void ReverifyEmail()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.reverifyEmail(_account);
+        _accountResource.reverifyEmail(_account);
     }
 
-    public void ChangePassword(ChangePasswordData changePasswordData)
+    public void ChangePassword(ChangePasswordData data)
     {
-        var data = changePasswordData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.changePasswordJson(_account, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessAccountResource<object>(
+            null,
+            _accountResource.changePasswordJson,
+            null,
+            data
+        );
     }
 
     public UserDetailsResponse GetUserDetails()
     {
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.getUserDetailsJson(_account);
-            return Utils.FromData<UserDetailsResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
+        return ProcessAccountResource<UserDetailsResponse>(
+            null,
+            null,
+            _accountResource.getUserDetailsJson,
+            null
+        );
     }
 
-    public void UpdateUserDetails(UpdateUserDetailsData updateUserDetailsData)
+    public void UpdateUserDetails(UpdateUserDetailsData data)
     {
-        var data = updateUserDetailsData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.updateUserDetailsJson(_account,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessAccountResource<object>(
+            null,
+            _accountResource.updateUserDetailsJson,
+            null,
+            data
+        );
     }
 
     public void DeleteAccount()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource.deleteAccount(_account);
+        _accountResource.deleteAccount(_account);
     }
 
     /**
@@ -325,781 +301,517 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     /**
      * Lock Operations
      */
-    public LockResponse GetSingleLock(GetSingleLockData getSingleLockData)
+    public LockResponse GetSingleLock(GetSingleLockData data)
     {
-        var data = getSingleLockData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getSingleLockJson(
-                    _lockOperations, data);
-            return Utils.FromData<LockResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<LockResponse>(
+            _lockOperationsResource.getSingleLockJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<AuditResponse> GetLockAuditTrail(GetLockAuditTrailData getLockAuditTrailData)
+    public List<AuditResponse> GetLockAuditTrail(GetLockAuditTrailData data)
     {
-        var data = getLockAuditTrailData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getLockAuditTrailJson(_lockOperations, data);
-            return Utils.FromData<List<AuditResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<AuditResponse>>(
+            _lockOperationsResource.getLockAuditTrailJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<AuditResponse> GetAuditForUser(GetAuditForUserData getAuditForUserData)
+    public List<AuditResponse> GetAuditForUser(GetAuditForUserData data)
     {
-        var data = getAuditForUserData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getAuditForUserJson(
-                    _lockOperations, data);
-            return Utils.FromData<List<AuditResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<AuditResponse>>(
+            _lockOperationsResource.getAuditForUserJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<UserLockResponse> GetUsersForLock(GetUsersForLockData getUsersForLockData)
+    public List<UserLockResponse> GetUsersForLock(GetUsersForLockData data)
     {
-        var data = getUsersForLockData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUsersForLockJson(
-                    _lockOperations, data);
-            return Utils.FromData<List<UserLockResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<UserLockResponse>>(
+            _lockOperationsResource.getUsersForLockJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public LockUserResponse GetLocksForUser(GetLocksForUserData getLocksForUserData)
+    public LockUserResponse GetLocksForUser(GetLocksForUserData data)
     {
-        var data = getLocksForUserData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getLocksForUserJson(
-                    _lockOperations, data);
-            return Utils.FromData<LockUserResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<LockUserResponse>(
+            _lockOperationsResource.getLocksForUserJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockName(UpdateLockNameData updateLockNameData)
+    public void UpdateLockName(UpdateLockNameData data)
     {
-        var data = updateLockNameData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockNameJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockNameJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockFavourite(UpdateLockFavouriteData updateLockFavouriteData)
+    public void UpdateLockFavourite(UpdateLockFavouriteData data)
     {
-        var data = updateLockFavouriteData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockFavouriteJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockFavouriteJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockColour(UpdateLockColourData updateLockColourData)
+    public void UpdateLockColour(UpdateLockColourData data)
     {
-        var data = updateLockColourData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockColourJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockColourJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData updateLockSettingDefaultNameData)
+    public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data)
     {
-        var data = updateLockSettingDefaultNameData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .updateLockSettingDefaultNameJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockSettingDefaultNameJson,
+            null,
+            data
+        );
     }
 
-    public void SetLockSettingPermittedAddresses(
-        SetLockSettingPermittedAddressesData setLockSettingPermittedAddressesData)
+    public void SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data)
     {
-        var data = setLockSettingPermittedAddressesData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .setLockSettingPermittedAddressesJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.setLockSettingPermittedAddressesJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockSettingHidden(UpdateLockSettingHiddenData updateLockSettingHiddenData)
+    public void UpdateLockSettingHidden(UpdateLockSettingHiddenData data)
     {
-        var data = updateLockSettingHiddenData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingHiddenJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockSettingHiddenJson,
+            null,
+            data
+        );
     }
 
-    public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData setLockSettingTimeRestrictionsData)
+    public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data)
     {
-        var data = setLockSettingTimeRestrictionsData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .setLockSettingTimeRestrictionsJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.setLockSettingTimeRestrictionsJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateLockSettingLocationRestrictions(
-        UpdateLockSettingLocationRestrictionsData updateLockSettingLocationRestrictionsData)
+    public void UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data)
     {
-        var data = updateLockSettingLocationRestrictionsData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .updateLockSettingLocationRestrictionsJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateLockSettingLocationRestrictionsJson,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKey(GetUserPublicKeyData getUserPublicKeyData)
+    public UserPublicKeyResponse GetUserPublicKey(GetUserPublicKeyData data)
     {
-        var data = getUserPublicKeyData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData getUserPublicKeyByEmailData)
+    public UserPublicKeyResponse GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data)
     {
-        var data = getUserPublicKeyByEmailData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByEmailJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyByEmailJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByTelephone(
-        GetUserPublicKeyByTelephoneData getUserPublicKeyByTelephoneData)
+    public UserPublicKeyResponse GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data)
     {
-        var data = getUserPublicKeyByTelephoneData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByTelephoneJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyByTelephoneJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByLocalKey(
-        GetUserPublicKeyByLocalKeyData getUserPublicKeyByLocalKeyData)
+    public UserPublicKeyResponse GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data)
     {
-        var data = getUserPublicKeyByLocalKeyData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByLocalKeyJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyByLocalKeyJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByForeignKey(
-        GetUserPublicKeyByForeignKeyData getUserPublicKeyByForeignKeyData)
+    public UserPublicKeyResponse GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data)
     {
-        var data = getUserPublicKeyByForeignKeyData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByForeignKeyJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyByForeignKeyJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByIdentity(
-        GetUserPublicKeyByIdentityData getUserPublicKeyByIdentityData)
+    public UserPublicKeyResponse GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data)
     {
-        var data = getUserPublicKeyByIdentityData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByIdentityJson(_lockOperations, data);
-            return Utils.FromData<UserPublicKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<UserPublicKeyResponse>(
+            _lockOperationsResource.getUserPublicKeyByIdentityJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByEmails(
-        GetUserPublicKeyByEmailsData getUserPublicKeyByEmailsData)
+    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data)
     {
-        var data = getUserPublicKeyByEmailsData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByEmailsJson(_lockOperations, data);
-            return Utils.FromData<List<BatchUserPublicKeyResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<BatchUserPublicKeyResponse>>(
+            _lockOperationsResource.getUserPublicKeyByEmailsJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByTelephones(
-        GetUserPublicKeyByTelephonesData getUserPublicKeyByTelephonesData)
+    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data)
     {
-        var data = getUserPublicKeyByTelephonesData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByTelephonesJson(_lockOperations, data);
-            return Utils.FromData<List<BatchUserPublicKeyResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<BatchUserPublicKeyResponse>>(
+            _lockOperationsResource.getUserPublicKeyByTelephonesJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByLocalKeys(
-        GetUserPublicKeyByLocalKeysData getUserPublicKeyByLocalKeysData)
+    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data)
     {
-        var data = getUserPublicKeyByLocalKeysData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByLocalKeysJson(_lockOperations, data);
-            return Utils.FromData<List<BatchUserPublicKeyResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<BatchUserPublicKeyResponse>>(
+            _lockOperationsResource.getUserPublicKeyByLocalKeysJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByForeignKeys(
-        GetUserPublicKeyByForeignKeysData getUserPublicKeyByForeignKeysData)
+    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data)
     {
-        var data = getUserPublicKeyByForeignKeysData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getUserPublicKeyByForeignKeysJson(_lockOperations, data);
-            return Utils.FromData<List<BatchUserPublicKeyResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessLockOperationsResource<List<BatchUserPublicKeyResponse>>(
+            _lockOperationsResource.getUserPublicKeyByForeignKeysJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void Unlock(UnlockOperationData unlockOperationData)
+    public void Unlock(UnlockOperationData data)
     {
-        var data = unlockOperationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(_lockOperations,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.unlockJson,
+            null,
+            data
+        );
     }
 
-    public void ShareLock(ShareLockOperationData shareLockOperationData)
+    public void ShareLock(ShareLockOperationData data)
     {
-        var data = shareLockOperationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.shareLockJson,
+            null,
+            data
+        );
     }
 
-    public void RevokeAccessToLock(RevokeAccessToLockOperationData revokeAccessToLockOperationData)
+    public void RevokeAccessToLock(RevokeAccessToLockOperationData data)
     {
-        var data = revokeAccessToLockOperationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(
-                _lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.revokeAccessToLockJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateSecureSettingUnlockDuration(
-        UpdateSecureSettingUnlockDurationData updateSecureSettingUnlockDurationData)
+    public void UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data)
     {
-        var data = updateSecureSettingUnlockDurationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .updateSecureSettingUnlockDurationJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateSecureSettingUnlockDurationJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateSecureSettingUnlockBetween(
-        UpdateSecureSettingUnlockBetweenData updateSecureSettingUnlockBetweenData)
+    public void UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data)
     {
-        var data = updateSecureSettingUnlockBetweenData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .updateSecureSettingUnlockBetweenJson(_lockOperations, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.updateSecureSettingUnlockBetweenJson,
+            null,
+            data
+        );
     }
 
     public List<LockResponse> GetPinnedLocks()
     {
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getPinnedLocksJson(
-                    _lockOperations);
-            return Utils.FromData<List<LockResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
+        return ProcessLockOperationsResource<List<LockResponse>>(
+            null,
+            null,
+            _lockOperationsResource.getPinnedLocksJson,
+            null
+        );
     }
 
     public List<ShareableLockResponse> GetShareableLocks()
     {
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource
-                .getShareableLocksJson(_lockOperations);
-            return Utils.FromData<List<ShareableLockResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
+        return ProcessLockOperationsResource<List<ShareableLockResponse>>(
+            null,
+            null,
+            _lockOperationsResource.getShareableLocksJson,
+            null
+        );
     }
 
     /**
      * Platform
      */
-    public void CreateApplication(CreateApplicationData createApplicationData)
+    public void CreateApplication(CreateApplicationData data)
     {
-        var data = createApplicationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.createApplicationJson(_platform,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.createApplicationJson,
+            null,
+            data
+        );
     }
 
     public List<ApplicationResponse> ListApplications()
     {
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.listApplicationsJson(
-                    _platform);
-            return Utils.FromData<List<ApplicationResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
+        return ProcessPlatformResource<List<ApplicationResponse>>(
+            null,
+            null,
+            _platformResource.listApplicationsJson,
+            null
+        );
     }
 
-    public ApplicationResponse GetApplication(GetApplicationData getApplicationData)
+    public ApplicationResponse GetApplication(GetApplicationData data)
     {
-        var data = getApplicationData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getApplicationJson(_platform,
-                    data);
-            return Utils.FromData<ApplicationResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessPlatformResource<ApplicationResponse>(
+            _platformResource.getApplicationJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationName(UpdateApplicationNameData updateApplicationNameData)
+    public void UpdateApplicationName(UpdateApplicationNameData data)
     {
-        var data = updateApplicationNameData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationNameJson(
-                _platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationNameJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData updateApplicationCompanyNameData)
+    public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
     {
-        var data = updateApplicationCompanyNameData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationCompanyNameJson(
-                _platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationCompanyNameJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData updateApplicationMailingAddressData)
+    public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
     {
-        var data = updateApplicationMailingAddressData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .updateApplicationMailingAddressJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationMailingAddressJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData updateApplicationPrivacyPolicyData)
+    public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
     {
-        var data = updateApplicationPrivacyPolicyData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .updateApplicationPrivacyPolicyJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationPrivacyPolicyJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData updateApplicationSupportContactData)
+    public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
     {
-        var data = updateApplicationSupportContactData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .updateApplicationSupportContactJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationSupportContactJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationAppLink(UpdateApplicationAppLinkData updateApplicationAppLinkData)
+    public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
     {
-        var data = updateApplicationAppLinkData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationAppLinkJson(
-                _platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationAppLinkJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationEmailPreferences(
-        UpdateApplicationEmailPreferencesData updateApplicationEmailPreferencesData)
+    public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
     {
-        var data = updateApplicationEmailPreferencesData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .updateApplicationEmailPreferencesJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationEmailPreferencesJson,
+            null,
+            data
+        );
     }
 
-    public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData updateApplicationLogoUrlData)
+    public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
     {
-        var data = updateApplicationLogoUrlData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationLogoUrlJson(
-                _platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.updateApplicationLogoUrlJson,
+            null,
+            data
+        );
     }
 
-    public void DeleteApplication(DeleteApplicationData deleteApplicationData)
+    public void DeleteApplication(DeleteApplicationData data)
     {
-        var data = deleteApplicationData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteApplicationJson(_platform,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.deleteApplicationJson,
+            null,
+            data
+        );
     }
 
-    public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData getLogoUploadUrlData)
+    public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData data)
     {
-        var data = getLogoUploadUrlData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getLogoUploadUrlJson(
-                    _platform, data);
-            return Utils.FromData<GetLogoUploadUrlResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessPlatformResource<GetLogoUploadUrlResponse>(
+            _platformResource.getLogoUploadUrlJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void AddAuthKey(AddAuthKeyData addAuthKeyData)
+    public void AddAuthKey(AddAuthKeyData data)
     {
-        var data = addAuthKeyData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addAuthKeyJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.addAuthKeyJson,
+            null,
+            data
+        );
     }
 
-    public void AddAuthIssuer(AddAuthIssuerData addAuthIssuerData)
+    public void AddAuthIssuer(AddAuthIssuerData data)
     {
-        var data = addAuthIssuerData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .addAuthIssuerJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.addAuthIssuerJson,
+            null,
+            data
+        );
     }
 
-    public void DeleteAuthIssuer(DeleteAuthIssuerData deleteAuthIssuerData)
+    public void DeleteAuthIssuer(DeleteAuthIssuerData data)
     {
-        var data = deleteAuthIssuerData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteAuthIssuerJson(_platform,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.deleteAuthIssuerJson,
+            null,
+            data
+        );
     }
 
-    public void AddCorsDomain(AddCorsDomainData addCorsDomainData)
+    public void AddCorsDomain(AddCorsDomainData data)
     {
-        var data = addCorsDomainData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .addCorsDomainJson(_platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.addCorsDomainJson,
+            null,
+            data
+        );
     }
 
-    public void RemoveCorsDomain(RemoveCorsDomainData removeCorsDomainData)
+    public void RemoveCorsDomain(RemoveCorsDomainData data)
     {
-        var data = removeCorsDomainData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeCorsDomainJson(_platform,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.removeCorsDomainJson,
+            null,
+            data
+        );
     }
 
-    public void AddApplicationOwner(AddApplicationOwnerData addApplicationOwnerData)
+    public void AddApplicationOwner(AddApplicationOwnerData data)
     {
-        var data = addApplicationOwnerData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addApplicationOwnerJson(_platform,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.addApplicationOwnerJson,
+            null,
+            data
+        );
     }
 
-    public void RemoveApplicationOwner(RemoveApplicationOwnerData removeApplicationOwnerData)
+    public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
     {
-        var data = removeApplicationOwnerData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeApplicationOwnerJson(
-                _platform, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessPlatformResource<object>(
+            null,
+            _platformResource.removeApplicationOwnerJson,
+            null,
+            data
+        );
     }
 
-    public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(
-        GetApplicationOwnersDetailsData getApplicationOwnersDetailsData)
+    public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(GetApplicationOwnersDetailsData data)
     {
-        var data = getApplicationOwnersDetailsData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource
-                .getApplicationOwnersDetailsJson(_platform, data);
-            return Utils.FromData<List<ApplicationOwnerDetailsResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessPlatformResource<List<ApplicationOwnerDetailsResponse>>(
+            _platformResource.getApplicationOwnersDetailsJson,
+            null,
+            null,
+            data
+        );
     }
 
     /**
@@ -1107,82 +819,55 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
      */
     public List<SiteResponse> ListSites()
     {
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.listSitesJson(_sites);
-            return Utils.FromData<List<SiteResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
+        return ProcessSitesResource<List<SiteResponse>>(
+            null,
+            null,
+            _sitesResource.listSitesJson,
+            null
+        );
     }
 
-    public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData getLocksForSiteData)
+    public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData data)
     {
-        var data = getLocksForSiteData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getLocksForSiteJson(_sites,
-                data);
-            return Utils.FromData<List<SiteLocksResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessSitesResource<List<SiteLocksResponse>>(
+            _sitesResource.getLocksForSiteJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData getUsersForSiteData)
+    public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData data)
     {
-        var data = getUsersForSiteData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource.getUsersForSiteJson(_sites,
-                data);
-            return Utils.FromData<List<UserForSiteResponse>>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessSitesResource<List<UserForSiteResponse>>(
+            _sitesResource.getUsersForSiteJson,
+            null,
+            null,
+            data
+        );
     }
 
     /**
      * Tiles
      */
-    public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData getLocksBelongingToTileData)
+    public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData data)
     {
-        var data = getLocksBelongingToTileData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.getLocksBelongingToTileJson(
-                    _tiles, data);
-            return Utils.FromData<TileLocksResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessTilesResource<TileLocksResponse>(
+            _tilesResource.getLocksBelongingToTileJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void AssociateMultipleLocks(AssociateMultipleLocksData associateMultipleLocksData)
+    public void AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
-        var data = associateMultipleLocksData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource.associateMultipleLocksJson(_tiles,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessTilesResource<object>(
+            null,
+            _tilesResource.associateMultipleLocksJson,
+            null,
+            data
+        );
     }
 
     /**
@@ -1193,11 +878,214 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = token.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(_contextManager, data);
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(_context, data);
         }
         finally
         {
             ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetAuthToken()
+    {
+        sbyte* result = null;
+        try
+        {
+            result =
+                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getAuthToken(_context);
+            return Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
+    public bool IsAuthTokenAboutToExpire()
+    {
+        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
+            .isAuthTokenAboutToExpire(_context).ToBoolean();
+    }
+
+    public void SetRefreshToken(string token)
+    {
+        var data = token.ToSByte();
+        try
+        {
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(_context,
+                data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetRefreshToken()
+    {
+        sbyte* result = null;
+        try
+        {
+            result =
+                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
+                    .getRefreshToken(_context);
+            return Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
+    public void SetFusionAuthToken(string token)
+    {
+        var data = token.ToSByte();
+        try
+        {
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusionAuthToken(_context,
+                data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetFusionAuthToken()
+    {
+        sbyte* result = null;
+        try
+        {
+            result =
+                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getFusionAuthToken(
+                    _context);
+            return Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
+    public void SetUserId(string userId)
+    {
+        var data = userId.ToSByte();
+        try
+        {
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setUserId(_context, data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetUserId()
+    {
+        sbyte* result = null;
+        try
+        {
+            result =
+                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getUserId(_context);
+            return Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
+    public void SetUserEmail(string email)
+    {
+        var data = email.ToSByte();
+        try
+        {
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setUserEmail(_context, data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetUserEmail()
+    {
+        sbyte* result = null;
+        try
+        {
+            result =
+                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getUserEmail(_context);
+            return Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
+    // SetCertificateChain
+
+    // GetCertificateChain
+
+    public bool IsCertificateChainAboutToExpire()
+    {
+        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
+            .isCertificateChainAboutToExpire(_context).ToBoolean();
+    }
+
+    // SetKeyPair
+
+    // GetKeyPair
+
+    public bool IsKeyPairValid()
+    {
+        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.isKeyPairValid(_context)
+            .ToBoolean();
+    }
+
+    public void SetOperationContextJson(OperationContextData operationContextData)
+    {
+        var data = operationContextData.ToData();
+        try
+        {
+            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(
+                _context, data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public void LoadContext()
+    {
+        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadContext(_context);
+    }
+
+    public void StoreContext()
+    {
+        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeContext(_context);
+    }
+
+    public void ClearContext()
+    {
+        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(_context);
+    }
+
+    /**
+     * Crypto manager
+     */
+    public EncodedKeyPair GenerateEncodedKeyPair()
+    {
+        sbyte* result = null;
+        try
+        {
+            result = _cryptoManager.generateEncodedKeyPair(_crypto);
+            return Utils.FromData<EncodedKeyPair>(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
         }
     }
 
@@ -1214,9 +1102,208 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         _symbols->DisposeStablePointer(_platform.pinned);
         _symbols->DisposeStablePointer(_sites.pinned);
         _symbols->DisposeStablePointer(_tiles.pinned);
-        _symbols->DisposeStablePointer(_contextManager.pinned);
-        _symbols->DisposeStablePointer(_cryptoManager.pinned);
+        _symbols->DisposeStablePointer(_context.pinned);
+        _symbols->DisposeStablePointer(_crypto.pinned);
         _symbols->DisposeStablePointer(_utils.pinned);
+    }
+
+    private TResponse ProcessAccountlessResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_accountless, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_accountless, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_accountless);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
+    }
+
+    private TResponse ProcessLockOperationsResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_lockOperations, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_lockOperations, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_lockOperations);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
+    }
+
+    private TResponse ProcessPlatformResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_platform, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_platform, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_platform);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
+    }
+
+    private TResponse ProcessAccountResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_account, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_account, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_account);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
+    }
+
+    private TResponse ProcessSitesResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_sites, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_sites, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_sites);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
+    }
+
+
+    private TResponse ProcessTilesResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_tiles, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_tiles, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_tiles);
+            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+
+            if (result != null) _symbols->DisposeString(result);
+        }
     }
 
     private void ReleaseMemory(sbyte* data, sbyte* result)
