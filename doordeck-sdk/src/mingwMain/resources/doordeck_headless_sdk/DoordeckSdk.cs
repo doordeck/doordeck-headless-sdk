@@ -31,6 +31,10 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory _factory;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource _fusion;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource _helper;
+
+    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._HelperResource_e__Struct _helperResource;
+
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource _lockOperations;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
@@ -89,6 +93,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         _platformResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource;
         _sitesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource;
         _tilesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource;
+        _helperResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource;
         _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager;
         _cryptoManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager;
     }
@@ -238,64 +243,44 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     /**
      * Helper
      */
-    public void UploadPlatformLogo(UploadPlatformLogoData uploadPlatformLogoData)
+    public void UploadPlatformLogo(UploadPlatformLogoData data)
     {
-        var data = uploadPlatformLogoData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.uploadPlatformLogoJson(_helper,
-                data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessHelperResource<object>(
+            null,
+            _helperResource.uploadPlatformLogoJson,
+            null,
+            data
+        );
     }
 
-    public AssistedLoginResponse AssistedLogin(AssistedLoginData assistedLoginData)
+    public AssistedLoginResponse AssistedLogin(AssistedLoginData data)
     {
-        var data = assistedLoginData.ToData();
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.assistedLoginJson(_helper,
-                data);
-            return Utils.FromData<AssistedLoginResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessHelperResource<AssistedLoginResponse>(
+            _helperResource.assistedLoginJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(
-        AssistedRegisterEphemeralKeyData? assistedRegisterEphemeralKeyData)
+    public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
     {
-        var data = assistedRegisterEphemeralKeyData != null ? assistedRegisterEphemeralKeyData.ToData() : null;
-        sbyte* result = null;
-        try
-        {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource
-                .assistedRegisterEphemeralKeyJson(_helper, data);
-            return Utils.FromData<AssistedRegisterEphemeralKeyResponse>(result);
-        }
-        finally
-        {
-            ReleaseMemory(data, result);
-        }
+        return ProcessHelperResource<AssistedRegisterEphemeralKeyResponse>(
+            _helperResource.assistedRegisterEphemeralKeyJson,
+            null,
+            null,
+            data
+        );
     }
 
-    public void AssistedRegister(AssistedRegisterData assistedRegisterData)
+    public void AssistedRegister(AssistedRegisterData data)
     {
-        var data = assistedRegisterData.ToData();
-        try
-        {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource.assistedRegisterJson(_helper, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
+        ProcessHelperResource<object>(
+            null,
+            _helperResource.assistedRegisterJson,
+            null,
+            data
+        );
     }
 
     /**
@@ -871,14 +856,14 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     }
 
     /**
-     * Context
+     * Context manager
      */
     public void SetAuthToken(string token)
     {
         var data = token.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setAuthToken(_context, data);
+            _contextManager.setAuthToken(_context, data);
         }
         finally
         {
@@ -891,9 +876,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         sbyte* result = null;
         try
         {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getAuthToken(_context);
-            return Utils.ConvertSByteToString(result);
+            result = _contextManager.getAuthToken(_context);
+            return Utils.Utils.ConvertSByteToString(result);
         }
         finally
         {
@@ -903,8 +887,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     public bool IsAuthTokenAboutToExpire()
     {
-        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
-            .isAuthTokenAboutToExpire(_context).ToBoolean();
+        return _contextManager.isAuthTokenAboutToExpire(_context).ToBoolean();
     }
 
     public void SetRefreshToken(string token)
@@ -912,8 +895,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = token.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setRefreshToken(_context,
-                data);
+            _contextManager.setRefreshToken(_context, data);
         }
         finally
         {
@@ -926,10 +908,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         sbyte* result = null;
         try
         {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
-                    .getRefreshToken(_context);
-            return Utils.ConvertSByteToString(result);
+            result = _contextManager.getRefreshToken(_context);
+            return Utils.Utils.ConvertSByteToString(result);
         }
         finally
         {
@@ -942,8 +922,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = token.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setFusionAuthToken(_context,
-                data);
+            _contextManager.setFusionAuthToken(_context, data);
         }
         finally
         {
@@ -956,10 +935,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         sbyte* result = null;
         try
         {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getFusionAuthToken(
-                    _context);
-            return Utils.ConvertSByteToString(result);
+            result = _contextManager.getFusionAuthToken(_context);
+            return Utils.Utils.ConvertSByteToString(result);
         }
         finally
         {
@@ -972,7 +949,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = userId.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setUserId(_context, data);
+            _contextManager.setUserId(_context, data);
         }
         finally
         {
@@ -985,9 +962,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         sbyte* result = null;
         try
         {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getUserId(_context);
-            return Utils.ConvertSByteToString(result);
+            result = _contextManager.getUserId(_context);
+            return Utils.Utils.ConvertSByteToString(result);
         }
         finally
         {
@@ -1000,7 +976,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = email.ToSByte();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setUserEmail(_context, data);
+            _contextManager.setUserEmail(_context, data);
         }
         finally
         {
@@ -1013,9 +989,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         sbyte* result = null;
         try
         {
-            result =
-                _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.getUserEmail(_context);
-            return Utils.ConvertSByteToString(result);
+            result = _contextManager.getUserEmail(_context);
+            return Utils.Utils.ConvertSByteToString(result);
         }
         finally
         {
@@ -1029,8 +1004,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     public bool IsCertificateChainAboutToExpire()
     {
-        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager
-            .isCertificateChainAboutToExpire(_context).ToBoolean();
+        return _contextManager.isCertificateChainAboutToExpire(_context).ToBoolean();
     }
 
     // SetKeyPair
@@ -1039,8 +1013,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     public bool IsKeyPairValid()
     {
-        return _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.isKeyPairValid(_context)
-            .ToBoolean();
+        return _contextManager.isKeyPairValid(_context).ToBoolean();
     }
 
     public void SetOperationContextJson(OperationContextData operationContextData)
@@ -1048,8 +1021,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         var data = operationContextData.ToData();
         try
         {
-            _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.setOperationContextJson(
-                _context, data);
+            _contextManager.setOperationContextJson(_context, data);
         }
         finally
         {
@@ -1059,17 +1031,17 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     public void LoadContext()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.loadContext(_context);
+        _contextManager.loadContext(_context);
     }
 
     public void StoreContext()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.storeContext(_context);
+        _contextManager.storeContext(_context);
     }
 
     public void ClearContext()
     {
-        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager.clearContext(_context);
+        _contextManager.clearContext(_context);
     }
 
     /**
@@ -1081,7 +1053,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         try
         {
             result = _cryptoManager.generateEncodedKeyPair(_crypto);
-            return Utils.FromData<EncodedKeyPair>(result);
+            return Utils.Utils.FromData<EncodedKeyPair>(result);
         }
         finally
         {
@@ -1130,13 +1102,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_accountless, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_accountless);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
+            ReleaseMemory(sData, result);
         }
     }
 
@@ -1163,13 +1133,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_lockOperations, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_lockOperations);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
+            ReleaseMemory(sData, result);
         }
     }
 
@@ -1196,13 +1164,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_platform, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_platform);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
+            ReleaseMemory(sData, result);
         }
     }
 
@@ -1229,13 +1195,42 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_account, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_account);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
+            ReleaseMemory(sData, result);
+        }
+    }
 
-            if (result != null) _symbols->DisposeString(result);
+    private TResponse ProcessHelperResource<TResponse>(
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
+            sbyte*, sbyte*> withDataAndWithResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
+            sbyte*, void> withDataAndWithoutResponse,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
+            sbyte*> withoutDataAndWithResponse,
+        object? data
+    )
+    {
+        var sData = data != null ? data.ToData() : null;
+        sbyte* result = null;
+        try
+        {
+            var withResponse = typeof(TResponse) != typeof(object);
+            var withData = data != null;
+
+            if (withData && withResponse)
+                result = withDataAndWithResponse(_helper, sData);
+            else if (withData && !withResponse)
+                withDataAndWithoutResponse(_helper, sData);
+            else if (!withData && withResponse)
+                result = withoutDataAndWithResponse(_helper);
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+        }
+        finally
+        {
+            ReleaseMemory(sData, result);
         }
     }
 
@@ -1262,13 +1257,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_sites, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_sites);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
+            ReleaseMemory(sData, result);
         }
     }
 
@@ -1296,13 +1289,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
                 withDataAndWithoutResponse(_tiles, sData);
             else if (!withData && withResponse)
                 result = withoutDataAndWithResponse(_tiles);
-            return result != null ? Utils.FromData<TResponse>(result)! : default!;
+            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
         }
         finally
         {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
+            ReleaseMemory(sData, result);
         }
     }
 
