@@ -13,7 +13,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     private readonly Account _account = new();
     private readonly Accountless _accountless = new();
-    private readonly Helper _helper = new Helper();
+    private readonly Helper _helper = new();
     private readonly LockOperations _lockOperations = new();
     private readonly Platform _platform = new();
     private readonly Sites _sites = new();
