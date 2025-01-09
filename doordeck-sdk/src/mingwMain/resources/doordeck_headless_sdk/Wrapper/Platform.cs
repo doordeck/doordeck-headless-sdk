@@ -29,7 +29,7 @@ public unsafe class Platform : IResource
 
     public void CreateApplication(CreateApplicationData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.createApplicationJson,
             null,
@@ -39,7 +39,7 @@ public unsafe class Platform : IResource
 
     public List<ApplicationResponse> ListApplications()
     {
-        return ProcessPlatformResource<List<ApplicationResponse>>(
+        return Process<List<ApplicationResponse>>(
             null,
             null,
             _platformResource.listApplicationsJson,
@@ -49,7 +49,7 @@ public unsafe class Platform : IResource
 
     public ApplicationResponse GetApplication(GetApplicationData data)
     {
-        return ProcessPlatformResource<ApplicationResponse>(
+        return Process<ApplicationResponse>(
             _platformResource.getApplicationJson,
             null,
             null,
@@ -59,7 +59,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationName(UpdateApplicationNameData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationNameJson,
             null,
@@ -69,7 +69,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationCompanyNameJson,
             null,
@@ -79,7 +79,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationMailingAddressJson,
             null,
@@ -89,7 +89,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationPrivacyPolicyJson,
             null,
@@ -99,7 +99,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationSupportContactJson,
             null,
@@ -109,7 +109,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationAppLinkJson,
             null,
@@ -119,7 +119,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationEmailPreferencesJson,
             null,
@@ -129,7 +129,7 @@ public unsafe class Platform : IResource
 
     public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.updateApplicationLogoUrlJson,
             null,
@@ -139,7 +139,7 @@ public unsafe class Platform : IResource
 
     public void DeleteApplication(DeleteApplicationData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.deleteApplicationJson,
             null,
@@ -149,7 +149,7 @@ public unsafe class Platform : IResource
 
     public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData data)
     {
-        return ProcessPlatformResource<GetLogoUploadUrlResponse>(
+        return Process<GetLogoUploadUrlResponse>(
             _platformResource.getLogoUploadUrlJson,
             null,
             null,
@@ -159,7 +159,7 @@ public unsafe class Platform : IResource
 
     public void AddAuthKey(AddAuthKeyData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.addAuthKeyJson,
             null,
@@ -169,7 +169,7 @@ public unsafe class Platform : IResource
 
     public void AddAuthIssuer(AddAuthIssuerData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.addAuthIssuerJson,
             null,
@@ -179,7 +179,7 @@ public unsafe class Platform : IResource
 
     public void DeleteAuthIssuer(DeleteAuthIssuerData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.deleteAuthIssuerJson,
             null,
@@ -189,7 +189,7 @@ public unsafe class Platform : IResource
 
     public void AddCorsDomain(AddCorsDomainData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.addCorsDomainJson,
             null,
@@ -199,7 +199,7 @@ public unsafe class Platform : IResource
 
     public void RemoveCorsDomain(RemoveCorsDomainData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.removeCorsDomainJson,
             null,
@@ -209,7 +209,7 @@ public unsafe class Platform : IResource
 
     public void AddApplicationOwner(AddApplicationOwnerData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.addApplicationOwnerJson,
             null,
@@ -219,7 +219,7 @@ public unsafe class Platform : IResource
 
     public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
     {
-        ProcessPlatformResource<object>(
+        Process<object>(
             null,
             _platformResource.removeApplicationOwnerJson,
             null,
@@ -229,7 +229,7 @@ public unsafe class Platform : IResource
 
     public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(GetApplicationOwnersDetailsData data)
     {
-        return ProcessPlatformResource<List<ApplicationOwnerDetailsResponse>>(
+        return Process<List<ApplicationOwnerDetailsResponse>>(
             _platformResource.getApplicationOwnersDetailsJson,
             null,
             null,
@@ -237,7 +237,7 @@ public unsafe class Platform : IResource
         );
     }
 
-    private TResponse ProcessPlatformResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,

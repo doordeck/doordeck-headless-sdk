@@ -29,7 +29,7 @@ public unsafe class Account : IResource
 
     public TokenResponse RefreshToken(RefreshTokenData? data)
     {
-        return ProcessAccountResource<TokenResponse>(
+        return Process<TokenResponse>(
             _accountResource.refreshTokenJson,
             null,
             null,
@@ -44,7 +44,7 @@ public unsafe class Account : IResource
 
     public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
-        return ProcessAccountResource<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
+        return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
             _accountResource.registerEphemeralKeyJson,
             null,
             null,
@@ -55,7 +55,7 @@ public unsafe class Account : IResource
     public RegisterEphemeralKeyResponse RegisterEphemeralKeyWithSecondaryAuthentication(
         RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
     {
-        return ProcessAccountResource<RegisterEphemeralKeyResponse>(
+        return Process<RegisterEphemeralKeyResponse>(
             _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson,
             null,
             null,
@@ -65,7 +65,7 @@ public unsafe class Account : IResource
 
     public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
     {
-        return ProcessAccountResource<RegisterEphemeralKeyResponse>(
+        return Process<RegisterEphemeralKeyResponse>(
             _accountResource.verifyEphemeralKeyRegistrationJson,
             null,
             null,
@@ -80,7 +80,7 @@ public unsafe class Account : IResource
 
     public void ChangePassword(ChangePasswordData data)
     {
-        ProcessAccountResource<object>(
+        Process<object>(
             null,
             _accountResource.changePasswordJson,
             null,
@@ -90,7 +90,7 @@ public unsafe class Account : IResource
 
     public UserDetailsResponse GetUserDetails()
     {
-        return ProcessAccountResource<UserDetailsResponse>(
+        return Process<UserDetailsResponse>(
             null,
             null,
             _accountResource.getUserDetailsJson,
@@ -100,7 +100,7 @@ public unsafe class Account : IResource
 
     public void UpdateUserDetails(UpdateUserDetailsData data)
     {
-        ProcessAccountResource<object>(
+        Process<object>(
             null,
             _accountResource.updateUserDetailsJson,
             null,
@@ -113,7 +113,7 @@ public unsafe class Account : IResource
         _accountResource.deleteAccount(_account);
     }
 
-    private TResponse ProcessAccountResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,

@@ -28,7 +28,7 @@ public unsafe class Tiles : IResource
 
     public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData data)
     {
-        return ProcessTilesResource<TileLocksResponse>(
+        return Process<TileLocksResponse>(
             _tilesResource.getLocksBelongingToTileJson,
             null,
             null,
@@ -38,7 +38,7 @@ public unsafe class Tiles : IResource
 
     public void AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
-        ProcessTilesResource<object>(
+        Process<object>(
             null,
             _tilesResource.associateMultipleLocksJson,
             null,
@@ -46,7 +46,7 @@ public unsafe class Tiles : IResource
         );
     }
 
-    private TResponse ProcessTilesResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,

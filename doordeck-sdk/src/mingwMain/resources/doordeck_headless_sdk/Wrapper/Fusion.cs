@@ -29,7 +29,7 @@ public unsafe class Fusion : IResource
 
     public FusionLoginResponse Login(FusionLoginData data)
     {
-        return ProcessFusionResource<FusionLoginResponse>(
+        return Process<FusionLoginResponse>(
             _fusionResource.loginJson,
             null,
             null,
@@ -39,7 +39,7 @@ public unsafe class Fusion : IResource
     
     public IntegrationTypeResponse GetIntegrationType()
     {
-        return ProcessFusionResource<IntegrationTypeResponse>(
+        return Process<IntegrationTypeResponse>(
             null,
             null,
             _fusionResource.getIntegrationTypeJson,
@@ -49,7 +49,7 @@ public unsafe class Fusion : IResource
     
     public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
     {
-        return ProcessFusionResource<List<IntegrationConfigurationResponse>>(
+        return Process<List<IntegrationConfigurationResponse>>(
             _fusionResource.getIntegrationConfigurationJson,
             null,
             null,
@@ -59,7 +59,7 @@ public unsafe class Fusion : IResource
     
     public void EnableDoor(EnableDoorData data)
     {
-        ProcessFusionResource<object>(
+        Process<object>(
             null,
             _fusionResource.enableDoorJson,
             null,
@@ -69,7 +69,7 @@ public unsafe class Fusion : IResource
     
     public void DeleteDoor(DeleteDoorData data)
     {
-        ProcessFusionResource<object>(
+        Process<object>(
             null,
             _fusionResource.deleteDoorJson,
             null,
@@ -79,7 +79,7 @@ public unsafe class Fusion : IResource
     
     public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
     {
-        return ProcessFusionResource<DoorStateResponse>(
+        return Process<DoorStateResponse>(
             _fusionResource.getDoorStatusJson,
             null,
             null,
@@ -89,7 +89,7 @@ public unsafe class Fusion : IResource
     
     public void StartDoor(StartDoorData data)
     {
-        ProcessFusionResource<object>(
+        Process<object>(
             null,
             _fusionResource.startDoor,
             null,
@@ -99,7 +99,7 @@ public unsafe class Fusion : IResource
     
     public void StopDoor(StopDoorData data)
     {
-        ProcessFusionResource<object>(
+        Process<object>(
             null,
             _fusionResource.stopDoor,
             null,
@@ -107,7 +107,7 @@ public unsafe class Fusion : IResource
         );
     }
     
-    private TResponse ProcessFusionResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,

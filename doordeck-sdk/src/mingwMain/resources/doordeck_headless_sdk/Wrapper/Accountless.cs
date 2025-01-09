@@ -29,7 +29,7 @@ public unsafe class Accountless : IResource
 
     public TokenResponse Login(LoginData data)
     {
-        return ProcessAccountlessResource<TokenResponse>(
+        return Process<TokenResponse>(
             _accountlessResource.loginJson,
             null,
             null,
@@ -39,7 +39,7 @@ public unsafe class Accountless : IResource
 
     public TokenResponse Registration(RegistrationData data)
     {
-        return ProcessAccountlessResource<TokenResponse>(
+        return Process<TokenResponse>(
             _accountlessResource.registrationJson,
             null,
             null,
@@ -49,7 +49,7 @@ public unsafe class Accountless : IResource
 
     public void VerifyEmail(VerifyEmailData data)
     {
-        ProcessAccountlessResource<object>(
+        Process<object>(
             null,
             _accountlessResource.verifyEmailJson,
             null,
@@ -59,7 +59,7 @@ public unsafe class Accountless : IResource
 
     public void PasswordReset(PasswordResetData data)
     {
-        ProcessAccountlessResource<object>(
+        Process<object>(
             null,
             _accountlessResource.passwordResetJson,
             null,
@@ -69,7 +69,7 @@ public unsafe class Accountless : IResource
 
     public void PasswordResetVerify(PasswordResetVerifyData data)
     {
-        ProcessAccountlessResource<object>(
+        Process<object>(
             null,
             _accountlessResource.passwordResetVerifyJson,
             null,
@@ -77,7 +77,7 @@ public unsafe class Accountless : IResource
         );
     }
 
-    private TResponse ProcessAccountlessResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,

@@ -29,7 +29,7 @@ public unsafe class Helper : IResource
 
     public void UploadPlatformLogo(UploadPlatformLogoData data)
     {
-        ProcessHelperResource<object>(
+        Process<object>(
             null,
             _helperResource.uploadPlatformLogoJson,
             null,
@@ -39,7 +39,7 @@ public unsafe class Helper : IResource
 
     public AssistedLoginResponse AssistedLogin(AssistedLoginData data)
     {
-        return ProcessHelperResource<AssistedLoginResponse>(
+        return Process<AssistedLoginResponse>(
             _helperResource.assistedLoginJson,
             null,
             null,
@@ -49,7 +49,7 @@ public unsafe class Helper : IResource
 
     public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
     {
-        return ProcessHelperResource<AssistedRegisterEphemeralKeyResponse>(
+        return Process<AssistedRegisterEphemeralKeyResponse>(
             _helperResource.assistedRegisterEphemeralKeyJson,
             null,
             null,
@@ -59,7 +59,7 @@ public unsafe class Helper : IResource
 
     public void AssistedRegister(AssistedRegisterData data)
     {
-        ProcessHelperResource<object>(
+        Process<object>(
             null,
             _helperResource.assistedRegisterJson,
             null,
@@ -67,7 +67,7 @@ public unsafe class Helper : IResource
         );
     }
 
-    private TResponse ProcessHelperResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,

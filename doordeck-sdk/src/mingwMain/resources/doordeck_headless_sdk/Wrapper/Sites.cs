@@ -29,7 +29,7 @@ public unsafe class Sites : IResource
 
     public List<SiteResponse> ListSites()
     {
-        return ProcessSitesResource<List<SiteResponse>>(
+        return Process<List<SiteResponse>>(
             null,
             null,
             _sitesResource.listSitesJson,
@@ -39,7 +39,7 @@ public unsafe class Sites : IResource
 
     public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData data)
     {
-        return ProcessSitesResource<List<SiteLocksResponse>>(
+        return Process<List<SiteLocksResponse>>(
             _sitesResource.getLocksForSiteJson,
             null,
             null,
@@ -49,7 +49,7 @@ public unsafe class Sites : IResource
 
     public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData data)
     {
-        return ProcessSitesResource<List<UserForSiteResponse>>(
+        return Process<List<UserForSiteResponse>>(
             _sitesResource.getUsersForSiteJson,
             null,
             null,
@@ -57,7 +57,7 @@ public unsafe class Sites : IResource
         );
     }
 
-    private TResponse ProcessSitesResource<TResponse>(
+    private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
             sbyte*, sbyte*> withDataAndWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
