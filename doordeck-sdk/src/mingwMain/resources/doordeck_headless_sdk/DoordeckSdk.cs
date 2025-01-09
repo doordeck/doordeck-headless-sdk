@@ -1,9 +1,10 @@
-﻿using Doordeck.Headless.Sdk.Model;
+﻿using System.Runtime.InteropServices;
+using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Wrapper;
 
 namespace Doordeck.Headless.Sdk;
 
-public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
+public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken)
 {
     private readonly Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
@@ -13,6 +14,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     private readonly Account _account = new();
     private readonly Accountless _accountless = new();
+    private readonly Fusion _fusion = new();
     private readonly Helper _helper = new();
     private readonly LockOperations _lockOperations = new();
     private readonly Platform _platform = new();
@@ -23,6 +25,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
     public void Initialize()
     {
+        var token = authToken != null ? Utils.Utils.ToSByte(authToken) : null;
         _apiEnvironment = apiEnvironment switch
         {
             ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV
@@ -35,10 +38,20 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
         };
 
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
-        _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(_factory, _apiEnvironment);
+
+        if (authToken != null)
+        {
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(_factory, _apiEnvironment, token);
+            Marshal.FreeHGlobal((IntPtr)token);
+        }
+        else
+        {
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(_factory, _apiEnvironment);
+        }
 
         _account.Initialize(_symbols, _sdk);
         _accountless.Initialize(_symbols, _sdk);
+        _fusion.Initialize(_symbols, _sdk);
         _helper.Initialize(_symbols, _sdk);
         _lockOperations.Initialize(_symbols, _sdk);
         _platform.Initialize(_symbols, _sdk);
@@ -56,6 +69,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
     public Accountless GetAccountless()
     {
         return _accountless;
+    }
+
+    public Fusion GetFusion()
+    {
+        return _fusion;
     }
 
     public Helper GetHelper()
@@ -101,6 +119,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment)
 
         _account.Release();
         _accountless.Release();
+        _fusion.Release();
         _helper.Release();
         _lockOperations.Release();
         _platform.Release();

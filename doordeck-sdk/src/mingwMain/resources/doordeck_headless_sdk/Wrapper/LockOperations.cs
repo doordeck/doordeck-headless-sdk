@@ -278,6 +278,16 @@ public unsafe class LockOperations : IResource
         );
     }
 
+    public void BatchShareLock(BatchShareLockOperationData data)
+    {
+        ProcessLockOperationsResource<object>(
+            null,
+            _lockOperationsResource.batchShareLockJson,
+            null,
+            data
+        );
+    }
+
     public void RevokeAccessToLock(RevokeAccessToLockOperationData data)
     {
         ProcessLockOperationsResource<object>(

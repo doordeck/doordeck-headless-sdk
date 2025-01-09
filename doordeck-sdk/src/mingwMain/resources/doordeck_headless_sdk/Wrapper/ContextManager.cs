@@ -26,6 +26,36 @@ public unsafe class ContextManager : IResource
         _symbols->DisposeStablePointer(_context.pinned);
     }
 
+    public void SetApiEnvironment(ApiEnvironment apiEnvironment)
+    {
+        var newApiEnvironment = apiEnvironment switch
+        {
+            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV
+                .get(),
+            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+                .STAGING.get(),
+            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD
+                .get(),
+            _ => throw new ArgumentOutOfRangeException(nameof(apiEnvironment), apiEnvironment, null)
+        };
+        _contextManager.setApiEnvironment(_context, newApiEnvironment);
+    }
+
+    public ApiEnvironment GetApiEnvironment()
+    {
+        var apiEnvironment = _contextManager.getApiEnvironment(_context);
+        sbyte* result = null;
+        try
+        {
+            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName(apiEnvironment);
+            return (ApiEnvironment)Enum.Parse(typeof(ApiEnvironment), Utils.Utils.ConvertSByteToString(result));
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
     public void SetAuthToken(string token)
     {
         var data = token.ToSByte();
@@ -184,16 +214,16 @@ public unsafe class ContextManager : IResource
         return _contextManager.isKeyPairValid(_context).ToBoolean();
     }
 
-    public void SetOperationContextJson(OperationContextData operationContextData)
+    public void SetOperationContext(OperationContextData data)
     {
-        var data = operationContextData.ToData();
+        var sData = data.ToData();
         try
         {
-            _contextManager.setOperationContextJson(_context, data);
+            _contextManager.setOperationContextJson(_context, sData);
         }
         finally
         {
-            ReleaseMemory(data, null);
+            ReleaseMemory(sData, null);
         }
     }
 

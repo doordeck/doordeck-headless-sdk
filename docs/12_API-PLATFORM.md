@@ -42,12 +42,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().createApplication(a
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.createApplicationJson(resource, data);
-}
+var data = new CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM");
+sdk.GetPlatform().CreateApplication(data);
 ```
 </details>
 
@@ -86,11 +82,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().li
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var response = Utils.FromData<List<ApplicationResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.listApplicationsJson(resource));
-}
+var response = sdk.GetPlatform().ListApplications();
 ```
 </details>
 
@@ -129,12 +121,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new GetApplicationData("APPLICATION_ID").ToData();
-    var response = Utils.FromData<ApplicationResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getApplicationJson(resource, data));
-}
+var data = new GetApplicationData("APPLICATION_ID");
+var response = sdk.GetPlatform().GetApplication(data);
 ```
 </details>
 
@@ -173,12 +161,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationNa
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationNameData("APPLICATION_ID","APPLICATION_NAME").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationNameJson(resource, data);
-}
+var data = new UpdateApplicationNameData("APPLICATION_ID", "APPLICATION_NAME");
+sdk.GetPlatform().UpdateApplicationName(data);
 ```
 </details>
 
@@ -217,12 +201,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCo
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationCompanyNameData("APPLICATION_ID", "APPLICATION_COMPANY_NAME").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationCompanyNameJson(resource, data);
-}
+var data = new UpdateApplicationCompanyNameData("APPLICATION_ID", "APPLICATION_COMPANY_NAME");
+sdk.GetPlatform().UpdateApplicationCompanyName(data);
 ```
 </details>
 
@@ -261,12 +241,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationMa
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationMailingAddressData("APPLICATION_ID", "COMPANY@MAIL.COM").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationMailingAddressJson(resource, data);
-}
+var data = new UpdateApplicationMailingAddressData("APPLICATION_ID", "COMPANY@MAIL.COM");
+sdk.GetPlatform().UpdateApplicationMailingAddress(data);
 ```
 </details>
 
@@ -305,12 +281,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationPr
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationPrivacyPolicyData("APPLICATION_ID", "PRIVACY_POLICY").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationPrivacyPolicyJson(resource, data);
-}
+var data = new UpdateApplicationPrivacyPolicyData("APPLICATION_ID", "PRIVACY_POLICY");
+sdk.GetPlatform().UpdateApplicationPrivacyPolicy(data);
 ```
 </details>
 
@@ -349,12 +321,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationSu
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationSupportContactData("APPLICATION_ID", "SUPPORT_CONTACT_URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationSupportContactJson(resource, data);
-}
+var data = new UpdateApplicationSupportContactData("APPLICATION_ID", "SUPPORT_CONTACT_URL");
+sdk.GetPlatform().UpdateApplicationSupportContact(data);
 ```
 </details>
 
@@ -393,12 +361,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationAp
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationAppLinkData("APPLICATION_ID", "APP_LINK").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationAppLinkJson(resource, data);
-}
+var data = new UpdateApplicationAppLinkData("APPLICATION_ID", "APP_LINK");
+sdk.GetPlatform().UpdateApplicationAppLink(data);
 ```
 </details>
 
@@ -441,13 +405,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationEm
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var emailPreferencesData = new EmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false);
-    var data = new UpdateApplicationEmailPreferencesData("APPLICATION_ID", emailPreferencesData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationEmailPreferencesJson(resource, data);
-}
+var emailPreferencesData = new EmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false);
+var data = new UpdateApplicationEmailPreferencesData("APPLICATION_ID", emailPreferencesData);
+sdk.GetPlatform().UpdateApplicationEmailPreferences(data);
 ```
 </details>
 
@@ -486,12 +446,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationLo
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new UpdateApplicationLogoUrlData("APPLICATION_ID", "LOGO_URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.updateApplicationLogoUrlJson(resource, data);
-}
+var data = new UpdateApplicationLogoUrlData("APPLICATION_ID", "LOGO_URL");
+sdk.GetPlatform().UpdateApplicationLogoUrl(data);
 ```
 </details>
 
@@ -533,12 +489,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteApplication("
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new DeleteApplicationData("APPLICATION_ID").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteApplicationJson(resource, data);
-}
+var data = new DeleteApplicationData("APPLICATION_ID");
+sdk.GetPlatform().DeleteApplication(data);
 ```
 </details>
 
@@ -577,12 +529,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE").ToData();
-    var response = Utils.FromData<GetLogoUploadUrlResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getLogoUploadUrlJson(resource, data));
-}
+var data = new GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE");
+var response = sdk.GetPlatform().GetLogoUploadUrl(data);
 ```
 </details>
 
@@ -625,13 +573,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthKey("APPLICA
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var keyData = new Ed25519KeyData("sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
-    var data = new AddAuthKeyData("APPLICATION_ID", keyData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addAuthKeyJson(resource, data);
-}
+var keyData = new Ed25519KeyData("sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
+var data = new AddAuthKeyData("APPLICATION_ID", keyData);
+sdk.GetPlatform().AddAuthKey(data);
 ```
 </details>
 
@@ -670,12 +614,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthIssuer("APPL
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new AddAuthIssuerData("APPLICATION_ID", "URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addAuthIssuerJson(resource, data);
-}
+var data = new AddAuthIssuerData("APPLICATION_ID", "URL");
+sdk.GetPlatform().AddAuthIssuer(data);
 ```
 </details>
 
@@ -714,12 +654,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteAuthIssuer("A
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new DeleteAuthIssuerData("APPLICATION_ID", "URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.deleteAuthIssuerJson(resource, data);
-}
+var data = new DeleteAuthIssuerData("APPLICATION_ID", "URL");
+sdk.GetPlatform().DeleteAuthIssuer(data);
 ```
 </details>
 
@@ -758,12 +694,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addCorsDomain("APPL
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new AddCorsDomainData("APPLICATION_ID", "URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addCorsDomainJson(resource, data);
-}
+var data = new AddCorsDomainData("APPLICATION_ID", "URL");
+sdk.GetPlatform().AddCorsDomain(data);
 ```
 </details>
 
@@ -802,12 +734,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeCorsDomain("A
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new RemoveCorsDomainData("APPLICATION_ID", "URL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeCorsDomainJson(resource, data);
-}
+var data = new RemoveCorsDomainData("APPLICATION_ID", "URL");
+sdk.GetPlatform().RemoveCorsDomain(data);
 ```
 </details>
 
@@ -846,12 +774,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addApplicationOwner
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new AddApplicationOwnerData("APPLICATION_ID", "OWNER_ID").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.addApplicationOwnerJson(resource, data);
-}
+var data = new AddApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
+sdk.GetPlatform().AddApplicationOwner(data);
 ```
 </details>
 
@@ -890,12 +814,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeApplicationOw
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new RemoveApplicationOwnerData("APPLICATION_ID", "OWNER_ID").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.removeApplicationOwnerJson(resource, data);
-}
+var data = new RemoveApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
+sdk.GetPlatform().RemoveApplicationOwner(data);
 ```
 </details>
 
@@ -934,12 +854,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
-    var data = new GetApplicationOwnersDetailsData("APPLICATION_ID").ToData();
-    var response = Utils.FromData<List<ApplicationOwnerDetailsResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource.getApplicationOwnersDetailsJson(resource, data));
-}
+var data = new GetApplicationOwnersDetailsData("APPLICATION_ID");
+var response = sdk.GetPlatform().GetApplicationOwnersDetails(data);
 ```
 </details>
 
