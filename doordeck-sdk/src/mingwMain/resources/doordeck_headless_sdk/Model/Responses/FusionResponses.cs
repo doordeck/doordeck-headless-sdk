@@ -38,7 +38,7 @@ namespace Doordeck.Headless.Sdk.Model.Responses
     
     public class DiscoveredDeviceResponse
     {
-        public ILockController Key { get; set; } = new DemoController();
+        public LockController Key { get; set; } = new DemoController();
         public Dictionary<string, string> Metadata { get; set; } = new();
     }
 

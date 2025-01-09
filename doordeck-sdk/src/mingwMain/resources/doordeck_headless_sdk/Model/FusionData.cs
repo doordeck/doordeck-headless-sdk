@@ -26,9 +26,9 @@
     {
         public string Name { get; set; }
         public string SiteId { get; set; }
-        public ILockController Controller { get; set; }
+        public LockController Controller { get; set; }
 
-        public EnableDoorData(string name, string siteId, ILockController controller)
+        public EnableDoorData(string name, string siteId, LockController controller)
         {
             Name = name;
             SiteId = siteId;

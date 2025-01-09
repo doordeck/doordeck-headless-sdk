@@ -4,7 +4,7 @@ namespace Doordeck.Headless.Sdk.Model
 {
     public interface ILockController;
 
-    [JsonPolymorphic]
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
     [JsonDerivedType(typeof(AlpetaController), "alpeta")]
     [JsonDerivedType(typeof(AmagController), "amag")]
     [JsonDerivedType(typeof(AssaAbloyController), "assa-abloy")]
