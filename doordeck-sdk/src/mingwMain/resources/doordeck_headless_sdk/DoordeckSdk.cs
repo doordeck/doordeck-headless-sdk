@@ -40,7 +40,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
 
         if (authToken != null)
         {
-            var token = authToken != null ? Utils.Utils.ToSByte(authToken) : null;
+            var token = Utils.Utils.ToSByte(authToken);
             try
             {
                 _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(_factory, _apiEnvironment, token);
