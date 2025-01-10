@@ -120,7 +120,7 @@
         public double? End { get; set; } = null;
     }
 
-    public class UserAuditResponse
+    public class AuditResponse
     {
         public string DeviceId { get; set; } = string.Empty;
         public double Timestamp { get; set; }

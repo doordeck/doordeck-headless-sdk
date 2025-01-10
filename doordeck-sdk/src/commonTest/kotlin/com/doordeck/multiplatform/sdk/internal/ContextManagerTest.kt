@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.internal
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.api.model.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
@@ -120,7 +121,7 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val operationContextData = Context.OperationContextData(userId, certificateChain, publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
+        val operationContextData = Context.OperationContextData(userId, certificateChain.certificateChainToString(), publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
         ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When

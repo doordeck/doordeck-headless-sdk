@@ -39,12 +39,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new LoginData("EMAIL", "PASSWORD").ToData();
-    var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.loginJson(resource, data));
-}
+var data = new LoginData("EMAIL", "PASSWORD");
+sdk.GetAccountless().Login(data);
 ```
 </details>
 
@@ -89,12 +85,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY").ToData();
-    var response = Utils.FromData<TokenResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.registrationJson(resource, data));
-}
+var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY");
+sdk.GetAccountless().Registration(data);
 ```
 </details>
 
@@ -134,12 +126,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("COD
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new VerifyEmailData("CODE").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.verifyEmailJson(resource, data);
-}
+var data = new VerifyEmailData("CODE");
+sdk.GetAccountless().VerifyEmail(data);
 ```
 </details>
 
@@ -179,12 +167,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordReset("E
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new PasswordResetData("EMAIL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetJson(resource, data);
-}
+var data = new PasswordResetData("EMAIL");
+sdk.GetAccountless().PasswordReset(data);
 ```
 </details>
 
@@ -224,12 +208,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordResetVer
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
-    var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource.passwordResetVerifyJson(resource, data);
-}
+var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL");
+sdk.GetAccountless().PasswordResetVerify(data);
 ```
 </details>
 

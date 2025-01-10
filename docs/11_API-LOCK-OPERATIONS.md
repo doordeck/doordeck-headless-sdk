@@ -35,12 +35,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetSingleLockData("LOCK_ID").ToData();
-    var response = Utils.FromData<LockResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getSingleLockJson(resource, data));
-}
+var data = new GetSingleLockData("LOCK_ID");
+var response = sdk.GetLockOperations().GetSingleLock(data);
 ```
 </details>
 
@@ -79,12 +75,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetLockAuditTrailData("LOCK_ID", START_EPOCH, END_EPOCH).ToData();
-    var response = Utils.FromData<List<LockAuditTrailResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getLockAuditTrailJson(resource, data));
-}
+var data = new GetLockAuditTrailData("LOCK_ID", START_EPOCH, END_EPOCH);
+var response = sdk.GetLockOperations().GetLockAuditTrail(data);
 ```
 </details>
 
@@ -97,7 +89,7 @@ unsafe
 ```kotlin
 val response = sdk.lockOperations().getAuditForUser("USER_ID", START_EPOCH, END_EPOCH)
 ```
-💡 **Note:** In Java, use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<UserAuditResponse>>` instead
+💡 **Note:** In Java, use the `getAuditForUserAsync` function, which returns a `CompletableFuture<List<AuditResponse>>` instead
 </details>
 
 ### Swift
@@ -123,12 +115,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetAuditForUserData("USER_ID", START_EPOCH, END_EPOCH).ToData();
-    var response = Utils.FromData<List<UserAuditResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getAuditForUserJson(resource, data));
-}
+var data = new GetAuditForUserData("USER_ID", START_EPOCH, END_EPOCH);
+var response = sdk.GetLockOperations().GetAuditForUser(data);
 ```
 </details>
 
@@ -167,12 +155,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUsersForLockData("LOCK_ID").ToData();
-    var response = Utils.FromData<List<UserLockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUsersForLockJson(resource, data));
-}
+var data = new GetUsersForLockData("LOCK_ID");
+var response = sdk.GetLockOperations().GetUsersForLock(data);
 ```
 </details>
 
@@ -211,12 +195,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetLocksForUserData("LOCK_ID").ToData();
-    var response = Utils.FromData<LockUserResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getLocksForUserJson(resource, data));
-}
+var data = new GetLocksForUserData("LOCK_ID");
+var response = sdk.GetLockOperations().GetLocksForUser(data);
 ```
 </details>
 
@@ -255,12 +235,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockNam
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new UpdateLockNameData("LOCK_ID", "LOCK_NAME").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockNameJson(resource, data);
-}
+var data = new UpdateLockNameData("LOCK_ID", "LOCK_NAME");
+sdk.GetLockOperations().UpdateLockName(data);
 ```
 </details>
 
@@ -299,12 +275,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockFav
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new UpdateLockFavouriteData("LOCK_ID", true).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockFavouriteJson(resource, data);
-}
+var data = new UpdateLockFavouriteData("LOCK_ID", true);
+sdk.GetLockOperations().UpdateLockFavourite(data);
 ```
 </details>
 
@@ -343,12 +315,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockCol
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new UpdateLockColourData("LOCK_ID", "COLOR").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockColourJson(resource, data);
-}
+var data = new UpdateLockColourData("LOCK_ID", "COLOR");
+sdk.GetLockOperations().UpdateLockColour(data);
 ```
 </details>
 
@@ -387,12 +355,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new UpdateLockSettingDefaultNameData("LOCK_ID", "LOCK_NAME").ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingDefaultNameJson(resource, data);
-}
+var data = new UpdateLockSettingDefaultNameData("LOCK_ID", "LOCK_NAME");
+sdk.GetLockOperations().UpdateLockSettingDefaultName(data);
 ```
 </details>
 
@@ -432,12 +396,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new SetLockSettingPermittedAddressesData("LOCK_ID", ["PERMITTED_ADDRESS"]).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingPermittedAddressesJson(resource, data);
-}
+var data = new SetLockSettingPermittedAddressesData("LOCK_ID", ["PERMITTED_ADDRESS"]);
+sdk.GetLockOperations().SetLockSettingPermittedAddresses(data);
 ```
 </details>
 
@@ -476,12 +436,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new UpdateLockSettingHiddenData("LOCK_ID", true).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingHiddenJson(resource, data);
-}
+var data = new UpdateLockSettingHiddenData("LOCK_ID", true);
+sdk.GetLockOperations().UpdateLockSettingHidden(data);
 ```
 </details>
 
@@ -525,13 +481,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", ["MONDAY"])];
-    var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.setLockSettingTimeRestrictionsJson(resource, data);
-}
+List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", ["MONDAY"])];
+var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData);
+sdk.GetLockOperations().SetLockSettingTimeRestrictions(data);
 ```
 </details>
 
@@ -574,13 +526,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var locationRequirementData = new LocationRequirementData(LATITUDE, LONGITUDE, true, 100);
-    var data = new UpdateLockSettingLocationRestrictionsData("LOCK_ID", locationRequirementData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateLockSettingLocationRestrictionsJson(resource, data);
-}
+var locationRequirementData = new LocationRequirementData(LATITUDE, LONGITUDE, true, 100);
+var data = new UpdateLockSettingLocationRestrictionsData("LOCK_ID", locationRequirementData);
+sdk.GetLockOperations().UpdateLockSettingLocationRestrictions(data);
 ```
 </details>
 
@@ -622,12 +570,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyData("USER_EMAIL", false).ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyJson(resource, data));
-}
+var data = new GetUserPublicKeyData("USER_EMAIL", false);
+var response = sdk.GetLockOperations().GetUserPublicKey(data);
 ```
 </details>
 
@@ -666,12 +610,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByEmailData("USER_EMAIL").ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByEmailJson(resource, data));
-}
+var data = new GetUserPublicKeyByEmailData("USER_EMAIL");
+var response = sdk.GetLockOperations().GetUserPublicKeyByEmail(data);
 ```
 </details>
 
@@ -710,12 +650,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByTelephoneData("USER_TELEPHONE").ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByTelephoneJson(resource, data));
-}
+var data = new GetUserPublicKeyByTelephoneData("USER_TELEPHONE");
+var response = sdk.GetLockOperations().GetUserPublicKeyByTelephone(data);
 ```
 </details>
 
@@ -754,12 +690,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByLocalKeyData("USER_LOCAL_KEY").ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByLocalKeyJson(resource, data));
-}
+var data = new GetUserPublicKeyByLocalKeyData("USER_LOCAL_KEY");
+var response = sdk.GetLockOperations().GetUserPublicKeyByLocalKey(data);
 ```
 </details>
 
@@ -798,12 +730,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByForeignKeyData("USER_FOREIGN_KEY").ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByForeignKeyJson(resource, data));
-}
+var data = new GetUserPublicKeyByForeignKeyData("USER_FOREIGN_KEY");
+var response = sdk.GetLockOperations().GetUserPublicKeyByForeignKey(data);
 ```
 </details>
 
@@ -842,12 +770,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByIdentityData("USER_IDENTITY").ToData();
-    var response = Utils.FromData<UserPublicKeyResponse>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByIdentityJson(resource, data));
-}
+var data = new GetUserPublicKeyByIdentityData("USER_IDENTITY");
+var response = sdk.GetLockOperations().GetUserPublicKeyByIdentity(data);
 ```
 </details>
 
@@ -888,12 +812,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByEmailsData(["USER_EMAIL", "USER_EMAIL"]).ToData();
-    var response = Utils.FromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByEmailsJson(resource, data));
-}
+var data = new GetUserPublicKeyByEmailsData(["USER_EMAIL", "USER_EMAIL"]);
+var response = sdk.GetLockOperations().GetUserPublicKeyByEmails(data);
 ```
 </details>
 
@@ -933,12 +853,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByTelephonesData(["USER_TELEPHONE", "USER_TELEPHONE"]).ToData();
-    var response = Utils.FromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByTelephonesJson(resource, data));
-}
+var data = new GetUserPublicKeyByTelephonesData(["USER_TELEPHONE", "USER_TELEPHONE"]);
+var response = sdk.GetLockOperations().GetUserPublicKeyByTelephones(data);
 ```
 </details>
 
@@ -978,12 +894,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByLocalKeysData(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]).ToData();
-    var response = Utils.FromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByLocalKeysJson(resource, data));
-}
+var data = new GetUserPublicKeyByLocalKeysData(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]);
+var response = sdk.GetLockOperations().GetUserPublicKeyByLocalKeys(data);
 ```
 </details>
 
@@ -1023,12 +935,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var data = new GetUserPublicKeyByForeignKeysData(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]).ToData();
-    var response = Utils.FromData<List<BatchUserPublicKeyResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getUserPublicKeyByForeignKeysJson(resource, data));
-}
+var data = new GetUserPublicKeyByForeignKeysData(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]);
+var response = sdk.GetLockOperations().GetUserPublicKeyByForeignKeys(data);
 ```
 </details>
 
@@ -1077,13 +985,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlock
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var data = new UnlockOperationData(baseOperationData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.unlockJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new UnlockOperationData(baseOperationData);
+sdk.GetLockOperations().Unlock(data);
 ```
 </details>
 
@@ -1136,14 +1040,10 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock(sha
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
-    var data = new ShareLockOperationData(baseOperationData, shareLockData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.shareLockJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
+var data = new ShareLockOperationData(baseOperationData, shareLockData);
+sdk.GetLockOperations().ShareLock(data);
 ```
 </details>
 
@@ -1199,14 +1099,10 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().batchShareLoc
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var users = [new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")];
-    var data = new BatchShareLockOperationData(baseOperationData, users).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.batchShareLockJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var users = [new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")];
+var data = new BatchShareLockOperationData(baseOperationData, users);
+sdk.GetLockOperations().BatchShareLock(data);
 ```
 </details>
 
@@ -1256,13 +1152,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessT
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var data = new RevokeAccessToLockOperationData(baseOperationData, ["USER_ID"]).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.revokeAccessToLockJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new RevokeAccessToLockOperationData(baseOperationData, ["USER_ID"]);
+sdk.GetLockOperations().RevokeAccessToLock(data);
 ```
 </details>
 
@@ -1311,13 +1203,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_DURATION).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockDurationJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_DURATION)
+sdk.GetLockOperations().UpdateSecureSettingUnlockDuration(data);
 ```
 </details>
 
@@ -1369,14 +1257,10 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-    var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
-    var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData).ToData();
-    symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.updateSecureSettingUnlockBetweenJson(resource, data);
-}
+var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
+var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData);
+sdk.GetLockOperations().UpdateSecureSettingUnlockBetween(data);
 ```
 </details>
 
@@ -1415,11 +1299,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var response = Utils.FromData<List<LockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getPinnedLocksJson(resource));
-}
+var response = sdk.GetLockOperations().GetPinnedLocks();
 ```
 </details>
 
@@ -1458,11 +1338,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-unsafe
-{
-    var resource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations(sdk);
-    var response = Utils.FromData<List<ShareableLockResponse>>(symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource.getShareableLocksJson(resource));
-}
+var response = sdk.GetLockOperations().GetShareableLocks();
 ```
 </details>
 

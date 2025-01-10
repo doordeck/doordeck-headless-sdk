@@ -13,6 +13,7 @@ import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlin.uuid.Uuid
 
@@ -171,7 +172,7 @@ internal object ContextManagerImpl : ContextManager {
     override fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<Context.OperationContextData>()
         currentUserId = operationContextData.userId
-        currentUserCertificateChain = operationContextData.userCertificateChain
+        currentUserCertificateChain = operationContextData.userCertificateChain.stringToCertificateChain()
         currentUserPublicKey = operationContextData.userPublicKey.decodeBase64ToByteArray()
         currentUserPrivateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
     }

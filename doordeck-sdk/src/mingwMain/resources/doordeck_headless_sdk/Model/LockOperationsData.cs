@@ -260,6 +260,36 @@
         }
     }
 
+    public class GetUserPublicKeyByTelephonesData
+    {
+        public List<string> Telephones { get; set; }
+
+        public GetUserPublicKeyByTelephonesData(List<string> telephones)
+        {
+            Telephones = telephones;
+        }
+    }
+
+    public class GetUserPublicKeyByLocalKeysData
+    {
+        public List<string> LocalKeys { get; set; }
+
+        public GetUserPublicKeyByLocalKeysData(List<string> localKeys)
+        {
+            LocalKeys = localKeys;
+        }
+    }
+
+    public class GetUserPublicKeyByForeignKeysData
+    {
+        public List<string> ForeignKeys { get; set; }
+
+        public GetUserPublicKeyByForeignKeysData(List<string> foreignKeys)
+        {
+            ForeignKeys = foreignKeys;
+        }
+    }
+
     public class UnlockOperationData
     {
         public BaseOperationData BaseOperation { get; set; }
