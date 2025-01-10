@@ -56,6 +56,7 @@ sdk.Initialize();
 
 > [!IMPORTANT]  
 > You should also call ``sdk.Release();`` at the end of your application’s lifecycle to release the SDK resources.
+
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)
