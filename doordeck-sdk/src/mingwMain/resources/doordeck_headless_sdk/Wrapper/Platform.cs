@@ -30,7 +30,6 @@ public unsafe class Platform : IResource
     public void CreateApplication(CreateApplicationData data)
     {
         Process<object>(
-            null,
             _platformResource.createApplicationJson,
             null,
             data
@@ -40,7 +39,6 @@ public unsafe class Platform : IResource
     public List<ApplicationResponse> ListApplications()
     {
         return Process<List<ApplicationResponse>>(
-            null,
             null,
             _platformResource.listApplicationsJson,
             null
@@ -52,7 +50,6 @@ public unsafe class Platform : IResource
         return Process<ApplicationResponse>(
             _platformResource.getApplicationJson,
             null,
-            null,
             data
         );
     }
@@ -60,7 +57,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationName(UpdateApplicationNameData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationNameJson,
             null,
             data
@@ -70,7 +66,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationCompanyNameJson,
             null,
             data
@@ -80,7 +75,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationMailingAddressJson,
             null,
             data
@@ -90,7 +84,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationPrivacyPolicyJson,
             null,
             data
@@ -100,7 +93,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationSupportContactJson,
             null,
             data
@@ -110,7 +102,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationAppLinkJson,
             null,
             data
@@ -120,7 +111,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationEmailPreferencesJson,
             null,
             data
@@ -130,7 +120,6 @@ public unsafe class Platform : IResource
     public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
     {
         Process<object>(
-            null,
             _platformResource.updateApplicationLogoUrlJson,
             null,
             data
@@ -140,7 +129,6 @@ public unsafe class Platform : IResource
     public void DeleteApplication(DeleteApplicationData data)
     {
         Process<object>(
-            null,
             _platformResource.deleteApplicationJson,
             null,
             data
@@ -152,7 +140,6 @@ public unsafe class Platform : IResource
         return Process<GetLogoUploadUrlResponse>(
             _platformResource.getLogoUploadUrlJson,
             null,
-            null,
             data
         );
     }
@@ -160,7 +147,6 @@ public unsafe class Platform : IResource
     public void AddAuthKey(AddAuthKeyData data)
     {
         Process<object>(
-            null,
             _platformResource.addAuthKeyJson,
             null,
             data
@@ -170,7 +156,6 @@ public unsafe class Platform : IResource
     public void AddAuthIssuer(AddAuthIssuerData data)
     {
         Process<object>(
-            null,
             _platformResource.addAuthIssuerJson,
             null,
             data
@@ -180,7 +165,6 @@ public unsafe class Platform : IResource
     public void DeleteAuthIssuer(DeleteAuthIssuerData data)
     {
         Process<object>(
-            null,
             _platformResource.deleteAuthIssuerJson,
             null,
             data
@@ -190,7 +174,6 @@ public unsafe class Platform : IResource
     public void AddCorsDomain(AddCorsDomainData data)
     {
         Process<object>(
-            null,
             _platformResource.addCorsDomainJson,
             null,
             data
@@ -200,7 +183,6 @@ public unsafe class Platform : IResource
     public void RemoveCorsDomain(RemoveCorsDomainData data)
     {
         Process<object>(
-            null,
             _platformResource.removeCorsDomainJson,
             null,
             data
@@ -210,7 +192,6 @@ public unsafe class Platform : IResource
     public void AddApplicationOwner(AddApplicationOwnerData data)
     {
         Process<object>(
-            null,
             _platformResource.addApplicationOwnerJson,
             null,
             data
@@ -220,7 +201,6 @@ public unsafe class Platform : IResource
     public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
     {
         Process<object>(
-            null,
             _platformResource.removeApplicationOwnerJson,
             null,
             data
@@ -232,18 +212,15 @@ public unsafe class Platform : IResource
         return Process<List<ApplicationOwnerDetailsResponse>>(
             _platformResource.getApplicationOwnersDetailsJson,
             null,
-            null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -251,16 +228,17 @@ public unsafe class Platform : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_platform, sData) :
+                processWithoutDataWithResponse(_platform);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_platform, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_platform, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_platform);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {

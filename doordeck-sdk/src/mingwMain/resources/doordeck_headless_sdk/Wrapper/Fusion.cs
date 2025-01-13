@@ -32,88 +32,78 @@ public unsafe class Fusion : IResource
         return Process<FusionLoginResponse>(
             _fusionResource.loginJson,
             null,
-            null,
             data
         );
     }
-    
+
     public IntegrationTypeResponse GetIntegrationType()
     {
         return Process<IntegrationTypeResponse>(
-            null,
             null,
             _fusionResource.getIntegrationTypeJson,
             null
         );
     }
-    
+
     public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
     {
         return Process<List<IntegrationConfigurationResponse>>(
             _fusionResource.getIntegrationConfigurationJson,
             null,
-            null,
             data
         );
     }
-    
+
     public void EnableDoor(EnableDoorData data)
     {
         Process<object>(
-            null,
             _fusionResource.enableDoorJson,
             null,
             data
         );
     }
-    
+
     public void DeleteDoor(DeleteDoorData data)
     {
         Process<object>(
-            null,
             _fusionResource.deleteDoorJson,
             null,
             data
         );
     }
-    
+
     public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
     {
         return Process<DoorStateResponse>(
             _fusionResource.getDoorStatusJson,
             null,
-            null,
             data
         );
     }
-    
+
     public void StartDoor(StartDoorData data)
     {
         Process<object>(
-            null,
-            _fusionResource.startDoor,
+            _fusionResource.startDoorJson,
             null,
             data
         );
     }
-    
+
     public void StopDoor(StopDoorData data)
     {
         Process<object>(
-            null,
-            _fusionResource.stopDoor,
+            _fusionResource.stopDoorJson,
             null,
             data
         );
     }
-    
+
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -121,16 +111,17 @@ public unsafe class Fusion : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_fusion, sData) :
+                processWithoutDataWithResponse(_fusion);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_fusion, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_fusion, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_fusion);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {

@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.toJson
+import com.doordeck.multiplatform.sdk.util.resultData
 import kotlinx.coroutines.runBlocking
 
 internal object FusionResourceImpl : FusionResource {
@@ -24,8 +24,10 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun loginJson(data: String): String {
-        val fusionLoginData = data.fromJson<FusionLoginData>()
-        return login(fusionLoginData.email, fusionLoginData.password).toJson()
+        return resultData {
+            val fusionLoginData = data.fromJson<FusionLoginData>()
+            login(fusionLoginData.email, fusionLoginData.password)
+        }
     }
 
     override fun getIntegrationType(): IntegrationTypeResponse {
@@ -33,7 +35,9 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getIntegrationTypeJson(): String {
-        return getIntegrationType().toJson()
+        return resultData {
+            getIntegrationType()
+        }
     }
 
     override fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
@@ -41,26 +45,32 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getIntegrationConfigurationJson(data: String): String {
-        val getIntegrationConfigurationData = data.fromJson<GetIntegrationConfigurationData>()
-        return getIntegrationConfiguration(getIntegrationConfigurationData.type).toJson()
+        return resultData {
+            val getIntegrationConfigurationData = data.fromJson<GetIntegrationConfigurationData>()
+            getIntegrationConfiguration(getIntegrationConfigurationData.type)
+        }
     }
 
     override fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
         return runBlocking { FusionClient.enableDoorRequest(name, siteId, controller) }
     }
 
-    override fun enableDoorJson(data: String) {
-        val enableDoorData = data.fromJson<EnableDoorData>()
-        return enableDoor(enableDoorData.name, enableDoorData.siteId, enableDoorData.controller)
+    override fun enableDoorJson(data: String): String {
+        return resultData {
+            val enableDoorData = data.fromJson<EnableDoorData>()
+            enableDoor(enableDoorData.name, enableDoorData.siteId, enableDoorData.controller)
+        }
     }
 
     override fun deleteDoor(deviceId: String) {
         return runBlocking { FusionClient.deleteDoorRequest(deviceId) }
     }
 
-    override fun deleteDoorJson(data: String) {
-        val deleteDoorData = data.fromJson<DeleteDoorData>()
-        return deleteDoor(deleteDoorData.deviceId)
+    override fun deleteDoorJson(data: String): String {
+        return resultData {
+            val deleteDoorData = data.fromJson<DeleteDoorData>()
+            deleteDoor(deleteDoorData.deviceId)
+        }
     }
 
     override fun getDoorStatus(deviceId: String): DoorStateResponse {
@@ -68,25 +78,31 @@ internal object FusionResourceImpl : FusionResource {
     }
 
     override fun getDoorStatusJson(data: String): String {
-        val getDoorStatusData = data.fromJson<GetDoorStatusData>()
-        return getDoorStatus(getDoorStatusData.deviceId).toJson()
+        return resultData {
+            val getDoorStatusData = data.fromJson<GetDoorStatusData>()
+            getDoorStatus(getDoorStatusData.deviceId)
+        }
     }
 
     override fun startDoor(deviceId: String) {
         return runBlocking { FusionClient.startDoorRequest(deviceId) }
     }
 
-    override fun startDoorJson(data: String) {
-        val startDoorData = data.fromJson<StartDoorData>()
-        return startDoor(startDoorData.deviceId)
+    override fun startDoorJson(data: String): String {
+        return resultData {
+            val startDoorData = data.fromJson<StartDoorData>()
+            startDoor(startDoorData.deviceId)
+        }
     }
 
     override fun stopDoor(deviceId: String) {
         return runBlocking { FusionClient.stopDoorRequest(deviceId) }
     }
 
-    override fun stopDoorJson(data: String) {
-        val stopDoorData = data.fromJson<StopDoorData>()
-        return stopDoor(stopDoorData.deviceId)
+    override fun stopDoorJson(data: String): String {
+        return resultData {
+            val stopDoorData = data.fromJson<StopDoorData>()
+            stopDoor(stopDoorData.deviceId)
+        }
     }
 }

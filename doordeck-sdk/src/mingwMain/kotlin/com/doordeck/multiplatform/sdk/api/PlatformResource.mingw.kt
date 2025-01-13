@@ -16,7 +16,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun createApplication(application: Platform.CreateApplication)
     @DoordeckOnly
-    fun createApplicationJson(data: String)
+    fun createApplicationJson(data: String): String
 
     /**
      * List applications
@@ -46,7 +46,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationName(applicationId: String, name: String)
     @DoordeckOnly
-    fun updateApplicationNameJson(data: String)
+    fun updateApplicationNameJson(data: String): String
 
     /**
      * Update application - Company name
@@ -56,7 +56,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationCompanyName(applicationId: String, companyName: String)
     @DoordeckOnly
-    fun updateApplicationCompanyNameJson(data: String)
+    fun updateApplicationCompanyNameJson(data: String): String
 
     /**
      * Update application - Mailing address
@@ -66,7 +66,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String)
     @DoordeckOnly
-    fun updateApplicationMailingAddressJson(data: String)
+    fun updateApplicationMailingAddressJson(data: String): String
 
     /**
      * Update application - Privacy policy
@@ -76,7 +76,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String)
     @DoordeckOnly
-    fun updateApplicationPrivacyPolicyJson(data: String)
+    fun updateApplicationPrivacyPolicyJson(data: String): String
 
     /**
      * Update application - Support contact
@@ -86,7 +86,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationSupportContact(applicationId: String, supportContact: String)
     @DoordeckOnly
-    fun updateApplicationSupportContactJson(data: String)
+    fun updateApplicationSupportContactJson(data: String): String
 
     /**
      * Update application - App link
@@ -96,7 +96,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationAppLink(applicationId: String, appLink: String)
     @DoordeckOnly
-    fun updateApplicationAppLinkJson(data: String)
+    fun updateApplicationAppLinkJson(data: String): String
 
     /**
      * Update application - Email preferences
@@ -106,7 +106,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences)
     @DoordeckOnly
-    fun updateApplicationEmailPreferencesJson(data: String)
+    fun updateApplicationEmailPreferencesJson(data: String): String
 
     /**
      * Update application - Logo url
@@ -116,7 +116,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun updateApplicationLogoUrl(applicationId: String, logoUrl: String)
     @DoordeckOnly
-    fun updateApplicationLogoUrlJson(data: String)
+    fun updateApplicationLogoUrlJson(data: String): String
 
     /**
      * Delete application
@@ -126,7 +126,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun deleteApplication(applicationId: String)
     @DoordeckOnly
-    fun deleteApplicationJson(data: String)
+    fun deleteApplicationJson(data: String): String
 
     /**
      * Get logo upload URL
@@ -146,7 +146,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun addAuthKey(applicationId: String, key: Platform.AuthKey)
     @DoordeckOnly
-    fun addAuthKeyJson(data: String)
+    fun addAuthKeyJson(data: String): String
 
     /**
      * Add auth issuer
@@ -156,7 +156,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun addAuthIssuer(applicationId: String, url: String)
     @DoordeckOnly
-    fun addAuthIssuerJson(data: String)
+    fun addAuthIssuerJson(data: String): String
 
     /**
      * Delete auth issuer
@@ -166,7 +166,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun deleteAuthIssuer(applicationId: String, url: String)
     @DoordeckOnly
-    fun deleteAuthIssuerJson(data: String)
+    fun deleteAuthIssuerJson(data: String): String
 
     /**
      * Add CORS domain
@@ -176,7 +176,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun addCorsDomain(applicationId: String, url: String)
     @DoordeckOnly
-    fun addCorsDomainJson(data: String)
+    fun addCorsDomainJson(data: String): String
 
     /**
      * Remove CORS domain
@@ -186,7 +186,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun removeCorsDomain(applicationId: String, url: String)
     @DoordeckOnly
-    fun removeCorsDomainJson(data: String)
+    fun removeCorsDomainJson(data: String): String
 
     /**
      * Add application owner
@@ -196,7 +196,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun addApplicationOwner(applicationId: String, userId: String)
     @DoordeckOnly
-    fun addApplicationOwnerJson(data: String)
+    fun addApplicationOwnerJson(data: String): String
 
     /**
      * Remove application owner
@@ -206,7 +206,7 @@ actual interface PlatformResource {
     @DoordeckOnly
     fun removeApplicationOwner(applicationId: String, userId: String)
     @DoordeckOnly
-    fun removeApplicationOwnerJson(data: String)
+    fun removeApplicationOwnerJson(data: String): String
 
     /**
      * Get application owners details

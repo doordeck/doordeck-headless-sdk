@@ -26,19 +26,19 @@ actual interface AccountlessResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
     fun verifyEmail(code: String)
-    fun verifyEmailJson(data: String)
+    fun verifyEmailJson(data: String): String
 
     /**
      * Password reset
      */
     fun passwordReset(email: String)
-    fun passwordResetJson(data: String)
+    fun passwordResetJson(data: String): String
 
     /**
      * Password reset verify
      */
     fun passwordResetVerify(userId: String, token: String, password: String)
-    fun passwordResetVerifyJson(data: String)
+    fun passwordResetVerifyJson(data: String): String
 }
 
 actual fun accountless(): AccountlessResource = AccountlessResourceImpl

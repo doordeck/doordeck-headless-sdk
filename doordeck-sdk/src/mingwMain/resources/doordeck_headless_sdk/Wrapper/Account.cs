@@ -32,21 +32,23 @@ public unsafe class Account : IResource
         return Process<TokenResponse>(
             _accountResource.refreshTokenJson,
             null,
-            null,
             data
         );
     }
 
     public void Logout()
     {
-        _accountResource.logout(_account);
+        Process<object>(
+            null,
+            _accountResource.logoutJson,
+            null
+        );
     }
 
     public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
         return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
             _accountResource.registerEphemeralKeyJson,
-            null,
             null,
             data
         );
@@ -58,7 +60,6 @@ public unsafe class Account : IResource
         return Process<RegisterEphemeralKeyResponse>(
             _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson,
             null,
-            null,
             data
         );
     }
@@ -68,20 +69,22 @@ public unsafe class Account : IResource
         return Process<RegisterEphemeralKeyResponse>(
             _accountResource.verifyEphemeralKeyRegistrationJson,
             null,
-            null,
             data
         );
     }
 
     public void ReverifyEmail()
     {
-        _accountResource.reverifyEmail(_account);
+        Process<object>(
+            null,
+            _accountResource.reverifyEmailJson,
+            null
+        );
     }
 
     public void ChangePassword(ChangePasswordData data)
     {
         Process<object>(
-            null,
             _accountResource.changePasswordJson,
             null,
             data
@@ -92,7 +95,6 @@ public unsafe class Account : IResource
     {
         return Process<UserDetailsResponse>(
             null,
-            null,
             _accountResource.getUserDetailsJson,
             null
         );
@@ -101,7 +103,6 @@ public unsafe class Account : IResource
     public void UpdateUserDetails(UpdateUserDetailsData data)
     {
         Process<object>(
-            null,
             _accountResource.updateUserDetailsJson,
             null,
             data
@@ -110,16 +111,18 @@ public unsafe class Account : IResource
 
     public void DeleteAccount()
     {
-        _accountResource.deleteAccount(_account);
+        Process<object>(
+            null,
+            _accountResource.deleteAccountJson,
+            null
+        );
     }
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -127,16 +130,17 @@ public unsafe class Account : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_account, sData) :
+                processWithoutDataWithResponse(_account);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_account, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_account, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_account);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {

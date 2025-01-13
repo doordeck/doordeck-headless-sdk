@@ -32,7 +32,6 @@ public unsafe class Accountless : IResource
         return Process<TokenResponse>(
             _accountlessResource.loginJson,
             null,
-            null,
             data
         );
     }
@@ -42,7 +41,6 @@ public unsafe class Accountless : IResource
         return Process<TokenResponse>(
             _accountlessResource.registrationJson,
             null,
-            null,
             data
         );
     }
@@ -50,7 +48,6 @@ public unsafe class Accountless : IResource
     public void VerifyEmail(VerifyEmailData data)
     {
         Process<object>(
-            null,
             _accountlessResource.verifyEmailJson,
             null,
             data
@@ -60,7 +57,6 @@ public unsafe class Accountless : IResource
     public void PasswordReset(PasswordResetData data)
     {
         Process<object>(
-            null,
             _accountlessResource.passwordResetJson,
             null,
             data
@@ -70,7 +66,6 @@ public unsafe class Accountless : IResource
     public void PasswordResetVerify(PasswordResetVerifyData data)
     {
         Process<object>(
-            null,
             _accountlessResource.passwordResetVerifyJson,
             null,
             data
@@ -79,11 +74,9 @@ public unsafe class Accountless : IResource
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -91,16 +84,17 @@ public unsafe class Accountless : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_accountless, sData) :
+                processWithoutDataWithResponse(_accountless);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_accountless, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_accountless, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_accountless);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {
