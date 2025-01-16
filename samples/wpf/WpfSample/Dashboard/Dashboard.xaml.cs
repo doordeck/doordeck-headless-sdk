@@ -11,10 +11,6 @@ namespace WpfSample.Dashboard;
 
 public partial class Dashboard : Window
 {
-    private DateTimeOffset _auditEnd = DateTimeOffset.UtcNow;
-
-    private DateTimeOffset _auditStart = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(2));
-
     private SiteLocksResponse? _selectedLock;
     private SiteResponse? _selectedSite;
 
@@ -22,10 +18,6 @@ public partial class Dashboard : Window
     {
         InitializeComponent();
         Load();
-        DataContext = this;
-
-        StartDatePicker.SelectedDate = _auditStart.UtcDateTime;
-        EndDatePicker.SelectedDate = _auditEnd.UtcDateTime;
     }
 
     public ObservableCollection<SiteResponse> Sites { get; } = [];
@@ -36,6 +28,9 @@ public partial class Dashboard : Window
 
     private void Load()
     {
+        DataContext = this;
+        ResetDateRange();
+        
         var adminsViewSource = (CollectionViewSource)Resources["AdminsView"]!;
         adminsViewSource.Source = LockAdmins;
 
@@ -72,8 +67,8 @@ public partial class Dashboard : Window
         // Load audit
         App.Sdk
             .GetLockOperations()
-            .GetLockAuditTrail(new GetLockAuditTrailData(lockId, (int)_auditStart.ToUnixTimeSeconds(),
-                (int)_auditEnd.ToUnixTimeSeconds()))
+            .GetLockAuditTrail(new GetLockAuditTrailData(lockId, (int)((DateTimeOffset)StartDatePicker.SelectedDate.Value).ToUnixTimeSeconds(),
+                (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds()))
             .ForEach(audit => Audits.Add(audit));
     }
 
@@ -140,6 +135,7 @@ public partial class Dashboard : Window
                     MessageBoxImage.Information);
 
                 // Reload users and audit
+                ResetDateRange();
                 LoadLockUsers(_selectedLock.Id);
                 LoadLockAudit(_selectedLock.Id);
             }
@@ -160,6 +156,7 @@ public partial class Dashboard : Window
             MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);
             // Refresh audit list
+            ResetDateRange();
             LoadLockAudit(_selectedLock.Id);
         }
         catch
@@ -189,6 +186,7 @@ public partial class Dashboard : Window
 
             MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
+            ResetDateRange();
             LoadLockUsers(_selectedLock.Id);
             LoadLockAudit(_selectedLock.Id);
         }
@@ -221,9 +219,19 @@ public partial class Dashboard : Window
             _selectedLock = siteLock;
 
             // Reload users and audit
+            ResetDateRange();
             LoadLockUsers(siteLock.Id);
             LoadLockAudit(siteLock.Id);
         }
+    }
+
+    private void ResetDateRange()
+    {
+        var auditEnd = DateTimeOffset.Now;
+        var auditStart = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
+        
+        StartDatePicker.SelectedDate = auditStart.DateTime;
+        EndDatePicker.SelectedDate = auditEnd.DateTime;
     }
 
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -239,16 +247,8 @@ public partial class Dashboard : Window
             var startDate = StartDatePicker.SelectedDate.Value;
             var endDate = EndDatePicker.SelectedDate.Value;
 
-            var startUnixTime = new DateTimeOffset(startDate);
-            var endUnixTime = new DateTimeOffset(endDate);
-
             if (startDate < endDate)
-            {
-                _auditStart = startUnixTime;
-                _auditEnd = endUnixTime;
-
                 LoadLockAudit(_selectedLock.Id);
-            }
         }
     }
 
