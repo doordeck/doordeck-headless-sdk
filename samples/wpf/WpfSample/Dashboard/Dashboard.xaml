@@ -12,7 +12,7 @@
     <Window.Resources>
         <CollectionViewSource x:Key="AdminsView" />
         <CollectionViewSource x:Key="UsersView" />
-        
+        <!-- Converters -->
         <converters:AuditEventToTextConverter x:Key="AuditEventToTextConverter" />
         <converters:TimestampToTextConverter x:Key="TimestampToTextConverter" />
     </Window.Resources>
@@ -23,7 +23,7 @@
                 <MenuItem Header="Change password" Click="ChangePassword_Click"/>
                 <MenuItem Header="Change display name" Click="ChangeDisplayName_Click" />
                 <Separator/>
-                <MenuItem Header="Logout" />
+                <MenuItem Header="Logout" Click="Logout_Click"/>
             </MenuItem>
         </Menu>
         <!-- Main Content -->

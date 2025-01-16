@@ -5,6 +5,7 @@ using System.Windows.Data;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using MaterialDesignThemes.Wpf;
+using WpfSample.Login;
 
 namespace WpfSample.Dashboard;
 
@@ -223,5 +224,29 @@ public partial class Dashboard : Window
     {
         var changeDisplayNameWindow = new ChangeDisplayName.ChangeDisplayName();
         changeDisplayNameWindow.ShowDialog(); 
+    }
+
+    private void Logout_Click(object sender, RoutedEventArgs e)
+    {
+        // Reset everything
+        Sites.Clear();
+        Locks.Clear();
+        LockUsers.Clear();
+        LockAdmins.Clear();
+        Audits.Clear();
+        _selectedLock = null;
+        _selectedSite = null;
+        
+        // Logout
+        App.Sdk
+            .GetAccount()
+            .Logout();
+        
+        // Redirect to log in
+        var loginWindow = new LoginWindow();
+        loginWindow.Show();
+        
+        // Close dashboard
+        Close();
     }
 }
