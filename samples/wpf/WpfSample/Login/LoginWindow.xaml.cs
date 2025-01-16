@@ -5,7 +5,7 @@ using Doordeck.Headless.Sdk.Utils;
 namespace WpfSample.Login;
 
 /// <summary>
-/// Interaction logic for LoginWindow.xaml
+///     Interaction logic for LoginWindow.xaml
 /// </summary>
 public partial class LoginWindow : Window
 {
@@ -25,14 +25,12 @@ public partial class LoginWindow : Window
         }
         catch (Exception exception)
         {
-            if (exception is UnauthorizedException) 
-            {
-                MessageBox.Show("Login failed, wrong email or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            if (exception is UnauthorizedException)
+                MessageBox.Show("Login failed, wrong email or password.", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             if (exception is BadRequestException)
-            {
-                MessageBox.Show("Login failed, wrong email or password.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                MessageBox.Show("Login failed, wrong email or password.", "Error", MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             return;
         }
 
@@ -44,7 +42,8 @@ public partial class LoginWindow : Window
         // Register the key pair
         App.Sdk
             .GetAccount()
-            .RegisterEphemeralKeyWithSecondaryAuthentication(new RegisterEphemeralKeyWithSecondaryAuthenticationData(keyPair.Public));
+            .RegisterEphemeralKeyWithSecondaryAuthentication(
+                new RegisterEphemeralKeyWithSecondaryAuthenticationData(keyPair.Public));
 
         // Two factor dialog
         var twoFactorWindow = new TwoFactorVerify.TwoFactorVerify();
@@ -54,31 +53,29 @@ public partial class LoginWindow : Window
             // Attempt to verify the key pair
             var verifyResponse = App.Sdk
                 .GetAccount()
-                .VerifyEphemeralKeyRegistration(new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
-                
+                .VerifyEphemeralKeyRegistration(
+                    new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
+
             // Set the operation context
             App.Sdk
                 .GetContextManager()
-                .SetOperationContext(new OperationContextData(verifyResponse.UserId, verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private));
+                .SetOperationContext(new OperationContextData(verifyResponse.UserId,
+                    verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private));
 
             // Display the dashboard
             var dashboard = new Dashboard.Dashboard();
             dashboard.Show();
-                
+
             // Close the login window
             Close();
         }
         catch (Exception exception)
         {
             if (exception is ForbiddenException)
-            {
                 MessageBox.Show("Code is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
 
             if (exception is TooManyRequestsException)
-            {
                 MessageBox.Show("Too many pending verifications", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 }

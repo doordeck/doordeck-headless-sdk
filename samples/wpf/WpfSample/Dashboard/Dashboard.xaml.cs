@@ -11,18 +11,13 @@ namespace WpfSample.Dashboard;
 
 public partial class Dashboard : Window
 {
-    public ObservableCollection<SiteResponse> Sites { get; } = [];
-    public ObservableCollection<SiteLocksResponse> Locks { get; } = [];
-    private ObservableCollection<UserLockResponse> LockUsers { get; } = [];
-    private ObservableCollection<UserLockResponse> LockAdmins { get; } = [];
-    public ObservableCollection<AuditResponse> Audits { get; } = [];
-    
+    private DateTimeOffset _auditEnd = DateTimeOffset.UtcNow;
+
+    private DateTimeOffset _auditStart = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(2));
+
     private SiteLocksResponse? _selectedLock;
     private SiteResponse? _selectedSite;
-    
-    private DateTimeOffset _auditStart = DateTimeOffset.UtcNow.Subtract(TimeSpan.FromDays(2));
-    private DateTimeOffset _auditEnd = DateTimeOffset.UtcNow;
-    
+
     public Dashboard()
     {
         InitializeComponent();
@@ -32,24 +27,30 @@ public partial class Dashboard : Window
         StartDatePicker.SelectedDate = _auditStart.UtcDateTime;
         EndDatePicker.SelectedDate = _auditEnd.UtcDateTime;
     }
-    
+
+    public ObservableCollection<SiteResponse> Sites { get; } = [];
+    public ObservableCollection<SiteLocksResponse> Locks { get; } = [];
+    private ObservableCollection<UserLockResponse> LockUsers { get; } = [];
+    private ObservableCollection<UserLockResponse> LockAdmins { get; } = [];
+    public ObservableCollection<AuditResponse> Audits { get; } = [];
+
     private void Load()
     {
         var adminsViewSource = (CollectionViewSource)Resources["AdminsView"]!;
         adminsViewSource.Source = LockAdmins;
-        
+
         var usersViewSource = (CollectionViewSource)Resources["UsersView"]!;
         usersViewSource.Source = LockUsers;
-        
+
         LoadSites();
     }
-    
+
     private void LoadLockUsers(string lockId)
     {
         // Clear users
         LockUsers.Clear();
         LockAdmins.Clear();
-        
+
         // Load users
         App.Sdk
             .GetLockOperations()
@@ -57,33 +58,30 @@ public partial class Dashboard : Window
             .ForEach(user =>
             {
                 if (user.Role == UserRole.USER)
-                {
                     LockUsers.Add(user);
-                }
                 else
-                {
                     LockAdmins.Add(user);
-                }
             });
     }
-    
+
     private void LoadLockAudit(string lockId)
     {
         // Clear audits
         Audits.Clear();
-        
+
         // Load audit
         App.Sdk
             .GetLockOperations()
-            .GetLockAuditTrail(new GetLockAuditTrailData(lockId, (int)_auditStart.ToUnixTimeSeconds(), (int)_auditEnd.ToUnixTimeSeconds()))
+            .GetLockAuditTrail(new GetLockAuditTrailData(lockId, (int)_auditStart.ToUnixTimeSeconds(),
+                (int)_auditEnd.ToUnixTimeSeconds()))
             .ForEach(audit => Audits.Add(audit));
     }
-    
+
     private void LoadLocksForSite(string siteId)
     {
         // Clear locks
         Locks.Clear();
-            
+
         // Load locks
         App.Sdk
             .GetSites()
@@ -95,7 +93,7 @@ public partial class Dashboard : Window
     {
         // Clear sites
         Sites.Clear();
-        
+
         // Load sites
         App.Sdk
             .GetSites()
@@ -108,7 +106,7 @@ public partial class Dashboard : Window
         var searchTerm = ((TextBox)sender).Text.ToLower();
         var adminsView = (ListCollectionView)((CollectionViewSource)Resources["AdminsView"]!).View;
         var usersView = (ListCollectionView)((CollectionViewSource)Resources["UsersView"]!).View;
-        
+
         adminsView.Filter = item =>
         {
             var user = item as UserLockResponse;
@@ -130,26 +128,28 @@ public partial class Dashboard : Window
                 "Confirmation",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
-            
+
             if (result == MessageBoxResult.Yes)
             {
                 App.Sdk
                     .GetLockOperations()
-                    .RevokeAccessToLock(new RevokeAccessToLockOperationData(new BaseOperationData(_selectedLock.Id), [lockUser.UserId]));
-                
-                MessageBox.Show("User successfully removed", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                
+                    .RevokeAccessToLock(new RevokeAccessToLockOperationData(new BaseOperationData(_selectedLock.Id),
+                        [lockUser.UserId]));
+
+                MessageBox.Show("User successfully removed", "Information", MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
                 // Reload users and audit
                 LoadLockUsers(_selectedLock.Id);
                 LoadLockAudit(_selectedLock.Id);
             }
         }
     }
-    
+
     private void Unlock_Click(object sender, RoutedEventArgs e)
     {
         if (_selectedLock == null) return;
-        
+
         try
         {
             // Perform unlock
@@ -157,7 +157,8 @@ public partial class Dashboard : Window
                 .GetLockOperations()
                 .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
             // Display success message
-            MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK,
+                MessageBoxImage.Information);
             // Refresh audit list
             LoadLockAudit(_selectedLock.Id);
         }
@@ -173,20 +174,21 @@ public partial class Dashboard : Window
 
         var shareLockWindow = new ShareLock.ShareLock();
         if (shareLockWindow.ShowDialog() == false) return;
-        
+
         try
         {
             var publicKey = App.Sdk
                 .GetLockOperations()
                 .GetUserPublicKey(new GetUserPublicKeyData(shareLockWindow.Email));
-            
+
             App.Sdk
                 .GetLockOperations()
-                .ShareLock(new ShareLockOperationData(new BaseOperationData(_selectedLock.Id), 
-                    new ShareLockData(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER, publicKey.PublicKey)));
-            
+                .ShareLock(new ShareLockOperationData(new BaseOperationData(_selectedLock.Id),
+                    new ShareLockData(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER,
+                        publicKey.PublicKey)));
+
             MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            
+
             LoadLockUsers(_selectedLock.Id);
             LoadLockAudit(_selectedLock.Id);
         }
@@ -205,9 +207,9 @@ public partial class Dashboard : Window
             LockUsers.Clear();
             LockAdmins.Clear();
             Audits.Clear();
-            
+
             _selectedSite = site;
-            
+
             LoadLocksForSite(site.Id);
         }
     }
@@ -217,18 +219,18 @@ public partial class Dashboard : Window
         if (sender is ListBox listBox && listBox.SelectedItem is SiteLocksResponse siteLock)
         {
             _selectedLock = siteLock;
-            
+
             // Reload users and audit
             LoadLockUsers(siteLock.Id);
             LoadLockAudit(siteLock.Id);
         }
     }
-    
+
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
         ValidateDateRange();
     }
-    
+
     private void ValidateDateRange()
     {
         if (StartDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue && _selectedLock != null)
@@ -236,7 +238,7 @@ public partial class Dashboard : Window
             // Capture the input values
             var startDate = StartDatePicker.SelectedDate.Value;
             var endDate = EndDatePicker.SelectedDate.Value;
-            
+
             var startUnixTime = new DateTimeOffset(startDate);
             var endUnixTime = new DateTimeOffset(endDate);
 
@@ -244,7 +246,7 @@ public partial class Dashboard : Window
             {
                 _auditStart = startUnixTime;
                 _auditEnd = endUnixTime;
-                
+
                 LoadLockAudit(_selectedLock.Id);
             }
         }
@@ -253,13 +255,13 @@ public partial class Dashboard : Window
     private void ChangePassword_Click(object sender, RoutedEventArgs e)
     {
         var passwordChangeWindow = new ChangePassword.ChangePassword();
-        passwordChangeWindow.ShowDialog(); 
+        passwordChangeWindow.ShowDialog();
     }
 
     private void ChangeDisplayName_Click(object sender, RoutedEventArgs e)
     {
         var changeDisplayNameWindow = new ChangeDisplayName.ChangeDisplayName();
-        changeDisplayNameWindow.ShowDialog(); 
+        changeDisplayNameWindow.ShowDialog();
     }
 
     private void Logout_Click(object sender, RoutedEventArgs e)
@@ -272,16 +274,16 @@ public partial class Dashboard : Window
         Audits.Clear();
         _selectedLock = null;
         _selectedSite = null;
-        
+
         // Logout
         App.Sdk
             .GetAccount()
             .Logout();
-        
+
         // Redirect to log in
         var loginWindow = new LoginWindow();
         loginWindow.Show();
-        
+
         // Close dashboard
         Close();
     }

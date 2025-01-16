@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:WpfSample.ChangeDisplayName"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Change display name" Height="200" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
@@ -18,12 +17,15 @@
             <ColumnDefinition Width="*" /> <!-- Input -->
         </Grid.ColumnDefinitions>
         <!-- Window title -->
-        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Change display name" FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Center" />
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Change display name" FontSize="16"
+                   FontWeight="Bold" Margin="10" TextAlignment="Center" />
         <!-- Display name icon -->
-        <materialDesign:PackIcon Kind="Rename" Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Center"/>
+        <materialDesign:PackIcon Kind="Rename" Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Center" />
         <!-- Display name input -->
-        <TextBox Grid.Column="1" Grid.Row="1" x:Name="NewDisplayName" Margin="10" materialDesign:HintAssist.Hint="New display name" />
+        <TextBox Grid.Column="1" Grid.Row="1" x:Name="NewDisplayName" Margin="10"
+                 materialDesign:HintAssist.Hint="New display name" />
         <!-- Submit button -->
-        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Content="Submit" Margin="10" Click="ChangeDisplayName_Click" />
+        <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Content="Submit" Margin="10"
+                Click="ChangeDisplayName_Click" />
     </Grid>
 </Window>

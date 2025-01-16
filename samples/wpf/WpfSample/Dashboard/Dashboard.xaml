@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:WpfSample.Dashboard"
-        xmlns:WpfSample="clr-namespace:WpfSample"
         xmlns:converters="clr-namespace:WpfSample.Converters"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -20,29 +18,31 @@
         <!-- Menu -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_Menu">
-                <MenuItem Header="Change password" Click="ChangePassword_Click"/>
+                <MenuItem Header="Change password" Click="ChangePassword_Click" />
                 <MenuItem Header="Change display name" Click="ChangeDisplayName_Click" />
-                <Separator/>
-                <MenuItem Header="Logout" Click="Logout_Click"/>
+                <Separator />
+                <MenuItem Header="Logout" Click="Logout_Click" />
             </MenuItem>
         </Menu>
         <!-- Main Content -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MaxWidth="200" /> <!-- Sites -->
-                <ColumnDefinition Width="*" MaxWidth="200"/> <!-- Locks -->
+                <ColumnDefinition Width="*" MaxWidth="200" /> <!-- Locks -->
                 <ColumnDefinition Width="*" /> <!-- Lock panel -->
             </Grid.ColumnDefinitions>
             <!-- Site list -->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <ListBox ItemsSource="{Binding Sites}" DisplayMemberPath="Name" SelectionChanged="Site_SelectionChanged" />
+                    <ListBox ItemsSource="{Binding Sites}" DisplayMemberPath="Name"
+                             SelectionChanged="Site_SelectionChanged" />
                 </ScrollViewer>
             </ScrollViewer>
             <!-- Lock list -->
             <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                    <ListBox ItemsSource="{Binding Locks}" DisplayMemberPath="Id" SelectionChanged="Lock_SelectionChanged"/>
+                    <ListBox ItemsSource="{Binding Locks}" DisplayMemberPath="Id"
+                             SelectionChanged="Lock_SelectionChanged" />
                 </ScrollViewer>
             </ScrollViewer>
             <!-- Lock panel -->
@@ -62,12 +62,15 @@
                                 <ColumnDefinition Width="*" /> <!-- Users -->
                             </Grid.ColumnDefinitions>
                             <!-- User search -->
-                            <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" x:Name="SearchTextBox" Height="30" Margin="10" VerticalAlignment="Top"
+                            <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" x:Name="SearchTextBox"
+                                     Height="30" Margin="10" VerticalAlignment="Top"
                                      TextChanged="SearchUsers_TextChanged" materialDesign:HintAssist.Hint="Search" />
                             <!-- Admins title -->
-                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Admins" FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Left" />
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Admins" FontSize="16" FontWeight="Bold"
+                                       Margin="10" TextAlignment="Left" />
                             <!-- Admin list -->
-                            <ScrollViewer Grid.Column="0" Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="10">
+                            <ScrollViewer Grid.Column="0" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled" Margin="10">
                                 <ListBox ItemsSource="{Binding Source={StaticResource AdminsView}}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -77,10 +80,13 @@
                                 </ListBox>
                             </ScrollViewer>
                             <!-- Users title -->
-                            <TextBlock Grid.Column="1" Grid.Row="1" Text="Users" FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Left" />
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="Users" FontSize="16" FontWeight="Bold"
+                                       Margin="10" TextAlignment="Left" />
                             <!-- Users list -->
-                            <ScrollViewer Grid.Column="1" Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="10">
-                                <ListBox ItemsSource="{Binding Source={StaticResource UsersView}}" HorizontalContentAlignment="Stretch">
+                            <ScrollViewer Grid.Column="1" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled" Margin="10">
+                                <ListBox ItemsSource="{Binding Source={StaticResource UsersView}}"
+                                         HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -89,12 +95,16 @@
                                                     <ColumnDefinition Width="*" /> <!-- Icon -->
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition Height="24"/>
+                                                    <RowDefinition Height="24" />
                                                 </Grid.RowDefinitions>
                                                 <!-- Email -->
-                                                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Email}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Email}"
+                                                           VerticalAlignment="Center" />
                                                 <!-- Delete icon -->
-                                                <materialDesign:PackIcon Grid.Column="1" Grid.Row="0" MouseDown="DeleteUser_Click" Kind="Delete" Width="24" Margin="10 0 0 0" HorizontalAlignment="Right" />
+                                                <materialDesign:PackIcon Grid.Column="1" Grid.Row="0"
+                                                                         MouseDown="DeleteUser_Click" Kind="Delete"
+                                                                         Width="24" Margin="10 0 0 0"
+                                                                         HorizontalAlignment="Right" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -112,23 +122,31 @@
                                 <RowDefinition Height="Auto" /> <!-- Audit list -->
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/> <!-- Start date -->
-                                <ColumnDefinition Width="*"/> <!-- End date -->
+                                <ColumnDefinition Width="*" /> <!-- Start date -->
+                                <ColumnDefinition Width="*" /> <!-- End date -->
                             </Grid.ColumnDefinitions>
                             <!-- Start date title -->
-                            <Label Content="Start date:" Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Center" />
+                            <Label Content="Start date:" Grid.Row="0" Grid.Column="0" Margin="10"
+                                   VerticalAlignment="Center" />
                             <!-- Start date picker -->
-                            <DatePicker Name="StartDatePicker" Grid.Row="1" Grid.Column="0" Margin="10" 
+                            <DatePicker Name="StartDatePicker" Grid.Row="1" Grid.Column="0" Margin="10"
                                         SelectedDateChanged="DatePicker_SelectedDateChanged" />
                             <!-- End date title -->
-                            <Label Content="End date:" Grid.Row="0" Grid.Column="1" Margin="10" VerticalAlignment="Center" />
+                            <Label Content="End date:" Grid.Row="0" Grid.Column="1" Margin="10"
+                                   VerticalAlignment="Center" />
                             <!-- End date picker -->
-                            <DatePicker Name="EndDatePicker" Grid.Row="1" Grid.Column="1" Margin="10" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                            <DatePicker Name="EndDatePicker" Grid.Row="1" Grid.Column="1" Margin="10"
+                                        SelectedDateChanged="DatePicker_SelectedDateChanged" />
                             <!-- Activity title -->
-                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Text="Activity" FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Left" />
+                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Text="Activity" FontSize="16"
+                                       FontWeight="Bold" Margin="10" TextAlignment="Left" />
                             <!-- Activity list -->
-                            <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="10">
-                                <ListBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Audits}" HorizontalContentAlignment="Stretch">
+                            <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"
+                                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                          Margin="10">
+                                <ListBox
+                                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Audits}"
+                                    HorizontalContentAlignment="Stretch">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -138,11 +156,17 @@
                                                     <ColumnDefinition Width="*" /> <!-- Timestamp -->
                                                 </Grid.ColumnDefinitions>
                                                 <!-- Audit type -->
-                                                <TextBlock Grid.Column="0" Text="{Binding Type, Converter={StaticResource AuditEventToTextConverter}}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="0"
+                                                           Text="{Binding Type, Converter={StaticResource AuditEventToTextConverter}}"
+                                                           VerticalAlignment="Center" />
                                                 <!-- Issuer -->
-                                                <TextBlock Grid.Column="1" Text="{Binding Issuer.Email}" VerticalAlignment="Center" />
+                                                <TextBlock Grid.Column="1" Text="{Binding Issuer.Email}"
+                                                           VerticalAlignment="Center" />
                                                 <!-- Timestamp -->
-                                                <TextBlock Grid.Column="2" Text="{Binding Timestamp, Converter={StaticResource TimestampToTextConverter}}" VerticalAlignment="Center" HorizontalAlignment="Right" TextAlignment="Right"/>
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Timestamp, Converter={StaticResource TimestampToTextConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                           TextAlignment="Right" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -156,15 +180,15 @@
                             <!-- Unlock button -->
                             <Button Height="32" Width="96" Click="Unlock_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Lock" Margin="0 0 5 0"/>
-                                    <TextBlock Text="Unlock"/>
+                                    <materialDesign:PackIcon Kind="Lock" Margin="0 0 5 0" />
+                                    <TextBlock Text="Unlock" />
                                 </StackPanel>
                             </Button>
                             <!-- Share button -->
                             <Button Height="32" Width="96" Margin="10 0 0 0" Click="Share_Click">
                                 <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Share" Margin="0 0 5 0"/>
-                                    <TextBlock Text="Share"/>
+                                    <materialDesign:PackIcon Kind="Share" Margin="0 0 5 0" />
+                                    <TextBlock Text="Share" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>
