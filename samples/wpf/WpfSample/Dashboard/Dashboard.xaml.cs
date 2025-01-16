@@ -29,7 +29,7 @@ public partial class Dashboard : Window
     private void Load()
     {
         DataContext = this;
-        ResetDateRange();
+        ResetAuditDateRange();
         
         var adminsViewSource = (CollectionViewSource)Resources["AdminsView"]!;
         adminsViewSource.Source = LockAdmins;
@@ -61,6 +61,8 @@ public partial class Dashboard : Window
 
     private void LoadLockAudit(string lockId)
     {
+        if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null) return;
+        
         // Clear audits
         Audits.Clear();
 
@@ -135,7 +137,7 @@ public partial class Dashboard : Window
                     MessageBoxImage.Information);
 
                 // Reload users and audit
-                ResetDateRange();
+                ResetAuditDateRange();
                 LoadLockUsers(_selectedLock.Id);
                 LoadLockAudit(_selectedLock.Id);
             }
@@ -156,7 +158,7 @@ public partial class Dashboard : Window
             MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);
             // Refresh audit list
-            ResetDateRange();
+            ResetAuditDateRange();
             LoadLockAudit(_selectedLock.Id);
         }
         catch
@@ -186,7 +188,7 @@ public partial class Dashboard : Window
 
             MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            ResetDateRange();
+            ResetAuditDateRange();
             LoadLockUsers(_selectedLock.Id);
             LoadLockAudit(_selectedLock.Id);
         }
@@ -219,13 +221,13 @@ public partial class Dashboard : Window
             _selectedLock = siteLock;
 
             // Reload users and audit
-            ResetDateRange();
+            ResetAuditDateRange();
             LoadLockUsers(siteLock.Id);
             LoadLockAudit(siteLock.Id);
         }
     }
 
-    private void ResetDateRange()
+    private void ResetAuditDateRange()
     {
         var auditEnd = DateTimeOffset.Now;
         var auditStart = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
@@ -235,11 +237,6 @@ public partial class Dashboard : Window
     }
 
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-        ValidateDateRange();
-    }
-
-    private void ValidateDateRange()
     {
         if (StartDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue && _selectedLock != null)
         {
