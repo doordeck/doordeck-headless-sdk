@@ -1,6 +1,5 @@
 ﻿using System.Windows.Data;
 using Doordeck.Headless.Sdk.Model;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace WpfSample.Converters;
 

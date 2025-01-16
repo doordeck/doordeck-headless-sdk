@@ -29,6 +29,6 @@
         <materialDesign:PackIcon Kind="Password" Grid.Row="2" Grid.Column="0" Margin="10" VerticalAlignment="Center"/>
         <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Password"/>
         <!-- Submit button -->
-        <Button Content="Submit" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Click="SubmitLoginButton_Click"/>
+        <Button Content="Submit" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Click="SubmitLogin_Click"/>
     </Grid>
 </Window>

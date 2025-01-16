@@ -45,9 +45,11 @@ public partial class Dashboard : Window
     
     private void LoadLockUsers(string lockId)
     {
+        // Clear users
         LockUsers.Clear();
         LockAdmins.Clear();
         
+        // Load users
         App.Sdk
             .GetLockOperations()
             .GetUsersForLock(new GetUsersForLockData(lockId))
@@ -66,6 +68,7 @@ public partial class Dashboard : Window
     
     private void LoadLockAudit(string lockId)
     {
+        // Clear audits
         Audits.Clear();
         
         // Load audit
@@ -101,23 +104,20 @@ public partial class Dashboard : Window
 
     private void SearchUsers_TextChanged(object sender, TextChangedEventArgs e)
     {
-        if (sender is TextBox textBox)
+        var searchTerm = ((TextBox)sender).Text.ToLower();
+        var adminsView = (ListCollectionView)((CollectionViewSource)Resources["AdminsView"]!).View;
+        var usersView = (ListCollectionView)((CollectionViewSource)Resources["UsersView"]!).View;
+        
+        adminsView.Filter = item =>
         {
-            var searchTerm = textBox.Text.ToLower();
-            var adminsView = (ListCollectionView)((CollectionViewSource)Resources["AdminsView"]!).View;
-            var usersView = (ListCollectionView)((CollectionViewSource)Resources["UsersView"]!).View;
-            
-            adminsView.Filter = item =>
-            {
-                var user = item as UserLockResponse;
-                return user != null && user.Email.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase);
-            };
-            usersView.Filter = item =>
-            {
-                var user = item as UserLockResponse;
-                return user != null && user.Email.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase);
-            };
-        }
+            var user = item as UserLockResponse;
+            return user != null && user.Email.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+        };
+        usersView.Filter = item =>
+        {
+            var user = item as UserLockResponse;
+            return user != null && user.Email.Contains(searchTerm, StringComparison.CurrentCultureIgnoreCase);
+        };
     }
 
     private void DeleteUser_Click(object sender, RoutedEventArgs e)
@@ -141,23 +141,22 @@ public partial class Dashboard : Window
     
     private void Unlock_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button button && _selectedLock != null)
+        if (_selectedLock == null) return;
+        
+        try
         {
-            try
-            {
-                // Perform unlock
-                App.Sdk
-                    .GetLockOperations()
-                    .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
-                // Display success message
-                MessageBox.Show("Unlocked!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-                // Refresh audit list
-                LoadLockAudit(_selectedLock.Id);
-            }
-            catch
-            {
-                MessageBox.Show("Failed to unlock", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            // Perform unlock
+            App.Sdk
+                .GetLockOperations()
+                .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
+            // Display success message
+            MessageBox.Show("Unlocked!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Refresh audit list
+            LoadLockAudit(_selectedLock.Id);
+        }
+        catch
+        {
+            MessageBox.Show("Failed to unlock", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -188,20 +187,16 @@ public partial class Dashboard : Window
         }
     }
     
-    private void StartDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+    private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
     {
         ValidateDateRange();
     }
-
-    private void EndDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-    {
-        ValidateDateRange();
-    }
-
+    
     private void ValidateDateRange()
     {
         if (StartDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue && _selectedLock != null)
         {
+            // Capture the input values
             var startDate = StartDatePicker.SelectedDate.Value;
             var endDate = EndDatePicker.SelectedDate.Value;
             

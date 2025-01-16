@@ -11,9 +11,9 @@ public partial class TwoFactorVerify : Window
         InitializeComponent();
     }
     
-    private void SubmitTwoFactorVerifyButton_Click(object sender, RoutedEventArgs e)
+    private void SubmitTwoFactorVerify_Click(object sender, RoutedEventArgs e)
     {
-        // Capture the input code
+        // Capture the input value
         TwoFactorCode = TwoFactorCodeTextBox.Text;
 
         // Close the window

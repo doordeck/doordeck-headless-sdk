@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 using Doordeck.Headless.Sdk.Model;
 
 namespace WpfSample.ChangeDisplayName;
@@ -11,27 +10,25 @@ public partial class ChangeDisplayName : Window
         InitializeComponent();
     }
 
-    private void ChangeDisplayNameButton_Click(object sender, RoutedEventArgs e)
+    private void ChangeDisplayName_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button button)
+        // Capture the input value
+        var newDisplayName = NewDisplayName.Text.Trim(); 
+        
+        try
         {
-            var displayName = NewDisplayName.Text.Trim(); 
-            
-            try
-            {
-                App.Sdk
-                    .GetAccount()
-                    .UpdateUserDetails(new UpdateUserDetailsData(displayName));
+            App.Sdk
+                .GetAccount()
+                .UpdateUserDetails(new UpdateUserDetailsData(newDisplayName));
                 
-                MessageBox.Show("Display name successfully changed!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Failed to change display name.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            
-            Close();
+            MessageBox.Show("Display name successfully changed!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+        catch
+        {
+            MessageBox.Show("Failed to change display name.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+            
+        Close();
     }
 }

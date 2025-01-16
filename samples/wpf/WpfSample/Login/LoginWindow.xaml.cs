@@ -14,7 +14,7 @@ public partial class LoginWindow : Window
         InitializeComponent();
     }
 
-    private void SubmitLoginButton_Click(object sender, RoutedEventArgs e)
+    private void SubmitLogin_Click(object sender, RoutedEventArgs e)
     {
         try
         {

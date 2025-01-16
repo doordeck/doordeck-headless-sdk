@@ -6,11 +6,8 @@ public class TimestampToTextConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     {
-        if (value is Double timestamp)
-        {
-            return DateTimeOffset.FromUnixTimeSeconds((long)timestamp).UtcDateTime.ToString("R");
-        }
-        return string.Empty;
+        if (value is not Double timestamp) return string.Empty;
+        return DateTimeOffset.FromUnixTimeSeconds((long)timestamp).UtcDateTime.ToString("R");
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
