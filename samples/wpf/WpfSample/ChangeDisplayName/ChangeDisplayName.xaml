@@ -9,19 +9,19 @@
         Title="Change display name" Height="200" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> <!-- Title -->
-            <RowDefinition Height="Auto" /> <!-- Current password -->
+            <RowDefinition Height="Auto" /> <!-- Window title -->
+            <RowDefinition Height="Auto" /> <!-- Display name -->
             <RowDefinition Height="Auto" /> <!-- Submit button -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" /> <!-- Title -->
+            <ColumnDefinition Width="Auto" /> <!-- Icon -->
             <ColumnDefinition Width="*" /> <!-- Input -->
         </Grid.ColumnDefinitions>
-        <!-- Title -->
+        <!-- Window title -->
         <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Text="Change display name" FontSize="16" FontWeight="Bold" Margin="10" TextAlignment="Center" />
-        <!-- Title -->
+        <!-- Display name icon -->
         <materialDesign:PackIcon Kind="Rename" Grid.Column="0" Grid.Row="1" Margin="10" VerticalAlignment="Center"/>
-        <!-- Input -->
+        <!-- Display name input -->
         <TextBox Grid.Column="1" Grid.Row="1" x:Name="NewDisplayName" Margin="10" materialDesign:HintAssist.Hint="New display name" />
         <!-- Submit button -->
         <Button Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Content="Submit" Margin="10" Click="ChangeDisplayName_Click" />

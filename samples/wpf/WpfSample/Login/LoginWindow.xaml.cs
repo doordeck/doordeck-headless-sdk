@@ -48,36 +48,36 @@ public partial class LoginWindow : Window
 
         // Two factor dialog
         var twoFactorWindow = new TwoFactorVerify.TwoFactorVerify();
-        if (twoFactorWindow.ShowDialog() == true)
+        if (twoFactorWindow.ShowDialog() == false) return;
+        try
         {
-            try
-            {
-                // Attempt to verify the key pair
-                var verifyResponse = App.Sdk
-                    .GetAccount()
-                    .VerifyEphemeralKeyRegistration(new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
+            // Attempt to verify the key pair
+            var verifyResponse = App.Sdk
+                .GetAccount()
+                .VerifyEphemeralKeyRegistration(new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
                 
-                // Set the operation context
-                App.Sdk
-                    .GetContextManager()
-                    .SetOperationContext(new OperationContextData(verifyResponse.UserId, verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private));
+            // Set the operation context
+            App.Sdk
+                .GetContextManager()
+                .SetOperationContext(new OperationContextData(verifyResponse.UserId, verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private));
 
-                var dashboard = new Dashboard.Dashboard();
-                dashboard.Show();
+            // Display the dashboard
+            var dashboard = new Dashboard.Dashboard();
+            dashboard.Show();
                 
-                Close();
+            // Close the login window
+            Close();
+        }
+        catch (Exception exception)
+        {
+            if (exception is ForbiddenException)
+            {
+                MessageBox.Show("Code is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            catch (Exception exception)
-            {
-                if (exception is ForbiddenException)
-                {
-                    MessageBox.Show("Code is invalid", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
 
-                if (exception is TooManyRequestsException)
-                {
-                    MessageBox.Show("Too many pending verifications", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+            if (exception is TooManyRequestsException)
+            {
+                MessageBox.Show("Too many pending verifications", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

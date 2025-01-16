@@ -136,6 +136,12 @@ public partial class Dashboard : Window
                 App.Sdk
                     .GetLockOperations()
                     .RevokeAccessToLock(new RevokeAccessToLockOperationData(new BaseOperationData(_selectedLock.Id), [lockUser.UserId]));
+                
+                MessageBox.Show("User successfully removed", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                
+                // Reload users and audit
+                LoadLockUsers(_selectedLock.Id);
+                LoadLockAudit(_selectedLock.Id);
             }
         }
     }
@@ -151,13 +157,42 @@ public partial class Dashboard : Window
                 .GetLockOperations()
                 .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
             // Display success message
-            MessageBox.Show("Unlocked!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             // Refresh audit list
             LoadLockAudit(_selectedLock.Id);
         }
         catch
         {
             MessageBox.Show("Failed to unlock", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void Share_Click(object sender, RoutedEventArgs e)
+    {
+        if (_selectedLock == null) return;
+
+        var shareLockWindow = new ShareLock.ShareLock();
+        if (shareLockWindow.ShowDialog() == false) return;
+        
+        try
+        {
+            var publicKey = App.Sdk
+                .GetLockOperations()
+                .GetUserPublicKey(new GetUserPublicKeyData(shareLockWindow.Email));
+            
+            App.Sdk
+                .GetLockOperations()
+                .ShareLock(new ShareLockOperationData(new BaseOperationData(_selectedLock.Id), 
+                    new ShareLockData(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER, publicKey.PublicKey)));
+            
+            MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            
+            LoadLockUsers(_selectedLock.Id);
+            LoadLockAudit(_selectedLock.Id);
+        }
+        catch
+        {
+            MessageBox.Show("Failed to share lock", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -183,6 +218,7 @@ public partial class Dashboard : Window
         {
             _selectedLock = siteLock;
             
+            // Reload users and audit
             LoadLockUsers(siteLock.Id);
             LoadLockAudit(siteLock.Id);
         }

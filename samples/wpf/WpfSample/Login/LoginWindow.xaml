@@ -9,24 +9,26 @@
         Title="Login" Height="250" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /> <!-- Window title -->
+            <RowDefinition Height="Auto" /> <!-- Email -->
+            <RowDefinition Height="Auto" /> <!-- Password -->
+            <RowDefinition Height="Auto" /> <!-- Submit button -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" /> <!-- Icon -->
+            <ColumnDefinition Width="*" /> <!-- Input -->
         </Grid.ColumnDefinitions>
-        <!-- Title -->
+        <!-- Window title -->
         <TextBlock Text="Login" Grid.Row="0" Grid.ColumnSpan="2" 
                    HorizontalAlignment="Center" TextAlignment="Center" 
                    FontSize="20" FontWeight="Bold" Margin="10"/>
-        <!-- Email -->
+        <!-- Email icon -->
         <materialDesign:PackIcon Kind="Account" Grid.Row="1" Grid.Column="0" Margin="10" VerticalAlignment="Center"/>
+        <!-- Email input -->
         <TextBox x:Name="EmailTextBox" Grid.Row="1" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Email"/>
-        <!-- Password -->
+        <!-- Password icon -->
         <materialDesign:PackIcon Kind="Password" Grid.Row="2" Grid.Column="0" Margin="10" VerticalAlignment="Center"/>
+        <!-- Password input -->
         <PasswordBox x:Name="PasswordBox" Grid.Row="2" Grid.Column="1" Margin="10" materialDesign:HintAssist.Hint="Password"/>
         <!-- Submit button -->
         <Button Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="10" Click="SubmitLogin_Click">
