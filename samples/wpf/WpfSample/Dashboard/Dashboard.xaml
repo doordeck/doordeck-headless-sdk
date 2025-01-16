@@ -37,10 +37,12 @@
             </Grid.RowDefinitions>
             <!-- Site title -->
             <Border Grid.Column="0" Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="DarkSlateBlue" Margin="5">
-                <TextBlock Text="Sites" Margin="10"  FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue" HorizontalAlignment="Center"/>
+                <TextBlock Text="Sites" Margin="10" FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue"
+                           HorizontalAlignment="Center" />
             </Border>
             <!-- Site list -->
-            <ScrollViewer Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                     <ListBox ItemsSource="{Binding Sites}" DisplayMemberPath="Name"
                              SelectionChanged="Site_SelectionChanged" />
@@ -48,7 +50,8 @@
             </ScrollViewer>
             <!-- Lock title -->
             <Border Grid.Column="1" Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="DarkSlateBlue" Margin="5">
-                <TextBlock Text="Locks" Margin="10"  FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue" HorizontalAlignment="Center"/>
+                <TextBlock Text="Locks" Margin="10" FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue"
+                           HorizontalAlignment="Center" />
             </Border>
             <!-- Lock list -->
             <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Disabled">

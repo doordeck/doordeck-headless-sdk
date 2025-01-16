@@ -30,7 +30,7 @@ public partial class Dashboard : Window
     {
         DataContext = this;
         ResetAuditDateRange();
-        
+
         var adminsViewSource = (CollectionViewSource)Resources["AdminsView"]!;
         adminsViewSource.Source = LockAdmins;
 
@@ -62,14 +62,15 @@ public partial class Dashboard : Window
     private void LoadLockAudit(string lockId)
     {
         if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null) return;
-        
+
         // Clear audits
         Audits.Clear();
 
         // Load audit
         App.Sdk
             .GetLockOperations()
-            .GetLockAuditTrail(new GetLockAuditTrailData(lockId, (int)((DateTimeOffset)StartDatePicker.SelectedDate.Value).ToUnixTimeSeconds(),
+            .GetLockAuditTrail(new GetLockAuditTrailData(lockId,
+                (int)((DateTimeOffset)StartDatePicker.SelectedDate.Value).ToUnixTimeSeconds(),
                 (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds()))
             .ForEach(audit => Audits.Add(audit));
     }
@@ -231,7 +232,7 @@ public partial class Dashboard : Window
     {
         var auditEnd = DateTimeOffset.Now;
         var auditStart = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
-        
+
         StartDatePicker.SelectedDate = auditStart.DateTime;
         EndDatePicker.SelectedDate = auditEnd.DateTime;
     }
