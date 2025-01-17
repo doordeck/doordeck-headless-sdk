@@ -1,0 +1,215 @@
+﻿<Window x:Class="WpfSample.Dashboard.Dashboard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:converters="clr-namespace:WpfSample.Converters"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Dashboard" Height="500" Width="900" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <CollectionViewSource x:Key="AdminsView" />
+        <CollectionViewSource x:Key="UsersView" />
+        <!-- Converters -->
+        <converters:AuditEventToTextConverter x:Key="AuditEventToTextConverter" />
+        <converters:TimestampToTextConverter x:Key="TimestampToTextConverter" />
+    </Window.Resources>
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Menu">
+                <MenuItem Header="Change password" Click="ChangePassword_Click" />
+                <MenuItem Header="Change display name" Click="ChangeDisplayName_Click" />
+                <Separator />
+                <MenuItem Header="Logout" Click="Logout_Click" />
+            </MenuItem>
+        </Menu>
+        <!-- Main Content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="200" /> <!-- Sites -->
+                <ColumnDefinition Width="*" MaxWidth="200" /> <!-- Locks -->
+                <ColumnDefinition Width="*" /> <!-- Lock panel -->
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /> <!-- Title -->
+                <RowDefinition Height="*" /> <!-- List -->
+            </Grid.RowDefinitions>
+            <!-- Site title -->
+            <Border Grid.Column="0" Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="DarkSlateBlue" Margin="5">
+                <TextBlock Text="Sites" Margin="10" FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue"
+                           HorizontalAlignment="Center" />
+            </Border>
+            <!-- Site list -->
+            <ScrollViewer Grid.Column="0" Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ListBox ItemsSource="{Binding Sites}" DisplayMemberPath="Name"
+                             SelectionChanged="Site_SelectionChanged" />
+                </ScrollViewer>
+            </ScrollViewer>
+            <!-- Lock title -->
+            <Border Grid.Column="1" Grid.Row="0" BorderThickness="0,0,0,2" BorderBrush="DarkSlateBlue" Margin="5">
+                <TextBlock Text="Locks" Margin="10" FontSize="16" FontWeight="Medium" Foreground="DarkSlateBlue"
+                           HorizontalAlignment="Center" />
+            </Border>
+            <!-- Lock list -->
+            <ScrollViewer Grid.Column="1" Grid.Row="1" HorizontalScrollBarVisibility="Disabled">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <ListBox ItemsSource="{Binding Locks}" DisplayMemberPath="Id"
+                             SelectionChanged="Lock_SelectionChanged" />
+                </ScrollViewer>
+            </ScrollViewer>
+            <!-- Lock panel -->
+            <ScrollViewer Grid.Row="0" Grid.RowSpan="2" Grid.Column="2">
+                <!-- Tabs for this lock -->
+                <TabControl>
+                    <!-- Users -->
+                    <TabItem Header="Users">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" /> <!-- Search box -->
+                                <RowDefinition Height="Auto" /> <!-- List title -->
+                                <RowDefinition Height="Auto" /> <!-- List -->
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Admins -->
+                                <ColumnDefinition Width="*" /> <!-- Users -->
+                            </Grid.ColumnDefinitions>
+                            <!-- User search -->
+                            <TextBox Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" x:Name="SearchTextBox"
+                                     Height="30" Margin="10" VerticalAlignment="Top"
+                                     TextChanged="SearchUsers_TextChanged" materialDesign:HintAssist.Hint="Search" />
+                            <!-- Admins title -->
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Admins" FontSize="16" FontWeight="Bold"
+                                       Margin="10" TextAlignment="Left" />
+                            <!-- Admin list -->
+                            <ScrollViewer Grid.Column="0" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled" Margin="10">
+                                <ListBox ItemsSource="{Binding Source={StaticResource AdminsView}}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Email}" Height="24" VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                            <!-- Users title -->
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="Users" FontSize="16" FontWeight="Bold"
+                                       Margin="10" TextAlignment="Left" />
+                            <!-- Users list -->
+                            <ScrollViewer Grid.Column="1" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled" Margin="10">
+                                <ListBox ItemsSource="{Binding Source={StaticResource UsersView}}"
+                                         HorizontalContentAlignment="Stretch">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" /> <!-- Email -->
+                                                    <ColumnDefinition Width="*" /> <!-- Icon -->
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="24" />
+                                                </Grid.RowDefinitions>
+                                                <!-- Email -->
+                                                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Email}"
+                                                           VerticalAlignment="Center" />
+                                                <!-- Delete icon -->
+                                                <materialDesign:PackIcon Grid.Column="1" Grid.Row="0"
+                                                                         MouseDown="DeleteUser_Click" Kind="Delete"
+                                                                         Width="24" Margin="10 0 0 0"
+                                                                         HorizontalAlignment="Right" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <!-- Activity -->
+                    <TabItem Header="Activity">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" /> <!-- Date picker title -->
+                                <RowDefinition Height="Auto" /> <!-- Date picker -->
+                                <RowDefinition Height="Auto" /> <!-- Audit title -->
+                                <RowDefinition Height="Auto" /> <!-- Audit list -->
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Start date -->
+                                <ColumnDefinition Width="*" /> <!-- End date -->
+                            </Grid.ColumnDefinitions>
+                            <!-- Start date title -->
+                            <Label Content="Start date:" Grid.Row="0" Grid.Column="0" Margin="10"
+                                   VerticalAlignment="Center" />
+                            <!-- Start date picker -->
+                            <DatePicker Name="StartDatePicker" Grid.Row="1" Grid.Column="0" Margin="10"
+                                        SelectedDateChanged="DatePicker_SelectedDateChanged" />
+                            <!-- End date title -->
+                            <Label Content="End date:" Grid.Row="0" Grid.Column="1" Margin="10"
+                                   VerticalAlignment="Center" />
+                            <!-- End date picker -->
+                            <DatePicker Name="EndDatePicker" Grid.Row="1" Grid.Column="1" Margin="10"
+                                        SelectedDateChanged="DatePicker_SelectedDateChanged" />
+                            <!-- Activity title -->
+                            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Text="Activity" FontSize="16"
+                                       FontWeight="Bold" Margin="10" TextAlignment="Left" />
+                            <!-- Activity list -->
+                            <ScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"
+                                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                                          Margin="10">
+                                <ListBox
+                                    ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.Audits}"
+                                    HorizontalContentAlignment="Stretch">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" /> <!-- Audit type -->
+                                                    <ColumnDefinition Width="Auto" /> <!-- Issuer -->
+                                                    <ColumnDefinition Width="*" /> <!-- Timestamp -->
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Audit type -->
+                                                <TextBlock Grid.Column="0"
+                                                           Text="{Binding Type, Converter={StaticResource AuditEventToTextConverter}}"
+                                                           VerticalAlignment="Center" />
+                                                <!-- Issuer -->
+                                                <TextBlock Grid.Column="1" Text="{Binding Issuer.Email}"
+                                                           VerticalAlignment="Center" />
+                                                <!-- Timestamp -->
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Timestamp, Converter={StaticResource TimestampToTextConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                           TextAlignment="Right" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <!-- Others -->
+                    <TabItem Header="Others">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="10">
+                            <!-- Unlock button -->
+                            <Button Height="32" Width="96" Click="Unlock_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Lock" Margin="0 0 5 0" />
+                                    <TextBlock Text="Unlock" />
+                                </StackPanel>
+                            </Button>
+                            <!-- Share button -->
+                            <Button Height="32" Width="96" Margin="10 0 0 0" Click="Share_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon Kind="Share" Margin="0 0 5 0" />
+                                    <TextBlock Text="Share" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+</Window>
