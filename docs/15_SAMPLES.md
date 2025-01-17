@@ -67,9 +67,30 @@ In JavaScript, we provide a sample built with **Angular** demonstrating how the 
 <details>
 <summary>Show Details</summary>
 
-```csharp
-// TODO
-```
+In C#, we provide a sample build with **WPF** demonstrating how the SDK can be integrated into a desktop application.
+
+#### Functionalities Included:
+- User login
+- Register ephemeral key with secondary authentication
+- List sites
+- List locks for a site
+- List users for a lock
+- List lock activity
+- Share a lock
+- Revoke access to a lock
+- Unlock a lock
+- Update user display name
+- Update user password
+- Logout
+
+#### Sample Screenshots:
+| Login Screen                              | Dashboard | Revoke Access |
+|-------------------------------------------|-----------|---------------|
+| ![login.png](media/samples/wpf/login.png) | ![dashboard.png](media/samples/wpf/dashboard.png) | ![revoke-access.png](media/samples/wpf/revoke-access.png) |
+
+| Activity Log | Share Lock |
+|--------------|------------|
+| ![activity.png](media/samples/wpf/activity.png) | ![share-lock.png](media/samples/wpf/share-lock.png) |
 
 </details>
 
