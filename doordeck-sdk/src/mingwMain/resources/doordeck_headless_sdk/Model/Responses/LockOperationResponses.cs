@@ -125,29 +125,22 @@
         public string DeviceId { get; set; } = string.Empty;
         public double Timestamp { get; set; }
         public AuditEvent Type { get; set; }
-        public UserAuditIssuerResponse Issuer { get; set; } = new UserAuditIssuerResponse();
-        public UserAuditSubjectResponse? Subject { get; set; } = null;
+        public AuditIssuerResponse Issuer { get; set; } = new AuditIssuerResponse();
+        public AuditSubjectResponse? Subject { get; set; } = null;
         public bool Rejected { get; set; }
     }
 
-    public class UserAuditIssuerResponse
+    public class AuditIssuerResponse
     {
         public string UserId { get; set; } = string.Empty;
+        public string? Email { get; set; } = null;
+        public string? Ip { get; set; } = null;
     }
 
-    public class UserAuditSubjectResponse
+    public class AuditSubjectResponse
     {
         public string UserId { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-    }
-
-    public class LockAuditTrailResponse
-    {
-        public double Timestamp { get; set; }
-        public AuditEvent Type { get; set; }
-        public string? User { get; set; } = null;
-        public string? Email { get; set; } = null;
         public string? DisplayName { get; set; } = null;
-        public string? Message { get; set; } = null;
     }
 }

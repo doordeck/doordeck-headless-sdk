@@ -21,7 +21,7 @@ actual interface TilesResource {
     @SiteAdmin
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
     @SiteAdmin
-    fun associateMultipleLocksJson(data: String)
+    fun associateMultipleLocksJson(data: String): String
 }
 
 actual fun tiles(): TilesResource = TilesResourceImpl

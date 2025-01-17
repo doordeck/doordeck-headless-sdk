@@ -31,7 +31,6 @@ public unsafe class Tiles : IResource
         return Process<TileLocksResponse>(
             _tilesResource.getLocksBelongingToTileJson,
             null,
-            null,
             data
         );
     }
@@ -39,7 +38,6 @@ public unsafe class Tiles : IResource
     public void AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
         Process<object>(
-            null,
             _tilesResource.associateMultipleLocksJson,
             null,
             data
@@ -48,11 +46,9 @@ public unsafe class Tiles : IResource
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -60,16 +56,17 @@ public unsafe class Tiles : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_tiles, sData) :
+                processWithoutDataWithResponse(_tiles);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_tiles, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_tiles, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_tiles);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {

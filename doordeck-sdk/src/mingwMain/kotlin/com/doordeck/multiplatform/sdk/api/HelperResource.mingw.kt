@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.internal.api.HelperResourceImpl
 
 actual interface HelperResource {
     fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray)
-    fun uploadPlatformLogoJson(data: String)
+    fun uploadPlatformLogoJson(data: String): String
 
     fun assistedLogin(email: String, password: String): AssistedLoginResponse
     fun assistedLoginJson(data: String): String
@@ -15,7 +15,7 @@ actual interface HelperResource {
     fun assistedRegisterEphemeralKeyJson(data: String? = null): String
 
     fun assistedRegister(email: String, password: String, displayName: String? = null, force: Boolean = false)
-    fun assistedRegisterJson(data: String)
+    fun assistedRegisterJson(data: String): String
 }
 
 actual fun helper(): HelperResource = HelperResourceImpl

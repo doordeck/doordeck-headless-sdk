@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.toJson
+import com.doordeck.multiplatform.sdk.util.resultData
 import kotlinx.coroutines.runBlocking
 
 internal object AccountResourceImpl : AccountResource {
@@ -24,12 +24,20 @@ internal object AccountResourceImpl : AccountResource {
     }
 
     override fun refreshTokenJson(data: String?): String {
-        val refreshTokenData = data?.fromJson<RefreshTokenData>()
-        return refreshToken(refreshTokenData?.refreshToken).toJson()
+        return resultData {
+            val refreshTokenData = data?.fromJson<RefreshTokenData>()
+            refreshToken(refreshTokenData?.refreshToken)
+        }
     }
 
     override fun logout() {
         return runBlocking { AccountClient.logoutRequest() }
+    }
+
+    override fun logoutJson(): String {
+        return resultData {
+            logout()
+        }
     }
 
     override fun registerEphemeralKey(publicKey: ByteArray?): RegisterEphemeralKeyResponse {
@@ -37,8 +45,10 @@ internal object AccountResourceImpl : AccountResource {
     }
 
     override fun registerEphemeralKeyJson(data: String?): String {
-        val registerEphemeralKeyData = data?.fromJson<RegisterEphemeralKeyData>()
-        return registerEphemeralKey(registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray()).toJson()
+        return resultData {
+            val registerEphemeralKeyData = data?.fromJson<RegisterEphemeralKeyData>()
+            registerEphemeralKey(registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
+        }
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray?, method: TwoFactorMethod?): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
@@ -46,8 +56,10 @@ internal object AccountResourceImpl : AccountResource {
     }
 
     override fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String?): String {
-        val registerEphemeralKeyWithSecondaryAuthenticationData = data?.fromJson<RegisterEphemeralKeyWithSecondaryAuthenticationData>()
-        return registerEphemeralKeyWithSecondaryAuthentication(registerEphemeralKeyWithSecondaryAuthenticationData?.publicKey?.decodeBase64ToByteArray(), registerEphemeralKeyWithSecondaryAuthenticationData?.method).toJson()
+        return resultData {
+            val registerEphemeralKeyWithSecondaryAuthenticationData = data?.fromJson<RegisterEphemeralKeyWithSecondaryAuthenticationData>()
+            registerEphemeralKeyWithSecondaryAuthentication(registerEphemeralKeyWithSecondaryAuthenticationData?.publicKey?.decodeBase64ToByteArray(), registerEphemeralKeyWithSecondaryAuthenticationData?.method)
+        }
     }
 
     override fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray?): RegisterEphemeralKeyResponse {
@@ -55,21 +67,31 @@ internal object AccountResourceImpl : AccountResource {
     }
 
     override fun verifyEphemeralKeyRegistrationJson(data: String): String {
-        val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
-        return verifyEphemeralKeyRegistration(verifyEphemeralKeyRegistrationData.code, verifyEphemeralKeyRegistrationData.privateKey?.decodeBase64ToByteArray()).toJson()
+        return resultData {
+            val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
+            verifyEphemeralKeyRegistration(verifyEphemeralKeyRegistrationData.code, verifyEphemeralKeyRegistrationData.privateKey?.decodeBase64ToByteArray())
+        }
     }
 
     override fun reverifyEmail() {
         return runBlocking { AccountClient.reverifyEmailRequest() }
     }
 
+    override fun reverifyEmailJson(): String {
+        return resultData {
+            reverifyEmail()
+        }
+    }
+
     override fun changePassword(oldPassword: String, newPassword: String) {
         return runBlocking { AccountClient.changePasswordRequest(oldPassword, newPassword) }
     }
 
-    override fun changePasswordJson(data: String) {
-        val changePasswordData = data.fromJson<ChangePasswordData>()
-        return changePassword(changePasswordData.oldPassword, changePasswordData.newPassword)
+    override fun changePasswordJson(data: String): String {
+        return resultData {
+            val changePasswordData = data.fromJson<ChangePasswordData>()
+            changePassword(changePasswordData.oldPassword, changePasswordData.newPassword)
+        }
     }
 
     override fun getUserDetails(): UserDetailsResponse {
@@ -77,19 +99,29 @@ internal object AccountResourceImpl : AccountResource {
     }
 
     override fun getUserDetailsJson(): String {
-        return getUserDetails().toJson()
+        return resultData {
+            getUserDetails()
+        }
     }
 
     override fun updateUserDetails(displayName: String) {
         return runBlocking { AccountClient.updateUserDetailsRequest(displayName) }
     }
 
-    override fun updateUserDetailsJson(data: String) {
-        val updateUserDetailsData = data.fromJson<UpdateUserDetailsData>()
-        return updateUserDetails(updateUserDetailsData.displayName)
+    override fun updateUserDetailsJson(data: String): String {
+        return resultData {
+            val updateUserDetailsData = data.fromJson<UpdateUserDetailsData>()
+            updateUserDetails(updateUserDetailsData.displayName)
+        }
     }
 
     override fun deleteAccount() {
         return runBlocking { AccountClient.deleteAccountRequest() }
+    }
+
+    override fun deleteAccountJson(): String {
+        return resultData {
+            deleteAccount()
+        }
     }
 }

@@ -31,13 +31,13 @@ actual interface FusionResource {
     fun enableDoor(name: String, siteId: String, controller: Fusion.LockController)
 
     @DoordeckOnly
-    fun enableDoorJson(data: String)
+    fun enableDoorJson(data: String): String
 
     @DoordeckOnly
     fun deleteDoor(deviceId: String)
 
     @DoordeckOnly
-    fun deleteDoorJson(data: String)
+    fun deleteDoorJson(data: String): String
 
     @DoordeckOnly
     fun getDoorStatus(deviceId: String): DoorStateResponse
@@ -49,13 +49,13 @@ actual interface FusionResource {
     fun startDoor(deviceId: String)
 
     @DoordeckOnly
-    fun startDoorJson(data: String)
+    fun startDoorJson(data: String): String
 
     @DoordeckOnly
     fun stopDoor(deviceId: String)
 
     @DoordeckOnly
-    fun stopDoorJson(data: String)
+    fun stopDoorJson(data: String): String
 }
 
 actual fun fusion(): FusionResource = FusionResourceImpl

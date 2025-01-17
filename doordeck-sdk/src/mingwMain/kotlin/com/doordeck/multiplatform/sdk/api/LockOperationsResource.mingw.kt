@@ -58,7 +58,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockName(lockId: String, name: String? = null)
-    fun updateLockNameJson(data: String)
+    fun updateLockNameJson(data: String): String
 
     /**
      * Update lock properties - Favourite
@@ -66,7 +66,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockFavourite(lockId: String, favourite: Boolean? = null)
-    fun updateLockFavouriteJson(data: String)
+    fun updateLockFavouriteJson(data: String): String
 
     /**
      * Update lock properties - Colour
@@ -74,7 +74,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockColour(lockId: String, colour: String? = null)
-    fun updateLockColourJson(data: String)
+    fun updateLockColourJson(data: String): String
 
     /**
      * Update lock properties - Settings - Default name
@@ -82,7 +82,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockSettingDefaultName(lockId: String, name: String? = null)
-    fun updateLockSettingDefaultNameJson(data: String)
+    fun updateLockSettingDefaultNameJson(data: String): String
 
     /**
      * Set lock properties - Settings - Permitted addresses
@@ -90,7 +90,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>)
-    fun setLockSettingPermittedAddressesJson(data: String)
+    fun setLockSettingPermittedAddressesJson(data: String): String
 
     /**
      * Update lock properties - Settings - Hidden
@@ -98,7 +98,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockSettingHidden(lockId: String, hidden: Boolean)
-    fun updateLockSettingHiddenJson(data: String)
+    fun updateLockSettingHiddenJson(data: String): String
 
     /**
      * Set lock properties - Settings - Usage requirements - Time
@@ -106,7 +106,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>)
-    fun setLockSettingTimeRestrictionsJson(data: String)
+    fun setLockSettingTimeRestrictionsJson(data: String): String
 
     /**
      * Update lock properties - Settings - Usage requirements - Location
@@ -114,7 +114,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null)
-    fun updateLockSettingLocationRestrictionsJson(data: String)
+    fun updateLockSettingLocationRestrictionsJson(data: String): String
 
     /**
      * Get user’s public key
@@ -204,7 +204,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     fun unlock(unlockOperation: LockOperations.UnlockOperation)
-    fun unlockJson(data: String)
+    fun unlockJson(data: String): String
 
     /**
      * Share a lock
@@ -212,15 +212,15 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     fun shareLock(shareLockOperation: LockOperations.ShareLockOperation)
-    fun shareLockJson(data: String)
+    fun shareLockJson(data: String): String
 
     /**
      * Batch share a lock
      *
      * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
      */
-    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation)
-    fun batchShareLockJson(data: String)
+    fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation)
+    fun batchShareLockJson(data: String): String
 
     /**
      * Revoke access to a lock
@@ -228,7 +228,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation)
-    fun revokeAccessToLockJson(data: String)
+    fun revokeAccessToLockJson(data: String): String
 
     /**
      * Update secure settings - Unlock duration
@@ -236,7 +236,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration)
-    fun updateSecureSettingUnlockDurationJson(data: String)
+    fun updateSecureSettingUnlockDurationJson(data: String): String
 
     /**
      * Update secure settings - Unlock between
@@ -244,7 +244,7 @@ actual interface LockOperationsResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween)
-    fun updateSecureSettingUnlockBetweenJson(data: String)
+    fun updateSecureSettingUnlockBetweenJson(data: String): String
 
     /**
      * Get pinned locks
