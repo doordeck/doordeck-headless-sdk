@@ -17,6 +17,16 @@ fun ApiEnvironment.getApiEnvironmentName(): String {
     return name
 }
 
+/**
+ * Executes a block of code and captures its result. Wraps either the result of the block or any exception thrown
+ * during its execution into a serialized JSON `ResultData` string.
+ *
+ * @param T The type of the result produced by the block.
+ * @param block A lambda function that represents the code to execute.
+ * @return A JSON string representing the result. If the block executes successfully,
+ *          the result is wrapped in `SuccessResultData`.
+ *          If an exception occurs, it is wrapped in `FailedResultData` along with an error message.
+ */
 internal inline fun <reified T>resultData(crossinline block: () -> T): String {
     return try {
         val result = block()
