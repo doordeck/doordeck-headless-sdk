@@ -25,6 +25,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
     fun logout()
+    fun logoutJson(): String
 
     /**
      * Register ephemeral key
@@ -57,6 +58,8 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     fun reverifyEmail()
+    @DoordeckOnly
+    fun reverifyEmailJson(): String
 
     /**
      * Change password
@@ -66,7 +69,7 @@ actual interface AccountResource {
     @DoordeckOnly
     fun changePassword(oldPassword: String, newPassword: String)
     @DoordeckOnly
-    fun changePasswordJson(data: String)
+    fun changePasswordJson(data: String): String
 
     /**
      * Get user details
@@ -82,7 +85,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
     fun updateUserDetails(displayName: String)
-    fun updateUserDetailsJson(data: String)
+    fun updateUserDetailsJson(data: String): String
 
     /**
      * Delete account
@@ -90,6 +93,7 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
     fun deleteAccount()
+    fun deleteAccountJson(): String
 }
 
 actual fun account(): AccountResource = AccountResourceImpl

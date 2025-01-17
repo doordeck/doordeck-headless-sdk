@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.api.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.toJson
+import com.doordeck.multiplatform.sdk.util.resultData
 import kotlinx.coroutines.runBlocking
 
 internal object HelperResourceImpl : HelperResource {
@@ -18,9 +18,11 @@ internal object HelperResourceImpl : HelperResource {
         return runBlocking { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
     }
 
-    override fun uploadPlatformLogoJson(data: String) {
-        val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
-        return runBlocking { HelperClient.uploadPlatformLogoRequest(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray()) }
+    override fun uploadPlatformLogoJson(data: String): String {
+        return resultData {
+            val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
+            uploadPlatformLogo(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray())
+        }
     }
 
     override fun assistedLogin(email: String, password: String): AssistedLoginResponse {
@@ -28,8 +30,10 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedLoginJson(data: String): String {
-        val assistedLoginData = data.fromJson<AssistedLoginData>()
-        return runBlocking { HelperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password) }.toJson()
+        return resultData {
+            val assistedLoginData = data.fromJson<AssistedLoginData>()
+            assistedLogin(assistedLoginData.email, assistedLoginData.password)
+        }
     }
 
     override fun assistedRegisterEphemeralKey(publicKey: ByteArray?): AssistedRegisterEphemeralKeyResponse {
@@ -37,8 +41,10 @@ internal object HelperResourceImpl : HelperResource {
     }
 
     override fun assistedRegisterEphemeralKeyJson(data: String?): String {
-        val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
-        return runBlocking { HelperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray()) }.toJson()
+        return resultData {
+            val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
+            assistedRegisterEphemeralKey(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
+        }
     }
 
     override fun assistedRegister(email: String, password: String, displayName: String?, force: Boolean) {
@@ -52,10 +58,10 @@ internal object HelperResourceImpl : HelperResource {
         }
     }
 
-    override fun assistedRegisterJson(data: String) {
-        val assistedRegisterData = data.fromJson<AssistedRegisterData>()
-        return runBlocking {
-            HelperClient.assistedRegisterRequest(
+    override fun assistedRegisterJson(data: String): String {
+        return resultData {
+            val assistedRegisterData = data.fromJson<AssistedRegisterData>()
+            assistedRegister(
                 email = assistedRegisterData.email,
                 password = assistedRegisterData.password,
                 displayName = assistedRegisterData.displayName,

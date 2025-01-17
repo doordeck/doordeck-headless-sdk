@@ -30,7 +30,6 @@ public unsafe class Helper : IResource
     public void UploadPlatformLogo(UploadPlatformLogoData data)
     {
         Process<object>(
-            null,
             _helperResource.uploadPlatformLogoJson,
             null,
             data
@@ -42,7 +41,6 @@ public unsafe class Helper : IResource
         return Process<AssistedLoginResponse>(
             _helperResource.assistedLoginJson,
             null,
-            null,
             data
         );
     }
@@ -52,7 +50,6 @@ public unsafe class Helper : IResource
         return Process<AssistedRegisterEphemeralKeyResponse>(
             _helperResource.assistedRegisterEphemeralKeyJson,
             null,
-            null,
             data
         );
     }
@@ -60,7 +57,6 @@ public unsafe class Helper : IResource
     public void AssistedRegister(AssistedRegisterData data)
     {
         Process<object>(
-            null,
             _helperResource.assistedRegisterJson,
             null,
             data
@@ -69,11 +65,9 @@ public unsafe class Helper : IResource
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -81,16 +75,17 @@ public unsafe class Helper : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_helper, sData) :
+                processWithoutDataWithResponse(_helper);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_helper, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_helper, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_helper);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {

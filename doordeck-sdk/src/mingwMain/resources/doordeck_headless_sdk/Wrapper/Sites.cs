@@ -31,7 +31,6 @@ public unsafe class Sites : IResource
     {
         return Process<List<SiteResponse>>(
             null,
-            null,
             _sitesResource.listSitesJson,
             null
         );
@@ -42,7 +41,6 @@ public unsafe class Sites : IResource
         return Process<List<SiteLocksResponse>>(
             _sitesResource.getLocksForSiteJson,
             null,
-            null,
             data
         );
     }
@@ -52,18 +50,15 @@ public unsafe class Sites : IResource
         return Process<List<UserForSiteResponse>>(
             _sitesResource.getUsersForSiteJson,
             null,
-            null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
-            sbyte*, sbyte*> withDataAndWithResponse,
+            sbyte*, sbyte*> processDataWithResponse,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
-            sbyte*, void> withDataAndWithoutResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
-            sbyte*> withoutDataAndWithResponse,
+            sbyte*> processWithoutDataWithResponse,
         object? data
     )
     {
@@ -71,16 +66,17 @@ public unsafe class Sites : IResource
         sbyte* result = null;
         try
         {
-            var withResponse = typeof(TResponse) != typeof(object);
-            var withData = data != null;
+            var hasData = data != null;
+            result = hasData ? processDataWithResponse(_sites, sData) :
+                processWithoutDataWithResponse(_sites);
 
-            if (withData && withResponse)
-                result = withDataAndWithResponse(_sites, sData);
-            else if (withData && !withResponse)
-                withDataAndWithoutResponse(_sites, sData);
-            else if (!withData && withResponse)
-                result = withoutDataAndWithResponse(_sites);
-            return result != null ? Utils.Utils.FromData<TResponse>(result)! : default!;
+            var resultData = result != null
+                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
+                : default!;
+
+            resultData.HandleException();
+
+            return resultData.Success!.Result ?? default!;
         }
         finally
         {
