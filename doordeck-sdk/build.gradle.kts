@@ -372,7 +372,7 @@ tasks.register("mingwX64Pack").configure {
         }
         // Copy the model folder from the mingwX64 resources
         copy {
-            from(file("$projectDir/src/mingwMain/resources/doordeck_headless_sdk"))
+            from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
         }
     }
