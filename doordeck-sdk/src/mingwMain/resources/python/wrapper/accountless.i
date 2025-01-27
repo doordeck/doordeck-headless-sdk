@@ -10,15 +10,15 @@ def registration(thiz, data):
     handle_exception(response)
     return TokenResponse(**get_success_result(response))
 
-def verifyEmail(thiz, data):
+def verify_email(thiz, data):
     response = json.loads(_doordeck_headless_sdk.verifyEmailJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
 
-def passwordReset(thiz, data):
+def password_reset(thiz, data):
     response = json.loads(_doordeck_headless_sdk.passwordResetJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
 
-def passwordResetVerify(thiz, data):
+def password_reset_verify(thiz, data):
     response = json.loads(_doordeck_headless_sdk.passwordResetVerifyJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
 
