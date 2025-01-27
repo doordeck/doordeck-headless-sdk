@@ -6,6 +6,18 @@ def current_epoch_seconds() -> int:
 def get_success_result(json_response):
     return json_response["success"]["result"]
 
+def decode_base64_to_byte_array(input):
+    return base64.b64decode(input)
+
+def encode_byte_array_to_base64(input):
+    return base64.b64encode(input).decode('utf-8')
+
+def certificate_chain_to_string(input):
+    return '|'.join(input)
+
+def string_to_certificate_chain(input):
+    return input.split('|')
+
 def handle_exception(response):
     if response["failure"] is None:
         return
