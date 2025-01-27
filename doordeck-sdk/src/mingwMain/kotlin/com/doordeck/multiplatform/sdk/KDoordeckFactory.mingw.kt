@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
 
 actual object KDoordeckFactory {
 
+    @CName("initialize")
     fun initialize(apiEnvironment: ApiEnvironment): Doordeck =
         DoordeckFactory.initialize(null, apiEnvironment, null, null)
 

@@ -9,9 +9,9 @@ class LoginData:
 class RegistrationData:
      email: str
      password: str
-     display_name: str
      force: str
-     public_key: str
+     publicKey: str
+     displayName: Optional[str] = None
 
 @dataclass
 class VerifyEmailData:
