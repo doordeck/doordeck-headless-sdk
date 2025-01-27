@@ -12,17 +12,17 @@ def logout(thiz):
 def register_ephemeral_key(thiz, data):
     response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return RegisterEphemeralKeyResponse(**get_success_result(response))
+    return register_ephemeral_key_response(**get_success_result(response))
 
 def register_ephemeral_key_with_secondary_authentication(thiz, data):
     response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyWithSecondaryAuthenticationJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return RegisterEphemeralKeyWithSecondaryAuthenticationResponse(**get_success_result(response))
+    return register_ephemeral_key_with_secondary_authentication_response(**get_success_result(response))
 
 def verify_ephemeral_key_registration(thiz, data):
     response = json.loads(_doordeck_headless_sdk.verifyEphemeralKeyRegistrationJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return RegisterEphemeralKeyResponse(**get_success_result(response))
+    return register_ephemeral_key_response(**get_success_result(response))
 
 def reverify_email(thiz):
     response = json.loads(_doordeck_headless_sdk.reverifyEmailJson(thiz))
@@ -35,7 +35,7 @@ def change_password(thiz, data):
 def get_user_details(thiz):
     response = json.loads(_doordeck_headless_sdk.getUserDetailsJson(thiz))
     handle_exception(response)
-    return UserDetailsResponse(**get_success_result(response))
+    return user_details_response(**get_success_result(response))
 
 def update_user_details(thiz, data):
     response = json.loads(_doordeck_headless_sdk.updateUserDetailsJson(thiz, json.dumps(dataclasses.asdict(data))))

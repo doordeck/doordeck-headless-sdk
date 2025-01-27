@@ -1,7 +1,7 @@
 %pythoncode %{
 
 @dataclass
-class EncodedKeyPair:
+class encoded_key_pair:
     private: str
     public: str
 

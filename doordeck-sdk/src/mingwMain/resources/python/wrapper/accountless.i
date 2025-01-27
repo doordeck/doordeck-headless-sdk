@@ -3,12 +3,12 @@
 def login(thiz, data):
     response = json.loads(_doordeck_headless_sdk.loginJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+    return token_response(**get_success_result(response))
 
 def registration(thiz, data):
     response = json.loads(_doordeck_headless_sdk.registrationJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+    return token_response(**get_success_result(response))
 
 def verify_email(thiz, data):
     response = json.loads(_doordeck_headless_sdk.verifyEmailJson(thiz, json.dumps(dataclasses.asdict(data))))

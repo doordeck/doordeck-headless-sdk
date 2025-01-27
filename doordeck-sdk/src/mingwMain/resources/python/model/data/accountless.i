@@ -1,12 +1,12 @@
 %pythoncode %{
 
 @dataclass
-class LoginData:
+class login_data:
      email: str
      password: str
 
 @dataclass
-class RegistrationData:
+class registration_data:
      email: str
      password: str
      force: str
@@ -14,15 +14,15 @@ class RegistrationData:
      displayName: Optional[str] = None
 
 @dataclass
-class VerifyEmailData:
+class verify_email_data:
      code: str
 
 @dataclass
-class PasswordResetData:
+class password_reset_data:
      email: str
 
 @dataclass
-class PasswordResetVerifyData:
+class password_reset_verify_data:
      user_id: str
      token: str
      password: str

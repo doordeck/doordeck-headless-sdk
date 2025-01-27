@@ -1,6 +1,6 @@
 %pythoncode %{
 
-class AuditEvent(Enum):
+class audit_event(Enum):
     DOOR_OPEN = "DOOR_OPEN"
     DOOR_CLOSE = "DOOR_CLOSE"
     DOOR_UNLOCK = "DOOR_UNLOCK"
@@ -16,6 +16,5 @@ class AuditEvent(Enum):
     TILE_ASSOCIATED = "TILE_ASSOCIATED"
     TILE_DISASSOCIATED = "TILE_DISASSOCIATED"
     DEVICE_DECOMMISSIONED = "DEVICE_DECOMMISSIONED"
-
 
 %}

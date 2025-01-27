@@ -1,7 +1,7 @@
 %pythoncode %{
 
 @dataclass
-class BaseOperationData:
+class base_operation_data:
     lockId: str
     userId: Optional[str] = None
     userCertificateChain: Optional[List[str]] = None
@@ -12,12 +12,12 @@ class BaseOperationData:
     jti: str = field(default_factory=lambda: str(uuid.uuid4()))
 
 @dataclass
-class UnlockOperationData:
-    baseOperation: BaseOperationData
+class unlock_operation_data:
+    baseOperation: base_operation_data
     directAccessEndpoints: Optional[List[str]] = None
 
 @dataclass
-class OperationContextData:
+class operation_context_data:
     userId: str
     userCertificateChain: str
     userPublicKey: str
