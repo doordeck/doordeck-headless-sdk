@@ -11,12 +11,12 @@ class register_ephemeral_key_data:
 @dataclass
 class register_ephemeral_key_withSecondary_authentication_data:
     publicKey: str
-    method: Optional[two_factor_method] = None
+    method: typing.Optional[two_factor_method] = None
 
 @dataclass
 class verify_ephemeral_key_registration_data:
         code: str
-        privateKey: Optional[str] = None
+        privateKey: typing.Optional[str] = None
 
 @dataclass
 class change_password_data:

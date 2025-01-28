@@ -4,6 +4,6 @@
 class tile_locks_response:
     siteId: str
     tileId: str
-    deviceIds: List[str]
+    deviceIds: typing.List[str]
 
 %}

@@ -10,11 +10,11 @@ class user_details_response:
     email: str
     emailVerified: bool
     publicKey: str
-    displayName: Optional[str] = None
+    displayName: typing.Optional[str] = None
 
 @dataclass
 class register_ephemeral_key_response:
-    certificateChain: [List[str]]
+    certificateChain: [typing.List[str]]
     userId: str
 
 @dataclass

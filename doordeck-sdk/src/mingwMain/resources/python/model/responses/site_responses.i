@@ -21,16 +21,16 @@ class user_for_site_response:
     userId: str
     email: str
     orphan: bool
-    displayName: Optional[str] = None
+    displayName: typing.Optional[str] = None
 
 @dataclass
 class site_lock_settings_response:
     unlockTime: float
-    permittedAddresses: List[str]
+    permittedAddresses: typing.List[str]
     defaultName: str
-    tiles: List[str]
-    state: Optional[site_state_response] = None
-    favourite: Optional[bool] = None
+    tiles: typing.List[str]
+    state: typing.Optional[site_state_response] = None
+    favourite: typing.Optional[bool] = None
 
 @dataclass
 class site_locks_response:
@@ -38,12 +38,12 @@ class site_locks_response:
     name: str
     role: user_role
     settings: site_lock_settings_response
-    colour: Optional[str] = None
+    colour: typing.Optional[str] = None
 
 @dataclass
 class tile_locks_response:
     siteId: str
     tileId: str
-    deviceIds: List[str]
+    deviceIds: typing.List[str]
 
 %}

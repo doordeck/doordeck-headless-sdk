@@ -3,7 +3,7 @@
 def refresh_token(thiz, data):
     response = json.loads(_doordeck_headless_sdk.refreshTokenJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+    return token_response(**get_success_result(response))
 
 def logout(thiz):
     response = json.loads(_doordeck_headless_sdk.logoutJson(thiz))

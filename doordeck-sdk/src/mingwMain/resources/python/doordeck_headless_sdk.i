@@ -19,6 +19,7 @@
 %include "model/data/lock_operations.i"
 // Responses
 %include "model/responses/account_responses.i"
+%include "model/responses/lock_operation_responses.i"
 %include "model/responses/site_responses.i"
 %include "model/responses/tile_responses.i"
 // Wrapper

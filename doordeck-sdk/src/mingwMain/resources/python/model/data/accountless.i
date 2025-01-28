@@ -11,7 +11,7 @@ class registration_data:
      password: str
      force: str
      publicKey: str
-     displayName: Optional[str] = None
+     displayName: typing.Optional[str] = None
 
 @dataclass
 class verify_email_data:
