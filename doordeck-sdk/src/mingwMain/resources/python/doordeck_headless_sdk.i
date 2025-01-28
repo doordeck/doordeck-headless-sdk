@@ -29,10 +29,11 @@
 // Wrapper
 %include "wrapper/account.i"
 %include "wrapper/accountless.i"
-%include "wrapper/lock_operations.i"
-%include "wrapper/crypto_manager.i"
 %include "wrapper/context_manager.i"
-
+%include "wrapper/crypto_manager.i"
+%include "wrapper/lock_operations.i"
+%include "wrapper/sites.i"
+%include "wrapper/tiles.i"
 %{
 #include <stdbool.h>
 %}
