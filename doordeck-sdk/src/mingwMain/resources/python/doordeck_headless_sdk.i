@@ -17,6 +17,8 @@
 %include "model/data/accountless.i"
 %include "model/data/result.i"
 %include "model/data/lock_operations.i"
+%include "model/data/sites.i"
+%include "model/data/tiles.i"
 // Responses
 %include "model/responses/account_responses.i"
 %include "model/responses/lock_operation_responses.i"
