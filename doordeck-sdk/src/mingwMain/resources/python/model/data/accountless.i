@@ -1,30 +1,30 @@
 %pythoncode %{
 
 @dataclass
-class login_data:
-     email: str
-     password: str
+class LoginData:
+    email: str
+    password: str
 
 @dataclass
-class registration_data:
-     email: str
-     password: str
-     force: str
-     publicKey: str
-     displayName: typing.Optional[str] = None
+class RegistrationData:
+    email: str
+    password: str
+    force: str
+    publicKey: str
+    displayName: typing.Optional[str] = None
 
 @dataclass
-class verify_email_data:
-     code: str
+class VerifyEmailData:
+    code: str
 
 @dataclass
-class password_reset_data:
-     email: str
+class PasswordResetData:
+    email: str
 
 @dataclass
-class password_reset_verify_data:
-     user_id: str
-     token: str
-     password: str
+class PasswordResetVerifyData:
+    userId: str
+    token: str
+    password: str
 
 %}

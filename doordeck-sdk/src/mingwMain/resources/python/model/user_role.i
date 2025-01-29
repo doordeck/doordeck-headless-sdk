@@ -1,6 +1,6 @@
 %pythoncode %{
 
-class user_role(Enum):
+class UserRole(Enum):
     ADMIN = "ADMIN"
     USER = "USER"
 

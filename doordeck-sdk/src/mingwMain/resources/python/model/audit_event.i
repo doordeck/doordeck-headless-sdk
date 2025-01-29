@@ -1,6 +1,6 @@
 %pythoncode %{
 
-class audit_event(Enum):
+class AuditEvent(Enum):
     DOOR_OPEN = "DOOR_OPEN"
     DOOR_CLOSE = "DOOR_CLOSE"
     DOOR_UNLOCK = "DOOR_UNLOCK"

@@ -1,7 +1,7 @@
 %pythoncode %{
 
 @dataclass
-class tile_locks_response:
+class TileLocksResponse:
     siteId: str
     tileId: str
     deviceIds: typing.List[str]

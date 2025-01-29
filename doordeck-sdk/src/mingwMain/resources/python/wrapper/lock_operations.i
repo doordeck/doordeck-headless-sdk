@@ -3,27 +3,27 @@
 def get_single_lock(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getSingleLockJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return lock_response(**get_success_result(response))
+    return LockResponse(**get_success_result(response))
 
 def get_lock_audit_trail(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getLockAuditTrailJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return [audit_response(**item) for item in get_success_result(response)]
+    return [AuditResponse(**item) for item in get_success_result(response)]
 
 def get_audit_for_user(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getAuditForUserJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return [audit_response(**item) for item in get_success_result(response)]
+    return [AuditResponse(**item) for item in get_success_result(response)]
 
 def get_users_for_lock(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUsersForLockJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return [user_lock_response(**item) for item in get_success_result(response)]
+    return [UserLockResponse(**item) for item in get_success_result(response)]
 
 def get_locks_for_user(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getLocksForUserJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return lock_user_response(**get_success_result(response))
+    return UserLockResponse(**get_success_result(response))
 
 def update_lock_name(thiz, data):
     response = json.loads(_doordeck_headless_sdk.updateLockNameJson(thiz, json.dumps(dataclasses.asdict(data))))
@@ -60,52 +60,52 @@ def update_lock_setting_location_restrictions(thiz, data):
 def get_user_public_key(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_email(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByEmailJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_telephone(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByTelephoneJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_local_key(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByLocalKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_foreign_key(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByForeignKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_identity(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByIdentityJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return user_public_key_response(**get_success_result(response))
+    return UserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_emails(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByEmailsJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return batch_user_public_key_response(**get_success_result(response))
+    return BatchUserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_telephones(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByTelephonesJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return batch_user_public_key_response(**get_success_result(response))
+    return BatchUserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_local_keys(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByLocalKeysJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return batch_user_public_key_response(**get_success_result(response))
+    return BatchUserPublicKeyResponse(**get_success_result(response))
 
 def get_user_public_key_by_foreign_keys(thiz, data):
     response = json.loads(_doordeck_headless_sdk.getUserPublicKeyByForeignKeysJson(thiz, json.dumps(dataclasses.asdict(data))))
     handle_exception(response)
-    return batch_user_public_key_response(**get_success_result(response))
+    return BatchUserPublicKeyResponse(**get_success_result(response))
 
 def unlock(thiz, data):
     response = json.loads(_doordeck_headless_sdk.unlockJson(thiz, json.dumps(dataclasses.asdict(data))))
@@ -134,11 +134,11 @@ def update_secure_setting_unlock_between(thiz, data):
 def get_pinned_locks(thiz):
     response = json.loads(_doordeck_headless_sdk.getPinnedLocksJson(thiz))
     handle_exception(response)
-    return [lock_response(**item) for item in get_success_result(response)]
+    return [LockResponse(**item) for item in get_success_result(response)]
 
 def get_shareable_locks(thiz):
     response = json.loads(_doordeck_headless_sdk.getShareableLocksJson(thiz))
     handle_exception(response)
-    return [shareable_lock_response(**item) for item in get_success_result(response)]
+    return [ShareableLockResponse(**item) for item in get_success_result(response)]
 
 %}

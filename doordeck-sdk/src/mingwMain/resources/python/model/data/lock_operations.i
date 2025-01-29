@@ -1,73 +1,73 @@
 %pythoncode %{
 
 @dataclass
-class get_single_lock_data:
+class GetSingleLockData:
     lockId: str
 
 @dataclass
-class get_lock_audit_trail_data:
+class GetLockAuditTrailData:
     lockId: str
     start: int
     end: int
 
 @dataclass
-class get_audit_for_user_data:
+class GetAuditForUserData:
     userId: str
     start: int
     end: int
 
 @dataclass
-class get_users_for_lock_data:
+class GetUsersForLockData:
     lockId: str
 
 @dataclass
-class get_locks_for_user_data:
+class GetLocksForUserData:
     userId: str
 
 @dataclass
-class update_lock_name_dData:
+class UpdateLockNameData:
     lockId: str
     name: typing.Optional[str] = None
 
 @dataclass
-class update_lock_favourite_data:
+class UpdateLockFavouriteData:
     lockId: str
     favourite: typing.Optional[bool] = None
 
 @dataclass
-class update_lock_colour_data:
+class UpdateLockColourData:
     lockId: str
     colour: typing.Optional[str] = None
 
 @dataclass
-class update_lock_setting_default_name_data:
+class UpdateLockSettingDefaultNameData:
     lockId: str
     name: typing.Optional[str] = None
 
 @dataclass
-class set_lock_setting_permitted_addresses_data:
+class SetLockSettingPermittedAddressesData:
     lockId: str
     permittedAddresses: typing.List[str]
 
 @dataclass
-class update_lock_setting_hidden_data:
+class UpdateLockSettingHiddenData:
     lockId: str
     hidden: bool
 
 @dataclass
-class time_requirement_data:
+class TimeRequirementData:
     start: str
     end: str
     timezone: str
     days: typing.List[str]
 
 @dataclass
-class set_lock_setting_time_restrictions_data:
+class SetLockSettingTimeRestrictionsData:
     lockId: str
-    times: typing.List[time_requirement_data]
+    times: typing.List[TimeRequirementData]
 
 @dataclass
-class location_requirement_data:
+class LocationRequirementData:
     latitude: float
     longitude: float
     enabled: typing.Optional[bool] = None
@@ -75,61 +75,61 @@ class location_requirement_data:
     accuracy: typing.Optional[int] = None
 
 @dataclass
-class update_lock_setting_location_restrictions_data:
+class UpdateLockSettingLocationRestrictionsData:
     lockId: str
-    location: typing.Optional[location_requirement_data] = None
+    location: typing.Optional[LocationRequirementData] = None
 
 @dataclass
-class get_user_public_key_data:
+class GetUserPublicKeyData:
     userEmail: str
     visitor: bool = False
 
 @dataclass
-class get_user_public_key_by_email_data:
+class GetUserPublicKeyByEmailData:
     email: str
 
 @dataclass
-class get_user_public_key_by_telephone_data:
+class GetUserPublicKeyByTelephoneData:
     telephone: str
 
 @dataclass
-class get_user_public_key_by_local_key_data:
+class GetUserPublicKeyByLocalKeyData:
     localKey: str
 
 @dataclass
-class get_user_public_key_by_foreign_key_data:
+class GetUserPublicKeyByForeignKeyData:
     foreignKey: str
 
 @dataclass
-class get_user_public_key_by_identity_data:
+class GetUserPublicKeyByIdentityData:
     identity: str
 
 @dataclass
-class get_user_public_key_by_emails_data:
+class GetUserPublicKeyByEmailsData:
     emails: typing.List[str]
 
 @dataclass
-class get_user_public_key_by_telephones_data:
+class GetUserPublicKeyByTelephonesData:
     telephones: typing.List[str]
 
 @dataclass
-class get_user_public_key_by_local_keys_data:
+class GetUserPublicKeyByLocalKeysData:
     localKeys: typing.List[str]
 
 @dataclass
-class get_user_public_key_by_foreign_keys_data:
+class GetUserPublicKeyByForeignKeysData:
     foreignKeys: typing.List[str]
 
 @dataclass
-class share_lock_data:
+class ShareLockData:
     targetUserId: str
-    targetUserRole: user_role
+    targetUserRole: UserRole
     targetUserPublicKey: str
     start: typing.Optional[int] = None
     end: typing.Optional[int] = None
 
 @dataclass
-class base_operation_data:
+class BaseOperationData:
     lockId: str
     userId: typing.Optional[str] = None
     userCertificateChain: typing.Optional[typing.List[str]] = None
@@ -140,27 +140,27 @@ class base_operation_data:
     jti: str = field(default_factory=lambda: str(uuid.uuid4()))
 
 @dataclass
-class share_lock_operation_data:
-    baseOperation: base_operation_data
-    shareLock: share_lock_data
+class ShareLockOperationData:
+    baseOperation: BaseOperationData
+    shareLock: ShareLockData
 
 @dataclass
-class batch_share_lock_operation_data:
-    baseOperation: base_operation_data
-    users: typing.List[share_lock_data]
+class BatchShareLockOperationData:
+    baseOperation: BaseOperationData
+    users: typing.List[ShareLockData]
 
 @dataclass
-class revoke_access_to_lock_operation_data:
-    baseOperation: base_operation_data
+class RevokeAccessToLockOperationData:
+    baseOperation: BaseOperationData
     users: typing.List[str]
 
 @dataclass
-class update_secure_setting_unlock_duration_data:
-    baseOperation: base_operation_data
+class UpdateSecureSettingUnlockDurationData:
+    baseOperation: BaseOperationData
     unlockDuration: int
 
 @dataclass
-class unlock_between_data:
+class UnlockBetweenData:
     start: str
     end: str
     timezone: str
@@ -168,13 +168,13 @@ class unlock_between_data:
     exceptions: typing.Optional[typing.List[str]] = None
 
 @dataclass
-class unlock_operation_data:
-    baseOperation: base_operation_data
+class UnlockOperationData:
+    baseOperation: BaseOperationData
     directAccessEndpoints: typing.Optional[typing.List[str]] = None
 
 @dataclass
-class update_secure_setting_unlock_between_data:
-    baseOperation: base_operation_data
-    unlockBetween: typing.Optional[unlock_between_data] = None
+class UpdateSecureSettingUnlockBetweenData:
+    baseOperation: BaseOperationData
+    unlockBetween: typing.Optional[UnlockBetweenData] = None
 
 %}

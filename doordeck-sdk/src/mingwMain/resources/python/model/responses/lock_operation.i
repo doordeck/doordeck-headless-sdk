@@ -1,65 +1,65 @@
 %pythoncode %{
 
 @dataclass
-class audit_subject_response:
+class AuditSubjectResponse:
     userId: str
     email: str
     displayName: typing.Optional[str] = None
 
 @dataclass
-class audit_issuer_response:
+class AuditIssuerResponse:
     userId: str
     email: typing.Optional[str] = None
     ip: typing.Optional[str] = None
 
 @dataclass
-class audit_response:
+class AuditResponse:
     deviceId: str
     timestamp: float
-    type: audit_event
-    issuer: audit_issuer_response
+    type: AuditEvent
+    issuer: AuditIssuerResponse
     rejected: bool
-    subject: typing.Optional[audit_subject_response] = None
+    subject: typing.Optional[AuditSubjectResponse] = None
     rejectionReason: typing.Optional[str] = None
 
 @dataclass
-class lock_user_details_response:
+class LockUserDetailsResponse:
     deviceId: str
-    role: user_role
+    role: UserRole
     start: typing.Optional[float] = None
     end: typing.Optional[float] = None
 
 @dataclass
-class lock_user_response:
+class LockUserResponse:
     userId: str
     email: str
     publicKey: str
     orphan: bool
     foreign: bool
-    devices: typing.List[lock_user_details_response]
+    devices: typing.List[LockUserDetailsResponse]
     displayName: typing.Optional[str] = None
     start: typing.Optional[float] = None
     end: typing.Optional[float] = None
 
 @dataclass
-class user_lock_response:
+class UserLockResponse:
     userId: str
     email: str
     publicKey: str
     orphan: bool
     foreign: bool
-    role: user_role
+    role: UserRole
     displayName: typing.Optional[str] = None
     start: typing.Optional[float] = None
     end: typing.Optional[float] = None
 
 @dataclass
-class shareable_lock_response:
+class ShareableLockResponse:
     id: str
     name: str
 
 @dataclass
-class batch_user_public_key_response:
+class BatchUserPublicKeyResponse:
     id: str
     publicKey: str
     email: typing.Optional[str] = None
@@ -67,17 +67,17 @@ class batch_user_public_key_response:
     phone: typing.Optional[str] = None
 
 @dataclass
-class user_public_key_response:
+class UserPublicKeyResponse:
     id: str
     publicKey: str
 
 @dataclass
-class lock_state_response:
+class LockStateResponse:
     locked: bool
     connected: bool
 
 @dataclass
-class unlock_between_setting_response:
+class UnlockBetweenSettingResponse:
     start: str
     end: str
     timezone: str
@@ -85,7 +85,7 @@ class unlock_between_setting_response:
     exceptions: typing.Optional[typing.List[str]] = None
 
 @dataclass
-class location_requirement_response:
+class LocationRequirementResponse:
     latitude: float
     longitude: float
     enabled: typing.Optional[bool] = None
@@ -93,36 +93,36 @@ class location_requirement_response:
     accuracy: typing.Optional[int] = None
 
 @dataclass
-class time_requirement_response:
+class TimeRequirementResponse:
     start: str
     end: str
     timezone: str
     days: typing.List[str]
 
 @dataclass
-class usage_requirements_response:
-    time: typing.Optional[typing.List[time_requirement_response]] = None
-    location: typing.Optional[location_requirement_response] = None
+class UsageRequirementsResponse:
+    time: typing.Optional[typing.List[TimeRequirementResponse]] = None
+    location: typing.Optional[LocationRequirementResponse] = None
 
 @dataclass
-class lock_settings_response:
+class LockSettingsResponse:
     unlockTime: float
     permittedAddresses: typing.List[str]
     defaultName: str
     tiles: typing.List[str]
     hidden: bool
     directAccessEndpoints: typing.List[str]
-    capabilities: typing.Dict[capability_type, capability_status]
-    usageRequirements: typing.Optional[usage_requirements_response] = None
-    unlockBetweenWindow: typing.Optional[unlock_between_setting_response] = None
+    capabilities: typing.Dict[CapabilityType, CapabilityStatus]
+    usageRequirements: typing.Optional[UsageRequirementsResponse] = None
+    unlockBetweenWindow: typing.Optional[UnlockBetweenSettingResponse] = None
 
 @dataclass
-class lock_response:
+class LockResponse:
     id: str
     name: str
-    role: user_role
-    settings: lock_settings_response
-    state: lock_state_response
+    role: UserRole
+    settings: LockSettingsResponse
+    state: LockStateResponse
     favourite: bool
     colour: typing.Optional[str] = None
     start: typing.Optional[str] = None

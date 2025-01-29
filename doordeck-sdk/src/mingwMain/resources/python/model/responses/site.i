@@ -1,7 +1,7 @@
 %pythoncode %{
 
 @dataclass
-class site_response:
+class SiteResponse:
     id: str
     name: str
     colour: str
@@ -13,35 +13,35 @@ class site_response:
     updated: str
 
 @dataclass
-class site_state_response:
+class SiteStateResponse:
     connected: bool
 
 @dataclass
-class user_for_site_response:
+class UserForSiteResponse:
     userId: str
     email: str
     orphan: bool
     displayName: typing.Optional[str] = None
 
 @dataclass
-class site_lock_settings_response:
+class SiteLockSettingsResponse:
     unlockTime: float
     permittedAddresses: typing.List[str]
     defaultName: str
     tiles: typing.List[str]
-    state: typing.Optional[site_state_response] = None
+    state: typing.Optional[SiteStateResponse] = None
     favourite: typing.Optional[bool] = None
 
 @dataclass
-class site_locks_response:
+class SiteLocksResponse:
     id: str
     name: str
-    role: user_role
-    settings: site_lock_settings_response
+    role: UserRole
+    settings: SiteLockSettingsResponse
     colour: typing.Optional[str] = None
 
 @dataclass
-class tile_locks_response:
+class TileLocksResponse:
     siteId: str
     tileId: str
     deviceIds: typing.List[str]

@@ -1,30 +1,30 @@
 %pythoncode %{
 
 @dataclass
-class refresh_token_data:
+class RefreshTokenData:
     refreshToken: str
 
 @dataclass
-class register_ephemeral_key_data:
+class RegisterEphemeralKeyData:
     publicKey: str
 
 @dataclass
-class register_ephemeral_key_withSecondary_authentication_data:
+class RegisterEphemeralKeyWithSecondaryAuthenticationData:
     publicKey: str
-    method: typing.Optional[two_factor_method] = None
+    method: typing.Optional[TwoFactorMethod] = None
 
 @dataclass
-class verify_ephemeral_key_registration_data:
-        code: str
-        privateKey: typing.Optional[str] = None
+class VerifyEphemeralKeyRegistrationData:
+    code: str
+    privateKey: typing.Optional[str] = None
 
 @dataclass
-class change_password_data:
+class ChangePasswordData:
     oldPassword: str
     newPassword: str
 
 @dataclass
-class update_user_details_data:
+class UpdateUserDetailsData:
     displayName: str
 
 %}

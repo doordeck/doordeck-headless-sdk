@@ -1,11 +1,11 @@
 %pythoncode %{
 
 @dataclass
-class get_locks_belonging_to_tile_data:
+class GetLocksBelongingToTileData:
     tileId: str
 
 @dataclass
-class associate_multiple_locks_data:
+class AssociateMultipleLocksData:
     tileId: str
     siteId: str
     lockIds: typing.List[str]

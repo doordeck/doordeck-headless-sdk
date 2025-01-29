@@ -1,6 +1,6 @@
 %pythoncode %{
 
-class two_factor_method(Enum):
+class TwoFactorMethod(Enum):
     EMAIL = "EMAIL"
     TELEPHONE = "TELEPHONE"
     SMS = "SMS"

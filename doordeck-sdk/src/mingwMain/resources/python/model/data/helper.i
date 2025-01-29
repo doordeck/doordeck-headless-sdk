@@ -1,22 +1,22 @@
 %pythoncode %{
 
 @dataclass
-class upload_platform_logo_data:
+class UploadPlatformLogoData:
     applicationId: str
     contentType: str
     image: str
 
 @dataclass
-class assisted_login_data:
+class AssistedLoginData:
     email: str
     password: str
 
 @dataclass
-class assisted_register_ephemeral_key_data:
+class AssistedRegisterEphemeralKeyData:
     publicKey: str
 
 @dataclass
-class assisted_register_data:
+class AssistedRegisterData:
     email: str
     password: str
     displayName: typing.Optional[str] = None

@@ -1,7 +1,7 @@
 %pythoncode %{
 
 @dataclass
-class operation_context_data:
+class OperationContextData:
     userId: str
     userCertificateChain: str
     userPublicKey: str

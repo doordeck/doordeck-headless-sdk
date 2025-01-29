@@ -1,11 +1,11 @@
 %pythoncode %{
 
 @dataclass
-class get_locks_for_site_data:
+class GetLocksForSiteData:
     siteId: str
 
 @dataclass
-class get_users_for_site_data:
+class GetUsersForSiteData:
     siteId: str
 
 %}

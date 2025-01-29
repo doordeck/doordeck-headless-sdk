@@ -1,11 +1,11 @@
 %pythoncode %{
 
 @dataclass
-class assisted_login_response:
+class AssistedLoginResponse:
     requiresVerification: bool
 
 @dataclass
-class assisted_register_ephemeral_key_response:
+class AssistedRegisterEphemeralKeyResponse:
     requiresVerification: bool
 
 %}

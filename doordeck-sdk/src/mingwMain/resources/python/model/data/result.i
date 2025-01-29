@@ -1,17 +1,17 @@
 %pythoncode %{
 
 @dataclass
-class success_result_data:
+class SuccessResultData:
     result: typing.Any
 
 @dataclass
-class failed_result_data:
+class FailedResultData:
     exceptionType: str
     exceptionMessage: str
 
 @dataclass
-class result_data:
-    success: typing.Optional[success_result_data] = None
-    failure: typing.Optional[failed_result_data] = None
+class ResultData:
+    success: typing.Optional[SuccessResultData] = None
+    failure: typing.Optional[FailedResultData] = None
 
 %}

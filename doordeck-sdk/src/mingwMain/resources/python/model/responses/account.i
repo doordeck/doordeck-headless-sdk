@@ -1,24 +1,24 @@
 %pythoncode %{
 
 @dataclass
-class token_response:
+class TokenResponse:
     authToken: str
     refreshToken: str
 
 @dataclass
-class user_details_response:
+class UserDetailsResponse:
     email: str
     emailVerified: bool
     publicKey: str
     displayName: typing.Optional[str] = None
 
 @dataclass
-class register_ephemeral_key_response:
+class RegisterEphemeralKeyResponse:
     certificateChain: [typing.List[str]]
     userId: str
 
 @dataclass
-class register_ephemeral_key_with_secondary_authentication_response:
-    method: two_factor_method
+class RegisterEphemeralKeyWithSecondaryAuthenticationResponse:
+    method: TwoFactorMethod
 
 %}
