@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
+import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.api.model.Fusion
@@ -7,22 +11,26 @@ import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        FusionResourceImpl.login("", "").await()
+        val response = FusionResourceImpl.login("", "").await()
+        assertEquals(FUSION_LOGIN_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        FusionResourceImpl.getIntegrationType().await()
+        val response = FusionResourceImpl.getIntegrationType().await()
+        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        FusionResourceImpl.getIntegrationConfiguration("").await()
+        val response = FusionResourceImpl.getIntegrationConfiguration("").await()
+        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
     }
 
     @Test
@@ -37,7 +45,8 @@ class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID).await()
+        val response = FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID).await()
+        assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test

@@ -1,21 +1,25 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.MockTest
+import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
 import com.doordeck.multiplatform.sdk.internal.api.AccountlessResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class AccountlessResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        AccountlessResourceImpl.login("", "").await()
+        val response = AccountlessResourceImpl.login("", "").await()
+        assertEquals(TOKEN_RESPONSE, response)
     }
 
     @Test
     fun shouldRegister() = runTest {
-        AccountlessResourceImpl.registration("", "", "", false).await()
+        val response = AccountlessResourceImpl.registration("", "", "", false).await()
+        assertEquals(TOKEN_RESPONSE, response)
     }
 
     @Test
