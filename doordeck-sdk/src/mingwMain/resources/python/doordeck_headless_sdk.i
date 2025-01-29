@@ -17,6 +17,7 @@
 %include "model/data/context.i"
 %include "model/data/helper.i"
 %include "model/data/lock_operations.i"
+%include "model/data/platform.i"
 %include "model/data/result.i"
 %include "model/data/sites.i"
 %include "model/data/tiles.i"
@@ -24,6 +25,7 @@
 %include "model/responses/account.i"
 %include "model/responses/helper.i"
 %include "model/responses/lock_operation.i"
+%include "model/responses/platform.i"
 %include "model/responses/site.i"
 %include "model/responses/tile.i"
 // Wrapper
@@ -32,8 +34,10 @@
 %include "wrapper/context_manager.i"
 %include "wrapper/crypto_manager.i"
 %include "wrapper/lock_operations.i"
+%include "wrapper/platform.i"
 %include "wrapper/sites.i"
 %include "wrapper/tiles.i"
+
 %{
 #include <stdbool.h>
 %}

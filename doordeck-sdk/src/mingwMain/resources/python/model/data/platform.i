@@ -84,80 +84,38 @@ class AuthKeyData(ABC):
     kid: str
     kty: str
     use: str
-    alg: Optional[str] = None
+    alg: str
 
     @abstractmethod
-    def __init__(self, kid: str, kty: str, use: str, alg: Optional[str] = None):
-        self.kid = kid
-        self.kty = kty
-        self.use = use
-        self.alg = alg
+    def some_abstract_method(self):
+        pass  # Placeholder for a required method in subclasses
 
 @dataclass
-class RsaKeyData(AuthKeyData):
+class RsaKeyData(AuthKeyData, ABC):
+    p: str
+    q: str
+    d: str
+    e: str
+    qi: str
+    dp: str
+    dq: str
+    n: str
     kty: str = "RSA"
 
-    def __init__(
-        self,
-        kid: str,
-        use: str,
-        p: str,
-        q: str,
-        d: str,
-        e: str,
-        qi: str,
-        dp: str,
-        dq: str,
-        n: str,
-        alg: Optional[str] = None,
-    ):
-        super().__init__(kid, self.kty, use, alg)
-        self.p = p
-        self.q = q
-        self.d = d
-        self.e = e
-        self.qi = qi
-        self.dp = dp
-        self.dq = dq
-        self.n = n
-
 @dataclass
-class EcKeyData(AuthKeyData):
+class EcKeyData(AuthKeyData, ABC):
+    d: str
+    crv: str
+    x: str
+    y: str
     kty: str = "EC"
 
-    def __init__(
-        self,
-        kid: str,
-        use: str,
-        d: str,
-        crv: str,
-        x: str,
-        y: str,
-        alg: Optional[str] = None,
-    ):
-        super().__init__(kid, self.kty, use, alg)
-        self.d = d
-        self.crv = crv
-        self.x = x
-        self.y = y
-
 @dataclass
-class Ed25519KeyData(AuthKeyData):
+class Ed25519KeyData(AuthKeyData, ABC):
+    d: str
+    crv: str
+    x: str
     kty: str = "OKP"
-
-    def __init__(
-        self,
-        kid: str,
-        use: str,
-        d: str,
-        crv: str,
-        x: str,
-        alg: Optional[str] = None,
-    ):
-        super().__init__(kid, self.kty, use, alg)
-        self.d = d
-        self.crv = crv
-        self.x = x
 
 @dataclass
 class AddAuthKeyData:

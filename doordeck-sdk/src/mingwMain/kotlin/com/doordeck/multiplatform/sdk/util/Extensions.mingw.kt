@@ -32,7 +32,7 @@ internal inline fun <reified T>resultData(crossinline block: () -> T): String {
         val result = block()
         val success = if (result != Unit) result else null
         ResultData(SuccessResultData(success))
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         val errorMessage = exception.message ?: exception.cause?.message ?: "Unknown error occurred"
         ResultData(failure = FailedResultData(exception.toString(), errorMessage))
     }.toJson()
