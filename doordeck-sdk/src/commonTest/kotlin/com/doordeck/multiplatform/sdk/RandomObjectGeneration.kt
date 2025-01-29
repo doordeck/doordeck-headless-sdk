@@ -272,7 +272,7 @@ internal fun randomApplicationResponse(): ApplicationResponse = ApplicationRespo
     isDoordeckApplication = randomBoolean()
 )
 
-internal fun randomAuthKeyResponse(): AuthKeyResponse = when(listOf(RsaKeyResponse::class, EcKeyResponse::class, Ed25519KeyResponse::class)) {
+internal fun randomAuthKeyResponse(): AuthKeyResponse = when(listOf(RsaKeyResponse::class, EcKeyResponse::class, Ed25519KeyResponse::class).random()) {
     RsaKeyResponse::class -> randomRsaKeyResponse()
     EcKeyResponse::class -> randomEcKeyResponse()
     Ed25519KeyResponse::class -> randomEd25519KeyResponse()
