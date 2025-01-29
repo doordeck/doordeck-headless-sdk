@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_UPLOAD_URL
 import com.doordeck.multiplatform.sdk.api.model.AuditEvent
 import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
 import com.doordeck.multiplatform.sdk.api.model.CapabilityType
@@ -297,7 +298,7 @@ internal fun randomApplicationOwnerDetailsResponse(): ApplicationOwnerDetailsRes
 )
 
 internal fun randomGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
-    uploadUrl = randomString()
+    uploadUrl = DEFAULT_UPLOAD_URL
 )
 
 /**
