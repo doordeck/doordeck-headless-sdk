@@ -12,10 +12,13 @@ import com.doordeck.multiplatform.sdk.api.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.api.responses.AuditIssuerResponse
 import com.doordeck.multiplatform.sdk.api.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.api.responses.AuditSubjectResponse
+import com.doordeck.multiplatform.sdk.api.responses.AuthKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.ControllerResponse
 import com.doordeck.multiplatform.sdk.api.responses.DiscoveredDeviceResponse
 import com.doordeck.multiplatform.sdk.api.responses.DoorStateResponse
+import com.doordeck.multiplatform.sdk.api.responses.EcKeyResponse
+import com.doordeck.multiplatform.sdk.api.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.EmailCallToActionResponse
 import com.doordeck.multiplatform.sdk.api.responses.EmailPreferencesResponse
 import com.doordeck.multiplatform.sdk.api.responses.FusionLoginResponse
@@ -31,6 +34,7 @@ import com.doordeck.multiplatform.sdk.api.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.api.responses.OauthResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.api.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.api.responses.ServiceStateResponse
 import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.api.responses.ShareableLockResponse
@@ -263,9 +267,66 @@ internal fun randomApplicationResponse(): ApplicationResponse = ApplicationRespo
     appLink = randomNullable { randomString() },
     slug = randomNullable { randomString() },
     emailPreferences = randomEmailPreferencesResponse(),
-    authKeys = emptyMap(),
+    authKeys = (1..3).associate { randomString() to randomAuthKeyResponse() },
     oauth = randomNullable { randomOauthResponse() },
     isDoordeckApplication = randomBoolean()
+)
+
+internal fun randomAuthKeyResponse(): AuthKeyResponse = when(listOf(RsaKeyResponse::class, EcKeyResponse::class, Ed25519KeyResponse::class)) {
+    RsaKeyResponse::class -> randomRsaKeyResponse()
+    EcKeyResponse::class -> randomEcKeyResponse()
+    Ed25519KeyResponse::class -> randomEd25519KeyResponse()
+    else -> error("Unknown key class")
+}
+
+internal fun randomRsaKeyResponse(): RsaKeyResponse = RsaKeyResponse(
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    ops = randomNullable { (1..3).map { randomString() } },
+    x5u = randomNullable { randomString() },
+    x5t = randomNullable { randomString() },
+    x5t256 = randomNullable { randomString() },
+    x5c = randomNullable { (1..3).map { randomString() } },
+    exp = randomNullable { randomInt() },
+    nbf = randomNullable { randomInt() },
+    iat = randomNullable { randomInt() },
+    e = randomString(),
+    n = randomString()
+)
+
+internal fun randomEcKeyResponse(): EcKeyResponse = EcKeyResponse(
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    ops = randomNullable { (1..3).map { randomString() } },
+    x5u = randomNullable { randomString() },
+    x5t = randomNullable { randomString() },
+    x5t256 = randomNullable { randomString() },
+    x5c = randomNullable { (1..3).map { randomString() } },
+    exp = randomNullable { randomInt() },
+    nbf = randomNullable { randomInt() },
+    iat = randomNullable { randomInt() },
+    crv = randomString(),
+    x = randomString(),
+    y = randomString()
+)
+
+internal fun randomEd25519KeyResponse(): Ed25519KeyResponse = Ed25519KeyResponse(
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    ops = randomNullable { (1..3).map { randomString() } },
+    x5u = randomNullable { randomString() },
+    x5t = randomNullable { randomString() },
+    x5t256 = randomNullable { randomString() },
+    x5c = randomNullable { (1..3).map { randomString() } },
+    exp = randomNullable { randomInt() },
+    nbf = randomNullable { randomInt() },
+    iat = randomNullable { randomInt() },
+    d = randomNullable { randomString() },
+    crv = randomString(),
+    x = randomString()
 )
 
 internal fun randomEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(

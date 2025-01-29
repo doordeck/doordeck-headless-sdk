@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
+import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.api.model.DeleteDoorData
@@ -11,40 +15,48 @@ import com.doordeck.multiplatform.sdk.api.model.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.api.model.StartDoorData
 import com.doordeck.multiplatform.sdk.api.model.StopDoorData
 import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
+import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        FusionResourceImpl.login("", "")
+        val response = FusionResourceImpl.login("", "")
+        assertEquals(FUSION_LOGIN_RESPONSE, response)
     }
 
     @Test
     fun shouldLoginJson() = runTest {
-        FusionResourceImpl.loginJson(FusionLoginData("", "").toJson())
+        val response = FusionResourceImpl.loginJson(FusionLoginData("", "").toJson())
+        assertEquals(FUSION_LOGIN_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        FusionResourceImpl.getIntegrationType()
+        val response = FusionResourceImpl.getIntegrationType()
+        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationTypeJson() = runTest {
-        FusionResourceImpl.getIntegrationTypeJson()
+        val response = FusionResourceImpl.getIntegrationTypeJson()
+        assertEquals(INTEGRATION_TYPE_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        FusionResourceImpl.getIntegrationConfiguration("")
+        val response = FusionResourceImpl.getIntegrationConfiguration("")
+        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationConfigurationJson() = runTest {
-        FusionResourceImpl.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
+        val response = FusionResourceImpl.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
+        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
@@ -69,12 +81,14 @@ class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
+        val response = FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
+        assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetDoorStatusJson() = runTest {
-        FusionResourceImpl.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
+        val response = FusionResourceImpl.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
+        assertEquals(DOOR_STATE_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
