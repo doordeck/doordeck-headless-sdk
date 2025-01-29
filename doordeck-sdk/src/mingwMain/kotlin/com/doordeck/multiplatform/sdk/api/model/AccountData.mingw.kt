@@ -3,34 +3,34 @@ package com.doordeck.multiplatform.sdk.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class RefreshTokenData(
+data class RefreshTokenData(
     val refreshToken: String
 )
 
 @Serializable
-class RegisterEphemeralKeyData(
+data class RegisterEphemeralKeyData(
     val publicKey: String
 )
 
 @Serializable
-class RegisterEphemeralKeyWithSecondaryAuthenticationData(
+data class RegisterEphemeralKeyWithSecondaryAuthenticationData(
     val publicKey: String? = null,
     val method: TwoFactorMethod? = null
 )
 
 @Serializable
-class VerifyEphemeralKeyRegistrationData(
+data class VerifyEphemeralKeyRegistrationData(
     val code: String,
     val privateKey: String? = null
 )
 
 @Serializable
-class ChangePasswordData(
+data class ChangePasswordData(
     val oldPassword: String,
     val newPassword: String
 )
 
 @Serializable
-class UpdateUserDetailsData(
+data class UpdateUserDetailsData(
     val displayName: String
 )

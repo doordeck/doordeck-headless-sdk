@@ -9,7 +9,7 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class LockResponse(
+data class LockResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
@@ -24,7 +24,7 @@ class LockResponse(
 
 @JsExport
 @Serializable
-class LockSettingsResponse(
+data class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: List<String>,
     val defaultName: String,
@@ -38,14 +38,14 @@ class LockSettingsResponse(
 
 @JsExport
 @Serializable
-class UsageRequirementsResponse(
+data class UsageRequirementsResponse(
     val time: List<TimeRequirementResponse>? = null,
     val location: LocationRequirementResponse? = null
 )
 
 @JsExport
 @Serializable
-class TimeRequirementResponse(
+data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
@@ -54,7 +54,7 @@ class TimeRequirementResponse(
 
 @JsExport
 @Serializable
-class LocationRequirementResponse(
+data class LocationRequirementResponse(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean? = null,
@@ -64,7 +64,7 @@ class LocationRequirementResponse(
 
 @JsExport
 @Serializable
-class UnlockBetweenSettingResponse(
+data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
@@ -74,21 +74,21 @@ class UnlockBetweenSettingResponse(
 
 @JsExport
 @Serializable
-class LockStateResponse(
+data class LockStateResponse(
     val locked: Boolean,
     val connected: Boolean
 )
 
 @JsExport
 @Serializable
-class UserPublicKeyResponse(
+data class UserPublicKeyResponse(
     val id: String,
     val publicKey: String
 )
 
 @JsExport
 @Serializable
-class BatchUserPublicKeyResponse(
+data class BatchUserPublicKeyResponse(
     val id: String,
     val email: String? = null,
     val foreignKey: String? = null,
@@ -98,14 +98,14 @@ class BatchUserPublicKeyResponse(
 
 @JsExport
 @Serializable
-class ShareableLockResponse(
+data class ShareableLockResponse(
     val id: String,
     val name: String
 )
 
 @JsExport
 @Serializable
-class UserLockResponse(
+data class UserLockResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -119,7 +119,7 @@ class UserLockResponse(
 
 @JsExport
 @Serializable
-class LockUserResponse(
+data class LockUserResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -133,7 +133,7 @@ class LockUserResponse(
 
 @JsExport
 @Serializable
-class LockUserDetailsResponse(
+data class LockUserDetailsResponse(
     val deviceId: String,
     val role: UserRole,
     val start: Double? = null,
@@ -142,7 +142,7 @@ class LockUserDetailsResponse(
 
 @JsExport
 @Serializable
-class AuditResponse(
+data class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
     val type: AuditEvent,
@@ -154,7 +154,7 @@ class AuditResponse(
 
 @JsExport
 @Serializable
-class AuditIssuerResponse(
+data class AuditIssuerResponse(
     val userId: String,
     val email: String? = null,
     val ip: String? = null
@@ -162,7 +162,7 @@ class AuditIssuerResponse(
 
 @JsExport
 @Serializable
-class AuditSubjectResponse(
+data class AuditSubjectResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null

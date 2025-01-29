@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.api.model.Platform
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CreateApplicationRequest(
+data class CreateApplicationRequest(
     val name: String,
     val companyName: String,
     val mailingAddress: String,
@@ -19,47 +19,47 @@ class CreateApplicationRequest(
 sealed interface UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationNameRequest(
+data class UpdateApplicationNameRequest(
     val name: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationCompanyNameRequest(
+data class UpdateApplicationCompanyNameRequest(
     val companyName: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationMailingAddressRequest(
+data class UpdateApplicationMailingAddressRequest(
     val mailingAddress: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationPrivacyPolicyRequest(
+data class UpdateApplicationPrivacyPolicyRequest(
     val privacyPolicy: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationSupportContactRequest(
+data class UpdateApplicationSupportContactRequest(
     val supportContact: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationAppLinkRequest(
+data class UpdateApplicationAppLinkRequest(
     val appLink: String
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationEmailPreferencesRequest(
+data class UpdateApplicationEmailPreferencesRequest(
     val emailPreferences: EmailPreferencesRequest
 ): UpdateApplicationRequest
 
 @Serializable
-class UpdateApplicationLogoUrlRequest(
+data class UpdateApplicationLogoUrlRequest(
     val logoUrl: String
 ): UpdateApplicationRequest
 
 @Serializable
-class EmailPreferencesRequest(
+data class EmailPreferencesRequest(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String? = null,
@@ -69,44 +69,44 @@ class EmailPreferencesRequest(
 )
 
 @Serializable
-class CallToActionRequest(
+data class CallToActionRequest(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @Serializable
-class AddAuthIssuerRequest(
+data class AddAuthIssuerRequest(
     val url: String
 )
 
 @Serializable
-class DeleteAuthIssuerRequest(
+data class DeleteAuthIssuerRequest(
     val url: String
 )
 
 @Serializable
-class AddCorsDomainRequest(
+data class AddCorsDomainRequest(
     val url: String
 )
 
 @Serializable
-class RemoveCorsDomainRequest(
+data class RemoveCorsDomainRequest(
     val url: String
 )
 
 @Serializable
-class AddApplicationOwnerRequest(
+data class AddApplicationOwnerRequest(
     val userId: String
 )
 
 @Serializable
-class RemoveApplicationOwnerRequest(
+data class RemoveApplicationOwnerRequest(
     val userId: String
 )
 
 @Serializable
-class GetLogoUploadUrlRequest(
+data class GetLogoUploadUrlRequest(
     val contentType: String
 )
 
@@ -119,7 +119,7 @@ sealed interface AddAuthKeyRequest {
 }
 
 @Serializable
-class AddRsaKeyRequest(
+data class AddRsaKeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,
@@ -135,7 +135,7 @@ class AddRsaKeyRequest(
 ): AddAuthKeyRequest
 
 @Serializable
-class AddEcKeyRequest(
+data class AddEcKeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,
@@ -147,7 +147,7 @@ class AddEcKeyRequest(
 ): AddAuthKeyRequest
 
 @Serializable
-class AddEd25519KeyRequest(
+data class AddEd25519KeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,

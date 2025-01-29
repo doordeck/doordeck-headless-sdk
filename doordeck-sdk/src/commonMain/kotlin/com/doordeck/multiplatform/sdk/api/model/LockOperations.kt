@@ -9,14 +9,14 @@ import kotlin.uuid.Uuid
 @JsExport
 object LockOperations {
 
-    class TimeRequirement(
+    data class TimeRequirement(
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
         val days: List<String>
     )
 
-    class LocationRequirement @JvmOverloads constructor(
+    data class LocationRequirement @JvmOverloads constructor(
         val latitude: Double,
         val longitude: Double,
         val enabled: Boolean? = null,
@@ -24,7 +24,7 @@ object LockOperations {
         val accuracy: Int? = null
     )
 
-    class UnlockBetween @JvmOverloads constructor(
+    data class UnlockBetween @JvmOverloads constructor(
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
@@ -32,17 +32,17 @@ object LockOperations {
         val exceptions: List<String>? = null
     )
 
-    class UnlockOperation @JvmOverloads constructor(
+    data class UnlockOperation @JvmOverloads constructor(
         val baseOperation: BaseOperation,
         val directAccessEndpoints: List<String>? = null
     ): Operation
 
-    class ShareLockOperation(
+    data class ShareLockOperation(
         val baseOperation: BaseOperation,
         val shareLock: ShareLock
     ): Operation
 
-    class ShareLock @JvmOverloads constructor(
+    data class ShareLock @JvmOverloads constructor(
         val targetUserId: String,
         val targetUserRole: UserRole,
         val targetUserPublicKey: ByteArray,
@@ -50,27 +50,27 @@ object LockOperations {
         val end: Int? = null
     )
 
-    class BatchShareLockOperation(
+    data class BatchShareLockOperation(
         val baseOperation: BaseOperation,
         val users: List<ShareLock>
     ): Operation
 
-    class RevokeAccessToLockOperation(
+    data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
         val users: List<String>
     ): Operation
 
-    class UpdateSecureSettingUnlockDuration(
+    data class UpdateSecureSettingUnlockDuration(
         val baseOperation: BaseOperation,
         val unlockDuration: Int
     ): Operation
 
-    class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
+    data class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
         val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
     ): Operation
 
-    class BaseOperation @JvmOverloads constructor(
+    data class BaseOperation @JvmOverloads constructor(
         val userId: String? = null,
         val userCertificateChain: List<String>? = null,
         val userPrivateKey: ByteArray? = null,

@@ -4,18 +4,18 @@ import com.doordeck.multiplatform.sdk.api.model.Fusion
 import kotlinx.serialization.Serializable
 
 @Serializable
-class FusionLoginRequest(
+data class FusionLoginRequest(
     val email: String,
     val password: String
 )
 
 @Serializable
-class IntegrationConfigurationRequest(
+data class IntegrationConfigurationRequest(
     val type: String
 )
 
 @Serializable
-class EnableDoorRequest(
+data class EnableDoorRequest(
     val name: String,
     val siteId: String,
     val key: Fusion.LockController
