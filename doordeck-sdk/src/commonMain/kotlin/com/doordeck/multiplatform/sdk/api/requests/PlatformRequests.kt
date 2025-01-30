@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.api.model.Platform
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CreateApplicationRequest(
+internal data class CreateApplicationRequest(
     val name: String,
     val companyName: String,
     val mailingAddress: String,
@@ -19,47 +19,47 @@ data class CreateApplicationRequest(
 sealed interface UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationNameRequest(
+internal data class UpdateApplicationNameRequest(
     val name: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationCompanyNameRequest(
+internal data class UpdateApplicationCompanyNameRequest(
     val companyName: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationMailingAddressRequest(
+internal data class UpdateApplicationMailingAddressRequest(
     val mailingAddress: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationPrivacyPolicyRequest(
+internal data class UpdateApplicationPrivacyPolicyRequest(
     val privacyPolicy: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationSupportContactRequest(
+internal data class UpdateApplicationSupportContactRequest(
     val supportContact: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationAppLinkRequest(
+internal data class UpdateApplicationAppLinkRequest(
     val appLink: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationEmailPreferencesRequest(
+internal data class UpdateApplicationEmailPreferencesRequest(
     val emailPreferences: EmailPreferencesRequest
 ): UpdateApplicationRequest
 
 @Serializable
-data class UpdateApplicationLogoUrlRequest(
+internal data class UpdateApplicationLogoUrlRequest(
     val logoUrl: String
 ): UpdateApplicationRequest
 
 @Serializable
-data class EmailPreferencesRequest(
+internal data class EmailPreferencesRequest(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String? = null,
@@ -69,44 +69,44 @@ data class EmailPreferencesRequest(
 )
 
 @Serializable
-data class CallToActionRequest(
+internal data class CallToActionRequest(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @Serializable
-data class AddAuthIssuerRequest(
+internal data class AddAuthIssuerRequest(
     val url: String
 )
 
 @Serializable
-data class DeleteAuthIssuerRequest(
+internal data class DeleteAuthIssuerRequest(
     val url: String
 )
 
 @Serializable
-data class AddCorsDomainRequest(
+internal data class AddCorsDomainRequest(
     val url: String
 )
 
 @Serializable
-data class RemoveCorsDomainRequest(
+internal data class RemoveCorsDomainRequest(
     val url: String
 )
 
 @Serializable
-data class AddApplicationOwnerRequest(
+internal data class AddApplicationOwnerRequest(
     val userId: String
 )
 
 @Serializable
-data class RemoveApplicationOwnerRequest(
+internal data class RemoveApplicationOwnerRequest(
     val userId: String
 )
 
 @Serializable
-data class GetLogoUploadUrlRequest(
+internal data class GetLogoUploadUrlRequest(
     val contentType: String
 )
 
@@ -119,7 +119,7 @@ sealed interface AddAuthKeyRequest {
 }
 
 @Serializable
-data class AddRsaKeyRequest(
+internal data class AddRsaKeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,
@@ -135,7 +135,7 @@ data class AddRsaKeyRequest(
 ): AddAuthKeyRequest
 
 @Serializable
-data class AddEcKeyRequest(
+internal data class AddEcKeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,
@@ -147,7 +147,7 @@ data class AddEcKeyRequest(
 ): AddAuthKeyRequest
 
 @Serializable
-data class AddEd25519KeyRequest(
+internal data class AddEd25519KeyRequest(
     override val kty: String,
     override val use: String,
     override val kid: String,

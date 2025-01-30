@@ -3,13 +3,13 @@ package com.doordeck.multiplatform.sdk.api.requests
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequest(
+internal data class LoginRequest(
     val email: String,
     val password: String
 )
 
 @Serializable
-data class RegisterRequest(
+internal data class RegisterRequest(
     val email: String,
     val password: String,
     val displayName: String? = null,
@@ -17,33 +17,33 @@ data class RegisterRequest(
 )
 
 @Serializable
-data class RegisterEphemeralKeyRequest(
+internal data class RegisterEphemeralKeyRequest(
     val ephemeralKey: String
 )
 
 @Serializable
-data class VerifyEphemeralKeyRegistrationRequest(
+internal data class VerifyEphemeralKeyRegistrationRequest(
     val verificationSignature: String
 )
 
 @Serializable
-data class UpdateUserDetailsRequest(
+internal data class UpdateUserDetailsRequest(
     val displayName: String
 )
 
 @Serializable
-data class ChangePasswordRequest(
+internal data class ChangePasswordRequest(
     val oldPassword: String,
     val newPassword: String
 )
 
 @Serializable
-data class PasswordResetRequest(
+internal data class PasswordResetRequest(
     val email: String
 )
 
 @Serializable
-data class PasswordResetVerifyRequest(
+internal data class PasswordResetVerifyRequest(
     val userId: String,
     val token: String,
     val password: String
