@@ -1,10 +1,18 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.AUDIT_RESPONSE
+import com.doordeck.multiplatform.sdk.BATCH_USER_PUBLIC_KEY_RESPONSE
+import com.doordeck.multiplatform.sdk.LOCK_RESPONSE
+import com.doordeck.multiplatform.sdk.LOCK_USER_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
+import com.doordeck.multiplatform.sdk.PINNED_LOCKS_RESPONSE
+import com.doordeck.multiplatform.sdk.SHAREABLE_LOCKS_RESPONSE
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.USER_LOCK_RESPONSE
+import com.doordeck.multiplatform.sdk.USER_PUBLIC_KEY_RESPONSE
 import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
 import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
@@ -14,32 +22,38 @@ import com.doordeck.multiplatform.sdk.internal.api.LockOperationsResourceImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        LockOperationsResourceImpl.getSingleLock(DEFAULT_LOCK_ID)
+        val response = LockOperationsResourceImpl.getSingleLock(DEFAULT_LOCK_ID)
+        assertEquals(LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        LockOperationsResourceImpl.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
+        val response = LockOperationsResourceImpl.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
+        assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        LockOperationsResourceImpl.getAuditForUser(DEFAULT_USER_ID, 0, 0)
+        val response = LockOperationsResourceImpl.getAuditForUser(DEFAULT_USER_ID, 0, 0)
+        assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUsersForLock() = runTest {
-        LockOperationsResourceImpl.getUsersForLock(DEFAULT_LOCK_ID)
+        val response = LockOperationsResourceImpl.getUsersForLock(DEFAULT_LOCK_ID)
+        assertEquals(USER_LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLocksForUser() = runTest {
-        LockOperationsResourceImpl.getLocksForUser(DEFAULT_USER_ID)
+        val response = LockOperationsResourceImpl.getLocksForUser(DEFAULT_USER_ID)
+        assertEquals(LOCK_USER_RESPONSE, response)
     }
 
     @Test
@@ -84,52 +98,62 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
-        LockOperationsResourceImpl.getUserPublicKey(DEFAULT_USER_EMAIL)
+        val response = LockOperationsResourceImpl.getUserPublicKey(DEFAULT_USER_EMAIL)
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByEmail("")
+        val response = LockOperationsResourceImpl.getUserPublicKeyByEmail("")
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephone() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByTelephone("")
+        val response = LockOperationsResourceImpl.getUserPublicKeyByTelephone("")
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByLocalKey("")
+        val response = LockOperationsResourceImpl.getUserPublicKeyByLocalKey("")
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKey() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByForeignKey("")
+        val response = LockOperationsResourceImpl.getUserPublicKeyByForeignKey("")
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByIdentity() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByIdentity("")
+        val response = LockOperationsResourceImpl.getUserPublicKeyByIdentity("")
+        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByEmails(listOf("", ""))
+        val response = LockOperationsResourceImpl.getUserPublicKeyByEmails(listOf("", ""))
+        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephones() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByTelephones(listOf("", ""))
+        val response = LockOperationsResourceImpl.getUserPublicKeyByTelephones(listOf("", ""))
+        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByLocalKeys(listOf("", ""))
+        val response = LockOperationsResourceImpl.getUserPublicKeyByLocalKeys(listOf("", ""))
+        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKeys() = runTest {
-        LockOperationsResourceImpl.getUserPublicKeyByForeignKeys(listOf("", ""))
+        val response = LockOperationsResourceImpl.getUserPublicKeyByForeignKeys(listOf("", ""))
+        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
     }
 
     @Test
@@ -232,11 +256,13 @@ class LockOperationsResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetPinnedLocks() = runTest {
-        LockOperationsResourceImpl.getPinnedLocks()
+        val response = LockOperationsResourceImpl.getPinnedLocks()
+        assertEquals(PINNED_LOCKS_RESPONSE, response)
     }
 
     @Test
     fun shouldGetShareableLocks() = runTest {
-        LockOperationsResourceImpl.getShareableLocks()
+        val response = LockOperationsResourceImpl.getShareableLocks()
+        assertEquals(SHAREABLE_LOCKS_RESPONSE, response)
     }
 }

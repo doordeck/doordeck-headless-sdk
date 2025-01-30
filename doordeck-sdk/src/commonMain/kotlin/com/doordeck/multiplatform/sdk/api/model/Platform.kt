@@ -6,7 +6,7 @@ import kotlin.jvm.JvmOverloads
 @JsExport
 object Platform {
 
-    class CreateApplication @JvmOverloads constructor(
+    data class CreateApplication @JvmOverloads constructor(
         val name: String,
         val companyName: String,
         val mailingAddress: String,
@@ -17,7 +17,7 @@ object Platform {
         val logoUrl: String? = null
     )
 
-    class EmailPreferences @JvmOverloads constructor(
+    data class EmailPreferences @JvmOverloads constructor(
         val senderEmail: String? = null,
         val senderName: String? = null,
         val primaryColour: String? = null,
@@ -26,7 +26,7 @@ object Platform {
         val callToAction: EmailCallToAction? = null
     )
 
-    class EmailCallToAction(
+    data class EmailCallToAction(
         val actionTarget: String,
         val headline: String,
         val actionText: String
@@ -39,7 +39,7 @@ object Platform {
         val alg: String?
     }
 
-    class RsaKey(
+    data class RsaKey(
         override val kty: String = "RSA",
         override val use: String,
         override val kid: String,
@@ -54,7 +54,7 @@ object Platform {
         val n: String
     ): AuthKey
 
-    class EcKey(
+    data class EcKey(
         override val kty: String = "EC",
         override val use: String,
         override val kid: String,
@@ -65,7 +65,7 @@ object Platform {
         val y: String
     ): AuthKey
 
-    class Ed25519Key(
+    data class Ed25519Key(
         override val kty: String = "OKP",
         override val use: String,
         override val kid: String,

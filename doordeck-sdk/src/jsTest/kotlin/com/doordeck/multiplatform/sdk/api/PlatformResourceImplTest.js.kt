@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.APPLICATION_LIST_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_OWNER_DETAILS_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
+import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.api.model.Platform
@@ -7,6 +11,7 @@ import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class PlatformResourceImplTest : MockTest() {
 
@@ -17,12 +22,14 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldListApplications() = runTest {
-        PlatformResourceImpl.listApplications().await()
+        val response = PlatformResourceImpl.listApplications().await()
+        assertEquals(APPLICATION_LIST_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplication() = runTest {
-        PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID).await()
+        val response = PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID).await()
+        assertEquals(APPLICATION_RESPONSE, response)
     }
 
     @Test
@@ -34,7 +41,7 @@ class PlatformResourceImplTest : MockTest() {
     fun shouldUpdateApplicationCompanyName() = runTest {
         PlatformResourceImpl.updateApplicationCompanyName(DEFAULT_APPLICATION_ID, "").await()
     }
-    
+
     @Test
     fun shouldUpdateApplicationMailingAddress() = runTest {
         PlatformResourceImpl.updateApplicationMailingAddress(DEFAULT_APPLICATION_ID, "").await()
@@ -72,7 +79,8 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetLogoUploadUrl() = runTest {
-        PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "").await()
+        val response = PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "").await()
+        assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
     }
 
     @Test
@@ -112,6 +120,7 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetApplicationOwnersDetails() = runTest {
-        PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID).await()
+        val response = PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID).await()
+        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
     }
 }

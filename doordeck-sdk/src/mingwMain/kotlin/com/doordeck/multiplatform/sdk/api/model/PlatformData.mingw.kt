@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class CreateApplicationData(
+data class CreateApplicationData(
     val name: String,
     val companyName: String,
     val mailingAddress: String,
@@ -15,7 +15,7 @@ class CreateApplicationData(
 )
 
 @Serializable
-class EmailPreferencesData(
+data class EmailPreferencesData(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String? = null,
@@ -25,78 +25,78 @@ class EmailPreferencesData(
 )
 
 @Serializable
-class EmailCallToActionData(
+data class EmailCallToActionData(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @Serializable
-class GetApplicationData(
+data class GetApplicationData(
     val applicationId: String
 )
 
 @Serializable
-class UpdateApplicationNameData(
+data class UpdateApplicationNameData(
     val applicationId: String,
     val name: String
 )
 
 @Serializable
-class UpdateApplicationCompanyNameData(
+data class UpdateApplicationCompanyNameData(
     val applicationId: String,
     val companyName: String
 )
 
 @Serializable
-class UpdateApplicationMailingAddressData(
+data class UpdateApplicationMailingAddressData(
     val applicationId: String,
     val mailingAddress: String
 )
 
 @Serializable
-class UpdateApplicationPrivacyPolicyData(
+data class UpdateApplicationPrivacyPolicyData(
     val applicationId: String,
     val privacyPolicy: String
 )
 
 @Serializable
-class UpdateApplicationSupportContactData(
+data class UpdateApplicationSupportContactData(
     val applicationId: String,
     val supportContact: String
 )
 
 @Serializable
-class UpdateApplicationAppLinkData(
+data class UpdateApplicationAppLinkData(
     val applicationId: String,
     val appLink: String
 )
 
 @Serializable
-class UpdateApplicationEmailPreferencesData(
+data class UpdateApplicationEmailPreferencesData(
     val applicationId: String,
     val emailPreferences: EmailPreferencesData
 )
 
 @Serializable
-class UpdateApplicationLogoUrlData(
+data class UpdateApplicationLogoUrlData(
     val applicationId: String,
     val logoUrl: String
 )
 
 @Serializable
-class DeleteApplicationData(
+data class DeleteApplicationData(
     val applicationId: String
 )
 
 @Serializable
-class GetLogoUploadUrlData(
+data class GetLogoUploadUrlData(
     val applicationId: String,
     val contentType: String
 )
 
 @Serializable
-class AddAuthKeyData(
+data class AddAuthKeyData(
     val applicationId: String,
     val key: AuthKeyData
 )
@@ -110,7 +110,7 @@ sealed interface AuthKeyData {
 }
 
 @Serializable
-class RsaKeyData(
+data class RsaKeyData(
     override val kty: String = "RSA",
     override val use: String,
     override val kid: String,
@@ -126,7 +126,7 @@ class RsaKeyData(
 ): AuthKeyData
 
 @Serializable
-class EcKeyData(
+data class EcKeyData(
     override val kty: String = "EC",
     override val use: String,
     override val kid: String,
@@ -138,7 +138,7 @@ class EcKeyData(
 ): AuthKeyData
 
 @Serializable
-class Ed25519KeyData(
+data class Ed25519KeyData(
     override val kty: String = "OKP",
     override val use: String,
     override val kid: String,
@@ -149,43 +149,43 @@ class Ed25519KeyData(
 ): AuthKeyData
 
 @Serializable
-class AddAuthIssuerData(
+data class AddAuthIssuerData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-class DeleteAuthIssuerData(
+data class DeleteAuthIssuerData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-class AddCorsDomainData(
+data class AddCorsDomainData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-class RemoveCorsDomainData(
+data class RemoveCorsDomainData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-class AddApplicationOwnerData(
+data class AddApplicationOwnerData(
     val applicationId: String,
     val userId: String
 )
 
 @Serializable
-class RemoveApplicationOwnerData(
+data class RemoveApplicationOwnerData(
     val applicationId: String,
     val userId: String
 )
 
 @Serializable
-class GetApplicationOwnersDetailsData(
+data class GetApplicationOwnersDetailsData(
     val applicationId: String
 )
 

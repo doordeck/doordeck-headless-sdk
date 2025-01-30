@@ -5,14 +5,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OperationHeaderRequest(
+internal data class OperationHeaderRequest(
     val alg: String = "EdDSA",
     val x5c: List<String>,
     val type: String = "JWT"
 )
 
 @Serializable
-class OperationBodyRequest(
+internal data class OperationBodyRequest(
     val iss: String,
     val sub: String,
     val nbf: Long,
@@ -23,7 +23,7 @@ class OperationBodyRequest(
 )
 
 @Serializable
-class BaseOperationRequest(
+internal data class BaseOperationRequest(
     val userId: String,
     val userCertificateChain: List<String>,
     val userPrivateKey: ByteArray,
@@ -36,13 +36,13 @@ class BaseOperationRequest(
 
 @Serializable
 @SerialName("MUTATE_LOCK")
-class LockOperationRequest(
+internal data class LockOperationRequest(
     val locked: Boolean
 ): OperationRequest
 
 @Serializable
 @SerialName("ADD_USER")
-class ShareLockOperationRequest(
+internal data class ShareLockOperationRequest(
     val user: String,
     val publicKey: String,
     val role: UserRole? = null,
@@ -52,25 +52,25 @@ class ShareLockOperationRequest(
 
 @Serializable
 @SerialName("BATCH_ADD_USER")
-class BatchShareLockOperationRequest(
+internal data class BatchShareLockOperationRequest(
     val users: List<ShareLockOperationRequest>
 ): OperationRequest
 
 @Serializable
 @SerialName("REMOVE_USER")
-class RevokeAccessToALockOperationRequest(
+internal data class RevokeAccessToALockOperationRequest(
     val users: List<String>
 ): OperationRequest
 
 @Serializable
 @SerialName("MUTATE_SETTING")
-class UpdateSecureSettingsOperationRequest(
+internal data class UpdateSecureSettingsOperationRequest(
     val unlockDuration: Int? = null,
     val unlockBetween: UnlockBetweenSettingRequest? = null
 ): OperationRequest
 
 @Serializable
-class UnlockBetweenSettingRequest(
+internal data class UnlockBetweenSettingRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
@@ -82,7 +82,7 @@ class UnlockBetweenSettingRequest(
 sealed interface OperationRequest
 
 @Serializable
-class UserPublicKeyRequest(
+internal data class UserPublicKeyRequest(
     val email: String? = null,
     val telephone: String? = null,
     val localKey: String? = null,
@@ -91,7 +91,7 @@ class UserPublicKeyRequest(
 )
 
 @Serializable
-class BatchUserPublicKeyRequest(
+internal data class BatchUserPublicKeyRequest(
     val email: List<String>? = null,
     val telephone: List<String>? = null,
     val localKey: List<String>? = null,
@@ -102,22 +102,22 @@ class BatchUserPublicKeyRequest(
 sealed interface UpdateLockPropertiesRequest
 
 @Serializable
-class UpdateLockNameRequest(
+internal data class UpdateLockNameRequest(
     val name: String?
 ): UpdateLockPropertiesRequest
 
 @Serializable
-class UpdateLockFavouriteRequest(
+internal data class UpdateLockFavouriteRequest(
     val favourite: Boolean?
 ): UpdateLockPropertiesRequest
 
 @Serializable
-class UpdateLockColourRequest(
+internal data class UpdateLockColourRequest(
     val colour: String?
 ): UpdateLockPropertiesRequest
 
 @Serializable
-class UpdateLockSettingRequest(
+internal data class UpdateLockSettingRequest(
     val settings: LockSettingsRequest?
 ): UpdateLockPropertiesRequest
 
@@ -125,17 +125,17 @@ class UpdateLockSettingRequest(
 sealed interface LockSettingsRequest
 
 @Serializable
-class LockSettingsDefaultNameRequest(
+internal data class LockSettingsDefaultNameRequest(
     val defaultName: String?
 ): LockSettingsRequest
 
 @Serializable
-class LockSettingsPermittedAddressesRequest(
+internal data class LockSettingsPermittedAddressesRequest(
     val permittedAddresses: List<String>
 ): LockSettingsRequest
 
 @Serializable
-class LockSettingsHiddenRequest(
+internal data class LockSettingsHiddenRequest(
     val hidden: Boolean
 ): LockSettingsRequest
 
@@ -143,22 +143,22 @@ class LockSettingsHiddenRequest(
 sealed interface UsageRequirementRequest
 
 @Serializable
-class UpdateLockSettingUsageRequirementRequest(
+internal data class UpdateLockSettingUsageRequirementRequest(
     val usageRequirements: UsageRequirementRequest?
 ): LockSettingsRequest
 
 @Serializable
-class UpdateLockSettingTimeUsageRequirementRequest(
+internal data class UpdateLockSettingTimeUsageRequirementRequest(
     val time: List<TimeRequirementRequest>
 ): UsageRequirementRequest
 
 @Serializable
-class UpdateLockSettingLocationUsageRequirementRequest(
+internal data class UpdateLockSettingLocationUsageRequirementRequest(
     val location: LocationRequirementRequest?
 ): UsageRequirementRequest
 
 @Serializable
-class TimeRequirementRequest(
+internal data class TimeRequirementRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
@@ -166,7 +166,7 @@ class TimeRequirementRequest(
 )
 
 @Serializable
-class LocationRequirementRequest(
+internal data class LocationRequirementRequest(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean? = null,

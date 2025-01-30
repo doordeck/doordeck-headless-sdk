@@ -1,41 +1,51 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.LIST_SITES_RESPONSE
+import com.doordeck.multiplatform.sdk.LOCKS_FOR_SITE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
+import com.doordeck.multiplatform.sdk.USER_FOR_SITE_RESPONSE
 import com.doordeck.multiplatform.sdk.internal.api.SitesResourceImpl
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class SitesResourceImplTest : MockTest() {
 
     @Test
     fun shouldListSites() = runTest {
-        SitesResourceImpl.listSites()
+        val response = SitesResourceImpl.listSites()
+        assertEquals(LIST_SITES_RESPONSE, response)
     }
 
     @Test
     fun shouldListSitesAsync() = runTest {
-        SitesResourceImpl.listSitesAsync().await()
+        val response = SitesResourceImpl.listSitesAsync().await()
+        assertEquals(LIST_SITES_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLocksForSite() = runTest {
-        SitesResourceImpl.getLocksForSite(DEFAULT_SITE_ID)
+        val response = SitesResourceImpl.getLocksForSite(DEFAULT_SITE_ID)
+        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLocksForSiteAsync() = runTest {
-        SitesResourceImpl.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
+        val response = SitesResourceImpl.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
+        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUsersForSite() = runTest {
-        SitesResourceImpl.getUsersForSite(DEFAULT_SITE_ID)
+        val response = SitesResourceImpl.getUsersForSite(DEFAULT_SITE_ID)
+        assertEquals(USER_FOR_SITE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUsersForSiteAsync() = runTest {
-        SitesResourceImpl.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
+        val response = SitesResourceImpl.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
+        assertEquals(USER_FOR_SITE_RESPONSE, response)
     }
 }

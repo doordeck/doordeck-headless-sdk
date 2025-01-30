@@ -7,7 +7,7 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class ApplicationResponse(
+data class ApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
@@ -47,7 +47,7 @@ sealed interface AuthKeyResponse {
 @JsExport
 @Serializable
 @SerialName("RSA")
-class RsaKeyResponse(
+data class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -68,7 +68,7 @@ class RsaKeyResponse(
 @JsExport
 @Serializable
 @SerialName("EC")
-class EcKeyResponse(
+data class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -90,7 +90,7 @@ class EcKeyResponse(
 @JsExport
 @Serializable
 @SerialName("OKP")
-class Ed25519KeyResponse(
+data class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -111,7 +111,7 @@ class Ed25519KeyResponse(
 
 @JsExport
 @Serializable
-class EmailPreferencesResponse(
+data class EmailPreferencesResponse(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String,
@@ -122,7 +122,7 @@ class EmailPreferencesResponse(
 
 @JsExport
 @Serializable
-class EmailCallToActionResponse(
+data class EmailCallToActionResponse(
     val actionTarget: String,
     val headline: String,
     val actionText: String
@@ -130,7 +130,7 @@ class EmailCallToActionResponse(
 
 @JsExport
 @Serializable
-class OauthResponse(
+data class OauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
     val grantType: String
@@ -138,7 +138,7 @@ class OauthResponse(
 
 @JsExport
 @Serializable
-class ApplicationOwnerDetailsResponse(
+data class ApplicationOwnerDetailsResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
@@ -148,6 +148,6 @@ class ApplicationOwnerDetailsResponse(
 
 @JsExport
 @Serializable
-class GetLogoUploadUrlResponse(
+data class GetLogoUploadUrlResponse(
     val uploadUrl: String
 )

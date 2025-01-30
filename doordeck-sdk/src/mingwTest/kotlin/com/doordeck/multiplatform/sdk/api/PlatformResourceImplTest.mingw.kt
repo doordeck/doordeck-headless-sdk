@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.APPLICATION_LIST_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_OWNER_DETAILS_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
+import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.api.model.AddApplicationOwnerData
@@ -26,9 +30,11 @@ import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationNameData
 import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationPrivacyPolicyData
 import com.doordeck.multiplatform.sdk.api.model.UpdateApplicationSupportContactData
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
+import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class PlatformResourceImplTest : MockTest() {
 
@@ -44,22 +50,26 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldListApplications() = runTest {
-        PlatformResourceImpl.listApplications()
+        val response = PlatformResourceImpl.listApplications()
+        assertEquals(APPLICATION_LIST_RESPONSE, response)
     }
 
     @Test
     fun shouldListApplicationsJson() = runTest {
-        PlatformResourceImpl.listApplicationsJson()
+        val response = PlatformResourceImpl.listApplicationsJson()
+        assertEquals(APPLICATION_LIST_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
     fun shouldGetApplication() = runTest {
-        PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID)
+        val response = PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID)
+        assertEquals(APPLICATION_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplicationJson() = runTest {
-        PlatformResourceImpl.getApplicationJson(GetApplicationData(DEFAULT_APPLICATION_ID).toJson())
+        val response = PlatformResourceImpl.getApplicationJson(GetApplicationData(DEFAULT_APPLICATION_ID).toJson())
+        assertEquals(APPLICATION_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
@@ -154,12 +164,14 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetLogoUploadUrl() = runTest {
-        PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
+        val response = PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
+        assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLogoUploadUrlJson() = runTest {
-        PlatformResourceImpl.getLogoUploadUrlJson(GetLogoUploadUrlData(DEFAULT_APPLICATION_ID, "").toJson())
+        val response = PlatformResourceImpl.getLogoUploadUrlJson(GetLogoUploadUrlData(DEFAULT_APPLICATION_ID, "").toJson())
+        assertEquals(LOGO_UPLOAD_URL_RESPONSE.toResultDataJson(), response)
     }
 
     @Test
@@ -234,11 +246,13 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetApplicationOwnersDetails() = runTest {
-        PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
+        val response = PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
+        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplicationOwnersDetailsJson() = runTest {
-        PlatformResourceImpl.getApplicationOwnersDetailsJson(GetApplicationOwnersDetailsData(DEFAULT_APPLICATION_ID).toJson())
+        val response = PlatformResourceImpl.getApplicationOwnersDetailsJson(GetApplicationOwnersDetailsData(DEFAULT_APPLICATION_ID).toJson())
+        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE.toResultDataJson(), response)
     }
 }

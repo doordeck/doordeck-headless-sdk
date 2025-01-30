@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
+import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
+import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.api.model.Fusion
@@ -7,37 +11,44 @@ import com.doordeck.multiplatform.sdk.internal.api.FusionResourceImpl
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        FusionResourceImpl.login("", "")
+        val response = FusionResourceImpl.login("", "")
+        assertEquals(FUSION_LOGIN_RESPONSE, response)
     }
 
     @Test
     fun shouldLoginAsync() = runTest {
-        FusionResourceImpl.loginAsync("", "").await()
+        val response = FusionResourceImpl.loginAsync("", "").await()
+        assertEquals(FUSION_LOGIN_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        FusionResourceImpl.getIntegrationType()
+        val response = FusionResourceImpl.getIntegrationType()
+        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationTypeAsync() = runTest {
-        FusionResourceImpl.getIntegrationTypeAsync().await()
+        val response = FusionResourceImpl.getIntegrationTypeAsync().await()
+        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        FusionResourceImpl.getIntegrationConfiguration("")
+        val response = FusionResourceImpl.getIntegrationConfiguration("")
+        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
     }
 
     @Test
     fun shouldGetIntegrationConfigurationAsync() = runTest {
-        FusionResourceImpl.getIntegrationConfigurationAsync("").await()
+        val response = FusionResourceImpl.getIntegrationConfigurationAsync("").await()
+        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
     }
 
     @Test
@@ -62,12 +73,14 @@ class FusionResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
+        val response = FusionResourceImpl.getDoorStatus(DEFAULT_DEVICE_ID)
+        assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetDoorStatusAsync() = runTest {
-        FusionResourceImpl.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
+        val response = FusionResourceImpl.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
+        assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test

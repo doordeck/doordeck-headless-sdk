@@ -15,7 +15,7 @@ object Fusion {
 
     @Serializable
     @SerialName("alpeta")
-    class AlpetaController(
+    data class AlpetaController(
         val username: String,
         val password: String,
         val doorId: Int, // Long, this can give problems
@@ -24,7 +24,7 @@ object Fusion {
 
     @Serializable
     @SerialName("amag")
-    class AmagController(
+    data class AmagController(
         val username: String,
         val password: String,
         val doorId: Int,
@@ -33,14 +33,14 @@ object Fusion {
 
     @Serializable
     @SerialName("assa-abloy")
-    class AssaAbloyController(
+    data class AssaAbloyController(
         val baseUrl: String,
         val doorId: String
     ) : LockController
 
     @Serializable
     @SerialName("avigilon")
-    class AvigilonController(
+    data class AvigilonController(
         val baseUrl: String,
         val username: String,
         val password: String,
@@ -49,20 +49,20 @@ object Fusion {
 
     @Serializable
     @SerialName("axis")
-    class AxisController(
+    data class AxisController(
         val baseUrl: String,
         val doorIdentifier: String
     ) : LockController
 
     @Serializable
     @SerialName("demo")
-    class DemoController(
+    data class DemoController(
         val port: Int = 8080
     ) : LockController
 
     @Serializable
     @SerialName("gallagher")
-    class GallagherController(
+    data class GallagherController(
         val baseUrl: String? = null,
         val apiKey: String,
         val doorId: String
@@ -70,7 +70,7 @@ object Fusion {
 
     @Serializable
     @SerialName("genetec")
-    class GenetecController(
+    data class GenetecController(
         val baseUrl: String,
         val username: String,
         val password: String,
@@ -79,7 +79,7 @@ object Fusion {
 
     @Serializable
     @SerialName("lenel")
-    class LenelController(
+    data class LenelController(
         val baseUrl: String,
         val username: String,
         val password: String,
@@ -90,14 +90,14 @@ object Fusion {
 
     @Serializable
     @SerialName("mitrefinch")
-    class MitrefinchController(
+    data class MitrefinchController(
         val host: String,
         val output: Int
     ) : LockController
 
     @Serializable
     @SerialName("net2")
-    class PaxtonNet2Controller(
+    data class PaxtonNet2Controller(
         val host: String,
         val address: String,
         val output: Short
@@ -105,7 +105,7 @@ object Fusion {
 
     @Serializable
     @SerialName("paxton10")
-    class Paxton10Controller(
+    data class Paxton10Controller(
         val baseUrl: String,
         val username: String,
         val password: String,
@@ -114,7 +114,7 @@ object Fusion {
 
     @Serializable
     @SerialName("integra")
-    class IntegraV1Controller(
+    data class IntegraV1Controller(
         val username: String,
         val password: String,
         val controllerId: Int
@@ -122,7 +122,7 @@ object Fusion {
 
     @Serializable
     @SerialName("integra-v2")
-    class IntegraV2Controller(
+    data class IntegraV2Controller(
         val baseUrl: String,
         val sessionId: String,
         val controllerId: Int,
@@ -132,14 +132,14 @@ object Fusion {
 
     @Serializable
     @SerialName("pac512")
-    class PacController(
+    data class PacController(
         val dataSource: DataSource,
         val outputChannel: Int,
         val controllerSerial: Int
     ) : LockController
 
     @Serializable
-    class DataSource(
+    data class DataSource(
         val driverClass: String,
         val url: String,
         val user: String,
@@ -148,7 +148,7 @@ object Fusion {
 
     @Serializable
     @SerialName("tdsi-exgarde")
-    class TdsiExgardeController(
+    data class TdsiExgardeController(
         val dbUrl: String? = null,
         val username: String,
         val password: String,
@@ -157,7 +157,7 @@ object Fusion {
 
     @Serializable
     @SerialName("tdsi-gardis")
-    class TdsiGardisController(
+    data class TdsiGardisController(
         val host: String,
         val username: String,
         val password: String,
@@ -166,7 +166,7 @@ object Fusion {
 
     @Serializable
     @SerialName("zkteco-zkbio-cvsecurity")
-    class ZktecoController(
+    data class ZktecoController(
         val clientSecret: String,
         val doorId: String,
         val baseUrl: String? = null,

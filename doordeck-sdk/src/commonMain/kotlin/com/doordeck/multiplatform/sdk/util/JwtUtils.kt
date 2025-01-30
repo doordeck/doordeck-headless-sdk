@@ -10,7 +10,7 @@ import kotlin.js.JsExport
 import kotlin.time.Duration.Companion.days
 
 @JsExport
-object JwtUtils {
+internal object JwtUtils {
     private const val TOKEN_EXPIRE_AT_FIELD = "exp"
 
     private fun getClaims(token: String): Map<String, String> {

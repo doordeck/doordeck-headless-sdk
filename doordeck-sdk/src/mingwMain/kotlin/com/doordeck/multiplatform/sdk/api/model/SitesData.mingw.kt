@@ -3,11 +3,11 @@ package com.doordeck.multiplatform.sdk.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class GetLocksForSiteData(
+data class GetLocksForSiteData(
     val siteId: String
 )
 
 @Serializable
-class GetUsersForSiteData(
+data class GetUsersForSiteData(
     val siteId: String
 )

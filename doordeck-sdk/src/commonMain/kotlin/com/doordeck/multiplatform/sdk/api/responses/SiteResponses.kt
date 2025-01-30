@@ -6,7 +6,7 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class SiteResponse(
+data class SiteResponse(
     val id: String,
     val name: String,
     val colour: String,
@@ -20,7 +20,7 @@ class SiteResponse(
 
 @JsExport
 @Serializable
-class SiteLocksResponse(
+data class SiteLocksResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
@@ -30,7 +30,7 @@ class SiteLocksResponse(
 
 @JsExport
 @Serializable
-class SiteLockSettingsResponse(
+data class SiteLockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: List<String>,
     val defaultName: String,
@@ -41,13 +41,13 @@ class SiteLockSettingsResponse(
 
 @JsExport
 @Serializable
-class SiteStateResponse(
+data class SiteStateResponse(
     val connected: Boolean
 )
 
 @JsExport
 @Serializable
-class UserForSiteResponse(
+data class UserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
