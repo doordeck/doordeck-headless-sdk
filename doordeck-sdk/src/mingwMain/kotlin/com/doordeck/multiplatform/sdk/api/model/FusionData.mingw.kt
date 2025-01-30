@@ -3,39 +3,39 @@ package com.doordeck.multiplatform.sdk.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class FusionLoginData(
+data class FusionLoginData(
     val email: String,
     val password: String
 )
 
 @Serializable
-class GetIntegrationConfigurationData(
+data class GetIntegrationConfigurationData(
     val type: String
 )
 
 @Serializable
-class EnableDoorData(
+data class EnableDoorData(
     val name: String,
     val siteId: String,
     val controller: Fusion.LockController
 )
 
 @Serializable
-class DeleteDoorData(
+data class DeleteDoorData(
     val deviceId: String
 )
 
 @Serializable
-class GetDoorStatusData(
+data class GetDoorStatusData(
     val deviceId: String
 )
 
 @Serializable
-class StartDoorData(
+data class StartDoorData(
     val deviceId: String
 )
 
 @Serializable
-class StopDoorData(
+data class StopDoorData(
     val deviceId: String
 )

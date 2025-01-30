@@ -5,7 +5,7 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class TileLocksResponse(
+data class TileLocksResponse(
     val siteId: String,
     val tileId: String,
     val deviceIds: List<String>

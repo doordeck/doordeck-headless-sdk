@@ -6,14 +6,14 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class TokenResponse(
+data class TokenResponse(
     val authToken: String,
     val refreshToken: String
 )
 
 @JsExport
 @Serializable
-class UserDetailsResponse(
+data class UserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
@@ -22,13 +22,13 @@ class UserDetailsResponse(
 
 @JsExport
 @Serializable
-class RegisterEphemeralKeyResponse(
+data class RegisterEphemeralKeyResponse(
     val certificateChain: List<String>,
     val userId: String
 )
 
 @JsExport
 @Serializable
-class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     val method: TwoFactorMethod
 )

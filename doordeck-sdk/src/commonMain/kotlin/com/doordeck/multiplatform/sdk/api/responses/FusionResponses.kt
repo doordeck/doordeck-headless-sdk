@@ -7,25 +7,25 @@ import kotlin.js.JsExport
 
 @JsExport
 @Serializable
-class FusionLoginResponse(
+data class FusionLoginResponse(
     val authToken: String
 )
 
 @JsExport
 @Serializable
-class IntegrationTypeResponse(
+data class IntegrationTypeResponse(
     val status: String? = null
 )
 
 @JsExport
 @Serializable
-class DoorStateResponse(
+data class DoorStateResponse(
     val state: ServiceStateType
 )
 
 @JsExport
 @Serializable
-class IntegrationConfigurationResponse(
+data class IntegrationConfigurationResponse(
     val doordeck: ControllerResponse? = null,
     val service: ServiceStateResponse? = null,
     val integration: DiscoveredDeviceResponse? = null
@@ -33,7 +33,7 @@ class IntegrationConfigurationResponse(
 
 @JsExport
 @Serializable
-class ControllerResponse(
+data class ControllerResponse(
     val id: String,
     val name: String? = null,
     val role: UserRole? = null
@@ -41,13 +41,13 @@ class ControllerResponse(
 
 @JsExport
 @Serializable
-class ServiceStateResponse(
+data class ServiceStateResponse(
     val state: ServiceStateType
 )
 
 @JsExport
 @Serializable
-class DiscoveredDeviceResponse(
+data class DiscoveredDeviceResponse(
     val key: Fusion.LockController,
     val metadata: Map<String, String>
 )

@@ -3,13 +3,13 @@ package com.doordeck.multiplatform.sdk.api.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LoginData(
+data class LoginData(
     val email: String,
     val password: String
 )
 
 @Serializable
-class RegistrationData(
+data class RegistrationData(
     val email: String,
     val password: String,
     val displayName: String? = null,
@@ -18,17 +18,17 @@ class RegistrationData(
 )
 
 @Serializable
-class VerifyEmailData(
+data class VerifyEmailData(
     val code: String
 )
 
 @Serializable
-class PasswordResetData(
+data class PasswordResetData(
     val email: String
 )
 
 @Serializable
-class PasswordResetVerifyData(
+data class PasswordResetVerifyData(
     val userId: String,
     val token: String,
     val password: String

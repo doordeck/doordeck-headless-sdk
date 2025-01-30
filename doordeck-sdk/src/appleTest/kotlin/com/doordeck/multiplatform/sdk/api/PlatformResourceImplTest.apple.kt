@@ -1,11 +1,16 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.APPLICATION_LIST_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_OWNER_DETAILS_RESPONSE
+import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
+import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.api.model.Platform
 import com.doordeck.multiplatform.sdk.internal.api.PlatformResourceImpl
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class PlatformResourceImplTest : MockTest() {
 
@@ -16,12 +21,14 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldListApplications() = runTest {
-        PlatformResourceImpl.listApplications()
+        val response = PlatformResourceImpl.listApplications()
+        assertEquals(APPLICATION_LIST_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplication() = runTest {
-        PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID)
+        val response = PlatformResourceImpl.getApplication(DEFAULT_APPLICATION_ID)
+        assertEquals(APPLICATION_RESPONSE, response)
     }
 
     @Test
@@ -71,7 +78,8 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetLogoUploadUrl() = runTest {
-        PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
+        val response = PlatformResourceImpl.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
+        assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
     }
 
     @Test
@@ -111,6 +119,7 @@ class PlatformResourceImplTest : MockTest() {
 
     @Test
     fun shouldGetApplicationOwnersDetails() = runTest {
-        PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
+        val response = PlatformResourceImpl.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
+        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
     }
 }
