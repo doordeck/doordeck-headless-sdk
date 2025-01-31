@@ -80,18 +80,15 @@ class GetLogoUploadUrlData:
     contentType: str
 
 @dataclass
-class AuthKeyData(ABC):
-    kid: str
-    kty: str
+class AuthKeyData:
     use: str
-    alg: str
-
-    @abstractmethod
-    def some_abstract_method(self):
-        pass  # Placeholder for a required method in subclasses
+    kid: str
+    alg: typing.Optional[str]
+    kty: str = field(init=False)
 
 @dataclass
-class RsaKeyData(AuthKeyData, ABC):
+class RsaKeyData(AuthKeyData):
+    kty: str
     p: str
     q: str
     d: str
@@ -100,22 +97,30 @@ class RsaKeyData(AuthKeyData, ABC):
     dp: str
     dq: str
     n: str
-    kty: str = "RSA"
+
+    def __post_init__(self):
+        self.kty = "RSA"
 
 @dataclass
-class EcKeyData(AuthKeyData, ABC):
+class EcKeyData(AuthKeyData):
+    kty: str
     d: str
     crv: str
     x: str
     y: str
-    kty: str = "EC"
+
+    def __post_init__(self):
+        self.kty = "EC"
 
 @dataclass
-class Ed25519KeyData(AuthKeyData, ABC):
+class Ed25519KeyData(AuthKeyData):
+    kty: str
     d: str
     crv: str
     x: str
-    kty: str = "OKP"
+
+    def __post_init__(self):
+        self.kty = "OKP"
 
 @dataclass
 class AddAuthKeyData:

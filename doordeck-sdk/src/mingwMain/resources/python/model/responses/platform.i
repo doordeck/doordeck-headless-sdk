@@ -25,15 +25,15 @@ class OauthResponse:
 class AuthKeyResponse:
     kid: str
     use: str
-    alg: Optional[str] = None
-    ops: Optional[List[str]] = None
-    x5u: Optional[str] = None
-    x5t: Optional[str] = None
-    x5t256: Optional[str] = None
-    x5c: Optional[List[str]] = None
-    exp: Optional[int] = None
-    nbf: Optional[int] = None
-    iat: Optional[int] = None
+    alg: Optional[str]
+    ops: Optional[List[str]]
+    x5u: Optional[str]
+    x5t: Optional[str]
+    x5t256: Optional[str]
+    x5c: Optional[List[str]]
+    exp: Optional[int]
+    nbf: Optional[int]
+    iat: Optional[int]
 
 @dataclass
 class RsaKeyResponse(AuthKeyResponse):
@@ -69,7 +69,7 @@ class ApplicationResponse:
    supportContact: typing.Optional[str] = None
    appLink: typing.Optional[str] = None
    slug: typing.Optional[str] = None
-   authKeys: typing.Dict[str, AuthKeyResponse]
+   authKeys: typing.Dict[str, AuthKeyResponse] = field(default_factory=dict)
    isDoordeckApplication: typing.Optional[bool] = None
 
 @dataclass
