@@ -1,48 +1,53 @@
 %pythoncode %{
 
-def refresh_token(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.refreshTokenJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+class Account(object):
 
-def logout(thiz):
-    response = json.loads(_doordeck_headless_sdk.logoutJson(thiz))
-    handle_exception(response)
+    def __init__(self, resource):
+        self.resource = resource
 
-def register_ephemeral_key(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return RegisterEphemeralKeyResponse(**get_success_result(response))
+    def refresh_token(self, data):
+        response = json.loads(_doordeck_headless_sdk.refreshTokenJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return TokenResponse(**get_success_result(response))
 
-def register_ephemeral_key_with_secondary_authentication(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyWithSecondaryAuthenticationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return RegisterEphemeralKeyWithSecondaryAuthenticationResponse(**get_success_result(response))
+    def logout(self):
+        response = json.loads(_doordeck_headless_sdk.logoutJson(self.resource))
+        handle_exception(response)
 
-def verify_ephemeral_key_registration(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.verifyEphemeralKeyRegistrationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return RegisterEphemeralKeyResponse(**get_success_result(response))
+    def register_ephemeral_key(self, data):
+        response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return RegisterEphemeralKeyResponse(**get_success_result(response))
 
-def reverify_email(thiz):
-    response = json.loads(_doordeck_headless_sdk.reverifyEmailJson(thiz))
-    handle_exception(response)
+    def register_ephemeral_key_with_secondary_authentication(self, data):
+        response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyWithSecondaryAuthenticationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return RegisterEphemeralKeyWithSecondaryAuthenticationResponse(**get_success_result(response))
 
-def change_password(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.changePasswordJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def verify_ephemeral_key_registration(self, data):
+        response = json.loads(_doordeck_headless_sdk.verifyEphemeralKeyRegistrationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return RegisterEphemeralKeyResponse(**get_success_result(response))
 
-def get_user_details(thiz):
-    response = json.loads(_doordeck_headless_sdk.getUserDetailsJson(thiz))
-    handle_exception(response)
-    return UserDetailsResponse(**get_success_result(response))
+    def reverify_email(self):
+        response = json.loads(_doordeck_headless_sdk.reverifyEmailJson(self.resource))
+        handle_exception(response)
 
-def update_user_details(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateUserDetailsJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def change_password(self, data):
+        response = json.loads(_doordeck_headless_sdk.changePasswordJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def delete_account(thiz):
-    response = json.loads(_doordeck_headless_sdk.deleteAccountJson(thiz))
-    handle_exception(response)
+    def get_user_details(self):
+        response = json.loads(_doordeck_headless_sdk.getUserDetailsJson(self.resource))
+        handle_exception(response)
+        return UserDetailsResponse(**get_success_result(response))
+
+    def update_user_details(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateUserDetailsJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+
+    def delete_account(self):
+        response = json.loads(_doordeck_headless_sdk.deleteAccountJson(self.resource))
+        handle_exception(response)
 
 %}

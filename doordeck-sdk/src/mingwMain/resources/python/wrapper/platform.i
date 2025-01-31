@@ -1,91 +1,96 @@
 %pythoncode %{
 
-def create_application(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.createApplicationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+class Platform(object):
 
-def list_applications(thiz):
-    response = json.loads(_doordeck_headless_sdk.listApplicationsJson(thiz))
-    handle_exception(response)
-    return [ApplicationResponse(**item) for item in get_success_result(response)]
+    def __init__(self, resource):
+        self.resource = resource
 
-def get_application(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.getApplicationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return ApplicationResponse(**get_success_result(response))
+    def create_application(self, data):
+        response = json.loads(_doordeck_headless_sdk.createApplicationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_name(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationNameJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def list_applications(self):
+        response = json.loads(_doordeck_headless_sdk.listApplicationsJson(self.resource))
+        handle_exception(response)
+        return [ApplicationResponse(**item) for item in get_success_result(response)]
 
-def update_application_company_name(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationCompanyNameJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def get_application(self, data):
+        response = json.loads(_doordeck_headless_sdk.getApplicationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return ApplicationResponse(**get_success_result(response))
 
-def update_application_mailing_address(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationMailingAddressJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_name(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationNameJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_privacy_policy(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationPrivacyPolicyJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_company_name(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationCompanyNameJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_support_contact(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationSupportContactJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_mailing_address(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationMailingAddressJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_app_link(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationAppLinkJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_privacy_policy(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationPrivacyPolicyJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_email_preferences(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationEmailPreferencesJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_support_contact(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationSupportContactJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def update_application_logo_url(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.updateApplicationLogoUrlJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_app_link(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationAppLinkJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def delete_application(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.deleteApplicationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def update_application_email_preferences(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationEmailPreferencesJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def get_logo_upload_url(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.getLogoUploadUrlJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return GetLogoUploadUrlResponse(**get_success_result(response))
+    def update_application_logo_url(self, data):
+        response = json.loads(_doordeck_headless_sdk.updateApplicationLogoUrlJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def add_auth_key(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.addAuthKeyJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def delete_application(self, data):
+        response = json.loads(_doordeck_headless_sdk.deleteApplicationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def add_auth_issuer(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.addAuthIssuerJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def get_logo_upload_url(self, data):
+        response = json.loads(_doordeck_headless_sdk.getLogoUploadUrlJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return GetLogoUploadUrlResponse(**get_success_result(response))
 
-def delete_auth_issuer(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.deleteAuthIssuerJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def add_auth_key(self, data):
+        response = json.loads(_doordeck_headless_sdk.addAuthKeyJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def add_cors_domain(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.addCorsDomainJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def add_auth_issuer(self, data):
+        response = json.loads(_doordeck_headless_sdk.addAuthIssuerJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def remove_cors_domain(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.removeCorsDomainJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def delete_auth_issuer(self, data):
+        response = json.loads(_doordeck_headless_sdk.deleteAuthIssuerJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def add_application_owner(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.addApplicationOwnerJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def add_cors_domain(self, data):
+        response = json.loads(_doordeck_headless_sdk.addCorsDomainJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def remove_application_owner(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.removeApplicationOwnerJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def remove_cors_domain(self, data):
+        response = json.loads(_doordeck_headless_sdk.removeCorsDomainJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
-def get_application_owners_details(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.getApplicationOwnersDetailsJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return [ApplicationOwnerDetailsResponse(**item) for item in get_success_result(response)]
+    def add_application_owner(self, data):
+        response = json.loads(_doordeck_headless_sdk.addApplicationOwnerJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+
+    def remove_application_owner(self, data):
+        response = json.loads(_doordeck_headless_sdk.removeApplicationOwnerJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+
+    def get_application_owners_details(self, data):
+        response = json.loads(_doordeck_headless_sdk.getApplicationOwnersDetailsJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return [ApplicationOwnerDetailsResponse(**item) for item in get_success_result(response)]
 
 %}

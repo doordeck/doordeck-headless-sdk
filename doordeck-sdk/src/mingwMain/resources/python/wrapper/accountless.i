@@ -1,25 +1,30 @@
 %pythoncode %{
 
-def login(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.loginJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+class Accountless(object):
 
-def registration(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.registrationJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
-    return TokenResponse(**get_success_result(response))
+    def __init__(self, resource):
+        self.resource = resource
 
-def verify_email(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.verifyEmailJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def login(self, data):
+        response = json.loads(_doordeck_headless_sdk.loginJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return TokenResponse(**get_success_result(response))
 
-def password_reset(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.passwordResetJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def registration(self, data):
+        response = json.loads(_doordeck_headless_sdk.registrationJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+        return TokenResponse(**get_success_result(response))
 
-def password_reset_verify(thiz, data):
-    response = json.loads(_doordeck_headless_sdk.passwordResetVerifyJson(thiz, json.dumps(dataclasses.asdict(data))))
-    handle_exception(response)
+    def verify_email(self, data):
+        response = json.loads(_doordeck_headless_sdk.verifyEmailJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+
+    def password_reset(self, data):
+        response = json.loads(_doordeck_headless_sdk.passwordResetJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
+
+    def password_reset_verify(self, data):
+        response = json.loads(_doordeck_headless_sdk.passwordResetVerifyJson(self.resource, json.dumps(dataclasses.asdict(data))))
+        handle_exception(response)
 
 %}

@@ -38,6 +38,25 @@
 %include "wrapper/sites.i"
 %include "wrapper/tiles.i"
 
+%pythoncode %{
+
+class InitializeSdk(object):
+
+    def __init__(self):
+        self.apiEnvironment = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_model_ApiEnvironment()
+        self.factory = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory()
+        self.sdk = initialize(self.factory, self.apiEnvironment)
+        self.accountless = Accountless(accountless(self.sdk))
+        self.account = Account(account(self.sdk))
+        self.lockOperations = LockOperations(lockOperations(self.sdk))
+        self.platform = Platform(platform(self.sdk))
+        self.sites = Sites(sites(self.sdk))
+        self.tiles = Tiles(tiles(self.sdk))
+        self.contextManager = ContextManager(contextManager(self.sdk))
+        self.cryptoManager = CryptoManager(crypto(self.sdk))
+
+%}
+
 %{
 #include <stdbool.h>
 %}
