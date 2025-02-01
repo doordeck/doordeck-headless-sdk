@@ -1,5 +1,3 @@
-ApiEnvironment
-
 %pythoncode %{
 
 class ApiEnvironment(Enum):
