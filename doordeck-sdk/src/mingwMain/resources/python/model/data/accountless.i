@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class LoginData:
     email: str
@@ -26,5 +25,4 @@ class PasswordResetVerifyData:
     userId: str
     token: str
     password: str
-
 %}

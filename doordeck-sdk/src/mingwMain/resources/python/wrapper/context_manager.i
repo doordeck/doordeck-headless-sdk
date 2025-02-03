@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class ContextManager(object):
 
     def __init__(self, resource):
@@ -55,5 +54,4 @@ class ContextManager(object):
 
     def clear_context(self):
         _doordeck_headless_sdk.clearContext(self.resource)
-
 %}

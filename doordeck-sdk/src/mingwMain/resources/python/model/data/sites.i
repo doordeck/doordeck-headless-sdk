@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class GetLocksForSiteData:
     siteId: str
@@ -7,5 +6,4 @@ class GetLocksForSiteData:
 @dataclass
 class GetUsersForSiteData:
     siteId: str
-
 %}

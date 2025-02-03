@@ -45,7 +45,6 @@
 %include "wrapper/tiles.i"
 
 %pythoncode %{
-
 class InitializeSdk(object):
 
     def __init__(self):
@@ -61,7 +60,6 @@ class InitializeSdk(object):
         self.tiles = Tiles(tiles(self.sdk))
         self.contextManager = ContextManager(contextManager(self.sdk))
         self.cryptoManager = CryptoManager(crypto(self.sdk))
-
 %}
 
 %{

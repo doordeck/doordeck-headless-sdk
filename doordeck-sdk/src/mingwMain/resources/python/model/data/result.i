@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class SuccessResultData:
     result: typing.Any
@@ -13,5 +12,4 @@ class FailedResultData:
 class ResultData:
     success: typing.Optional[SuccessResultData] = None
     failure: typing.Optional[FailedResultData] = None
-
 %}

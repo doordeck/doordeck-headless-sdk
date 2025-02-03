@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class Platform(object):
 
     def __init__(self, resource):
@@ -92,5 +91,4 @@ class Platform(object):
         response = json.loads(_doordeck_headless_sdk.getApplicationOwnersDetailsJson(self.resource, json.dumps(dataclasses.asdict(data))))
         handle_exception(response)
         return [ApplicationOwnerDetailsResponse(**item) for item in get_success_result(response)]
-
 %}

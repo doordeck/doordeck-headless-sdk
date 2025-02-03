@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class Account(object):
 
     def __init__(self, resource):
@@ -49,5 +48,4 @@ class Account(object):
     def delete_account(self):
         response = json.loads(_doordeck_headless_sdk.deleteAccountJson(self.resource))
         handle_exception(response)
-
 %}

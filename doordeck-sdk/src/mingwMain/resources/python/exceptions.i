@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class SdkException(Exception):
     def __init__(self, message: str, exception: Exception = None):
         super().__init__(message)
@@ -90,5 +89,4 @@ class ServiceUnavailableException(SdkException):
 class GatewayTimeoutException(SdkException):
     def __init__(self, message: str):
         super().__init__(message)
-
 %}

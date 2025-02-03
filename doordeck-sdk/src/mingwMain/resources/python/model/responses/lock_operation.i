@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class AuditSubjectResponse:
     userId: str
@@ -128,5 +127,4 @@ class LockResponse:
     start: typing.Optional[str] = None
     end: typing.Optional[str] = None
     unlockTime: typing.Optional[float] = None
-
 %}

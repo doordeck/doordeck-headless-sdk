@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class GetLocksBelongingToTileData:
     tileId: str
@@ -9,5 +8,4 @@ class AssociateMultipleLocksData:
     tileId: str
     siteId: str
     lockIds: typing.List[str]
-
 %}

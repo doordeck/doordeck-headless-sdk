@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class GetSingleLockData:
     lockId: str
@@ -176,5 +175,4 @@ class UnlockOperationData:
 class UpdateSecureSettingUnlockBetweenData:
     baseOperation: BaseOperationData
     unlockBetween: typing.Optional[UnlockBetweenData] = None
-
 %}

@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class TokenResponse:
     authToken: str
@@ -20,5 +19,4 @@ class RegisterEphemeralKeyResponse:
 @dataclass
 class RegisterEphemeralKeyWithSecondaryAuthenticationResponse:
     method: TwoFactorMethod
-
 %}

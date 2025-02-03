@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class AuditEvent(Enum):
     DOOR_OPEN = "DOOR_OPEN"
     DOOR_CLOSE = "DOOR_CLOSE"
@@ -16,5 +15,4 @@ class AuditEvent(Enum):
     TILE_ASSOCIATED = "TILE_ASSOCIATED"
     TILE_DISASSOCIATED = "TILE_DISASSOCIATED"
     DEVICE_DECOMMISSIONED = "DEVICE_DECOMMISSIONED"
-
 %}

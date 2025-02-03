@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class RefreshTokenData:
     refreshToken: str
@@ -26,5 +25,4 @@ class ChangePasswordData:
 @dataclass
 class UpdateUserDetailsData:
     displayName: str
-
 %}

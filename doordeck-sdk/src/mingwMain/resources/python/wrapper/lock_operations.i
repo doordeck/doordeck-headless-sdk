@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class LockOperations(object):
 
     def __init__(self, resource):
@@ -145,5 +144,4 @@ class LockOperations(object):
         response = json.loads(_doordeck_headless_sdk.getShareableLocksJson(self.resource))
         handle_exception(response)
         return [ShareableLockResponse(**item) for item in get_success_result(response)]
-
 %}

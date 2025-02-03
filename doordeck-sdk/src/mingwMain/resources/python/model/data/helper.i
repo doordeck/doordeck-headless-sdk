@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class UploadPlatformLogoData:
     applicationId: str
@@ -21,5 +20,4 @@ class AssistedRegisterData:
     password: str
     displayName: typing.Optional[str] = None
     force: bool = False
-
 %}

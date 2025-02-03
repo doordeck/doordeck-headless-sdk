@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class AssistedLoginResponse:
     requiresVerification: bool
@@ -7,5 +6,4 @@ class AssistedLoginResponse:
 @dataclass
 class AssistedRegisterEphemeralKeyResponse:
     requiresVerification: bool
-
 %}

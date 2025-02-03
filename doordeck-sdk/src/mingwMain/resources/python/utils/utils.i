@@ -1,5 +1,4 @@
 %pythoncode %{
-
 def current_epoch_seconds() -> int:
     return int(time.time())
 
@@ -58,5 +57,4 @@ def handle_exception(response):
     if "GatewayTimeoutException" in exception_type:
         raise GatewayTimeoutException(exception_message)
     raise SdkException("Unhandled exception type: " + exception_type)
-
 %}

@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class EmailCallToActionData:
     actionTarget: str
@@ -160,5 +159,4 @@ class RemoveApplicationOwnerData:
 @dataclass
 class GetApplicationOwnersDetailsData:
     applicationId: str
-
 %}

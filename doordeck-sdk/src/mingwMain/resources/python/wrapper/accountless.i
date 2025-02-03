@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class Accountless(object):
 
     def __init__(self, resource):
@@ -26,5 +25,4 @@ class Accountless(object):
     def password_reset_verify(self, data):
         response = json.loads(_doordeck_headless_sdk.passwordResetVerifyJson(self.resource, json.dumps(dataclasses.asdict(data))))
         handle_exception(response)
-
 %}

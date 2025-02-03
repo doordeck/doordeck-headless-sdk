@@ -1,5 +1,4 @@
 %pythoncode %{
-
 @dataclass
 class EmailCallToActionResponse:
     actionTarget: str
@@ -83,5 +82,4 @@ class ApplicationOwnerDetailsResponse:
 @dataclass
 class GetLogoUploadUrlResponse:
     uploadUrl: str
-
 %}

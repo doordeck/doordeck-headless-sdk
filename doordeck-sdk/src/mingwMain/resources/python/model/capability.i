@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class CapabilityStatus(Enum):
     SUPPORTED = "SUPPORTED"
     UNSUPPORTED = "UNSUPPORTED"
@@ -8,5 +7,4 @@ class CapabilityType(Enum):
     CONFIGURABLE_UNLOCK_DURATION = "CONFIGURABLE_UNLOCK_DURATION"
     OPEN_HOURS = "OPEN_HOURS"
     BATCH_SHARING_25 = "BATCH_SHARING_25"
-
 %}

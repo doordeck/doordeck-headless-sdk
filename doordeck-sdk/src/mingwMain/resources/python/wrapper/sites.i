@@ -1,5 +1,4 @@
 %pythoncode %{
-
 class Sites(object):
 
     def __init__(self, resource):
@@ -19,5 +18,4 @@ class Sites(object):
         response = json.loads(_doordeck_headless_sdk.getUsersForSiteJson(self.resource, json.dumps(dataclasses.asdict(data))))
         handle_exception(response)
         return [UserForSiteResponse(**item) for item in get_success_result(response)]
-
 %}
