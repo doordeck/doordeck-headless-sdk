@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.api.model.CapabilityType
 import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.api.model.withNewJti
 import com.doordeck.multiplatform.sdk.api.requests.BaseOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchShareLockOperationRequest
 import com.doordeck.multiplatform.sdk.api.requests.BatchUserPublicKeyRequest
@@ -46,6 +45,7 @@ import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.request.parameter
 import io.ktor.client.request.setBody
+import kotlin.uuid.Uuid
 
 internal object LockOperationsClient : AbstractResourceImpl() {
 
@@ -339,7 +339,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
             val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
                 try {
                     shareLockRequest(LockOperations.ShareLockOperation(
-                        baseOperation = batchShareLockOperation.baseOperation.withNewJti(), // Recreate the base operation because we need to use a different JTI for each user
+                        baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString()),
                         shareLock = shareLock
                     ))
                     null
