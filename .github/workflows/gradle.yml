@@ -116,6 +116,9 @@ jobs:
             -name "*.dylib" \
             -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
 
+      - name: Install SWIG
+        run: brew install swig
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
