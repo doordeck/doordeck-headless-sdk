@@ -1,7 +1,6 @@
 %module doordeck_headless_sdk
 
 // Include sdk interfaces
-%include "ignore.i"
 %include "imports.i"
 %include "exceptions.i"
 %include "utils/utils.i"
@@ -47,10 +46,11 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self):
-        self.apiEnvironment = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_model_ApiEnvironment()
+    def __init__(self, api_environment):
         self.factory = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory()
-        self.sdk = initialize(self.factory, self.apiEnvironment)
+        self.apiEnvironment = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_model_ApiEnvironment()
+        self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(self.apiEnvironment, api_environment.name)
+        self.sdk = initialize(self.factory, self.sdkApiEnvironment)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))
         self.helper = Helper(helper(self.sdk))
