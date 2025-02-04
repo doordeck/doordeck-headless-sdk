@@ -13,8 +13,17 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
 /**
  * Utility extension to expose the `ApiEnvironment` enum name
  */
+@CName("getApiEnvironmentName")
 fun ApiEnvironment.getApiEnvironmentName(): String {
     return name
+}
+
+/**
+ * Utility extension to retrieve the ``ApiEnvironment`` by its name
+ */
+@CName("getApiEnvironmentByName")
+fun ApiEnvironment.getApiEnvironmentByName(name: String): ApiEnvironment {
+    return ApiEnvironment.valueOf(name)
 }
 
 /**
