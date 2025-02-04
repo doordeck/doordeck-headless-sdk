@@ -134,14 +134,22 @@ jobs:
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
 
+      - name: Build mingw binaries
+        if: github.ref == 'refs/heads/main'
+        run: |
+          ./gradlew mingwX64Binaries
+          
+          # Adjust generated header
+          sed -i '' \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+          "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
-          # Generate the dll and header files
-          ./gradlew mingwX64Binaries
-          
           # Generate PInvoke bindings
           ClangSharpPInvokeGenerator \
             -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
@@ -149,10 +157,9 @@ jobs:
             -n Doordeck.Headless.Sdk
           
           # Adjust generated bindings
-          sed -i '' \
-            -e 's/_\$$/_/g' \
-            -e 's/\$//g' \
-            -e '/\[NativeTypeName/d' \
+          sed -i \
+            -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
+            -e 's/\[.*NativeTypeName([^]]*)\]//g' \
             -e 's/\[DllImport(""/\[DllImport("Doordeck.Headless.Sdk.dll"/g' \
             "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
           
