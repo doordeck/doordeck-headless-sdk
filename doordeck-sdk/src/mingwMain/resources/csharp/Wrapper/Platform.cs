@@ -18,7 +18,7 @@ public unsafe class Platform : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _platform = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform(sdk);
+        _platform = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform_(sdk);
         _platformResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformResource;
     }
 
@@ -30,7 +30,7 @@ public unsafe class Platform : IResource
     public void CreateApplication(CreateApplicationData data)
     {
         Process<object>(
-            _platformResource.createApplicationJson,
+            _platformResource.createApplicationJson_,
             null,
             data
         );
@@ -40,7 +40,7 @@ public unsafe class Platform : IResource
     {
         return Process<List<ApplicationResponse>>(
             null,
-            _platformResource.listApplicationsJson,
+            _platformResource.listApplicationsJson_,
             null
         );
     }
@@ -48,7 +48,7 @@ public unsafe class Platform : IResource
     public ApplicationResponse GetApplication(GetApplicationData data)
     {
         return Process<ApplicationResponse>(
-            _platformResource.getApplicationJson,
+            _platformResource.getApplicationJson_,
             null,
             data
         );
@@ -57,7 +57,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationName(UpdateApplicationNameData data)
     {
         Process<object>(
-            _platformResource.updateApplicationNameJson,
+            _platformResource.updateApplicationNameJson_,
             null,
             data
         );
@@ -66,7 +66,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
     {
         Process<object>(
-            _platformResource.updateApplicationCompanyNameJson,
+            _platformResource.updateApplicationCompanyNameJson_,
             null,
             data
         );
@@ -75,7 +75,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
     {
         Process<object>(
-            _platformResource.updateApplicationMailingAddressJson,
+            _platformResource.updateApplicationMailingAddressJson_,
             null,
             data
         );
@@ -84,7 +84,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
     {
         Process<object>(
-            _platformResource.updateApplicationPrivacyPolicyJson,
+            _platformResource.updateApplicationPrivacyPolicyJson_,
             null,
             data
         );
@@ -93,7 +93,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
     {
         Process<object>(
-            _platformResource.updateApplicationSupportContactJson,
+            _platformResource.updateApplicationSupportContactJson_,
             null,
             data
         );
@@ -102,7 +102,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
     {
         Process<object>(
-            _platformResource.updateApplicationAppLinkJson,
+            _platformResource.updateApplicationAppLinkJson_,
             null,
             data
         );
@@ -111,7 +111,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
     {
         Process<object>(
-            _platformResource.updateApplicationEmailPreferencesJson,
+            _platformResource.updateApplicationEmailPreferencesJson_,
             null,
             data
         );
@@ -120,7 +120,7 @@ public unsafe class Platform : IResource
     public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
     {
         Process<object>(
-            _platformResource.updateApplicationLogoUrlJson,
+            _platformResource.updateApplicationLogoUrlJson_,
             null,
             data
         );
@@ -129,7 +129,7 @@ public unsafe class Platform : IResource
     public void DeleteApplication(DeleteApplicationData data)
     {
         Process<object>(
-            _platformResource.deleteApplicationJson,
+            _platformResource.deleteApplicationJson_,
             null,
             data
         );
@@ -138,7 +138,7 @@ public unsafe class Platform : IResource
     public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData data)
     {
         return Process<GetLogoUploadUrlResponse>(
-            _platformResource.getLogoUploadUrlJson,
+            _platformResource.getLogoUploadUrlJson_,
             null,
             data
         );
@@ -147,7 +147,7 @@ public unsafe class Platform : IResource
     public void AddAuthKey(AddAuthKeyData data)
     {
         Process<object>(
-            _platformResource.addAuthKeyJson,
+            _platformResource.addAuthKeyJson_,
             null,
             data
         );
@@ -156,7 +156,7 @@ public unsafe class Platform : IResource
     public void AddAuthIssuer(AddAuthIssuerData data)
     {
         Process<object>(
-            _platformResource.addAuthIssuerJson,
+            _platformResource.addAuthIssuerJson_,
             null,
             data
         );
@@ -165,7 +165,7 @@ public unsafe class Platform : IResource
     public void DeleteAuthIssuer(DeleteAuthIssuerData data)
     {
         Process<object>(
-            _platformResource.deleteAuthIssuerJson,
+            _platformResource.deleteAuthIssuerJson_,
             null,
             data
         );
@@ -174,7 +174,7 @@ public unsafe class Platform : IResource
     public void AddCorsDomain(AddCorsDomainData data)
     {
         Process<object>(
-            _platformResource.addCorsDomainJson,
+            _platformResource.addCorsDomainJson_,
             null,
             data
         );
@@ -183,7 +183,7 @@ public unsafe class Platform : IResource
     public void RemoveCorsDomain(RemoveCorsDomainData data)
     {
         Process<object>(
-            _platformResource.removeCorsDomainJson,
+            _platformResource.removeCorsDomainJson_,
             null,
             data
         );
@@ -192,7 +192,7 @@ public unsafe class Platform : IResource
     public void AddApplicationOwner(AddApplicationOwnerData data)
     {
         Process<object>(
-            _platformResource.addApplicationOwnerJson,
+            _platformResource.addApplicationOwnerJson_,
             null,
             data
         );
@@ -201,7 +201,7 @@ public unsafe class Platform : IResource
     public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
     {
         Process<object>(
-            _platformResource.removeApplicationOwnerJson,
+            _platformResource.removeApplicationOwnerJson_,
             null,
             data
         );
@@ -210,7 +210,7 @@ public unsafe class Platform : IResource
     public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(GetApplicationOwnersDetailsData data)
     {
         return Process<List<ApplicationOwnerDetailsResponse>>(
-            _platformResource.getApplicationOwnersDetailsJson,
+            _platformResource.getApplicationOwnersDetailsJson_,
             null,
             data
         );

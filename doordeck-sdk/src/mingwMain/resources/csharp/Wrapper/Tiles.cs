@@ -17,7 +17,7 @@ public unsafe class Tiles : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _tiles = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles(sdk);
+        _tiles = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles_(sdk);
         _tilesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource;
     }
 
@@ -29,7 +29,7 @@ public unsafe class Tiles : IResource
     public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData data)
     {
         return Process<TileLocksResponse>(
-            _tilesResource.getLocksBelongingToTileJson,
+            _tilesResource.getLocksBelongingToTileJson_,
             null,
             data
         );
@@ -38,7 +38,7 @@ public unsafe class Tiles : IResource
     public void AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
         Process<object>(
-            _tilesResource.associateMultipleLocksJson,
+            _tilesResource.associateMultipleLocksJson_,
             null,
             data
         );

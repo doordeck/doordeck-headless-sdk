@@ -18,7 +18,7 @@ public unsafe class Accountless : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _accountless = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless(sdk);
+        _accountless = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.accountless_(sdk);
         _accountlessResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountlessResource;
     }
 
@@ -30,7 +30,7 @@ public unsafe class Accountless : IResource
     public TokenResponse Login(LoginData data)
     {
         return Process<TokenResponse>(
-            _accountlessResource.loginJson,
+            _accountlessResource.loginJson_,
             null,
             data
         );
@@ -39,7 +39,7 @@ public unsafe class Accountless : IResource
     public TokenResponse Registration(RegistrationData data)
     {
         return Process<TokenResponse>(
-            _accountlessResource.registrationJson,
+            _accountlessResource.registrationJson_,
             null,
             data
         );
@@ -48,7 +48,7 @@ public unsafe class Accountless : IResource
     public void VerifyEmail(VerifyEmailData data)
     {
         Process<object>(
-            _accountlessResource.verifyEmailJson,
+            _accountlessResource.verifyEmailJson_,
             null,
             data
         );
@@ -57,7 +57,7 @@ public unsafe class Accountless : IResource
     public void PasswordReset(PasswordResetData data)
     {
         Process<object>(
-            _accountlessResource.passwordResetJson,
+            _accountlessResource.passwordResetJson_,
             null,
             data
         );
@@ -66,7 +66,7 @@ public unsafe class Accountless : IResource
     public void PasswordResetVerify(PasswordResetVerifyData data)
     {
         Process<object>(
-            _accountlessResource.passwordResetVerifyJson,
+            _accountlessResource.passwordResetVerifyJson_,
             null,
             data
         );

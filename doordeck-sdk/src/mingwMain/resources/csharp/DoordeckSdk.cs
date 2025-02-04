@@ -43,7 +43,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
             var token = Utils.Utils.ToSByte(authToken);
             try
             {
-                _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(_factory, _apiEnvironment, token);
+                _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken_(_factory, _apiEnvironment, token);
             }
             finally
             {
@@ -52,7 +52,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
         }
         else
         {
-            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(_factory, _apiEnvironment);
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, _apiEnvironment);
         }
 
         _account.Initialize(_symbols, _sdk);

@@ -17,7 +17,7 @@ public unsafe class ContextManager : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _context = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager(sdk);
+        _context = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager_(sdk);
         _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager;
     }
 
@@ -47,7 +47,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName(apiEnvironment);
+            result = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName_(apiEnvironment);
             return (ApiEnvironment)Enum.Parse(typeof(ApiEnvironment), Utils.Utils.ConvertSByteToString(result));
         }
         finally
@@ -61,7 +61,7 @@ public unsafe class ContextManager : IResource
         var data = token.ToSByte();
         try
         {
-            _contextManager.setAuthToken(_context, data);
+            _contextManager.setAuthToken_(_context, data);
         }
         finally
         {
@@ -74,7 +74,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _contextManager.getAuthToken(_context);
+            result = _contextManager.getAuthToken_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -85,7 +85,7 @@ public unsafe class ContextManager : IResource
 
     public bool IsAuthTokenAboutToExpire()
     {
-        return _contextManager.isAuthTokenAboutToExpire(_context).ToBoolean();
+        return _contextManager.isAuthTokenAboutToExpire_(_context).ToBoolean();
     }
 
     public void SetRefreshToken(string token)
@@ -93,7 +93,7 @@ public unsafe class ContextManager : IResource
         var data = token.ToSByte();
         try
         {
-            _contextManager.setRefreshToken(_context, data);
+            _contextManager.setRefreshToken_(_context, data);
         }
         finally
         {
@@ -106,7 +106,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _contextManager.getRefreshToken(_context);
+            result = _contextManager.getRefreshToken_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -120,7 +120,7 @@ public unsafe class ContextManager : IResource
         var data = token.ToSByte();
         try
         {
-            _contextManager.setFusionAuthToken(_context, data);
+            _contextManager.setFusionAuthToken_(_context, data);
         }
         finally
         {
@@ -133,7 +133,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _contextManager.getFusionAuthToken(_context);
+            result = _contextManager.getFusionAuthToken_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -147,7 +147,7 @@ public unsafe class ContextManager : IResource
         var data = userId.ToSByte();
         try
         {
-            _contextManager.setUserId(_context, data);
+            _contextManager.setUserId_(_context, data);
         }
         finally
         {
@@ -160,7 +160,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _contextManager.getUserId(_context);
+            result = _contextManager.getUserId_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -174,7 +174,7 @@ public unsafe class ContextManager : IResource
         var data = email.ToSByte();
         try
         {
-            _contextManager.setUserEmail(_context, data);
+            _contextManager.setUserEmail_(_context, data);
         }
         finally
         {
@@ -187,7 +187,7 @@ public unsafe class ContextManager : IResource
         sbyte* result = null;
         try
         {
-            result = _contextManager.getUserEmail(_context);
+            result = _contextManager.getUserEmail_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -202,7 +202,7 @@ public unsafe class ContextManager : IResource
 
     public bool IsCertificateChainAboutToExpire()
     {
-        return _contextManager.isCertificateChainAboutToExpire(_context).ToBoolean();
+        return _contextManager.isCertificateChainAboutToExpire_(_context).ToBoolean();
     }
 
     // SetKeyPair
@@ -211,7 +211,7 @@ public unsafe class ContextManager : IResource
 
     public bool IsKeyPairValid()
     {
-        return _contextManager.isKeyPairValid(_context).ToBoolean();
+        return _contextManager.isKeyPairValid_(_context).ToBoolean();
     }
 
     public void SetOperationContext(OperationContextData data)
@@ -219,7 +219,7 @@ public unsafe class ContextManager : IResource
         var sData = data.ToData();
         try
         {
-            _contextManager.setOperationContextJson(_context, sData);
+            _contextManager.setOperationContextJson_(_context, sData);
         }
         finally
         {
@@ -229,17 +229,17 @@ public unsafe class ContextManager : IResource
 
     public void LoadContext()
     {
-        _contextManager.loadContext(_context);
+        _contextManager.loadContext_(_context);
     }
 
     public void StoreContext()
     {
-        _contextManager.storeContext(_context);
+        _contextManager.storeContext_(_context);
     }
 
     public void ClearContext()
     {
-        _contextManager.clearContext(_context);
+        _contextManager.clearContext_(_context);
     }
 
     private void ReleaseMemory(sbyte* data, sbyte* result)

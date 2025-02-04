@@ -18,7 +18,7 @@ public unsafe class Helper : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _helper = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper(sdk);
+        _helper = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper_(sdk);
         _helperResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource;
     }
 
@@ -30,7 +30,7 @@ public unsafe class Helper : IResource
     public void UploadPlatformLogo(UploadPlatformLogoData data)
     {
         Process<object>(
-            _helperResource.uploadPlatformLogoJson,
+            _helperResource.uploadPlatformLogoJson_,
             null,
             data
         );
@@ -39,7 +39,7 @@ public unsafe class Helper : IResource
     public AssistedLoginResponse AssistedLogin(AssistedLoginData data)
     {
         return Process<AssistedLoginResponse>(
-            _helperResource.assistedLoginJson,
+            _helperResource.assistedLoginJson_,
             null,
             data
         );
@@ -48,7 +48,7 @@ public unsafe class Helper : IResource
     public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
     {
         return Process<AssistedRegisterEphemeralKeyResponse>(
-            _helperResource.assistedRegisterEphemeralKeyJson,
+            _helperResource.assistedRegisterEphemeralKeyJson_,
             null,
             data
         );
@@ -57,7 +57,7 @@ public unsafe class Helper : IResource
     public void AssistedRegister(AssistedRegisterData data)
     {
         Process<object>(
-            _helperResource.assistedRegisterJson,
+            _helperResource.assistedRegisterJson_,
             null,
             data
         );
