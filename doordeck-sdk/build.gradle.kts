@@ -46,10 +46,15 @@ private data class NugetPublishData(
     val tags: List<String> = listOf("doordeck", "access control")
 ) : PublishData()
 
+private data class PyPiPublishData(
+    val packageName: String = "doordeck_headless_sdk"
+) : PublishData()
+
 private val npmPublish = NpmPublishData()
 private val cocoapodsPublish = CocoapodsPublishData()
 private val mavenPublish = MavenPublishData()
 private val nugetPublish = NugetPublishData()
+private val pypiPublish = PyPiPublishData()
 
 kotlin {
     applyDefaultHierarchyTemplate()
@@ -374,6 +379,22 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
+        }
+    }
+}
+
+tasks.register("pythonPack").configure {
+    doLast {
+        val outputDir = file("$projectDir/build/bin/mingwX64/python")
+        // Copy readme
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(outputDir)
+        }
+        // Copy python resources
+        copy {
+            from(file("$projectDir/src/mingwMain/resources/python"))
+            into(file("$outputDir/${pypiPublish.packageName}"))
         }
     }
 }

@@ -148,6 +148,13 @@ jobs:
             -e 's/\$//g' \
           "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
 
+      - name: Publish to PyPi
+        run: |
+          ./gradlew pythonPack
+          
+          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk_wrap.py \
+            doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk.i
+
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'
         env:
