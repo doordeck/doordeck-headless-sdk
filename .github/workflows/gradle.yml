@@ -116,6 +116,11 @@ jobs:
             -name "*.dylib" \
             -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
       - name: Install SWIG
         run: brew install swig
 
@@ -152,7 +157,7 @@ jobs:
         run: |
           ./gradlew pythonPack
           
-          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk_wrap.py \
+          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk.i
 
       - name: Publish to NuGet
