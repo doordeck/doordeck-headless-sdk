@@ -156,25 +156,25 @@ jobs:
           # Generate PInvoke bindings
           ClangSharpPInvokeGenerator \
             -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
-            -o doordeck-sdk/build/bin/mingwX64/releaseShared/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
+            -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
             -n Doordeck.Headless.Sdk
           
           # Adjust generated bindings
-          sed -i \
+          sed -i '' \
             -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
             -e 's/\[.*NativeTypeName([^]]*)\]//g' \
             -e 's/\[DllImport(""/\[DllImport("Doordeck.Headless.Sdk.dll"/g' \
-            "doordeck-sdk/build/bin/mingwX64/releaseShared/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+            "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
           
           # Create the .nuspec file
           ./gradlew -Prelease.useLastTag=true csharpPack
           
           # Create the .nupkg file
-          nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/csharp/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/csharp/
+          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
+            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
           
           # Publish the package
-          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
+          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
             -Source https://api.nuget.org/v3/index.json \
             -ApiKey ${{ secrets.NUGET_TOKEN }}
 

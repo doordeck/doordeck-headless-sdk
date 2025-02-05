@@ -354,7 +354,7 @@ val nuspecTemplate = """
   </metadata>
   <files>
     <file src="README.md" target="\" />
-    <file src="${nugetPublish.packageName}.dll" target="lib\netstandard2.0\" />
+    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="lib\netstandard2.0\" />
     <file src="${nugetPublish.packageName}\**\*" target="contentFiles\cs\any\${nugetPublish.packageName}\" />
   </files>
 </package>
@@ -362,15 +362,15 @@ val nuspecTemplate = """
 
 tasks.register("csharpPack").configure {
     doLast {
-        val outputDir = file("$projectDir/build/bin/mingwX64/releaseShared/csharp")
+        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
         val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
         nuspecFile.writeText(nuspecTemplate.trim())
-        // Copy the readme file
+        // Copy readme
         copy {
             from(rootProject.layout.projectDirectory.file("README.md"))
             into(outputDir)
         }
-        // Copy the model folder from the mingwX64 resources
+        // Copy csharp resources
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
