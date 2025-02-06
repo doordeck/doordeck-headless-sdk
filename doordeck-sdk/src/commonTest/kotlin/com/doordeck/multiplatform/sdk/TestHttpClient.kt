@@ -30,6 +30,7 @@ import com.doordeck.multiplatform.sdk.api.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.api.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
@@ -102,7 +103,7 @@ private val TEST_ENGINE = MockEngine { request ->
                 Paths.getLogoUploadUrlPath(DEFAULT_APPLICATION_ID) -> respondContent(LOGO_UPLOAD_URL_RESPONSE)
                 FusionPaths.getLoginPath() -> respondContent(FUSION_LOGIN_RESPONSE)
                 FusionPaths.getIntegrationConfiguration() -> respondContent(INTEGRATION_CONFIGURATION_RESPONSE)
-                Paths.getUserPublicKeyPath() -> if (request.isVersionTwo()) {
+                Paths.getUserPublicKeyPath() -> if (request.isVersion(ApiVersion.VERSION_2)) {
                     respondContent(BATCH_USER_PUBLIC_KEY_RESPONSE)
                 } else {
                     respondContent(USER_PUBLIC_KEY_RESPONSE)
@@ -149,8 +150,8 @@ private inline fun <reified T> MockRequestHandleScope.respondContent(content: T)
         headers = headersOf(HttpHeaders.ContentType, "application/json")
     )
 
-private fun HttpRequestData.isVersionTwo(): Boolean =
-    headers.contains(HttpHeaders.Accept, "application/vnd.doordeck.api-v2+json")
+private fun HttpRequestData.isVersion(apiVersion: ApiVersion): Boolean =
+    headers.contains(HttpHeaders.Accept, "application/vnd.doordeck.api-v${apiVersion.version}+json")
 
 internal val TOKEN_RESPONSE: TokenResponse = randomTokenResponse()
 internal val TILE_LOCKS_RESPONSE: TileLocksResponse = randomTileLocksResponse()
