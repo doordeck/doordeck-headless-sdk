@@ -157,11 +157,11 @@ jobs:
           mv python-3.13.2-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
           unzip doordeck-sdk/build/bin/mingwX64/python/python-3.13.2-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
           
-          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/src/doordeck_headless_sdk_wrap.c \
+          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
           
-          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
-            doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/doordeck_headless_sdk_wrap.c \
+          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/src/_doordeck_headless_sdk.pyd \
+            doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
             -I $(python3 -c "import sysconfig; print(sysconfig.get_paths()['include'])") \
             -L doordeck-sdk/build/bin/mingwX64/python/windows-python \
