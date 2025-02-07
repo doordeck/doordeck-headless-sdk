@@ -379,6 +379,7 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
+            include("**/*.cs")
         }
     }
 }
@@ -396,6 +397,7 @@ tasks.register("pythonPack").configure {
             // Copy python resources
             from(file("$projectDir/src/mingwMain/resources/python"))
             into(outputDir)
+            include("**/*.i")
         }
         // Create src & tests folders
         mkdir(file("$outputDir/${pypiPublish.packageName}/src"))
