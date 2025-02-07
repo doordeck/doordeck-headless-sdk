@@ -67,7 +67,7 @@ class InitializeSdk(object):
 %}
 
 %{
-#include "Doordeck.Headless.Sdk_api.h"
+#include "../releaseShared/Doordeck.Headless.Sdk_api.h"
 %}
 
-%include "Doordeck.Headless.Sdk_api.h"
+%include "../releaseShared/Doordeck.Headless.Sdk_api.h"

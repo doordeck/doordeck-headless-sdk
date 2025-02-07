@@ -386,15 +386,19 @@ tasks.register("csharpPack").configure {
 tasks.register("pythonPack").configure {
     doLast {
         val outputDir = file("$projectDir/build/bin/mingwX64/python")
-        // Copy readme
+        // Copy README & LICENSE
         copy {
+            from(rootProject.layout.projectDirectory.file("LICENSE"))
             from(rootProject.layout.projectDirectory.file("README.md"))
-            into(outputDir)
-        }
-        // Copy python resources
-        copy {
-            from(file("$projectDir/src/mingwMain/resources/python"))
             into(file("$outputDir/${pypiPublish.packageName}"))
         }
+        copy {
+            // Copy python resources
+            from(file("$projectDir/src/mingwMain/resources/python"))
+            into(outputDir)
+        }
+        // Create src & tests folders
+        mkdir(file("$outputDir/${pypiPublish.packageName}/src"))
+        mkdir(file("$outputDir/${pypiPublish.packageName}/tests"))
     }
 }
