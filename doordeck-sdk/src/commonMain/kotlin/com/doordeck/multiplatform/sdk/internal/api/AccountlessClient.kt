@@ -9,10 +9,13 @@ import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import io.ktor.client.call.body
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 
-internal object AccountlessClient : AbstractResourceImpl()  {
+internal object AccountlessClient {
 
     /**
      * Login
@@ -20,10 +23,10 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
     suspend fun loginRequest(email: String, password: String): TokenResponse {
-        return CloudHttpClient.post<TokenResponse>(Paths.getLoginPath()) {
+        return CloudHttpClient.client.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
-        }.also {
+        }.body<TokenResponse>().also {
             ContextManagerImpl.setUserEmail(email)
             ContextManagerImpl.setAuthToken(it.authToken)
             ContextManagerImpl.setRefreshToken(it.refreshToken)
@@ -36,7 +39,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
      */
     suspend fun registrationRequest(email: String, password: String, displayName: String?, force: Boolean, publicKey: ByteArray?): TokenResponse {
-        return CloudHttpClient.post<TokenResponse>(Paths.getRegistrationPath()) {
+        return CloudHttpClient.client.post(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(RegisterRequest(
                 email = email,
@@ -45,7 +48,7 @@ internal object AccountlessClient : AbstractResourceImpl()  {
                 ephemeralKey = publicKey?.encodeByteArrayToBase64()
             ))
             parameter(Params.FORCE, force)
-        }.also {
+        }.body<TokenResponse>().also {
             ContextManagerImpl.setUserEmail(email)
             ContextManagerImpl.setAuthToken(it.authToken)
             ContextManagerImpl.setRefreshToken(it.refreshToken)
@@ -58,26 +61,26 @@ internal object AccountlessClient : AbstractResourceImpl()  {
      * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
      */
     suspend fun verifyEmailRequest(code: String) {
-        return CloudHttpClient.put<Unit>(Paths.getVerifyEmailPath()) {
+        return CloudHttpClient.client.put(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(Params.CODE, code)
-        }
+        }.body()
     }
 
     /**
      * Password reset
      */
     suspend fun passwordResetRequest(email: String) {
-        return CloudHttpClient.post(Paths.getPasswordResetPath()) {
+        return CloudHttpClient.client.post(Paths.getPasswordResetPath()) {
             addRequestHeaders()
             setBody(PasswordResetRequest(email))
-        }
+        }.body()
     }
 
     suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
-        return CloudHttpClient.post(Paths.getPasswordResetVerifyPath()) {
+        return CloudHttpClient.client.post(Paths.getPasswordResetVerifyPath()) {
             addRequestHeaders()
             setBody(PasswordResetVerifyRequest(userId, token, password))
-        }
+        }.body()
     }
 }
