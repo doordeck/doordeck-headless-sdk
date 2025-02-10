@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.internal
+package com.doordeck.multiplatform.sdk.api.responses
 
 import kotlinx.serialization.Serializable
 

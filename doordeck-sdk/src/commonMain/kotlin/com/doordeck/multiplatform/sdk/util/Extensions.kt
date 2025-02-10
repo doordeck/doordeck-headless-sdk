@@ -20,7 +20,7 @@ import com.doordeck.multiplatform.sdk.UnauthorizedException
 import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.ResponseError
+import com.doordeck.multiplatform.sdk.api.responses.ResponseError
 import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import io.ktor.client.HttpClient
