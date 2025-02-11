@@ -84,7 +84,7 @@ jobs:
         with:
           ruby-version: '3.3'
 
-      - name: Install CocoaPods
+      - name: Setup CocoaPods
         run: |
           sudo gem install cocoapods
 
@@ -99,7 +99,7 @@ jobs:
         with:
             dotnet-version: 7.x
 
-      - name: Install ClangSharpPInvokeGenerator
+      - name: Setup ClangSharpPInvokeGenerator
         run: |
           # Install ClangSharpPInvokeGenerator
           dotnet tool install --global ClangSharpPInvokeGenerator
@@ -116,10 +116,10 @@ jobs:
             -name "*.dylib" \
             -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
 
-      - name: Install SWIG
+      - name: Setup SWIG
         run: brew install swig
 
-      - name: Install mingw-w64
+      - name: Setup mingw-w64
         run: brew install mingw-w64
 
       - name: Setup python build
@@ -155,18 +155,23 @@ jobs:
           "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
 
       - name: Publish to PyPi
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
-          ./gradlew pythonPack
+          ./gradlew -Prelease.useLastTag=true pythonPack
           
           # Download python for windows
           curl -LO https://www.python.org/ftp/python/3.13.2/python-3.13.2-embed-amd64.zip
           mv python-3.13.2-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
           unzip doordeck-sdk/build/bin/mingwX64/python/python-3.13.2-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
           
+          # Generate python bindings
           swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
           
+          # Compile python bindings
           x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
@@ -174,8 +179,11 @@ jobs:
             -L doordeck-sdk/build/bin/mingwX64/python/windows-python \
             -lpython313
           
-          # Build the package
+          # Build package
           python -m build doordeck-sdk/build/bin/mingwX64/python
+          
+          # Publish
+          twine upload --repository testpypi doordeck-sdk/build/bin/mingwX64/python/dist/*
 
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'
