@@ -369,8 +369,8 @@ tasks.register("pythonPack").configure {
         val outputDir = file("$projectDir/build/bin/mingwX64/python")
         mkdir(outputDir)
         // Create pyproject file
-        val setupFile = file("$outputDir/setup.py")
-        setupFile.writeText(pypiTemplate.trim())
+        val setupFile = file("$outputDir/pyproject.toml")
+        setupFile.writeText(pyprojectTemplate.trim())
         // Copy README & LICENSE
         copy {
             from(rootProject.layout.projectDirectory.file("LICENSE"))
@@ -419,7 +419,7 @@ private val nuspecTemplate = """
 </package>
 """
 
-private val pypiTemplate = """
+private val pyprojectTemplate = """
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
