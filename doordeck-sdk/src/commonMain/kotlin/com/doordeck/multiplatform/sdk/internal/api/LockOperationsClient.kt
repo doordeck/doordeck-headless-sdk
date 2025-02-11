@@ -43,11 +43,15 @@ import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlin.uuid.Uuid
 
-internal object LockOperationsClient : AbstractResourceImpl() {
+internal object LockOperationsClient {
 
     /**
      * Get a single lock
@@ -55,9 +59,9 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
     suspend fun getSingleLockRequest(lockId: String): LockResponse {
-        return CloudHttpClient.get(Paths.getSingleLockPath(lockId)) {
+        return CloudHttpClient.client.get(Paths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
-        }
+        }.body()
     }
 
     /**
@@ -66,11 +70,11 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
     suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return CloudHttpClient.get(Paths.getLockAuditTrailPath(lockId)) {
+        return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
             parameter(Params.END, end)
-        }
+        }.body()
     }
 
     /**
@@ -79,11 +83,11 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
     suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return CloudHttpClient.get(Paths.getAuditForUserPath(userId)) {
+        return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
             parameter(Params.END, end)
-        }
+        }.body()
     }
 
     /**
@@ -92,7 +96,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
     suspend fun getUsersForLockRequest(lockId: String): List<UserLockResponse> {
-        return CloudHttpClient.get(Paths.getUsersForLockPath(lockId))
+        return CloudHttpClient.client.get(Paths.getUsersForLockPath(lockId)).body()
     }
 
     /**
@@ -101,7 +105,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
     suspend fun getLocksForUserRequest(userId: String): LockUserResponse {
-        return CloudHttpClient.get(Paths.getLocksForUserPath(userId))
+        return CloudHttpClient.client.get(Paths.getLocksForUserPath(userId)).body()
     }
 
     /**
@@ -185,7 +189,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
     }
 
     private suspend fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest) {
-        CloudHttpClient.put<Unit>(Paths.getUpdateLockPropertiesPath(lockId)) {
+        CloudHttpClient.client.put(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -198,10 +202,10 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      */
     @DoordeckOnly
     suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
-        return CloudHttpClient.post(Paths.getUserPublicKeyPath(userEmail)) {
+        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
             parameter(Params.VISITOR, visitor)
-        }
+        }.body()
     }
 
     /**
@@ -245,10 +249,10 @@ internal object LockOperationsClient : AbstractResourceImpl() {
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
     private suspend fun getUserPublicKey(request: UserPublicKeyRequest): UserPublicKeyResponse {
-        return CloudHttpClient.post(Paths.getUserPublicKeyPath()) {
+        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders()
             setBody(request)
-        }
+        }.body()
     }
 
     /**
@@ -284,10 +288,10 @@ internal object LockOperationsClient : AbstractResourceImpl() {
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
 
     private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BatchUserPublicKeyResponse> {
-        return CloudHttpClient.post(Paths.getUserPublicKeyPath()) {
+        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(request)
-        }
+        }.body()
     }
 
     /**
@@ -436,7 +440,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
             LocalUnlockClient.unlock(directAccessEndpoints, body)
         }
 
-        CloudHttpClient.post<Unit>(Paths.getOperationPath(baseOperationRequest.lockId)) {
+        CloudHttpClient.client.post(Paths.getOperationPath(baseOperationRequest.lockId)) {
             addRequestHeaders(true)
             setBody(body)
         }
@@ -448,7 +452,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
     suspend fun getPinnedLocksRequest(): List<LockResponse> {
-        return CloudHttpClient.get(Paths.getPinnedLocksPath())
+        return CloudHttpClient.client.get(Paths.getPinnedLocksPath()).body()
     }
 
     /**
@@ -457,7 +461,7 @@ internal object LockOperationsClient : AbstractResourceImpl() {
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
     suspend fun getShareableLocksRequest(): List<ShareableLockResponse> {
-        return CloudHttpClient.get(Paths.getShareableLocksPath())
+        return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
     }
 
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {

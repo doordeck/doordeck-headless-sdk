@@ -11,50 +11,54 @@ import com.doordeck.multiplatform.sdk.api.responses.IntegrationConfigurationResp
 import com.doordeck.multiplatform.sdk.api.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import io.ktor.client.call.body
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
-internal object FusionClient : AbstractResourceImpl() {
+internal object FusionClient {
 
     suspend fun loginRequest(email: String, password: String): FusionLoginResponse {
-        return FusionHttpClient.post<FusionLoginResponse>(FusionPaths.getLoginPath()) {
+        return FusionHttpClient.client.post(FusionPaths.getLoginPath()) {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
-        }.also {
+        }.body<FusionLoginResponse>().also {
             ContextManagerImpl.setFusionAuthToken(it.authToken)
         }
     }
 
     suspend fun getIntegrationTypeRequest(): IntegrationTypeResponse {
-        return FusionHttpClient.get(FusionPaths.getConfigurationTypePath())
+        return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath()).body()
     }
 
     suspend fun getIntegrationConfigurationRequest(type: String): List<IntegrationConfigurationResponse> {
-        return FusionHttpClient.post(FusionPaths.getIntegrationConfiguration()) {
+        return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
             setBody(IntegrationConfigurationRequest(type))
-        }
+        }.body()
     }
 
     suspend fun enableDoorRequest(name: String, siteId: String, controller: Fusion.LockController) {
-        FusionHttpClient.post<Unit>(FusionPaths.getEnableDoorPath()) {
+        FusionHttpClient.client.post(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId , controller))
         }
     }
 
     suspend fun deleteDoorRequest(deviceId: String) {
-        FusionHttpClient.delete<Unit>(FusionPaths.getDeleteDoorPath(deviceId))
+        FusionHttpClient.client.delete(FusionPaths.getDeleteDoorPath(deviceId))
     }
 
     suspend fun getDoorStatusRequest(deviceId: String): DoorStateResponse {
-        return FusionHttpClient.get(FusionPaths.getDoorStatusPath(deviceId))
+        return FusionHttpClient.client.get(FusionPaths.getDoorStatusPath(deviceId)).body()
     }
 
     suspend fun startDoorRequest(deviceId: String) {
-        FusionHttpClient.get<Unit>(FusionPaths.startDoorPathPath(deviceId))
+        FusionHttpClient.client.get(FusionPaths.startDoorPathPath(deviceId))
     }
 
     suspend fun stopDoorRequest(deviceId: String) {
-        FusionHttpClient.get<Unit>(FusionPaths.stopDoorPathPath(deviceId))
+        FusionHttpClient.client.get(FusionPaths.stopDoorPathPath(deviceId))
     }
 }
