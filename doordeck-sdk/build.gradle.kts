@@ -368,7 +368,7 @@ tasks.register("pythonPack").configure {
         // Create output directory
         val outputDir = file("$projectDir/build/bin/mingwX64/python")
         mkdir(outputDir)
-        // Create setup.py file
+        // Create pyproject file
         val setupFile = file("$outputDir/setup.py")
         setupFile.writeText(pypiTemplate.trim())
         // Copy README & LICENSE
@@ -420,24 +420,25 @@ private val nuspecTemplate = """
 """
 
 private val pypiTemplate = """
-from setuptools import setup, find_packages
-setup(
-    name="${pypiPublish.packageName}",
-    version="${project.version}",
-    description="${pypiPublish.description}",
-    url="${pypiPublish.authorHomepage}",
-    author="${pypiPublish.author}",
-    author_email="${pypiPublish.authorEmail}",
-    keywords="${pypiPublish.keywords.joinToString()}",
-    package_dir={"": "src"},
-    packages=find_packages(where="src"),
-    python_requires=">=3.6",
-    package_data={
-        "doordeck_headless_sdk": ["_doordeck_headless_sdk.pyd", "Doordeck.Headless.Sdk.dll"],
-    },
-    project_urls={
-        "Bug Reports": "${pypiPublish.issues}",
-        "Source": "${pypiPublish.gitRepository}",
-    },
-)
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "${pypiPublish.packageName}"
+version = "${project.version}"
+description = "${pypiPublish.description}"
+readme = "README.md"
+requires-python = ">=3.6"
+license = { file = "LICENSE.txt" }
+keywords = [${pypiPublish.keywords.joinToString(separator = ", ") { "\"$it\"" }}]
+authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}" }]
+[project.urls]
+"Homepage" = "${pypiPublish.authorHomepage}"
+"Bug Reports" = "${pypiPublish.issues}"
+"Source" = "${pypiPublish.gitRepository}"
+[tool.setuptools]
+package-data = { "doordeck_headless_sdk" = ["_doordeck_headless_sdk.pyd", "Doordeck.Headless.Sdk.dll"] }
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["doordeck_headless_sdk*"]
 """.trimIndent()
