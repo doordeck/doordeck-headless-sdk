@@ -119,6 +119,12 @@ jobs:
       - name: Install SWIG
         run: brew install swig
 
+      - name: Install mingw-w64
+        run: brew install mingw-w64
+
+      - name: Setup python build
+        run: python -m pip install build
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
@@ -158,15 +164,18 @@ jobs:
           unzip doordeck-sdk/build/bin/mingwX64/python/python-3.13.2-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
           
           swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
-            -outdir doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/src \
+            -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
           
-          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk/src/_doordeck_headless_sdk.pyd \
+          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
             -I $(python3 -c "import sysconfig; print(sysconfig.get_paths()['include'])") \
             -L doordeck-sdk/build/bin/mingwX64/python/windows-python \
             -lpython313
+          
+          # Build the package
+          python -m build doordeck-sdk/build/bin/mingwX64/python
 
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'

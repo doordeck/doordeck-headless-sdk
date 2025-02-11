@@ -20,6 +20,7 @@ private sealed class PublishData(
     val repository: String = "https://github.com/doordeck/doordeck-headless-sdk",
     val gitRepository: String = "https://github.com/doordeck/doordeck-headless-sdk.git",
     val author: String = "Doordeck Limited",
+    val authorEmail: String = "development@doordeck.com",
     val authorRepository: String = "https://github.com/doordeck",
     val authorHomepage: String = "https://www.doordeck.com",
     val licenseType: String = "Apache-2.0",
@@ -47,7 +48,8 @@ private data class NugetPublishData(
 ) : PublishData()
 
 private data class PyPiPublishData(
-    val packageName: String = "doordeck_headless_sdk"
+    val packageName: String = "doordeck_headless_sdk",
+    val keywords: List<String> = listOf("doordeck", "sdk", "access control")
 ) : PublishData()
 
 private val npmPublish = NpmPublishData()
@@ -339,7 +341,59 @@ tasks.withType<KotlinJsCompile>().configureEach {
     }
 }
 
-val nuspecTemplate = """
+tasks.register("csharpPack").configure {
+    doLast {
+        // Create output directory
+        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
+        mkdir(outputDir)
+        // Create nuspec file
+        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
+        nuspecFile.writeText(nuspecTemplate.trim())
+        // Copy readme
+        copy {
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(outputDir)
+        }
+        // Copy csharp resources
+        copy {
+            from(file("$projectDir/src/mingwMain/resources/csharp"))
+            into(file("$outputDir/${nugetPublish.packageName}"))
+            include("**/*.cs")
+        }
+    }
+}
+
+tasks.register("pythonPack").configure {
+    doLast {
+        // Create output directory
+        val outputDir = file("$projectDir/build/bin/mingwX64/python")
+        mkdir(outputDir)
+        // Create setup.py file
+        val setupFile = file("$outputDir/setup.py")
+        setupFile.writeText(pypiTemplate.trim())
+        // Copy README & LICENSE
+        copy {
+            from(rootProject.layout.projectDirectory.file("LICENSE"))
+            from(rootProject.layout.projectDirectory.file("README.md"))
+            into(outputDir)
+        }
+        // Copy python resources
+        copy {
+            from(file("$projectDir/src/mingwMain/resources/python"))
+            into(outputDir)
+            include("**/*.i")
+        }
+        // Copy mingwX64 dll
+        copy {
+            from(file("$projectDir/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll"))
+            into(file("$outputDir/src/${pypiPublish.packageName}"))
+        }
+        // Create empty __init__.py file
+        file("$outputDir/src/${pypiPublish.packageName}/__init__.py").createNewFile()
+    }
+}
+
+private val nuspecTemplate = """
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
   <metadata>
@@ -365,42 +419,25 @@ val nuspecTemplate = """
 </package>
 """
 
-tasks.register("csharpPack").configure {
-    doLast {
-        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
-        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
-        nuspecFile.writeText(nuspecTemplate.trim())
-        // Copy readme
-        copy {
-            from(rootProject.layout.projectDirectory.file("README.md"))
-            into(outputDir)
-        }
-        // Copy csharp resources
-        copy {
-            from(file("$projectDir/src/mingwMain/resources/csharp"))
-            into(file("$outputDir/${nugetPublish.packageName}"))
-            include("**/*.cs")
-        }
-    }
-}
-
-tasks.register("pythonPack").configure {
-    doLast {
-        val outputDir = file("$projectDir/build/bin/mingwX64/python")
-        // Copy README & LICENSE
-        copy {
-            from(rootProject.layout.projectDirectory.file("LICENSE"))
-            from(rootProject.layout.projectDirectory.file("README.md"))
-            into(file("$outputDir/${pypiPublish.packageName}"))
-        }
-        copy {
-            // Copy python resources
-            from(file("$projectDir/src/mingwMain/resources/python"))
-            into(outputDir)
-            include("**/*.i")
-        }
-        // Create src & tests folders
-        mkdir(file("$outputDir/${pypiPublish.packageName}/src"))
-        mkdir(file("$outputDir/${pypiPublish.packageName}/tests"))
-    }
-}
+private val pypiTemplate = """
+from setuptools import setup, find_packages
+setup(
+    name="${pypiPublish.packageName}",
+    version="${project.version}",
+    description="${pypiPublish.description}",
+    url="${pypiPublish.authorHomepage}",
+    author="${pypiPublish.author}",
+    author_email="${pypiPublish.authorEmail}",
+    keywords="${pypiPublish.keywords.joinToString()}",
+    package_dir={"": "src"},
+    packages=find_packages(where="src"),
+    python_requires=">=3.6",
+    package_data={
+        "doordeck_headless_sdk": ["_doordeck_headless_sdk.pyd", "Doordeck.Headless.Sdk.dll"],
+    },
+    project_urls={
+        "Bug Reports": "${pypiPublish.issues}",
+        "Source": "${pypiPublish.gitRepository}",
+    },
+)
+""".trimIndent()
