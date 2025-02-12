@@ -57,7 +57,7 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateLockName() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockName = "Demo ${Uuid.random()} Lock"
+        val updatedLockName = "Doordeck Fusion Test Site - ${Uuid.random()}"
 
         // When
         LockOperationsClient.updateLockNameRequest(TEST_MAIN_LOCK_ID, updatedLockName)
@@ -99,7 +99,7 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockDefaultName = "Demo ${Uuid.random()} Lock"
+        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${Uuid.random()}"
 
         // When
         LockOperationsClient.updateLockSettingDefaultNameRequest(TEST_MAIN_LOCK_ID, updatedLockDefaultName)
