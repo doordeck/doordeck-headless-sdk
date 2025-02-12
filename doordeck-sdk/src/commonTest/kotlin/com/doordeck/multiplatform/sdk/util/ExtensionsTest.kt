@@ -1,11 +1,28 @@
 package com.doordeck.multiplatform.sdk.util
 
+import com.doordeck.multiplatform.sdk.BadRequestException
+import com.doordeck.multiplatform.sdk.ConflictException
+import com.doordeck.multiplatform.sdk.ForbiddenException
+import com.doordeck.multiplatform.sdk.GatewayTimeoutException
+import com.doordeck.multiplatform.sdk.GoneException
+import com.doordeck.multiplatform.sdk.InternalServerErrorException
+import com.doordeck.multiplatform.sdk.LockedException
+import com.doordeck.multiplatform.sdk.MethodNotAllowedException
+import com.doordeck.multiplatform.sdk.NotAcceptableException
+import com.doordeck.multiplatform.sdk.NotFoundException
 import com.doordeck.multiplatform.sdk.PlatformType
+import com.doordeck.multiplatform.sdk.SdkException
+import com.doordeck.multiplatform.sdk.ServiceUnavailableException
+import com.doordeck.multiplatform.sdk.TooEarlyException
+import com.doordeck.multiplatform.sdk.TooManyRequestsException
+import com.doordeck.multiplatform.sdk.UnauthorizedException
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
@@ -14,13 +31,31 @@ import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.pluginOrNull
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode.Companion.BadRequest
+import io.ktor.http.HttpStatusCode.Companion.Conflict
+import io.ktor.http.HttpStatusCode.Companion.Forbidden
+import io.ktor.http.HttpStatusCode.Companion.GatewayTimeout
+import io.ktor.http.HttpStatusCode.Companion.Gone
+import io.ktor.http.HttpStatusCode.Companion.InternalServerError
+import io.ktor.http.HttpStatusCode.Companion.Locked
+import io.ktor.http.HttpStatusCode.Companion.MethodNotAllowed
+import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
+import io.ktor.http.HttpStatusCode.Companion.NotFound
+import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
+import io.ktor.http.HttpStatusCode.Companion.TooEarly
+import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
+import io.ktor.http.HttpStatusCode.Companion.Unauthorized
+import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 class ExtensionsTest {
@@ -147,7 +182,7 @@ class ExtensionsTest {
     fun shouldInstallInterceptor() = runTest {
         // Given
         val httpClient = HttpClient().also {
-            it.addInterceptor(
+            it.addAuthInterceptor(
                 requiresAuth = Paths::requiresAuth,
                 getAuthToken = ContextManagerImpl::getAuthToken
             )
@@ -155,5 +190,71 @@ class ExtensionsTest {
 
         // Then
         assertNotNull(httpClient.pluginOrNull(HttpSend))
+    }
+
+    @Test
+    fun shouldInstallResponseValidator() = runTest {
+        val status = listOf(BadRequest, Unauthorized, Forbidden, NotFound, MethodNotAllowed, NotAcceptable, Conflict,
+            Gone, Locked, TooEarly, TooManyRequests, InternalServerError, ServiceUnavailable, GatewayTimeout
+        )
+        status.forEach { responseStatus ->
+            val httpClient = HttpClient(MockEngine {
+                respond(
+                    content = "",
+                    status = responseStatus
+                )
+            }) {
+                installResponseValidator()
+            }
+
+            val response = assertFails {
+                httpClient.get("")
+            }
+
+            // Then
+            when (responseStatus) {
+                BadRequest -> assertTrue { response is BadRequestException }
+                Unauthorized -> assertTrue { response is UnauthorizedException }
+                Forbidden -> assertTrue { response is ForbiddenException }
+                NotFound -> assertTrue { response is NotFoundException }
+                MethodNotAllowed -> assertTrue { response is MethodNotAllowedException }
+                NotAcceptable -> assertTrue { response is NotAcceptableException }
+                Conflict -> assertTrue { response is ConflictException }
+                Gone -> assertTrue { response is GoneException }
+                Locked -> assertTrue { response is LockedException }
+                TooEarly -> assertTrue { response is TooEarlyException }
+                TooManyRequests -> assertTrue { response is TooManyRequestsException }
+                InternalServerError -> assertTrue { response is InternalServerErrorException }
+                ServiceUnavailable -> assertTrue { response is ServiceUnavailableException }
+                GatewayTimeout -> assertTrue { response is GatewayTimeoutException }
+
+            }
+            assertNotNull(httpClient.pluginOrNull(HttpSend))
+        }
+
+    }
+
+    @Test
+    fun shouldInstallExceptionInterceptor() = runTest {
+        // Given
+        val exceptions = listOf(ContentConvertException(""), SdkException(""), Exception(""))
+        exceptions.forEach { exception ->
+            val httpClient = HttpClient(
+                MockEngine {
+                    throw exception
+                }
+            ).also {
+                it.addExceptionInterceptor()
+            }
+
+            // When
+            val response = assertFails {
+                httpClient.get("")
+            }
+
+            // Then
+            assertTrue { response is SdkException }
+            assertNotNull(httpClient.pluginOrNull(HttpSend))
+        }
     }
 }

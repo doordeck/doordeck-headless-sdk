@@ -9,15 +9,16 @@ import com.doordeck.multiplatform.sdk.api.responses.AssistedRegisterEphemeralKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 
-internal object HelperClient : AbstractResourceImpl() {
+internal object HelperClient {
 
     suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
         // Generate a new presigned URL
         val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
         // Upload the image into the presigned URL
-        HttpClient.put<Unit>(url.uploadUrl) {
+        HttpClient.client.put(url.uploadUrl) {
             addRequestHeaders(contentType = contentType)
             setBody(image)
         }
