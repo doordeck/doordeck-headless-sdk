@@ -99,7 +99,7 @@ class ExtensionsTest {
         }
 
         // Then
-        assertEquals("application/vnd.doordeck.api-v3+json", httpRequestBuilder.headers[HttpHeaders.Accept])
+        assertEquals(ApiVersion.VERSION_3.toHeaderValue(), httpRequestBuilder.headers[HttpHeaders.Accept])
     }
 
     @Test

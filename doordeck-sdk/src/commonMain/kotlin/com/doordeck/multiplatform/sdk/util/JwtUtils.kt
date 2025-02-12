@@ -6,10 +6,8 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import kotlin.js.JsExport
 import kotlin.time.Duration.Companion.days
 
-@JsExport
 internal object JwtUtils {
     private const val TOKEN_EXPIRE_AT_FIELD = "exp"
 

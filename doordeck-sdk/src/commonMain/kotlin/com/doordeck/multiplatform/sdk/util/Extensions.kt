@@ -56,6 +56,8 @@ import kotlinx.serialization.encodeToString
 private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
 private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
+internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
+
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     contentType: String? = if (signedRequest) DEFAULT_SIGNED_REQUEST_CONTENT_TYPE else DEFAULT_REQUEST_CONTENT_TYPE,
@@ -67,7 +69,7 @@ internal fun HttpRequestBuilder.addRequestHeaders(
             append(HttpHeaders.ContentType, contentType)
         }
         if (apiVersion != null) {
-            append(HttpHeaders.Accept, "application/vnd.doordeck.api-v${apiVersion.version}+json")
+            append(HttpHeaders.Accept, apiVersion.toHeaderValue())
         }
         if (token != null) {
             append(HttpHeaders.Authorization, "Bearer $token")
