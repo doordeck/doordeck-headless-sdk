@@ -370,7 +370,7 @@ tasks.register("pythonPack").configure {
         mkdir(outputDir)
         // Create pyproject file
         val setupFile = file("$outputDir/pyproject.toml")
-        setupFile.writeText(pyprojectTemplate.trim())
+        setupFile.writeText(pypiTemplate.trim())
         // Copy README & LICENSE
         copy {
             from(rootProject.layout.projectDirectory.file("LICENSE"))
@@ -419,7 +419,7 @@ private val nuspecTemplate = """
 </package>
 """
 
-private val pyprojectTemplate = """
+val pypiTemplate = """
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
@@ -428,7 +428,7 @@ name = "${pypiPublish.packageName}"
 version = "${project.version}"
 description = "${pypiPublish.description}"
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = "3.13"
 license = { file = "LICENSE.txt" }
 keywords = [${pypiPublish.keywords.joinToString(separator = ", ") { "\"$it\"" }}]
 authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}" }]
