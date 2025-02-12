@@ -48,7 +48,7 @@ private data class NugetPublishData(
 ) : PublishData()
 
 private data class PyPiPublishData(
-    val packageName: String = "doordeck_headless_sdk",
+    val packageName: String = "doordeck.sdk",
     val keywords: List<String> = listOf("doordeck", "sdk", "access control")
 ) : PublishData()
 
@@ -432,6 +432,10 @@ requires-python = "3.13"
 license = { file = "LICENSE.txt" }
 keywords = [${pypiPublish.keywords.joinToString(separator = ", ") { "\"$it\"" }}]
 authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}" }]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3.13",
+],
 [project.urls]
 "Homepage" = "${pypiPublish.authorHomepage}"
 "Bug Reports" = "${pypiPublish.issues}"
