@@ -34,6 +34,7 @@ import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
 import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
 import com.doordeck.multiplatform.sdk.internal.api.Paths
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
+import com.doordeck.multiplatform.sdk.util.toHeaderValue
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -151,7 +152,7 @@ private inline fun <reified T> MockRequestHandleScope.respondContent(content: T)
     )
 
 private fun HttpRequestData.isVersion(apiVersion: ApiVersion): Boolean =
-    headers.contains(HttpHeaders.Accept, "application/vnd.doordeck.api-v${apiVersion.version}+json")
+    headers.contains(HttpHeaders.Accept, apiVersion.toHeaderValue())
 
 internal val TOKEN_RESPONSE: TokenResponse = randomTokenResponse()
 internal val TILE_LOCKS_RESPONSE: TileLocksResponse = randomTileLocksResponse()
