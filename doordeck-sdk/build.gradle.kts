@@ -48,7 +48,7 @@ private data class NugetPublishData(
 ) : PublishData()
 
 private data class PyPiPublishData(
-    val packageName: String = "doordeck.sdk",
+    val packageName: String = "doordeck_headless_sdk",
     val keywords: List<String> = listOf("doordeck", "sdk", "access control")
 ) : PublishData()
 
@@ -435,11 +435,12 @@ authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3.13",
-],
+  "Operating System :: Microsoft :: Windows",
+]
 [project.urls]
 "Homepage" = "${pypiPublish.authorHomepage}"
-"Bug Reports" = "${pypiPublish.issues}"
 "Source" = "${pypiPublish.gitRepository}"
+"Issue tracker" = "${pypiPublish.issues}"
 [tool.setuptools]
 package-data = { "doordeck_headless_sdk" = ["_doordeck_headless_sdk.pyd", "Doordeck.Headless.Sdk.dll"] }
 """.trimIndent()

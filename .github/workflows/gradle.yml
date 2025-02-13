@@ -168,11 +168,11 @@ jobs:
           
           # Generate python bindings
           swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
-            -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck.sdk \
+            -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
           
           # Compile python bindings
-          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck.sdk/_doordeck_headless_sdk.pyd \
+          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
             -I $(python -c "import sysconfig; print(sysconfig.get_paths()['include'])") \
