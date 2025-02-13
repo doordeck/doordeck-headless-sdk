@@ -183,7 +183,7 @@ jobs:
           python -m build doordeck-sdk/build/bin/mingwX64/python
           
           # Publish
-          twine upload --repository testpypi doordeck-sdk/build/bin/mingwX64/python/dist/*
+          twine upload doordeck-sdk/build/bin/mingwX64/python/dist/*
 
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'
