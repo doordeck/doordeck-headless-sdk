@@ -257,4 +257,16 @@ class ExtensionsTest {
             assertNotNull(httpClient.pluginOrNull(HttpSend))
         }
     }
+
+    @Test
+    fun shouldBuildApiVersionToHeaderValue() = runTest {
+        // Given
+        val version = ApiVersion.VERSION_3
+
+        // When
+        val result = version.toHeaderValue()
+
+        // Then
+        assertEquals("application/vnd.doordeck.api-v3+json", result)
+    }
 }
