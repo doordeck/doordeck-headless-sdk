@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+/*package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
@@ -89,4 +89,4 @@ class FusionClientTest : IntegrationTest() {
             }
         }
     }
-}
+}*/

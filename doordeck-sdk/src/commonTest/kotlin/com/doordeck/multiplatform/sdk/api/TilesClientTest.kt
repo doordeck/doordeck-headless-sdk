@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+/*package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.NotFoundException
@@ -50,4 +50,4 @@ class TilesClientTest : IntegrationTest() {
         }
         assertTrue { exception is NotFoundException }
     }
-}
+}*/

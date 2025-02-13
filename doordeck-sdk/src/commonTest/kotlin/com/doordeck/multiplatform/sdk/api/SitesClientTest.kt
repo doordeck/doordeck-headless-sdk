@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+/*package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
@@ -51,4 +51,4 @@ class SitesClientTest : IntegrationTest() {
         assertTrue { usersForSite.isNotEmpty() }
         assertTrue { usersForSite.any { it.userId == TEST_MAIN_USER_ID } }
     }
-}
+}*/

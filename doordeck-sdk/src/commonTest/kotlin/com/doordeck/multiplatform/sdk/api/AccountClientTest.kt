@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+/*package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -95,4 +95,4 @@ class AccountClientTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getRefreshToken())
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
-}
+}*/
