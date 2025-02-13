@@ -41,7 +41,7 @@ import kotlin.uuid.Uuid
 
 class LockOperationsClientTest : IntegrationTest() {
 
-    /*@Test
+    @Test
     fun shouldGetSingleLock() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -326,7 +326,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { shareableLocks.isNotEmpty() }
-    }*/
+    }
 
     @Test
     fun shouldUnlock() = runTest {
@@ -349,7 +349,7 @@ class LockOperationsClientTest : IntegrationTest() {
         LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(baseOperation = baseOperation))
     }
 
-    /*@Test
+    @Test
     fun shouldUnlockUsingContext() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -829,5 +829,5 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.message)
         assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
-    }*/
+    }
 }
