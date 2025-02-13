@@ -18,7 +18,7 @@ public unsafe class Sites : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _sites = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites(sdk);
+        _sites = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites_(sdk);
         _sitesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource;
     }
 
@@ -31,7 +31,7 @@ public unsafe class Sites : IResource
     {
         return Process<List<SiteResponse>>(
             null,
-            _sitesResource.listSitesJson,
+            _sitesResource.listSitesJson_,
             null
         );
     }
@@ -39,7 +39,7 @@ public unsafe class Sites : IResource
     public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData data)
     {
         return Process<List<SiteLocksResponse>>(
-            _sitesResource.getLocksForSiteJson,
+            _sitesResource.getLocksForSiteJson_,
             null,
             data
         );
@@ -48,7 +48,7 @@ public unsafe class Sites : IResource
     public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData data)
     {
         return Process<List<UserForSiteResponse>>(
-            _sitesResource.getUsersForSiteJson,
+            _sitesResource.getUsersForSiteJson_,
             null,
             data
         );

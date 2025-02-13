@@ -15,7 +15,7 @@ public unsafe class CryptoManager : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _crypto = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto(sdk);
+        _crypto = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.crypto_(sdk);
         _cryptoManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager;
     }
 
@@ -23,13 +23,13 @@ public unsafe class CryptoManager : IResource
     {
         _symbols->DisposeStablePointer(_crypto.pinned);
     }
-    
+
     public EncodedKeyPair GenerateEncodedKeyPair()
     {
         sbyte* result = null;
         try
         {
-            result = _cryptoManager.generateEncodedKeyPair(_crypto);
+            result = _cryptoManager.generateEncodedKeyPair_(_crypto);
             return Utils.Utils.FromData<EncodedKeyPair>(result);
         }
         finally

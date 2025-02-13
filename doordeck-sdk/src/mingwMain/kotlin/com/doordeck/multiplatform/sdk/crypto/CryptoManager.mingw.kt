@@ -25,6 +25,7 @@ actual object CryptoManager {
         )
     }
 
+    @CName("generateEncodedKeyPair")
     actual fun generateEncodedKeyPair(): String {
         val keyPair = generateKeyPair()
         return Crypto.EncodedKeyPair(

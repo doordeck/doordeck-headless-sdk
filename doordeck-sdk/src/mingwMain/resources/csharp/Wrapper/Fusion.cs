@@ -18,7 +18,7 @@ public unsafe class Fusion : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _fusion = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion(sdk);
+        _fusion = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion_(sdk);
         _fusionResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource;
     }
 
@@ -40,7 +40,7 @@ public unsafe class Fusion : IResource
     {
         return Process<IntegrationTypeResponse>(
             null,
-            _fusionResource.getIntegrationTypeJson,
+            _fusionResource.getIntegrationTypeJson_,
             null
         );
     }
@@ -48,7 +48,7 @@ public unsafe class Fusion : IResource
     public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
     {
         return Process<List<IntegrationConfigurationResponse>>(
-            _fusionResource.getIntegrationConfigurationJson,
+            _fusionResource.getIntegrationConfigurationJson_,
             null,
             data
         );
@@ -57,7 +57,7 @@ public unsafe class Fusion : IResource
     public void EnableDoor(EnableDoorData data)
     {
         Process<object>(
-            _fusionResource.enableDoorJson,
+            _fusionResource.enableDoorJson_,
             null,
             data
         );
@@ -66,7 +66,7 @@ public unsafe class Fusion : IResource
     public void DeleteDoor(DeleteDoorData data)
     {
         Process<object>(
-            _fusionResource.deleteDoorJson,
+            _fusionResource.deleteDoorJson_,
             null,
             data
         );
@@ -75,7 +75,7 @@ public unsafe class Fusion : IResource
     public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
     {
         return Process<DoorStateResponse>(
-            _fusionResource.getDoorStatusJson,
+            _fusionResource.getDoorStatusJson_,
             null,
             data
         );
@@ -84,7 +84,7 @@ public unsafe class Fusion : IResource
     public void StartDoor(StartDoorData data)
     {
         Process<object>(
-            _fusionResource.startDoorJson,
+            _fusionResource.startDoorJson_,
             null,
             data
         );
@@ -93,7 +93,7 @@ public unsafe class Fusion : IResource
     public void StopDoor(StopDoorData data)
     {
         Process<object>(
-            _fusionResource.stopDoorJson,
+            _fusionResource.stopDoorJson_,
             null,
             data
         );

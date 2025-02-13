@@ -16,7 +16,9 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     fun refreshToken(refreshToken: String? = null): TokenResponse
+
     @DoordeckOnly
+    @CName("refreshTokenJson")
     fun refreshTokenJson(data: String? = null): String
 
     /**
@@ -25,6 +27,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
     fun logout()
+
+    @CName("logoutJson")
     fun logoutJson(): String
 
     /**
@@ -33,6 +37,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
     fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse
+
+    @CName("registerEphemeralKeyJson")
     fun registerEphemeralKeyJson(data: String? = null): String
 
     /**
@@ -41,6 +47,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+
+    @CName("registerEphemeralKeyWithSecondaryAuthenticationJson")
     fun registerEphemeralKeyWithSecondaryAuthenticationJson(data: String? = null): String
 
     /**
@@ -49,6 +57,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse
+
+    @CName("verifyEphemeralKeyRegistrationJson")
     fun verifyEphemeralKeyRegistrationJson(data: String): String
 
     /**
@@ -58,7 +68,9 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     fun reverifyEmail()
+
     @DoordeckOnly
+    @CName("reverifyEmailJson")
     fun reverifyEmailJson(): String
 
     /**
@@ -68,7 +80,9 @@ actual interface AccountResource {
      */
     @DoordeckOnly
     fun changePassword(oldPassword: String, newPassword: String)
+
     @DoordeckOnly
+    @CName("changePasswordJson")
     fun changePasswordJson(data: String): String
 
     /**
@@ -77,6 +91,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
     fun getUserDetails(): UserDetailsResponse
+
+    @CName("getUserDetailsJson")
     fun getUserDetailsJson(): String
 
     /**
@@ -85,6 +101,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
     fun updateUserDetails(displayName: String)
+
+    @CName("updateUserDetailsJson")
     fun updateUserDetailsJson(data: String): String
 
     /**
@@ -93,6 +111,8 @@ actual interface AccountResource {
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
     fun deleteAccount()
+
+    @CName("deleteAccountJson")
     fun deleteAccountJson(): String
 }
 

@@ -18,7 +18,7 @@ public unsafe class Account : IResource
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
-        _account = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account(sdk);
+        _account = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account_(sdk);
         _accountResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource;
     }
 
@@ -30,7 +30,7 @@ public unsafe class Account : IResource
     public TokenResponse RefreshToken(RefreshTokenData? data)
     {
         return Process<TokenResponse>(
-            _accountResource.refreshTokenJson,
+            _accountResource.refreshTokenJson_,
             null,
             data
         );
@@ -40,7 +40,7 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.logoutJson,
+            _accountResource.logoutJson_,
             null
         );
     }
@@ -48,7 +48,7 @@ public unsafe class Account : IResource
     public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
         return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
-            _accountResource.registerEphemeralKeyJson,
+            _accountResource.registerEphemeralKeyJson_,
             null,
             data
         );
@@ -58,7 +58,7 @@ public unsafe class Account : IResource
         RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
     {
         return Process<RegisterEphemeralKeyResponse>(
-            _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson,
+            _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson_,
             null,
             data
         );
@@ -67,7 +67,7 @@ public unsafe class Account : IResource
     public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
     {
         return Process<RegisterEphemeralKeyResponse>(
-            _accountResource.verifyEphemeralKeyRegistrationJson,
+            _accountResource.verifyEphemeralKeyRegistrationJson_,
             null,
             data
         );
@@ -77,7 +77,7 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.reverifyEmailJson,
+            _accountResource.reverifyEmailJson_,
             null
         );
     }
@@ -85,7 +85,7 @@ public unsafe class Account : IResource
     public void ChangePassword(ChangePasswordData data)
     {
         Process<object>(
-            _accountResource.changePasswordJson,
+            _accountResource.changePasswordJson_,
             null,
             data
         );
@@ -95,7 +95,7 @@ public unsafe class Account : IResource
     {
         return Process<UserDetailsResponse>(
             null,
-            _accountResource.getUserDetailsJson,
+            _accountResource.getUserDetailsJson_,
             null
         );
     }
@@ -103,7 +103,7 @@ public unsafe class Account : IResource
     public void UpdateUserDetails(UpdateUserDetailsData data)
     {
         Process<object>(
-            _accountResource.updateUserDetailsJson,
+            _accountResource.updateUserDetailsJson_,
             null,
             data
         );
@@ -113,7 +113,7 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.deleteAccountJson,
+            _accountResource.deleteAccountJson_,
             null
         );
     }

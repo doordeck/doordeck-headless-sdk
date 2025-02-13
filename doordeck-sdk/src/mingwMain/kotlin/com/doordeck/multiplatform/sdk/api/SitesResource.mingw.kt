@@ -12,6 +12,8 @@ actual interface SitesResource {
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
     fun listSites(): List<SiteResponse>
+
+    @CName("listSitesJson")
     fun listSitesJson(): String
 
     /**
@@ -20,6 +22,8 @@ actual interface SitesResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
     fun getLocksForSite(siteId: String): List<SiteLocksResponse>
+
+    @CName("getLocksForSiteJson")
     fun getLocksForSiteJson(data: String): String
 
     /**
@@ -28,6 +32,8 @@ actual interface SitesResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
     fun getUsersForSite(siteId: String): List<UserForSiteResponse>
+
+    @CName("getUsersForSiteJson")
     fun getUsersForSiteJson(data: String): String
 }
 

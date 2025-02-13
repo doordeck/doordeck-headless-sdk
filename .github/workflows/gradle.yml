@@ -84,7 +84,7 @@ jobs:
         with:
           ruby-version: '3.3'
 
-      - name: Install CocoaPods
+      - name: Setup CocoaPods
         run: |
           sudo gem install cocoapods
 
@@ -99,7 +99,7 @@ jobs:
         with:
             dotnet-version: 7.x
 
-      - name: Install ClangSharpPInvokeGenerator
+      - name: Setup ClangSharpPInvokeGenerator
         run: |
           # Install ClangSharpPInvokeGenerator
           dotnet tool install --global ClangSharpPInvokeGenerator
@@ -115,6 +115,15 @@ jobs:
           find ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages \
             -name "*.dylib" \
             -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
+
+      - name: Setup SWIG
+        run: brew install swig
+
+      - name: Setup mingw-w64
+        run: brew install mingw-w64
+
+      - name: Setup python build
+        run: python -m pip install build
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -134,37 +143,75 @@ jobs:
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
 
+      - name: Build mingw binaries
+        if: github.ref == 'refs/heads/main'
+        run: |
+          ./gradlew mingwX64Binaries
+          
+          # Adjust generated header
+          sed -i '' \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+          "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+      - name: Publish to PyPi
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          ./gradlew -Prelease.useLastTag=true pythonPack
+          
+          # Download python for windows
+          curl -LO https://www.python.org/ftp/python/3.13.2/python-3.13.2-embed-amd64.zip
+          mv python-3.13.2-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
+          unzip doordeck-sdk/build/bin/mingwX64/python/python-3.13.2-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
+          
+          # Generate python bindings
+          swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
+            -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
+            doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
+          
+          # Compile python bindings
+          x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
+            doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
+            doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
+            -I $(python -c "import sysconfig; print(sysconfig.get_paths()['include'])") \
+            -L doordeck-sdk/build/bin/mingwX64/python/windows-python \
+            -lpython313
+          
+          # Build package
+          python -m build doordeck-sdk/build/bin/mingwX64/python
+          
+          # Publish
+          twine upload doordeck-sdk/build/bin/mingwX64/python/dist/*
+
       - name: Publish to NuGet
         if: github.ref == 'refs/heads/main'
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
-          # Generate the dll and header files
-          ./gradlew mingwX64Binaries
-          
           # Generate PInvoke bindings
           ClangSharpPInvokeGenerator \
             -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
-            -o doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
+            -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
             -n Doordeck.Headless.Sdk
           
           # Adjust generated bindings
           sed -i '' \
-            -e 's/_\$$/_/g' \
-            -e 's/\$//g' \
-            -e '/\[NativeTypeName/d' \
+            -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
+            -e 's/\[.*NativeTypeName([^]]*)\]//g' \
             -e 's/\[DllImport(""/\[DllImport("Doordeck.Headless.Sdk.dll"/g' \
-            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+            "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
           
           # Create the .nuspec file
-          ./gradlew -Prelease.useLastTag=true mingwX64Pack
+          ./gradlew -Prelease.useLastTag=true csharpPack
           
           # Create the .nupkg file
-          nuget pack doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/releaseShared/
+          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
+            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
           
           # Publish the package
-          nuget push doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
+          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
             -Source https://api.nuget.org/v3/index.json \
             -ApiKey ${{ secrets.NUGET_TOKEN }}
 

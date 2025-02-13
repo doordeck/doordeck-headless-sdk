@@ -11,6 +11,8 @@ actual interface TilesResource {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
     fun getLocksBelongingToTile(tileId: String): TileLocksResponse
+
+    @CName("getLocksBelongingToTileJson")
     fun getLocksBelongingToTileJson(data: String): String
 
     /**
@@ -20,7 +22,9 @@ actual interface TilesResource {
      */
     @SiteAdmin
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>)
+
     @SiteAdmin
+    @CName("associateMultipleLocksJson")
     fun associateMultipleLocksJson(data: String): String
 }
 
