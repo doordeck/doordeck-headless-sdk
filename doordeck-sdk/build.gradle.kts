@@ -385,7 +385,7 @@ tasks.register("pythonPack").configure {
         }
         // Copy mingwX64 dll
         copy {
-            from(file("$projectDir/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll"))
+            from(file("$projectDir/build/bin/mingwX64/releaseShared/${nugetPublish.packageName}.dll"))
             into(file("$outputDir/src/${pypiPublish.packageName}"))
         }
         // Create empty __init__.py file
@@ -442,5 +442,5 @@ classifiers = [
 "Source" = "${pypiPublish.gitRepository}"
 "Issue tracker" = "${pypiPublish.issues}"
 [tool.setuptools]
-package-data = { "doordeck_headless_sdk" = ["_doordeck_headless_sdk.pyd", "Doordeck.Headless.Sdk.dll"] }
+package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
 """.trimIndent()
