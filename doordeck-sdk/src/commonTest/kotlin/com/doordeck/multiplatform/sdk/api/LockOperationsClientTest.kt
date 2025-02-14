@@ -331,9 +331,7 @@ class LockOperationsClientTest : IntegrationTest() {
     @Test
     fun shouldUnlock() = runTest {
         // Given
-        println("loginRequest")
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        println("registerEphemeralKeyRequest")
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
             .certificateChain
             .certificateChainToString()
@@ -345,7 +343,6 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        println("unlockRequest")
         LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(baseOperation = baseOperation))
     }
 
