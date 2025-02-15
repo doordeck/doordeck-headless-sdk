@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
@@ -13,12 +12,13 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_US
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.api.model.LockOperations
-import com.doordeck.multiplatform.sdk.api.model.UserRole
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.AccountClient
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
-import com.doordeck.multiplatform.sdk.internal.api.LockOperationsClient
+import com.doordeck.multiplatform.sdk.clients.AccountClient
+import com.doordeck.multiplatform.sdk.clients.AccountlessClient
+import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
+import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.model.LockOperations
+import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
@@ -379,7 +379,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.shareLockRequest(LockOperations.ShareLockOperation(
+        LockOperationsClient.shareLockRequest(
+            LockOperations.ShareLockOperation(
             baseOperation = shareBaseOperation,
             shareLock = LockOperations.ShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_USER_ID,
@@ -401,7 +402,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsClient.revokeAccessToLockRequest(
+            LockOperations.RevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
             users = listOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
@@ -438,7 +440,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.batchShareLockRequest(LockOperations.BatchShareLockOperation(
+        LockOperationsClient.batchShareLockRequest(
+            LockOperations.BatchShareLockOperation(
             baseOperation = shareBaseOperation,
             users = batchShareLock
         ))
@@ -463,7 +466,8 @@ class LockOperationsClientTest : IntegrationTest() {
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
-        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsClient.revokeAccessToLockRequest(
+            LockOperations.RevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
             users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
@@ -499,7 +503,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.shareLockRequest(LockOperations.ShareLockOperation(
+        LockOperationsClient.shareLockRequest(
+            LockOperations.ShareLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             shareLock = shareLock
         ))
@@ -510,7 +515,8 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Given - shouldRevokeAccessToLockUsingContext
         // When
-        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsClient.revokeAccessToLockRequest(
+            LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = listOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
@@ -547,7 +553,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.batchShareLockRequest(LockOperations.BatchShareLockOperation(
+        LockOperationsClient.batchShareLockRequest(
+            LockOperations.BatchShareLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = batchShareLock
         ))
@@ -566,7 +573,8 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Given - shouldRevokeAccessToLockUsingContext
         // When
-        LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(
+        LockOperationsClient.revokeAccessToLockRequest(
+            LockOperations.RevokeAccessToLockOperation(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
@@ -598,7 +606,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.updateSecureSettingUnlockDurationRequest(LockOperations.UpdateSecureSettingUnlockDuration(
+        LockOperationsClient.updateSecureSettingUnlockDurationRequest(
+            LockOperations.UpdateSecureSettingUnlockDuration(
             baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
         ))
@@ -661,7 +670,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
+            LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = addBaseOperation,
             unlockBetween = updatedUnlockBetween
         ))
@@ -683,7 +693,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
+            LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = removeBaseOperation,
             unlockBetween = null
         ))
@@ -718,7 +729,8 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
+            LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = updatedUnlockBetween
         ))
@@ -732,7 +744,8 @@ class LockOperationsClientTest : IntegrationTest() {
         assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
 
         // Given
-        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(LockOperations.UpdateSecureSettingUnlockBetween(
+        LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
+            LockOperations.UpdateSecureSettingUnlockBetween(
             baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = null
         ))
@@ -782,7 +795,8 @@ class LockOperationsClientTest : IntegrationTest() {
             LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
         }
         val shareLockUsingContextException = assertFails {
-            LockOperationsClient.shareLockRequest(LockOperations.ShareLockOperation(
+            LockOperationsClient.shareLockRequest(
+                LockOperations.ShareLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
                 shareLock = LockOperations.ShareLock(
                     targetUserId = "",
@@ -795,7 +809,8 @@ class LockOperationsClientTest : IntegrationTest() {
             LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
         }
         val updateSecureSettingUnlockDurationUsingContextException = assertFails {
-            LockOperationsClient.updateSecureSettingUnlockDurationRequest(LockOperations.UpdateSecureSettingUnlockDuration(
+            LockOperationsClient.updateSecureSettingUnlockDurationRequest(
+                LockOperations.UpdateSecureSettingUnlockDuration(
                 baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
                 unlockDuration = 0
             ))

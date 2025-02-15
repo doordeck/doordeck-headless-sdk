@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.internal.api.FusionPaths
-import com.doordeck.multiplatform.sdk.internal.api.Paths
-import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
+import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.model.network.FusionPaths
+import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
+import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
 import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation

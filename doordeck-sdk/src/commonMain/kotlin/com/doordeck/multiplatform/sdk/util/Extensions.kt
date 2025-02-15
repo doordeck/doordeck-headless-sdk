@@ -1,28 +1,28 @@
 package com.doordeck.multiplatform.sdk.util
 
-import com.doordeck.multiplatform.sdk.BadRequestException
-import com.doordeck.multiplatform.sdk.ConflictException
-import com.doordeck.multiplatform.sdk.ForbiddenException
-import com.doordeck.multiplatform.sdk.GatewayTimeoutException
-import com.doordeck.multiplatform.sdk.GoneException
-import com.doordeck.multiplatform.sdk.InternalServerErrorException
 import com.doordeck.multiplatform.sdk.JSON
-import com.doordeck.multiplatform.sdk.LockedException
-import com.doordeck.multiplatform.sdk.MethodNotAllowedException
-import com.doordeck.multiplatform.sdk.NotAcceptableException
-import com.doordeck.multiplatform.sdk.NotFoundException
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.SdkException
-import com.doordeck.multiplatform.sdk.ServiceUnavailableException
-import com.doordeck.multiplatform.sdk.TooEarlyException
-import com.doordeck.multiplatform.sdk.TooManyRequestsException
-import com.doordeck.multiplatform.sdk.UnauthorizedException
-import com.doordeck.multiplatform.sdk.api.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
+import com.doordeck.multiplatform.sdk.exceptions.ConflictException
+import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
+import com.doordeck.multiplatform.sdk.exceptions.GatewayTimeoutException
+import com.doordeck.multiplatform.sdk.exceptions.GoneException
+import com.doordeck.multiplatform.sdk.exceptions.InternalServerErrorException
+import com.doordeck.multiplatform.sdk.exceptions.LockedException
+import com.doordeck.multiplatform.sdk.exceptions.MethodNotAllowedException
+import com.doordeck.multiplatform.sdk.exceptions.NotAcceptableException
+import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
+import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
+import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
+import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.getPlatform
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.api.responses.ResponseError
-import com.doordeck.multiplatform.sdk.internal.api.ApiVersion
-import com.doordeck.multiplatform.sdk.internal.api.Paths
+import com.doordeck.multiplatform.sdk.model.network.ApiVersion
+import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.responses.ResponseError
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
@@ -51,7 +51,6 @@ import io.ktor.http.append
 import io.ktor.http.encodedPath
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.encodeToString
 
 private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
 private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"

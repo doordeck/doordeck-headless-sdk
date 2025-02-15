@@ -6,9 +6,9 @@ import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
-import com.doordeck.multiplatform.sdk.api.responses.ServiceStateType
+import com.doordeck.multiplatform.sdk.clients.FusionClient
 import com.doordeck.multiplatform.sdk.createFusionHttpClient
-import com.doordeck.multiplatform.sdk.internal.api.FusionClient
+import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.http.URLProtocol
 import kotlinx.coroutines.test.runTest

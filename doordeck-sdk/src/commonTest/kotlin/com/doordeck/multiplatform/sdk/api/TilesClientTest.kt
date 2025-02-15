@@ -1,15 +1,15 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.NotFoundException
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_TILE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_TILE_ID
-import com.doordeck.multiplatform.sdk.internal.api.AccountlessClient
-import com.doordeck.multiplatform.sdk.internal.api.TilesClient
+import com.doordeck.multiplatform.sdk.clients.AccountlessClient
+import com.doordeck.multiplatform.sdk.clients.TilesClient
+import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFails
