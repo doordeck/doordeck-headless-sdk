@@ -28,7 +28,7 @@ jobs:
 #            os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
-            os: windows-latest
+            os: ubuntu-latest
 #          - name: Apple
 #            test: iosX64Test macosArm64Test
 #            os: macos-latest
