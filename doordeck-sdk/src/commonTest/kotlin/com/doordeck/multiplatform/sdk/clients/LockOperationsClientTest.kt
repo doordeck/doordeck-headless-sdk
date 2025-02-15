@@ -13,12 +13,18 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAI
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.LockOperations
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.requests.LockOperationRequest
+import com.doordeck.multiplatform.sdk.model.requests.OperationBodyRequest
+import com.doordeck.multiplatform.sdk.model.requests.OperationHeaderRequest
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
+import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -838,5 +844,30 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.message)
         assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
+    }
+
+    @Test
+    fun shouldPerformOperation() = runTest {
+        // Given
+        val privateKey = "MC4CAQAwBQYDK2VwBCIEIEq01zxYexZwMJGXG1WVjRind7GoRdm7HNKaTUU/IJxF"
+        val operationHeader = OperationHeaderRequest(x5c = listOf("b6c888fa-b5dd-4001-86b2-44e9e39bc732"))
+        val operationBody = OperationBodyRequest(
+            iss = "62974ed7-eb0a-45bf-9e27-8e9475b3cef4",
+            sub = "7d520362-88f8-45ec-ade8-394f016e09ee",
+            nbf = 1739613314,
+            iat = 1739613314,
+            exp = 1739613374,
+            jti = "95230bb1-d555-499f-9ff7-8baceabe8740",
+            operation = LockOperationRequest(locked = false)
+        )
+
+        // When
+        val headerB64 = operationHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(privateKey.decodeBase64ToByteArray()).encodeByteArrayToBase64()
+        val body = "$headerB64.$bodyB64.$signatureB64"
+
+        // Then
+        assertEquals("eyJhbGciOiJFZERTQSIsIng1YyI6WyJiNmM4ODhmYS1iNWRkLTQwMDEtODZiMi00NGU5ZTM5YmM3MzIiXSwidHlwZSI6IkpXVCJ9.eyJpc3MiOiI2Mjk3NGVkNy1lYjBhLTQ1YmYtOWUyNy04ZTk0NzViM2NlZjQiLCJzdWIiOiI3ZDUyMDM2Mi04OGY4LTQ1ZWMtYWRlOC0zOTRmMDE2ZTA5ZWUiLCJuYmYiOjE3Mzk2MTMzMTQsImlhdCI6MTczOTYxMzMxNCwiZXhwIjoxNzM5NjEzMzc0LCJqdGkiOiI5NTIzMGJiMS1kNTU1LTQ5OWYtOWZmNy04YmFjZWFiZTg3NDAiLCJvcGVyYXRpb24iOnsidHlwZSI6Ik1VVEFURV9MT0NLIiwibG9ja2VkIjpmYWxzZX19.JVdB7eo5fFCW4XqdB/Wd5XeUBsv95wlqBEbKhI58w9jgVXwgbBsTQjj+9b0T7VhqekRiiE/4hS8D2NXfKT3RAw==", body)
     }
 }
