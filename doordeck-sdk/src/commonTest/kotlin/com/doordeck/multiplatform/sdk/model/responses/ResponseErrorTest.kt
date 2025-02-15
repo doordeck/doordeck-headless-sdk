@@ -1,6 +1,5 @@
-package com.doordeck.multiplatform.sdk.api.responses
+package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

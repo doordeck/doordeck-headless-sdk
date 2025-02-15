@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
@@ -12,9 +12,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_US
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.clients.AccountClient
-import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.LockOperations

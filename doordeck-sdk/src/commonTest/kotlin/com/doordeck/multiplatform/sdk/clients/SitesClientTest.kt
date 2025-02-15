@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
@@ -6,8 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
-import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.clients.SitesClient
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue

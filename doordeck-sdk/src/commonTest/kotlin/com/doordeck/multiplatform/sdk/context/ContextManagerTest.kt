@@ -1,7 +1,6 @@
-package com.doordeck.multiplatform.sdk.internal
+package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.Context
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString

@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.api
+package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
-import com.doordeck.multiplatform.sdk.clients.FusionClient
 import com.doordeck.multiplatform.sdk.createFusionHttpClient
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
 import io.ktor.client.plugins.defaultRequest
