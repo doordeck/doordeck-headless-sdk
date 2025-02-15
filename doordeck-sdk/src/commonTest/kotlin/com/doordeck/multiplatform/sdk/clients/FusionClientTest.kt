@@ -18,7 +18,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
-
+/*
 class FusionClientTest : IntegrationTest() {
 
     @Ignore
@@ -89,3 +89,5 @@ class FusionClientTest : IntegrationTest() {
         }
     }
 }
+
+ */

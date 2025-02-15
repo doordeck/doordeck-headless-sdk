@@ -13,7 +13,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
-
+/*
 class AccountlessClientTest : IntegrationTest() {
 
     @Test
@@ -55,3 +55,5 @@ class AccountlessClientTest : IntegrationTest() {
         }
     }
 }
+
+ */

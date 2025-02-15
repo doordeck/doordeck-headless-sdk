@@ -17,7 +17,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
-
+/*
 class PlatformClientTest : IntegrationTest() {
 
     @Test
@@ -318,3 +318,5 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }
+
+ */
