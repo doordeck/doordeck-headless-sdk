@@ -1,8 +1,8 @@
-package com.doordeck.multiplatform.sdk.model
+package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.LockOperations.BaseOperation
-import com.doordeck.multiplatform.sdk.model.LockOperations.ShareLock
-import com.doordeck.multiplatform.sdk.model.LockOperations.UnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
+import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
+import com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockBetween
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock

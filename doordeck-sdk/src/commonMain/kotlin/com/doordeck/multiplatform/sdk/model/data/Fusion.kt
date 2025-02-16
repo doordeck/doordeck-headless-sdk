@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.model
+package com.doordeck.multiplatform.sdk.model.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

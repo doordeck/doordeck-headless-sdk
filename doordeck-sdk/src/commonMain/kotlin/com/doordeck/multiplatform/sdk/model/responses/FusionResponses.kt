@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.Fusion
+import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport

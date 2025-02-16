@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
 import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.model.Fusion
+import com.doordeck.multiplatform.sdk.model.data.Fusion
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

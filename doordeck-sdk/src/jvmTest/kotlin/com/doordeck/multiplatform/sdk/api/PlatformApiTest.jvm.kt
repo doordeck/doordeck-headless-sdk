@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
 import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.model.Platform
+import com.doordeck.multiplatform.sdk.model.data.Platform
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test

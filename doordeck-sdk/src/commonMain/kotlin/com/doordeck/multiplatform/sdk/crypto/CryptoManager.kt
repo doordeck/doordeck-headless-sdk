@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import com.doordeck.multiplatform.sdk.model.Crypto
+import com.doordeck.multiplatform.sdk.model.data.Crypto
 import kotlin.time.Duration.Companion.days
 
 internal const val SODIUM_PUBLIC_KEY_SIZE = 32

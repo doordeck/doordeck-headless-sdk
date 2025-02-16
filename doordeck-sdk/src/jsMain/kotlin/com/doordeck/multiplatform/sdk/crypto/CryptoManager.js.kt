@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.jsmodule.ASN1
 import com.doordeck.multiplatform.sdk.jsmodule.PKI
-import com.doordeck.multiplatform.sdk.model.Crypto
+import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.util.decodeBase64Bytes

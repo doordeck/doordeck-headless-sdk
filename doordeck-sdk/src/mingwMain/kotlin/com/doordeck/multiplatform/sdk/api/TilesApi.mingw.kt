@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
-import com.doordeck.multiplatform.sdk.model.AssociateMultipleLocksData
-import com.doordeck.multiplatform.sdk.model.GetLocksBelongingToTileData
+import com.doordeck.multiplatform.sdk.model.data.AssociateMultipleLocksData
+import com.doordeck.multiplatform.sdk.model.data.GetLocksBelongingToTileData
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.resultData

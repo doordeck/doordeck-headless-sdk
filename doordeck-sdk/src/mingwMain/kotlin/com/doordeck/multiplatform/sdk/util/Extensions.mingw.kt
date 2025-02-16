@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.util
 
-import com.doordeck.multiplatform.sdk.model.FailedResultData
-import com.doordeck.multiplatform.sdk.model.ResultData
-import com.doordeck.multiplatform.sdk.model.SuccessResultData
-import com.doordeck.multiplatform.sdk.model.common.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.FailedResultData
+import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import io.ktor.client.HttpClientConfig
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {

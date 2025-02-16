@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.model
+package com.doordeck.multiplatform.sdk.model.data
 
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads

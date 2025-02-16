@@ -5,8 +5,8 @@ import com.doordeck.multiplatform.sdk.LOCKS_FOR_SITE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
 import com.doordeck.multiplatform.sdk.USER_FOR_SITE_RESPONSE
-import com.doordeck.multiplatform.sdk.model.GetLocksForSiteData
-import com.doordeck.multiplatform.sdk.model.GetUsersForSiteData
+import com.doordeck.multiplatform.sdk.model.data.GetLocksForSiteData
+import com.doordeck.multiplatform.sdk.model.data.GetUsersForSiteData
 import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest

@@ -1,11 +1,11 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.model.LoginData
-import com.doordeck.multiplatform.sdk.model.PasswordResetData
-import com.doordeck.multiplatform.sdk.model.PasswordResetVerifyData
-import com.doordeck.multiplatform.sdk.model.RegistrationData
-import com.doordeck.multiplatform.sdk.model.VerifyEmailData
+import com.doordeck.multiplatform.sdk.model.data.LoginData
+import com.doordeck.multiplatform.sdk.model.data.PasswordResetData
+import com.doordeck.multiplatform.sdk.model.data.PasswordResetVerifyData
+import com.doordeck.multiplatform.sdk.model.data.RegistrationData
+import com.doordeck.multiplatform.sdk.model.data.VerifyEmailData
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson

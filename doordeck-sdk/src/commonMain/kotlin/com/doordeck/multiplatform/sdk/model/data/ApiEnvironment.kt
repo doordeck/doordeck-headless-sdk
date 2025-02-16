@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.model.common
+package com.doordeck.multiplatform.sdk.model.data
 
 import kotlin.js.JsExport
 

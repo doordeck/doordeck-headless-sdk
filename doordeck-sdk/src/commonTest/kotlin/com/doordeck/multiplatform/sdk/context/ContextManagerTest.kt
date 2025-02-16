@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.model.Context
+import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson

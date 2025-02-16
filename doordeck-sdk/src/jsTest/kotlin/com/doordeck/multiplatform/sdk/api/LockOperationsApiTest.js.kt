@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.USER_LOCK_RESPONSE
 import com.doordeck.multiplatform.sdk.USER_PUBLIC_KEY_RESPONSE
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
-import com.doordeck.multiplatform.sdk.model.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole

@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.FusionClient
-import com.doordeck.multiplatform.sdk.model.Fusion
+import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse

@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TILE_LOCKS_RESPONSE
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_TILE_ID
-import com.doordeck.multiplatform.sdk.model.AssociateMultipleLocksData
-import com.doordeck.multiplatform.sdk.model.GetLocksBelongingToTileData
+import com.doordeck.multiplatform.sdk.model.data.AssociateMultipleLocksData
+import com.doordeck.multiplatform.sdk.model.data.GetLocksBelongingToTileData
 import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest

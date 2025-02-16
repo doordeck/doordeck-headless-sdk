@@ -2,12 +2,12 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
-import com.doordeck.multiplatform.sdk.model.ChangePasswordData
-import com.doordeck.multiplatform.sdk.model.RefreshTokenData
-import com.doordeck.multiplatform.sdk.model.RegisterEphemeralKeyData
-import com.doordeck.multiplatform.sdk.model.RegisterEphemeralKeyWithSecondaryAuthenticationData
-import com.doordeck.multiplatform.sdk.model.UpdateUserDetailsData
-import com.doordeck.multiplatform.sdk.model.VerifyEphemeralKeyRegistrationData
+import com.doordeck.multiplatform.sdk.model.data.ChangePasswordData
+import com.doordeck.multiplatform.sdk.model.data.RefreshTokenData
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyData
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSecondaryAuthenticationData
+import com.doordeck.multiplatform.sdk.model.data.UpdateUserDetailsData
+import com.doordeck.multiplatform.sdk.model.data.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse

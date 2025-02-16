@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.requests
 
-import com.doordeck.multiplatform.sdk.model.Platform
+import com.doordeck.multiplatform.sdk.model.data.Platform
 import kotlinx.serialization.Serializable
 
 @Serializable

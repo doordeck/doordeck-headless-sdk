@@ -1,4 +1,4 @@
-package com.doordeck.multiplatform.sdk.model
+package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import kotlinx.serialization.Serializable

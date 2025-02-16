@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.HelperClient
-import com.doordeck.multiplatform.sdk.model.AssistedLoginData
-import com.doordeck.multiplatform.sdk.model.AssistedRegisterData
-import com.doordeck.multiplatform.sdk.model.AssistedRegisterEphemeralKeyData
-import com.doordeck.multiplatform.sdk.model.UploadPlatformLogoData
+import com.doordeck.multiplatform.sdk.model.data.AssistedLoginData
+import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterData
+import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKeyData
+import com.doordeck.multiplatform.sdk.model.data.UploadPlatformLogoData
 import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray

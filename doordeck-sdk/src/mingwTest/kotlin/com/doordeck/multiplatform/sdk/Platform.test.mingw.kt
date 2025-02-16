@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.model.ResultData
-import com.doordeck.multiplatform.sdk.model.SuccessResultData
+import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.toKString
 import platform.posix.getenv

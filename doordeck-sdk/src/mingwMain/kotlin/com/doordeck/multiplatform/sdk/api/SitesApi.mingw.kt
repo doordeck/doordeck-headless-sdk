@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.SitesClient
-import com.doordeck.multiplatform.sdk.model.GetLocksForSiteData
-import com.doordeck.multiplatform.sdk.model.GetUsersForSiteData
+import com.doordeck.multiplatform.sdk.model.data.GetLocksForSiteData
+import com.doordeck.multiplatform.sdk.model.data.GetUsersForSiteData
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse

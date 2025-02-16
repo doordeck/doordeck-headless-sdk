@@ -5,9 +5,9 @@ import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
-import com.doordeck.multiplatform.sdk.model.Context
-import com.doordeck.multiplatform.sdk.model.Crypto
-import com.doordeck.multiplatform.sdk.model.common.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.Context
+import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire

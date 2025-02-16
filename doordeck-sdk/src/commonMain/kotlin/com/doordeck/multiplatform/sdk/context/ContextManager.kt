@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.model.Crypto
-import com.doordeck.multiplatform.sdk.model.common.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import kotlin.js.JsExport
 import kotlin.native.CName

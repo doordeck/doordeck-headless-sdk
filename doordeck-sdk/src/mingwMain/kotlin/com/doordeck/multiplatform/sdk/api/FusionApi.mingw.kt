@@ -2,14 +2,14 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.FusionClient
-import com.doordeck.multiplatform.sdk.model.DeleteDoorData
-import com.doordeck.multiplatform.sdk.model.EnableDoorData
-import com.doordeck.multiplatform.sdk.model.Fusion
-import com.doordeck.multiplatform.sdk.model.FusionLoginData
-import com.doordeck.multiplatform.sdk.model.GetDoorStatusData
-import com.doordeck.multiplatform.sdk.model.GetIntegrationConfigurationData
-import com.doordeck.multiplatform.sdk.model.StartDoorData
-import com.doordeck.multiplatform.sdk.model.StopDoorData
+import com.doordeck.multiplatform.sdk.model.data.DeleteDoorData
+import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
+import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
+import com.doordeck.multiplatform.sdk.model.data.GetDoorStatusData
+import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
+import com.doordeck.multiplatform.sdk.model.data.StartDoorData
+import com.doordeck.multiplatform.sdk.model.data.StopDoorData
 import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse

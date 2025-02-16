@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
-import com.doordeck.multiplatform.sdk.model.Platform
+import com.doordeck.multiplatform.sdk.model.data.Platform
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddAuthIssuerRequest
