@@ -40,6 +40,15 @@ var response = sdk.GetSites().ListSites();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = sdk.sites.list_sites()
+```
+</details>
+
 ## Get locks for a site
 
 ### JVM & Android
@@ -81,6 +90,16 @@ var response = sdk.GetSites().GetLocksForSite(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.GetLocksForSiteData("SITE_ID")
+response = sdk.sites.get_locks_for_site(data)
+```
+</details>
+
 ## Get users for a site
 
 ### JVM & Android
@@ -119,6 +138,16 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUs
 ```csharp
 var data = new GetUsersForSiteData("SITE_ID");
 var response = sdk.GetSites().GetUsersForSite(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.GetUsersForSiteData("SITE_ID")
+response = sdk.sites.get_users_for_site(data)
 ```
 </details>
 

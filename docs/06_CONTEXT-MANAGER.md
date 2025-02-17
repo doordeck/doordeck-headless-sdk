@@ -41,6 +41,17 @@ sdk.GetContextManager().SetOperationContext(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY")
+sdk.contextManager.set_operation_context(data)
+```
+</details>
+
+
 ## Is certificate chain about to expire
 
 Checks if the current certificate chain from the context is about to expire within the next 7 days.
@@ -78,6 +89,15 @@ const result = sdk.contextManager().isCertificateChainAboutToExpire();
 
 ```csharp
 var result = sdk.GetContextManager().IsCertificateChainAboutToExpire();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.is_certificate_chain_about_to_expire()
 ```
 </details>
 
@@ -121,6 +141,15 @@ var result = sdk.GetContextManager().IsKeyPairValid();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.is_key_pair_valid()
+```
+</details>
+
 ## Set auth token
 
 If the SDK was initialized without an authentication token, you can provide or update the token using this function.
@@ -158,6 +187,15 @@ sdk.contextManager().setAuthToken("AUTH_TOKEN");
 
 ```csharp
 sdk.GetContextManager().SetAuthToken("AUTH_TOKEN");
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.contextManager.set_auth_token("AUTH_TOKEN")
 ```
 </details>
 
@@ -201,6 +239,15 @@ var result = sdk.GetContextManager().IsAuthTokenAboutToExpire();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.is_auth_token_about_to_expire()
+```
+</details>
+
 ## Set refresh token
 
 ### JVM & Android
@@ -239,6 +286,15 @@ sdk.GetContextManager().SetRefreshToken("REFRESH_TOKEN");
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.set_refresh_token("REFRESH_TOKEN")
+```
+</details>
+
 ## Set fusion auth token
 
 ### JVM & Android
@@ -274,6 +330,15 @@ sdk.contextManager().setFusionAuthToken("FUSION_AUTH_TOKEN");
 
 ```csharp
 sdk.GetContextManager().SetFusionAuthToken("FUSION_AUTH_TOKEN");
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.set_fusion_auth_token("FUSION_AUTH_TOKEN")
 ```
 </details>
 
@@ -339,6 +404,17 @@ sdk.GetContextManager().StoreContext();
 💡 **Note:** In C#, the context is stored using `windows registry`.
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.contextManager.store_context()
+```
+
+💡 **Note:** In Python, the context is stored using `windows registry`.
+</details>
+
 ## Load context
 
 Loads the previously stored context, including the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), and [fusion auth token](#set-fusion-auth-token).
@@ -379,6 +455,15 @@ sdk.GetContextManager().LoadContext();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.contextManager.load_context()
+```
+</details>
+
 ## Clear context
 
 This function removes all stored context fields from the system but does not clear them from memory.
@@ -416,6 +501,15 @@ sdk.contextManager().clearContext();
 
 ```csharp
 sdk.GetContextManager().ClearContext();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.contextManager.clear_context()
 ```
 </details>
 
@@ -616,6 +710,15 @@ sdk.contextManager().setSecureStorageImpl(new MyOwnSecureImplementation());
 </details>
 
 ### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+// TODO
+```
+</details>
+
+### Python
 <details>
 <summary>Show Details</summary>
 

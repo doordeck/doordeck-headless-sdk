@@ -8,7 +8,7 @@ class LoginData:
 class RegistrationData:
     email: str
     password: str
-    force: str
+    force: bool
     publicKey: str
     displayName: typing.Optional[str] = None
 
