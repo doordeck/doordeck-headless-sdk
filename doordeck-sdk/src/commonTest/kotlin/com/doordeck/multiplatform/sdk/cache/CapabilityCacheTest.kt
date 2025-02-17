@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.cache
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
-import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
-import com.doordeck.multiplatform.sdk.api.model.CapabilityType
+import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
+import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test

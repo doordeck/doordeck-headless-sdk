@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.cache
 
-import com.doordeck.multiplatform.sdk.api.model.CapabilityStatus
-import com.doordeck.multiplatform.sdk.api.model.CapabilityType
+import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
+import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 
 /**
  * A cache to store and retrieve device capabilities.

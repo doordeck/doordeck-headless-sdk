@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
-import com.doordeck.multiplatform.sdk.api.model.Fusion
+import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 
 internal object TestConstants {
     val TEST_ENVIRONMENT = ApiEnvironment.DEV

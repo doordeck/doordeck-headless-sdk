@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
-import com.doordeck.multiplatform.sdk.internal.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest

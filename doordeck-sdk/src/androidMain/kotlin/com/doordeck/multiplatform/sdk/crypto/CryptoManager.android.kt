@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import com.doordeck.multiplatform.sdk.SdkException
-import com.doordeck.multiplatform.sdk.api.model.Crypto
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.model.data.Crypto
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant

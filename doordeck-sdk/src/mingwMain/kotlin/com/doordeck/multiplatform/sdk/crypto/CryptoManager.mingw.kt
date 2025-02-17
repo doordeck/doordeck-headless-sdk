@@ -1,7 +1,8 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import com.doordeck.multiplatform.sdk.SdkException
-import com.doordeck.multiplatform.sdk.api.model.Crypto
+
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
 import com.doordeck.multiplatform.sdk.util.toJson

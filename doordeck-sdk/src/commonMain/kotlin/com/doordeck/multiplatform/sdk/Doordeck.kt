@@ -1,14 +1,14 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.AccountResource
-import com.doordeck.multiplatform.sdk.api.AccountlessResource
-import com.doordeck.multiplatform.sdk.api.ContextManager
-import com.doordeck.multiplatform.sdk.api.FusionResource
-import com.doordeck.multiplatform.sdk.api.HelperResource
-import com.doordeck.multiplatform.sdk.api.LockOperationsResource
-import com.doordeck.multiplatform.sdk.api.PlatformResource
-import com.doordeck.multiplatform.sdk.api.SitesResource
-import com.doordeck.multiplatform.sdk.api.TilesResource
+import com.doordeck.multiplatform.sdk.api.AccountApi
+import com.doordeck.multiplatform.sdk.api.AccountlessApi
+import com.doordeck.multiplatform.sdk.api.FusionApi
+import com.doordeck.multiplatform.sdk.api.HelperApi
+import com.doordeck.multiplatform.sdk.api.LockOperationsApi
+import com.doordeck.multiplatform.sdk.api.PlatformApi
+import com.doordeck.multiplatform.sdk.api.SitesApi
+import com.doordeck.multiplatform.sdk.api.TilesApi
+import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import kotlin.js.JsExport
 import kotlin.native.CName
@@ -21,35 +21,35 @@ interface Doordeck {
 
     @JsExport.Ignore
     @CName("accountless")
-    fun accountless(): AccountlessResource
+    fun accountless(): AccountlessApi
 
     @JsExport.Ignore
     @CName("account")
-    fun account(): AccountResource
+    fun account(): AccountApi
 
     @JsExport.Ignore
     @CName("sites")
-    fun sites(): SitesResource
+    fun sites(): SitesApi
 
     @JsExport.Ignore
     @CName("tiles")
-    fun tiles(): TilesResource
+    fun tiles(): TilesApi
 
     @JsExport.Ignore
     @CName("lockOperations")
-    fun lockOperations(): LockOperationsResource
+    fun lockOperations(): LockOperationsApi
 
     @JsExport.Ignore
     @CName("platform")
-    fun platform(): PlatformResource
+    fun platform(): PlatformApi
 
     @JsExport.Ignore
     @CName("fusion")
-    fun fusion(): FusionResource
+    fun fusion(): FusionApi
 
     @JsExport.Ignore
     @CName("helper")
-    fun helper(): HelperResource
+    fun helper(): HelperApi
 
     @JsExport.Ignore
     @CName("crypto")

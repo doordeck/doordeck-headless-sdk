@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.storage
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.MissingAndroidContextException
+import com.doordeck.multiplatform.sdk.exceptions.MissingAndroidContextException
 import com.russhwolf.settings.SharedPreferencesSettings
 
 actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {

@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 
 actual object KDoordeckFactory {
 
