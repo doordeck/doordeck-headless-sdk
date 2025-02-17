@@ -37,7 +37,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.tiles().getLo
 
 ```csharp
 var data = new GetLocksBelongingToTileData("TILE_ID");
-sdk.GetTiles().GetLocksBelongingToTile(data);
+response = sdk.GetTiles().GetLocksBelongingToTile(data);
 ```
 </details>
 
@@ -47,7 +47,7 @@ sdk.GetTiles().GetLocksBelongingToTile(data);
 
 ```python
 data = doordeck_headless_sdk.GetLocksBelongingToTileData("TILE_ID")
-sdk.tiles.get_locks_belonging_to_tile(data)
+response = sdk.tiles.get_locks_belonging_to_tile(data)
 ```
 </details>
 

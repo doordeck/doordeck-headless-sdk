@@ -105,7 +105,7 @@ var response = sdk.GetAccountless().Registration(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY")
+data = doordeck_headless_sdk.RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", False, "BASE64_PUBLIC_KEY")
 response = sdk.accountless.registration(data)
 ```
 </details>

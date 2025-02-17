@@ -376,7 +376,7 @@ sdk.GetAccount().ChangePassword(data);
 
 ```python
 data = doordeck_headless_sdk.ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD")
-response = sdk.account.change_password(data)
+sdk.account.change_password(data)
 ```
 </details>
 

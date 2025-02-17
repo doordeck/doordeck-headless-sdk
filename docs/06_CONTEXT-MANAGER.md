@@ -412,7 +412,7 @@ sdk.GetContextManager().StoreContext();
 sdk.contextManager.store_context()
 ```
 
-💡 **Note:** In C#, the context is stored using `windows registry`.
+💡 **Note:** In Python, the context is stored using `windows registry`.
 </details>
 
 ## Load context
