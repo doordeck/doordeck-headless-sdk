@@ -50,6 +50,16 @@ var response = sdk.GetAccount().RefreshToken(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.RefreshTokenData("REFRESH_TOKEN")
+response = sdk.account.refresh_token(data)
+```
+</details>
+
 ## Logout
 
 > [!IMPORTANT]  
@@ -90,6 +100,15 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().logout();
 
 ```csharp
 sdk.GetAccount().Logout();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.account.logout()
 ```
 </details>
 
@@ -135,6 +154,16 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 ```csharp
 var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY");
 var response = sdk.GetAccount().RegisterEphemeralKey(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.RegisterEphemeralKeyData("BASE64_PUBLIC_KEY")
+response = sdk.account.register_ephemeral_key()
 ```
 </details>
 
@@ -184,6 +213,16 @@ var response = sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentication(
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY")
+response = sdk.account.register_ephemeral_key_with_secondary_authentication(data)
+```
+</details>
+
 ## Verify ephemeral key registration
 
 ### JVM & Android
@@ -222,6 +261,16 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 ```csharp
 var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY");
 var response = sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY")
+response = sdk.account.verify_ephemeral_key_registration(data)
 ```
 </details>
 
@@ -265,6 +314,15 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().reverifyEmail();
 
 ```csharp
 sdk.GetAccount().ReverifyEmail();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.account.reverify_email()
 ```
 </details>
 
@@ -312,6 +370,16 @@ sdk.GetAccount().ChangePassword(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD")
+response = sdk.account.change_password(data)
+```
+</details>
+
 ## Get user details
 
 ### JVM & Android
@@ -349,6 +417,15 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().get
 
 ```csharp
 var response = sdk.GetAccount().GetUserDetails();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = sdk.account.get_user_details()
 ```
 </details>
 
@@ -393,6 +470,16 @@ sdk.GetAccount().UpdateUserDetails(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.UpdateUserDetailsData("DISPLAY_NAME")
+sdk.account.update_user_details(data)
+```
+</details>
+
 ## Delete account
 
 > [!CAUTION]  
@@ -433,6 +520,15 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().deleteAccount();
 
 ```csharp
 sdk.GetAccount().DeleteAccount();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk.account.delete_account()
 ```
 </details>
 

@@ -39,4 +39,13 @@ var keyPair = sdk.GetCryptoManager().GenerateEncodedKeyPair();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```csharp
+keyPair = sdk.cryptoManager.generate_key_pair()
+```
+</details>
+
 :arrow_left: [Back to index](01_INDEX.md)

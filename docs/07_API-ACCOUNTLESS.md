@@ -40,7 +40,17 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var data = new LoginData("EMAIL", "PASSWORD");
-sdk.GetAccountless().Login(data);
+response = sdk.GetAccountless().Login(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.LoginData("EMAIL", "PASSWORD")
+response = sdk.accountless.login(data)
 ```
 </details>
 
@@ -86,7 +96,17 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY");
-sdk.GetAccountless().Registration(data);
+var response = sdk.GetAccountless().Registration(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY")
+response = sdk.accountless.registration(data)
 ```
 </details>
 
@@ -131,6 +151,16 @@ sdk.GetAccountless().VerifyEmail(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.VerifyEmailData("CODE")
+sdk.accountless.verify_email(data)
+```
+</details>
+
 ## Password reset
 
 ### JVM & Android
@@ -172,6 +202,16 @@ sdk.GetAccountless().PasswordReset(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.PasswordResetData("EMAIL")
+sdk.accountless.password_reset(data)
+```
+</details>
+
 ## Password reset verify
 
 ### JVM & Android
@@ -210,6 +250,16 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordResetVer
 ```csharp
 var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL");
 sdk.GetAccountless().PasswordResetVerify(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.PasswordResetVerifyData("USERID", "TOKEN", "EMAIL")
+sdk.accountless.password_reset_verify(data)
 ```
 </details>
 

@@ -57,4 +57,13 @@ sdk.Initialize();
 ⚠️ **Note:** You should also call ``sdk.Release();`` at the end of your application’s lifecycle to release the SDK resources.
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+sdk = doordeck_headless_sdk.InitializeSdk(doordeck_headless_sdk.ApiEnvironment.DEV)
+```
+</details>
+
 :arrow_left: [Back to index](01_INDEX.md)

@@ -43,4 +43,14 @@ sdk.GetHelper().UploadPlatformLogo(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_IMAGE")
+sdk.helper.upload_platform_logo(data)
+```
+</details>
+
 :arrow_left: [Back to index](01_INDEX.md)

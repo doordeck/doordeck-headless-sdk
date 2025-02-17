@@ -41,6 +41,16 @@ sdk.GetTiles().GetLocksBelongingToTile(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.GetLocksBelongingToTileData("TILE_ID")
+sdk.tiles.get_locks_belonging_to_tile(data)
+```
+</details>
+
 ## Associate Multiple Locks
 
 ### JVM & Android
@@ -80,6 +90,16 @@ await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks
 ```csharp
 var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"]);
 sdk.GetTiles().AssociateMultipleLocks(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+data = doordeck_headless_sdk.AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"])
+sdk.tiles.associate_multiple_locks(data)
 ```
 </details>
 
