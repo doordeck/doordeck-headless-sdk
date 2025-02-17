@@ -14,14 +14,14 @@ We are publishing the packages to multiple repositories:
 ## Supported platforms
 The SDK supports a range of targets for different platforms:
 
-| Platform | Target                                    |
-|:--------:|-------------------------------------------|
-| Android  | `android`                                 |
-|   JVM    | `jvm`                                     |
-|   iOS    | `iosX64`, `iosArm64`, `iosSimulatorArm64` |
-|  macOS   | `macosArm64`                              |
-|    JS    | `jsNode`, `jsBrowser`                     |
-| Windows  | `mingwX64`                                |
+| Platform | Target                                    | Language          |
+|:--------:|-------------------------------------------|-------------------|
+| Android  | `android`                                 | `Java`, `Kotlin`  |
+|   JVM    | `jvm`                                     | `Java`, `Kotlin`  |
+|   iOS    | `iosX64`, `iosArm64`, `iosSimulatorArm64` | `Swift`           |
+|  macOS   | `macosArm64`                              | `Swift`           |
+|    JS    | `jsNode`, `jsBrowser`                     | `JavaScript`      |
+| Windows  | `mingwX64`                                | `C#`, `Python`    |
 
 ## Getting started
 To start using the Doordeck Headless SDK, refer to the [documentation index](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/01_INDEX.md#index) for detailed setup and usage instructions tailored to your platform.

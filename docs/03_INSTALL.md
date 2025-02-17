@@ -110,6 +110,8 @@ The Windows artifacts for Python are available on [PyPi](https://pypi.org/projec
 ```python
 pip install doordeck-headless-sdk
 ```
+
+💡 **Requirement:** Python 3.13.2.
 </details>
 
 :arrow_left: [Back to index](01_INDEX.md)
