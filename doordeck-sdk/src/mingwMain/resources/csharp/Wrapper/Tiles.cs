@@ -8,17 +8,17 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 public unsafe class Tiles : IResource
 {
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource _tiles;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi _tiles;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesResource_e__Struct _tilesResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesApi_e__Struct _tilesApi;
 
     public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
         _tiles = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles_(sdk);
-        _tilesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesResource;
+        _tilesApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesApi;
     }
 
     public void Release()
@@ -29,7 +29,7 @@ public unsafe class Tiles : IResource
     public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData data)
     {
         return Process<TileLocksResponse>(
-            _tilesResource.getLocksBelongingToTileJson_,
+            _tilesApi.getLocksBelongingToTileJson_,
             null,
             data
         );
@@ -38,16 +38,16 @@ public unsafe class Tiles : IResource
     public void AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
         Process<object>(
-            _tilesResource.associateMultipleLocksJson_,
+            _tilesApi.associateMultipleLocksJson_,
             null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )

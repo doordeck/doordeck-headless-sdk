@@ -6,11 +6,11 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class ContextManager : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_ContextManager _context;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager _context;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._ContextManager_e__Struct _contextManager;
-    
+        _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct _contextManager;
+
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
     public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
@@ -18,7 +18,7 @@ public unsafe class ContextManager : IResource
     {
         _symbols = symbols;
         _context = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.contextManager_(sdk);
-        _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.ContextManager;
+        _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.context.ContextManager;
     }
 
     public void Release()
@@ -30,11 +30,11 @@ public unsafe class ContextManager : IResource
     {
         var newApiEnvironment = apiEnvironment switch
         {
-            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV
+            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
                 .get(),
-            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
                 .STAGING.get(),
-            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD
+            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
                 .get(),
             _ => throw new ArgumentOutOfRangeException(nameof(apiEnvironment), apiEnvironment, null)
         };

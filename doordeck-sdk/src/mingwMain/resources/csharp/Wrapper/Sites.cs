@@ -7,10 +7,10 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class Sites : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource _sites;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesApi _sites;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._SitesResource_e__Struct _sitesResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._SitesApi_e__Struct _sitesApi;
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
@@ -19,7 +19,7 @@ public unsafe class Sites : IResource
     {
         _symbols = symbols;
         _sites = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.sites_(sdk);
-        _sitesResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesResource;
+        _sitesApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.SitesApi;
     }
 
     public void Release()
@@ -31,7 +31,7 @@ public unsafe class Sites : IResource
     {
         return Process<List<SiteResponse>>(
             null,
-            _sitesResource.listSitesJson_,
+            _sitesApi.listSitesJson_,
             null
         );
     }
@@ -39,7 +39,7 @@ public unsafe class Sites : IResource
     public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData data)
     {
         return Process<List<SiteLocksResponse>>(
-            _sitesResource.getLocksForSiteJson_,
+            _sitesApi.getLocksForSiteJson_,
             null,
             data
         );
@@ -48,16 +48,16 @@ public unsafe class Sites : IResource
     public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData data)
     {
         return Process<List<UserForSiteResponse>>(
-            _sitesResource.getUsersForSiteJson_,
+            _sitesApi.getUsersForSiteJson_,
             null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )
