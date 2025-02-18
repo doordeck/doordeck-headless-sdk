@@ -7,11 +7,11 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class LockOperations : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource _lockOperations;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi _lockOperations;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsResource_e__Struct
-        _lockOperationsResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct
+        _lockOperationsApi;
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
@@ -20,7 +20,7 @@ public unsafe class LockOperations : IResource
     {
         _symbols = symbols;
         _lockOperations = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.lockOperations_(sdk);
-        _lockOperationsResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsResource;
+        _lockOperationsApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsApi;
     }
 
     public void Release()
@@ -31,7 +31,7 @@ public unsafe class LockOperations : IResource
     public LockResponse GetSingleLock(GetSingleLockData data)
     {
         return Process<LockResponse>(
-            _lockOperationsResource.getSingleLockJson_,
+            _lockOperationsApi.getSingleLockJson_,
             null,
             data
         );
@@ -40,7 +40,7 @@ public unsafe class LockOperations : IResource
     public List<AuditResponse> GetLockAuditTrail(GetLockAuditTrailData data)
     {
         return Process<List<AuditResponse>>(
-            _lockOperationsResource.getLockAuditTrailJson_,
+            _lockOperationsApi.getLockAuditTrailJson_,
             null,
             data
         );
@@ -49,7 +49,7 @@ public unsafe class LockOperations : IResource
     public List<AuditResponse> GetAuditForUser(GetAuditForUserData data)
     {
         return Process<List<AuditResponse>>(
-            _lockOperationsResource.getAuditForUserJson_,
+            _lockOperationsApi.getAuditForUserJson_,
             null,
             data
         );
@@ -58,7 +58,7 @@ public unsafe class LockOperations : IResource
     public List<UserLockResponse> GetUsersForLock(GetUsersForLockData data)
     {
         return Process<List<UserLockResponse>>(
-            _lockOperationsResource.getUsersForLockJson_,
+            _lockOperationsApi.getUsersForLockJson_,
             null,
             data
         );
@@ -67,7 +67,7 @@ public unsafe class LockOperations : IResource
     public LockUserResponse GetLocksForUser(GetLocksForUserData data)
     {
         return Process<LockUserResponse>(
-            _lockOperationsResource.getLocksForUserJson_,
+            _lockOperationsApi.getLocksForUserJson_,
             null,
             data
         );
@@ -76,7 +76,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockName(UpdateLockNameData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockNameJson_,
+            _lockOperationsApi.updateLockNameJson_,
             null,
             data
         );
@@ -85,7 +85,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockFavourite(UpdateLockFavouriteData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockFavouriteJson_,
+            _lockOperationsApi.updateLockFavouriteJson_,
             null,
             data
         );
@@ -94,7 +94,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockColour(UpdateLockColourData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockColourJson_,
+            _lockOperationsApi.updateLockColourJson_,
             null,
             data
         );
@@ -103,7 +103,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockSettingDefaultNameJson_,
+            _lockOperationsApi.updateLockSettingDefaultNameJson_,
             null,
             data
         );
@@ -112,7 +112,7 @@ public unsafe class LockOperations : IResource
     public void SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data)
     {
         Process<object>(
-            _lockOperationsResource.setLockSettingPermittedAddressesJson_,
+            _lockOperationsApi.setLockSettingPermittedAddressesJson_,
             null,
             data
         );
@@ -121,7 +121,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockSettingHidden(UpdateLockSettingHiddenData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockSettingHiddenJson_,
+            _lockOperationsApi.updateLockSettingHiddenJson_,
             null,
             data
         );
@@ -130,7 +130,7 @@ public unsafe class LockOperations : IResource
     public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data)
     {
         Process<object>(
-            _lockOperationsResource.setLockSettingTimeRestrictionsJson_,
+            _lockOperationsApi.setLockSettingTimeRestrictionsJson_,
             null,
             data
         );
@@ -139,7 +139,7 @@ public unsafe class LockOperations : IResource
     public void UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data)
     {
         Process<object>(
-            _lockOperationsResource.updateLockSettingLocationRestrictionsJson_,
+            _lockOperationsApi.updateLockSettingLocationRestrictionsJson_,
             null,
             data
         );
@@ -148,7 +148,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKey(GetUserPublicKeyData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyJson_,
+            _lockOperationsApi.getUserPublicKeyJson_,
             null,
             data
         );
@@ -157,7 +157,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyByEmailJson_,
+            _lockOperationsApi.getUserPublicKeyByEmailJson_,
             null,
             data
         );
@@ -166,7 +166,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyByTelephoneJson_,
+            _lockOperationsApi.getUserPublicKeyByTelephoneJson_,
             null,
             data
         );
@@ -175,7 +175,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyByLocalKeyJson_,
+            _lockOperationsApi.getUserPublicKeyByLocalKeyJson_,
             null,
             data
         );
@@ -184,7 +184,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyByForeignKeyJson_,
+            _lockOperationsApi.getUserPublicKeyByForeignKeyJson_,
             null,
             data
         );
@@ -193,7 +193,7 @@ public unsafe class LockOperations : IResource
     public UserPublicKeyResponse GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data)
     {
         return Process<UserPublicKeyResponse>(
-            _lockOperationsResource.getUserPublicKeyByIdentityJson_,
+            _lockOperationsApi.getUserPublicKeyByIdentityJson_,
             null,
             data
         );
@@ -202,7 +202,7 @@ public unsafe class LockOperations : IResource
     public List<BatchUserPublicKeyResponse> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data)
     {
         return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsResource.getUserPublicKeyByEmailsJson_,
+            _lockOperationsApi.getUserPublicKeyByEmailsJson_,
             null,
             data
         );
@@ -211,7 +211,7 @@ public unsafe class LockOperations : IResource
     public List<BatchUserPublicKeyResponse> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data)
     {
         return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsResource.getUserPublicKeyByTelephonesJson_,
+            _lockOperationsApi.getUserPublicKeyByTelephonesJson_,
             null,
             data
         );
@@ -220,7 +220,7 @@ public unsafe class LockOperations : IResource
     public List<BatchUserPublicKeyResponse> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data)
     {
         return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsResource.getUserPublicKeyByLocalKeysJson_,
+            _lockOperationsApi.getUserPublicKeyByLocalKeysJson_,
             null,
             data
         );
@@ -229,7 +229,7 @@ public unsafe class LockOperations : IResource
     public List<BatchUserPublicKeyResponse> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data)
     {
         return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsResource.getUserPublicKeyByForeignKeysJson_,
+            _lockOperationsApi.getUserPublicKeyByForeignKeysJson_,
             null,
             data
         );
@@ -238,7 +238,7 @@ public unsafe class LockOperations : IResource
     public void Unlock(UnlockOperationData data)
     {
         Process<object>(
-            _lockOperationsResource.unlockJson_,
+            _lockOperationsApi.unlockJson_,
             null,
             data
         );
@@ -247,7 +247,7 @@ public unsafe class LockOperations : IResource
     public void ShareLock(ShareLockOperationData data)
     {
         Process<object>(
-            _lockOperationsResource.shareLockJson_,
+            _lockOperationsApi.shareLockJson_,
             null,
             data
         );
@@ -256,7 +256,7 @@ public unsafe class LockOperations : IResource
     public void BatchShareLock(BatchShareLockOperationData data)
     {
         Process<object>(
-            _lockOperationsResource.batchShareLockJson_,
+            _lockOperationsApi.batchShareLockJson_,
             null,
             data
         );
@@ -265,7 +265,7 @@ public unsafe class LockOperations : IResource
     public void RevokeAccessToLock(RevokeAccessToLockOperationData data)
     {
         Process<object>(
-            _lockOperationsResource.revokeAccessToLockJson_,
+            _lockOperationsApi.revokeAccessToLockJson_,
             null,
             data
         );
@@ -274,7 +274,7 @@ public unsafe class LockOperations : IResource
     public void UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data)
     {
         Process<object>(
-            _lockOperationsResource.updateSecureSettingUnlockDurationJson_,
+            _lockOperationsApi.updateSecureSettingUnlockDurationJson_,
             null,
             data
         );
@@ -283,7 +283,7 @@ public unsafe class LockOperations : IResource
     public void UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data)
     {
         Process<object>(
-            _lockOperationsResource.updateSecureSettingUnlockBetweenJson_,
+            _lockOperationsApi.updateSecureSettingUnlockBetweenJson_,
             null,
             data
         );
@@ -293,7 +293,7 @@ public unsafe class LockOperations : IResource
     {
         return Process<List<LockResponse>>(
             null,
-            _lockOperationsResource.getPinnedLocksJson_,
+            _lockOperationsApi.getPinnedLocksJson_,
             null
         );
     }
@@ -302,15 +302,15 @@ public unsafe class LockOperations : IResource
     {
         return Process<List<ShareableLockResponse>>(
             null,
-            _lockOperationsResource.getShareableLocksJson_,
+            _lockOperationsApi.getShareableLocksJson_,
             null
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )

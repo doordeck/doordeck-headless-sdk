@@ -7,10 +7,10 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class Helper : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource _helper;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi _helper;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._HelperResource_e__Struct _helperResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._HelperApi_e__Struct _helperApi;
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
@@ -19,7 +19,7 @@ public unsafe class Helper : IResource
     {
         _symbols = symbols;
         _helper = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.helper_(sdk);
-        _helperResource = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperResource;
+        _helperApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperApi;
     }
 
     public void Release()
@@ -30,7 +30,7 @@ public unsafe class Helper : IResource
     public void UploadPlatformLogo(UploadPlatformLogoData data)
     {
         Process<object>(
-            _helperResource.uploadPlatformLogoJson_,
+            _helperApi.uploadPlatformLogoJson_,
             null,
             data
         );
@@ -39,7 +39,7 @@ public unsafe class Helper : IResource
     public AssistedLoginResponse AssistedLogin(AssistedLoginData data)
     {
         return Process<AssistedLoginResponse>(
-            _helperResource.assistedLoginJson_,
+            _helperApi.assistedLoginJson_,
             null,
             data
         );
@@ -48,7 +48,7 @@ public unsafe class Helper : IResource
     public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
     {
         return Process<AssistedRegisterEphemeralKeyResponse>(
-            _helperResource.assistedRegisterEphemeralKeyJson_,
+            _helperApi.assistedRegisterEphemeralKeyJson_,
             null,
             data
         );
@@ -57,16 +57,16 @@ public unsafe class Helper : IResource
     public void AssistedRegister(AssistedRegisterData data)
     {
         Process<object>(
-            _helperResource.assistedRegisterJson_,
+            _helperApi.assistedRegisterJson_,
             null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )

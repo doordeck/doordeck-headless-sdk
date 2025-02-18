@@ -7,10 +7,10 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class Fusion : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource _fusion;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi _fusion;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._FusionResource_e__Struct _fusionResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._FusionApi_e__Struct _fusionApi;
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
@@ -19,7 +19,7 @@ public unsafe class Fusion : IResource
     {
         _symbols = symbols;
         _fusion = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.fusion_(sdk);
-        _fusionResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionResource;
+        _fusionApi = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionApi;
     }
 
     public void Release()
@@ -30,7 +30,7 @@ public unsafe class Fusion : IResource
     public FusionLoginResponse Login(FusionLoginData data)
     {
         return Process<FusionLoginResponse>(
-            _fusionResource.loginJson,
+            _fusionApi.loginJson,
             null,
             data
         );
@@ -40,7 +40,7 @@ public unsafe class Fusion : IResource
     {
         return Process<IntegrationTypeResponse>(
             null,
-            _fusionResource.getIntegrationTypeJson_,
+            _fusionApi.getIntegrationTypeJson_,
             null
         );
     }
@@ -48,7 +48,7 @@ public unsafe class Fusion : IResource
     public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
     {
         return Process<List<IntegrationConfigurationResponse>>(
-            _fusionResource.getIntegrationConfigurationJson_,
+            _fusionApi.getIntegrationConfigurationJson_,
             null,
             data
         );
@@ -57,7 +57,7 @@ public unsafe class Fusion : IResource
     public void EnableDoor(EnableDoorData data)
     {
         Process<object>(
-            _fusionResource.enableDoorJson_,
+            _fusionApi.enableDoorJson_,
             null,
             data
         );
@@ -66,7 +66,7 @@ public unsafe class Fusion : IResource
     public void DeleteDoor(DeleteDoorData data)
     {
         Process<object>(
-            _fusionResource.deleteDoorJson_,
+            _fusionApi.deleteDoorJson_,
             null,
             data
         );
@@ -75,7 +75,7 @@ public unsafe class Fusion : IResource
     public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
     {
         return Process<DoorStateResponse>(
-            _fusionResource.getDoorStatusJson_,
+            _fusionApi.getDoorStatusJson_,
             null,
             data
         );
@@ -84,7 +84,7 @@ public unsafe class Fusion : IResource
     public void StartDoor(StartDoorData data)
     {
         Process<object>(
-            _fusionResource.startDoorJson_,
+            _fusionApi.startDoorJson_,
             null,
             data
         );
@@ -93,16 +93,16 @@ public unsafe class Fusion : IResource
     public void StopDoor(StopDoorData data)
     {
         Process<object>(
-            _fusionResource.stopDoorJson_,
+            _fusionApi.stopDoorJson_,
             null,
             data
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )

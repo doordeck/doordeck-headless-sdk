@@ -8,7 +8,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
 {
     private readonly Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_model_ApiEnvironment _apiEnvironment;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment _apiEnvironment;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory _factory;
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck _sdk;
 
@@ -27,11 +27,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
     {
         _apiEnvironment = apiEnvironment switch
         {
-            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.DEV
+            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
                 .get(),
-            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment
+            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
                 .STAGING.get(),
-            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment.PROD
+            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
                 .get(),
             _ => _apiEnvironment
         };

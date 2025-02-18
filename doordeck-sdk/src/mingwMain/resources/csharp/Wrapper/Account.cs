@@ -7,10 +7,10 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public unsafe class Account : IResource
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource _account;
+    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi _account;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountResource_e__Struct _accountResource;
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountApi_e__Struct _accountApi;
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
@@ -19,7 +19,7 @@ public unsafe class Account : IResource
     {
         _symbols = symbols;
         _account = symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account_(sdk);
-        _accountResource = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountResource;
+        _accountApi = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountApi;
     }
 
     public void Release()
@@ -30,7 +30,7 @@ public unsafe class Account : IResource
     public TokenResponse RefreshToken(RefreshTokenData? data)
     {
         return Process<TokenResponse>(
-            _accountResource.refreshTokenJson_,
+            _accountApi.refreshTokenJson_,
             null,
             data
         );
@@ -40,7 +40,7 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.logoutJson_,
+            _accountApi.logoutJson_,
             null
         );
     }
@@ -48,7 +48,7 @@ public unsafe class Account : IResource
     public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
         return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
-            _accountResource.registerEphemeralKeyJson_,
+            _accountApi.registerEphemeralKeyJson_,
             null,
             data
         );
@@ -58,7 +58,7 @@ public unsafe class Account : IResource
         RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
     {
         return Process<RegisterEphemeralKeyResponse>(
-            _accountResource.registerEphemeralKeyWithSecondaryAuthenticationJson_,
+            _accountApi.registerEphemeralKeyWithSecondaryAuthenticationJson_,
             null,
             data
         );
@@ -67,7 +67,7 @@ public unsafe class Account : IResource
     public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
     {
         return Process<RegisterEphemeralKeyResponse>(
-            _accountResource.verifyEphemeralKeyRegistrationJson_,
+            _accountApi.verifyEphemeralKeyRegistrationJson_,
             null,
             data
         );
@@ -77,7 +77,7 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.reverifyEmailJson_,
+            _accountApi.reverifyEmailJson_,
             null
         );
     }
@@ -85,7 +85,7 @@ public unsafe class Account : IResource
     public void ChangePassword(ChangePasswordData data)
     {
         Process<object>(
-            _accountResource.changePasswordJson_,
+            _accountApi.changePasswordJson_,
             null,
             data
         );
@@ -95,7 +95,7 @@ public unsafe class Account : IResource
     {
         return Process<UserDetailsResponse>(
             null,
-            _accountResource.getUserDetailsJson_,
+            _accountApi.getUserDetailsJson_,
             null
         );
     }
@@ -103,7 +103,7 @@ public unsafe class Account : IResource
     public void UpdateUserDetails(UpdateUserDetailsData data)
     {
         Process<object>(
-            _accountResource.updateUserDetailsJson_,
+            _accountApi.updateUserDetailsJson_,
             null,
             data
         );
@@ -113,15 +113,15 @@ public unsafe class Account : IResource
     {
         Process<object>(
             null,
-            _accountResource.deleteAccountJson_,
+            _accountApi.deleteAccountJson_,
             null
         );
     }
 
     private TResponse Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
             sbyte*, sbyte*> processDataWithResponse,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountResource,
+        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
             sbyte*> processWithoutDataWithResponse,
         object? data
     )
