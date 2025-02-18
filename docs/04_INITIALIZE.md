@@ -40,7 +40,7 @@ let sdk = KDoordeckFactory().initialize(apiEnvironment: .prod, token: "AUTH_TOKE
 
 ```js
 import doordeck from '@doordeck/doordeck-headless-sdk';
-const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+const apiEnvironment = doordeck.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment;
 const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken(apiEnvironment.PROD, "AUTH_TOKEN");
 ```
 </details>

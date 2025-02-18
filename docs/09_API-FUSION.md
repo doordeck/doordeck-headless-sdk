@@ -153,7 +153,7 @@ sdk.fusion().enableDoor(name: "NAME", siteId: "SITE_ID", controller: controller)
 <summary>Show Details</summary>
 
 ```js
-const fusion = doordeck.com.doordeck.multiplatform.sdk.api.model.Fusion;
+const fusion = doordeck.com.doordeck.multiplatform.sdk.model.data.Fusion;
 const controller = new fusion.DemoController(8080);
 await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "SITE_ID", controller);
 ```

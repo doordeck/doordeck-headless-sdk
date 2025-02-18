@@ -31,12 +31,12 @@ import {
   MatTableDataSource
 } from '@angular/material/table';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import SiteResponse = com.doordeck.multiplatform.sdk.api.responses.SiteResponse;
-import SiteLocksResponse = com.doordeck.multiplatform.sdk.api.responses.SiteLocksResponse;
-import UserLockResponse = com.doordeck.multiplatform.sdk.api.responses.UserLockResponse;
-import UserRole = com.doordeck.multiplatform.sdk.api.model.UserRole;
-import AuditResponse = com.doordeck.multiplatform.sdk.api.responses.AuditResponse;
-import AuditEvent = com.doordeck.multiplatform.sdk.api.model.AuditEvent;
+import SiteResponse = com.doordeck.multiplatform.sdk.model.responses.SiteResponse;
+import SiteLocksResponse = com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse;
+import UserLockResponse = com.doordeck.multiplatform.sdk.model.responses.UserLockResponse;
+import UserRole = com.doordeck.multiplatform.sdk.model.common.UserRole;
+import AuditResponse = com.doordeck.multiplatform.sdk.model.responses.AuditResponse;
+import AuditEvent = com.doordeck.multiplatform.sdk.model.common.AuditEvent;
 import {MatFormField, MatFormFieldModule, MatHint, MatLabel} from '@angular/material/form-field';
 import {MatInput, MatInputModule} from '@angular/material/input';
 import {RemoveUserFromLockComponent} from '../remove-user-from-lock/remove-user-from-lock.component';
@@ -50,14 +50,14 @@ import {
 import { provideNativeDateAdapter } from '@angular/material/core';
 import {combineLatest} from 'rxjs';
 import {ShareLockComponent} from '../share-lock/share-lock.component';
-import ShareLock = com.doordeck.multiplatform.sdk.api.model.LockOperations.ShareLock;
+import ShareLock = com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock;
 import {ChangeDisplayNameComponent} from '../change-display-name/change-display-name.component';
 import {ChangePasswordComponent} from '../change-password/change-password.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import UnlockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.UnlockOperation;
-import BaseOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.BaseOperation;
-import RevokeAccessToLockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.RevokeAccessToLockOperation;
-import ShareLockOperation = com.doordeck.multiplatform.sdk.api.model.LockOperations.ShareLockOperation;
+import UnlockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockOperation;
+import BaseOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation;
+import RevokeAccessToLockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.RevokeAccessToLockOperation;
+import ShareLockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLockOperation;
 
 @Component({
   selector: 'app-dashboard',

@@ -198,7 +198,7 @@ let response = sdk.account().registerEphemeralKeyWithSecondaryAuthentication(pub
 <summary>Show Details</summary>
 
 ```js
-const twoFactorMethod = doordeck.com.doordeck.multiplatform.sdk.api.model.TwoFactorMethod;
+const twoFactorMethod = doordeck.com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod;
 const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().registerEphemeralKeyWithSecondaryAuthentication(PUBLIC_KEY, twoFactorMethod.EMAIL);
 ```
 </details>
