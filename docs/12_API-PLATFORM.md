@@ -31,7 +31,7 @@ sdk.platform().createApplication(application: application)
 <summary>Show Details</summary>
 
 ```js
-const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const platform = doordeck.com.doordeck.multiplatform.sdk.model.data.Platform;
 const application = new platform.CreateApplication("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM", null, null, null, null, null);
 await doordeck.com.doordeck.multiplatform.sdk.api.platform().createApplication(application);
 ```
@@ -483,7 +483,7 @@ sdk.platform().updateApplicationEmailPreferences(applicationId: "APPLICATION_ID"
 <summary>Show Details</summary>
 
 ```js
-const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const platform = doordeck.com.doordeck.multiplatform.sdk.model.data.Platform;
 const emailPreferences = new platform.EmailPreferences("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false, null);
 await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationEmailPreferences("APPLICATION_ID", emailPreferences);
 ```
@@ -692,7 +692,7 @@ sdk.platform().addAuthKey(applicationId: "APPLICATION_ID", key: key)
 <summary>Show Details</summary>
 
 ```js
-const platform = doordeck.com.doordeck.multiplatform.sdk.api.model.Platform;
+const platform = doordeck.com.doordeck.multiplatform.sdk.model.data.Platform;
 const key = new platform.Ed25519Key("OKP", "sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
 await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthKey("APPLICATION_ID", key);
 ```

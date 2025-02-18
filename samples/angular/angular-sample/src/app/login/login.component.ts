@@ -12,10 +12,10 @@ import {TwoFactorVerifyComponent} from '../two-factor-verify/two-factor-verify.c
 import {MatDialog} from '@angular/material/dialog';
 import {MatIcon} from '@angular/material/icon';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import ForbiddenException = com.doordeck.multiplatform.sdk.ForbiddenException;
-import UnauthorizedException = com.doordeck.multiplatform.sdk.UnauthorizedException;
-import TooManyRequestsException = com.doordeck.multiplatform.sdk.TooManyRequestsException;
-import KeyPair = com.doordeck.multiplatform.sdk.api.model.Crypto.KeyPair;
+import ForbiddenException = com.doordeck.multiplatform.sdk.exceptions.ForbiddenException;
+import UnauthorizedException = com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException;
+import TooManyRequestsException = com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException;
+import KeyPair = com.doordeck.multiplatform.sdk.model.data.Crypto.KeyPair;
 
 @Component({
   selector: 'app-login',

@@ -580,7 +580,7 @@ sdk.lockOperations().setLockSettingTimeRestrictions(lockId: "LOCK_ID", times: lo
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettingTimeRestrictions("LOCK_ID",
     ktList.fromJsArray([new lockOperations.TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", ktList.fromJsArray(["MONDAY"]))]));
 ```
@@ -636,7 +636,7 @@ sdk.lockOperations().updateLockSettingLocationRestrictions(lockId: "LOCK_ID", lo
 <summary>Show Details</summary>
 
 ```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const locationRequirement = new lockOperations.LocationRequirement(LATITUDE, LONGITUDE, ENABLED, RADIUS, ACCURACY);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSettingLocationRestrictions("LOCK_ID", locationRequirement);
 ```
@@ -1204,7 +1204,7 @@ sdk.lockOperations().unlock(unlockOperation: shareLockOperation)
 <summary>Show Details</summary>
 
 ```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const unlockOperation = new lockOperations.UnlockOperation(baseOperation, null);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlockOperation);
@@ -1268,9 +1268,9 @@ sdk.lockOperations().shareLock(shareLockOperation: shareLockOperation)
 <summary>Show Details</summary>
 
 ```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
-const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
+const userRole = doordeck.com.doordeck.multiplatform.sdk.model.common.UserRole;
 const shareLock = new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null);
 const shareLockOperation = new lockOperations.ShareLockOperation(baseOperation, shareLock);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock(shareLockOperation);
@@ -1339,9 +1339,9 @@ sdk.lockOperations().batchShareLock(shareLockOperation: shareLockOperation)
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
-const userRole = doordeck.com.doordeck.multiplatform.sdk.api.model.UserRole;
+const userRole = doordeck.com.doordeck.multiplatform.sdk.model.common.UserRole;
 const users = [new lockOperations.ShareLock("TARGET_USER_ID", userRole.USER, TARGET_PUBLIC_KEY, null, null)];
 const shareLockOperation = new lockOperations.BatchShareLockOperation(baseOperation, ktList.fromJsArray(users));
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().batchShareLock(shareLockOperation);
@@ -1406,7 +1406,7 @@ sdk.lockOperations().revokeAccessToLock(revokeAccessToLockOperation: revokeAcces
 
 ```js
 const ktList = doordeck.kotlin.collections.KtList;
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const revokeAccessToLockOperation = new lockOperations.RevokeAccessToLockOperation(baseOperation, ktList.fromJsArray(["USER_ID"]));
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessToLock(revokeAccessToLockOperation);
@@ -1468,7 +1468,7 @@ sdk.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlock
 <summary>Show Details</summary>
 
 ```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const updateSecureSettingUnlockDuration = new lockOperations.UpdateSecureSettingUnlockDuration(baseOperation, UNLOCK_DURATION);
 await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration);
@@ -1532,7 +1532,7 @@ sdk.lockOperations().updateSecureSettingUnlockBetween(updateSecureSettingUnlockB
 <summary>Show Details</summary>
 
 ```js
-const lockOperations = doordeck.com.doordeck.multiplatform.sdk.api.model.LockOperations;
+const lockOperations = doordeck.com.doordeck.multiplatform.sdk.model.data.LockOperations;
 const baseOperation = new lockOperations.BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, PRIVATE_KEY, "LOCK_ID", NOT_BEFORE, ISSUED_AT, EXPIRES_AT, "UUID");
 const unlockBetween = new lockOperations.UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST, EXCEPTIONS_LIST);
 const updateSecureSettingUnlockBetween = new lockOperations.UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween)

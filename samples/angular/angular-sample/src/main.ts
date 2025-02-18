@@ -3,7 +3,7 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import doordeck from '@doordeck/doordeck-headless-sdk';
 
-const apiEnvironment =  doordeck.com.doordeck.multiplatform.sdk.api.model.ApiEnvironment;
+const apiEnvironment =  doordeck.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment;
 export const doordeckSDK = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(apiEnvironment.DEV);
 
 // Utils
