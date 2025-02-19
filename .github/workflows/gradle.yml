@@ -37,31 +37,35 @@ jobs:
             os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: corretto
           java-version: 21
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
 
-  release:
-    name: Releases
+  pre-release:
+    name: Pre-release
     needs: build
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: macos-latest
-
+    runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: write
       packages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -70,23 +74,30 @@ jobs:
           git config --global user.name "Doordeck Development"
           git config --global user.email "development@doordeck.com"
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 'latest'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@doordeck'
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+      - name: Tag for release (if on main)
+        if: github.ref == 'refs/heads/main'
+        run: ./gradlew final -x test
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
+  spm:
+    name: SPM publish
+    needs: [build, pre-release]
+    runs-on: macos-latest
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      id-token: write
 
-      - name: Setup CocoaPods
-        run: |
-          sudo gem install cocoapods
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -94,158 +105,321 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Set up NET
-        uses: actions/setup-dotnet@v4
-        with:
-            dotnet-version: 7.x
-
-      - name: Setup ClangSharpPInvokeGenerator
-        run: |
-          # Install ClangSharpPInvokeGenerator
-          dotnet tool install --global ClangSharpPInvokeGenerator
-          
-          # Install dependencies using nuget
-          nuget install libclang.runtime.osx-arm64 \
-            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
-          
-          nuget install libClangSharp.runtime.osx-arm64 \
-            -OutputDirectory ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages
-          
-          # Copy the dlls
-          find ${{ env.DOTNET_ROOT }}/tools/.store/nuget_packages \
-            -name "*.dylib" \
-            -exec cp {} $(find ${{ env.DOTNET_ROOT }}/tools/.store/clangsharppinvokegenerator -type d -path "*/tools/net8.0/any") \;
-
-      - name: Setup SWIG
-        run: brew install swig
-
-      - name: Setup mingw-w64
-        run: brew install mingw-w64
-
-      - name: Setup twine
-        run: python -m pip install --upgrade twine
-
-      - name: Setup python build
-        run: python -m pip install build
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
       - name: Configure AWS Credentials
-        if: github.ref == 'refs/heads/main'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
           aws-region: eu-west-1
 
-      - name: Tag for release (if on main)
-        if: github.ref == 'refs/heads/main'
-        run: ./gradlew final -x test
+      - name: Generate artifact
+        run: ./gradlew assembleDoordeckSDKReleaseXCFramework
+
+      - name: Publish
+        run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ steps.version_info.outputs.version }}/
+
+  cocoapods:
+    name: CocoaPods publish
+    needs: [build, pre-release, spm]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Parse release version
         id: version_info
         run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
 
-      - name: Build mingw binaries
-        if: github.ref == 'refs/heads/main'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+
+      - name: Setup CocoaPods
+        run: sudo gem install cocoapods
+
+      - name: Generate artifact
+        run: ./gradlew -Prelease.useLastTag=true podSpecRelease
+
+      - name: Publish
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        run: pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
+
+  npm:
+    name: NPM publish
+    needs: [build, pre-release]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@doordeck'
+
+      - name: Generate artifact
+        run: ./gradlew -Prelease.useLastTag=true jsBrowserProductionLibraryDistribution
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
         run: |
-          ./gradlew mingwX64Binaries
-          
-          # Adjust generated header
-          sed -i '' \
+          cd build/js/packages/doordeck-sdk
+          npm publish --access public
+
+  maven:
+    name: Maven publish
+    needs: [build, pre-release]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+        run: ./gradlew -Prelease.useLastTag=true doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
+
+  nuget:
+    name: Nuget publish
+    needs: [build, pre-release]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Setup ClangSharpPInvokeGenerator
+        run: dotnet tool install --global ClangSharpPInvokeGenerator
+
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
+
+      - name: Adjust header
+        run: |
+          sed -i \
             -e 's/_\$$/_/g' \
             -e 's/\$//g' \
-          "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
 
-      - name: Publish to PyPi
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      - name: Generate bindings
         run: |
-          ./gradlew -Prelease.useLastTag=true pythonPack
-          
-          # Download python for windows
+          ClangSharpPInvokeGenerator \
+            -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
+            -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
+            -l Doordeck.Headless.Sdk.dll \
+            -n Doordeck.Headless.Sdk
+
+      - name: Adjust bindings
+        run: |
+          sed -i \
+            -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
+            -e 's/\[.*NativeTypeName([^]]*)\]//g' \
+            "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+
+      - name: Generate .nuspec file
+        run: ./gradlew -Prelease.useLastTag=true csharpPack
+
+      - name: Generate .nupkg file
+        run: |
+          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
+            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
+
+      - name: Publish
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+        run: |
+          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
+            -Source https://api.nuget.org/v3/index.json \
+            -ApiKey ${{ secrets.NUGET_TOKEN }}
+
+  pypi:
+    name: PyPi publish
+    needs: [build, pre-release]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.2'
+
+      - name: Setup SWIG
+        run: sudo apt-get update && sudo apt-get install -y swig
+
+      - name: Setup Mingw
+        run: sudo apt-get install -y swig mingw-w64
+
+      - name: Setup GCC
+        run: sudo apt-get install -y swig mingw-w64 gcc g++
+
+      - name: Setup python build
+        run: python -m pip install build
+
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
+
+      - name: Adjust header
+        run: |
+          sed -i \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+      - name: Generate pyproject file
+        run: ./gradlew -Prelease.useLastTag=true pythonPack
+
+      - name: Download python for windows
+        run: |
           curl -LO https://www.python.org/ftp/python/3.13.2/python-3.13.2-embed-amd64.zip
           mv python-3.13.2-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
           unzip doordeck-sdk/build/bin/mingwX64/python/python-3.13.2-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
-          
-          # Generate python bindings
+
+      - name: Generate bindings
+        run: |
           swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
-          
-          # Compile python bindings
+
+      - name: Compile bindings
+        run: |
           x86_64-w64-mingw32-gcc -shared -o doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk/_doordeck_headless_sdk.pyd \
             doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
             doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk.dll \
             -I $(python -c "import sysconfig; print(sysconfig.get_paths()['include'])") \
             -L doordeck-sdk/build/bin/mingwX64/python/windows-python \
             -lpython313
-          
-          # Build package
-          python -m build doordeck-sdk/build/bin/mingwX64/python
-          
-          # Publish
-          twine upload doordeck-sdk/build/bin/mingwX64/python/dist/*
 
-      - name: Publish to NuGet
-        if: github.ref == 'refs/heads/main'
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - name: Python build
+        run: python -m build doordeck-sdk/build/bin/mingwX64/python
+
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1.12
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
+
+  release:
+    name: GitHub Release
+    needs: [tests, pre-release, spm, cocoapods, npm, maven, nuget, pypi]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Parse release version
+        id: version_info
+        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+
+      - name: Setup Git
         run: |
-          # Generate PInvoke bindings
-          ClangSharpPInvokeGenerator \
-            -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
-            -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
-            -n Doordeck.Headless.Sdk
-          
-          # Adjust generated bindings
-          sed -i '' \
-            -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
-            -e 's/\[.*NativeTypeName([^]]*)\]//g' \
-            -e 's/\[DllImport(""/\[DllImport("Doordeck.Headless.Sdk.dll"/g' \
-            "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
-          
-          # Create the .nuspec file
-          ./gradlew -Prelease.useLastTag=true csharpPack
-          
-          # Create the .nupkg file
-          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
-          
-          # Publish the package
-          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
-            -Source https://api.nuget.org/v3/index.json \
-            -ApiKey ${{ secrets.NUGET_TOKEN }}
-
-      - name: Publish to SPM
-        if: github.ref == 'refs/heads/main'
-        run: |
-          ./gradlew assembleDoordeckSDKReleaseXCFramework
-          aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ steps.version_info.outputs.version }}/
-
-      - name: Publish to CocoaPods
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: |
-          ./gradlew -Prelease.useLastTag=true podSpecRelease
-          pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
-
-      - name: Publish to Maven Central
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-
-      - name: Publish to NPM
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-        run: |
-          ./gradlew -Prelease.useLastTag=true jsBrowserProductionLibraryDistribution
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
+          git config --global user.name "Doordeck Development"
+          git config --global user.email "development@doordeck.com"
 
       - name: Create GitHub Release
         env:
