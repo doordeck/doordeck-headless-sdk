@@ -399,7 +399,7 @@ jobs:
 
   release:
     name: GitHub Release
-    needs: [tests, pre-release, spm, cocoapods, npm, maven, nuget, pypi]
+    needs: [build, pre-release, spm, cocoapods, npm, maven, nuget, pypi]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
