@@ -185,7 +185,7 @@ jobs:
           scope: '@doordeck'
 
       - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true jsBrowserProductionLibraryDistribution
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
 
       - name: Publish
         env:
@@ -221,7 +221,7 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
           MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew -Prelease.useLastTag=true doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
 
   nuget:
     name: Nuget publish
