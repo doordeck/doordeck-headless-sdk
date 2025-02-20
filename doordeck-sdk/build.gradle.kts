@@ -16,15 +16,16 @@ plugins {
 private sealed class PublishData(
     val title: String = "Doordeck Headless SDK",
     val description: String = "The official Doordeck SDK for Kotlin Multiplatform",
-    val issues: String = "https://github.com/doordeck/doordeck-headless-sdk/issues",
     val repository: String = "https://github.com/doordeck/doordeck-headless-sdk",
-    val gitRepository: String = "https://github.com/doordeck/doordeck-headless-sdk.git",
+    val issues: String = "$repository/issues",
+    val gitRepository: String = "$repository.git",
     val author: String = "Doordeck Limited",
     val authorEmail: String = "development@doordeck.com",
     val authorRepository: String = "https://github.com/doordeck",
     val authorHomepage: String = "https://www.doordeck.com",
     val licenseType: String = "Apache-2.0",
-    val licenseUrl: String = "https://github.com/doordeck/doordeck-headless-sdk/blob/main/LICENSE"
+    val licenseUrl: String = "$repository/blob/main/LICENSE",
+    val readmeUrl: String = "$repository/blob/main/README.md"
 )
 
 private data class NpmPublishData(
@@ -143,6 +144,8 @@ kotlin {
         framework {
             baseName = cocoapodsPublish.packageName
         }
+
+        extraSpecAttributes["readme"] = "'${cocoapodsPublish.readmeUrl}'"
         extraSpecAttributes["vendored_frameworks"] = "'${cocoapodsPublish.vendoredFrameworks}'"
     }
 
