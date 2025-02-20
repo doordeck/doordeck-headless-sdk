@@ -59,6 +59,8 @@ jobs:
     needs: build
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.pre-release-tag.outputs.tag }}
     permissions:
       contents: write
       packages: write
@@ -78,6 +80,10 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: ./gradlew final -x test
 
+      - name: Store tag
+        id: pre-release-tag
+        run: echo "tag=$(git describe --tags --abbrev=0 | sed 's/^v//')" >> "$GITHUB_OUTPUT" # i.e: 0.74.0
+
   spm:
     name: SPM publish
     needs: [build, pre-release]
@@ -90,11 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -115,7 +117,7 @@ jobs:
         run: ./gradlew assembleDoordeckSDKReleaseXCFramework
 
       - name: Publish
-        run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ steps.version_info.outputs.version }}/
+        run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ needs.pre-release.outputs.tag }}/
 
   cocoapods:
     name: CocoaPods publish
@@ -127,11 +129,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -168,11 +166,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -210,11 +204,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -246,11 +236,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -306,7 +292,7 @@ jobs:
         env:
           NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
         run: |
-          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ steps.version_info.outputs.version }}.nupkg \
+          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ needs.pre-release.outputs.tag }}.nupkg \
             -Source https://api.nuget.org/v3/index.json \
             -ApiKey ${{ secrets.NUGET_TOKEN }}
 
@@ -322,11 +308,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -409,11 +391,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Parse release version
-        id: version_info
-        run: echo version=$(./gradlew properties -q -Prelease.useLastTag=true | grep "version:" | awk '{print $2}') >> "$GITHUB_OUTPUT"
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
 
       - name: Setup Git
         run: |
@@ -424,4 +402,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v${{ steps.version_info.outputs.version }} --title "Release v${{ steps.version_info.outputs.version }}" --verify-tag --generate-notes
+          gh release create v${{ needs.pre-release.outputs.tag }} --title "Release v${{ needs.pre-release.outputs.tag }}" --verify-tag --generate-notes

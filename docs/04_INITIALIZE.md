@@ -20,7 +20,7 @@ val sdk = KDoordeckFactory.initialize(ApiEnvironment.PROD, "AUTH_TOKEN")
 In Android, you need to pass the Android application context to initialize the SDK:
 
 ```kotlin
-val applicationContext = ApplicationContext(context)
+val applicationContext = ApplicationContext.apply { set(ANDROID_CONTEXT) }
 val sdk = KDoordeckFactory.initialize(applicationContext, ApiEnvironment.PROD, "AUTH_TOKEN")
 ```
 </details>
