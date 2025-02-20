@@ -394,7 +394,6 @@ jobs:
       - name: Publish
         uses: pypa/gh-action-pypi-publish@release/v1.12
         with:
-          repository-url: https://test.pypi.org/legacy/
           packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
 
   release:
