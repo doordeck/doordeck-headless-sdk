@@ -1,0 +1,39 @@
+{
+  "name": "@doordeck/headless-react-native-sdk-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "build:android": "react-native build-android --extra-params \"--no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a\"",
+    "build:ios": "react-native build-ios --scheme HeadlessReactNativeSdkExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
+  },
+  "dependencies": {
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/stack": "^7.1.1",
+    "react": "18.3.1",
+    "react-native": "0.77.1",
+    "react-native-gesture-handler": "^2.24.0",
+    "react-native-reanimated": "^3.16.7",
+    "react-native-safe-area-context": "^5.2.0",
+    "react-native-screens": "^4.8.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "@babel/runtime": "^7.25.0",
+    "@react-native-community/cli": "15.0.1",
+    "@react-native-community/cli-platform-android": "15.0.1",
+    "@react-native-community/cli-platform-ios": "15.0.1",
+    "@react-native/babel-preset": "0.77.1",
+    "@react-native/metro-config": "0.77.1",
+    "@react-native/typescript-config": "0.77.1",
+    "@types/jest": "^29.5.14",
+    "@types/react-native-vector-icons": "^6.4.18",
+    "react-native-builder-bob": "^0.37.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
