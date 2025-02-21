@@ -1,6 +1,23 @@
 package com.doordeck.multiplatform.sdk.clients
 
-/*
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
+import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.model.data.Platform
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
+
 class PlatformClientTest : IntegrationTest() {
 
     @Test
@@ -301,5 +318,3 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }
-
- */

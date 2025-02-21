@@ -12,7 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
-/*
+
 class TilesClientTest : IntegrationTest() {
 
     @Test
@@ -49,5 +49,3 @@ class TilesClientTest : IntegrationTest() {
         assertTrue { exception is NotFoundException }
     }
 }
-
- */
