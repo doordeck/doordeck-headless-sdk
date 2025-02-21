@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
-/*
+
 class AccountClientTest : IntegrationTest() {
 
     @Test
@@ -94,5 +94,3 @@ class AccountClientTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }
-
- */
