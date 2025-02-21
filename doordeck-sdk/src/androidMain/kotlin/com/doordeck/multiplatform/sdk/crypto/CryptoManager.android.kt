@@ -5,8 +5,10 @@ import com.doordeck.multiplatform.sdk.model.data.Crypto
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
+import java.security.Security
 import java.security.Signature
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -17,6 +19,11 @@ actual object CryptoManager {
 
     private const val ALGORITHM = "Ed25519"
     private const val CERTIFICATE_TYPE = "X.509"
+
+    init {
+        Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
+        Security.addProvider(BouncyCastleProvider())
+    }
 
     actual fun generateKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()

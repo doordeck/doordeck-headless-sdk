@@ -196,6 +196,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.security.crypto)
+                implementation(libs.bouncycastle)
             }
         }
 
