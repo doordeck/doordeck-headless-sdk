@@ -43,13 +43,15 @@ actual object CryptoManager {
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
-        JAVA_PKCS8_PUBLIC_KEY_SIZE -> this
+        JAVA_PKCS8_PUBLIC_KEY_SIZE,
+        BOUNCY_CASTLE_PUBLIC_KEY_SIZE -> this
         else -> throw SdkException("Unknown public key size: $size")
     }
 
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when(size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE,
         SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
+        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE)
         JAVA_PKCS8_PRIVATE_KEY_SIZE -> this
         else -> throw SdkException("Unknown private key size: $size")
     }

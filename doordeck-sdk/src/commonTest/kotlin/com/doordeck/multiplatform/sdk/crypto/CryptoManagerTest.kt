@@ -20,6 +20,9 @@ class CryptoManagerTest {
     private val CRYPTO_KIT_PUBLIC_KEY = "VpXka4JVjIYQ969Yqo92+x4JgwZPh0QiJIKx/3XzAxs="
     private val CRYPTO_KIT_PRIVATE_KEY = "GJsHlbSK/tdAGDL5+7QjB/aJx/AfKOWjMUGOpQ/1F9U="
 
+    private val BOUNCY_CASTLE_PUBLIC_KEY = "MCowBQYDK2VwAyEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
+    private val BOUNCY_CASTLE_PRIVATE_KEY = "MFECAQEwBQYDK2VwBCIEIOmntkLRdLIVT+BDWRF88R3Bu3XIrl3PR5U2mPmlyD74gSEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
+
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
         assertDoesNotThrow {
@@ -38,6 +41,46 @@ class CryptoManagerTest {
 
         // Then
         assertTrue { result.verifySignature(keyPair.public, content) }
+    }
+
+    @Test
+    fun shouldSignWithBouncyCastlePrivateKey() = runTest {
+        // Given
+        val content = "hello"
+
+        // Then
+        val result = content.signWithPrivateKey(BOUNCY_CASTLE_PRIVATE_KEY.decodeBase64ToByteArray())
+
+        // Then
+        assertTrue {
+            result.verifySignature(BOUNCY_CASTLE_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+        }
+    }
+
+    @Test
+    fun shouldVerifyWithBouncyCastlePrivateKey() = runTest {
+        // Given
+        val signed = "vpdhVsz6zrQsbOFxBnslQGgmZ3rc/Jp6KgdMvoe9/azRz9CRqlsap1SO4Adouhs/Tw+AONYurPKbp1/MLgZqDg=="
+        val content = "hello"
+
+        // Then
+        val result = signed.decodeBase64ToByteArray().verifySignature(BOUNCY_CASTLE_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertTrue { result }
+    }
+
+    @Test
+    fun shouldFailToVerifyWithBouncyCastlePrivateKey() = runTest {
+        // Given
+        val signed = "vpdhVsz6zrQsbOFxBnsQQGgmZ3rc/Jp6KgdMvoe9/azRz9CRqlsap1SO4Adouhs/Tw+AONYurPKbp1/MLgZqDg=="
+        val content = "hello"
+
+        // Then
+        val result = signed.decodeBase64ToByteArray().verifySignature(BOUNCY_CASTLE_PUBLIC_KEY.decodeBase64ToByteArray(), content)
+
+        // Then
+        assertFalse { result }
     }
 
     @Test
