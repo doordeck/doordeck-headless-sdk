@@ -8,7 +8,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -28,7 +27,6 @@ class AccountClientTest : IntegrationTest() {
         assertEquals(TEST_MAIN_USER_EMAIL, response.email)
     }
 
-    @Ignore
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
