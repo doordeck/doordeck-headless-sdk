@@ -9,6 +9,8 @@ internal const val CRYPTO_KIT_PUBLIC_KEY_SIZE = 32
 internal const val CRYPTO_KIT_PRIVATE_KEY_SIZE = 32
 internal const val JAVA_PKCS8_PUBLIC_KEY_SIZE = 44
 internal const val JAVA_PKCS8_PRIVATE_KEY_SIZE = 48
+internal const val BOUNCY_CASTLE_PUBLIC_KEY_SIZE = 44
+internal const val BOUNCY_CASTLE_PRIVATE_KEY_SIZE = 83
 internal const val RAW_KEY_SIZE = 32
 internal val MIN_CERTIFICATE_LIFETIME_DAYS = 7.days
 
