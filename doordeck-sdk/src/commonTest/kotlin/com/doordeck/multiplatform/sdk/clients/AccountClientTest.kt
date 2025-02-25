@@ -29,12 +29,11 @@ class AccountClientTest : IntegrationTest() {
         assertEquals(TEST_MAIN_USER_EMAIL, response.email)
     }
 
-    @Ignore
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedUserDisplayName = Uuid.random().toString()
+        val updatedUserDisplayName = "Training"
 
         // When
         AccountClient.updateUserDetailsRequest(updatedUserDisplayName)
