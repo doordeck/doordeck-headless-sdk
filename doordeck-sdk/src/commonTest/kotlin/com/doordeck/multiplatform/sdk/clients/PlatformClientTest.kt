@@ -40,6 +40,11 @@ class PlatformClientTest : IntegrationTest() {
             it.name.equals(newApplication.name, true)
         }
         assertNotNull(application)
+        assertEquals(newApplication.name, application.name)
+        assertEquals(newApplication.companyName, application.companyName)
+        assertEquals(newApplication.mailingAddress, application.mailingAddress)
+        assertEquals(newApplication.privacyPolicy, application.privacyPolicy)
+        assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
         val updatedApplicationName = "Test Application ${Uuid.random()}"

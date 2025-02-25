@@ -22,6 +22,7 @@ class SitesClientTest : IntegrationTest() {
 
         // Then
         assertTrue { sites.isNotEmpty() }
+        assertTrue { sites.any { it.id == TEST_MAIN_SITE_ID } }
     }
 
     @Test
