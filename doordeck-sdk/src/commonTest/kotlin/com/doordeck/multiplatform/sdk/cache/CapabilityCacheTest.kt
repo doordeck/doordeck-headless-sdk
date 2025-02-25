@@ -16,7 +16,7 @@ import kotlin.uuid.Uuid
 class CapabilityCacheTest {
 
     @BeforeTest
-    fun setup() {
+    fun setup() = runTest {
         CapabilityCache.reset()
     }
 

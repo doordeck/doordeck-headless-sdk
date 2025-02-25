@@ -9,7 +9,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
-/*
+
 class SitesClientTest : IntegrationTest() {
 
     @Test
@@ -22,6 +22,7 @@ class SitesClientTest : IntegrationTest() {
 
         // Then
         assertTrue { sites.isNotEmpty() }
+        assertTrue { sites.any { it.id == TEST_MAIN_SITE_ID } }
     }
 
     @Test
@@ -50,5 +51,3 @@ class SitesClientTest : IntegrationTest() {
         assertTrue { usersForSite.any { it.userId == TEST_MAIN_USER_ID } }
     }
 }
-
- */

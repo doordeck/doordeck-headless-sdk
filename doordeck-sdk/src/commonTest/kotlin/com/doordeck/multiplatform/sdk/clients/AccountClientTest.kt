@@ -12,8 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
-/*
+
 class AccountClientTest : IntegrationTest() {
 
     @Test
@@ -32,7 +31,7 @@ class AccountClientTest : IntegrationTest() {
     fun shouldUpdateUserDetails() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedUserDisplayName = Uuid.random().toString()
+        val updatedUserDisplayName = "Training"
 
         // When
         AccountClient.updateUserDetailsRequest(updatedUserDisplayName)
@@ -63,6 +62,9 @@ class AccountClientTest : IntegrationTest() {
 
         // When
         AccountClient.changePasswordRequest(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
+
+        // Then
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
     }
 
     @Test
@@ -94,5 +96,3 @@ class AccountClientTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }
-
- */

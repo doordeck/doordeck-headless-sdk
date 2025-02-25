@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -199,5 +200,17 @@ class ContextManagerTest : IntegrationTest() {
 
         // Then
         assertTrue { result }
+    }
+
+    @Test
+    fun shouldUpdateApiEnvironment() = runTest {
+        // Given
+        val apiEnvironment = ApiEnvironment.STAGING
+
+        // When
+        ContextManagerImpl.setApiEnvironment(apiEnvironment)
+
+        // Then
+        assertEquals(apiEnvironment, ContextManagerImpl.getApiEnvironment())
     }
 }
