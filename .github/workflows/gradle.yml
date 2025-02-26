@@ -419,5 +419,5 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.PAT }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/BernatCarbo/sdk-spm/dispatches \
+            https://api.github.com/repos/doordeck/doordeck-headless-sdk-spm/dispatches \
             -d "{\"event_type\": \"spm-release\", \"client_payload\": {\"tag\": \"${{ needs.pre-release.outputs.tag }}\"}}"
