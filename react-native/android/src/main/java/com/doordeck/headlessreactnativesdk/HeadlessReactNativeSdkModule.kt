@@ -57,6 +57,7 @@ class HeadlessReactNativeSdkModule(
   override fun verify(code: String, promise: Promise) {
     doordeckSdk.account().verifyEphemeralKeyRegistrationAsync(code)
       .thenApply {
+        doordeckSdk.contextManager().storeContext()
         promise.resolve(null)
       }
       .exceptionally { error ->

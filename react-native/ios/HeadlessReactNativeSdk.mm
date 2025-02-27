@@ -9,6 +9,7 @@
   self = [super init];
   if (self) {
     moduleSdk = [HeadlessReactNativeSdkImpl new];
+    [moduleSdk loadContext];
   }
   
   return self;
