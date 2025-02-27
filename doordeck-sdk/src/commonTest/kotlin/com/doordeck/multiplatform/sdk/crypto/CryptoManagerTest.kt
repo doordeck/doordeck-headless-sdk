@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import com.doordeck.multiplatform.sdk.assertDoesNotThrow
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -25,9 +24,7 @@ class CryptoManagerTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        assertDoesNotThrow {
-            CryptoManager.generateKeyPair()
-        }
+        CryptoManager.generateKeyPair()
     }
 
     @Test

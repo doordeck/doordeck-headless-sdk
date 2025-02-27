@@ -287,6 +287,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { usersForLock.isNotEmpty() }
+        assertTrue { usersForLock.any { it.userId == TEST_MAIN_USER_ID } }
     }
 
     @Test
@@ -299,6 +300,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { locksForUser.devices.isNotEmpty() }
+        assertTrue { locksForUser.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
     }
 
     @Test
@@ -323,6 +325,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // Then
         assertTrue { shareableLocks.isNotEmpty() }
+        assertTrue { shareableLocks.any { it.id == TEST_MAIN_LOCK_ID } }
     }
 
     @Test

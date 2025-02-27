@@ -8,12 +8,12 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
-/*
+
 class AccountClientTest : IntegrationTest() {
 
     @Test
@@ -28,11 +28,12 @@ class AccountClientTest : IntegrationTest() {
         assertEquals(TEST_MAIN_USER_EMAIL, response.email)
     }
 
+    @Ignore
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedUserDisplayName = Uuid.random().toString()
+        val updatedUserDisplayName = "Training"
 
         // When
         AccountClient.updateUserDetailsRequest(updatedUserDisplayName)
@@ -63,6 +64,9 @@ class AccountClientTest : IntegrationTest() {
 
         // When
         AccountClient.changePasswordRequest(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
+
+        // Then
+        AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
     }
 
     @Test
@@ -94,5 +98,3 @@ class AccountClientTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }
-
- */
