@@ -12,20 +12,20 @@ interface ContextManager {
 
     fun getApiEnvironment(): ApiEnvironment
 
-    @CName("setAuthToken")
-    fun setAuthToken(token: String)
+    @CName("setCloudAuthToken")
+    fun setCloudAuthToken(token: String)
 
-    @CName("getAuthToken")
-    fun getAuthToken(): String?
+    @CName("getCloudAuthToken")
+    fun getCloudAuthToken(): String?
 
-    @CName("isAuthTokenAboutToExpire")
-    fun isAuthTokenAboutToExpire(): Boolean
+    @CName("isCloudAuthTokenAboutToExpire")
+    fun isCloudAuthTokenAboutToExpire(): Boolean
 
-    @CName("setRefreshToken")
-    fun setRefreshToken(token: String)
+    @CName("setCloudRefreshToken")
+    fun setCloudRefreshToken(token: String)
 
-    @CName("getRefreshToken")
-    fun getRefreshToken(): String?
+    @CName("getCloudRefreshToken")
+    fun getCloudRefreshToken(): String?
 
     @CName("setFusionAuthToken")
     fun setFusionAuthToken(token: String)

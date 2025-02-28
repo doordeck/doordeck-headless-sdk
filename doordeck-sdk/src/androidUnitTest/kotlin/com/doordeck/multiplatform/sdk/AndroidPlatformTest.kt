@@ -3,6 +3,8 @@ package com.doordeck.multiplatform.sdk
 import android.app.Application
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.russhwolf.settings.MapSettings
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -40,14 +42,15 @@ class AndroidPlatformTest {
             .setCloudAuthToken(Uuid.random().toString())
             .setCloudRefreshToken(Uuid.random().toString())
             .setApplicationContext(context)
+            .setSecureStorageOverride(DefaultSecureStorage(MapSettings()))
             .build()
 
         // When
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
-        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getAuthToken())
-        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getRefreshToken())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }

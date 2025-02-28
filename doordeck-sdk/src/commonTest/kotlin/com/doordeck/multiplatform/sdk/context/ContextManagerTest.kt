@@ -29,8 +29,8 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setAuthToken(cloudAuthToken)
-        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
+        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
         ContextManagerImpl.setUserId(userId)
         ContextManagerImpl.setCertificateChain(certificateChain)
@@ -49,8 +49,8 @@ class ContextManagerTest : IntegrationTest() {
         assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
-        assertEquals(cloudAuthToken, ContextManagerImpl.getAuthToken())
-        assertEquals(cloudRefreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(cloudAuthToken, ContextManagerImpl.getCloudAuthToken())
+        assertEquals(cloudRefreshToken, ContextManagerImpl.getCloudRefreshToken())
         assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
     }
 
@@ -65,8 +65,8 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setAuthToken(cloudAuthToken)
-        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
+        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
         ContextManagerImpl.setUserId(userId)
         ContextManagerImpl.setCertificateChain(certificateChain)
@@ -85,8 +85,8 @@ class ContextManagerTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getPublicKey())
         assertNull(ContextManagerImpl.getPrivateKey())
         assertNull(ContextManagerImpl.getKeyPair())
-        assertNull(ContextManagerImpl.getAuthToken())
-        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getCloudAuthToken())
+        assertNull(ContextManagerImpl.getCloudRefreshToken())
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 
@@ -141,7 +141,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.reset()
 
         // When
-        val result = ContextManagerImpl.isAuthTokenAboutToExpire()
+        val result = ContextManagerImpl.isCloudAuthTokenAboutToExpire()
 
         // Then
         assertTrue { result }

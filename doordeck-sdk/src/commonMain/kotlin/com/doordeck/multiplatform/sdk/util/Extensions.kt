@@ -51,7 +51,6 @@ import io.ktor.http.append
 import io.ktor.http.encodedPath
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.encodeToString
 
 private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
 private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
@@ -87,7 +86,7 @@ internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
             refreshTokens {
-                ContextManagerImpl.getRefreshToken()?.let { currentRefreshToken ->
+                ContextManagerImpl.getCloudRefreshToken()?.let { currentRefreshToken ->
                     val refreshTokens: TokenResponse = client.post(Paths.getRefreshTokenPath()) {
                         url {
                             protocol = URLProtocol.HTTPS

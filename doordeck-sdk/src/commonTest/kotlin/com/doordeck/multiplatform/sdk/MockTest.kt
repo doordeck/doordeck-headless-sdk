@@ -18,7 +18,7 @@ open class MockTest {
         ContextManagerImpl.setApiEnvironment(TEST_ENVIRONMENT)
         ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings()))
         ContextManagerImpl.setOperationContext("", emptyList(), TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
-        ContextManagerImpl.setRefreshToken("")
+        ContextManagerImpl.setCloudRefreshToken("")
         CloudHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
         HttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)
         FusionHttpClient.overrideClient(TEST_MOCK_HTTP_CLIENT)

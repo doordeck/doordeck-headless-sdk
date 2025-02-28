@@ -184,7 +184,7 @@ class ExtensionsTest {
         val httpClient = HttpClient().also {
             it.addAuthInterceptor(
                 requiresAuth = Paths::requiresAuth,
-                getAuthToken = ContextManagerImpl::getAuthToken
+                getAuthToken = ContextManagerImpl::getCloudAuthToken
             )
         }
 

@@ -17,8 +17,8 @@ import kotlin.uuid.Uuid
 internal object ContextManagerImpl : ContextManager {
 
     private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
-    private var currentToken: String? = null
-    private var currentRefreshToken: String? = null
+    private var currentCloudAuthToken: String? = null
+    private var currentCloudRefreshToken: String? = null
     private var currentFusionToken: String? = null
     private var currentUserId: String? = null
     private var currentEmail: String? = null
@@ -35,26 +35,26 @@ internal object ContextManagerImpl : ContextManager {
         return apiEnvironment
     }
 
-    override fun setAuthToken(token: String) {
-        currentToken = token
+    override fun setCloudAuthToken(token: String) {
+        currentCloudAuthToken = token
         secureStorage?.addCloudAuthToken(token)
     }
 
-    override fun getAuthToken(): String? {
-        return currentToken
+    override fun getCloudAuthToken(): String? {
+        return currentCloudAuthToken
     }
 
-    override fun isAuthTokenAboutToExpire(): Boolean {
-        return currentToken?.isJwtTokenAboutToExpire() ?: true
+    override fun isCloudAuthTokenAboutToExpire(): Boolean {
+        return currentCloudAuthToken?.isJwtTokenAboutToExpire() ?: true
     }
 
-    override fun setRefreshToken(token: String) {
-        currentRefreshToken = token
+    override fun setCloudRefreshToken(token: String) {
+        currentCloudRefreshToken = token
         secureStorage?.addCloudRefreshToken(token)
     }
 
-    override fun getRefreshToken(): String? {
-        return currentRefreshToken
+    override fun getCloudRefreshToken(): String? {
+        return currentCloudRefreshToken
     }
 
     override fun setFusionAuthToken(token: String) {
@@ -138,13 +138,13 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     internal fun setTokens(token: String, refreshToken: String) {
-        setAuthToken(token)
-        setRefreshToken(refreshToken)
+        setCloudAuthToken(token)
+        setCloudRefreshToken(refreshToken)
     }
 
     internal fun reset(clearStorage: Boolean = true) {
-        currentToken = null
-        currentRefreshToken = null
+        currentCloudAuthToken = null
+        currentCloudRefreshToken = null
         currentFusionToken = null
         currentUserId = null
         currentUserCertificateChain = null
@@ -176,8 +176,8 @@ internal object ContextManagerImpl : ContextManager {
 
     internal fun loadContext() {
         secureStorage?.let { storage ->
-            storage.getCloudAuthToken()?.let { currentToken = it }
-            storage.getCloudRefreshToken()?.let { currentRefreshToken = it }
+            storage.getCloudAuthToken()?.let { currentCloudAuthToken = it }
+            storage.getCloudRefreshToken()?.let { currentCloudRefreshToken = it }
             storage.getFusionAuthToken()?.let { currentFusionToken = it }
             storage.getUserId()?.let { currentUserId = it }
             storage.getUserEmail()?.let { currentEmail = it }
