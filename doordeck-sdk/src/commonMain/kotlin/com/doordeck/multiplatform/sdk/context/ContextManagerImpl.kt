@@ -142,7 +142,7 @@ internal object ContextManagerImpl : ContextManager {
         setRefreshToken(refreshToken)
     }
 
-    internal fun reset() {
+    internal fun reset(clearStorage: Boolean = true) {
         currentToken = null
         currentRefreshToken = null
         currentFusionToken = null
@@ -152,8 +152,9 @@ internal object ContextManagerImpl : ContextManager {
         currentUserPrivateKey = null
         currentEmail = null
         CapabilityCache.reset()
-        clearContext()
-        secureStorage = null
+        if (clearStorage) {
+            clearContext()
+        }
     }
 
     override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
