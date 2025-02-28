@@ -16,7 +16,7 @@ import kotlin.uuid.Uuid
 
 internal object ContextManagerImpl : ContextManager {
 
-    private lateinit var apiEnvironment: ApiEnvironment
+    private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
     private var currentToken: String? = null
     private var currentRefreshToken: String? = null
     private var currentFusionToken: String? = null
@@ -25,7 +25,7 @@ internal object ContextManagerImpl : ContextManager {
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
-    private lateinit var secureStorage: SecureStorage
+    private var secureStorage: SecureStorage? = null
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         this.apiEnvironment = apiEnvironment
@@ -37,7 +37,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setAuthToken(token: String) {
         currentToken = token
-        secureStorage.addCloudAuthToken(token)
+        secureStorage?.addCloudAuthToken(token)
     }
 
     override fun getAuthToken(): String? {
@@ -50,7 +50,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setRefreshToken(token: String) {
         currentRefreshToken = token
-        secureStorage.addCloudRefreshToken(token)
+        secureStorage?.addCloudRefreshToken(token)
     }
 
     override fun getRefreshToken(): String? {
@@ -59,7 +59,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setFusionAuthToken(token: String) {
         currentFusionToken = token
-        secureStorage.addFusionAuthToken(token)
+        secureStorage?.addFusionAuthToken(token)
     }
 
     override fun getFusionAuthToken(): String? {
@@ -68,7 +68,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setUserId(userId: String) {
         currentUserId = userId
-        secureStorage.addUserId(userId)
+        secureStorage?.addUserId(userId)
     }
 
     override fun getUserId(): String? {
@@ -77,7 +77,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setUserEmail(email: String) {
         currentEmail = email
-        secureStorage.addUserEmail(email)
+        secureStorage?.addUserEmail(email)
     }
 
     override fun getUserEmail(): String? {
@@ -86,7 +86,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setCertificateChain(certificateChain: List<String>) {
         currentUserCertificateChain = certificateChain
-        secureStorage.addCertificateChain(certificateChain)
+        secureStorage?.addCertificateChain(certificateChain)
     }
 
     override fun getCertificateChain(): List<String>? {
@@ -102,8 +102,8 @@ internal object ContextManagerImpl : ContextManager {
     override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         currentUserPublicKey = publicKey
         currentUserPrivateKey = privateKey
-        secureStorage.addPublicKey(publicKey)
-        secureStorage.addPrivateKey(privateKey)
+        secureStorage?.addPublicKey(publicKey)
+        secureStorage?.addPrivateKey(privateKey)
     }
 
     override fun getKeyPair(): Crypto.KeyPair? {
@@ -153,6 +153,7 @@ internal object ContextManagerImpl : ContextManager {
         currentEmail = null
         CapabilityCache.reset()
         clearContext()
+        secureStorage = null
     }
 
     override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
@@ -173,17 +174,17 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     internal fun loadContext() {
-        currentToken =  secureStorage.getCloudAuthToken()
-        currentRefreshToken = secureStorage.getCloudRefreshToken()
-        currentFusionToken = secureStorage.getFusionAuthToken()
-        currentUserId = secureStorage.getUserId()
-        currentEmail = secureStorage.getUserEmail()
-        currentUserCertificateChain = secureStorage.getCertificateChain()
-        currentUserPublicKey = secureStorage.getPublicKey()
-        currentUserPrivateKey = secureStorage.getPrivateKey()
+        currentToken =  secureStorage?.getCloudAuthToken()
+        currentRefreshToken = secureStorage?.getCloudRefreshToken()
+        currentFusionToken = secureStorage?.getFusionAuthToken()
+        currentUserId = secureStorage?.getUserId()
+        currentEmail = secureStorage?.getUserEmail()
+        currentUserCertificateChain = secureStorage?.getCertificateChain()
+        currentUserPublicKey = secureStorage?.getPublicKey()
+        currentUserPrivateKey = secureStorage?.getPrivateKey()
     }
 
     override fun clearContext() {
-        secureStorage.clear()
+        secureStorage?.clear()
     }
 }

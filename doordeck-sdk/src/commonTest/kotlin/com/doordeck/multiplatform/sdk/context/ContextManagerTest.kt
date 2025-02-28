@@ -38,7 +38,6 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setUserEmail(email)
 
         // When
-        ContextManagerImpl.storeContext()
         ContextManagerImpl.reset()
         ContextManagerImpl.loadContext()
 
@@ -73,7 +72,6 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setCertificateChain(certificateChain)
         ContextManagerImpl.setKeyPair(publicKey, privateKey)
         ContextManagerImpl.setUserEmail(email)
-        ContextManagerImpl.storeContext()
 
         // When
         ContextManagerImpl.clearContext()
@@ -102,7 +100,6 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        ContextManagerImpl.storeContext()
         ContextManagerImpl.reset()
         ContextManagerImpl.loadContext()
 
@@ -126,7 +123,6 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When
-        ContextManagerImpl.storeContext()
         ContextManagerImpl.reset()
         ContextManagerImpl.loadContext()
 

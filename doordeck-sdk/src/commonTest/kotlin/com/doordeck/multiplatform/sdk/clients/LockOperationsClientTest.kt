@@ -787,9 +787,6 @@ class LockOperationsClientTest : IntegrationTest() {
 
     @Test
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
-        // Given
-        ContextManagerImpl.resetOperationContext()
-
         // When
         val revokeAccessToLockUsingContextException = assertFails {
             LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))

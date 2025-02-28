@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import io.ktor.client.engine.js.JsClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -30,15 +31,18 @@ class JsPlatformTest {
     @Test
     fun shouldInitialize() = runTest {
         // Given
-        val token = Uuid.random().toString()
-        val refreshToken = Uuid.random().toString()
+        val sdkConfig = SdkConfig.Builder()
+            .setApiEnvironment(TEST_ENVIRONMENT)
+            .setCloudAuthToken(Uuid.random().toString())
+            .setCloudRefreshToken(Uuid.random().toString())
+            .build()
 
         // When
-        val sdk = KDoordeckFactory.initializeWithAuthAndRefreshTokens(TEST_ENVIRONMENT, token, refreshToken)
+        val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
-        assertEquals(token, sdk.contextManager().getAuthToken())
-        assertEquals(refreshToken, sdk.contextManager().getRefreshToken())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getRefreshToken())
         assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
     }
 }
