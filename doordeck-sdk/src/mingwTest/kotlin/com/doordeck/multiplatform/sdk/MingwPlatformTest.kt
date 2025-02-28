@@ -43,6 +43,6 @@ class MingwPlatformTest {
         // Then
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getAuthToken())
         assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getRefreshToken())
-        assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
+        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }
