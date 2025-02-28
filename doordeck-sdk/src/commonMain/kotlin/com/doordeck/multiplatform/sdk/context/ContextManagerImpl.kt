@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
@@ -9,7 +8,6 @@ import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
-import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
@@ -18,8 +16,7 @@ import kotlin.uuid.Uuid
 
 internal object ContextManagerImpl : ContextManager {
 
-    private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
-    private var applicationContext: ApplicationContext? = null
+    private lateinit var apiEnvironment: ApiEnvironment
     private var currentToken: String? = null
     private var currentRefreshToken: String? = null
     private var currentFusionToken: String? = null
@@ -28,22 +25,19 @@ internal object ContextManagerImpl : ContextManager {
     private var currentUserCertificateChain: List<String>? = null
     private var currentUserPublicKey: ByteArray? = null
     private var currentUserPrivateKey: ByteArray? = null
-    private var secureStorage: SecureStorage? = null
+    private lateinit var secureStorage: SecureStorage
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        ContextManagerImpl.apiEnvironment = apiEnvironment
+        this.apiEnvironment = apiEnvironment
     }
 
     override fun getApiEnvironment(): ApiEnvironment {
         return apiEnvironment
     }
 
-    override fun setApplicationContext(applicationContext: ApplicationContext) {
-        ContextManagerImpl.applicationContext = applicationContext
-    }
-
     override fun setAuthToken(token: String) {
         currentToken = token
+        secureStorage.addCloudAuthToken(token)
     }
 
     override fun getAuthToken(): String? {
@@ -56,6 +50,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setRefreshToken(token: String) {
         currentRefreshToken = token
+        secureStorage.addCloudRefreshToken(token)
     }
 
     override fun getRefreshToken(): String? {
@@ -64,6 +59,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setFusionAuthToken(token: String) {
         currentFusionToken = token
+        secureStorage.addFusionAuthToken(token)
     }
 
     override fun getFusionAuthToken(): String? {
@@ -72,6 +68,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setUserId(userId: String) {
         currentUserId = userId
+        secureStorage.addUserId(userId)
     }
 
     override fun getUserId(): String? {
@@ -80,6 +77,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setUserEmail(email: String) {
         currentEmail = email
+        secureStorage.addUserEmail(email)
     }
 
     override fun getUserEmail(): String? {
@@ -88,6 +86,7 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun setCertificateChain(certificateChain: List<String>) {
         currentUserCertificateChain = certificateChain
+        secureStorage.addCertificateChain(certificateChain)
     }
 
     override fun getCertificateChain(): List<String>? {
@@ -103,6 +102,8 @@ internal object ContextManagerImpl : ContextManager {
     override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         currentUserPublicKey = publicKey
         currentUserPrivateKey = privateKey
+        secureStorage.addPublicKey(publicKey)
+        secureStorage.addPrivateKey(privateKey)
     }
 
     override fun getKeyPair(): Crypto.KeyPair? {
@@ -137,82 +138,52 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     internal fun setTokens(token: String, refreshToken: String) {
-        currentToken = token
-        currentRefreshToken = refreshToken
+        setAuthToken(token)
+        setRefreshToken(refreshToken)
     }
 
     internal fun reset() {
-        resetTokens()
-        resetOperationContext()
-        currentEmail = null
-        CapabilityCache.reset()
-    }
-
-    private fun resetTokens() {
         currentToken = null
         currentRefreshToken = null
         currentFusionToken = null
-    }
-
-    internal fun resetOperationContext() {
         currentUserId = null
         currentUserCertificateChain = null
         currentUserPublicKey = null
         currentUserPrivateKey = null
+        currentEmail = null
+        CapabilityCache.reset()
+        clearContext()
     }
 
     override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
-        currentUserId = userId
-        currentUserCertificateChain = certificateChain
-        currentUserPublicKey = publicKey
-        currentUserPrivateKey = privateKey
+        setUserId(userId)
+        setCertificateChain(certificateChain)
+        setKeyPair(publicKey, privateKey)
     }
 
     override fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<Context.OperationContextData>()
-        currentUserId = operationContextData.userId
-        currentUserCertificateChain = operationContextData.userCertificateChain.stringToCertificateChain()
-        currentUserPublicKey = operationContextData.userPublicKey.decodeBase64ToByteArray()
-        currentUserPrivateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
+        setUserId(operationContextData.userId)
+        setCertificateChain(operationContextData.userCertificateChain.stringToCertificateChain())
+        setKeyPair(operationContextData.userPublicKey.decodeBase64ToByteArray(), operationContextData.userPrivateKey.decodeBase64ToByteArray())
     }
 
-    override fun setSecureStorageImpl(secureStorage: SecureStorage) {
-        ContextManagerImpl.secureStorage = secureStorage
+    internal fun setSecureStorageImpl(secureStorage: SecureStorage) {
+        this.secureStorage = secureStorage
     }
 
-    override fun loadContext() {
-        initializeSecureStorage()
-
-        currentToken =  currentToken ?: secureStorage?.getCloudAuthToken()
-        currentRefreshToken = currentRefreshToken ?: secureStorage?.getCloudRefreshToken()
-        currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
-        currentUserId = currentUserId ?: secureStorage?.getUserId()
-        currentEmail = currentEmail ?: secureStorage?.getUserEmail()
-        currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
-        currentUserPublicKey = currentUserPublicKey ?: secureStorage?.getPublicKey()
-        currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
-    }
-
-    override fun storeContext() {
-        initializeSecureStorage()
-
-        currentToken?.let { secureStorage?.addCloudAuthToken(it) }
-        currentRefreshToken?.let { secureStorage?.addCloudRefreshToken(it) }
-        currentFusionToken?.let { secureStorage?.addFusionAuthToken(it) }
-        currentUserId?.let { secureStorage?.addUserId(it) }
-        currentEmail?.let { secureStorage?.addUserEmail(it) }
-        currentUserCertificateChain?.let { secureStorage?.addCertificateChain(it) }
-        currentUserPublicKey?.let { secureStorage?.addPublicKey(it) }
-        currentUserPrivateKey?.let { secureStorage?.addPrivateKey(it) }
+    internal fun loadContext() {
+        currentToken =  secureStorage.getCloudAuthToken()
+        currentRefreshToken = secureStorage.getCloudRefreshToken()
+        currentFusionToken = secureStorage.getFusionAuthToken()
+        currentUserId = secureStorage.getUserId()
+        currentEmail = secureStorage.getUserEmail()
+        currentUserCertificateChain = secureStorage.getCertificateChain()
+        currentUserPublicKey = secureStorage.getPublicKey()
+        currentUserPrivateKey = secureStorage.getPrivateKey()
     }
 
     override fun clearContext() {
-        initializeSecureStorage()
-
-        secureStorage?.clear()
-    }
-
-    private fun initializeSecureStorage() {
-        secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+        secureStorage.clear()
     }
 }

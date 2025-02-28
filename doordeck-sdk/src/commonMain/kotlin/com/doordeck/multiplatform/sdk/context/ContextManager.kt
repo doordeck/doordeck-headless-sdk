@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import kotlin.js.JsExport
 import kotlin.native.CName
 
@@ -13,9 +11,6 @@ interface ContextManager {
     fun setApiEnvironment(apiEnvironment: ApiEnvironment)
 
     fun getApiEnvironment(): ApiEnvironment
-
-    @JsExport.Ignore
-    fun setApplicationContext(applicationContext: ApplicationContext)
 
     @CName("setAuthToken")
     fun setAuthToken(token: String)
@@ -68,14 +63,6 @@ interface ContextManager {
 
     @CName("setOperationContextJson")
     fun setOperationContextJson(data: String)
-
-    fun setSecureStorageImpl(secureStorage: SecureStorage)
-
-    @CName("loadContext")
-    fun loadContext()
-
-    @CName("storeContext")
-    fun storeContext()
 
     @CName("clearContext")
     fun clearContext()
