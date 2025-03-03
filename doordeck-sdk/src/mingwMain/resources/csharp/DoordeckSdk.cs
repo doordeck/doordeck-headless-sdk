@@ -38,21 +38,26 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
 
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        if (authToken != null)
+        var token = authToken != null ? Utils.Utils.ToSByte(authToken) : null;
+        var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
+        var builder = sdkConfig.Builder.Builder();
+        sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
+
+        if (token != null)
         {
-            var token = Utils.Utils.ToSByte(authToken);
-            try
-            {
-                _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initializeWithAuthToken_(_factory, _apiEnvironment, token);
-            }
-            finally
-            {
-                Marshal.FreeHGlobal((IntPtr)token);
-            }
+            sdkConfig.Builder.setCloudAuthToken(builder, token);
         }
-        else
+
+        try
         {
-            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, _apiEnvironment);
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, sdkConfig.Builder.build(builder));
+        }
+        finally
+        {
+            if (token != null)
+            {
+               Marshal.FreeHGlobal((IntPtr)token);
+            }
         }
 
         _account.Initialize(_symbols, _sdk);

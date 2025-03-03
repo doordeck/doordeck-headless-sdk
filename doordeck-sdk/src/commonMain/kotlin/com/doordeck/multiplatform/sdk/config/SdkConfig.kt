@@ -16,7 +16,6 @@ class SdkConfig private constructor(
     val apiEnvironment: ApiEnvironment,
     val cloudAuthToken: String?,
     val cloudRefreshToken: String?,
-    val applicationContext: ApplicationContext?,
     val secureStorage: SecureStorage
 ) {
     /**
@@ -69,7 +68,6 @@ class SdkConfig private constructor(
                 apiEnvironment = apiEnvironment,
                 cloudAuthToken = cloudAuthToken,
                 cloudRefreshToken = cloudRefreshToken,
-                applicationContext = applicationContext,
                 secureStorage = secureStorage
             )
         }

@@ -175,16 +175,14 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     internal fun loadContext() {
-        secureStorage?.let { storage ->
-            storage.getCloudAuthToken()?.let { currentCloudAuthToken = it }
-            storage.getCloudRefreshToken()?.let { currentCloudRefreshToken = it }
-            storage.getFusionAuthToken()?.let { currentFusionToken = it }
-            storage.getUserId()?.let { currentUserId = it }
-            storage.getUserEmail()?.let { currentEmail = it }
-            storage.getCertificateChain()?.let { currentUserCertificateChain = it }
-            storage.getPublicKey()?.let { currentUserPublicKey = it }
-            storage.getPrivateKey()?.let { currentUserPrivateKey = it }
-        }
+        currentCloudAuthToken =  currentCloudAuthToken ?: secureStorage?.getCloudAuthToken()
+        currentCloudRefreshToken = currentCloudRefreshToken ?: secureStorage?.getCloudRefreshToken()
+        currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
+        currentUserId = currentUserId ?: secureStorage?.getUserId()
+        currentEmail = currentEmail ?: secureStorage?.getUserEmail()
+        currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
+        currentUserPublicKey = currentUserPublicKey ?: secureStorage?.getPublicKey()
+        currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
     }
 
     override fun clearContext() {
