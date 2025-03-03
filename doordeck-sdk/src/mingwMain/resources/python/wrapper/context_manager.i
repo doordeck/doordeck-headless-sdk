@@ -4,11 +4,16 @@ class ContextManager(object):
     def __init__(self, resource):
         self.resource = resource
 
+    def get_api_environment(self):
+        env = _doordeck_headless_sdk.getApiEnvironment(self.resource)
+        name = _doordeck_headless_sdk.getApiEnvironmentName(env)
+        return ApiEnvironment[name]
+
     def set_cloud_auth_token(self, data):
         _doordeck_headless_sdk.setCloudAuthToken(self.resource, data)
 
     def get_cloud_auth_token(self):
-        _doordeck_headless_sdk.getCloudAuthToken(self.resource)
+        return _doordeck_headless_sdk.getCloudAuthToken(self.resource)
 
     def is_cloud_auth_token_about_to_expire(self):
         return _doordeck_headless_sdk.isCloudAuthTokenAboutToExpire(self.resource)
@@ -17,13 +22,13 @@ class ContextManager(object):
         _doordeck_headless_sdk.setCloudRefreshToken(self.resource, data)
 
     def get_cloud_refresh_token(self):
-        _doordeck_headless_sdk.getCloudRefreshToken(self.resource)
+        return _doordeck_headless_sdk.getCloudRefreshToken(self.resource)
 
     def set_fusion_auth_token(self, data):
         _doordeck_headless_sdk.setFusionAuthToken(self.resource, data)
 
     def get_fusion_auth_token(self):
-        _doordeck_headless_sdk.getFusionAuthToken(self.resource)
+        return _doordeck_headless_sdk.getFusionAuthToken(self.resource)
 
     def set_user_id(self, data):
         _doordeck_headless_sdk.setUserId(self.resource, data)
@@ -45,12 +50,6 @@ class ContextManager(object):
 
     def set_operation_context(self, data):
         _doordeck_headless_sdk.setOperationContextJson(self.resource, json.dumps(dataclasses.asdict(data)))
-
-    def load_context(self):
-        _doordeck_headless_sdk.loadContext(self.resource)
-
-    def store_context(self):
-        _doordeck_headless_sdk.storeContext(self.resource)
 
     def clear_context(self):
         _doordeck_headless_sdk.clearContext(self.resource)

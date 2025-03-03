@@ -10,6 +10,7 @@ interface ContextManager {
 
     fun setApiEnvironment(apiEnvironment: ApiEnvironment)
 
+    @CName("getApiEnvironment")
     fun getApiEnvironment(): ApiEnvironment
 
     @CName("setCloudAuthToken")
