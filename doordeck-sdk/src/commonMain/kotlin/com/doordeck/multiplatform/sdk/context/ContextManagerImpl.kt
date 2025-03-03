@@ -142,7 +142,7 @@ internal object ContextManagerImpl : ContextManager {
         setCloudRefreshToken(refreshToken)
     }
 
-    internal fun reset(clearStorage: Boolean = true) {
+    internal fun reset() {
         currentCloudAuthToken = null
         currentCloudRefreshToken = null
         currentFusionToken = null
@@ -152,9 +152,7 @@ internal object ContextManagerImpl : ContextManager {
         currentUserPrivateKey = null
         currentEmail = null
         CapabilityCache.reset()
-        if (clearStorage) {
-            clearContext()
-        }
+        clearContext()
     }
 
     override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
