@@ -11,9 +11,9 @@ PODS:
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
+    - React
     - React-Codegen
     - React-Core
-    - ReactCommon/turbomodule/core
   - hermes-engine (0.77.1):
     - hermes-engine/Pre-built (= 0.77.1)
   - hermes-engine/Pre-built (0.77.1)
@@ -1965,7 +1965,7 @@ SPEC CHECKSUMS:
   FBLazyVector: 79c4b7ec726447eec5f8593379466bd9fde1aa14
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
-  HeadlessReactNativeSdk: c2c35e8d88d09208a07103843eec3c7adc167418
+  HeadlessReactNativeSdk: eb8a3f3536432396a496ccbea99c6aa373bfd8cb
   hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 664055db806cce35c3c1b43c84414dd66e117ae6

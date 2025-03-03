@@ -21,8 +21,8 @@ const UnlockDeviceScreen: React.FC<UnlockDeviceScreenProps> = () => {
     setSuccess(false);
 
     unlockDevice(uuid)
-      .then(() => setSuccess(true)) // ✅ Show "Unlocked!" on success
-      .catch((err) => setError(String(err))); // ✅ Convert error to string
+      .then(() => setSuccess(true))
+      .catch((err) => setError(String(err)));
   };
 
   return (

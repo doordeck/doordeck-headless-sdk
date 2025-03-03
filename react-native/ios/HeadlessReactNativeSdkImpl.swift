@@ -12,12 +12,19 @@ import DoordeckSDK
 @objc(HeadlessReactNativeSdkImpl)
 public class HeadlessReactNativeSdkImpl: NSObject {
   
-  private let doordeckSdk = KDoordeckFactory().initialize(apiEnvironment: ApiEnvironment.prod)
+  private let doordeckSdk: Doordeck
 
+  override public init() {
+    self.doordeckSdk = KDoordeckFactory().initialize(apiEnvironment: ApiEnvironment.prod)
+    self.doordeckSdk.contextManager().loadContext()
+    
+    super.init()
+  }
+  
   /**
    * ✅ Authentication Methods
    */
-
+  
   @objc public func login(
     _ email: String,
     password: String,
@@ -103,11 +110,6 @@ public class HeadlessReactNativeSdkImpl: NSObject {
     resolver: @escaping RCTPromiseResolveBlock,
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
-    let a = doordeckSdk.contextManager().getUserId()
-    let a2 = doordeckSdk.contextManager().getCertificateChain()
-    let b = doordeckSdk.contextManager().getKeyPair()
-    let c1 = b?.public_
-    let c2 = b?.private_
     let baseOperation = LockOperations.BaseOperation(
       userId: nil,
       userCertificateChain: nil,
@@ -139,12 +141,12 @@ public class HeadlessReactNativeSdkImpl: NSObject {
   }
 
   private func setKeyPairIfNeeded() {
-    let a = doordeckSdk.contextManager().getUserId()
     guard doordeckSdk.contextManager().getKeyPair() == nil else { return }
     
     let newKeyPair = doordeckSdk.crypto().generateKeyPair()
     doordeckSdk.contextManager().setKeyPair(publicKey: newKeyPair.public_, privateKey: newKeyPair.private_)
-    doordeckSdk.contextManager().storeContext()
+    
+    self.doordeckSdk.contextManager().storeContext()
   }
 
   private func respondNeedsVerification(

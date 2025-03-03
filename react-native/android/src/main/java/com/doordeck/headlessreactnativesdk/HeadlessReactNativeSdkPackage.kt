@@ -16,7 +16,7 @@ class HeadlessReactNativeSdkPackage : BaseReactPackage() {
         reactContext = reactContext,
         doordeckSdk = KDoordeckFactory.initialize(
           applicationContext = ApplicationContext.apply { set(reactContext.applicationContext)},
-        )
+        ).also { it.contextManager().loadContext() }
       )
     } else {
       null
