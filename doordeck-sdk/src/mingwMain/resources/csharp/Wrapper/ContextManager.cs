@@ -43,7 +43,7 @@ public unsafe class ContextManager : IResource
 
     public ApiEnvironment GetApiEnvironment()
     {
-        var apiEnvironment = _contextManager.getApiEnvironment(_context);
+        var apiEnvironment = _contextManager.getApiEnvironment_(_context);
         sbyte* result = null;
         try
         {
