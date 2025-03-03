@@ -70,16 +70,16 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuth
             }
         }
 
-        _account.Initialize(_symbols, _sdk);
-        _accountless.Initialize(_symbols, _sdk);
-        _fusion.Initialize(_symbols, _sdk);
-        _helper.Initialize(_symbols, _sdk);
-        _lockOperations.Initialize(_symbols, _sdk);
-        _platform.Initialize(_symbols, _sdk);
-        _sites.Initialize(_symbols, _sdk);
-        _tiles.Initialize(_symbols, _sdk);
-        _contextManager.Initialize(_symbols, _sdk);
-        _cryptoManager.Initialize(_symbols, _sdk);
+        ((IResource)_account).Initialize(_symbols, _sdk);
+        ((IResource)_accountless).Initialize(_symbols, _sdk);
+        ((IResource)_fusion).Initialize(_symbols, _sdk);
+        ((IResource)_helper).Initialize(_symbols, _sdk);
+        ((IResource)_lockOperations).Initialize(_symbols, _sdk);
+        ((IResource)_platform).Initialize(_symbols, _sdk);
+        ((IResource)_sites).Initialize(_symbols, _sdk);
+        ((IResource)_tiles).Initialize(_symbols, _sdk);
+        ((IResource)_contextManager).Initialize(_symbols, _sdk);
+        ((IResource)_cryptoManager).Initialize(_symbols, _sdk);
     }
 
     public Account GetAccount()
@@ -138,15 +138,15 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuth
         _symbols->DisposeStablePointer(_factory.pinned);
         _symbols->DisposeStablePointer(_sdk.pinned);
 
-        _account.Release();
-        _accountless.Release();
-        _fusion.Release();
-        _helper.Release();
-        _lockOperations.Release();
-        _platform.Release();
-        _sites.Release();
-        _tiles.Release();
-        _contextManager.Release();
-        _cryptoManager.Release();
+        ((IResource)_account).Release();
+        ((IResource)_accountless).Release();
+        ((IResource)_fusion).Release();
+        ((IResource)_helper).Release();
+        ((IResource)_lockOperations).Release();
+        ((IResource)_platform).Release();
+        ((IResource)_sites).Release();
+        ((IResource)_tiles).Release();
+        ((IResource)_contextManager).Release();
+        ((IResource)_cryptoManager).Release();
     }
 }

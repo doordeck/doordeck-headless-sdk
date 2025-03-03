@@ -13,7 +13,7 @@ public unsafe class Tiles : IResource
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesApi_e__Struct _tilesApi;
 
-    public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -21,7 +21,7 @@ public unsafe class Tiles : IResource
         _tilesApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesApi;
     }
 
-    public void Release()
+    void IResource.Release()
     {
         _symbols->DisposeStablePointer(_tiles.pinned);
     }

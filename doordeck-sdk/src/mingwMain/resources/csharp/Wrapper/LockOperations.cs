@@ -15,7 +15,7 @@ public unsafe class LockOperations : IResource
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -23,7 +23,7 @@ public unsafe class LockOperations : IResource
         _lockOperationsApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsApi;
     }
 
-    public void Release()
+    void IResource.Release()
     {
         _symbols->DisposeStablePointer(_lockOperations.pinned);
     }
