@@ -4,7 +4,7 @@ using Doordeck.Headless.Sdk.Wrapper;
 
 namespace Doordeck.Headless.Sdk;
 
-public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken)
+public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuthToken = null, string? cloudRefreshToken = null)
 {
     private readonly Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
@@ -38,7 +38,8 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
 
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        var token = authToken != null ? Utils.Utils.ToSByte(authToken) : null;
+        var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
+        var refreshToken = cloudRefreshToken != null ? Utils.Utils.ToSByte(cloudRefreshToken) : null;
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
         var builder = sdkConfig.Builder.Builder();
         sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
@@ -46,6 +47,11 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
         if (token != null)
         {
             sdkConfig.Builder.setCloudAuthToken(builder, token);
+        }
+
+        if (refreshToken != null)
+        {
+            sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
         }
 
         try
@@ -57,6 +63,10 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? authToken
             if (token != null)
             {
                Marshal.FreeHGlobal((IntPtr)token);
+            }
+            if (refreshToken != null)
+            {
+                Marshal.FreeHGlobal((IntPtr)refreshToken);
             }
         }
 
