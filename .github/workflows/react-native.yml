@@ -22,7 +22,9 @@ jobs:
         uses: ./.github/actions/react-native-setup
 
       - name: Build package
-        run: yarn prepare
+        run: |
+          cd react-native
+          yarn prepare
 
   build-android:
     runs-on: ubuntu-latest

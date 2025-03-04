@@ -11,20 +11,20 @@ import DoordeckSDK
 
 @objc(HeadlessReactNativeSdkImpl)
 public class HeadlessReactNativeSdkImpl: NSObject {
-  
+
   private let doordeckSdk: Doordeck
 
   override public init() {
     self.doordeckSdk = KDoordeckFactory().initialize(apiEnvironment: ApiEnvironment.prod)
     self.doordeckSdk.contextManager().loadContext()
-    
+
     super.init()
   }
-  
+
   /**
    * ✅ Authentication Methods
    */
-  
+
   @objc public func login(
     _ email: String,
     password: String,
@@ -32,9 +32,9 @@ public class HeadlessReactNativeSdkImpl: NSObject {
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
     setKeyPairIfNeeded()
-    
-    doordeckSdk.accountless().login(email: email, password: password) { tokenResponse, error in
-    
+
+    doordeckSdk.accountaless().login(email: email, password: password) { tokenResponse, error in
+
       if let error = error {
         rejecter("LOGIN_ERROR", error.localizedDescription, error)
       } else if tokenResponse != nil {
@@ -51,7 +51,7 @@ public class HeadlessReactNativeSdkImpl: NSObject {
     rejecter: @escaping RCTPromiseRejectBlock
   ) {
     setKeyPairIfNeeded()
-    
+
     doordeckSdk.contextManager().setAuthToken(token: authToken)
     self.respondNeedsVerification(resolver, rejecter)
   }
@@ -120,9 +120,9 @@ public class HeadlessReactNativeSdkImpl: NSObject {
       expiresAt: Int32(Date().addingTimeInterval(60).timeIntervalSince1970), // val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
       jti: UUID().uuidString // val jti: String = Uuid.random().toString()
     )
-    
+
     let unlockOperation = LockOperations.UnlockOperation(baseOperation: baseOperation, directAccessEndpoints: nil)
-    
+
     doordeckSdk.lockOperations().unlock(unlockOperation: unlockOperation) { error in
       if let error = error {
         rejecter("UNLOCK_ERROR", error.localizedDescription, error)
@@ -135,17 +135,17 @@ public class HeadlessReactNativeSdkImpl: NSObject {
   /**
    * ✅ Helper Methods
    */
-  
+
   @objc public func loadContext() {
     doordeckSdk.contextManager().loadContext()
   }
 
   private func setKeyPairIfNeeded() {
     guard doordeckSdk.contextManager().getKeyPair() == nil else { return }
-    
+
     let newKeyPair = doordeckSdk.crypto().generateKeyPair()
     doordeckSdk.contextManager().setKeyPair(publicKey: newKeyPair.public_, privateKey: newKeyPair.private_)
-    
+
     self.doordeckSdk.contextManager().storeContext()
   }
 
