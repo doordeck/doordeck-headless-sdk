@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import kotlin.js.JsExport
 
 /**
@@ -8,6 +9,17 @@ import kotlin.js.JsExport
  */
 @JsExport
 interface SecureStorage {
+
+    /**
+     * Stores the API environment on which the SDK will operate
+     * @param apiEnvironment The api environment to be stored.
+     */
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment)
+
+    /**
+     * Retrieves the API environment
+     */
+    fun getApiEnvironment(): ApiEnvironment?
 
     /**
      * Stores the cloud authentication token.

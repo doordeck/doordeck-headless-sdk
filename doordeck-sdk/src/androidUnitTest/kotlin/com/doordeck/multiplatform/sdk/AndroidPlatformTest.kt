@@ -4,7 +4,7 @@ import android.app.Application
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
-import com.russhwolf.settings.MapSettings
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import io.ktor.client.engine.okhttp.OkHttpConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -42,7 +42,7 @@ class AndroidPlatformTest {
             .setCloudAuthToken(Uuid.random().toString())
             .setCloudRefreshToken(Uuid.random().toString())
             .setApplicationContext(context)
-            .setSecureStorageOverride(DefaultSecureStorage(MapSettings()))
+            .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
         // When

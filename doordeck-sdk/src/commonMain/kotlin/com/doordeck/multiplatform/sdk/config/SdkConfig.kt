@@ -13,7 +13,7 @@ import kotlin.js.JsExport
  */
 @JsExport
 class SdkConfig private constructor(
-    val apiEnvironment: ApiEnvironment,
+    val apiEnvironment: ApiEnvironment?,
     val cloudAuthToken: String?,
     val cloudRefreshToken: String?,
     val secureStorage: SecureStorage
@@ -25,7 +25,7 @@ class SdkConfig private constructor(
      * an immutable [SdkConfig] instance.
      */
     class Builder {
-        private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
+        private var apiEnvironment: ApiEnvironment? = null
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
         private var applicationContext: ApplicationContext? = null
@@ -39,12 +39,12 @@ class SdkConfig private constructor(
         /**
          * Sets the cloud authentication token.
          */
-        fun setCloudAuthToken(cloudAuthToken: String?): Builder = apply { this.cloudAuthToken = cloudAuthToken }
+        fun setCloudAuthToken(cloudAuthToken: String): Builder = apply { this.cloudAuthToken = cloudAuthToken }
 
         /**
          * Sets the cloud refresh token.
          */
-        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+        fun setCloudRefreshToken(cloudRefreshToken: String): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
          * Sets the Android application context. This should only be provided on Android.

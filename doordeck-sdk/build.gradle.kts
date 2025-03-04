@@ -188,7 +188,6 @@ kotlin {
                 implementation(libs.kotlin.test)
                 implementation(libs.kotlin.coroutines.test)
                 implementation(libs.ktor.client.mock)
-                implementation(libs.multiplatform.settings.test)
             }
         }
 

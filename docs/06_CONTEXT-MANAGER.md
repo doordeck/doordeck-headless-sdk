@@ -2,10 +2,10 @@
 
 The **Context Manager** simplifies the usage of complex SDK functions by reducing the number of parameters required when setting the operation context, authentication tokens, and other session data.
 
-## Set operation context
-
 > [!NOTE]  
-> When used, the provided values are automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
+> All the values that are provided to the context manager are automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
+
+## Set operation context
 
 ### JVM & Android
 <details>
@@ -156,9 +156,6 @@ result = sdk.contextManager.is_key_pair_valid()
 
 If the SDK was initialized without an authentication token, you can provide or update the token using this function.
 
-> [!NOTE]  
-> When used, the provided value is automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
-
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -302,9 +299,6 @@ result = sdk.contextManager.is_cloud_auth_token_about_to_expire()
 
 ## Set cloud refresh token
 
-> [!NOTE]  
-> When used, the provided value is automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
-
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -398,9 +392,6 @@ token = sdk.contextManager.get_cloud_refresh_token()
 </details>
 
 ## Set fusion auth token
-
-> [!NOTE]  
-> When used, the provided value is automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 ### JVM & Android
 <details>

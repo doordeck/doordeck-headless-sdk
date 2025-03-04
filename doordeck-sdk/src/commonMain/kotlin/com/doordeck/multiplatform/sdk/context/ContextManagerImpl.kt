@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -16,115 +18,99 @@ import kotlin.uuid.Uuid
 
 internal object ContextManagerImpl : ContextManager {
 
-    private var apiEnvironment: ApiEnvironment = ApiEnvironment.PROD
-    private var currentCloudAuthToken: String? = null
-    private var currentCloudRefreshToken: String? = null
-    private var currentFusionToken: String? = null
-    private var currentUserId: String? = null
-    private var currentEmail: String? = null
-    private var currentUserCertificateChain: List<String>? = null
-    private var currentUserPublicKey: ByteArray? = null
-    private var currentUserPrivateKey: ByteArray? = null
-    private var secureStorage: SecureStorage? = null
+    private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        this.apiEnvironment = apiEnvironment
+        secureStorage.setApiEnvironment(apiEnvironment)
     }
 
     override fun getApiEnvironment(): ApiEnvironment {
-        return apiEnvironment
+        return secureStorage.getApiEnvironment()
+            ?: ApiEnvironment.PROD
     }
 
     override fun setCloudAuthToken(token: String) {
-        currentCloudAuthToken = token
-        secureStorage?.addCloudAuthToken(token)
+        secureStorage.addCloudAuthToken(token)
     }
 
     override fun getCloudAuthToken(): String? {
-        return currentCloudAuthToken
+        return secureStorage.getCloudAuthToken()
     }
 
     override fun isCloudAuthTokenAboutToExpire(): Boolean {
-        return currentCloudAuthToken?.isJwtTokenAboutToExpire() ?: true
+        return getCloudAuthToken()?.isJwtTokenAboutToExpire() ?: true
     }
 
     override fun setCloudRefreshToken(token: String) {
-        currentCloudRefreshToken = token
-        secureStorage?.addCloudRefreshToken(token)
+        secureStorage.addCloudRefreshToken(token)
     }
 
     override fun getCloudRefreshToken(): String? {
-        return currentCloudRefreshToken
+        return secureStorage.getCloudRefreshToken()
     }
 
     override fun setFusionAuthToken(token: String) {
-        currentFusionToken = token
-        secureStorage?.addFusionAuthToken(token)
+        secureStorage.addFusionAuthToken(token)
     }
 
     override fun getFusionAuthToken(): String? {
-        return currentFusionToken
+        return secureStorage.getFusionAuthToken()
     }
 
     override fun setUserId(userId: String) {
-        currentUserId = userId
-        secureStorage?.addUserId(userId)
+        secureStorage.addUserId(userId)
     }
 
     override fun getUserId(): String? {
-        return currentUserId
+        return secureStorage.getUserId()
     }
 
     override fun setUserEmail(email: String) {
-        currentEmail = email
-        secureStorage?.addUserEmail(email)
+        secureStorage.addUserEmail(email)
     }
 
     override fun getUserEmail(): String? {
-        return currentEmail
+        return secureStorage.getUserEmail()
     }
 
     override fun setCertificateChain(certificateChain: List<String>) {
-        currentUserCertificateChain = certificateChain
-        secureStorage?.addCertificateChain(certificateChain)
+        secureStorage.addCertificateChain(certificateChain)
     }
 
     override fun getCertificateChain(): List<String>? {
-        return currentUserCertificateChain
+        return secureStorage.getCertificateChain()
     }
 
     override fun isCertificateChainAboutToExpire(): Boolean {
-        return currentUserCertificateChain?.firstOrNull()?.let {
+        return getCertificateChain()?.firstOrNull()?.let {
             CryptoManager.isCertificateAboutToExpire(it)
         } ?: true
     }
 
     override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
-        currentUserPublicKey = publicKey
-        currentUserPrivateKey = privateKey
-        secureStorage?.addPublicKey(publicKey)
-        secureStorage?.addPrivateKey(privateKey)
+        secureStorage.addPublicKey(publicKey)
+        secureStorage.addPrivateKey(privateKey)
     }
 
     override fun getKeyPair(): Crypto.KeyPair? {
-        val actualUserPublicKey = currentUserPublicKey
-        val actualUserPrivateKey = currentUserPrivateKey
+        val actualUserPublicKey = getPublicKey()
+        val actualUserPrivateKey = getPrivateKey()
         return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
             Crypto.KeyPair(actualUserPrivateKey, actualUserPublicKey)
         } else null
     }
 
     internal fun getPublicKey(): ByteArray? {
-        return currentUserPublicKey
+        return secureStorage.getPublicKey()
     }
 
     internal fun getPrivateKey(): ByteArray? {
-        return currentUserPrivateKey
+        return secureStorage.getPrivateKey()
     }
 
     override fun isKeyPairValid(): Boolean {
-        val actualUserPublicKey = currentUserPublicKey
-        val actualUserPrivateKey = currentUserPrivateKey
+        val actualUserPublicKey = getPublicKey()
+        val actualUserPrivateKey = getPrivateKey()
         if (actualUserPublicKey == null || actualUserPrivateKey == null) {
             return false
         }
@@ -143,14 +129,6 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     internal fun reset() {
-        currentCloudAuthToken = null
-        currentCloudRefreshToken = null
-        currentFusionToken = null
-        currentUserId = null
-        currentUserCertificateChain = null
-        currentUserPublicKey = null
-        currentUserPrivateKey = null
-        currentEmail = null
         CapabilityCache.reset()
         clearContext()
     }
@@ -172,18 +150,7 @@ internal object ContextManagerImpl : ContextManager {
         this.secureStorage = secureStorage
     }
 
-    internal fun loadContext() {
-        currentCloudAuthToken =  currentCloudAuthToken ?: secureStorage?.getCloudAuthToken()
-        currentCloudRefreshToken = currentCloudRefreshToken ?: secureStorage?.getCloudRefreshToken()
-        currentFusionToken = currentFusionToken ?: secureStorage?.getFusionAuthToken()
-        currentUserId = currentUserId ?: secureStorage?.getUserId()
-        currentEmail = currentEmail ?: secureStorage?.getUserEmail()
-        currentUserCertificateChain = currentUserCertificateChain ?: secureStorage?.getCertificateChain()
-        currentUserPublicKey = currentUserPublicKey ?: secureStorage?.getPublicKey()
-        currentUserPrivateKey = currentUserPrivateKey ?: secureStorage?.getPrivateKey()
-    }
-
     override fun clearContext() {
-        secureStorage?.clear()
+        secureStorage.clear()
     }
 }

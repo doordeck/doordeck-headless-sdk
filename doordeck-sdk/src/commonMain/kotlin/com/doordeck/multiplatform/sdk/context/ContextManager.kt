@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.Crypto
 import kotlin.js.JsExport
 import kotlin.native.CName
 
@@ -9,7 +9,7 @@ import kotlin.native.CName
 interface ContextManager {
 
     /**
-     * Sets the API environment on which the SDK will operate.
+     * Sets the API environment on which the SDK will operate, the provided value will be automatically stored in secure storage.
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
