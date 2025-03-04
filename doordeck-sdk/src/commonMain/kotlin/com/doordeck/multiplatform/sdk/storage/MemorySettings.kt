@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.storage
 import com.russhwolf.settings.Settings
 
 /**
- * Memory storage implementation
+ * In-memory storage implementation
  */
 internal class MemorySettings(private val delegate: MutableMap<String, Any> = mutableMapOf()) : Settings {
 
