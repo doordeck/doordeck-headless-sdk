@@ -23,6 +23,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
+        val apiEnvironment = ApiEnvironment.entries.random()
         val cloudAuthToken = Uuid.random().toString()
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
@@ -33,6 +34,7 @@ class ContextManagerTest : IntegrationTest() {
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.setSecureStorageImpl(settings)
+        ContextManagerImpl.setApiEnvironment(apiEnvironment)
         ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
         ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
@@ -47,6 +49,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
 
         // Then
+        assertEquals(apiEnvironment, ContextManagerImpl.getApiEnvironment())
         assertEquals(userId, ContextManagerImpl.getUserId())
         assertEquals(email, ContextManagerImpl.getUserEmail())
         assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
@@ -62,6 +65,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldClearContext() = runTest {
         // Given
+        val apiEnvironment = ApiEnvironment.entries.random()
         val cloudAuthToken = Uuid.random().toString()
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
@@ -70,6 +74,7 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
+        ContextManagerImpl.setApiEnvironment(apiEnvironment)
         ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
         ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
@@ -83,6 +88,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.reset()
 
         // Then
+        assertEquals(ApiEnvironment.PROD, ContextManagerImpl.getApiEnvironment())
         assertNull(ContextManagerImpl.getUserId())
         assertNull(ContextManagerImpl.getUserEmail())
         assertNull(ContextManagerImpl.getCertificateChain())
