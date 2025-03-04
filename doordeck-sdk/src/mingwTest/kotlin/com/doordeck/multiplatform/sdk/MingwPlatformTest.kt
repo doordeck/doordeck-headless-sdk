@@ -2,8 +2,6 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.SdkConfig
-import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
-import com.russhwolf.settings.MapSettings
 import io.ktor.client.engine.winhttp.WinHttpClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -37,7 +35,6 @@ class MingwPlatformTest {
             .setApiEnvironment(TEST_ENVIRONMENT)
             .setCloudAuthToken(Uuid.random().toString())
             .setCloudRefreshToken(Uuid.random().toString())
-            .setSecureStorageOverride(DefaultSecureStorage(MapSettings()))
             .build()
 
         // When

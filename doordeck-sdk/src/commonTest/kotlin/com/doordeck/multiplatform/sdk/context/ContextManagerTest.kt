@@ -5,10 +5,10 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import com.russhwolf.settings.MapSettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -31,7 +31,7 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val settings = DefaultSecureStorage(MapSettings())
+        val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.setSecureStorageImpl(settings)
         ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
         ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
@@ -42,10 +42,9 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setUserEmail(email)
 
         // When
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings())) // Override the storage so that it is not deleted upon a reset call
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
         ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
-        ContextManagerImpl.loadContext()
 
         // Then
         assertEquals(userId, ContextManagerImpl.getUserId())
@@ -82,7 +81,6 @@ class ContextManagerTest : IntegrationTest() {
         // When
         ContextManagerImpl.clearContext()
         ContextManagerImpl.reset()
-        ContextManagerImpl.loadContext()
 
         // Then
         assertNull(ContextManagerImpl.getUserId())
@@ -103,15 +101,14 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val settings = DefaultSecureStorage(MapSettings())
+        val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.setSecureStorageImpl(settings)
         ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings())) // Override the storage so that it is not deleted upon a reset call
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
         ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
-        ContextManagerImpl.loadContext()
 
         // Then
         assertEquals(userId, ContextManagerImpl.getUserId())
@@ -130,15 +127,14 @@ class ContextManagerTest : IntegrationTest() {
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val operationContextData = Context.OperationContextData(userId, certificateChain.certificateChainToString(), publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
-        val settings = DefaultSecureStorage(MapSettings())
+        val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.setSecureStorageImpl(settings)
         ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When
-        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MapSettings())) // Override the storage so that it is not deleted upon a reset call
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
         ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
-        ContextManagerImpl.loadContext()
 
         // Then
         assertEquals(userId, ContextManagerImpl.getUserId())
