@@ -98,10 +98,12 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
+def doordeckSdkVersion = "0.78.0"
+
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "com.doordeck.headless.sdk:doordeck-sdk-android:0.78.0"
+  implementation "com.doordeck.headless.sdk:doordeck-sdk-android:$doordeckSdkVersion"
 }
 
 if (isNewArchitectureEnabled()) {
