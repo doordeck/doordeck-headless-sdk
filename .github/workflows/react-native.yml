@@ -1,15 +1,6 @@
-name: CI
+name: React Native
 on:
-  push:
-    branches:
-      - feature/react-native-sdk
-#      - main
-  pull_request:
-    branches:
-      - main
-  merge_group:
-    types:
-      - checks_requested
+  workflow_dispatch:
 
 jobs:
   release-tag:
@@ -191,8 +182,8 @@ jobs:
           yarn prepare
 
       - name: Publish to npm
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
         run: |
           cd react-native
           npm publish --access public
