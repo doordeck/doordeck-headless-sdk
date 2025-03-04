@@ -12,20 +12,6 @@ on:
       - checks_requested
 
 jobs:
-  build-library:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/react-native-setup
-
-      - name: Build package
-        run: |
-          cd react-native
-          yarn prepare
-
   build-android:
     runs-on: ubuntu-latest
     env:
@@ -144,3 +130,35 @@ jobs:
         run: |
           cd react-native
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+  publish-npm:
+    needs: [build-android, build-ios]
+    runs-on: ubuntu-latest
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/react-native-setup
+
+      - name: Build package
+        run: |
+          cd react-native
+          yarn prepare
+
+      - name: Update package.json version
+        run: |
+          cd react-native
+          jq --arg version "$VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          cat package.json
+        env:
+          VERSION: 0.0.1-dev
+
+      - name: Publish to npm
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+        run: |
+          cd react-native
+          npm publish --access public

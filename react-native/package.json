@@ -1,6 +1,6 @@
 {
   "name": "@doordeck/headless-react-native-sdk",
-  "version": "0.1.0",
+  "version": "0.0.0-dev",
   "description": "Doordeck React Native headless SDK",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",
