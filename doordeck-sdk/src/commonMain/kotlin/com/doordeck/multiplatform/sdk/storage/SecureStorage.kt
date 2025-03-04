@@ -10,8 +10,15 @@ import kotlin.js.JsExport
 @JsExport
 interface SecureStorage {
 
+    /**
+     * Stores the API environment on which the SDK will operate
+     * @param apiEnvironment The api environment to be stored.
+     */
     fun setApiEnvironment(apiEnvironment: ApiEnvironment)
 
+    /**
+     * Retrieves the API environment
+     */
     fun getApiEnvironment(): ApiEnvironment?
 
     /**

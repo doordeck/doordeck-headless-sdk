@@ -19,14 +19,14 @@ The minimum viable `SdkConfig` is `SdkConfig.Builder().build()`, although the fo
 
 By default, the SDK stores the context information on its own, as shown in the following table:
 
-| Platform | Storage                       |
-|:--------:|-------------------------------|
-| Android  | `EncryptedSharedPreferences`  |
-|   JVM    | -                             |
-|   iOS    | `Keychain`                    |
-|  macOS   | `Keychain`                    |
-|    JS    | `LocalStorage`                |
-| Windows  | -                             |
+| Platform | Storage                      |
+|:--------:|------------------------------|
+| Android  | `EncryptedSharedPreferences` |
+|   JVM    | `Memory`                     |
+|   iOS    | `Keychain`                   |
+|  macOS   | `Keychain`                   |
+|    JS    | `LocalStorage`               |
+| Windows  | `Memory`                     |
 
 > [!NOTE]
 > To override the default secure storage, you must implement the `SecureStorage` interface and pass the class through the `setSecureStorageOverride` function from `SdkConfig`.
