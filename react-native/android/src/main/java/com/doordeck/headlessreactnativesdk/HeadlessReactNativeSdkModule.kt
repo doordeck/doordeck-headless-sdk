@@ -114,7 +114,7 @@ class HeadlessReactNativeSdkModule(
   private fun setKeyPairIfNeeded() {
     if (doordeckSdk.contextManager().getKeyPair() == null) {
       val newKeyPair = doordeckSdk.crypto().generateKeyPair()
-      doordeckaSdk.contextManager().setKeyPair(
+      doordeckSdk.contextManager().setKeyPair(
         publicKey = newKeyPair.public,
         privateKey = newKeyPair.private,
       )

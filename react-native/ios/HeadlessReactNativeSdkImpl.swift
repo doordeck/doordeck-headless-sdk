@@ -33,7 +33,7 @@ public class HeadlessReactNativeSdkImpl: NSObject {
   ) {
     setKeyPairIfNeeded()
 
-    doordeckSdk.accountaless().login(email: email, password: password) { tokenResponse, error in
+    doordeckSdk.accountless().login(email: email, password: password) { tokenResponse, error in
 
       if let error = error {
         rejecter("LOGIN_ERROR", error.localizedDescription, error)
