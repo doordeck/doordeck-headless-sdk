@@ -49,7 +49,7 @@ const InspectTileScreen: React.FC<InspectTileScreenProps> = () => {
         <>
           <Text style={styles.title}>List of devices</Text>
           <FlatList
-            data={tileData?.deviceIds ?? []} // ✅ Ensures `deviceIds` is always an array
+            data={tileData?.deviceIds ?? []}
             keyExtractor={(_, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={styles.tileItem}>

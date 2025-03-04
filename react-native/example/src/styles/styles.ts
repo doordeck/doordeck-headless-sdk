@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 18, // ✅ Reduced font size so it fits
+    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 10,
@@ -13,16 +13,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10, // ✅ Added padding
+    paddingVertical: 10,
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
 
   deviceIdText: {
-    fontSize: 14, // ✅ Reduced font size
-    flex: 1, // ✅ Makes sure text doesn't overlap button
-    marginRight: 10, // ✅ Adds space between text and button
+    fontSize: 14,
+    flex: 1,
+    marginRight: 10,
   },
 
   copyButton: {
