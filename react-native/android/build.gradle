@@ -98,7 +98,7 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
-def doordeckSdkVersion = "0.78.0"
+def doordeckSdkVersion = System.getenv("DOORDECK_SDK_VERSION") ?: "0.78.0"
 
 dependencies {
   implementation "com.facebook.react:react-android"
