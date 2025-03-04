@@ -154,7 +154,7 @@ jobs:
           jq --arg version "$VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
           cat package.json
         env:
-          VERSION: 0.0.1-dev
+          VERSION: 0.0.1
 
       - name: Publish to npm
 #        env:
