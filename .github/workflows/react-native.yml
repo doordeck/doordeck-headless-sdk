@@ -28,7 +28,7 @@ jobs:
         id: release-tag
         run: |
           LATEST_TAG_V=$(git describe --tags --abbrev=0)
-          LATEST_TAG=${LATEST_TAG#v}
+          LATEST_TAG=${LATEST_TAG_V#v}
           echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_OUTPUT
 
   build-android:
