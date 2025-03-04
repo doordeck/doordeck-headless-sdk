@@ -147,10 +147,10 @@ jobs:
           cd react-native
           
           # Modify Podspec file
-          sed -i "s/\(s.version *= *\).*/\1\"$DOORDECK_SDK_VERSION\"/" HeadlessReactNativeSdk.podspec
+          sed -i "s/doordeck_sdk_version = '.*'/doordeck_sdk_version = '${DOORDECK_SDK_VERSION}'/" HeadlessReactNativeSdk.podspec
 
           # Modify build.gradle
-          sed -i "s/\(version *= *\).*/\1\"$DOORDECK_SDK_VERSION\"/" android/build.gradle
+          sed -i 's/def doordeckSdkVersion = ".*"/def doordeckSdkVersion = "'"${DOORDECK_SDK_VERSION}"'"/' android/build.gradle
 
           cat HeadlessReactNativeSdk.podspec
           cat android/build.gradle
@@ -166,10 +166,8 @@ jobs:
       - name: Update package.json version
         run: |
           cd react-native
-          jq --arg version "$VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
+          jq --arg version "$DOORDECK_VERSION" '.version = $version' package.json > tmp.json && mv tmp.json package.json
           cat package.json
-        env:
-          VERSION: 0.0.1
 
       - name: Publish to npm
 #        env:
