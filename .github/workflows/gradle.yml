@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - 'main'
+      - 'context-and-storage-simplification'
 
 jobs:
   build:
