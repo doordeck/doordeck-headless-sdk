@@ -3,7 +3,7 @@
 ## Login
 
 > [!NOTE]  
-> When used successfully, the user email, auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+> When used successfully, the cloud auth token and cloud refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md) and automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 ### JVM & Android
 <details>
@@ -59,7 +59,7 @@ response = sdk.accountless.login(data)
 After registration, you will need to [verify the email](#verify-email)
 
 > [!NOTE]  
-> When used successfully, the user email, auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+> When used successfully, the cloud auth token and cloud refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md) and automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 ### JVM & Android
 <details>

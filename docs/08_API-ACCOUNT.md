@@ -6,7 +6,7 @@
 > This function is only available to users with Doordeck issued auth tokens.
 
 > [!NOTE]  
-> When used successfully, the auth token and refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+> When used successfully, the cloud auth token and cloud refresh token from the response are added to the [context manager](06_CONTEXT-MANAGER.md) and automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 > [!NOTE]  
 > This function can be used with the [refresh token](06_CONTEXT-MANAGER.md#set-refresh-token) value from the context. To use the value from the context, you should pass null as the function parameter
@@ -62,8 +62,8 @@ response = sdk.account.refresh_token(data)
 
 ## Logout
 
-> [!IMPORTANT]  
-> When used, the [context manager](06_CONTEXT-MANAGER.md#context-manager) is restarted, so for any further usage, you will need to load or provide a new context.
+> [!IMPORTANT]
+> When used, the [context manager](06_CONTEXT-MANAGER.md#context-manager) restarts, and the values from the [secure storage](04_INITIALIZE.md#secure-storage) are automatically deleted.
 
 ### JVM & Android
 <details>
@@ -116,7 +116,7 @@ sdk.account.logout()
 To register a new ephemeral key, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair).
 
 > [!NOTE]  
-> When used successfully, the user ID, and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
+> When used successfully, the user ID and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md) and automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 ### JVM & Android
 <details>
@@ -170,9 +170,6 @@ response = sdk.account.register_ephemeral_key()
 ## Register ephemeral key with secondary authentication
 To register a new ephemeral key with secondary authentication, you will need to [generate a new key pair](05_CRYPTO.md#generate-a-key-pair). After the registration, you will need to [verify the ephemeral key registration](#verify-ephemeral-key-registration).
 
-> [!NOTE]  
-> When used successfully, the user ID, and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md).
-
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
@@ -224,6 +221,9 @@ response = sdk.account.register_ephemeral_key_with_secondary_authentication(data
 </details>
 
 ## Verify ephemeral key registration
+
+> [!NOTE]  
+> When used successfully, the user ID and user certificate chain from the response are added to the [context manager](06_CONTEXT-MANAGER.md) and automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
 
 ### JVM & Android
 <details>
@@ -484,6 +484,9 @@ sdk.account.update_user_details(data)
 
 > [!CAUTION]  
 > This operation is executed instantly and is irreversible.
+
+> [!IMPORTANT]
+> When used, the [context manager](06_CONTEXT-MANAGER.md#context-manager) restarts, and the values from the [secure storage](04_INITIALIZE.md#secure-storage) are automatically deleted.
 
 ### JVM & Android
 <details>
