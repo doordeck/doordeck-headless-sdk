@@ -1,6 +1,9 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import io.ktor.client.engine.js.JsClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -30,15 +33,19 @@ class JsPlatformTest {
     @Test
     fun shouldInitialize() = runTest {
         // Given
-        val token = Uuid.random().toString()
-        val refreshToken = Uuid.random().toString()
+        val sdkConfig = SdkConfig.Builder()
+            .setApiEnvironment(TEST_ENVIRONMENT)
+            .setCloudAuthToken(Uuid.random().toString())
+            .setCloudRefreshToken(Uuid.random().toString())
+            .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
+            .build()
 
         // When
-        val sdk = KDoordeckFactory.initializeWithAuthAndRefreshTokens(TEST_ENVIRONMENT, token, refreshToken)
+        val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
-        assertEquals(token, sdk.contextManager().getAuthToken())
-        assertEquals(refreshToken, sdk.contextManager().getRefreshToken())
-        assertEquals(TEST_ENVIRONMENT, sdk.contextManager().getApiEnvironment())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }

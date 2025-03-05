@@ -24,8 +24,8 @@ class AccountlessClientTest : IntegrationTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManagerImpl.getAuthToken())
-        assertEquals(response.refreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(response.authToken, ContextManagerImpl.getCloudAuthToken())
+        assertEquals(response.refreshToken, ContextManagerImpl.getCloudRefreshToken())
     }
 
     @Test
@@ -40,16 +40,16 @@ class AccountlessClientTest : IntegrationTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManagerImpl.getAuthToken())
-        assertEquals(response.refreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(response.authToken, ContextManagerImpl.getCloudAuthToken())
+        assertEquals(response.refreshToken, ContextManagerImpl.getCloudRefreshToken())
 
         // Given - shouldDelete
         // When
         AccountClient.deleteAccountRequest()
 
         // Then
-        assertNull(ContextManagerImpl.getAuthToken())
-        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getCloudAuthToken())
+        assertNull(ContextManagerImpl.getCloudRefreshToken())
         assertFails {
             AccountlessClient.loginRequest(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }

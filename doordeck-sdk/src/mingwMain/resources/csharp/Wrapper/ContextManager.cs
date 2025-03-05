@@ -13,7 +13,7 @@ public unsafe class ContextManager : IResource
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -21,7 +21,7 @@ public unsafe class ContextManager : IResource
         _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.context.ContextManager;
     }
 
-    public void Release()
+    void IResource.Release()
     {
         _symbols->DisposeStablePointer(_context.pinned);
     }
@@ -43,7 +43,7 @@ public unsafe class ContextManager : IResource
 
     public ApiEnvironment GetApiEnvironment()
     {
-        var apiEnvironment = _contextManager.getApiEnvironment(_context);
+        var apiEnvironment = _contextManager.getApiEnvironment_(_context);
         sbyte* result = null;
         try
         {
@@ -56,12 +56,12 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetAuthToken(string token)
+    public void SetCloudAuthToken(string token)
     {
         var data = token.ToSByte();
         try
         {
-            _contextManager.setAuthToken_(_context, data);
+            _contextManager.setCloudAuthToken_(_context, data);
         }
         finally
         {
@@ -69,12 +69,12 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetAuthToken()
+    public string GetCloudAuthToken()
     {
         sbyte* result = null;
         try
         {
-            result = _contextManager.getAuthToken_(_context);
+            result = _contextManager.getCloudAuthToken_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -83,17 +83,17 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public bool IsAuthTokenAboutToExpire()
+    public bool IsCloudAuthTokenAboutToExpire()
     {
-        return _contextManager.isAuthTokenAboutToExpire_(_context).ToBoolean();
+        return _contextManager.isCloudAuthTokenAboutToExpire_(_context).ToBoolean();
     }
 
-    public void SetRefreshToken(string token)
+    public void SetCloudRefreshToken(string token)
     {
         var data = token.ToSByte();
         try
         {
-            _contextManager.setRefreshToken_(_context, data);
+            _contextManager.setCloudRefreshToken_(_context, data);
         }
         finally
         {
@@ -101,12 +101,12 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetRefreshToken()
+    public string GetCloudRefreshToken()
     {
         sbyte* result = null;
         try
         {
-            result = _contextManager.getRefreshToken_(_context);
+            result = _contextManager.getCloudRefreshToken_(_context);
             return Utils.Utils.ConvertSByteToString(result);
         }
         finally
@@ -225,21 +225,6 @@ public unsafe class ContextManager : IResource
         {
             ReleaseMemory(sData, null);
         }
-    }
-
-    public void LoadContext()
-    {
-        _contextManager.loadContext_(_context);
-    }
-
-    public void StoreContext()
-    {
-        _contextManager.storeContext_(_context);
-    }
-
-    public void ClearContext()
-    {
-        _contextManager.clearContext_(_context);
     }
 
     private void ReleaseMemory(sbyte* data, sbyte* result)

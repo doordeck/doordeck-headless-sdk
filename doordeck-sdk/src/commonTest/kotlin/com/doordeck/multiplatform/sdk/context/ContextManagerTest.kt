@@ -4,6 +4,8 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -21,6 +23,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
+        val apiEnvironment = ApiEnvironment.entries.random()
         val cloudAuthToken = Uuid.random().toString()
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
@@ -29,8 +32,11 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setAuthToken(cloudAuthToken)
-        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        val settings = DefaultSecureStorage(MemorySettings())
+        ContextManagerImpl.setSecureStorageImpl(settings)
+        ContextManagerImpl.setApiEnvironment(apiEnvironment)
+        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
+        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
         ContextManagerImpl.setUserId(userId)
         ContextManagerImpl.setCertificateChain(certificateChain)
@@ -38,11 +44,12 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.setUserEmail(email)
 
         // When
-        ContextManagerImpl.storeContext()
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
-        ContextManagerImpl.loadContext()
+        ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
 
         // Then
+        assertEquals(apiEnvironment, ContextManagerImpl.getApiEnvironment())
         assertEquals(userId, ContextManagerImpl.getUserId())
         assertEquals(email, ContextManagerImpl.getUserEmail())
         assertContentEquals(certificateChain, ContextManagerImpl.getCertificateChain())
@@ -50,14 +57,15 @@ class ContextManagerTest : IntegrationTest() {
         assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
-        assertEquals(cloudAuthToken, ContextManagerImpl.getAuthToken())
-        assertEquals(cloudRefreshToken, ContextManagerImpl.getRefreshToken())
+        assertEquals(cloudAuthToken, ContextManagerImpl.getCloudAuthToken())
+        assertEquals(cloudRefreshToken, ContextManagerImpl.getCloudRefreshToken())
         assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
     }
 
     @Test
     fun shouldClearContext() = runTest {
         // Given
+        val apiEnvironment = ApiEnvironment.entries.random()
         val cloudAuthToken = Uuid.random().toString()
         val cloudRefreshToken = Uuid.random().toString()
         val fusionAuthToken = Uuid.random().toString()
@@ -66,29 +74,29 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setAuthToken(cloudAuthToken)
-        ContextManagerImpl.setRefreshToken(cloudRefreshToken)
+        ContextManagerImpl.setApiEnvironment(apiEnvironment)
+        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
+        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
         ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
         ContextManagerImpl.setUserId(userId)
         ContextManagerImpl.setCertificateChain(certificateChain)
         ContextManagerImpl.setKeyPair(publicKey, privateKey)
         ContextManagerImpl.setUserEmail(email)
-        ContextManagerImpl.storeContext()
 
         // When
         ContextManagerImpl.clearContext()
         ContextManagerImpl.reset()
-        ContextManagerImpl.loadContext()
 
         // Then
+        assertEquals(ApiEnvironment.PROD, ContextManagerImpl.getApiEnvironment())
         assertNull(ContextManagerImpl.getUserId())
         assertNull(ContextManagerImpl.getUserEmail())
         assertNull(ContextManagerImpl.getCertificateChain())
         assertNull(ContextManagerImpl.getPublicKey())
         assertNull(ContextManagerImpl.getPrivateKey())
         assertNull(ContextManagerImpl.getKeyPair())
-        assertNull(ContextManagerImpl.getAuthToken())
-        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getCloudAuthToken())
+        assertNull(ContextManagerImpl.getCloudRefreshToken())
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 
@@ -99,12 +107,14 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
+        val settings = DefaultSecureStorage(MemorySettings())
+        ContextManagerImpl.setSecureStorageImpl(settings)
         ContextManagerImpl.setOperationContext(userId, certificateChain, publicKey, privateKey)
 
         // When
-        ContextManagerImpl.storeContext()
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
-        ContextManagerImpl.loadContext()
+        ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
 
         // Then
         assertEquals(userId, ContextManagerImpl.getUserId())
@@ -123,12 +133,14 @@ class ContextManagerTest : IntegrationTest() {
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
         val operationContextData = Context.OperationContextData(userId, certificateChain.certificateChainToString(), publicKey.encodeByteArrayToBase64(), privateKey.encodeByteArrayToBase64())
+        val settings = DefaultSecureStorage(MemorySettings())
+        ContextManagerImpl.setSecureStorageImpl(settings)
         ContextManagerImpl.setOperationContextJson(operationContextData.toJson())
 
         // When
-        ContextManagerImpl.storeContext()
+        ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
         ContextManagerImpl.reset()
-        ContextManagerImpl.loadContext()
+        ContextManagerImpl.setSecureStorageImpl(settings) // Re-add the original storage
 
         // Then
         assertEquals(userId, ContextManagerImpl.getUserId())
@@ -145,7 +157,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.reset()
 
         // When
-        val result = ContextManagerImpl.isAuthTokenAboutToExpire()
+        val result = ContextManagerImpl.isCloudAuthTokenAboutToExpire()
 
         // Then
         assertTrue { result }

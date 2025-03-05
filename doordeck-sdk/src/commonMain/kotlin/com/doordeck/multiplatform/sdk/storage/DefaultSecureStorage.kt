@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -11,6 +12,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     /**
      * Storage Keys
      */
+    private val API_ENVIRONMENT = "API_ENVIRONMENT"
     private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
     private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
     private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
@@ -19,6 +21,14 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     private val USER_ID_KEY = "USER_ID_KEY"
     private val USER_EMAIL_KEY = "USER_EMAIL_KEY"
     private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
+
+    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+        return settings.putString(API_ENVIRONMENT, apiEnvironment.name)
+    }
+
+    override fun getApiEnvironment(): ApiEnvironment? {
+        return settings.getStringOrNull(API_ENVIRONMENT)?.let { ApiEnvironment.valueOf(it) }
+    }
 
     override fun addCloudAuthToken(token: String) {
         return settings.putString(CLOUD_AUTH_TOKEN_KEY, token)

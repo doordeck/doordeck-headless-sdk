@@ -1,16 +1,17 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 
 internal object DoordeckFactory {
-    fun initialize(applicationContext: ApplicationContext?, apiEnvironment: ApiEnvironment, token: String?, refreshToken: String?): Doordeck {
+
+    fun initialize(sdkConfig: SdkConfig): Doordeck {
         // Add the provided values into the context
         ContextManagerImpl.also { context ->
-            context.setApiEnvironment(apiEnvironment)
-            token?.let { context.setAuthToken(it) }
-            refreshToken?.let { context.setRefreshToken(it) }
-            applicationContext?.let { context.setApplicationContext(it) }
+            context.setSecureStorageImpl(sdkConfig.secureStorage)
+            sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
+            sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
+            sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
         }
         return DoordeckImpl
     }

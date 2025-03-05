@@ -11,7 +11,7 @@ public unsafe class CryptoManager : IResource
     
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    public void Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -19,7 +19,7 @@ public unsafe class CryptoManager : IResource
         _cryptoManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager;
     }
 
-    public void Release()
+    void IResource.Release()
     {
         _symbols->DisposeStablePointer(_crypto.pinned);
     }

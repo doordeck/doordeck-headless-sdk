@@ -95,7 +95,7 @@ npm install @doordeck/doordeck-headless-sdk --save
 
 The Windows artifacts for C# are available on [NuGet](https://www.nuget.org/packages/Doordeck.Headless.Sdk).
 
-```csharp
+```bash
 dotnet add package Doordeck.Headless.Sdk
 ```
 💡 **Requirement:** In Visual Studio, it's necessary to enable the unsafe block with ```<AllowUnsafeBlocks>true</AllowUnsafeBlocks>```
@@ -107,7 +107,7 @@ dotnet add package Doordeck.Headless.Sdk
 
 The Windows artifacts for Python are available on [PyPi](https://pypi.org/project/doordeck-headless-sdk/).
 
-```python
+```bash
 pip install doordeck-headless-sdk
 ```
 
