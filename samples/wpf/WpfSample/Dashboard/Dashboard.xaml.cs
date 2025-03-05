@@ -29,7 +29,11 @@ public partial class Dashboard : Window
     private void Load()
     {
         DataContext = this;
-        ResetAuditDateRange();
+
+        var auditEnd = DateTimeOffset.Now;
+        var auditStart = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
+        StartDatePicker.SelectedDate = auditStart.DateTime;
+        EndDatePicker.SelectedDate = auditEnd.DateTime;
 
         var adminsViewSource = (CollectionViewSource)Resources["AdminsView"]!;
         adminsViewSource.Source = LockAdmins;
@@ -138,7 +142,6 @@ public partial class Dashboard : Window
                     MessageBoxImage.Information);
 
                 // Reload users and audit
-                ResetAuditDateRange();
                 LoadLockUsers(_selectedLock.Id);
                 LoadLockAudit(_selectedLock.Id);
             }
@@ -159,7 +162,6 @@ public partial class Dashboard : Window
             MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);
             // Refresh audit list
-            ResetAuditDateRange();
             LoadLockAudit(_selectedLock.Id);
         }
         catch
@@ -189,7 +191,6 @@ public partial class Dashboard : Window
 
             MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            ResetAuditDateRange();
             LoadLockUsers(_selectedLock.Id);
             LoadLockAudit(_selectedLock.Id);
         }
@@ -222,19 +223,9 @@ public partial class Dashboard : Window
             _selectedLock = siteLock;
 
             // Reload users and audit
-            ResetAuditDateRange();
             LoadLockUsers(siteLock.Id);
             LoadLockAudit(siteLock.Id);
         }
-    }
-
-    private void ResetAuditDateRange()
-    {
-        var auditEnd = DateTimeOffset.Now;
-        var auditStart = DateTimeOffset.Now.Subtract(TimeSpan.FromDays(7));
-
-        StartDatePicker.SelectedDate = auditStart.DateTime;
-        EndDatePicker.SelectedDate = auditEnd.DateTime;
     }
 
     private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
