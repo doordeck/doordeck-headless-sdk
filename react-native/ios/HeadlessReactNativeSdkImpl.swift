@@ -15,8 +15,7 @@ public class HeadlessReactNativeSdkImpl: NSObject {
   private let doordeckSdk: Doordeck
 
   override public init() {
-    self.doordeckSdk = KDoordeckFactory().initialize(apiEnvironment: ApiEnvironment.prod)
-    self.doordeckSdk.contextManager().loadContext()
+    self.doordeckSdk = KDoordeckFactory().initialize(sdkConfig: SdkConfig.Builder().build())
 
     super.init()
   }
@@ -52,7 +51,7 @@ public class HeadlessReactNativeSdkImpl: NSObject {
   ) {
     setKeyPairIfNeeded()
 
-    doordeckSdk.contextManager().setAuthToken(token: authToken)
+    doordeckSdk.contextManager().setCloudAuthToken(token: authToken)
     self.respondNeedsVerification(resolver, rejecter)
   }
 
@@ -65,7 +64,6 @@ public class HeadlessReactNativeSdkImpl: NSObject {
       if let error = error {
         rejecter("VERIFY_ERROR", error.localizedDescription, error)
       } else {
-        self.doordeckSdk.contextManager().storeContext()
         resolver(nil)
       }
     }
@@ -79,8 +77,30 @@ public class HeadlessReactNativeSdkImpl: NSObject {
       if let error = error {
         rejecter("LOGOUT_ERROR", error.localizedDescription, error)
       } else {
-        self.doordeckSdk.contextManager().clearContext()
         resolver(nil)
+      }
+    }
+  }
+
+  /**
+   * ✅ User Operations
+   */
+
+  @objc public func getUserDetails(
+    _ resolver: @escaping RCTPromiseResolveBlock,
+    rejecter: @escaping RCTPromiseRejectBlock
+  ) {
+    doordeckSdk.account().getUserDetails { response, error in
+      if let error = error {
+        rejecter("USER_DETAILS_ERROR", error.localizedDescription, error)
+      } else if let response = response {
+        resolver(response.toNativeMap(
+          userId: self.doordeckSdk.contextManager().getUserId(),
+          certificateChainAboutToExpire: self.doordeckSdk.contextManager().isCertificateChainAboutToExpire(),
+          tokenAboutToExpire: self.doordeckSdk.contextManager().isCloudAuthTokenAboutToExpire()
+        ))
+      } else {
+        rejecter("USER_DETAILS_ERROR", "Unknown error occurred", nil)
       }
     }
   }
@@ -132,21 +152,11 @@ public class HeadlessReactNativeSdkImpl: NSObject {
     }
   }
 
-  /**
-   * ✅ Helper Methods
-   */
-
-  @objc public func loadContext() {
-    doordeckSdk.contextManager().loadContext()
-  }
-
   private func setKeyPairIfNeeded() {
     guard doordeckSdk.contextManager().getKeyPair() == nil else { return }
 
     let newKeyPair = doordeckSdk.crypto().generateKeyPair()
     doordeckSdk.contextManager().setKeyPair(publicKey: newKeyPair.public_, privateKey: newKeyPair.private_)
-
-    self.doordeckSdk.contextManager().storeContext()
   }
 
   private func respondNeedsVerification(
@@ -181,6 +191,20 @@ extension TileLocksResponse {
       "siteId": siteId,
       "tileId": tileId,
       "deviceIds": deviceIds
+    ]
+  }
+}
+
+extension UserDetailsResponse {
+  func toNativeMap(userId: String?, certificateChainAboutToExpire: Bool, tokenAboutToExpire: Bool) -> NSDictionary {
+    return [
+      "userId": userId as Any,
+      "certificateChainAboutToExpire": certificateChainAboutToExpire,
+      "tokenAboutToExpire": tokenAboutToExpire,
+      "publicKey": publicKey,
+      "email": email,
+      "displayName": displayName as Any,
+      "emailVerified": emailVerified
     ]
   }
 }

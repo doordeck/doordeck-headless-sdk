@@ -1,13 +1,13 @@
 PODS:
   - boost (1.84.0)
-  - DoordeckSDK (0.80.0)
+  - DoordeckSDK (0.81.0)
   - DoubleConversion (1.1.6)
   - fast_float (6.1.4)
   - FBLazyVector (0.77.1)
   - fmt (11.0.2)
   - glog (0.3.5)
-  - HeadlessReactNativeSdk (0.1.0):
-    - DoordeckSDK (~> 0.78)
+  - HeadlessReactNativeSdk (0.0.0):
+    - DoordeckSDK (~> 0.81)
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -1959,13 +1959,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
-  DoordeckSDK: 17ab48cda675b93e25889963b40156d6dffaa778
+  DoordeckSDK: 4b24fb5cb77aaa243f8602e1837f5808c0a124ec
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 79c4b7ec726447eec5f8593379466bd9fde1aa14
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: eb93e2f488219332457c3c4eafd2738ddc7e80b8
-  HeadlessReactNativeSdk: eb8a3f3536432396a496ccbea99c6aa373bfd8cb
+  HeadlessReactNativeSdk: bad789fdbf6b8b18b298e2730e409b2324e77846
   hermes-engine: ccc24d29d650ea725d582a9a53d57cd417fbdb53
   RCT-Folly: 36fe2295e44b10d831836cc0d1daec5f8abcf809
   RCTDeprecation: 664055db806cce35c3c1b43c84414dd66e117ae6

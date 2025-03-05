@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.private_header_files = "ios/**/*.h"
   s.preserve_paths = "ios/**/*.{h,m,mm,swift}"
 
-  doordeck_sdk_version = ENV['DOORDECK_SDK_VERSION'] || '0.78'
+  doordeck_sdk_version = ENV['DOORDECK_SDK_VERSION'] || '0.81'
   s.dependency "DoordeckSDK", "~> #{doordeck_sdk_version}"
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.

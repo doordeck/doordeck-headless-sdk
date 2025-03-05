@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -50,14 +51,13 @@ class HeadlessReactNativeSdkModule(
   ) {
     setKeyPairIfNeeded()
 
-    doordeckSdk.contextManager().setAuthToken(authToken)
+    doordeckSdk.contextManager().setCloudAuthToken(authToken)
     respondNeedsVerification(promise)
   }
 
   override fun verify(code: String, promise: Promise) {
     doordeckSdk.account().verifyEphemeralKeyRegistrationAsync(code)
       .thenApply {
-        doordeckSdk.contextManager().storeContext()
         promise.resolve(null)
       }
       .exceptionally { error ->
@@ -68,11 +68,27 @@ class HeadlessReactNativeSdkModule(
   override fun logout(promise: Promise) {
     doordeckSdk.account().logoutAsync()
       .thenApply {
-        doordeckSdk.contextManager().clearContext()
         promise.resolve(null)
       }
       .exceptionally { error ->
         promise.reject("LOGOUT_ERROR", error)
+      }
+  }
+
+  /**
+   * User operations
+   */
+  override fun getUserDetails(promise: Promise) {
+    doordeckSdk.account().getUserDetailsAsync()
+      .thenApply { response ->
+        promise.resolve(response.toNativeMap(
+          userId = doordeckSdk.contextManager().getUserId(),
+          certificateChainAboutToExpire = doordeckSdk.contextManager().isCertificateChainAboutToExpire(),
+          tokenAboutToExpire = doordeckSdk.contextManager().isCloudAuthTokenAboutToExpire(),
+        ))
+      }
+      .exceptionally {  error ->
+        promise.reject("USER_DETAILS_ERROR", error)
       }
   }
 
@@ -118,8 +134,6 @@ class HeadlessReactNativeSdkModule(
         publicKey = newKeyPair.public,
         privateKey = newKeyPair.private,
       )
-
-      doordeckSdk.contextManager().storeContext()
     }
   }
 
@@ -145,4 +159,18 @@ class HeadlessReactNativeSdkModule(
     })
   }
 
+  private fun UserDetailsResponse.toNativeMap(
+    userId: String?,
+    certificateChainAboutToExpire: Boolean,
+    tokenAboutToExpire: Boolean,
+  ) = Arguments.createMap().apply {
+    putString("userId", userId)
+    putBoolean("certificateChainAboutToExpire", certificateChainAboutToExpire)
+    putBoolean("tokenAboutToExpire", tokenAboutToExpire)
+    putString("publicKey", publicKey)
+    putString("email", email)
+    putString("displayName", displayName)
+    putBoolean("emailVerified", emailVerified)
+  }
 }
+

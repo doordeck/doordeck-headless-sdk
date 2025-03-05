@@ -31,6 +31,14 @@ export interface Spec extends TurboModule {
   ): Promise<AssistedRegisterEphemeralKeyResponse>;
 
   /**
+   * @returns UserDetailsResponse if the user is logged in, otherwise null
+   *
+   * This method is useful to check if the user needs to verify 2fa login,
+   * or if the certificate chain or the token are about to expire.
+   */
+  getUserDetails(): Promise<UserDetailsResponse>;
+
+  /**
    * @param code  - code sent for verification
    */
   verify(code: string): Promise<void>
@@ -64,6 +72,16 @@ export type TileLocksResponse = {
 
 export type AssistedRegisterEphemeralKeyResponse = {
   requiresVerification: boolean;
+}
+
+export type UserDetailsResponse = {
+  userId?: string;
+  publicKey: string;
+  email: string;
+  displayName?: string;
+  emailVerified: boolean;
+  certificateChainAboutToExpire: boolean;
+  tokenAboutToExpire: boolean;
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>('HeadlessReactNativeSdk');

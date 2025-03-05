@@ -9,9 +9,8 @@
   self = [super init];
   if (self) {
     moduleSdk = [HeadlessReactNativeSdkImpl new];
-    [moduleSdk loadContext];
   }
-  
+
   return self;
 }
 
@@ -29,6 +28,10 @@ RCT_EXPORT_MODULE()
 
 - (void)login:(nonnull NSString *)email password:(nonnull NSString *)password resolve:(nonnull RCTPromiseResolveBlock)resolve reject:(nonnull RCTPromiseRejectBlock)reject {
   [moduleSdk login:email password:password resolver:resolve rejecter:reject];
+}
+
+- (void)getUserDetails:(nonnull RCTPromiseResolveBlock)resolve reject:(nonnull RCTPromiseRejectBlock)reject {
+  [moduleSdk getUserDetails:resolve rejecter:reject];
 }
 
 - (void)logout:(nonnull RCTPromiseResolveBlock)resolve reject:(nonnull RCTPromiseRejectBlock)reject {

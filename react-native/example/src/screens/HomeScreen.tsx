@@ -17,6 +17,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Button title="Login" onPress={() => navigation.navigate('Login')} />
         <Button title="Set auth token" onPress={() => navigation.navigate('SetAuthToken')} />
+        <Button title="See user details" onPress={() => navigation.navigate('SeeUserDetails')} />
         <Button title="Verification" onPress={() => navigation.navigate('Verification')} />
         <Button title="Inspect tile" onPress={() => navigation.navigate('InspectTile')} />
         <Button title="Unlock device" onPress={() => navigation.navigate('UnlockDevice')} />

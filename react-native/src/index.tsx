@@ -1,6 +1,6 @@
 import HeadlessReactNativeSdk, {
   type AssistedRegisterEphemeralKeyResponse,
-  type TileLocksResponse,
+  type TileLocksResponse, type UserDetailsResponse,
 } from './NativeHeadlessReactNativeSdk';
 
 export function login(email: string, password: string): Promise<AssistedRegisterEphemeralKeyResponse> {
@@ -12,6 +12,10 @@ export function login(email: string, password: string): Promise<AssistedRegister
 
 export function setAuthToken(authToken: string): Promise<AssistedRegisterEphemeralKeyResponse> {
   return HeadlessReactNativeSdk.setAuthToken(authToken);
+}
+
+export function getUserDetails(): Promise<UserDetailsResponse> {
+  return HeadlessReactNativeSdk.getUserDetails();
 }
 
 export function verify(code: string): Promise<void> {

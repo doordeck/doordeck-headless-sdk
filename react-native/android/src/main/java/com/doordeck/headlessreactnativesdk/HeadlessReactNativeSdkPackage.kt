@@ -2,6 +2,7 @@ package com.doordeck.headlessreactnativesdk
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.KDoordeckFactory
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
@@ -15,8 +16,10 @@ class HeadlessReactNativeSdkPackage : BaseReactPackage() {
       HeadlessReactNativeSdkModule(
         reactContext = reactContext,
         doordeckSdk = KDoordeckFactory.initialize(
-          applicationContext = ApplicationContext.apply { set(reactContext.applicationContext)},
-        ).also { it.contextManager().loadContext() }
+          SdkConfig.Builder()
+            .setApplicationContext(ApplicationContext.apply { set(reactContext.applicationContext)})
+            .build()
+        )
       )
     } else {
       null
