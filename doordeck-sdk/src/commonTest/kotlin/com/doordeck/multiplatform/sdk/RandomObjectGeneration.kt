@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.AuditIssuerResponse
@@ -55,7 +56,7 @@ import kotlin.random.Random
 import kotlin.uuid.Uuid
 
 /**
- * Account
+ * Account responses
  */
 internal fun randomTokenResponse(): TokenResponse = TokenResponse(
     authToken = randomString(),
@@ -79,7 +80,7 @@ internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): Re
 )
 
 /**
- * Fusion
+ * Fusion responses
  */
 internal fun randomFusionLoginResponse(): FusionLoginResponse = FusionLoginResponse(
     authToken = randomString()
@@ -117,7 +118,7 @@ internal fun randomDiscoveredDeviceResponse(): DiscoveredDeviceResponse = Discov
 internal fun randomFusionController(): Fusion.LockController = Fusion.DemoController()
 
 /**
- * Lock operations
+ * Lock operation responses
  */
 internal fun randomLockResponse(): LockResponse = LockResponse(
     id = randomString(),
@@ -250,7 +251,7 @@ internal fun randomAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerRespo
 )
 
 /**
- * Platform
+ * Platform responses
  */
 internal fun randomApplicationResponse(): ApplicationResponse = ApplicationResponse(
     applicationId = randomString(),
@@ -363,7 +364,7 @@ internal fun randomGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLog
 )
 
 /**
- * Site
+ * Site responses
  */
 internal fun randomSiteResponse(): SiteResponse = SiteResponse(
     id = randomString(),
@@ -406,7 +407,7 @@ internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteRespo
 )
 
 /**
- * Tile
+ * Tile responses
  */
 internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
     siteId = randomString(),
@@ -414,8 +415,87 @@ internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
     deviceIds = (1..3).map { randomString() }
 )
 
+/**
+ * Lock operation data
+ */
+internal fun randomTimeRequirement(): LockOperations.TimeRequirement = LockOperations.TimeRequirement(
+    start = randomString(),
+    end = randomString(),
+    timezone = randomString(),
+    days = (1..3).map { randomString() }
+)
+
+internal fun randomLocationRequirement(): LockOperations.LocationRequirement = LockOperations.LocationRequirement(
+    latitude = randomDouble(),
+    longitude = randomDouble(),
+    enabled = randomNullable { randomBoolean() },
+    radius = randomNullable { randomInt() },
+    accuracy = randomNullable { randomInt() }
+)
+
+internal fun randomUnlockBetween(): LockOperations.UnlockBetween = LockOperations.UnlockBetween(
+    start = randomString(),
+    end = randomString(),
+    timezone = randomString(),
+    days = (1..3).map { randomString() },
+    exceptions = randomNullable { (1..3).map { randomString() } }
+)
+
+internal fun randomUnlockOperation(): LockOperations.UnlockOperation = LockOperations.UnlockOperation(
+    baseOperation = randomBaseOperation(),
+    directAccessEndpoints = randomNullable { (1..3).map { randomString() } }
+)
+
+internal fun randomShareLockOperation(): LockOperations.ShareLockOperation = LockOperations.ShareLockOperation(
+    baseOperation = randomBaseOperation(),
+    shareLock = randomShareLock()
+)
+
+internal fun randomBatchShareLockOperation(): LockOperations.BatchShareLockOperation = LockOperations.BatchShareLockOperation(
+    baseOperation = randomBaseOperation(),
+    users = (1..3).map { randomShareLock() }
+)
+
+internal fun randomRevokeAccessToLockOperation(): LockOperations.RevokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+    baseOperation = randomBaseOperation(),
+    users = (1..3).map { randomString() }
+)
+
+internal fun randomUpdateSecureSettingUnlockDuration(): LockOperations.UpdateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
+    baseOperation = randomBaseOperation(),
+    unlockDuration = randomInt()
+)
+
+internal fun randomUpdateSecureSettingUnlockBetween(): LockOperations.UpdateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+    baseOperation = randomBaseOperation(),
+    unlockBetween = randomNullable { randomUnlockBetween() }
+)
+
+internal fun randomShareLock(): LockOperations.ShareLock = LockOperations.ShareLock(
+    targetUserId = randomString(),
+    targetUserRole = UserRole.entries.random(),
+    targetUserPublicKey = randomByteArray(),
+    start = randomNullable { randomInt() },
+    end = randomNullable { randomInt() }
+)
+
+internal fun randomBaseOperation(): LockOperations.BaseOperation = LockOperations.BaseOperation(
+    userId = randomNullable { randomString() },
+    userCertificateChain = randomNullable { (1..3).map { randomString() } },
+    userPrivateKey = randomNullable { randomByteArray() },
+    lockId = randomString(),
+    notBefore = randomInt(),
+    issuedAt = randomInt(),
+    expiresAt = randomInt(),
+    jti = randomString()
+)
+
+/**
+ * Test utils
+ */
 private fun randomInt(min: Int = 0, max: Int = Int.MAX_VALUE) = Random.nextInt(min, max)
 private fun randomDouble(from: Double = 0.0, to: Double = 100.0): Double = Random.nextDouble(from, to)
 private fun randomBoolean(): Boolean = Random.nextBoolean()
 private inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
 private fun randomString(): String = Uuid.random().toString()
+private fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))
