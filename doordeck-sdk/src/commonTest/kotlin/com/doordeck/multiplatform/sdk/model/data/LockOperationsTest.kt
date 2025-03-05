@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.randomBaseOperation
 import com.doordeck.multiplatform.sdk.randomBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.randomLocationRequirement
 import com.doordeck.multiplatform.sdk.randomRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.randomShareLock
 import com.doordeck.multiplatform.sdk.randomShareLockOperation
 import com.doordeck.multiplatform.sdk.randomTimeRequirement
 import com.doordeck.multiplatform.sdk.randomUnlockBetween
@@ -112,6 +113,24 @@ class LockOperationsTest {
 
         // Then
         assertEquals(batchShareLockOperation, result)
+    }
+
+    @Test
+    fun shouldBuildShareLock() = runTest {
+        // Given
+        val shareLock = randomShareLock()
+
+        // When
+        val result = LockOperations.ShareLock.Builder()
+            .setTargetUserId(shareLock.targetUserId)
+            .setTargetUserRole(shareLock.targetUserRole)
+            .setTargetUserPublicKey(shareLock.targetUserPublicKey)
+            .setStart(shareLock.start)
+            .setEnd(shareLock.end)
+            .build()
+
+        // Then
+        assertEquals(shareLock, result)
     }
 
     @Test

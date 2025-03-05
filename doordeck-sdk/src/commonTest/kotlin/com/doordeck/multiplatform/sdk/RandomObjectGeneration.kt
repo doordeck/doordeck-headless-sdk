@@ -8,6 +8,8 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.Platform.EmailCallToAction
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.AuditIssuerResponse
@@ -488,6 +490,71 @@ internal fun randomBaseOperation(): LockOperations.BaseOperation = LockOperation
     issuedAt = randomInt(),
     expiresAt = randomInt(),
     jti = randomString()
+)
+
+/**
+ * Platform data
+ */
+internal fun randomCreateApplication(): Platform.CreateApplication = Platform.CreateApplication(
+    name = randomString(),
+    companyName = randomString(),
+    mailingAddress = randomString(),
+    privacyPolicy = randomNullable { randomString() },
+    supportContact = randomNullable { randomString() },
+    appLink = randomNullable { randomString() },
+    emailPreferences = randomNullable { randomEmailPreferences() },
+    logoUrl = randomNullable { randomString() }
+)
+
+internal fun randomEmailPreferences(): Platform.EmailPreferences = Platform.EmailPreferences(
+    senderEmail = randomNullable { randomString() },
+    senderName = randomNullable { randomString() },
+    primaryColour = randomNullable { randomString() },
+    secondaryColour = randomNullable { randomString() },
+    onlySendEssentialEmails = randomNullable { randomBoolean() },
+    callToAction = randomNullable { randomEmailCallToAction() }
+)
+
+internal fun randomEmailCallToAction(): EmailCallToAction = EmailCallToAction(
+    actionTarget = randomString(),
+    headline = randomString(),
+    actionText = randomString()
+)
+
+internal fun randomRsaKey(): Platform.RsaKey = Platform.RsaKey(
+    kty = randomString(),
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    p = randomString(),
+    q = randomString(),
+    d = randomString(),
+    e = randomString(),
+    qi = randomString(),
+    dp = randomString(),
+    dq = randomString(),
+    n = randomString()
+)
+
+internal fun randomEcKey(): Platform.EcKey = Platform.EcKey(
+    kty = randomString(),
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    d = randomString(),
+    crv = randomString(),
+    x = randomString(),
+    y = randomString()
+)
+
+internal fun randomEd25519Key(): Platform.Ed25519Key = Platform.Ed25519Key(
+    kty = randomString(),
+    use = randomString(),
+    kid = randomString(),
+    alg = randomNullable { randomString() },
+    d = randomString(),
+    crv = randomString(),
+    x = randomString()
 )
 
 /**
