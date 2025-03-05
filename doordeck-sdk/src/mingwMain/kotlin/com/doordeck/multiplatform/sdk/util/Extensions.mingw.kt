@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.util
 
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.model.data.FailedResultData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
@@ -24,6 +25,17 @@ fun ApiEnvironment.getApiEnvironmentName(): String {
 @CName("getApiEnvironmentByName")
 fun ApiEnvironment.getApiEnvironmentByName(name: String): ApiEnvironment {
     return ApiEnvironment.valueOf(name)
+}
+
+/**
+ * Utility extension for easily building an [SdkConfig] instance externally.
+ */
+@CName("buildSdkConfig")
+fun buildSdkConfig(apiEnvironment: ApiEnvironment, cloudAuthToken: String? = null, cloudRefreshToken: String? = null): SdkConfig {
+    return SdkConfig.Builder().setApiEnvironment(apiEnvironment).apply {
+        cloudAuthToken?.let { setCloudAuthToken(it) }
+        cloudRefreshToken?.let { setCloudRefreshToken(it) }
+    }.build()
 }
 
 /**

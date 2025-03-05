@@ -31,8 +31,8 @@ internal object AccountlessClient {
             setBody(LoginRequest(email, password))
         }.body<TokenResponse>().also {
             ContextManagerImpl.setUserEmail(email)
-            ContextManagerImpl.setAuthToken(it.authToken)
-            ContextManagerImpl.setRefreshToken(it.refreshToken)
+            ContextManagerImpl.setCloudAuthToken(it.authToken)
+            ContextManagerImpl.setCloudRefreshToken(it.refreshToken)
         }
     }
 
@@ -55,8 +55,8 @@ internal object AccountlessClient {
             parameter(Params.FORCE, force)
         }.body<TokenResponse>().also {
             ContextManagerImpl.setUserEmail(email)
-            ContextManagerImpl.setAuthToken(it.authToken)
-            ContextManagerImpl.setRefreshToken(it.refreshToken)
+            ContextManagerImpl.setCloudAuthToken(it.authToken)
+            ContextManagerImpl.setCloudRefreshToken(it.refreshToken)
         }
     }
 

@@ -35,13 +35,13 @@ internal object AccountClient {
     @DoordeckOnly
     suspend fun refreshTokenRequest(refreshToken: String? = null): TokenResponse {
         val token = refreshToken
-            ?: ContextManagerImpl.getRefreshToken()
+            ?: ContextManagerImpl.getCloudRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
         return CloudHttpClient.client.post(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
         }.body<TokenResponse>().also {
-            ContextManagerImpl.setAuthToken(it.authToken)
-            ContextManagerImpl.setRefreshToken(it.refreshToken)
+            ContextManagerImpl.setCloudAuthToken(it.authToken)
+            ContextManagerImpl.setCloudRefreshToken(it.refreshToken)
         }
     }
 

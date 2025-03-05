@@ -2,6 +2,9 @@
 
 The **Context Manager** simplifies the usage of complex SDK functions by reducing the number of parameters required when setting the operation context, authentication tokens, and other session data.
 
+> [!NOTE]  
+> All the values that are provided to the context manager are automatically stored in [secure storage](04_INITIALIZE.md#secure-storage).
+
 ## Set operation context
 
 ### JVM & Android
@@ -50,7 +53,6 @@ data = OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "B
 sdk.contextManager.set_operation_context(data)
 ```
 </details>
-
 
 ## Is certificate chain about to expire
 
@@ -150,7 +152,7 @@ result = sdk.contextManager.is_key_pair_valid()
 ```
 </details>
 
-## Set auth token
+## Set cloud auth token
 
 If the SDK was initialized without an authentication token, you can provide or update the token using this function.
 
@@ -159,7 +161,7 @@ If the SDK was initialized without an authentication token, you can provide or u
 <summary>Show Details</summary>
 
 ```kotlin
-sdk.contextManager().setAuthToken("AUTH_TOKEN")
+sdk.contextManager().setCloudAuthToken("AUTH_TOKEN")
 ```
 </details>
 
@@ -168,7 +170,7 @@ sdk.contextManager().setAuthToken("AUTH_TOKEN")
 <summary>Show Details</summary>
 
 ```swift
-sdk.contextManager().setAuthToken(token: "AUTH_TOKEN")
+sdk.contextManager().setCloudAuthToken(token: "AUTH_TOKEN")
 ```
 </details>
 
@@ -177,7 +179,7 @@ sdk.contextManager().setAuthToken(token: "AUTH_TOKEN")
 <summary>Show Details</summary>
 
 ```js
-sdk.contextManager().setAuthToken("AUTH_TOKEN");
+sdk.contextManager().setCloudAuthToken("AUTH_TOKEN");
 ```
 </details>
 
@@ -186,7 +188,7 @@ sdk.contextManager().setAuthToken("AUTH_TOKEN");
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetContextManager().SetAuthToken("AUTH_TOKEN");
+sdk.GetContextManager().SetCloudAuthToken("AUTH_TOKEN");
 ```
 </details>
 
@@ -195,20 +197,18 @@ sdk.GetContextManager().SetAuthToken("AUTH_TOKEN");
 <summary>Show Details</summary>
 
 ```python
-sdk.contextManager.set_auth_token("AUTH_TOKEN")
+sdk.contextManager.set_cloud_auth_token("AUTH_TOKEN")
 ```
 </details>
 
-## Is auth token about to expire
-
-Checks if the current [auth token](#set-auth-token) from the context is about to expire within the next 24 hours
+## Get cloud auth token
 
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
 
 ```kotlin
-val result = sdk.contextManager().isAuthTokenAboutToExpire()
+val token = sdk.contextManager().getCloudAuthToken()
 ```
 </details>
 
@@ -217,7 +217,7 @@ val result = sdk.contextManager().isAuthTokenAboutToExpire()
 <summary>Show Details</summary>
 
 ```swift
-let result = sdk.contextManager().isAuthTokenAboutToExpire()
+let token = sdk.contextManager().getCloudAuthToken()
 ```
 </details>
 
@@ -226,7 +226,7 @@ let result = sdk.contextManager().isAuthTokenAboutToExpire()
 <summary>Show Details</summary>
 
 ```js
-const result = sdk.contextManager().isAuthTokenAboutToExpire();
+const token = sdk.contextManager().getCloudAuthToken();
 ```
 </details>
 
@@ -235,7 +235,7 @@ const result = sdk.contextManager().isAuthTokenAboutToExpire();
 <summary>Show Details</summary>
 
 ```csharp
-var result = sdk.GetContextManager().IsAuthTokenAboutToExpire();
+var token = sdk.GetContextManager().GetCloudAuthToken();
 ```
 </details>
 
@@ -244,18 +244,20 @@ var result = sdk.GetContextManager().IsAuthTokenAboutToExpire();
 <summary>Show Details</summary>
 
 ```python
-result = sdk.contextManager.is_auth_token_about_to_expire()
+token = sdk.contextManager.get_cloud_auth_token()
 ```
 </details>
 
-## Set refresh token
+## Is cloud auth token about to expire
+
+Checks if the current [cloud auth token](#set-cloud-auth-token) from the context is about to expire within the next 24 hours
 
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
 
 ```kotlin
-sdk.contextManager().setRefreshToken("REFRESH_TOKEN")
+val result = sdk.contextManager().isCloudAuthTokenAboutToExpire()
 ```
 </details>
 
@@ -264,7 +266,7 @@ sdk.contextManager().setRefreshToken("REFRESH_TOKEN")
 <summary>Show Details</summary>
 
 ```swift
-sdk.contextManager().setRefreshToken(token: "REFRESH_TOKEN")
+let result = sdk.contextManager().isCloudAuthTokenAboutToExpire()
 ```
 </details>
 
@@ -273,7 +275,7 @@ sdk.contextManager().setRefreshToken(token: "REFRESH_TOKEN")
 <summary>Show Details</summary>
 
 ```js
-sdk.contextManager().setRefreshToken("REFRESH_TOKEN");
+const result = sdk.contextManager().isCloudAuthTokenAboutToExpire();
 ```
 </details>
 
@@ -282,7 +284,7 @@ sdk.contextManager().setRefreshToken("REFRESH_TOKEN");
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetContextManager().SetRefreshToken("REFRESH_TOKEN");
+var result = sdk.GetContextManager().IsCloudAuthTokenAboutToExpire();
 ```
 </details>
 
@@ -291,7 +293,101 @@ sdk.GetContextManager().SetRefreshToken("REFRESH_TOKEN");
 <summary>Show Details</summary>
 
 ```python
-result = sdk.contextManager.set_refresh_token("REFRESH_TOKEN")
+result = sdk.contextManager.is_cloud_auth_token_about_to_expire()
+```
+</details>
+
+## Set cloud refresh token
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+sdk.contextManager().setCloudRefreshToken("REFRESH_TOKEN")
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+sdk.contextManager().setCloudRefreshToken(token: "REFRESH_TOKEN")
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+sdk.contextManager().setCloudRefreshToken("REFRESH_TOKEN");
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+sdk.GetContextManager().SetCloudRefreshToken("REFRESH_TOKEN");
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+result = sdk.contextManager.set_cloud_refresh_token("REFRESH_TOKEN")
+```
+</details>
+
+## Get cloud refresh token
+
+### JVM & Android
+<details>
+<summary>Show Details</summary>
+
+```kotlin
+val token = sdk.contextManager().getCloudRefreshToken()
+```
+</details>
+
+### Swift
+<details>
+<summary>Show Details</summary>
+
+```swift
+let token = sdk.contextManager().getCloudRefreshToken()
+```
+</details>
+
+### JavaScript
+<details>
+<summary>Show Details</summary>
+
+```js
+const token = sdk.contextManager().getCloudRefreshToken();
+```
+</details>
+
+### C#
+<details>
+<summary>Show Details</summary>
+
+```csharp
+var token = sdk.GetContextManager().GetCloudRefreshToken();
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+token = sdk.contextManager.get_cloud_refresh_token()
 ```
 </details>
 
@@ -342,89 +438,14 @@ result = sdk.contextManager.set_fusion_auth_token("FUSION_AUTH_TOKEN")
 ```
 </details>
 
-## Store context
-
-After setting the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), or [fusion auth token](#set-fusion-auth-token), you can store these values so they persist across sessions.
-
-> [!NOTE] 
-> You can override the default secure storage implementation with the [set secure storage implementation](#set-secure-storage-implementation) functionality
-
-### JVM
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-sdk.contextManager().storeContext()
-```
-
-💡 **Note:** In JVM, the context is stored using `properties`.
-</details>
-
-### Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-sdk.contextManager().storeContext()
-```
-
-💡 **Note:** In Android, the context is stored using `shared preference settings`.
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-sdk.contextManager().storeContext()
-```
-
-💡 **Note:** In Swift, the context is stored using `keychain`.
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-sdk.contextManager().storeContext();
-```
-
-💡 **Note:** In JavaScript, the context is stored using `local storage`.
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-sdk.GetContextManager().StoreContext();
-```
-
-💡 **Note:** In C#, the context is stored using `windows registry`.
-</details>
-
-### Python
-<details>
-<summary>Show Details</summary>
-
-```python
-sdk.contextManager.store_context()
-```
-
-💡 **Note:** In Python, the context is stored using `windows registry`.
-</details>
-
-## Load context
-
-Loads the previously stored context, including the [operation context](#set-operation-context), [auth token](#set-auth-token), [refresh token](#set-refresh-token), and [fusion auth token](#set-fusion-auth-token).
+## Get fusion auth token
 
 ### JVM & Android
 <details>
 <summary>Show Details</summary>
 
 ```kotlin
-sdk.contextManager().loadContext()
+val token = sdk.contextManager().getFusionAuthToken()
 ```
 </details>
 
@@ -433,7 +454,7 @@ sdk.contextManager().loadContext()
 <summary>Show Details</summary>
 
 ```swift
-sdk.contextManager().loadContext()
+let token = sdk.contextManager().getFusionAuthToken()
 ```
 </details>
 
@@ -442,7 +463,7 @@ sdk.contextManager().loadContext()
 <summary>Show Details</summary>
 
 ```js
-sdk.contextManager().loadContext();
+const token = sdk.contextManager().getFusionAuthToken();
 ```
 </details>
 
@@ -451,7 +472,7 @@ sdk.contextManager().loadContext();
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetContextManager().LoadContext();
+var token = sdk.GetContextManager().GetFusionAuthToken();
 ```
 </details>
 
@@ -460,7 +481,7 @@ sdk.GetContextManager().LoadContext();
 <summary>Show Details</summary>
 
 ```python
-sdk.contextManager.load_context()
+token = sdk.contextManager.get_fusion_auth_token()
 ```
 </details>
 
@@ -510,220 +531,6 @@ sdk.GetContextManager().ClearContext();
 
 ```python
 sdk.contextManager.clear_context()
-```
-</details>
-
-## Set secure storage implementation
-
-This function enables you to provide your own storage implementation.
-
-> [!NOTE]
-> If you are looking to override the default secure storage with this option, you should set it before using the [load context](#load-context)
-
-### JVM & Android
-<details>
-<summary>Show Details</summary>
-
-```kotlin
-class MyOwnSecureImplementation : SecureStorage {
-    override fun addCloudAuthToken(token: String) {
-        // Your implementation
-    }
-
-    override fun getCloudAuthToken(): String? {
-        // Your implementation
-    }
-
-    override fun addCloudRefreshToken(token: String) {
-        // Your implementation
-    }
-
-    override fun getCloudRefreshToken(): String? {
-        // Your implementation
-    }
-    
-    override fun addFusionAuthToken(token: String) {
-        // Your implementation
-    }
-
-    override fun getFusionAuthToken(): String? {
-        // Your implementation
-    }
-
-    override fun addPrivateKey(byteArray: ByteArray) {
-        // Your implementation
-    }
-
-    override fun getPrivateKey(): ByteArray? {
-        // Your implementation
-    }
-
-    override fun addUserId(userId: String) {
-        // Your implementation
-    }
-
-    override fun getUserId(): String? {
-        // Your implementation
-    }
-
-    override fun addCertificateChain(certificateChain: List<String>) {
-        // Your implementation
-    }
-
-    override fun getCertificateChain(): List<String>? {
-        // Your implementation
-    }
-
-    override fun clear() {
-        // Your implementation
-    }
-}
-
-sdk.contextManager().setSecureStorageImpl(MyOwnSecureImplementation())
-```
-</details>
-
-### Swift
-<details>
-<summary>Show Details</summary>
-
-```swift
-class MyOwnSecureImplementation : SecureStorage {
-    func addCloudAuthToken(token: String) {
-        // Your Implementation
-    }
-
-    func getCloudAuthToken() -> String? {
-        // Your Implementation
-    }
-    
-    func addCloudRefreshToken(token: String) {
-        // Your Implementation
-    }
-    
-    func getCloudRefreshToken() -> String? {
-        // Your Implementation
-    }
-    
-    func addFusionAuthToken(token: String) {
-        // Your Implementation
-    }
-    
-    func getFusionAuthToken() -> String? {
-        // Your Implementation
-    }
-    
-    func addPrivateKey(byteArray: KotlinByteArray) {
-        // Your Implementation
-    }
-    
-    func getPrivateKey() -> KotlinByteArray? {
-        // Your Implementation
-    }
-    
-    func addUserId(userId: String) {
-        // Your Implementation
-    }
-    
-    func getUserId() -> String? {
-        // Your Implementation
-    }
-    
-    func addCertificateChain(certificateChain: [String]) {
-        // Your Implementation
-    }
-    
-    func getCertificateChain() -> [String]? {
-        // Your Implementation
-    }
-    
-    func clear() {
-        // Your Implementation
-    }
-}
-
-sdk.contextManager().setSecureStorageImpl(secureStorage: MyOwnSecureImplementation())
-```
-</details>
-
-### JavaScript
-<details>
-<summary>Show Details</summary>
-
-```js
-class MyOwnSecureImplementation implements com.doordeck.multiplatform.sdk.storage.SecureStorage {
-    addCloudAuthToken(token: string): void {
-        // Your implementation
-    }
-
-    getCloudAuthToken(): Nullable<string> {
-        // Your implementation
-    }
-
-    addCloudRefreshToken(token: string): void {
-        // Your implementation
-    }
-
-    getCloudRefreshToken(): Nullable<string> {
-        // Your implementation
-    }
-
-    addFusionAuthToken(token: string): void {
-        // Your implementation
-    }
-
-    getFusionAuthToken(): Nullable<string> {
-        // Your implementation
-    }
-
-    addPrivateKey(byteArray: Int8Array): void {
-        // Your implementation
-    }
-
-    getPrivateKey(): Nullable<Int8Array> {
-        // Your implementation
-    }
-
-    addUserId(userId: string): void {
-        // Your implementation
-    }
-
-    getUserId(): Nullable<string> {
-        // Your implementation
-    }
-
-    addCertificateChain(certificateChain: kotlin.collections.KtList<string>): void {
-        // Your implementation
-    }
-
-    getCertificateChain(): Nullable<kotlin.collections.KtList<string>> {
-        // Your implementation
-    }
-
-    clear(): void {
-        // Your implementation
-    }
-}
-
-sdk.contextManager().setSecureStorageImpl(new MyOwnSecureImplementation());
-```
-</details>
-
-### C#
-<details>
-<summary>Show Details</summary>
-
-```csharp
-// TODO
-```
-</details>
-
-### Python
-<details>
-<summary>Show Details</summary>
-
-```csharp
-// TODO
 ```
 </details>
 

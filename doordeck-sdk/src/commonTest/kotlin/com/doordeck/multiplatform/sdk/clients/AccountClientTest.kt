@@ -80,8 +80,8 @@ class AccountClientTest : IntegrationTest() {
         // Then
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(ContextManagerImpl.getAuthToken(), response.authToken)
-        assertEquals(ContextManagerImpl.getRefreshToken(), response.refreshToken)
+        assertEquals(ContextManagerImpl.getCloudAuthToken(), response.authToken)
+        assertEquals(ContextManagerImpl.getCloudRefreshToken(), response.refreshToken)
     }
 
     @Test
@@ -93,8 +93,8 @@ class AccountClientTest : IntegrationTest() {
         AccountClient.logoutRequest()
 
         // Then
-        assertNull(ContextManagerImpl.getAuthToken())
-        assertNull(ContextManagerImpl.getRefreshToken())
+        assertNull(ContextManagerImpl.getCloudAuthToken())
+        assertNull(ContextManagerImpl.getCloudRefreshToken())
         assertNull(ContextManagerImpl.getFusionAuthToken())
     }
 }

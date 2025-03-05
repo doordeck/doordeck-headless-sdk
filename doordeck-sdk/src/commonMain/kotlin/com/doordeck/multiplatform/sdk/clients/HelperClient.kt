@@ -42,8 +42,6 @@ internal object HelperClient {
      *  * If the response indicates that verification is required
      *      (`AssistedLoginResponse.requiresVerification` is true),
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
-     *  * This method interacts with the context manager by reading and writing data but does not handle context loading or storage.
-     *      Ensure the context is properly loaded and stored outside this function as required.
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val currentKeyPair = ContextManagerImpl.getKeyPair()
@@ -100,9 +98,6 @@ internal object HelperClient {
      *  * Generates a new key pair.
      *  * Registers a new account using the provided details, including the key pair.
      *  * Adds the key pair to the context manager.
-     *
-     * Note: This function interacts with the context manager to store key pair data but does not manage context persistence.
-     *  Ensure the context is properly loaded and stored outside this function as required.
      */
     suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Generate a new cryptographic key pair

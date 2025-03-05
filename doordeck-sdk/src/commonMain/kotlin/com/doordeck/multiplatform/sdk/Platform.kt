@@ -46,7 +46,7 @@ internal fun createCloudHttpClient(): HttpClient {
         it.addExceptionInterceptor()
         it.addAuthInterceptor(
             requiresAuth = Paths::requiresAuth,
-            getAuthToken = ContextManagerImpl::getAuthToken
+            getAuthToken = ContextManagerImpl::getCloudAuthToken
         )
     }
 }
