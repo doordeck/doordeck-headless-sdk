@@ -1,12 +1,14 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_UPLOAD_URL
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.Platform
 import com.doordeck.multiplatform.sdk.model.data.Platform.EmailCallToAction
@@ -54,6 +56,8 @@ import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlin.random.Random
 import kotlin.uuid.Uuid
 
@@ -555,6 +559,16 @@ internal fun randomEd25519Key(): Platform.Ed25519Key = Platform.Ed25519Key(
     d = randomString(),
     crv = randomString(),
     x = randomString()
+)
+
+/**
+ * Config
+ */
+fun randomSdkConfig(): SdkConfig = SdkConfig(
+    apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+    cloudAuthToken = randomNullable { randomString() },
+    cloudRefreshToken = randomNullable { randomString() },
+    secureStorage = DefaultSecureStorage(MemorySettings())
 )
 
 /**
