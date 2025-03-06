@@ -1,8 +1,8 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -229,6 +229,16 @@ kotlin {
             }
         }
     }
+
+    // Override konan properties: https://github.com/JetBrains/kotlin/blob/master/kotlin-native/konan/konan.properties
+    targets.withType<KotlinNativeTarget> {
+        compilations["main"].compileTaskProvider.configure {
+            compilerOptions {
+                val version = libs.versions.ios.minSdk.get().toInt()
+                freeCompilerArgs.addAll("-Xoverride-konan-properties=osVersionMin.ios_x64=$version.0;osVersionMin.ios_arm64=$version.0;osVersionMin.macos_arm64=$version.0;osVersionMin.ios_simulator_arm64=$version.0")
+            }
+        }
+    }
 }
 
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central
@@ -342,19 +352,6 @@ tasks.named("assemble${cocoapodsPublish.packageName}ReleaseXCFramework").configu
 tasks.withType<KotlinJsCompile>().configureEach {
     compilerOptions {
         sourceMap = false
-    }
-}
-
-// Override konan properties: https://github.com/JetBrains/kotlin/blob/master/kotlin-native/konan/konan.properties
-tasks.withType<KotlinNativeLink> {
-    toolOptions {
-        val minVersion = libs.versions.ios.minSdk.get().toInt()
-        freeCompilerArgs.add("""-Xoverride-konan-properties=
-            osVersionMin.ios_x64=$minVersion;
-            osVersionMin.ios_arm64=$minVersion;
-            osVersionMin.macos_arm64=$minVersion;
-            osVersionMin.ios_simulator_arm64=$minVersion
-        """.trimIndent())
     }
 }
 
