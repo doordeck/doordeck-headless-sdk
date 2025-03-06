@@ -349,7 +349,12 @@ tasks.withType<KotlinJsCompile>().configureEach {
 tasks.withType<KotlinNativeLink> {
     toolOptions {
         val minVersion = libs.versions.ios.minSdk.get().toInt()
-        freeCompilerArgs.add("-Xoverride-konan-properties=osVersionMin.ios_x64=$minVersion;osVersionMin.ios_arm64=$minVersion;osVersionMin.macos_arm64=$minVersion;osVersionMin.ios_simulator_arm64=$minVersion;")
+        freeCompilerArgs.add("""-Xoverride-konan-properties=
+            osVersionMin.ios_x64=$minVersion;
+            osVersionMin.ios_arm64=$minVersion;
+            osVersionMin.macos_arm64=$minVersion;
+            osVersionMin.ios_simulator_arm64=$minVersion
+        """.trimIndent())
     }
 }
 
