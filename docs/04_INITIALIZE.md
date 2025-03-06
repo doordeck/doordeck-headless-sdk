@@ -62,7 +62,7 @@ val sdk = KDoordeckFactory.initialize(SdkConfig.Builder()
 <summary>Show Details</summary>
 
 ```swift
-let sdk = KDoordeckFactory().initialize(SdkConfig.Builder().setCloudAuthToken(cloudAuthToken: "AUTH_TOKEN").build())
+let sdk = KDoordeckFactory().initialize(sdkConfig: SdkConfig.Builder().setCloudAuthToken(cloudAuthToken: "AUTH_TOKEN").build())
 ```
 </details>
 
