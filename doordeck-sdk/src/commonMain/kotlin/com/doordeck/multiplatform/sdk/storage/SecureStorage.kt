@@ -46,6 +46,18 @@ interface SecureStorage {
     fun getCloudRefreshToken(): String?
 
     /**
+     * Stores the fusion host.
+     * @param host The fusion host to be stored.
+     */
+    fun setFusionHost(host: String)
+
+    /**
+     * Retrieves the fusion host.
+     * @return The stored fusion host, or null if not found.
+     */
+    fun getFusionHost(): String?
+
+    /**
      * Stores the Fusion authentication token.
      * @param token The Fusion authentication token to be stored.
      */

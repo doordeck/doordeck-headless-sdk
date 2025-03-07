@@ -15,6 +15,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     private val API_ENVIRONMENT = "API_ENVIRONMENT"
     private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
     private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
+    private val FUSION_HOST = "FUSION_HOST"
     private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
     private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
     private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
@@ -23,7 +24,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        return settings.putString(API_ENVIRONMENT, apiEnvironment.name)
+        settings.putString(API_ENVIRONMENT, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
@@ -31,7 +32,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     }
 
     override fun addCloudAuthToken(token: String) {
-        return settings.putString(CLOUD_AUTH_TOKEN_KEY, token)
+        settings.putString(CLOUD_AUTH_TOKEN_KEY, token)
     }
 
     override fun getCloudAuthToken(): String? {
@@ -39,15 +40,23 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     }
 
     override fun addCloudRefreshToken(token: String) {
-        return settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
+        settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
     }
 
     override fun getCloudRefreshToken(): String? {
         return settings.getStringOrNull(CLOUD_REFRESH_TOKEN_KEY)
     }
 
+    override fun setFusionHost(host: String) {
+        settings.putString(FUSION_HOST, host)
+    }
+
+    override fun getFusionHost(): String? {
+        return settings.getStringOrNull(FUSION_HOST)
+    }
+
     override fun addFusionAuthToken(token: String) {
-        return settings.putString(FUSION_AUTH_TOKEN_KEY, token)
+        settings.putString(FUSION_AUTH_TOKEN_KEY, token)
     }
 
     override fun getFusionAuthToken(): String? {
@@ -55,7 +64,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
-        return settings.putString(PUBLIC_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        settings.putString(PUBLIC_KEY_KEY, byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPublicKey(): ByteArray? {
@@ -63,7 +72,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
-        return settings.putString(PRIVATE_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        settings.putString(PRIVATE_KEY_KEY, byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPrivateKey(): ByteArray? {
@@ -87,7 +96,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-        return settings.putString(CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString())
+        settings.putString(CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString())
     }
 
     override fun getCertificateChain(): List<String>? {

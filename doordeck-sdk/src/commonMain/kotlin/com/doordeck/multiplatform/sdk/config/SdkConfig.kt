@@ -16,6 +16,7 @@ class SdkConfig private constructor(
     val apiEnvironment: ApiEnvironment?,
     val cloudAuthToken: String?,
     val cloudRefreshToken: String?,
+    val fusionHost: String?,
     val secureStorage: SecureStorage
 ) {
     /**
@@ -28,6 +29,7 @@ class SdkConfig private constructor(
         private var apiEnvironment: ApiEnvironment? = null
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
+        private var fusionHost: String? = null
         private var applicationContext: ApplicationContext? = null
         private var secureStorage: SecureStorage? = null
 
@@ -45,6 +47,11 @@ class SdkConfig private constructor(
          * Sets the cloud refresh token.
          */
         fun setCloudRefreshToken(cloudRefreshToken: String): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+
+        /**
+         * Sets the fusion host.
+         */
+        fun setFusionHost(fusionHost: String): Builder = apply { this.fusionHost = fusionHost }
 
         /**
          * Sets the Android application context. This should only be provided on Android.
@@ -68,6 +75,7 @@ class SdkConfig private constructor(
                 apiEnvironment = apiEnvironment,
                 cloudAuthToken = cloudAuthToken,
                 cloudRefreshToken = cloudRefreshToken,
+                fusionHost = fusionHost,
                 secureStorage = secureStorage
             )
         }
