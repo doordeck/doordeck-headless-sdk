@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -225,6 +226,16 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.winhttp)
                 implementation(libs.libsodium.bindings.mingwx64)
+            }
+        }
+    }
+
+    // Override konan properties: https://github.com/JetBrains/kotlin/blob/master/kotlin-native/konan/konan.properties
+    targets.withType<KotlinNativeTarget> {
+        compilations["main"].compileTaskProvider.configure {
+            compilerOptions {
+                val version = libs.versions.ios.minSdk.get().toInt()
+                freeCompilerArgs.addAll("-Xoverride-konan-properties=osVersionMin.ios_x64=$version.0;osVersionMin.ios_arm64=$version.0;osVersionMin.macos_arm64=$version.0;osVersionMin.ios_simulator_arm64=$version.0")
             }
         }
     }
