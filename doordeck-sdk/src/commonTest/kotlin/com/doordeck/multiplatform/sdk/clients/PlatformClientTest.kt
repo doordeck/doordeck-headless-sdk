@@ -47,7 +47,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application ${Uuid.random()}"
+        val updatedApplicationName = "Test Application ${getPlatform()} ${Uuid.random()}"
 
         // When
         PlatformClient.updateApplicationNameRequest(application.applicationId, updatedApplicationName)

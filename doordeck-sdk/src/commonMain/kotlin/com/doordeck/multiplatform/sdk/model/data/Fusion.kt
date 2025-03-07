@@ -55,6 +55,16 @@ object Fusion {
     ) : LockController
 
     @Serializable
+    @SerialName("ccure")
+    data class CCureController(
+        val baseUrl: String,
+        val username: String,
+        val password: String,
+        val doorType: String,
+        val doorId: Int
+    ) : LockController
+
+    @Serializable
     @SerialName("demo")
     data class DemoController(
         val port: Int = 8080
@@ -99,6 +109,8 @@ object Fusion {
     @SerialName("net2")
     data class PaxtonNet2Controller(
         val host: String,
+        val username: String,
+        val password: String,
         val address: String,
         val output: Short
     ) : LockController

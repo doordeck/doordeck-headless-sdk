@@ -56,6 +56,18 @@ interface ContextManager {
     fun getCloudRefreshToken(): String?
 
     /**
+     * Sets the fusion host, the provided value will be automatically stored in secure storage.
+     *
+     * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
+     */
+    fun setFusionHost(host: String)
+
+    /**
+     * Retrieves the fusion host.
+     */
+    fun getFusionHost(): String
+
+    /**
      * Sets the Fusion authentication token, the provided value will be automatically stored in secure storage.
      */
     @CName("setFusionAuthToken")

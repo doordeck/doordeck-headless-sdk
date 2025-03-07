@@ -12,6 +12,7 @@ internal object DoordeckFactory {
             sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
             sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
             sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
+            sdkConfig.fusionHost?.let { context.setFusionHost(it) }
         }
         return DoordeckImpl
     }

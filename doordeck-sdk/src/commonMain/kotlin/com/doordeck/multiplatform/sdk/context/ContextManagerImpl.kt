@@ -49,6 +49,15 @@ internal object ContextManagerImpl : ContextManager {
         return secureStorage.getCloudRefreshToken()
     }
 
+    override fun setFusionHost(host: String) {
+        secureStorage.setFusionHost(host)
+    }
+
+    override fun getFusionHost(): String {
+        return secureStorage.getFusionHost()
+            ?: "localhost:27700"
+    }
+
     override fun setFusionAuthToken(token: String) {
         secureStorage.addFusionAuthToken(token)
     }
