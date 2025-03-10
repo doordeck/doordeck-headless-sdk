@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.util.fromJson
+import kotlinx.serialization.Serializable
 
 internal object TestConstants {
     val TEST_ENVIRONMENT = ApiEnvironment.DEV
@@ -24,27 +26,12 @@ internal object TestConstants {
     const val TEST_SUPPLEMENTARY_TILE_ID = "8bdc10ea-7443-4561-9716-eeac5aaf68f4"
     const val TEST_MAIN_LOCK_ID = "eb868970-e882-11ef-bced-bf10e8a8d751"
     const val TEST_MAIN_SITE_ID = "97b26c60-e882-11ef-b506-e76037f764f5"
+    val FUSION_INTEGRATIONS: Map<String, TestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyMap()
 
-    val FUSION_INTEGRATIONS: Map<String, TestController> = mapOf(
-        "192.168.202.54:27700" to TestController("demo", Fusion.DemoController(1)),
-        "192.168.202.26:27700" to TestController("paxton10", Fusion.Paxton10Controller("", "", "", 1)),
-        "192.168.202.58:27700" to TestController("amag", Fusion.AmagController("", "", 1, "")),
-        "192.168.202.19:27700" to TestController("gallagher", Fusion.GallagherController("", "", "")),
-        "192.168.202.56:27700" to TestController("genetec", Fusion.GenetecController("", "", "", "")),
-        "192.168.202.39:27700" to TestController("lenel", Fusion.LenelController("", "", "", "", "", "")),
-        "192.168.202.31:27700" to TestController("net2", Fusion.PaxtonNet2Controller("", "", 0)),
-        "192.168.202.18:27700" to TestController("integra-v2", Fusion.IntegraV2Controller("", "", 1, 1, 1)),
-        //"192.168.202.16:27700" to TestController("", ), WORK IN PROGRESS
-        "192.168.202.52:27700" to TestController("tdsi-gardis", Fusion.TdsiGardisController("", "", "", 1)),
-        "192.168.202.61:27700" to TestController("tdsi-exgarde", Fusion.TdsiExgardeController("", "", "", 1)),
-        "192.168.202.62:27700" to TestController("zkteco-zkbio-cvsecurity", Fusion.ZktecoController("", "", "", Fusion.ZktecoEntityType.DOOR)),
-        "192.168.202.63:27700" to TestController("alpeta", Fusion.AlpetaController("", "", 1, ""))
-    )
-
+    @Serializable
     data class TestController(
         val type: String,
-        val controller: Fusion.LockController,
-        val enabled: Boolean = false
+        val controller: Fusion.LockController
     )
 
     // Default values used on the Mock http client
