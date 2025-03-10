@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import kotlin.js.JsExport
+import kotlin.jvm.JvmOverloads
 
 /**
  * Configuration settings for the SDK.
@@ -12,10 +13,10 @@ import kotlin.js.JsExport
  * This class holds various configuration options for initializing and operating the SDK.
  */
 @JsExport
-data class SdkConfig(
-    val apiEnvironment: ApiEnvironment?,
-    val cloudAuthToken: String?,
-    val cloudRefreshToken: String?,
+data class SdkConfig @JvmOverloads constructor(
+    val apiEnvironment: ApiEnvironment? = null,
+    val cloudAuthToken: String? = null,
+    val cloudRefreshToken: String? = null,
     val secureStorage: SecureStorage
 ) {
     /**
