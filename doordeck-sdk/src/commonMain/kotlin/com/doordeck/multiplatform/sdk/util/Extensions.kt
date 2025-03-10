@@ -106,10 +106,13 @@ internal fun HttpClientConfig<*>.installAuth() {
     }
 }
 
-internal fun HttpClientConfig<*>.installDefaultRequest(determineHost: () -> String) {
+internal fun HttpClientConfig<*>.installDefaultRequest(
+    protocol: URLProtocol = URLProtocol.HTTPS,
+    determineHost: () -> String
+) {
     defaultRequest {
         url {
-            protocol = URLProtocol.HTTPS
+            this.protocol = protocol
             host = determineHost()
         }
     }
