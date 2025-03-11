@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import kotlin.js.JsExport
+import kotlin.jvm.JvmOverloads
 
 /**
  * Configuration settings for the SDK.
@@ -12,10 +13,10 @@ import kotlin.js.JsExport
  * This class holds various configuration options for initializing and operating the SDK.
  */
 @JsExport
-class SdkConfig private constructor(
-    val apiEnvironment: ApiEnvironment?,
-    val cloudAuthToken: String?,
-    val cloudRefreshToken: String?,
+data class SdkConfig @JvmOverloads constructor(
+    val apiEnvironment: ApiEnvironment? = null,
+    val cloudAuthToken: String? = null,
+    val cloudRefreshToken: String? = null,
     val fusionHost: String?,
     val secureStorage: SecureStorage
 ) {
@@ -36,17 +37,17 @@ class SdkConfig private constructor(
         /**
          * Sets the API environment for the SDK.
          */
-        fun setApiEnvironment(apiEnvironment: ApiEnvironment): Builder = apply { this.apiEnvironment = apiEnvironment }
+        fun setApiEnvironment(apiEnvironment: ApiEnvironment?): Builder = apply { this.apiEnvironment = apiEnvironment }
 
         /**
          * Sets the cloud authentication token.
          */
-        fun setCloudAuthToken(cloudAuthToken: String): Builder = apply { this.cloudAuthToken = cloudAuthToken }
+        fun setCloudAuthToken(cloudAuthToken: String?): Builder = apply { this.cloudAuthToken = cloudAuthToken }
 
         /**
          * Sets the cloud refresh token.
          */
-        fun setCloudRefreshToken(cloudRefreshToken: String): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
          * Sets the fusion host.
@@ -57,12 +58,12 @@ class SdkConfig private constructor(
          * Sets the Android application context. This should only be provided on Android.
          */
         @JsExport.Ignore
-        fun setApplicationContext(context: ApplicationContext): Builder = apply { this.applicationContext = context }
+        fun setApplicationContext(context: ApplicationContext?): Builder = apply { this.applicationContext = context }
 
         /**
          * Overrides the default secure storage with a custom implementation.
          */
-        fun setSecureStorageOverride(secureStorage: SecureStorage): Builder = apply { this.secureStorage = secureStorage }
+        fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
 
         /**
          * Builds a new [SdkConfig] instance.
