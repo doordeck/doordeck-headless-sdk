@@ -52,7 +52,7 @@ data class SdkConfig @JvmOverloads constructor(
         /**
          * Sets the fusion host.
          */
-        fun setFusionHost(fusionHost: String): Builder = apply { this.fusionHost = fusionHost }
+        fun setFusionHost(fusionHost: String?): Builder = apply { this.fusionHost = fusionHost }
 
         /**
          * Sets the Android application context. This should only be provided on Android.
