@@ -52,7 +52,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Setup WireGuard (Ubuntu)
+      - name: Setup WireGuard (ubuntu)
         if: runner.os == 'Linux'
         run: |
           # Install
@@ -92,6 +92,28 @@ jobs:
           # Enable interface
           sudo chmod 600 /usr/local/etc/wireguard/wg0.conf
           sudo wg-quick up /usr/local/etc/wireguard/wg0.conf
+
+      - name: Setup WireGuard (windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          # Install
+          choco install wireguard -y --force
+
+          # Config
+          $configFile = @"
+          [Interface]
+          PrivateKey = ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          Address = ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+          [Peer]
+          PublicKey = ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          AllowedIPs = ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          Endpoint = ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
+          "@
+          Set-Content -Path C:\Temp\adaptername.conf -Value $configFile
+          
+          # Enable interface
+          & "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice C:\Temp\adaptername.conf
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
