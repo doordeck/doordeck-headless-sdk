@@ -4,7 +4,7 @@ import kotlin.js.JsExport
 
 @JsExport
 enum class ApiEnvironment(val cloudHost: String) {
-    DEV("api.dev.doordeck.com"),
-    STAGING("api.staging.doordeck.com"),
-    PROD("api.doordeck.com")
+    DEV("https://api.dev.doordeck.com"),
+    STAGING("https://api.staging.doordeck.com"),
+    PROD("https://api.doordeck.com")
 }

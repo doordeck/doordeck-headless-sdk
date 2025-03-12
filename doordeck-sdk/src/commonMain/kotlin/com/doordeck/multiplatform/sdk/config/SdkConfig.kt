@@ -50,7 +50,7 @@ data class SdkConfig @JvmOverloads constructor(
         fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
-         * Sets the fusion host.
+         * Sets the fusion host i.e: http://localhost:500
          */
         fun setFusionHost(fusionHost: String?): Builder = apply { this.fusionHost = fusionHost }
 
