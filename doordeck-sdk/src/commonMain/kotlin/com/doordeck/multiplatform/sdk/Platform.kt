@@ -57,7 +57,7 @@ internal fun createFusionHttpClient(): HttpClient {
         installContentNegotiation()
         installTimeout()
         installUserAgent()
-        installDefaultRequest(URLProtocol.HTTP, determineHost = {
+        installDefaultRequest(determineHost = {
             ContextManagerImpl.getFusionHost()
         })
     }.also {

@@ -110,10 +110,10 @@ jobs:
           AllowedIPs = ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
           Endpoint = ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
           "@
-          Set-Content -Path C:\Temp\adaptername.conf -Value $configFile
+          Set-Content -Path C:\Temp\wg0.conf -Value $configFile
           
           # Enable interface
-          & "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice C:\Temp\adaptername.conf
+          & "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice C:\Temp\wg0.conf
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
