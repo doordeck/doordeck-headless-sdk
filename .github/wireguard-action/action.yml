@@ -1,0 +1,81 @@
+name: Setup WireGuard
+
+inputs:
+  WIREGUARD_PRIVATE_KEY:
+    required: true
+  WIREGUARD_INTERFACE_ADDRESS:
+    required: true
+  WIREGUARD_PEER_PUBLIC_KEY:
+    required: true
+  WIREGUARD_PEER_ALLOWED_IPS:
+    required: true
+  WIREGUARD_PEER_ENDPOINT:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Setup WireGuard (ubuntu)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        # Install
+        sudo apt install wireguard -y
+
+        # Config
+        sudo mkdir -p /etc/wireguard/
+        echo "[Interface]" | sudo tee /etc/wireguard/wg0.conf > /dev/null
+        echo "PrivateKey = ${{ inputs.WIREGUARD_PRIVATE_KEY }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+        echo "Address = ${{ inputs.WIREGUARD_INTERFACE_ADDRESS }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+        echo "[Peer]" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+        echo "PublicKey = ${{ inputs.WIREGUARD_PEER_PUBLIC_KEY }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+        echo "AllowedIPs = ${{ inputs.WIREGUARD_PEER_ALLOWED_IPS }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+        echo "Endpoint = ${{ inputs.WIREGUARD_PEER_ENDPOINT }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+
+        # Enable interface
+        sudo wg-quick up wg0
+
+    - name: Setup WireGuard (macOS)
+      if: runner.os == 'macOS'
+      shell: bash
+      run: |
+        # Install
+        brew install wireguard-tools wireguard-go
+
+        # Config
+        sudo mkdir -p /usr/local/etc/wireguard
+        cat <<EOF | sudo tee /usr/local/etc/wireguard/wg0.conf > /dev/null
+        [Interface]
+        PrivateKey = ${{ inputs.WIREGUARD_PRIVATE_KEY }}
+        Address = ${{ inputs.WIREGUARD_INTERFACE_ADDRESS }}
+        [Peer]
+        PublicKey = ${{ inputs.WIREGUARD_PEER_PUBLIC_KEY }}
+        AllowedIPs = ${{ inputs.WIREGUARD_PEER_ALLOWED_IPS }}
+        Endpoint = ${{ inputs.WIREGUARD_PEER_ENDPOINT }}
+        EOF
+
+        # Enable interface
+        sudo chmod 600 /usr/local/etc/wireguard/wg0.conf
+        sudo wg-quick up /usr/local/etc/wireguard/wg0.conf
+
+    - name: Setup WireGuard (windows)
+      if: runner.os == 'Windows'
+      shell: powershell
+      run: |
+        # Install
+        choco install wireguard -y --force
+
+        # Config
+        $configFile = @"
+        [Interface]
+        PrivateKey = ${{ inputs.WIREGUARD_PRIVATE_KEY }}
+        Address = ${{ inputs.WIREGUARD_INTERFACE_ADDRESS }}
+        [Peer]
+        PublicKey = ${{ inputs.WIREGUARD_PEER_PUBLIC_KEY }}
+        AllowedIPs = ${{ inputs.WIREGUARD_PEER_ALLOWED_IPS }}
+        Endpoint = ${{ inputs.WIREGUARD_PEER_ENDPOINT }}
+        "@
+        Set-Content -Path C:\Temp\wg0.conf -Value $configFile
+
+        # Enable interface
+        & "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice C:\Temp\wg0.conf

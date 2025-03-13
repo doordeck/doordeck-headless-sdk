@@ -24,23 +24,18 @@ jobs:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
-            wireguard: wireguard-ubuntu
           - name: Android
             test: testReleaseUnitTest
             os: ubuntu-latest
-            wireguard: wireguard-ubuntu
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
-            wireguard: wireguard-ubuntu
           - name: Apple
             test: iosX64Test macosArm64Test
             os: macos-latest
-            wireguard: wireguard-macos
           - name: Windows
             test: mingwX64Test
             os: windows-latest
-            wireguard: wireguard-windows
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
 
@@ -58,15 +53,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Setup WireGuard
-        uses: ./.github/workflows/wireguard.yml
+        uses: ./.github/actions/wireguard-action
         with:
-          wireguard_type: "${{ matrix.wireguard }}"
-        env:
-          WIREGUARD_PRIVATE_KEY: "${{ secrets.WIREGUARD_PRIVATE_KEY }}"
-          WIREGUARD_INTERFACE_ADDRESS: "${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}"
-          WIREGUARD_PEER_PUBLIC_KEY: "${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}"
-          WIREGUARD_PEER_ALLOWED_IPS: "${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}"
-          WIREGUARD_PEER_ENDPOINT: "${{ secrets.WIREGUARD_PEER_ENDPOINT }}"
+          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
