@@ -16,6 +16,7 @@ jobs:
       TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
       TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
       TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
     strategy:
       max-parallel: 1
       matrix:
@@ -50,6 +51,15 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup WireGuard
+        uses: ./.github/actions/wireguard-action
+        with:
+          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache

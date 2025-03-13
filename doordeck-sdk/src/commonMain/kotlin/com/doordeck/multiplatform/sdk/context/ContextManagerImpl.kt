@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
@@ -47,6 +48,15 @@ internal object ContextManagerImpl : ContextManager {
 
     override fun getCloudRefreshToken(): String? {
         return secureStorage.getCloudRefreshToken()
+    }
+
+    override fun setFusionHost(host: String) {
+        secureStorage.setFusionHost(host)
+    }
+
+    override fun getFusionHost(): String {
+        return secureStorage.getFusionHost()
+            ?: DEFAULT_FUSION_HOST
     }
 
     override fun setFusionAuthToken(token: String) {

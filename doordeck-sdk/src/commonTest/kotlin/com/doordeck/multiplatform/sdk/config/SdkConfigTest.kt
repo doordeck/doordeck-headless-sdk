@@ -17,6 +17,7 @@ class SdkConfigTest {
             .setApiEnvironment(sdkConfig.apiEnvironment)
             .setCloudAuthToken(sdkConfig.cloudAuthToken)
             .setCloudRefreshToken(sdkConfig.cloudRefreshToken)
+            .setFusionHost(sdkConfig.fusionHost)
             .setSecureStorageOverride(sdkConfig.secureStorage)
             .build()
 

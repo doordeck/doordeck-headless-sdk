@@ -17,6 +17,7 @@ data class SdkConfig @JvmOverloads constructor(
     val apiEnvironment: ApiEnvironment? = null,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
+    val fusionHost: String?,
     val secureStorage: SecureStorage
 ) {
     /**
@@ -29,6 +30,7 @@ data class SdkConfig @JvmOverloads constructor(
         private var apiEnvironment: ApiEnvironment? = null
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
+        private var fusionHost: String? = null
         private var applicationContext: ApplicationContext? = null
         private var secureStorage: SecureStorage? = null
 
@@ -46,6 +48,11 @@ data class SdkConfig @JvmOverloads constructor(
          * Sets the cloud refresh token.
          */
         fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+
+        /**
+         * Sets the fusion host i.e: http://localhost:500
+         */
+        fun setFusionHost(fusionHost: String?): Builder = apply { this.fusionHost = fusionHost }
 
         /**
          * Sets the Android application context. This should only be provided on Android.
@@ -69,6 +76,7 @@ data class SdkConfig @JvmOverloads constructor(
                 apiEnvironment = apiEnvironment,
                 cloudAuthToken = cloudAuthToken,
                 cloudRefreshToken = cloudRefreshToken,
+                fusionHost = fusionHost,
                 secureStorage = secureStorage
             )
         }

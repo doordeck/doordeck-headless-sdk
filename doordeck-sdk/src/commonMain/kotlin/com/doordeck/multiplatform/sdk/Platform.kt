@@ -13,6 +13,7 @@ import com.doordeck.multiplatform.sdk.util.installResponseValidator
 import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
+import io.ktor.http.URLProtocol
 import kotlinx.serialization.json.Json
 
 enum class PlatformType {
@@ -57,7 +58,7 @@ internal fun createFusionHttpClient(): HttpClient {
         installTimeout()
         installUserAgent()
         installDefaultRequest(determineHost = {
-            ContextManagerImpl.getApiEnvironment().fusionHost
+            ContextManagerImpl.getFusionHost()
         })
     }.also {
         it.addExceptionInterceptor()

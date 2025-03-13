@@ -568,6 +568,7 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
     apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
     cloudAuthToken = randomNullable { randomString() },
     cloudRefreshToken = randomNullable { randomString() },
+    fusionHost = randomNullable { randomString() },
     secureStorage = DefaultSecureStorage(MemorySettings())
 )
 
