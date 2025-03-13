@@ -61,7 +61,7 @@ jobs:
         uses: ./.github/workflows/wireguard.yml
         with:
           wireguard_type: "${{ matrix.wireguard }}"
-        secrets:
+        env:
           WIREGUARD_PRIVATE_KEY: "${{ secrets.WIREGUARD_PRIVATE_KEY }}"
           WIREGUARD_INTERFACE_ADDRESS: "${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}"
           WIREGUARD_PEER_PUBLIC_KEY: "${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}"
