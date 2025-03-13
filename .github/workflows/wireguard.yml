@@ -7,15 +7,15 @@ on:
         required: true
         type: string
     secrets:
-      interface_private_key:
+      WIREGUARD_PRIVATE_KEY:
         required: true
-      interface_address:
+      WIREGUARD_INTERFACE_ADDRESS:
         required: true
-      peer_public_key:
+      WIREGUARD_PEER_PUBLIC_KEY:
         required: true
-      peer_allowed_ips:
+      WIREGUARD_PEER_ALLOWED_IPS:
         required: true
-      peer_endpoint:
+      WIREGUARD_PEER_ENDPOINT:
         required: true
 
 jobs:
@@ -31,12 +31,12 @@ jobs:
           # Config
           sudo mkdir -p /etc/wireguard/
           echo "[Interface]" | sudo tee /etc/wireguard/wg0.conf > /dev/null
-          echo "PrivateKey = ${{ secrets.interface_private_key }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
-          echo "Address = ${{ secrets.interface_address }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+          echo "PrivateKey = ${{ secrets.WIREGUARD_PRIVATE_KEY }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+          echo "Address = ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
           echo "[Peer]" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
-          echo "PublicKey = ${{ secrets.peer_public_key }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
-          echo "AllowedIPs = ${{ secrets.peer_allowed_ips }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
-          echo "Endpoint = ${{ secrets.peer_endpoint }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+          echo "PublicKey = ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+          echo "AllowedIPs = ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
+          echo "Endpoint = ${{ secrets.WIREGUARD_PEER_ENDPOINT }}" | sudo tee -a /etc/wireguard/wg0.conf > /dev/null
 
           # Enable interface
           sudo wg-quick up wg0
@@ -54,12 +54,12 @@ jobs:
           sudo mkdir -p /usr/local/etc/wireguard
           cat <<EOF | sudo tee /usr/local/etc/wireguard/wg0.conf > /dev/null
           [Interface]
-          PrivateKey = ${{ secrets.interface_private_key }}
-          Address = ${{ secrets.interface_address }}
+          PrivateKey = ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          Address = ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
           [Peer]
-          PublicKey = ${{ secrets.peer_public_key }}
-          AllowedIPs = ${{ secrets.peer_allowed_ips }}
-          Endpoint = ${{ secrets.peer_endpoint }}
+          PublicKey = ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          AllowedIPs = ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          Endpoint = ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
           EOF
 
           # Enable interface
@@ -79,12 +79,12 @@ jobs:
           # Config
           $configFile = @"
           [Interface]
-          PrivateKey = ${{ secrets.interface_private_key }}
-          Address = ${{ secrets.interface_address }}
+          PrivateKey = ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          Address = ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
           [Peer]
-          PublicKey = ${{ secrets.peer_public_key }}
-          AllowedIPs = ${{ secrets.peer_allowed_ips }}
-          Endpoint = ${{ secrets.peer_endpoint }}
+          PublicKey = ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          AllowedIPs = ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          Endpoint = ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
           "@
           Set-Content -Path C:\Temp\wg0.conf -Value $configFile
 

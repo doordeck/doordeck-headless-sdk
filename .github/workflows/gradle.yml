@@ -62,11 +62,11 @@ jobs:
         with:
           wireguard_type: "${{ matrix.wireguard }}"
         secrets:
-          interface_private_key: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
-          interface_address: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
-          peer_public_key: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
-          peer_allowed_ips: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
-          peer_endpoint: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
+          WIREGUARD_PRIVATE_KEY: "${{ secrets.WIREGUARD_PRIVATE_KEY }}"
+          WIREGUARD_INTERFACE_ADDRESS: "${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}"
+          WIREGUARD_PEER_PUBLIC_KEY: "${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}"
+          WIREGUARD_PEER_ALLOWED_IPS: "${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}"
+          WIREGUARD_PEER_ENDPOINT: "${{ secrets.WIREGUARD_PEER_ENDPOINT }}"
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
