@@ -4,16 +4,17 @@ To initialize the SDK, you need to provide an [SdkConfig](04_INITIALIZE.md#sdk-c
 ## SDK config builder
 The minimum viable `SdkConfig` is `SdkConfig.Builder().build()`, although the following configurations are also available:
 
-|                   Configuration                   | Method                      |   Default    |
-|:-------------------------------------------------:|:----------------------------|:------------:|
-|                  API environment                  | `setApiEnvironment`         |  Production  |
-|                 Cloud auth token                  | `setCloudAuthToken`         |      -       |
-|                Cloud refresh token                | `setCloudRefreshToken`      |      -       |
-|        Application context (Android only)         | `setApplicationContext`     |      -       |
-| [Secure storage](04_INITIALIZE.md#secure-storage) | `setSecureStorageOverride`  |      -       |
+|                   Configuration                   | Method                     |        Default         |
+|:-------------------------------------------------:|:---------------------------|:----------------------:|
+|                  API environment                  | `setApiEnvironment`        |       Production       |
+|                 Cloud auth token                  | `setCloudAuthToken`        |           -            |
+|                Cloud refresh token                | `setCloudRefreshToken`     |           -            |
+|                    Fusion host                    | `setFusionHost`            | http://localhost:27700 |
+|        Application context (Android only)         | `setApplicationContext`    |           -            |
+| [Secure storage](04_INITIALIZE.md#secure-storage) | `setSecureStorageOverride` |           -            |
 
 > [!NOTE]  
-> If you initialize the SDK without a cloud auth token, you will need to either provide one manually through the [context manager](06_CONTEXT-MANAGER.md#set-auth-token) or call the [login](07_API-ACCOUNTLESS.md#login) function to access most SDK functionalities.
+> If you initialize the SDK without a cloud auth token, you will need to either provide one manually through the [context manager](06_CONTEXT-MANAGER.md#set-cloud-auth-token) or call the [login](07_API-ACCOUNTLESS.md#login) function to access most SDK functionalities.
 
 ## Secure storage
 

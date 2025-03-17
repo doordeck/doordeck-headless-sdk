@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.swift.klib).apply(false)
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
     id("com.netflix.nebula.release") version "20.1.0"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
 }
 
 group = "com.doordeck"
