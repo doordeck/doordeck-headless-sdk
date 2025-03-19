@@ -39,6 +39,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().logi
 <summary>Show Details</summary>
 
 ```csharp
+var data = new FusionLoginData("EMAIL", "PASSWORD");
 var response = sdk.GetFusion().Login(data);
 ```
 </details>
@@ -206,7 +207,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeleteDoorData("DEVICE_ID");
+var data = new DeviceIdData("DEVICE_ID");
 sdk.GetFusion().DeleteDoor(data);
 ```
 </details>
@@ -247,7 +248,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getD
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetDoorStatusData("DEVICE_ID");
+var data = new DeviceIdData("DEVICE_ID");
 var response = sdk.GetFusion().GetDoorStatus(data);
 ```
 </details>
@@ -288,7 +289,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().startDoor("DEVICE_ID"
 <summary>Show Details</summary>
 
 ```csharp
-var data = new StartDoorData("DEVICE_ID");
+var data = new DeviceIdData("DEVICE_ID");
 sdk.GetFusion().StartDoor(data);
 ```
 </details>
@@ -329,7 +330,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID")
 <summary>Show Details</summary>
 
 ```csharp
-var data = new StopDoorData("DEVICE_ID");
+var data = new DeviceIdData("DEVICE_ID");
 sdk.GetFusion().StopDoor(data);
 ```
 </details>
