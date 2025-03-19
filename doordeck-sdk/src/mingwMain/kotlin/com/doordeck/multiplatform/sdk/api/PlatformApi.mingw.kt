@@ -22,12 +22,10 @@ import com.doordeck.multiplatform.sdk.model.data.toCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toEmailPreferences
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.launchCallback
-import com.doordeck.multiplatform.sdk.util.resultData
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.CValuesRef
-import kotlinx.coroutines.runBlocking
 
 actual object PlatformApi {
     /**
@@ -103,20 +101,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return runBlocking { PlatformClient.updateApplicationCompanyNameRequest(applicationId, companyName) }
-    }
-
-    @DoordeckOnly
     @CName("updateApplicationCompanyName")
-    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
-        return resultData {
-            val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
-            updateApplicationCompanyName(
-                applicationId = updateApplicationCompanyName.applicationId,
-                companyName = updateApplicationCompanyName.companyName
-            )
-        }
+    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
+                PlatformClient.updateApplicationCompanyNameRequest(
+                    applicationId = updateApplicationCompanyName.applicationId,
+                    companyName = updateApplicationCompanyName.companyName
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -125,20 +121,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return runBlocking { PlatformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress) }
-    }
-
-    @DoordeckOnly
     @CName("updateApplicationMailingAddress")
-    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
-        return resultData {
-            val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
-            updateApplicationMailingAddress(
-                applicationId = updateApplicationMailingAddressData.applicationId,
-                mailingAddress = updateApplicationMailingAddressData.mailingAddress
-            )
-        }
+    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
+                PlatformClient.updateApplicationMailingAddressRequest(
+                    applicationId = updateApplicationMailingAddressData.applicationId,
+                    mailingAddress = updateApplicationMailingAddressData.mailingAddress
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -167,20 +161,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return runBlocking { PlatformClient.updateApplicationSupportContactRequest(applicationId, supportContact) }
-    }
-
-    @DoordeckOnly
     @CName("updateApplicationSupportContact")
-    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
-        return resultData {
-            val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
-            updateApplicationSupportContact(
-                applicationId = updateApplicationSupportContactData.applicationId,
-                supportContact = updateApplicationSupportContactData.supportContact
-            )
-        }
+    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
+                PlatformClient.updateApplicationSupportContactRequest(
+                    applicationId = updateApplicationSupportContactData.applicationId,
+                    supportContact = updateApplicationSupportContactData.supportContact
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
