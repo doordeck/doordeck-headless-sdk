@@ -82,8 +82,7 @@ const sdk = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(
 <summary>Show Details</summary>
 
 ```csharp
-var sdk = new DoordeckSdk(ApiEnvironment.PROD, "AUTH_TOKEN")
-sdk.Initialize();
+var sdk = new DoordeckSdk(ApiEnvironment.PROD, "AUTH_TOKEN");
 ```
 
 ⚠️ **Note:** You should also call ``sdk.Release();`` at the end of your application’s lifecycle to release the SDK resources.

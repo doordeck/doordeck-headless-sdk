@@ -4,7 +4,7 @@ using Doordeck.Headless.Sdk.Wrapper;
 
 namespace Doordeck.Headless.Sdk;
 
-public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuthToken = null, string? cloudRefreshToken = null, string? fusionHost = null)
+public unsafe class DoordeckSdk
 {
     private readonly Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
@@ -23,7 +23,7 @@ public unsafe class DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuth
     private readonly ContextManager _contextManager = new();
     private readonly CryptoManager _cryptoManager = new();
 
-    public void Initialize()
+    public DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuthToken = null, string? cloudRefreshToken = null, string? fusionHost = null)
     {
         _apiEnvironment = apiEnvironment switch
         {
