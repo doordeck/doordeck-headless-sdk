@@ -150,7 +150,7 @@ var response = sdk.GetPlatform().GetApplication(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetApplicationData("APPLICATION_ID")
+data = doordeck_headless_sdk.ApplicationIdData("APPLICATION_ID")
 response = sdk.platform.get_application(data)
 ```
 </details>
@@ -609,7 +609,7 @@ sdk.GetPlatform().DeleteApplication(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.DeleteApplicationData("APPLICATION_ID")
+data = doordeck_headless_sdk.ApplicationIdData("APPLICATION_ID")
 sdk.platform.delete_application(data)
 ```
 </details>
@@ -765,7 +765,7 @@ sdk.GetPlatform().AddAuthIssuer(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.AddAuthIssuerData("APPLICATION_ID", "URL")
+data = doordeck_headless_sdk.AuthIssuerData("APPLICATION_ID", "URL")
 sdk.platform.add_auth_issuer(data)
 ```
 </details>
@@ -815,7 +815,7 @@ sdk.GetPlatform().DeleteAuthIssuer(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.DeleteAuthIssuerData("APPLICATION_ID", "URL")
+data = doordeck_headless_sdk.AuthIssuerData("APPLICATION_ID", "URL")
 sdk.platform.delete_auth_issuer(data)
 ```
 </details>
@@ -865,7 +865,7 @@ sdk.GetPlatform().AddCorsDomain(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.AddCorsDomainData("APPLICATION_ID", "URL")
+data = doordeck_headless_sdk.CorsDomainData("APPLICATION_ID", "URL")
 sdk.platform.add_cors_domain(data)
 ```
 </details>
@@ -915,7 +915,7 @@ sdk.GetPlatform().RemoveCorsDomain(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RemoveCorsDomainData("APPLICATION_ID", "URL")
+data = doordeck_headless_sdk.CorsDomainData("APPLICATION_ID", "URL")
 sdk.platform.remove_cors_domain(data)
 ```
 </details>
@@ -965,7 +965,7 @@ sdk.GetPlatform().AddApplicationOwner(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.AddApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
+data = doordeck_headless_sdk.ApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
 sdk.platform.add_application_owner(data)
 ```
 </details>
@@ -1015,7 +1015,7 @@ sdk.GetPlatform().RemoveApplicationOwner(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RemoveApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
+data = doordeck_headless_sdk.ApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
 sdk.platform.remove_application_owner(data)
 ```
 </details>

@@ -95,7 +95,7 @@ var response = sdk.GetSites().GetLocksForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetLocksForSiteData("SITE_ID")
+data = doordeck_headless_sdk.SiteIdData("SITE_ID")
 response = sdk.sites.get_locks_for_site(data)
 ```
 </details>
@@ -146,7 +146,7 @@ var response = sdk.GetSites().GetUsersForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetUsersForSiteData("SITE_ID")
+data = doordeck_headless_sdk.SiteIdData("SITE_ID")
 response = sdk.sites.get_users_for_site(data)
 ```
 </details>
