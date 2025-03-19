@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
 import com.doordeck.multiplatform.sdk.model.data.BatchShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.GetAuditForUserData
@@ -18,7 +17,6 @@ import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyByTelephoneData
 import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyByTelephonesData
 import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.model.data.GetUsersForLockData
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.RevokeAccessToLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.SetLockSettingPermittedAddressesData
 import com.doordeck.multiplatform.sdk.model.data.SetLockSettingTimeRestrictionsData
@@ -32,13 +30,6 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateLockSettingHiddenData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockSettingLocationRestrictionsData
 import com.doordeck.multiplatform.sdk.model.data.UpdateSecureSettingUnlockBetweenData
 import com.doordeck.multiplatform.sdk.model.data.UpdateSecureSettingUnlockDurationData
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.data.toBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.model.data.toLocationRequirement
 import com.doordeck.multiplatform.sdk.model.data.toRevokeAccessToLockOperation
@@ -48,8 +39,11 @@ import com.doordeck.multiplatform.sdk.model.data.toUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.resultData
-import kotlinx.coroutines.runBlocking
+import com.doordeck.multiplatform.sdk.util.launchCallback
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.CValuesRef
 
 actual object LockOperationsApi {
     /**
@@ -57,16 +51,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
-    fun getSingleLock(lockId: String): LockResponse {
-        return runBlocking { LockOperationsClient.getSingleLockRequest(lockId) }
-    }
-
-    @CName("getSingleLockJson")
-    fun getSingleLockJson(data: String): String {
-        return resultData {
-            val getSingleLockData = data.fromJson<GetSingleLockData>()
-            getSingleLock(getSingleLockData.lockId)
-        }
+    @CName("getSingleLock")
+    fun getSingleLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getSingleLockData = data.fromJson<GetSingleLockData>()
+                LockOperationsClient.getSingleLockRequest(getSingleLockData.lockId)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -74,16 +67,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return runBlocking { LockOperationsClient.getLockAuditTrailRequest(lockId, start, end) }
-    }
-
-    @CName("getLockAuditTrailJson")
-    fun getLockAuditTrailJson(data: String): String {
-        return resultData {
-            val getLockAuditTrailData = data.fromJson<GetLockAuditTrailData>()
-            getLockAuditTrail(getLockAuditTrailData.lockId, getLockAuditTrailData.start, getLockAuditTrailData.end)
-        }
+    @CName("getLockAuditTrail")
+    fun getLockAuditTrail(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getLockAuditTrailData = data.fromJson<GetLockAuditTrailData>()
+                LockOperationsClient.getLockAuditTrailRequest(getLockAuditTrailData.lockId, getLockAuditTrailData.start, getLockAuditTrailData.end)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -91,16 +83,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return runBlocking { LockOperationsClient.getAuditForUserRequest(userId, start, end) }
-    }
-
-    @CName("getAuditForUserJson")
-    fun getAuditForUserJson(data: String): String {
-        return resultData {
-            val getAuditForUserData = data.fromJson<GetAuditForUserData>()
-            getAuditForUser(getAuditForUserData.userId, getAuditForUserData.start, getAuditForUserData.end)
-        }
+    @CName("getAuditForUser")
+    fun getAuditForUser(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getAuditForUserData = data.fromJson<GetAuditForUserData>()
+                LockOperationsClient.getAuditForUserRequest(getAuditForUserData.userId, getAuditForUserData.start, getAuditForUserData.end)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -108,16 +99,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
-    fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return runBlocking { LockOperationsClient.getUsersForLockRequest(lockId) }
-    }
-
-    @CName("getUsersForLockJson")
-    fun getUsersForLockJson(data: String): String {
-        return resultData {
-            val getUsersForLockData = data.fromJson<GetUsersForLockData>()
-            getUsersForLock(getUsersForLockData.lockId)
-        }
+    @CName("getUsersForLock")
+    fun getUsersForLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUsersForLockData = data.fromJson<GetUsersForLockData>()
+                LockOperationsClient.getUsersForLockRequest(getUsersForLockData.lockId)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -125,16 +115,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
-    fun getLocksForUser(userId: String): LockUserResponse {
-        return runBlocking { LockOperationsClient.getLocksForUserRequest(userId) }
-    }
-
-    @CName("getLocksForUserJson")
-    fun getLocksForUserJson(data: String): String {
-        return resultData {
-            val getLocksForUserData = data.fromJson<GetLocksForUserData>()
-            getLocksForUser(getLocksForUserData.userId)
-        }
+    @CName("getLocksForUser")
+    fun getLocksForUser(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getLocksForUserData = data.fromJson<GetLocksForUserData>()
+                LockOperationsClient.getLocksForUserRequest(getLocksForUserData.userId)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -142,16 +131,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockName(lockId: String, name: String? = null) {
-        return runBlocking { LockOperationsClient.updateLockNameRequest(lockId, name) }
-    }
-
-    @CName("updateLockNameJson")
-    fun updateLockNameJson(data: String): String {
-        return resultData {
-            val updateLockNameData = data.fromJson<UpdateLockNameData>()
-            updateLockName(updateLockNameData.lockId, updateLockNameData.name)
-        }
+    @CName("updateLockName")
+    fun updateLockName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockNameData = data.fromJson<UpdateLockNameData>()
+                LockOperationsClient.updateLockNameRequest(updateLockNameData.lockId, updateLockNameData.name)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -159,16 +147,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
-        return runBlocking { LockOperationsClient.updateLockFavouriteRequest(lockId, favourite) }
-    }
-
-    @CName("updateLockFavouriteJson")
-    fun updateLockFavouriteJson(data: String): String {
-        return resultData {
-            val updateLockFavouriteData = data.fromJson<UpdateLockFavouriteData>()
-            updateLockFavourite(updateLockFavouriteData.lockId, updateLockFavouriteData.favourite)
-        }
+    @CName("updateLockFavourite")
+    fun updateLockFavourite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockFavouriteData = data.fromJson<UpdateLockFavouriteData>()
+                LockOperationsClient.updateLockFavouriteRequest(updateLockFavouriteData.lockId, updateLockFavouriteData.favourite)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -176,16 +163,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockColour(lockId: String, colour: String? = null) {
-        return runBlocking { LockOperationsClient.updateLockColourRequest(lockId, colour) }
-    }
-
-    @CName("updateLockColourJson")
-    fun updateLockColourJson(data: String): String {
-        return resultData {
-            val updateLockColourData = data.fromJson<UpdateLockColourData>()
-            updateLockColour(updateLockColourData.lockId, updateLockColourData.colour)
-        }
+    @CName("updateLockColour")
+    fun updateLockColour(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockColourData = data.fromJson<UpdateLockColourData>()
+                LockOperationsClient.updateLockColourRequest(updateLockColourData.lockId, updateLockColourData.colour)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -193,16 +179,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
-        return runBlocking { LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name) }
-    }
-
-    @CName("updateLockSettingDefaultNameJson")
-    fun updateLockSettingDefaultNameJson(data: String): String {
-        return resultData {
-            val updateLockSettingDefaultNameData = data.fromJson<UpdateLockSettingDefaultNameData>()
-            updateLockSettingDefaultName(updateLockSettingDefaultNameData.lockId, updateLockSettingDefaultNameData.name)
-        }
+    @CName("updateLockSettingDefaultName")
+    fun updateLockSettingDefaultName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockSettingDefaultNameData = data.fromJson<UpdateLockSettingDefaultNameData>()
+                LockOperationsClient.updateLockSettingDefaultNameRequest(updateLockSettingDefaultNameData.lockId, updateLockSettingDefaultNameData.name)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -210,16 +195,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return runBlocking { LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses) }
-    }
-
-    @CName("setLockSettingPermittedAddressesJson")
-    fun setLockSettingPermittedAddressesJson(data: String): String {
-        return resultData {
-            val setLockSettingPermittedAddressesData = data.fromJson<SetLockSettingPermittedAddressesData>()
-            setLockSettingPermittedAddresses(setLockSettingPermittedAddressesData.lockId, setLockSettingPermittedAddressesData.permittedAddresses)
-        }
+    @CName("setLockSettingPermittedAddresses")
+    fun setLockSettingPermittedAddresses(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val setLockSettingPermittedAddressesData = data.fromJson<SetLockSettingPermittedAddressesData>()
+                LockOperationsClient.setLockSettingPermittedAddressesRequest(setLockSettingPermittedAddressesData.lockId, setLockSettingPermittedAddressesData.permittedAddresses)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -227,16 +211,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return runBlocking { LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden) }
-    }
-
-    @CName("updateLockSettingHiddenJson")
-    fun updateLockSettingHiddenJson(data: String): String {
-        return resultData {
-            val updateLockSettingHiddenData = data.fromJson<UpdateLockSettingHiddenData>()
-            updateLockSettingHidden(updateLockSettingHiddenData.lockId, updateLockSettingHiddenData.hidden)
-        }
+    @CName("updateLockSettingHidden")
+    fun updateLockSettingHidden(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockSettingHiddenData = data.fromJson<UpdateLockSettingHiddenData>()
+                LockOperationsClient.updateLockSettingHiddenRequest(updateLockSettingHiddenData.lockId, updateLockSettingHiddenData.hidden)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -244,16 +227,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return runBlocking { LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times) }
-    }
-
-    @CName("setLockSettingTimeRestrictionsJson")
-    fun setLockSettingTimeRestrictionsJson(data: String): String {
-        return resultData {
-            val setLockSettingTimeRestrictionsData = data.fromJson<SetLockSettingTimeRestrictionsData>()
-            setLockSettingTimeRestrictions(setLockSettingTimeRestrictionsData.lockId, setLockSettingTimeRestrictionsData.times.toTimeRequirementList())
-        }
+    @CName("setLockSettingTimeRestrictions")
+    fun setLockSettingTimeRestrictions(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val setLockSettingTimeRestrictionsData = data.fromJson<SetLockSettingTimeRestrictionsData>()
+                LockOperationsClient.setLockSettingTimeRestrictionsRequest(setLockSettingTimeRestrictionsData.lockId, setLockSettingTimeRestrictionsData.times.toTimeRequirementList())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -261,16 +243,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
-        return runBlocking { LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location) }
-    }
-
-    @CName("updateLockSettingLocationRestrictionsJson")
-    fun updateLockSettingLocationRestrictionsJson(data: String): String {
-        return resultData {
-            val updateLockSettingLocationRestrictionsData = data.fromJson<UpdateLockSettingLocationRestrictionsData>()
-            updateLockSettingLocationRestrictions(updateLockSettingLocationRestrictionsData.lockId, updateLockSettingLocationRestrictionsData.location?.toLocationRequirement())
-        }
+    @CName("updateLockSettingLocationRestrictions")
+    fun updateLockSettingLocationRestrictions(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateLockSettingLocationRestrictionsData = data.fromJson<UpdateLockSettingLocationRestrictionsData>()
+                LockOperationsClient.updateLockSettingLocationRestrictionsRequest(updateLockSettingLocationRestrictionsData.lockId, updateLockSettingLocationRestrictionsData.location?.toLocationRequirement())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -278,18 +259,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
      */
-    @DoordeckOnly
-    fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor) }
-    }
-
-    @DoordeckOnly
-    @CName("getUserPublicKeyJson")
-    fun getUserPublicKeyJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyData = data.fromJson<GetUserPublicKeyData>()
-            getUserPublicKey(getUserPublicKeyData.userEmail, getUserPublicKeyData.visitor)
-        }
+    @CName("getUserPublicKey")
+    fun getUserPublicKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyData = data.fromJson<GetUserPublicKeyData>()
+                LockOperationsClient.getUserPublicKeyRequest(getUserPublicKeyData.userEmail, getUserPublicKeyData.visitor)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -297,16 +275,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByEmailRequest(email) }
-    }
-
-    @CName("getUserPublicKeyByEmailJson")
-    fun getUserPublicKeyByEmailJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyData = data.fromJson<GetUserPublicKeyByEmailData>()
-            getUserPublicKeyByEmail(getUserPublicKeyData.email)
-        }
+    @CName("getUserPublicKeyByEmail")
+    fun getUserPublicKeyByEmail(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyData = data.fromJson<GetUserPublicKeyByEmailData>()
+                LockOperationsClient.getUserPublicKeyByEmailRequest(getUserPublicKeyData.email)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -314,16 +291,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone) }
-    }
-
-    @CName("getUserPublicKeyByTelephoneJson")
-    fun getUserPublicKeyByTelephoneJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByTelephoneData = data.fromJson<GetUserPublicKeyByTelephoneData>()
-            getUserPublicKeyByTelephone(getUserPublicKeyByTelephoneData.telephone)
-        }
+    @CName("getUserPublicKeyByTelephone")
+    fun getUserPublicKeyByTelephone(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByTelephoneData = data.fromJson<GetUserPublicKeyByTelephoneData>()
+                LockOperationsClient.getUserPublicKeyByTelephoneRequest(getUserPublicKeyByTelephoneData.telephone)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -331,16 +307,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey) }
-    }
-
-    @CName("getUserPublicKeyByLocalKeyJson")
-    fun getUserPublicKeyByLocalKeyJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByLocalKeyData = data.fromJson<GetUserPublicKeyByLocalKeyData>()
-            getUserPublicKeyByLocalKey(getUserPublicKeyByLocalKeyData.localKey)
-        }
+    @CName("getUserPublicKeyByLocalKey")
+    fun getUserPublicKeyByLocalKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByLocalKeyData = data.fromJson<GetUserPublicKeyByLocalKeyData>()
+                LockOperationsClient.getUserPublicKeyByLocalKeyRequest(getUserPublicKeyByLocalKeyData.localKey)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -348,16 +323,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey) }
-    }
-
-    @CName("getUserPublicKeyByForeignKeyJson")
-    fun getUserPublicKeyByForeignKeyJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByForeignKeyData = data.fromJson<GetUserPublicKeyByForeignKeyData>()
-            getUserPublicKeyByForeignKey(getUserPublicKeyByForeignKeyData.foreignKey)
-        }
+    @CName("getUserPublicKeyByForeignKey")
+    fun getUserPublicKeyByForeignKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByForeignKeyData = data.fromJson<GetUserPublicKeyByForeignKeyData>()
+                LockOperationsClient.getUserPublicKeyByForeignKeyRequest(getUserPublicKeyByForeignKeyData.foreignKey)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -365,16 +339,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByIdentityRequest(identity) }
-    }
-
-    @CName("getUserPublicKeyByIdentityJson")
-    fun getUserPublicKeyByIdentityJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByIdentityData = data.fromJson<GetUserPublicKeyByIdentityData>()
-            getUserPublicKeyByIdentity(getUserPublicKeyByIdentityData.identity)
-        }
+    @CName("getUserPublicKeyByIdentity")
+    fun getUserPublicKeyByIdentity(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByIdentityData = data.fromJson<GetUserPublicKeyByIdentityData>()
+                LockOperationsClient.getUserPublicKeyByIdentityRequest(getUserPublicKeyByIdentityData.identity)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -382,16 +355,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByEmailsRequest(emails) }
-    }
-
-    @CName("getUserPublicKeyByEmailsJson")
-    fun getUserPublicKeyByEmailsJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByEmailsData = data.fromJson<GetUserPublicKeyByEmailsData>()
-            getUserPublicKeyByEmails(getUserPublicKeyByEmailsData.emails)
-        }
+    @CName("getUserPublicKeyByEmails")
+    fun getUserPublicKeyByEmails(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByEmailsData = data.fromJson<GetUserPublicKeyByEmailsData>()
+                LockOperationsClient.getUserPublicKeyByEmailsRequest(getUserPublicKeyByEmailsData.emails)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -399,16 +371,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones) }
-    }
-
-    @CName("getUserPublicKeyByTelephonesJson")
-    fun getUserPublicKeyByTelephonesJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByTelephonesData = data.fromJson<GetUserPublicKeyByTelephonesData>()
-            getUserPublicKeyByTelephones(getUserPublicKeyByTelephonesData.telephones)
-        }
+    @CName("getUserPublicKeyByTelephones")
+    fun getUserPublicKeyByTelephones(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByTelephonesData = data.fromJson<GetUserPublicKeyByTelephonesData>()
+                LockOperationsClient.getUserPublicKeyByTelephonesRequest(getUserPublicKeyByTelephonesData.telephones)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -416,16 +387,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys) }
-    }
-
-    @CName("getUserPublicKeyByLocalKeysJson")
-    fun getUserPublicKeyByLocalKeysJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByLocalKeysData = data.fromJson<GetUserPublicKeyByLocalKeysData>()
-            getUserPublicKeyByLocalKeys(getUserPublicKeyByLocalKeysData.localKeys)
-        }
+    @CName("getUserPublicKeyByLocalKeys")
+    fun getUserPublicKeyByLocalKeys(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByLocalKeysData = data.fromJson<GetUserPublicKeyByLocalKeysData>()
+                LockOperationsClient.getUserPublicKeyByLocalKeysRequest(getUserPublicKeyByLocalKeysData.localKeys)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -433,16 +403,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
-        return runBlocking { LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys) }
-    }
-
-    @CName("getUserPublicKeyByForeignKeysJson")
-    fun getUserPublicKeyByForeignKeysJson(data: String): String {
-        return resultData {
-            val getUserPublicKeyByForeignKeysData = data.fromJson<GetUserPublicKeyByForeignKeysData>()
-            getUserPublicKeyByForeignKeys(getUserPublicKeyByForeignKeysData.foreignKeys)
-        }
+    @CName("getUserPublicKeyByForeignKeys")
+    fun getUserPublicKeyByForeignKeys(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getUserPublicKeyByForeignKeysData = data.fromJson<GetUserPublicKeyByForeignKeysData>()
+                LockOperationsClient.getUserPublicKeyByForeignKeysRequest(getUserPublicKeyByForeignKeysData.foreignKeys)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -450,16 +419,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return runBlocking { LockOperationsClient.unlockRequest(unlockOperation) }
-    }
-
-    @CName("unlockJson")
-    fun unlockJson(data: String): String {
-        return resultData {
-            val unlockOperationData = data.fromJson<UnlockOperationData>()
-            unlock(unlockOperationData.toUnlockOperation())
-        }
+    @CName("unlock")
+    fun unlock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val unlockOperationData = data.fromJson<UnlockOperationData>()
+                LockOperationsClient.unlockRequest(unlockOperationData.toUnlockOperation())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -467,16 +435,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
-    fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return runBlocking { LockOperationsClient.shareLockRequest(shareLockOperation) }
-    }
-
-    @CName("shareLockJson")
-    fun shareLockJson(data: String): String {
-        return resultData {
-            val shareLockOperationData = data.fromJson<ShareLockOperationData>()
-            shareLock(shareLockOperationData.toShareLockOperation())
-        }
+    @CName("shareLock")
+    fun shareLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val shareLockOperationData = data.fromJson<ShareLockOperationData>()
+                LockOperationsClient.shareLockRequest(shareLockOperationData.toShareLockOperation())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -484,16 +451,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
      */
-    fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
-        return runBlocking { LockOperationsClient.batchShareLockRequest(batchShareLockOperation) }
-    }
-
-    @CName("batchShareLockJson")
-    fun batchShareLockJson(data: String): String {
-        return resultData {
-            val batchShareLockOperationData = data.fromJson<BatchShareLockOperationData>()
-            batchShareLock(batchShareLockOperationData.toBatchShareLockOperation())
-        }
+    @CName("batchShareLock")
+    fun batchShareLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val batchShareLockOperationData = data.fromJson<BatchShareLockOperationData>()
+                LockOperationsClient.batchShareLockRequest(batchShareLockOperationData.toBatchShareLockOperation())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -501,16 +467,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return runBlocking { LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation) }
-    }
-
-    @CName("revokeAccessToLockJson")
-    fun revokeAccessToLockJson(data: String): String {
-        return resultData {
-            val revokeAccessToLockOperationData = data.fromJson<RevokeAccessToLockOperationData>()
-            revokeAccessToLock(revokeAccessToLockOperationData.toRevokeAccessToLockOperation())
-        }
+    @CName("revokeAccessToLock")
+    fun revokeAccessToLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val revokeAccessToLockOperationData = data.fromJson<RevokeAccessToLockOperationData>()
+                LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperationData.toRevokeAccessToLockOperation())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -518,16 +483,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return runBlocking { LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration) }
-    }
-
-    @CName("updateSecureSettingUnlockDurationJson")
-    fun updateSecureSettingUnlockDurationJson(data: String): String {
-        return resultData {
-            val updateSecureSettingUnlockDurationData = data.fromJson<UpdateSecureSettingUnlockDurationData>()
-            updateSecureSettingUnlockDuration(updateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration())
-        }
+    @CName("updateSecureSettingUnlockDuration")
+    fun updateSecureSettingUnlockDuration(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateSecureSettingUnlockDurationData = data.fromJson<UpdateSecureSettingUnlockDurationData>()
+                LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -535,16 +499,15 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return runBlocking { LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween) }
-    }
-
-    @CName("updateSecureSettingUnlockBetweenJson")
-    fun updateSecureSettingUnlockBetweenJson(data: String): String {
-        return resultData {
-            val updateSecureSettingUnlockBetweenData = data.fromJson<UpdateSecureSettingUnlockBetweenData>()
-            updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetweenData.toUpdateSecureSettingUnlockBetween())
-        }
+    @CName("updateSecureSettingUnlockBetween")
+    fun updateSecureSettingUnlockBetween(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateSecureSettingUnlockBetweenData = data.fromJson<UpdateSecureSettingUnlockBetweenData>()
+                LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetweenData.toUpdateSecureSettingUnlockBetween())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -552,15 +515,14 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
-    fun getPinnedLocks(): List<LockResponse> {
-        return runBlocking { LockOperationsClient.getPinnedLocksRequest() }
-    }
-
-    @CName("getPinnedLocksJson")
-    fun getPinnedLocksJson(): String {
-        return resultData {
-            getPinnedLocks()
-        }
+    @CName("getPinnedLocks")
+    fun getPinnedLocks(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                LockOperationsClient.getPinnedLocksRequest()
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -568,15 +530,14 @@ actual object LockOperationsApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
-    fun getShareableLocks(): List<ShareableLockResponse> {
-        return runBlocking { LockOperationsClient.getShareableLocksRequest() }
-    }
-
-    @CName("getShareableLocksJson")
-    fun getShareableLocksJson(): String {
-        return resultData {
-            getShareableLocks()
-        }
+    @CName("getShareableLocks")
+    fun getShareableLocks(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                LockOperationsClient.getShareableLocksRequest()
+            },
+            callback = callback
+        )
     }
 }
 
