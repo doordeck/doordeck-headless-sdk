@@ -1,10 +1,13 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
-import doordeck from '@doordeck/doordeck-headless-sdk';
+import doordeck, {com} from '@doordeck/doordeck-headless-sdk';
+import SdkConfig = com.doordeck.multiplatform.sdk.config.SdkConfig;
+import ApiEnvironment = com.doordeck.multiplatform.sdk.model.data.ApiEnvironment;
 
-const apiEnvironment =  doordeck.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment;
-export const doordeckSDK = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(apiEnvironment.DEV);
+export const doordeckSDK = doordeck.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize(
+  new SdkConfig.Builder().setApiEnvironment(ApiEnvironment.DEV).build()
+);
 
 // Utils
 export const doordeckUtil = doordeck.com.doordeck.multiplatform.sdk.util.Utils;

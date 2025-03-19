@@ -60,11 +60,13 @@ interface ContextManager {
      *
      * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
      */
+    @CName("setFusionHost")
     fun setFusionHost(host: String)
 
     /**
      * Retrieves the fusion host.
      */
+    @CName("getFusionHost")
     fun getFusionHost(): String
 
     /**

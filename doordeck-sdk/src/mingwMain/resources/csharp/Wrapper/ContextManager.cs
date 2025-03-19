@@ -115,6 +115,33 @@ public unsafe class ContextManager : IResource
         }
     }
 
+    public void SetFusionHost(string host)
+    {
+        var data = host.ToSByte();
+        try
+        {
+            _contextManager.setFusionHost_(_context, data);
+        }
+        finally
+        {
+            ReleaseMemory(data, null);
+        }
+    }
+
+    public string GetFusionHost()
+    {
+        sbyte* result = null;
+        try
+        {
+            result = _contextManager.getFusionHost_(_context);
+            return Utils.Utils.ConvertSByteToString(result);
+        }
+        finally
+        {
+            ReleaseMemory(null, result);
+        }
+    }
+
     public void SetFusionAuthToken(string token)
     {
         var data = token.ToSByte();

@@ -61,6 +61,15 @@ namespace Doordeck.Headless.Sdk.Model
         public string DoorIdentifier { get; set; } = string.Empty;
     }
 
+    public class CCureController : LockController
+    {
+        public string BaseUrl { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string DoorType { get; set; } = string.Empty;
+        public int DoorId { get; set; } = 0;
+    }
+
     public class DemoController : LockController
     {
         public int Port { get; set; } = 8080;
@@ -100,6 +109,8 @@ namespace Doordeck.Headless.Sdk.Model
     public class PaxtonNet2Controller : LockController
     {
         public string Host { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public short Output { get; set; } = 0;
     }
