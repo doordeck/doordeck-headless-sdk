@@ -63,11 +63,11 @@
         }
     }
 
-    public class GetApplicationData
+    public class ApplicationIdData
     {
         public string ApplicationId { get; set; }
 
-        public GetApplicationData(string applicationId)
+        public ApplicationIdData(string applicationId)
         {
             ApplicationId = applicationId;
         }
@@ -166,16 +166,6 @@
         {
             ApplicationId = applicationId;
             LogoUrl = logoUrl;
-        }
-    }
-
-    public class DeleteApplicationData
-    {
-        public string ApplicationId { get; set; }
-
-        public DeleteApplicationData(string applicationId)
-        {
-            ApplicationId = applicationId;
         }
     }
 
@@ -286,85 +276,39 @@
         }
     }
 
-    public class AddAuthIssuerData
+    public class AuthIssuerData
     {
         public string ApplicationId { get; set; }
         public string Url { get; set; }
 
-        public AddAuthIssuerData(string applicationId, string url)
+        public AuthIssuerData(string applicationId, string url)
         {
             ApplicationId = applicationId;
             Url = url;
         }
     }
 
-    public class DeleteAuthIssuerData
+    public class CorsDomainData
     {
         public string ApplicationId { get; set; }
         public string Url { get; set; }
 
-        public DeleteAuthIssuerData(string applicationId, string url)
+        public CorsDomainData(string applicationId, string url)
         {
             ApplicationId = applicationId;
             Url = url;
         }
     }
 
-    public class AddCorsDomainData
-    {
-        public string ApplicationId { get; set; }
-        public string Url { get; set; }
-
-        public AddCorsDomainData(string applicationId, string url)
-        {
-            ApplicationId = applicationId;
-            Url = url;
-        }
-    }
-
-    public class RemoveCorsDomainData
-    {
-        public string ApplicationId { get; set; }
-        public string Url { get; set; }
-
-        public RemoveCorsDomainData(string applicationId, string url)
-        {
-            ApplicationId = applicationId;
-            Url = url;
-        }
-    }
-
-    public class AddApplicationOwnerData
+    public class ApplicationOwnerData
     {
         public string ApplicationId { get; set; }
         public string UserId { get; set; }
 
-        public AddApplicationOwnerData(string applicationId, string userId)
+        public ApplicationOwnerData(string applicationId, string userId)
         {
             ApplicationId = applicationId;
             UserId = userId;
-        }
-    }
-
-    public class RemoveApplicationOwnerData
-    {
-        public string ApplicationId { get; set; }
-        public string UserId { get; set; }
-
-        public RemoveApplicationOwnerData(string applicationId, string userId)
-        {
-            ApplicationId = applicationId;
-            UserId = userId;
-        }
-    }
-
-    public class GetApplicationOwnersDetailsData
-    {
-        public string ApplicationId { get; set; }
-
-        public GetApplicationOwnersDetailsData(string applicationId)
-        {
-            ApplicationId = applicationId;
         }
     }
 }

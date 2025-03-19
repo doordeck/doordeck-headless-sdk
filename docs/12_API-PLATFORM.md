@@ -140,7 +140,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetApplicationData("APPLICATION_ID");
+var data = new ApplicationIdData("APPLICATION_ID");
 var response = sdk.GetPlatform().GetApplication(data);
 ```
 </details>
@@ -599,7 +599,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteApplication("
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeleteApplicationData("APPLICATION_ID");
+var data = new ApplicationIdData("APPLICATION_ID");
 sdk.GetPlatform().DeleteApplication(data);
 ```
 </details>
@@ -755,7 +755,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthIssuer("APPL
 <summary>Show Details</summary>
 
 ```csharp
-var data = new AddAuthIssuerData("APPLICATION_ID", "URL");
+var data = new AuthIssuerData("APPLICATION_ID", "URL");
 sdk.GetPlatform().AddAuthIssuer(data);
 ```
 </details>
@@ -805,7 +805,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteAuthIssuer("A
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeleteAuthIssuerData("APPLICATION_ID", "URL");
+var data = new AuthIssuerData("APPLICATION_ID", "URL");
 sdk.GetPlatform().DeleteAuthIssuer(data);
 ```
 </details>
@@ -855,7 +855,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addCorsDomain("APPL
 <summary>Show Details</summary>
 
 ```csharp
-var data = new AddCorsDomainData("APPLICATION_ID", "URL");
+var data = new CorsDomainData("APPLICATION_ID", "URL");
 sdk.GetPlatform().AddCorsDomain(data);
 ```
 </details>
@@ -905,7 +905,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeCorsDomain("A
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RemoveCorsDomainData("APPLICATION_ID", "URL");
+var data = new CorsDomainData("APPLICATION_ID", "URL");
 sdk.GetPlatform().RemoveCorsDomain(data);
 ```
 </details>
@@ -955,7 +955,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addApplicationOwner
 <summary>Show Details</summary>
 
 ```csharp
-var data = new AddApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
+var data = new ApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
 sdk.GetPlatform().AddApplicationOwner(data);
 ```
 </details>
@@ -1005,7 +1005,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeApplicationOw
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RemoveApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
+var data = new ApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
 sdk.GetPlatform().RemoveApplicationOwner(data);
 ```
 </details>

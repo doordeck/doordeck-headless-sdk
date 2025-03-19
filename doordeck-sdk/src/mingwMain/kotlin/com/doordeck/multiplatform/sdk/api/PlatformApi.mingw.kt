@@ -2,19 +2,13 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.AddApplicationOwnerData
-import com.doordeck.multiplatform.sdk.model.data.AddAuthIssuerData
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
-import com.doordeck.multiplatform.sdk.model.data.AddCorsDomainData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationIdData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerData
+import com.doordeck.multiplatform.sdk.model.data.AuthIssuerData
+import com.doordeck.multiplatform.sdk.model.data.CorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.CreateApplicationData
-import com.doordeck.multiplatform.sdk.model.data.DeleteApplicationData
-import com.doordeck.multiplatform.sdk.model.data.DeleteAuthIssuerData
-import com.doordeck.multiplatform.sdk.model.data.GetApplicationData
-import com.doordeck.multiplatform.sdk.model.data.GetApplicationOwnersDetailsData
 import com.doordeck.multiplatform.sdk.model.data.GetLogoUploadUrlData
-import com.doordeck.multiplatform.sdk.model.data.Platform
-import com.doordeck.multiplatform.sdk.model.data.RemoveApplicationOwnerData
-import com.doordeck.multiplatform.sdk.model.data.RemoveCorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationAppLinkData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationCompanyNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationEmailPreferencesData
@@ -23,14 +17,16 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationMailingAddress
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationPrivacyPolicyData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationSupportContactData
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.data.toAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toEmailPreferences
 import com.doordeck.multiplatform.sdk.util.fromJson
+import com.doordeck.multiplatform.sdk.util.launchCallback
 import com.doordeck.multiplatform.sdk.util.resultData
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.CValuesRef
 import kotlinx.coroutines.runBlocking
 
 actual object PlatformApi {
@@ -40,17 +36,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    fun createApplication(application: Platform.CreateApplication) {
-        return runBlocking { PlatformClient.createApplicationRequest(application) }
-    }
-
-    @DoordeckOnly
-    @CName("createApplicationJson")
-    fun createApplicationJson(data: String): String {
-        return resultData {
-            val createApplicationData = data.fromJson<CreateApplicationData>()
-            createApplication(createApplicationData.toCreateApplication())
-        }
+    @CName("createApplication")
+    fun createApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val createApplicationData = data.fromJson<CreateApplicationData>()
+                PlatformClient.createApplicationRequest(createApplicationData.toCreateApplication())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -59,16 +53,14 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    fun listApplications(): List<ApplicationResponse> {
-        return runBlocking { PlatformClient.listApplicationsRequest() }
-    }
-
-    @DoordeckOnly
-    @CName("listApplicationsJson")
-    fun listApplicationsJson(): String {
-        return resultData {
-            listApplications()
-        }
+    @CName("listApplications")
+    fun listApplications(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                PlatformClient.listApplicationsRequest()
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -77,17 +69,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    fun getApplication(applicationId: String): ApplicationResponse {
-        return runBlocking { PlatformClient.getApplicationRequest(applicationId) }
-    }
-
-    @DoordeckOnly
-    @CName("getApplicationJson")
-    fun getApplicationJson(data: String): String {
-        return resultData {
-            val getApplicationData = data.fromJson<GetApplicationData>()
-            getApplication(getApplicationData.applicationId)
-        }
+    @CName("getApplication")
+    fun getApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val applicationIdData = data.fromJson<ApplicationIdData>()
+                PlatformClient.getApplicationRequest(applicationIdData.applicationId)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -96,17 +86,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationName(applicationId: String, name: String) {
-        return runBlocking { PlatformClient.updateApplicationNameRequest(applicationId, name) }
-    }
-
-    @DoordeckOnly
-    @CName("updateApplicationNameJson")
-    fun updateApplicationNameJson(data: String): String {
-        return resultData {
-            val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
-            updateApplicationName(updateApplicationName.applicationId, updateApplicationName.name)
-        }
+    @CName("updateApplicationName")
+    fun updateApplicationName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
+                PlatformClient.updateApplicationNameRequest(updateApplicationName.applicationId, updateApplicationName.name)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -120,8 +108,8 @@ actual object PlatformApi {
     }
 
     @DoordeckOnly
-    @CName("updateApplicationCompanyNameJson")
-    fun updateApplicationCompanyNameJson(data: String): String {
+    @CName("updateApplicationCompanyName")
+    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
         return resultData {
             val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
             updateApplicationCompanyName(
@@ -142,8 +130,8 @@ actual object PlatformApi {
     }
 
     @DoordeckOnly
-    @CName("updateApplicationMailingAddressJson")
-    fun updateApplicationMailingAddressJson(data: String): String {
+    @CName("updateApplicationMailingAddress")
+    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
         return resultData {
             val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
             updateApplicationMailingAddress(
@@ -159,20 +147,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return runBlocking { PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy) }
-    }
-
-    @DoordeckOnly
-    @CName("updateApplicationPrivacyPolicyJson")
-    fun updateApplicationPrivacyPolicyJson(data: String): String {
-        return resultData {
-            val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
-            updateApplicationPrivacyPolicy(
-                applicationId = updateApplicationPrivacyPolicyData.applicationId,
-                privacyPolicy = updateApplicationPrivacyPolicyData.privacyPolicy
-            )
-        }
+    @CName("updateApplicationPrivacyPolicy")
+    fun updateApplicationPrivacyPolicy(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
+                PlatformClient.updateApplicationPrivacyPolicyRequest(
+                    applicationId = updateApplicationPrivacyPolicyData.applicationId,
+                    privacyPolicy = updateApplicationPrivacyPolicyData.privacyPolicy
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -186,8 +172,8 @@ actual object PlatformApi {
     }
 
     @DoordeckOnly
-    @CName("updateApplicationSupportContactJson")
-    fun updateApplicationSupportContactJson(data: String): String {
+    @CName("updateApplicationSupportContact")
+    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>): String {
         return resultData {
             val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
             updateApplicationSupportContact(
@@ -203,20 +189,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return runBlocking { PlatformClient.updateApplicationAppLinkRequest(applicationId, appLink) }
-    }
-
-    @DoordeckOnly
-    @CName("updateApplicationAppLinkJson")
-    fun updateApplicationAppLinkJson(data: String): String {
-        return resultData {
-            val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
-            updateApplicationAppLink(
-                applicationId = updateApplicationAppLinkData.applicationId,
-                appLink = updateApplicationAppLinkData.appLink
-            )
-        }
+    @CName("updateApplicationAppLink")
+    fun updateApplicationAppLink(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
+                PlatformClient.updateApplicationAppLinkRequest(
+                    applicationId = updateApplicationAppLinkData.applicationId,
+                    appLink = updateApplicationAppLinkData.appLink
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -225,20 +209,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        return runBlocking { PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
-    }
-
-    @DoordeckOnly
-    @CName("updateApplicationEmailPreferencesJson")
-    fun updateApplicationEmailPreferencesJson(data: String): String {
-        return resultData {
-            val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
-            updateApplicationEmailPreferences(
-                applicationId = updateApplicationEmailPreferencesData.applicationId,
-                emailPreferences = updateApplicationEmailPreferencesData.emailPreferences.toEmailPreferences()
-            )
-        }
+    @CName("updateApplicationEmailPreferences")
+    fun updateApplicationEmailPreferences(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
+                PlatformClient.updateApplicationEmailPreferencesRequest(
+                    applicationId = updateApplicationEmailPreferencesData.applicationId,
+                    emailPreferences = updateApplicationEmailPreferencesData.emailPreferences.toEmailPreferences()
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -247,20 +229,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return runBlocking { PlatformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl) }
-    }
-
-    @DoordeckOnly
-    @CName("updateApplicationLogoUrlJson")
-    fun updateApplicationLogoUrlJson(data: String): String {
-        return resultData {
-            val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
-            updateApplicationLogoUrl(
-                applicationId = updateApplicationLogoUrlData.applicationId,
-                logoUrl = updateApplicationLogoUrlData.logoUrl
-            )
-        }
+    @CName("updateApplicationLogoUrl")
+    fun updateApplicationLogoUrl(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
+                PlatformClient.updateApplicationLogoUrlRequest(
+                    applicationId = updateApplicationLogoUrlData.applicationId,
+                    logoUrl = updateApplicationLogoUrlData.logoUrl
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -269,17 +249,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
     @DoordeckOnly
-    fun deleteApplication(applicationId: String) {
-        return runBlocking { PlatformClient.deleteApplicationRequest(applicationId) }
-    }
-
-    @DoordeckOnly
-    @CName("deleteApplicationJson")
-    fun deleteApplicationJson(data: String): String {
-        return resultData {
-            val deleteApplicationData = data.fromJson<DeleteApplicationData>()
-            deleteApplication(deleteApplicationData.applicationId)
-        }
+    @CName("deleteApplication")
+    fun deleteApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val applicationIdData = data.fromJson<ApplicationIdData>()
+                PlatformClient.deleteApplicationRequest(applicationIdData.applicationId)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -288,17 +266,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
-    fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return runBlocking { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType) }
-    }
-
-    @DoordeckOnly
-    @CName("getLogoUploadUrlJson")
-    fun getLogoUploadUrlJson(data: String): String {
-        return resultData {
-            val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
-            getLogoUploadUrl(getLogoUploadUrlData.applicationId, getLogoUploadUrlData.contentType)
-        }
+    @CName("getLogoUploadUrl")
+    fun getLogoUploadUrl(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
+                PlatformClient.getLogoUploadUrlRequest(getLogoUploadUrlData.applicationId, getLogoUploadUrlData.contentType)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -307,17 +283,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        return runBlocking { PlatformClient.addAuthKeyRequest(applicationId, key) }
-    }
-
-    @DoordeckOnly
-    @CName("addAuthKeyJson")
-    fun addAuthKeyJson(data: String): String {
-        return resultData {
-            val addAuthKeyData = data.fromJson<AddAuthKeyData>()
-            addAuthKey(addAuthKeyData.applicationId, addAuthKeyData.key.toAuthKey())
-        }
+    @CName("addAuthKey")
+    fun addAuthKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val addAuthKeyData = data.fromJson<AddAuthKeyData>()
+                PlatformClient.addAuthKeyRequest(addAuthKeyData.applicationId, addAuthKeyData.key.toAuthKey())
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -326,17 +300,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    fun addAuthIssuer(applicationId: String, url: String) {
-        return runBlocking { PlatformClient.addAuthIssuerRequest(applicationId, url) }
-    }
-
-    @DoordeckOnly
-    @CName("addAuthIssuerJson")
-    fun addAuthIssuerJson(data: String): String {
-        return resultData {
-            val addAuthIssuerData = data.fromJson<AddAuthIssuerData>()
-            addAuthIssuer(addAuthIssuerData.applicationId, addAuthIssuerData.url)
-        }
+    @CName("addAuthIssuer")
+    fun addAuthIssuer(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val authIssuerData = data.fromJson<AuthIssuerData>()
+                PlatformClient.addAuthIssuerRequest(authIssuerData.applicationId, authIssuerData.url)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -345,17 +317,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    fun deleteAuthIssuer(applicationId: String, url: String) {
-        return runBlocking { PlatformClient.deleteAuthIssuerRequest(applicationId, url) }
-    }
-
-    @DoordeckOnly
-    @CName("deleteAuthIssuerJson")
-    fun deleteAuthIssuerJson(data: String): String {
-        return resultData {
-            val deleteAuthIssuerData = data.fromJson<DeleteAuthIssuerData>()
-            deleteAuthIssuer(deleteAuthIssuerData.applicationId, deleteAuthIssuerData.url)
-        }
+    @CName("deleteAuthIssuer")
+    fun deleteAuthIssuer(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val authIssuerData = data.fromJson<AuthIssuerData>()
+                PlatformClient.deleteAuthIssuerRequest(authIssuerData.applicationId, authIssuerData.url)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -364,17 +334,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    fun addCorsDomain(applicationId: String, url: String) {
-        return runBlocking { PlatformClient.addCorsDomainRequest(applicationId, url) }
-    }
-
-    @DoordeckOnly
-    @CName("addCorsDomainJson")
-    fun addCorsDomainJson(data: String): String {
-        return resultData {
-            val addCorsDomainData = data.fromJson<AddCorsDomainData>()
-            addCorsDomain(addCorsDomainData.applicationId, addCorsDomainData.url)
-        }
+    @CName("addCorsDomain")
+    fun addCorsDomain(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val corsDomainData = data.fromJson<CorsDomainData>()
+                PlatformClient.addCorsDomainRequest(corsDomainData.applicationId, corsDomainData.url)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -383,17 +351,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    fun removeCorsDomain(applicationId: String, url: String) {
-        return runBlocking { PlatformClient.removeCorsDomainRequest(applicationId, url) }
-    }
-
-    @DoordeckOnly
-    @CName("removeCorsDomainJson")
-    fun removeCorsDomainJson(data: String): String {
-        return resultData {
-            val removeCorsDomainData = data.fromJson<RemoveCorsDomainData>()
-            removeCorsDomain(removeCorsDomainData.applicationId, removeCorsDomainData.url)
-        }
+    @CName("removeCorsDomain")
+    fun removeCorsDomain(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val corsDomainData = data.fromJson<CorsDomainData>()
+                PlatformClient.removeCorsDomainRequest(corsDomainData.applicationId, corsDomainData.url)
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -402,17 +368,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    fun addApplicationOwner(applicationId: String, userId: String) {
-        return runBlocking { PlatformClient.addApplicationOwnerRequest(applicationId, userId) }
-    }
-
-    @DoordeckOnly
-    @CName("addApplicationOwnerJson")
-    fun addApplicationOwnerJson(data: String): String {
-        return resultData {
-            val addApplicationOwnerData = data.fromJson<AddApplicationOwnerData>()
-            addApplicationOwner(addApplicationOwnerData.applicationId, addApplicationOwnerData.userId)
-        }
+    @CName("addApplicationOwner")
+    fun addApplicationOwner(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
+                PlatformClient.addApplicationOwnerRequest(
+                    applicationId = applicationOwnerData.applicationId,
+                    userId = applicationOwnerData.userId
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -421,20 +388,18 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    fun removeApplicationOwner(applicationId: String, userId: String) {
-        return runBlocking { PlatformClient.removeApplicationOwnerRequest(applicationId, userId) }
-    }
-
-    @DoordeckOnly
-    @CName("removeApplicationOwnerJson")
-    fun removeApplicationOwnerJson(data: String): String {
-        return resultData {
-            val removeApplicationOwnerData = data.fromJson<RemoveApplicationOwnerData>()
-            removeApplicationOwner(
-                applicationId = removeApplicationOwnerData.applicationId,
-                userId = removeApplicationOwnerData.userId
-            )
-        }
+    @CName("removeApplicationOwner")
+    fun removeApplicationOwner(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
+                PlatformClient.removeApplicationOwnerRequest(
+                    applicationId = applicationOwnerData.applicationId,
+                    userId = applicationOwnerData.userId
+                )
+            },
+            callback = callback
+        )
     }
 
     /**
@@ -443,17 +408,15 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return runBlocking { PlatformClient.getApplicationOwnersDetailsRequest(applicationId) }
-    }
-
-    @DoordeckOnly
-    @CName("getApplicationOwnersDetailsJson")
-    fun getApplicationOwnersDetailsJson(data: String): String {
-        return resultData {
-            val getApplicationOwnersDetailsData = data.fromJson<GetApplicationOwnersDetailsData>()
-            getApplicationOwnersDetails(getApplicationOwnersDetailsData.applicationId)
-        }
+    @CName("getApplicationOwnersDetails")
+    fun getApplicationOwnersDetails(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+        launchCallback(
+            block = {
+                val applicationIdData = data.fromJson<ApplicationIdData>()
+                PlatformClient.getApplicationOwnersDetailsRequest(applicationIdData.applicationId)
+            },
+            callback = callback
+        )
     }
 }
 
