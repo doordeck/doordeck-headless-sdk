@@ -1,8 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.SitesClient
-import com.doordeck.multiplatform.sdk.model.data.GetLocksForSiteData
-import com.doordeck.multiplatform.sdk.model.data.GetUsersForSiteData
+import com.doordeck.multiplatform.sdk.model.data.SiteIdData
 import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.launchCallback
 import kotlinx.cinterop.ByteVar
@@ -35,8 +34,8 @@ actual object SitesApi {
     fun getLocksForSite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
         launchCallback(
             block = {
-                val getLocksForSiteData = data.fromJson<GetLocksForSiteData>()
-                SitesClient.getLocksForSiteRequest(getLocksForSiteData.siteId)
+                val siteIdData = data.fromJson<SiteIdData>()
+                SitesClient.getLocksForSiteRequest(siteIdData.siteId)
             },
             callback = callback
         )
@@ -51,8 +50,8 @@ actual object SitesApi {
     fun getUsersForSite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
         launchCallback(
             block = {
-                val getUsersForSiteData = data.fromJson<GetUsersForSiteData>()
-                SitesClient.getUsersForSiteRequest(getUsersForSiteData.siteId)
+                val siteIdData = data.fromJson<SiteIdData>()
+                SitesClient.getUsersForSiteRequest(siteIdData.siteId)
             },
             callback = callback
         )
