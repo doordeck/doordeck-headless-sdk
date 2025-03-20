@@ -15,6 +15,9 @@ public unsafe class LockOperations : IResource
 
     private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void CallbackDelegate(IntPtr r);
+
     void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
@@ -28,314 +31,188 @@ public unsafe class LockOperations : IResource
         _symbols->DisposeStablePointer(_lockOperations.pinned);
     }
 
-    public LockResponse GetSingleLock(GetSingleLockData data)
+    public void GetSingleLock(GetSingleLockData data, Action<LockResponse> action)
     {
-        return Process<LockResponse>(
-            _lockOperationsApi.getSingleLockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getSingleLock_, null, action, data);
     }
 
-    public List<AuditResponse> GetLockAuditTrail(GetLockAuditTrailData data)
+    public void GetLockAuditTrail(GetLockAuditTrailData data, Action<List<AuditResponse>> action)
     {
-        return Process<List<AuditResponse>>(
-            _lockOperationsApi.getLockAuditTrailJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getLockAuditTrail_, null, action, data);
     }
 
-    public List<AuditResponse> GetAuditForUser(GetAuditForUserData data)
+    public void GetAuditForUser(GetAuditForUserData data, Action<List<AuditResponse>> action)
     {
-        return Process<List<AuditResponse>>(
-            _lockOperationsApi.getAuditForUserJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getAuditForUser_, null, action, data);
     }
 
-    public List<UserLockResponse> GetUsersForLock(GetUsersForLockData data)
+    public void GetUsersForLock(GetUsersForLockData data, Action<List<UserLockResponse>> action)
     {
-        return Process<List<UserLockResponse>>(
-            _lockOperationsApi.getUsersForLockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUsersForLock_, null, action, data);
     }
 
-    public LockUserResponse GetLocksForUser(GetLocksForUserData data)
+    public void GetLocksForUser(GetLocksForUserData data, Action<LockUserResponse> action)
     {
-        return Process<LockUserResponse>(
-            _lockOperationsApi.getLocksForUserJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getLocksForUser_, null, action, data);
     }
 
-    public void UpdateLockName(UpdateLockNameData data)
+    public void UpdateLockName(UpdateLockNameData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockNameJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockName_, null, action, data);
     }
 
-    public void UpdateLockFavourite(UpdateLockFavouriteData data)
+    public void UpdateLockFavourite(UpdateLockFavouriteData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockFavouriteJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockFavourite_, null, action, data);
     }
 
-    public void UpdateLockColour(UpdateLockColourData data)
+    public void UpdateLockColour(UpdateLockColourData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockColourJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockColour_, null, action, data);
     }
 
-    public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data)
+    public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingDefaultNameJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockSettingDefaultName_, null, action, data);
     }
 
-    public void SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data)
+    public void SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.setLockSettingPermittedAddressesJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.setLockSettingPermittedAddresses_, null, action, data);
     }
 
-    public void UpdateLockSettingHidden(UpdateLockSettingHiddenData data)
+    public void UpdateLockSettingHidden(UpdateLockSettingHiddenData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingHiddenJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockSettingHidden_, null, action, data);
     }
 
-    public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data)
+    public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.setLockSettingTimeRestrictionsJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.setLockSettingTimeRestrictions_, null, action, data);
     }
 
-    public void UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data)
+    public void UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingLocationRestrictionsJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateLockSettingLocationRestrictions_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKey(GetUserPublicKeyData data)
+    public void GetUserPublicKey(GetUserPublicKeyData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKey_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data)
+    public void GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByEmailJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByEmail_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data)
+    public void GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByTelephoneJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByTelephone_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data)
+    public void GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByLocalKeyJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByLocalKey_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data)
+    public void GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByForeignKeyJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByForeignKey_, null, action, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data)
+    public void GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data, Action<UserPublicKeyResponse> action)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByIdentityJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByIdentity_, null, action, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data)
+    public void GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data, Action<List<BatchUserPublicKeyResponse>> action)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByEmailsJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByEmails_, null, action, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data)
+    public void GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data, Action<List<BatchUserPublicKeyResponse>> action)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByTelephonesJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByTelephones_, null, action, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data)
+    public void GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data, Action<List<BatchUserPublicKeyResponse>> action)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByLocalKeysJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByLocalKeys_, null, action, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data)
+    public void GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data, Action<List<BatchUserPublicKeyResponse>> action)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByForeignKeysJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.getUserPublicKeyByForeignKeys_, null, action, data);
     }
 
-    public void Unlock(UnlockOperationData data)
+    public void Unlock(UnlockOperationData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.unlockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.unlock_, null, action, data);
     }
 
-    public void ShareLock(ShareLockOperationData data)
+    public void ShareLock(ShareLockOperationData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.shareLockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.shareLock_, null, action, data);
     }
 
-    public void BatchShareLock(BatchShareLockOperationData data)
+    public void BatchShareLock(BatchShareLockOperationData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.batchShareLockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.batchShareLock_, null, action, data);
     }
 
-    public void RevokeAccessToLock(RevokeAccessToLockOperationData data)
+    public void RevokeAccessToLock(RevokeAccessToLockOperationData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.revokeAccessToLockJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.revokeAccessToLock_, null, action, data);
     }
 
-    public void UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data)
+    public void UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateSecureSettingUnlockDurationJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateSecureSettingUnlockDuration_, null, action, data);
     }
 
-    public void UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data)
+    public void UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data, Action<object> action)
     {
-        Process<object>(
-            _lockOperationsApi.updateSecureSettingUnlockBetweenJson_,
-            null,
-            data
-        );
+        Process(_lockOperationsApi.updateSecureSettingUnlockBetween_, null, action, data);
     }
 
-    public List<LockResponse> GetPinnedLocks()
+    public void GetPinnedLocks(Action<List<LockResponse>> action)
     {
-        return Process<List<LockResponse>>(
-            null,
-            _lockOperationsApi.getPinnedLocksJson_,
-            null
-        );
+        Process(null, _lockOperationsApi.getPinnedLocks_, action, null);
     }
 
-    public List<ShareableLockResponse> GetShareableLocks()
+    public void GetShareableLocks(Action<List<ShareableLockResponse>> action)
     {
-        return Process<List<ShareableLockResponse>>(
-            null,
-            _lockOperationsApi.getShareableLocksJson_,
-            null
-        );
+        Process(null, _lockOperationsApi.getShareableLocks_, action, null);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_lockOperations, sData) :
-                processWithoutDataWithResponse(_lockOperations);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_lockOperations, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_lockOperations, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

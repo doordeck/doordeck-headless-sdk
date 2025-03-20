@@ -27,62 +27,48 @@ public unsafe class Sites : IResource
         _symbols->DisposeStablePointer(_sites.pinned);
     }
 
-    public List<SiteResponse> ListSites()
+    public void ListSites(Action<List<SiteResponse>> action)
     {
-        return Process<List<SiteResponse>>(
-            null,
-            _sitesApi.listSitesJson_,
-            null
-        );
+        Process(null, _sitesApi.listSites_, action, null);
     }
 
-    public List<SiteLocksResponse> GetLocksForSite(GetLocksForSiteData data)
+    public void GetLocksForSite(SiteIdData data, Action<List<SiteLocksResponse>> action)
     {
-        return Process<List<SiteLocksResponse>>(
-            _sitesApi.getLocksForSiteJson_,
-            null,
-            data
-        );
+        Process(_sitesApi.getLocksForSite_, null, action, data);
     }
 
-    public List<UserForSiteResponse> GetUsersForSite(GetUsersForSiteData data)
+    public void GetUsersForSite(SiteIdData data, Action<List<UserForSiteResponse>> action)
     {
-        return Process<List<UserForSiteResponse>>(
-            _sitesApi.getUsersForSiteJson_,
-            null,
-            data
-        );
+        Process(_sitesApi.getUsersForSite_, null, action, data);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_SitesApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_sites, sData) :
-                processWithoutDataWithResponse(_sites);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_sites, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_sites, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

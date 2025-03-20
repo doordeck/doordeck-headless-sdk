@@ -25,7 +25,6 @@ import com.doordeck.multiplatform.sdk.util.launchCallback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CValuesRef
 
 actual object PlatformApi {
     /**
@@ -35,7 +34,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("createApplication")
-    fun createApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun createApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val createApplicationData = data.fromJson<CreateApplicationData>()
@@ -52,7 +51,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("listApplications")
-    fun listApplications(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun listApplications(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 PlatformClient.listApplicationsRequest()
@@ -68,7 +67,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getApplication")
-    fun getApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val applicationIdData = data.fromJson<ApplicationIdData>()
@@ -85,7 +84,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationName")
-    fun updateApplicationName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
@@ -102,7 +101,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationCompanyName")
-    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
@@ -122,7 +121,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationMailingAddress")
-    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
@@ -142,7 +141,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationPrivacyPolicy")
-    fun updateApplicationPrivacyPolicy(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationPrivacyPolicy(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
@@ -162,7 +161,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationSupportContact")
-    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
@@ -182,7 +181,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationAppLink")
-    fun updateApplicationAppLink(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationAppLink(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
@@ -202,7 +201,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationEmailPreferences")
-    fun updateApplicationEmailPreferences(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationEmailPreferences(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
@@ -222,7 +221,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationLogoUrl")
-    fun updateApplicationLogoUrl(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateApplicationLogoUrl(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
@@ -242,7 +241,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("deleteApplication")
-    fun deleteApplication(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun deleteApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val applicationIdData = data.fromJson<ApplicationIdData>()
@@ -259,7 +258,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getLogoUploadUrl")
-    fun getLogoUploadUrl(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getLogoUploadUrl(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
@@ -276,7 +275,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addAuthKey")
-    fun addAuthKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun addAuthKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val addAuthKeyData = data.fromJson<AddAuthKeyData>()
@@ -293,7 +292,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addAuthIssuer")
-    fun addAuthIssuer(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun addAuthIssuer(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val authIssuerData = data.fromJson<AuthIssuerData>()
@@ -310,7 +309,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("deleteAuthIssuer")
-    fun deleteAuthIssuer(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun deleteAuthIssuer(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val authIssuerData = data.fromJson<AuthIssuerData>()
@@ -327,7 +326,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addCorsDomain")
-    fun addCorsDomain(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun addCorsDomain(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val corsDomainData = data.fromJson<CorsDomainData>()
@@ -344,7 +343,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("removeCorsDomain")
-    fun removeCorsDomain(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun removeCorsDomain(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val corsDomainData = data.fromJson<CorsDomainData>()
@@ -361,7 +360,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addApplicationOwner")
-    fun addApplicationOwner(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun addApplicationOwner(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
@@ -381,7 +380,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("removeApplicationOwner")
-    fun removeApplicationOwner(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun removeApplicationOwner(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
@@ -401,7 +400,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getApplicationOwnersDetails")
-    fun getApplicationOwnersDetails(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getApplicationOwnersDetails(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val applicationIdData = data.fromJson<ApplicationIdData>()

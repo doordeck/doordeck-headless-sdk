@@ -9,7 +9,6 @@ import io.ktor.client.HttpClientConfig
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CValuesRef
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
@@ -60,7 +59,7 @@ fun buildSdkConfig(apiEnvironment: ApiEnvironment, cloudAuthToken: String? = nul
  */
 internal inline fun <reified T>launchCallback(
     crossinline block: suspend () -> T,
-    callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>
+    callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
 ) {
     GlobalScope.launch(Dispatchers.Default) {
         val result: String = try {

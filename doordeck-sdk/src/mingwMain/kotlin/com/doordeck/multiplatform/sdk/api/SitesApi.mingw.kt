@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.util.launchCallback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CValuesRef
 
 actual object SitesApi {
     /**
@@ -16,7 +15,7 @@ actual object SitesApi {
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
     @CName("listSites")
-    fun listSites(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun listSites(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 SitesClient.listSitesRequest()
@@ -31,7 +30,7 @@ actual object SitesApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
     @CName("getLocksForSite")
-    fun getLocksForSite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getLocksForSite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val siteIdData = data.fromJson<SiteIdData>()
@@ -47,7 +46,7 @@ actual object SitesApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
     @CName("getUsersForSite")
-    fun getUsersForSite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUsersForSite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val siteIdData = data.fromJson<SiteIdData>()

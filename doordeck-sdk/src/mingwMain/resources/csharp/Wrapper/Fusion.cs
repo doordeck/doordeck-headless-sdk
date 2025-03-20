@@ -27,107 +27,74 @@ public unsafe class Fusion : IResource
         _symbols->DisposeStablePointer(_fusion.pinned);
     }
 
-    public FusionLoginResponse Login(FusionLoginData data)
+    public void Login(FusionLoginData data, Action<FusionLoginResponse> action)
     {
-        return Process<FusionLoginResponse>(
-            _fusionApi.loginJson,
-            null,
-            data
-        );
+        Process(_fusionApi.login, null, action, data);
     }
 
-    public IntegrationTypeResponse GetIntegrationType()
+    public void GetIntegrationType(Action<IntegrationTypeResponse> action)
     {
-        return Process<IntegrationTypeResponse>(
-            null,
-            _fusionApi.getIntegrationTypeJson_,
-            null
-        );
+        Process(null, _fusionApi.getIntegrationType_, action, null);
     }
 
-    public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
+    public void GetIntegrationConfiguration(GetIntegrationConfigurationData data,
+        Action<List<IntegrationConfigurationResponse>> action)
     {
-        return Process<List<IntegrationConfigurationResponse>>(
-            _fusionApi.getIntegrationConfigurationJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.getIntegrationConfiguration_, null, action, data);
     }
 
-    public void EnableDoor(EnableDoorData data)
+    public void EnableDoor(EnableDoorData data, Action<object> action)
     {
-        Process<object>(
-            _fusionApi.enableDoorJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.enableDoor_, null, action, data);
     }
 
-    public void DeleteDoor(DeleteDoorData data)
+    public void DeleteDoor(DeviceIdData data, Action<object> action)
     {
-        Process<object>(
-            _fusionApi.deleteDoorJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.deleteDoor_, null, action, data);
     }
 
-    public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
+    public void GetDoorStatus(DeviceIdData data, Action<DoorStateResponse> action)
     {
-        return Process<DoorStateResponse>(
-            _fusionApi.getDoorStatusJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.getDoorStatus_, null, action, data);
     }
 
-    public void StartDoor(StartDoorData data)
+    public void StartDoor(DeviceIdData data, Action<object> action)
     {
-        Process<object>(
-            _fusionApi.startDoorJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.startDoor_, null, action, data);
     }
 
-    public void StopDoor(StopDoorData data)
+    public void StopDoor(DeviceIdData data, Action<object> action)
     {
-        Process<object>(
-            _fusionApi.stopDoorJson_,
-            null,
-            data
-        );
+        Process(_fusionApi.stopDoor_, null, action, data);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_fusion, sData) :
-                processWithoutDataWithResponse(_fusion);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_fusion, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_fusion, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

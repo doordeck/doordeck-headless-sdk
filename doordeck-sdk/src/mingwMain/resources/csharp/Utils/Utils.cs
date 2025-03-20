@@ -20,6 +20,9 @@ namespace Doordeck.Headless.Sdk.Utils
         public static T FromData<T>(sbyte* input) =>
             JsonSerializer.Deserialize<T>(ConvertSByteToString(input), JsonSerializerOptions);
 
+        public static T FromData<T>(string input) =>
+            JsonSerializer.Deserialize<T>(input, JsonSerializerOptions);
+
         public static sbyte* ToSByte(this string input) =>
             (sbyte*)Marshal.StringToHGlobalAnsi(input);
 

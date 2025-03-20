@@ -27,126 +27,86 @@ public unsafe class Account : IResource
         _symbols->DisposeStablePointer(_account.pinned);
     }
 
-    public TokenResponse RefreshToken(RefreshTokenData? data)
+    public void RefreshToken(RefreshTokenData? data, Action<TokenResponse> action)
     {
-        return Process<TokenResponse>(
-            _accountApi.refreshTokenJson_,
-            null,
-            data
-        );
+        Process(_accountApi.refreshToken_, null, action, data);
     }
 
-    public void Logout()
+    public void Logout(Action<object> action)
     {
-        Process<object>(
-            null,
-            _accountApi.logoutJson_,
-            null
-        );
+        Process(null, _accountApi.logout_, action, null);
     }
 
-    public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
+    public void RegisterEphemeralKey(RegisterEphemeralKeyData? data,
+        Action<RegisterEphemeralKeyResponse> action)
     {
-        return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
-            _accountApi.registerEphemeralKeyJson_,
-            null,
-            data
-        );
+        Process(_accountApi.registerEphemeralKey_, null, action, data);
     }
 
-    public RegisterEphemeralKeyResponse RegisterEphemeralKeyWithSecondaryAuthentication(
-        RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
+    public void RegisterEphemeralKeyWithSecondaryAuthentication(RegisterEphemeralKeyWithSecondaryAuthenticationData? data,
+        Action<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> action)
     {
-        return Process<RegisterEphemeralKeyResponse>(
-            _accountApi.registerEphemeralKeyWithSecondaryAuthenticationJson_,
-            null,
-            data
-        );
+        Process(_accountApi.registerEphemeralKeyWithSecondaryAuthentication_, null, action, data);
     }
 
-    public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
+    public void VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data,
+        Action<RegisterEphemeralKeyResponse> action)
     {
-        return Process<RegisterEphemeralKeyResponse>(
-            _accountApi.verifyEphemeralKeyRegistrationJson_,
-            null,
-            data
-        );
+        Process(_accountApi.verifyEphemeralKeyRegistration_, null, action, data);
     }
 
-    public void ReverifyEmail()
+    public void ReverifyEmail(Action<object> action)
     {
-        Process<object>(
-            null,
-            _accountApi.reverifyEmailJson_,
-            null
-        );
+        Process(null, _accountApi.reverifyEmail_, action, null);
     }
 
-    public void ChangePassword(ChangePasswordData data)
+    public void ChangePassword(ChangePasswordData data, Action<object> action)
     {
-        Process<object>(
-            _accountApi.changePasswordJson_,
-            null,
-            data
-        );
+        Process(_accountApi.changePassword_, null, action, data);
     }
 
-    public UserDetailsResponse GetUserDetails()
+    public void GetUserDetails(Action<UserDetailsResponse> action)
     {
-        return Process<UserDetailsResponse>(
-            null,
-            _accountApi.getUserDetailsJson_,
-            null
-        );
+        Process(null, _accountApi.getUserDetails_, action, null);
     }
 
-    public void UpdateUserDetails(UpdateUserDetailsData data)
+    public void UpdateUserDetails(UpdateUserDetailsData data, Action<object> action)
     {
-        Process<object>(
-            _accountApi.updateUserDetailsJson_,
-            null,
-            data
-        );
+        Process(_accountApi.updateUserDetails_, null, action, data);
     }
 
-    public void DeleteAccount()
+    public void DeleteAccount(Action<object> action)
     {
-        Process<object>(
-            null,
-            _accountApi.deleteAccountJson_,
-            null
-        );
+        Process(null, _accountApi.deleteAccount_, action, null);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_account, sData) :
-                processWithoutDataWithResponse(_account);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_account, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_account, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

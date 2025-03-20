@@ -27,80 +27,58 @@ public unsafe class Accountless : IResource
         _symbols->DisposeStablePointer(_accountless.pinned);
     }
 
-    public TokenResponse Login(LoginData data)
+    public void Login(LoginData data, Action<TokenResponse> action)
     {
-        return Process<TokenResponse>(
-            _accountlessApi.loginJson_,
-            null,
-            data
-        );
+        Process(_accountlessApi.login_, null, action, data);
     }
 
-    public TokenResponse Registration(RegistrationData data)
+    public void Registration(RegistrationData data, Action<TokenResponse> action)
     {
-        return Process<TokenResponse>(
-            _accountlessApi.registrationJson_,
-            null,
-            data
-        );
+        Process(_accountlessApi.registration_, null, action, data);
     }
 
-    public void VerifyEmail(VerifyEmailData data)
+    public void VerifyEmail(VerifyEmailData data, Action<object> action)
     {
-        Process<object>(
-            _accountlessApi.verifyEmailJson_,
-            null,
-            data
-        );
+        Process(_accountlessApi.verifyEmail_, null, action, data);
     }
 
-    public void PasswordReset(PasswordResetData data)
+    public void PasswordReset(PasswordResetData data, Action<object> action)
     {
-        Process<object>(
-            _accountlessApi.passwordResetJson_,
-            null,
-            data
-        );
+        Process(_accountlessApi.passwordReset_, null, action, data);
     }
 
-    public void PasswordResetVerify(PasswordResetVerifyData data)
+    public void PasswordResetVerify(PasswordResetVerifyData data, Action<object> action)
     {
-        Process<object>(
-            _accountlessApi.passwordResetVerifyJson_,
-            null,
-            data
-        );
+        Process(_accountlessApi.passwordResetVerify_, null, action, data);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_accountless, sData) :
-                processWithoutDataWithResponse(_accountless);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_accountless, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_accountless, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

@@ -26,53 +26,43 @@ public unsafe class Tiles : IResource
         _symbols->DisposeStablePointer(_tiles.pinned);
     }
 
-    public TileLocksResponse GetLocksBelongingToTile(GetLocksBelongingToTileData data)
+    public void GetLocksBelongingToTile(GetLocksBelongingToTileData data, Action<TileLocksResponse> action)
     {
-        return Process<TileLocksResponse>(
-            _tilesApi.getLocksBelongingToTileJson_,
-            null,
-            data
-        );
+        Process(_tilesApi.getLocksBelongingToTile_, null, action, data);
     }
 
-    public void AssociateMultipleLocks(AssociateMultipleLocksData data)
+    public void AssociateMultipleLocks(AssociateMultipleLocksData data, Action<object> action)
     {
-        Process<object>(
-            _tilesApi.associateMultipleLocksJson_,
-            null,
-            data
-        );
+        Process(_tilesApi.associateMultipleLocks_, null, action, data);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_tiles, sData) :
-                processWithoutDataWithResponse(_tiles);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_tiles, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_tiles, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }

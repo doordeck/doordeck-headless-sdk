@@ -11,12 +11,11 @@ import com.doordeck.multiplatform.sdk.util.launchCallback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CValuesRef
 
 actual object HelperApi {
 
     @CName("uploadPlatformLogo")
-    fun uploadPlatformLogo(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun uploadPlatformLogo(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
@@ -31,7 +30,7 @@ actual object HelperApi {
     }
 
     @CName("assistedLogin")
-    fun assistedLogin(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun assistedLogin(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val assistedLoginData = data.fromJson<AssistedLoginData>()
@@ -42,7 +41,7 @@ actual object HelperApi {
     }
 
     @CName("assistedRegisterEphemeralKey")
-    fun assistedRegisterEphemeralKey(data: String? = null, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun assistedRegisterEphemeralKey(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
@@ -53,7 +52,7 @@ actual object HelperApi {
     }
 
     @CName("assistedRegister")
-    fun assistedRegister(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun assistedRegister(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val assistedRegisterData = data.fromJson<AssistedRegisterData>()

@@ -43,7 +43,6 @@ import com.doordeck.multiplatform.sdk.util.launchCallback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.CValuesRef
 
 actual object LockOperationsApi {
     /**
@@ -52,7 +51,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
     @CName("getSingleLock")
-    fun getSingleLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getSingleLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getSingleLockData = data.fromJson<GetSingleLockData>()
@@ -68,7 +67,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
     @CName("getLockAuditTrail")
-    fun getLockAuditTrail(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getLockAuditTrail(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getLockAuditTrailData = data.fromJson<GetLockAuditTrailData>()
@@ -84,7 +83,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
     @CName("getAuditForUser")
-    fun getAuditForUser(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getAuditForUser(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getAuditForUserData = data.fromJson<GetAuditForUserData>()
@@ -100,7 +99,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
     @CName("getUsersForLock")
-    fun getUsersForLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUsersForLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUsersForLockData = data.fromJson<GetUsersForLockData>()
@@ -116,7 +115,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
     @CName("getLocksForUser")
-    fun getLocksForUser(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getLocksForUser(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getLocksForUserData = data.fromJson<GetLocksForUserData>()
@@ -132,7 +131,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockName")
-    fun updateLockName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockNameData = data.fromJson<UpdateLockNameData>()
@@ -148,7 +147,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockFavourite")
-    fun updateLockFavourite(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockFavourite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockFavouriteData = data.fromJson<UpdateLockFavouriteData>()
@@ -164,7 +163,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockColour")
-    fun updateLockColour(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockColour(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockColourData = data.fromJson<UpdateLockColourData>()
@@ -180,7 +179,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockSettingDefaultName")
-    fun updateLockSettingDefaultName(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockSettingDefaultName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockSettingDefaultNameData = data.fromJson<UpdateLockSettingDefaultNameData>()
@@ -196,7 +195,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("setLockSettingPermittedAddresses")
-    fun setLockSettingPermittedAddresses(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun setLockSettingPermittedAddresses(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val setLockSettingPermittedAddressesData = data.fromJson<SetLockSettingPermittedAddressesData>()
@@ -212,7 +211,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockSettingHidden")
-    fun updateLockSettingHidden(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockSettingHidden(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockSettingHiddenData = data.fromJson<UpdateLockSettingHiddenData>()
@@ -228,7 +227,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("setLockSettingTimeRestrictions")
-    fun setLockSettingTimeRestrictions(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun setLockSettingTimeRestrictions(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val setLockSettingTimeRestrictionsData = data.fromJson<SetLockSettingTimeRestrictionsData>()
@@ -244,7 +243,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     @CName("updateLockSettingLocationRestrictions")
-    fun updateLockSettingLocationRestrictions(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateLockSettingLocationRestrictions(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateLockSettingLocationRestrictionsData = data.fromJson<UpdateLockSettingLocationRestrictionsData>()
@@ -260,7 +259,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
      */
     @CName("getUserPublicKey")
-    fun getUserPublicKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyData = data.fromJson<GetUserPublicKeyData>()
@@ -276,7 +275,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @CName("getUserPublicKeyByEmail")
-    fun getUserPublicKeyByEmail(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByEmail(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyData = data.fromJson<GetUserPublicKeyByEmailData>()
@@ -292,7 +291,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @CName("getUserPublicKeyByTelephone")
-    fun getUserPublicKeyByTelephone(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByTelephone(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByTelephoneData = data.fromJson<GetUserPublicKeyByTelephoneData>()
@@ -308,7 +307,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @CName("getUserPublicKeyByLocalKey")
-    fun getUserPublicKeyByLocalKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByLocalKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByLocalKeyData = data.fromJson<GetUserPublicKeyByLocalKeyData>()
@@ -324,7 +323,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @CName("getUserPublicKeyByForeignKey")
-    fun getUserPublicKeyByForeignKey(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByForeignKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByForeignKeyData = data.fromJson<GetUserPublicKeyByForeignKeyData>()
@@ -340,7 +339,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     @CName("getUserPublicKeyByIdentity")
-    fun getUserPublicKeyByIdentity(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByIdentity(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByIdentityData = data.fromJson<GetUserPublicKeyByIdentityData>()
@@ -356,7 +355,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     @CName("getUserPublicKeyByEmails")
-    fun getUserPublicKeyByEmails(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByEmails(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByEmailsData = data.fromJson<GetUserPublicKeyByEmailsData>()
@@ -372,7 +371,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     @CName("getUserPublicKeyByTelephones")
-    fun getUserPublicKeyByTelephones(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByTelephones(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByTelephonesData = data.fromJson<GetUserPublicKeyByTelephonesData>()
@@ -388,7 +387,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     @CName("getUserPublicKeyByLocalKeys")
-    fun getUserPublicKeyByLocalKeys(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByLocalKeys(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByLocalKeysData = data.fromJson<GetUserPublicKeyByLocalKeysData>()
@@ -404,7 +403,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     @CName("getUserPublicKeyByForeignKeys")
-    fun getUserPublicKeyByForeignKeys(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getUserPublicKeyByForeignKeys(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val getUserPublicKeyByForeignKeysData = data.fromJson<GetUserPublicKeyByForeignKeysData>()
@@ -420,7 +419,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
     @CName("unlock")
-    fun unlock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun unlock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val unlockOperationData = data.fromJson<UnlockOperationData>()
@@ -436,7 +435,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
     @CName("shareLock")
-    fun shareLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun shareLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val shareLockOperationData = data.fromJson<ShareLockOperationData>()
@@ -452,7 +451,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
      */
     @CName("batchShareLock")
-    fun batchShareLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun batchShareLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val batchShareLockOperationData = data.fromJson<BatchShareLockOperationData>()
@@ -468,7 +467,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     @CName("revokeAccessToLock")
-    fun revokeAccessToLock(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun revokeAccessToLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val revokeAccessToLockOperationData = data.fromJson<RevokeAccessToLockOperationData>()
@@ -484,7 +483,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     @CName("updateSecureSettingUnlockDuration")
-    fun updateSecureSettingUnlockDuration(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateSecureSettingUnlockDuration(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateSecureSettingUnlockDurationData = data.fromJson<UpdateSecureSettingUnlockDurationData>()
@@ -500,7 +499,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
     @CName("updateSecureSettingUnlockBetween")
-    fun updateSecureSettingUnlockBetween(data: String, callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun updateSecureSettingUnlockBetween(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 val updateSecureSettingUnlockBetweenData = data.fromJson<UpdateSecureSettingUnlockBetweenData>()
@@ -516,7 +515,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
     @CName("getPinnedLocks")
-    fun getPinnedLocks(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getPinnedLocks(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 LockOperationsClient.getPinnedLocksRequest()
@@ -531,7 +530,7 @@ actual object LockOperationsApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
     @CName("getShareableLocks")
-    fun getShareableLocks(callback: CPointer<CFunction<(CValuesRef<ByteVar>) -> ByteVar>>) {
+    fun getShareableLocks(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
         launchCallback(
             block = {
                 LockOperationsClient.getShareableLocksRequest()

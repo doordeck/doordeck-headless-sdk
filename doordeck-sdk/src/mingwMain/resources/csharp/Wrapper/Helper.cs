@@ -27,71 +27,54 @@ public unsafe class Helper : IResource
         _symbols->DisposeStablePointer(_helper.pinned);
     }
 
-    public void UploadPlatformLogo(UploadPlatformLogoData data)
+    public void UploadPlatformLogo(UploadPlatformLogoData data, Action<object> action)
     {
-        Process<object>(
-            _helperApi.uploadPlatformLogoJson_,
-            null,
-            data
-        );
+        Process(_helperApi.uploadPlatformLogo_, null, action, data);
     }
 
-    public AssistedLoginResponse AssistedLogin(AssistedLoginData data)
+    public void AssistedLogin(AssistedLoginData data, Action<AssistedLoginResponse> action)
     {
-        return Process<AssistedLoginResponse>(
-            _helperApi.assistedLoginJson_,
-            null,
-            data
-        );
+        Process(_helperApi.assistedLogin_, null, action, data);
     }
 
-    public AssistedRegisterEphemeralKeyResponse AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
+    public void AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data,
+        Action<AssistedRegisterEphemeralKeyResponse> action)
     {
-        return Process<AssistedRegisterEphemeralKeyResponse>(
-            _helperApi.assistedRegisterEphemeralKeyJson_,
-            null,
-            data
-        );
+        Process(_helperApi.assistedRegisterEphemeralKey_, null, action, data);
     }
 
-    public void AssistedRegister(AssistedRegisterData data)
+    public void AssistedRegister(AssistedRegisterData data, Action<object> action)
     {
-        Process<object>(
-            _helperApi.assistedRegisterJson_,
-            null,
-            data
-        );
+        Process(_helperApi.assistedRegister_, null, action, data);
     }
 
-    private TResponse Process<TResponse>(
+    private void Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
+        Action<TResponse> userCallback,
         object? data
     )
     {
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_helper, sData) :
-                processWithoutDataWithResponse(_helper);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(userCallback);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_helper, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_helper, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
     }
 }
