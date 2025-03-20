@@ -5,12 +5,12 @@ namespace Doordeck.Headless.Sdk.Utils;
 
 internal class CallbackHolder<TResponse>
 {
-    private readonly Action<TResponse> _userCallback;
+    private TaskCompletionSource<TResponse> _tcs;
     private GCHandle _handle;
 
-    public CallbackHolder(Action<TResponse>? userCallback)
+    public CallbackHolder(TaskCompletionSource<TResponse> tcs)
     {
-        _userCallback = userCallback;
+        _tcs = tcs;
         _handle = GCHandle.Alloc(this);
     }
 
@@ -33,7 +33,8 @@ internal class CallbackHolder<TResponse>
         {
             var resultData = Utils.FromData<ResultData<TResponse>>(result);
             resultData.HandleException();
-            _userCallback.Invoke(resultData.Success!.Result ?? default!);
+            var r = resultData.Success!.Result ?? default!;
+            _tcs.SetResult(r);
         }
         finally
         {

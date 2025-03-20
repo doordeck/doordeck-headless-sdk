@@ -4,7 +4,7 @@ using Doordeck.Headless.Sdk.Model;
 
 namespace Doordeck.Headless.Sdk.Utils
 {
-    public static unsafe class Utils
+    public static class Utils
     {
         private static readonly JsonSerializerOptions JsonSerializerOptions = new()
         {
@@ -14,19 +14,19 @@ namespace Doordeck.Headless.Sdk.Utils
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        public static sbyte* ToData<T>(this T input) =>
+        public static unsafe sbyte* ToData<T>(this T input) =>
             JsonSerializer.Serialize(input, JsonSerializerOptions).ToSByte();
 
-        public static T FromData<T>(sbyte* input) =>
+        public static unsafe T FromData<T>(sbyte* input) =>
             JsonSerializer.Deserialize<T>(ConvertSByteToString(input), JsonSerializerOptions);
 
         public static T FromData<T>(string input) =>
             JsonSerializer.Deserialize<T>(input, JsonSerializerOptions);
 
-        public static sbyte* ToSByte(this string input) =>
+        public static unsafe sbyte* ToSByte(this string input) =>
             (sbyte*)Marshal.StringToHGlobalAnsi(input);
 
-        public static string ConvertSByteToString(sbyte* input) =>
+        public static unsafe string ConvertSByteToString(sbyte* input) =>
             Marshal.PtrToStringAnsi((IntPtr)input)!;
 
         public static bool ToBoolean(this byte input) =>
@@ -52,74 +52,88 @@ namespace Doordeck.Headless.Sdk.Utils
             {
                 throw new SdkException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("MissingContextFieldException"))
+
+            if (exceptionType.Contains("MissingContextFieldException"))
             {
                 throw new MissingContextFieldException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("BatchShareFailedException"))
+
+            if (exceptionType.Contains("BatchShareFailedException"))
             {
-                throw new BatchShareFailedException(input.Failure.ExceptionMessage, new List<string>());
+                throw new BatchShareFailedException(input.Failure.ExceptionMessage, []);
             }
-            else if (exceptionType.Contains("BadRequestException"))
+
+            if (exceptionType.Contains("BadRequestException"))
             {
                 throw new BadRequestException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("UnauthorizedException"))
+
+            if (exceptionType.Contains("UnauthorizedException"))
             {
                 throw new UnauthorizedException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("ForbiddenException"))
+
+            if (exceptionType.Contains("ForbiddenException"))
             {
                 throw new ForbiddenException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("NotFoundException"))
+
+            if (exceptionType.Contains("NotFoundException"))
             {
                 throw new NotFoundException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("MethodNotAllowedException"))
+
+            if (exceptionType.Contains("MethodNotAllowedException"))
             {
                 throw new MethodNotAllowedException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("NotAcceptableException"))
+
+            if (exceptionType.Contains("NotAcceptableException"))
             {
                 throw new NotAcceptableException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("ConflictException"))
+
+            if (exceptionType.Contains("ConflictException"))
             {
                 throw new ConflictException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("GoneException"))
+
+            if (exceptionType.Contains("GoneException"))
             {
                 throw new GoneException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("LockedException"))
+
+            if (exceptionType.Contains("LockedException"))
             {
                 throw new LockedException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("TooEarlyException"))
+
+            if (exceptionType.Contains("TooEarlyException"))
             {
                 throw new TooEarlyException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("TooManyRequestsException"))
+
+            if (exceptionType.Contains("TooManyRequestsException"))
             {
                 throw new TooManyRequestsException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("InternalServerErrorException"))
+
+            if (exceptionType.Contains("InternalServerErrorException"))
             {
                 throw new InternalServerErrorException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("ServiceUnavailableException"))
+
+            if (exceptionType.Contains("ServiceUnavailableException"))
             {
                 throw new ServiceUnavailableException(input.Failure.ExceptionMessage);
             }
-            else if (exceptionType.Contains("GatewayTimeoutException"))
+
+            if (exceptionType.Contains("GatewayTimeoutException"))
             {
                 throw new GatewayTimeoutException(input.Failure.ExceptionMessage);
             }
-            else
-            {
-                throw new SdkException("Unhandled exception type: " + exceptionType);
-            }
+
+            throw new SdkException("Unhandled exception type: " + exceptionType);
         }
     }
 }

@@ -59,7 +59,7 @@ public class Helper : IResource
         var sData = data != null ? data.ToData() : null;
         try
         {
-            var holder = new CallbackHolder<TResponse>(null, tcs);
+            var holder = new CallbackHolder<TResponse>(tcs);
             IResource.CallbackDelegate callbackDelegate = holder.Callback;
             var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
             if (data != null)
