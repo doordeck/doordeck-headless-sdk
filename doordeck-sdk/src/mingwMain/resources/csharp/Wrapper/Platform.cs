@@ -5,16 +5,16 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class Platform : IResource
+public class Platform : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi _platform;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct _platformApi;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -22,229 +22,145 @@ public unsafe class Platform : IResource
         _platformApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformApi;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_platform.pinned);
     }
 
-    public void CreateApplication(CreateApplicationData data)
+    public unsafe Task<object> CreateApplication(CreateApplicationData data)
     {
-        Process<object>(
-            _platformApi.createApplicationJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.createApplication_, null, data);
     }
 
-    public List<ApplicationResponse> ListApplications()
+    public unsafe Task<List<ApplicationResponse>> ListApplications()
     {
-        return Process<List<ApplicationResponse>>(
-            null,
-            _platformApi.listApplicationsJson_,
-            null
-        );
+        return Process<List<ApplicationResponse>>(null, _platformApi.listApplications_, null);
     }
 
-    public ApplicationResponse GetApplication(GetApplicationData data)
+    public unsafe Task<ApplicationResponse> GetApplication(ApplicationIdData data)
     {
-        return Process<ApplicationResponse>(
-            _platformApi.getApplicationJson_,
-            null,
-            data
-        );
+        return Process<ApplicationResponse>(_platformApi.getApplication_, null, data);
     }
 
-    public void UpdateApplicationName(UpdateApplicationNameData data)
+    public unsafe Task<object> UpdateApplicationName(UpdateApplicationNameData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationNameJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationName_, null, data);
     }
 
-    public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
+    public unsafe Task<object> UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationCompanyNameJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationCompanyName_, null, data);
     }
 
-    public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
+    public unsafe Task<object> UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationMailingAddressJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationMailingAddress_, null, data);
     }
 
-    public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
+    public unsafe Task<object> UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationPrivacyPolicyJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationPrivacyPolicy_, null, data);
     }
 
-    public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
+    public unsafe Task<object> UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationSupportContactJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationSupportContact_, null, data);
     }
 
-    public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
+    public unsafe Task<object> UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationAppLinkJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationAppLink_, null, data);
     }
 
-    public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
+    public unsafe Task<object> UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationEmailPreferencesJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationEmailPreferences_, null, data);
     }
 
-    public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
+    public unsafe Task<object> UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
     {
-        Process<object>(
-            _platformApi.updateApplicationLogoUrlJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.updateApplicationLogoUrl_, null, data);
     }
 
-    public void DeleteApplication(DeleteApplicationData data)
+    public unsafe Task<object> DeleteApplication(ApplicationIdData data)
     {
-        Process<object>(
-            _platformApi.deleteApplicationJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.deleteApplication_, null, data);
     }
 
-    public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData data)
+    public unsafe Task<GetLogoUploadUrlResponse> GetLogoUploadUrl(GetLogoUploadUrlData data)
     {
-        return Process<GetLogoUploadUrlResponse>(
-            _platformApi.getLogoUploadUrlJson_,
-            null,
-            data
-        );
+        return Process<GetLogoUploadUrlResponse>(_platformApi.getLogoUploadUrl_, null, data);
     }
 
-    public void AddAuthKey(AddAuthKeyData data)
+    public unsafe Task<object> AddAuthKey(AddAuthKeyData data)
     {
-        Process<object>(
-            _platformApi.addAuthKeyJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.addAuthKey_, null, data);
     }
 
-    public void AddAuthIssuer(AddAuthIssuerData data)
+    public unsafe Task<object> AddAuthIssuer(AuthIssuerData data)
     {
-        Process<object>(
-            _platformApi.addAuthIssuerJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.addAuthIssuer_, null, data);
     }
 
-    public void DeleteAuthIssuer(DeleteAuthIssuerData data)
+    public unsafe Task<object> DeleteAuthIssuer(AuthIssuerData data)
     {
-        Process<object>(
-            _platformApi.deleteAuthIssuerJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.deleteAuthIssuer_, null, data);
     }
 
-    public void AddCorsDomain(AddCorsDomainData data)
+    public unsafe Task<object> AddCorsDomain(CorsDomainData data)
     {
-        Process<object>(
-            _platformApi.addCorsDomainJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.addCorsDomain_, null, data);
     }
 
-    public void RemoveCorsDomain(RemoveCorsDomainData data)
+    public unsafe Task<object> RemoveCorsDomain(CorsDomainData data)
     {
-        Process<object>(
-            _platformApi.removeCorsDomainJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.removeCorsDomain_, null, data);
     }
 
-    public void AddApplicationOwner(AddApplicationOwnerData data)
+    public unsafe Task<object> AddApplicationOwner(ApplicationOwnerData data)
     {
-        Process<object>(
-            _platformApi.addApplicationOwnerJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.addApplicationOwner_, null, data);
     }
 
-    public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
+    public unsafe Task<object> RemoveApplicationOwner(ApplicationOwnerData data)
     {
-        Process<object>(
-            _platformApi.removeApplicationOwnerJson_,
-            null,
-            data
-        );
+        return Process<object>(_platformApi.removeApplicationOwner_, null, data);
     }
 
-    public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(GetApplicationOwnersDetailsData data)
+    public unsafe Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(ApplicationOwnerData data)
     {
-        return Process<List<ApplicationOwnerDetailsResponse>>(
-            _platformApi.getApplicationOwnersDetailsJson_,
-            null,
-            data
-        );
+        return Process<List<ApplicationOwnerDetailsResponse>>(_platformApi.getApplicationOwnersDetails_, null, data);
     }
 
-    private TResponse Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
         object? data
     )
     {
+        var tcs = new TaskCompletionSource<TResponse>();
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_platform, sData) :
-                processWithoutDataWithResponse(_platform);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(null, tcs);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_platform, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_platform, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
+
+        return tcs.Task;
     }
 }

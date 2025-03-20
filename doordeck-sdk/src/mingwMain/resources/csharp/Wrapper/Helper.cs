@@ -5,16 +5,16 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class Helper : IResource
+public class Helper : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi _helper;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._HelperApi_e__Struct _helperApi;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -22,45 +22,44 @@ public unsafe class Helper : IResource
         _helperApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.HelperApi;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_helper.pinned);
     }
 
-    public void UploadPlatformLogo(UploadPlatformLogoData data, Action<object> action)
+    public unsafe Task<object> UploadPlatformLogo(UploadPlatformLogoData data)
     {
-        Process(_helperApi.uploadPlatformLogo_, null, action, data);
+        return Process<object>(_helperApi.uploadPlatformLogo_, null, data);
     }
 
-    public void AssistedLogin(AssistedLoginData data, Action<AssistedLoginResponse> action)
+    public unsafe Task<AssistedLoginResponse> AssistedLogin(AssistedLoginData data)
     {
-        Process(_helperApi.assistedLogin_, null, action, data);
+        return Process<AssistedLoginResponse>(_helperApi.assistedLogin_, null, data);
     }
 
-    public void AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data,
-        Action<AssistedRegisterEphemeralKeyResponse> action)
+    public unsafe Task<AssistedRegisterEphemeralKeyResponse> AssistedRegisterEphemeralKey(AssistedRegisterEphemeralKeyData? data)
     {
-        Process(_helperApi.assistedRegisterEphemeralKey_, null, action, data);
+        return Process<AssistedRegisterEphemeralKeyResponse>(_helperApi.assistedRegisterEphemeralKey_, null, data);
     }
 
-    public void AssistedRegister(AssistedRegisterData data, Action<object> action)
+    public unsafe Task<object> AssistedRegister(AssistedRegisterData data)
     {
-        Process(_helperApi.assistedRegister_, null, action, data);
+        return Process<object>(_helperApi.assistedRegister_, null, data);
     }
 
-    private void Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
             sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_HelperApi,
             void*, void> processWithoutData,
-        Action<TResponse> userCallback,
         object? data
     )
     {
+        var tcs = new TaskCompletionSource<TResponse>();
         var sData = data != null ? data.ToData() : null;
         try
         {
-            var holder = new CallbackHolder<TResponse>(userCallback);
+            var holder = new CallbackHolder<TResponse>(null, tcs);
             IResource.CallbackDelegate callbackDelegate = holder.Callback;
             var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
             if (data != null)
@@ -76,5 +75,7 @@ public unsafe class Helper : IResource
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
         }
+
+        return tcs.Task;
     }
 }
