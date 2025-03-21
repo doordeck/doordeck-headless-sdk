@@ -168,7 +168,7 @@ class LockOperationsApiTest : MockTest() {
             delay(10.milliseconds)
 
             // Then
-            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
         }
     }
 
@@ -186,7 +186,7 @@ class LockOperationsApiTest : MockTest() {
             delay(10.milliseconds)
 
             // Then
-            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
         }
     }
 
@@ -204,7 +204,7 @@ class LockOperationsApiTest : MockTest() {
             delay(10.milliseconds)
 
             // Then
-            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
         }
     }
 
@@ -222,7 +222,7 @@ class LockOperationsApiTest : MockTest() {
             delay(10.milliseconds)
 
             // Then
-            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
         }
     }
 
