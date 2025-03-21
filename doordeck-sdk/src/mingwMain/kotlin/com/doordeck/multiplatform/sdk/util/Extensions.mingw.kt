@@ -6,6 +6,15 @@ import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import io.ktor.client.HttpClientConfig
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.cstr
+import kotlinx.cinterop.invoke
+import kotlinx.cinterop.memScoped
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     // Certificate pinner is not supported on the WinHttp engine
@@ -48,13 +57,23 @@ fun buildSdkConfig(apiEnvironment: ApiEnvironment, cloudAuthToken: String? = nul
  *          the result is wrapped in `SuccessResultData`.
  *          If an exception occurs, it is wrapped in `FailedResultData` along with an error message.
  */
-internal inline fun <reified T>resultData(crossinline block: () -> T): String {
-    return try {
-        val result = block()
-        val success = if (result != Unit) result else null
-        ResultData(SuccessResultData(success))
-    } catch (exception: Throwable) {
-        val errorMessage = exception.message ?: exception.cause?.message ?: "Unknown error occurred"
-        ResultData(failure = FailedResultData(exception.toString(), errorMessage))
-    }.toJson()
+internal inline fun <reified T>launchCallback(
+    crossinline block: suspend () -> T,
+    callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
+) {
+    GlobalScope.launch(Dispatchers.Default) {
+        val result: String = try {
+            val result = block()
+            val success = if (result != Unit) result else null
+            ResultData(SuccessResultData(success))
+        } catch (exception: Throwable) {
+            val errorMessage = exception.message ?: exception.cause?.message ?: "Unknown error occurred"
+            ResultData(failure = FailedResultData(exception.toString(), errorMessage))
+        }.toJson()
+
+        memScoped {
+            val cString = result.cstr.ptr
+            callback.invoke(cString)
+        }
+    }
 }

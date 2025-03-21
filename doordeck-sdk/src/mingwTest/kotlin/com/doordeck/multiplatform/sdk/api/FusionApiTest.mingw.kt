@@ -1,112 +1,166 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
 import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
 import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
 import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.model.data.DeleteDoorData
+import com.doordeck.multiplatform.sdk.UNIT_RESULT_DATA
+import com.doordeck.multiplatform.sdk.capturedCallback
+import com.doordeck.multiplatform.sdk.model.data.DeviceIdData
 import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
-import com.doordeck.multiplatform.sdk.model.data.GetDoorStatusData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
-import com.doordeck.multiplatform.sdk.model.data.StartDoorData
-import com.doordeck.multiplatform.sdk.model.data.StopDoorData
+import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.milliseconds
 
-class FusionApiTest : MockTest() {
+class FusionApiTest : CallbackTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        val response = FusionApi.login("", "")
-        assertEquals(FUSION_LOGIN_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldLoginJson() = runTest {
-        val response = FusionApi.loginJson(FusionLoginData("", "").toJson())
-        assertEquals(FUSION_LOGIN_RESPONSE.toResultDataJson(), response)
+            // When
+            FusionApi.login(FusionLoginData("", "").toJson(), callbackPtr)
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(FUSION_LOGIN_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        val response = FusionApi.getIntegrationType()
-        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetIntegrationTypeJson() = runTest {
-        val response = FusionApi.getIntegrationTypeJson()
-        assertEquals(INTEGRATION_TYPE_RESPONSE.toResultDataJson(), response)
+            // When
+            FusionApi.getIntegrationType(callbackPtr)
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(INTEGRATION_TYPE_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        val response = FusionApi.getIntegrationConfiguration("")
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetIntegrationConfigurationJson() = runTest {
-        val response = FusionApi.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE.toResultDataJson(), response)
+            // When
+            FusionApi.getIntegrationConfiguration(
+                data = GetIntegrationConfigurationData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(INTEGRATION_CONFIGURATION_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldEnableDoor() = runTest {
-        FusionApi.enableDoor("", "", Fusion.DemoController())
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldEnableDoorJson() = runTest {
-        FusionApi.enableDoorJson(EnableDoorData("", "", Fusion.DemoController()).toJson())
+            // When
+            FusionApi.enableDoor(
+                data = EnableDoorData("", "", Fusion.DemoController()).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldDeleteDoor() = runTest {
-        FusionApi.deleteDoor(DEFAULT_DEVICE_ID)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldDeleteDoorJson() = runTest {
-        FusionApi.deleteDoorJson(DeleteDoorData(DEFAULT_DEVICE_ID).toJson())
+            // When
+            FusionApi.deleteDoor(
+                data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        val response = FusionApi.getDoorStatus(DEFAULT_DEVICE_ID)
-        assertEquals(DOOR_STATE_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetDoorStatusJson() = runTest {
-        val response = FusionApi.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
-        assertEquals(DOOR_STATE_RESPONSE.toResultDataJson(), response)
+            // When
+            FusionApi.getDoorStatus(
+                data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(DOOR_STATE_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldStartDoor() = runTest {
-        FusionApi.startDoor(DEFAULT_DEVICE_ID)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldStartDoorJson() = runTest {
-        FusionApi.startDoorJson(StartDoorData(DEFAULT_DEVICE_ID).toJson())
+            // When
+            FusionApi.startDoor(
+                data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldStopDoor() = runTest {
-        FusionApi.stopDoor(DEFAULT_DEVICE_ID)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldStopDoorJson() = runTest {
-        FusionApi.stopDoorJson(StopDoorData(DEFAULT_DEVICE_ID).toJson())
+            // When
+            FusionApi.stopDoor(
+                data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 }

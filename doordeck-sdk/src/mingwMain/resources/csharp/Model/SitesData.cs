@@ -1,20 +1,10 @@
 ﻿namespace Doordeck.Headless.Sdk.Model
 {
-    public class GetLocksForSiteData
+    public class SiteIdData
     {
         public string SiteId { get; set; }
 
-        public GetLocksForSiteData(string siteId)
-        {
-            SiteId = siteId;
-        }
-    }
-
-    public class GetUsersForSiteData
-    {
-        public string SiteId { get; set; }
-
-        public GetUsersForSiteData(string siteId)
+        public SiteIdData(string siteId)
         {
             SiteId = siteId;
         }

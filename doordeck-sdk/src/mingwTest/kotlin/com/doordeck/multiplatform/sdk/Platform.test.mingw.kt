@@ -10,4 +10,6 @@ actual fun getEnvironmentVariable(name: String): String? {
     return getenv(name)?.toKString()
 }
 
+internal val UNIT_RESULT_DATA = ResultData(SuccessResultData(null)).toJson()
+
 internal inline fun <reified T>T.toResultDataJson(): String = ResultData(SuccessResultData(this)).toJson()

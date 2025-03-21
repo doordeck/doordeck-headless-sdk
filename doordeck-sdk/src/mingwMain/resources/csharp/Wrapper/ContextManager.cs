@@ -4,16 +4,16 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class ContextManager : IResource
+public class ContextManager : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager _context;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct _contextManager;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -21,12 +21,12 @@ public unsafe class ContextManager : IResource
         _contextManager = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.context.ContextManager;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_context.pinned);
     }
 
-    public void SetApiEnvironment(ApiEnvironment apiEnvironment)
+    public unsafe void SetApiEnvironment(ApiEnvironment apiEnvironment)
     {
         var newApiEnvironment = apiEnvironment switch
         {
@@ -41,7 +41,7 @@ public unsafe class ContextManager : IResource
         _contextManager.setApiEnvironment(_context, newApiEnvironment);
     }
 
-    public ApiEnvironment GetApiEnvironment()
+    public unsafe ApiEnvironment GetApiEnvironment()
     {
         var apiEnvironment = _contextManager.getApiEnvironment_(_context);
         sbyte* result = null;
@@ -56,7 +56,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetCloudAuthToken(string token)
+    public unsafe void SetCloudAuthToken(string token)
     {
         var data = token.ToSByte();
         try
@@ -69,7 +69,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetCloudAuthToken()
+    public unsafe string GetCloudAuthToken()
     {
         sbyte* result = null;
         try
@@ -83,12 +83,12 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public bool IsCloudAuthTokenAboutToExpire()
+    public unsafe bool IsCloudAuthTokenAboutToExpire()
     {
         return _contextManager.isCloudAuthTokenAboutToExpire_(_context).ToBoolean();
     }
 
-    public void SetCloudRefreshToken(string token)
+    public unsafe void SetCloudRefreshToken(string token)
     {
         var data = token.ToSByte();
         try
@@ -101,7 +101,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetCloudRefreshToken()
+    public unsafe string GetCloudRefreshToken()
     {
         sbyte* result = null;
         try
@@ -115,7 +115,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetFusionHost(string host)
+    public unsafe void SetFusionHost(string host)
     {
         var data = host.ToSByte();
         try
@@ -128,7 +128,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetFusionHost()
+    public unsafe string GetFusionHost()
     {
         sbyte* result = null;
         try
@@ -142,7 +142,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetFusionAuthToken(string token)
+    public unsafe void SetFusionAuthToken(string token)
     {
         var data = token.ToSByte();
         try
@@ -155,7 +155,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetFusionAuthToken()
+    public unsafe string GetFusionAuthToken()
     {
         sbyte* result = null;
         try
@@ -169,7 +169,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetUserId(string userId)
+    public unsafe void SetUserId(string userId)
     {
         var data = userId.ToSByte();
         try
@@ -182,7 +182,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetUserId()
+    public unsafe string GetUserId()
     {
         sbyte* result = null;
         try
@@ -196,7 +196,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public void SetUserEmail(string email)
+    public unsafe void SetUserEmail(string email)
     {
         var data = email.ToSByte();
         try
@@ -209,7 +209,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    public string GetUserEmail()
+    public unsafe string GetUserEmail()
     {
         sbyte* result = null;
         try
@@ -227,7 +227,7 @@ public unsafe class ContextManager : IResource
 
     // GetCertificateChain
 
-    public bool IsCertificateChainAboutToExpire()
+    public unsafe bool IsCertificateChainAboutToExpire()
     {
         return _contextManager.isCertificateChainAboutToExpire_(_context).ToBoolean();
     }
@@ -236,12 +236,12 @@ public unsafe class ContextManager : IResource
 
     // GetKeyPair
 
-    public bool IsKeyPairValid()
+    public unsafe bool IsKeyPairValid()
     {
         return _contextManager.isKeyPairValid_(_context).ToBoolean();
     }
 
-    public void SetOperationContext(OperationContextData data)
+    public unsafe void SetOperationContext(OperationContextData data)
     {
         var sData = data.ToData();
         try
@@ -254,7 +254,7 @@ public unsafe class ContextManager : IResource
         }
     }
 
-    private void ReleaseMemory(sbyte* data, sbyte* result)
+    private unsafe void ReleaseMemory(sbyte* data, sbyte* result)
     {
         if (data != null) Marshal.FreeHGlobal((IntPtr)data);
 

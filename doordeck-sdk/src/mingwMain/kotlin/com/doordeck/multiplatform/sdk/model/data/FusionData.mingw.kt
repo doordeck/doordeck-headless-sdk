@@ -21,21 +21,6 @@ data class EnableDoorData(
 )
 
 @Serializable
-data class DeleteDoorData(
-    val deviceId: String
-)
-
-@Serializable
-data class GetDoorStatusData(
-    val deviceId: String
-)
-
-@Serializable
-data class StartDoorData(
-    val deviceId: String
-)
-
-@Serializable
-data class StopDoorData(
+data class DeviceIdData(
     val deviceId: String
 )

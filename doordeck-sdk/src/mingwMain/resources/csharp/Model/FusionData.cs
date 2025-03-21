@@ -35,42 +35,12 @@
             Controller = controller;
         }
     }
-    
-    public class DeleteDoorData
+
+    public class DeviceIdData
     {
         public string DeviceId { get; set; }
 
-        public DeleteDoorData(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
-    }
-    
-    public class GetDoorStatusData
-    {
-        public string DeviceId { get; set; }
-
-        public GetDoorStatusData(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
-    }
-    
-    public class StartDoorData
-    {
-        public string DeviceId { get; set; }
-
-        public StartDoorData(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
-    }
-    
-    public class StopDoorData
-    {
-        public string DeviceId { get; set; }
-
-        public StopDoorData(string deviceId)
+        public DeviceIdData(string deviceId)
         {
             DeviceId = deviceId;
         }

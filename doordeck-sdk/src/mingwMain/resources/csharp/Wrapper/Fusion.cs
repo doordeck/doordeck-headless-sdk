@@ -5,16 +5,16 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class Fusion : IResource
+public class Fusion : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi _fusion;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._FusionApi_e__Struct _fusionApi;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -22,112 +22,80 @@ public unsafe class Fusion : IResource
         _fusionApi = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.FusionApi;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_fusion.pinned);
     }
 
-    public FusionLoginResponse Login(FusionLoginData data)
+    public unsafe Task<FusionLoginResponse> Login(FusionLoginData data)
     {
-        return Process<FusionLoginResponse>(
-            _fusionApi.loginJson,
-            null,
-            data
-        );
+        return Process<FusionLoginResponse>(_fusionApi.login, null, data);
     }
 
-    public IntegrationTypeResponse GetIntegrationType()
+    public unsafe Task<IntegrationTypeResponse> GetIntegrationType()
     {
-        return Process<IntegrationTypeResponse>(
-            null,
-            _fusionApi.getIntegrationTypeJson_,
-            null
-        );
+        return Process<IntegrationTypeResponse>(null, _fusionApi.getIntegrationType_, null);
     }
 
-    public List<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
+    public unsafe Task<IntegrationConfigurationResponse> GetIntegrationConfiguration(GetIntegrationConfigurationData data)
     {
-        return Process<List<IntegrationConfigurationResponse>>(
-            _fusionApi.getIntegrationConfigurationJson_,
-            null,
-            data
-        );
+        return Process<IntegrationConfigurationResponse>(_fusionApi.getIntegrationConfiguration_, null, data);
     }
 
-    public void EnableDoor(EnableDoorData data)
+    public unsafe Task<object> EnableDoor(EnableDoorData data)
     {
-        Process<object>(
-            _fusionApi.enableDoorJson_,
-            null,
-            data
-        );
+        return Process<object>(_fusionApi.enableDoor_, null, data);
     }
 
-    public void DeleteDoor(DeleteDoorData data)
+    public unsafe Task<object> DeleteDoor(DeviceIdData data)
     {
-        Process<object>(
-            _fusionApi.deleteDoorJson_,
-            null,
-            data
-        );
+        return Process<object>(_fusionApi.deleteDoor_, null, data);
     }
 
-    public DoorStateResponse GetDoorStatus(GetDoorStatusData data)
+    public unsafe Task<DoorStateResponse> GetDoorStatus(DeviceIdData data)
     {
-        return Process<DoorStateResponse>(
-            _fusionApi.getDoorStatusJson_,
-            null,
-            data
-        );
+        return Process<DoorStateResponse>(_fusionApi.getDoorStatus_, null, data);
     }
 
-    public void StartDoor(StartDoorData data)
+    public unsafe Task<object> StartDoor(DeviceIdData data)
     {
-        Process<object>(
-            _fusionApi.startDoorJson_,
-            null,
-            data
-        );
+        return Process<object>(_fusionApi.startDoor_, null, data);
     }
 
-    public void StopDoor(StopDoorData data)
+    public unsafe Task<object> StopDoor(DeviceIdData data)
     {
-        Process<object>(
-            _fusionApi.stopDoorJson_,
-            null,
-            data
-        );
+        return Process<object>(_fusionApi.stopDoor_, null, data);
     }
 
-    private TResponse Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
         object? data
     )
     {
+        var tcs = new TaskCompletionSource<TResponse>();
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_fusion, sData) :
-                processWithoutDataWithResponse(_fusion);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(tcs);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_fusion, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_fusion, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
+
+        return tcs.Task;
     }
 }

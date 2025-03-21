@@ -5,16 +5,16 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class Account : IResource
+public class Account : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi _account;
 
     private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountApi_e__Struct _accountApi;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -22,131 +22,90 @@ public unsafe class Account : IResource
         _accountApi = symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.AccountApi;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_account.pinned);
     }
 
-    public TokenResponse RefreshToken(RefreshTokenData? data)
+    public unsafe Task<TokenResponse> RefreshToken(RefreshTokenData? data)
     {
-        return Process<TokenResponse>(
-            _accountApi.refreshTokenJson_,
-            null,
-            data
-        );
+        return Process<TokenResponse>(_accountApi.refreshToken_, null, data);
     }
 
-    public void Logout()
+    public unsafe Task<object> Logout()
     {
-        Process<object>(
-            null,
-            _accountApi.logoutJson_,
-            null
-        );
+        return Process<object>(null, _accountApi.logout_, null);
     }
 
-    public RegisterEphemeralKeyWithSecondaryAuthenticationResponse RegisterEphemeralKey(RegisterEphemeralKeyData? data)
+    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(RegisterEphemeralKeyData? data)
     {
-        return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(
-            _accountApi.registerEphemeralKeyJson_,
-            null,
-            data
-        );
+        return Process<RegisterEphemeralKeyResponse>(_accountApi.registerEphemeralKey_, null, data);
     }
 
-    public RegisterEphemeralKeyResponse RegisterEphemeralKeyWithSecondaryAuthentication(
-        RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
+    public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(RegisterEphemeralKeyWithSecondaryAuthenticationData? data)
     {
-        return Process<RegisterEphemeralKeyResponse>(
-            _accountApi.registerEphemeralKeyWithSecondaryAuthenticationJson_,
-            null,
-            data
-        );
+        return Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(_accountApi.registerEphemeralKeyWithSecondaryAuthentication_, null, data);
     }
 
-    public RegisterEphemeralKeyResponse VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
+    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(VerifyEphemeralKeyRegistrationData data)
     {
-        return Process<RegisterEphemeralKeyResponse>(
-            _accountApi.verifyEphemeralKeyRegistrationJson_,
-            null,
-            data
-        );
+        return Process<RegisterEphemeralKeyResponse>(_accountApi.verifyEphemeralKeyRegistration_, null, data);
     }
 
-    public void ReverifyEmail()
+    public unsafe Task<object> ReverifyEmail()
     {
-        Process<object>(
-            null,
-            _accountApi.reverifyEmailJson_,
-            null
-        );
+        return Process<object>(null, _accountApi.reverifyEmail_, null);
     }
 
-    public void ChangePassword(ChangePasswordData data)
+    public unsafe Task<object> ChangePassword(ChangePasswordData data)
     {
-        Process<object>(
-            _accountApi.changePasswordJson_,
-            null,
-            data
-        );
+        return Process<object>(_accountApi.changePassword_, null, data);
     }
 
-    public UserDetailsResponse GetUserDetails()
+    public unsafe Task<UserDetailsResponse> GetUserDetails()
     {
-        return Process<UserDetailsResponse>(
-            null,
-            _accountApi.getUserDetailsJson_,
-            null
-        );
+        return Process<UserDetailsResponse>(null, _accountApi.getUserDetails_, null);
     }
 
-    public void UpdateUserDetails(UpdateUserDetailsData data)
+    public unsafe Task<object> UpdateUserDetails(UpdateUserDetailsData data)
     {
-        Process<object>(
-            _accountApi.updateUserDetailsJson_,
-            null,
-            data
-        );
+        return Process<object>(_accountApi.updateUserDetails_, null, data);
     }
 
-    public void DeleteAccount()
+    public unsafe Task<object> DeleteAccount()
     {
-        Process<object>(
-            null,
-            _accountApi.deleteAccountJson_,
-            null
-        );
+        return Process<object>(null, _accountApi.deleteAccount_, null);
     }
 
-    private TResponse Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
         object? data
     )
     {
+        var tcs = new TaskCompletionSource<TResponse>();
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_account, sData) :
-                processWithoutDataWithResponse(_account);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(tcs);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_account, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_account, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
+
+        return tcs.Task;
     }
 }

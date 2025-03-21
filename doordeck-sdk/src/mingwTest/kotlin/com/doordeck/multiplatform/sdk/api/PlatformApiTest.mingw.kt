@@ -3,24 +3,20 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.APPLICATION_LIST_RESPONSE
 import com.doordeck.multiplatform.sdk.APPLICATION_OWNER_DETAILS_RESPONSE
 import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
+import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.model.data.AddApplicationOwnerData
-import com.doordeck.multiplatform.sdk.model.data.AddAuthIssuerData
+import com.doordeck.multiplatform.sdk.UNIT_RESULT_DATA
+import com.doordeck.multiplatform.sdk.capturedCallback
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
-import com.doordeck.multiplatform.sdk.model.data.AddCorsDomainData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationIdData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerData
+import com.doordeck.multiplatform.sdk.model.data.AuthIssuerData
+import com.doordeck.multiplatform.sdk.model.data.CorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.CreateApplicationData
-import com.doordeck.multiplatform.sdk.model.data.DeleteApplicationData
-import com.doordeck.multiplatform.sdk.model.data.DeleteAuthIssuerData
 import com.doordeck.multiplatform.sdk.model.data.EcKeyData
 import com.doordeck.multiplatform.sdk.model.data.EmailPreferencesData
-import com.doordeck.multiplatform.sdk.model.data.GetApplicationData
-import com.doordeck.multiplatform.sdk.model.data.GetApplicationOwnersDetailsData
 import com.doordeck.multiplatform.sdk.model.data.GetLogoUploadUrlData
-import com.doordeck.multiplatform.sdk.model.data.Platform
-import com.doordeck.multiplatform.sdk.model.data.RemoveApplicationOwnerData
-import com.doordeck.multiplatform.sdk.model.data.RemoveCorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationAppLinkData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationCompanyNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationEmailPreferencesData
@@ -29,229 +25,391 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationMailingAddress
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationPrivacyPolicyData
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationSupportContactData
+import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.milliseconds
 
-class PlatformApiTest : MockTest() {
+class PlatformApiTest : CallbackTest() {
 
     @Test
     fun shouldCreateApplication() = runTest {
-        PlatformApi.createApplication(Platform.CreateApplication("name", "companyName", "mailingAddress"))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldCreateApplicationJson() = runTest {
-        PlatformApi.createApplicationJson(CreateApplicationData("name", "companyName", "mailingAddress").toJson())
+            // When
+            PlatformApi.createApplication(
+                data = CreateApplicationData("name", "companyName", "mailingAddress").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldListApplications() = runTest {
-        val response = PlatformApi.listApplications()
-        assertEquals(APPLICATION_LIST_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldListApplicationsJson() = runTest {
-        val response = PlatformApi.listApplicationsJson()
-        assertEquals(APPLICATION_LIST_RESPONSE.toResultDataJson(), response)
+            // When
+            PlatformApi.listApplications(callbackPtr)
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(APPLICATION_LIST_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetApplication() = runTest {
-        val response = PlatformApi.getApplication(DEFAULT_APPLICATION_ID)
-        assertEquals(APPLICATION_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetApplicationJson() = runTest {
-        val response = PlatformApi.getApplicationJson(GetApplicationData(DEFAULT_APPLICATION_ID).toJson())
-        assertEquals(APPLICATION_RESPONSE.toResultDataJson(), response)
+            // When
+            PlatformApi.getApplication(
+                data = ApplicationIdData(DEFAULT_APPLICATION_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(APPLICATION_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationName() = runTest {
-        PlatformApi.updateApplicationName(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationNameJson() = runTest {
-        PlatformApi.updateApplicationNameJson(UpdateApplicationNameData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationName(
+                data = UpdateApplicationNameData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationCompanyName() = runTest {
-        PlatformApi.updateApplicationCompanyName(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationCompanyNameJson() = runTest {
-        PlatformApi.updateApplicationCompanyNameJson(UpdateApplicationCompanyNameData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationCompanyName(
+                UpdateApplicationCompanyNameData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationMailingAddress() = runTest {
-        PlatformApi.updateApplicationMailingAddress(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationMailingAddressJson() = runTest {
-        PlatformApi.updateApplicationMailingAddressJson(UpdateApplicationMailingAddressData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationMailingAddress(
+                data = UpdateApplicationMailingAddressData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationPrivacyPolicy() = runTest {
-        PlatformApi.updateApplicationPrivacyPolicy(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationPrivacyPolicyJson() = runTest {
-        PlatformApi.updateApplicationPrivacyPolicyJson(UpdateApplicationPrivacyPolicyData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationPrivacyPolicy(
+                data = UpdateApplicationPrivacyPolicyData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationSupportContact() = runTest {
-        PlatformApi.updateApplicationSupportContact(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationSupportContactJson() = runTest {
-        PlatformApi.updateApplicationSupportContactJson(UpdateApplicationSupportContactData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationSupportContact(
+                data = UpdateApplicationSupportContactData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationAppLink() = runTest {
-        PlatformApi.updateApplicationAppLink(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationAppLinkJson() = runTest {
-        PlatformApi.updateApplicationAppLinkJson(UpdateApplicationAppLinkData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationAppLink(
+                data = UpdateApplicationAppLinkData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationEmailPreferences() = runTest {
-        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, Platform.EmailPreferences())
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationEmailPreferencesJson() = runTest {
-        PlatformApi.updateApplicationEmailPreferencesJson(UpdateApplicationEmailPreferencesData(DEFAULT_APPLICATION_ID, EmailPreferencesData()).toJson())
+            // When
+            PlatformApi.updateApplicationEmailPreferences(
+                data = UpdateApplicationEmailPreferencesData(DEFAULT_APPLICATION_ID, EmailPreferencesData()).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateApplicationLogoUrl() = runTest {
-        PlatformApi.updateApplicationLogoUrl(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateApplicationLogoUrlJson() = runTest {
-        PlatformApi.updateApplicationLogoUrlJson(UpdateApplicationLogoUrlData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.updateApplicationLogoUrl(
+                data = UpdateApplicationLogoUrlData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldDeleteApplication() = runTest {
-        PlatformApi.deleteApplication(DEFAULT_APPLICATION_ID)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldDeleteApplicationJson() = runTest {
-        PlatformApi.deleteApplicationJson(DeleteApplicationData(DEFAULT_APPLICATION_ID).toJson())
+            // When
+            PlatformApi.deleteApplication(
+                data = ApplicationIdData(DEFAULT_APPLICATION_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetLogoUploadUrl() = runTest {
-        val response = PlatformApi.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
-        assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetLogoUploadUrlJson() = runTest {
-        val response = PlatformApi.getLogoUploadUrlJson(GetLogoUploadUrlData(DEFAULT_APPLICATION_ID, "").toJson())
-        assertEquals(LOGO_UPLOAD_URL_RESPONSE.toResultDataJson(), response)
+            // When
+            PlatformApi.getLogoUploadUrl(
+                data = GetLogoUploadUrlData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(LOGO_UPLOAD_URL_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldAddAuthKey() = runTest {
-        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldAddAuthKeyJson() = runTest {
-        PlatformApi.addAuthKeyJson(AddAuthKeyData(DEFAULT_APPLICATION_ID, EcKeyData(use = "", kid = "", d = "", crv = "", x = "", y = "")).toJson())
+            // When
+            PlatformApi.addAuthKey(
+                data = AddAuthKeyData(DEFAULT_APPLICATION_ID, EcKeyData(use = "", kid = "", d = "", crv = "", x = "", y = "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldAddAuthIssuer() = runTest {
-        PlatformApi.addAuthIssuer(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldAddAuthIssuerJson() = runTest {
-        PlatformApi.addAuthIssuerJson(AddAuthIssuerData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.addAuthIssuer(
+                data = AuthIssuerData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldDeleteAuthIssuer() = runTest {
-        PlatformApi.deleteAuthIssuer(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldDeleteAuthIssuerJson() = runTest {
-        PlatformApi.deleteAuthIssuerJson(DeleteAuthIssuerData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.deleteAuthIssuer(
+                data = AuthIssuerData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldAddCorsDomain() = runTest {
-        PlatformApi.addCorsDomain(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldAddCorsDomainJson() = runTest {
-        PlatformApi.addCorsDomainJson(AddCorsDomainData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.addCorsDomain(
+                data = CorsDomainData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldRemoveCorsDomain() = runTest {
-        PlatformApi.removeCorsDomain(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldRemoveCorsDomainJson() = runTest {
-        PlatformApi.removeCorsDomainJson(RemoveCorsDomainData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.removeCorsDomain(
+                data = CorsDomainData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldAddApplicationOwner() = runTest {
-        PlatformApi.addApplicationOwner(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldAddApplicationOwnerJson() = runTest {
-        PlatformApi.addApplicationOwnerJson(AddApplicationOwnerData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.addApplicationOwner(
+                data = ApplicationOwnerData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldRemoveApplicationOwner() = runTest {
-        PlatformApi.removeApplicationOwner(DEFAULT_APPLICATION_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldRemoveApplicationOwnerJson() = runTest {
-        PlatformApi.removeApplicationOwnerJson(RemoveApplicationOwnerData(DEFAULT_APPLICATION_ID, "").toJson())
+            // When
+            PlatformApi.removeApplicationOwner(
+                data = ApplicationOwnerData(DEFAULT_APPLICATION_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetApplicationOwnersDetails() = runTest {
-        val response = PlatformApi.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
-        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetApplicationOwnersDetailsJson() = runTest {
-        val response = PlatformApi.getApplicationOwnersDetailsJson(GetApplicationOwnersDetailsData(DEFAULT_APPLICATION_ID).toJson())
-        assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE.toResultDataJson(), response)
+            // When
+            PlatformApi.getApplicationOwnersDetails(
+                data = ApplicationIdData(DEFAULT_APPLICATION_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 }

@@ -26,7 +26,7 @@ class CreateApplicationData:
     logoUrl: typing.Optional[str] = None
 
 @dataclass
-class GetApplicationData:
+class ApplicationIdData:
     applicationId: str
 
 @dataclass
@@ -68,10 +68,6 @@ class UpdateApplicationEmailPreferencesData:
 class UpdateApplicationLogoUrlData:
     applicationId: str
     logoUrl: str
-
-@dataclass
-class DeleteApplicationData:
-    applicationId: str
 
 @dataclass
 class GetLogoUploadUrlData:
@@ -127,36 +123,17 @@ class AddAuthKeyData:
     key: AuthKeyData
 
 @dataclass
-class AddAuthIssuerData:
+class AuthIssuerData:
     applicationId: str
     url: str
 
 @dataclass
-class DeleteAuthIssuerData:
+class CorsDomainData:
     applicationId: str
     url: str
 
 @dataclass
-class AddCorsDomainData:
-    applicationId: str
-    url: str
-
-@dataclass
-class RemoveCorsDomainData:
-    applicationId: str
-    url: str
-
-@dataclass
-class AddApplicationOwnerData:
+class ApplicationOwnerData:
     applicationId: str
     userId: str
-
-@dataclass
-class RemoveApplicationOwnerData:
-    applicationId: str
-    userId: str
-
-@dataclass
-class GetApplicationOwnersDetailsData:
-    applicationId: str
 %}

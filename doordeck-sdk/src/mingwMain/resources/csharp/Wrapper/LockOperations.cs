@@ -5,7 +5,7 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class LockOperations : IResource
+public class LockOperations : IResource
 {
     private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi _lockOperations;
 
@@ -13,9 +13,9 @@ public unsafe class LockOperations : IResource
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct
         _lockOperationsApi;
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
+    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
         Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
     {
         _symbols = symbols;
@@ -23,319 +23,195 @@ public unsafe class LockOperations : IResource
         _lockOperationsApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.LockOperationsApi;
     }
 
-    void IResource.Release()
+    unsafe void IResource.Release()
     {
         _symbols->DisposeStablePointer(_lockOperations.pinned);
     }
 
-    public LockResponse GetSingleLock(GetSingleLockData data)
+    public unsafe Task<LockResponse> GetSingleLock(GetSingleLockData data)
     {
-        return Process<LockResponse>(
-            _lockOperationsApi.getSingleLockJson_,
-            null,
-            data
-        );
+        return Process<LockResponse>(_lockOperationsApi.getSingleLock_, null, data);
     }
 
-    public List<AuditResponse> GetLockAuditTrail(GetLockAuditTrailData data)
+    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(GetLockAuditTrailData data)
     {
-        return Process<List<AuditResponse>>(
-            _lockOperationsApi.getLockAuditTrailJson_,
-            null,
-            data
-        );
+        return Process<List<AuditResponse>>(_lockOperationsApi.getLockAuditTrail_, null, data);
     }
 
-    public List<AuditResponse> GetAuditForUser(GetAuditForUserData data)
+    public unsafe Task<List<AuditResponse>> GetAuditForUser(GetAuditForUserData data)
     {
-        return Process<List<AuditResponse>>(
-            _lockOperationsApi.getAuditForUserJson_,
-            null,
-            data
-        );
+        return Process<List<AuditResponse>>(_lockOperationsApi.getAuditForUser_, null, data);
     }
 
-    public List<UserLockResponse> GetUsersForLock(GetUsersForLockData data)
+    public unsafe Task<List<UserLockResponse>> GetUsersForLock(GetUsersForLockData data)
     {
-        return Process<List<UserLockResponse>>(
-            _lockOperationsApi.getUsersForLockJson_,
-            null,
-            data
-        );
+        return Process<List<UserLockResponse>>(_lockOperationsApi.getUsersForLock_, null, data);
     }
 
-    public LockUserResponse GetLocksForUser(GetLocksForUserData data)
+    public unsafe Task<LockUserResponse> GetLocksForUser(GetLocksForUserData data)
     {
-        return Process<LockUserResponse>(
-            _lockOperationsApi.getLocksForUserJson_,
-            null,
-            data
-        );
+        return Process<LockUserResponse>(_lockOperationsApi.getLocksForUser_, null, data);
     }
 
-    public void UpdateLockName(UpdateLockNameData data)
+    public unsafe Task<object> UpdateLockName(UpdateLockNameData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockNameJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockName_, null, data);
     }
 
-    public void UpdateLockFavourite(UpdateLockFavouriteData data)
+    public unsafe Task<object> UpdateLockFavourite(UpdateLockFavouriteData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockFavouriteJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockFavourite_, null, data);
     }
 
-    public void UpdateLockColour(UpdateLockColourData data)
+    public unsafe Task<object> UpdateLockColour(UpdateLockColourData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockColourJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockColour_, null, data);
     }
 
-    public void UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data)
+    public unsafe Task<object> UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingDefaultNameJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockSettingDefaultName_, null, data);
     }
 
-    public void SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data)
+    public unsafe Task<object> SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data)
     {
-        Process<object>(
-            _lockOperationsApi.setLockSettingPermittedAddressesJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.setLockSettingPermittedAddresses_, null, data);
     }
 
-    public void UpdateLockSettingHidden(UpdateLockSettingHiddenData data)
+    public unsafe Task<object> UpdateLockSettingHidden(UpdateLockSettingHiddenData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingHiddenJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockSettingHidden_, null, data);
     }
 
-    public void SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data)
+    public unsafe Task<object> SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data)
     {
-        Process<object>(
-            _lockOperationsApi.setLockSettingTimeRestrictionsJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.setLockSettingTimeRestrictions_, null, data);
     }
 
-    public void UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data)
+    public unsafe Task<object> UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateLockSettingLocationRestrictionsJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateLockSettingLocationRestrictions_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKey(GetUserPublicKeyData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKey(GetUserPublicKeyData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKey_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByEmailJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKeyByEmail_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByTelephoneJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKeyByTelephone_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByLocalKeyJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKeyByLocalKey_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByForeignKeyJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKeyByForeignKey_, null, data);
     }
 
-    public UserPublicKeyResponse GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data)
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data)
     {
-        return Process<UserPublicKeyResponse>(
-            _lockOperationsApi.getUserPublicKeyByIdentityJson_,
-            null,
-            data
-        );
+        return Process<UserPublicKeyResponse>(_lockOperationsApi.getUserPublicKeyByIdentity_, null, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data)
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByEmailsJson_,
-            null,
-            data
-        );
+        return Process<List<BatchUserPublicKeyResponse>>(_lockOperationsApi.getUserPublicKeyByEmails_, null, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data)
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByTelephonesJson_,
-            null,
-            data
-        );
+        return Process<List<BatchUserPublicKeyResponse>>(_lockOperationsApi.getUserPublicKeyByTelephones_, null, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data)
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByLocalKeysJson_,
-            null,
-            data
-        );
+        return Process<List<BatchUserPublicKeyResponse>>(_lockOperationsApi.getUserPublicKeyByLocalKeys_, null, data);
     }
 
-    public List<BatchUserPublicKeyResponse> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data)
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data)
     {
-        return Process<List<BatchUserPublicKeyResponse>>(
-            _lockOperationsApi.getUserPublicKeyByForeignKeysJson_,
-            null,
-            data
-        );
+        return Process<List<BatchUserPublicKeyResponse>>(_lockOperationsApi.getUserPublicKeyByForeignKeys_, null, data);
     }
 
-    public void Unlock(UnlockOperationData data)
+    public unsafe Task<object> Unlock(UnlockOperationData data)
     {
-        Process<object>(
-            _lockOperationsApi.unlockJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.unlock_, null, data);
     }
 
-    public void ShareLock(ShareLockOperationData data)
+    public unsafe Task<object> ShareLock(ShareLockOperationData data)
     {
-        Process<object>(
-            _lockOperationsApi.shareLockJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.shareLock_, null, data);
     }
 
-    public void BatchShareLock(BatchShareLockOperationData data)
+    public unsafe Task<object> BatchShareLock(BatchShareLockOperationData data)
     {
-        Process<object>(
-            _lockOperationsApi.batchShareLockJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.batchShareLock_, null, data);
     }
 
-    public void RevokeAccessToLock(RevokeAccessToLockOperationData data)
+    public unsafe Task<object> RevokeAccessToLock(RevokeAccessToLockOperationData data)
     {
-        Process<object>(
-            _lockOperationsApi.revokeAccessToLockJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.revokeAccessToLock_, null, data);
     }
 
-    public void UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data)
+    public unsafe Task<object> UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateSecureSettingUnlockDurationJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateSecureSettingUnlockDuration_, null, data);
     }
 
-    public void UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data)
+    public unsafe Task<object> UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data)
     {
-        Process<object>(
-            _lockOperationsApi.updateSecureSettingUnlockBetweenJson_,
-            null,
-            data
-        );
+        return Process<object>(_lockOperationsApi.updateSecureSettingUnlockBetween_, null, data);
     }
 
-    public List<LockResponse> GetPinnedLocks()
+    public unsafe Task<List<LockResponse>> GetPinnedLocks()
     {
-        return Process<List<LockResponse>>(
-            null,
-            _lockOperationsApi.getPinnedLocksJson_,
-            null
-        );
+        return Process<List<LockResponse>>(null, _lockOperationsApi.getPinnedLocks_, null);
     }
 
-    public List<ShareableLockResponse> GetShareableLocks()
+    public unsafe Task<List<ShareableLockResponse>> GetShareableLocks()
     {
-        return Process<List<ShareableLockResponse>>(
-            null,
-            _lockOperationsApi.getShareableLocksJson_,
-            null
-        );
+        return Process<List<ShareableLockResponse>>(null, _lockOperationsApi.getShareableLocks_, null);
     }
 
-    private TResponse Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi,
-            sbyte*> processWithoutDataWithResponse,
+            void*, void> processWithoutData,
         object? data
     )
     {
+        var tcs = new TaskCompletionSource<TResponse>();
         var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
         try
         {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_lockOperations, sData) :
-                processWithoutDataWithResponse(_lockOperations);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
+            var holder = new CallbackHolder<TResponse>(tcs);
+            IResource.CallbackDelegate callbackDelegate = holder.Callback;
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            if (data != null)
+            {
+                processWithData(_lockOperations, sData, callbackPointer.ToPointer());
+            }
+            else
+            {
+                processWithoutData(_lockOperations, callbackPointer.ToPointer());
+            }
         }
         finally
         {
             if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
         }
+
+        return tcs.Task;
     }
 }
