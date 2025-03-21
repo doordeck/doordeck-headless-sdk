@@ -11,9 +11,11 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.UNIT_RESULT_DATA
 import com.doordeck.multiplatform.sdk.USER_LOCK_RESPONSE
 import com.doordeck.multiplatform.sdk.USER_PUBLIC_KEY_RESPONSE
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.capturedCallback
 import com.doordeck.multiplatform.sdk.model.data.BaseOperationData
 import com.doordeck.multiplatform.sdk.model.data.BatchShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.GetAuditForUserData
@@ -31,7 +33,6 @@ import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyByTelephoneData
 import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyByTelephonesData
 import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.model.data.GetUsersForLockData
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.RevokeAccessToLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.SetLockSettingPermittedAddressesData
 import com.doordeck.multiplatform.sdk.model.data.SetLockSettingTimeRestrictionsData
@@ -49,501 +50,710 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateSecureSettingUnlockDurati
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.toResultDataJson
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.milliseconds
 
 class LockOperationsApiTest : MockTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        val response = LockOperationsApi.getSingleLock(DEFAULT_LOCK_ID)
-        assertEquals(LOCK_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetSingleLockJson() = runTest {
-        val response = LockOperationsApi.getSingleLockJson(GetSingleLockData(DEFAULT_LOCK_ID).toJson())
-        assertEquals(LOCK_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(DEFAULT_LOCK_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(LOCK_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
-        assertEquals(AUDIT_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetLockAuditTrailJson() = runTest {
-        val response = LockOperationsApi.getLockAuditTrailJson(GetLockAuditTrailData(DEFAULT_LOCK_ID, 0, 0).toJson())
-        assertEquals(AUDIT_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getLockAuditTrail(
+                data = GetLockAuditTrailData(DEFAULT_LOCK_ID, 0, 0).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(AUDIT_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID, 0, 0)
-        assertEquals(AUDIT_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetAuditForUserJson() = runTest {
-        val response = LockOperationsApi.getAuditForUserJson(GetAuditForUserData(DEFAULT_USER_ID, 0, 0).toJson())
-        assertEquals(AUDIT_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getAuditForUser(
+                data = GetAuditForUserData(DEFAULT_USER_ID, 0, 0).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(AUDIT_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUsersForLock() = runTest {
-        val response = LockOperationsApi.getUsersForLock(DEFAULT_LOCK_ID)
-        assertEquals(USER_LOCK_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUsersForLockJson() = runTest {
-        val response = LockOperationsApi.getUsersForLockJson(GetUsersForLockData(DEFAULT_LOCK_ID).toJson())
-        assertEquals(USER_LOCK_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUsersForLock(
+                data = GetUsersForLockData(DEFAULT_LOCK_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_LOCK_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetLocksForUser() = runTest {
-        val response = LockOperationsApi.getLocksForUser(DEFAULT_USER_ID)
-        assertEquals(LOCK_USER_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetLocksForUserJson() = runTest {
-        val response = LockOperationsApi.getLocksForUserJson(GetLocksForUserData(DEFAULT_USER_ID).toJson())
-        assertEquals(LOCK_USER_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(DEFAULT_USER_ID).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(LOCK_USER_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockName() = runTest {
-        LockOperationsApi.updateLockName(DEFAULT_LOCK_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockNameJson() = runTest {
-        LockOperationsApi.updateLockNameJson(UpdateLockNameData(DEFAULT_LOCK_ID, "").toJson())
+            // When
+            LockOperationsApi.updateLockName(
+                data = UpdateLockNameData(DEFAULT_LOCK_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
-        LockOperationsApi.updateLockFavourite(DEFAULT_LOCK_ID, false)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockFavouriteJson() = runTest {
-        LockOperationsApi.updateLockFavouriteJson(UpdateLockFavouriteData(DEFAULT_LOCK_ID, false).toJson())
+            // When
+            LockOperationsApi.updateLockFavourite(
+                data = UpdateLockFavouriteData(DEFAULT_LOCK_ID, false).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockColour() = runTest {
-        LockOperationsApi.updateLockColour(DEFAULT_LOCK_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockColourJson() = runTest {
-        LockOperationsApi.updateLockColourJson(UpdateLockColourData(DEFAULT_LOCK_ID, "").toJson())
+            // When
+            LockOperationsApi.updateLockColour(
+                data = UpdateLockColourData(DEFAULT_LOCK_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
-        LockOperationsApi.updateLockSettingDefaultName(DEFAULT_LOCK_ID, "")
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockSettingDefaultNameJson() = runTest {
-        LockOperationsApi.updateLockSettingDefaultNameJson(UpdateLockSettingDefaultNameData(DEFAULT_LOCK_ID, "").toJson())
+            // When
+            LockOperationsApi.updateLockSettingDefaultName(
+                data = UpdateLockSettingDefaultNameData(DEFAULT_LOCK_ID, "").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldSetLockSettingPermittedAddresses() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, listOf("1.1.1.1"))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldSetLockSettingPermittedAddressesJson() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddressesJson(SetLockSettingPermittedAddressesData(DEFAULT_LOCK_ID, listOf("1.1.1.1")).toJson())
+            // When
+            LockOperationsApi.setLockSettingPermittedAddresses(
+                data = SetLockSettingPermittedAddressesData(DEFAULT_LOCK_ID, listOf("1.1.1.1")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
-        LockOperationsApi.updateLockSettingHidden(DEFAULT_LOCK_ID, true)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockSettingHiddenJson() = runTest {
-        LockOperationsApi.updateLockSettingHiddenJson(UpdateLockSettingHiddenData(DEFAULT_LOCK_ID, true).toJson())
+            // When
+            LockOperationsApi.updateLockSettingHidden(
+                data = UpdateLockSettingHiddenData(DEFAULT_LOCK_ID, true).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldSetLockSettingTimeRestrictions() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyList())
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldSetLockSettingTimeRestrictionsJson() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictionsJson(SetLockSettingTimeRestrictionsData(DEFAULT_LOCK_ID, emptyList()).toJson())
+            // When
+            LockOperationsApi.setLockSettingTimeRestrictions(
+                data = SetLockSettingTimeRestrictionsData(DEFAULT_LOCK_ID, emptyList()).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateLockSettingLocationRestrictions() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID, null)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateLockSettingLocationRestrictionsJson() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictionsJson(UpdateLockSettingLocationRestrictionsData(DEFAULT_LOCK_ID, null).toJson())
+            // When
+            LockOperationsApi.updateLockSettingLocationRestrictions(
+                data = UpdateLockSettingLocationRestrictionsData(DEFAULT_LOCK_ID, null).toJson(),
+                callback = callbackPtr
+            )
+            
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKey(DEFAULT_USER_EMAIL)
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyJson(GetUserPublicKeyData(DEFAULT_USER_EMAIL).toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKey(
+                data = GetUserPublicKeyData(DEFAULT_USER_EMAIL).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmail("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByEmailJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmailJson(GetUserPublicKeyByEmailData("").toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByEmail(
+                data = GetUserPublicKeyByEmailData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephone() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephone("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByTelephoneJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephoneJson(GetUserPublicKeyByTelephoneData("").toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByTelephone(
+                data = GetUserPublicKeyByTelephoneData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKey("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByLocalKeyJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeyJson(GetUserPublicKeyByLocalKeyData("").toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByLocalKey(
+                data = GetUserPublicKeyByLocalKeyData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKey("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByForeignKeyJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeyJson(GetUserPublicKeyByForeignKeyData("").toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByForeignKey(
+                data = GetUserPublicKeyByForeignKeyData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByIdentity() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByIdentity("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByIdentityJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByIdentityJson(GetUserPublicKeyByIdentityData("").toJson())
-        assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByIdentity(
+                data = GetUserPublicKeyByIdentityData("").toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmails(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByEmailsJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmailsJson(GetUserPublicKeyByEmailsData(listOf("", "")).toJson())
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByEmails(
+                data = GetUserPublicKeyByEmailsData(listOf("", "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByTelephones() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephones(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByTelephonesJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephonesJson(GetUserPublicKeyByTelephonesData(listOf("", "")).toJson())
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByTelephones(
+                data = GetUserPublicKeyByTelephonesData(listOf("", "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeys(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByLocalKeysJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeysJson(GetUserPublicKeyByLocalKeysData(listOf("", "")).toJson())
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByLocalKeys(
+                data = GetUserPublicKeyByLocalKeysData(listOf("", "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetUserPublicKeyByForeignKeys() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeys(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetUserPublicKeyByForeignKeysJson() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeysJson(GetUserPublicKeyByForeignKeysData(listOf("", "")).toJson())
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getUserPublicKeyByForeignKeys(
+                data = GetUserPublicKeyByForeignKeysData(listOf("", "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldUnlockUsingContext() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUnlockUsingContextJson() = runTest {
-        LockOperationsApi.unlockJson(UnlockOperationData(BaseOperationData(lockId = DEFAULT_LOCK_ID)).toJson())
+            // When
+            LockOperationsApi.unlock(
+                data = UnlockOperationData(BaseOperationData(lockId = DEFAULT_LOCK_ID)).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUnlock() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID)))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUnlockJson() = runTest {
-        LockOperationsApi.unlockJson(UnlockOperationData(BaseOperationData("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, "")).toJson())
+            // When
+            LockOperationsApi.unlock(
+                data = UnlockOperationData(BaseOperationData("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, "")).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldShareLockUsingContext() = runTest {
-        LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-            ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldShareLockUsingContextJson() = runTest {
-        LockOperationsApi.shareLockJson(
-            ShareLockOperationData(
-            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
-            shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
-        ).toJson())
+            // When
+            LockOperationsApi.shareLock(
+                data = ShareLockOperationData(
+                    baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+                    shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldBatchShareLockUsingContext() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            ))
-    }
+        runBlocking {
+            // Given
+            CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldBatchShareLockUsingContextJson() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLockJson(
-            BatchShareLockOperationData(
-            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
-            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
-        ).toJson())
+            // When
+            LockOperationsApi.batchShareLock(
+                data = BatchShareLockOperationData(
+                    baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+                    users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldShareLock() = runTest {
-        LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-            ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldShareLockJson() = runTest {
-        LockOperationsApi.shareLockJson(
-            ShareLockOperationData(
-            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
-            shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
-        ).toJson())
+            // When
+            LockOperationsApi.shareLock(
+                data = ShareLockOperationData(
+                    baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+                    shareLock = ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64())
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldBatchShareLock() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            ))
-    }
+        runBlocking {
+            // Given
+            CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldBatchShareLockJson() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLockJson(
-            BatchShareLockOperationData(
-            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
-            users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
-        ).toJson())
+            // When
+            LockOperationsApi.batchShareLock(
+                data = BatchShareLockOperationData(
+                    baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+                    users = listOf(ShareLockData("", UserRole.USER, byteArrayOf().encodeByteArrayToBase64()))
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldRevokeAccessToLockUsingContext() = runTest {
-        LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            users = emptyList()
-        ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldRevokeAccessToLockUsingContextJson() = runTest {
-        LockOperationsApi.revokeAccessToLockJson(
-            RevokeAccessToLockOperationData(
-            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
-            users = emptyList()
-        ).toJson())
+            // When
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+                    users = emptyList()
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldRevokeAccessToLock() = runTest {
-        LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            users = emptyList()
-        ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldRevokeAccessToLockJson() = runTest {
-        LockOperationsApi.revokeAccessToLockJson(
-            RevokeAccessToLockOperationData(
-            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
-            users = emptyList()
-        ).toJson())
+            // When
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+                    users = emptyList()
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                unlockDuration = 0
-            ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateSecureSettingUnlockDurationUsingContextJson() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDurationJson(
-            UpdateSecureSettingUnlockDurationData(
-            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        ).toJson())
+            // When
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                data = UpdateSecureSettingUnlockDurationData(
+                    baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+                    unlockDuration = 0
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateSecureSettingUnlockDurationJson() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDurationJson(
-            UpdateSecureSettingUnlockDurationData(
-            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0 , 0, ""),
-            unlockDuration = 0
-        ).toJson())
+            // When
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                data = UpdateSecureSettingUnlockDurationData(
+                    baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0 , 0, ""),
+                    unlockDuration = 0
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                unlockBetween = null
-            ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetweenUsingContextJson() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetweenJson(
-            UpdateSecureSettingUnlockBetweenData(
-            baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
-            unlockBetween = null
-        ).toJson())
+            // When
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = BaseOperationData(lockId = DEFAULT_LOCK_ID),
+                    unlockBetween = null
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockBetween = null
-        ))
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetweenJson() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetweenJson(
-            UpdateSecureSettingUnlockBetweenData(
-            baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
-            unlockBetween = null
-        ).toJson())
+            // When
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = BaseOperationData("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY, DEFAULT_LOCK_ID, 0, 0, 0, ""),
+                    unlockBetween = null
+                ).toJson(),
+                callback = callbackPtr
+            )
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(UNIT_RESULT_DATA, capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetPinnedLocks() = runTest {
-        val response = LockOperationsApi.getPinnedLocks()
-        assertEquals(PINNED_LOCKS_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetPinnedLocksJson() = runTest {
-        val response = LockOperationsApi.getPinnedLocksJson()
-        assertEquals(PINNED_LOCKS_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getPinnedLocks(callbackPtr)
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(PINNED_LOCKS_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 
     @Test
     fun shouldGetShareableLocks() = runTest {
-        val response = LockOperationsApi.getShareableLocks()
-        assertEquals(SHAREABLE_LOCKS_RESPONSE, response)
-    }
+        runBlocking {
+            // Given
+            val callbackPtr = staticCFunction(::testCallback)
 
-    @Test
-    fun shouldGetShareableLocksJson() = runTest {
-        val response = LockOperationsApi.getShareableLocksJson()
-        assertEquals(SHAREABLE_LOCKS_RESPONSE.toResultDataJson(), response)
+            // When
+            LockOperationsApi.getShareableLocks(callbackPtr)
+            delay(10.milliseconds)
+
+            // Then
+            assertEquals(SHAREABLE_LOCKS_RESPONSE.toResultDataJson(), capturedCallback)
+        }
     }
 }
