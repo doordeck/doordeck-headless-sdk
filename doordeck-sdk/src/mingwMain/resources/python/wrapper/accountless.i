@@ -4,7 +4,7 @@ class Accountless(object):
     def __init__(self, resource):
         self.resource = resource
 
-    async def login(self, data, callback):
+    async def login(self, data):
         return await execute_async(
             _doordeck_headless_sdk.login,
             [self.resource, json.dumps(dataclasses.asdict(data))],

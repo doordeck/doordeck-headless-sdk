@@ -65,14 +65,12 @@ async def execute_async(sdk_func, args, response_handler = None):
     def callback(result):
         try:
             response = json.loads(result)
-            handle_exception(response)  # Keep exception handling common
-            # Use handler if provided, else return None
+            handle_exception(response)
             processed = response_handler(response) if response_handler else None
             loop.call_soon_threadsafe(future.set_result, processed)
         except Exception as e:
             loop.call_soon_threadsafe(future.set_exception, e)
 
-    # Execute SDK function with args + callback
     sdk_func(*args, callback)
     return await future
 %}
