@@ -67,6 +67,88 @@ class InitializeSdk(object):
 
 %{
 #include "../releaseShared/Doordeck.Headless.Sdk_api.h"
+#include <Python.h>
+
+// Define a structure to hold the Python callback and the associated Future object.
+typedef struct {
+    PyObject *py_callback;
+    PyObject *future;
+} CallbackData;
+
+// Bridge function: this is the C function pointer that will be passed to C functions.
+// When the DLL calls this function, it sets the result of the Future object.
+void bridge_callback(const char *result, void *user_data) {
+    PyGILState_STATE gstate = PyGILState_Ensure();
+    CallbackData *cb_data = (CallbackData *)user_data;
+    if (cb_data && cb_data->py_callback && cb_data->future) {
+        PyObject *arglist = Py_BuildValue("(s)", result);
+        PyObject *res = PyObject_CallObject(cb_data->py_callback, arglist);
+        Py_DECREF(arglist);
+        if (res) {
+            // Set the result of the Future object.
+            PyObject_CallMethod(cb_data->future, "set_result", "O", res);
+            Py_DECREF(res);
+        } else {
+            // Set the exception of the Future object.
+            PyObject *exc = PyErr_Occurred();
+            PyObject_CallMethod(cb_data->future, "set_exception", "O", exc);
+            PyErr_Clear();
+        }
+    }
+    PyGILState_Release(gstate);
+    // Clean up the CallbackData structure.
+    Py_XDECREF(cb_data->py_callback);
+    Py_XDECREF(cb_data->future);
+    free(cb_data);
+}
+
+// Define a typedef for the callback function pointer type.
+typedef void (*callback_t)(const char *, void *);
 %}
+
+// Include standard typemaps.
+%include "typemaps.i"
+
+// Apply our custom typemap to our typedef.
+// This typemap converts a Python callable to our C function pointer.
+%typemap(in) (callback_t, void *) {
+    if (PyCallable_Check($input)) {
+        // Create a new CallbackData structure.
+        CallbackData *cb_data = (CallbackData *)malloc(sizeof(CallbackData));
+        if (!cb_data) {
+            PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for callback data");
+            SWIG_fail;
+        }
+        // Increase reference count to ensure the callback and future are not garbage collected.
+        Py_XINCREF($input);
+        cb_data->py_callback = $input;
+
+        // Create a new Future object.
+        PyObject *asyncio_module = PyImport_ImportModule("asyncio");
+        if (!asyncio_module) {
+            free(cb_data);
+            PyErr_SetString(PyExc_ImportError, "Unable to import asyncio module");
+            SWIG_fail;
+        }
+        PyObject *future = PyObject_CallMethod(asyncio_module, "Future", NULL);
+        Py_DECREF(asyncio_module);
+        if (!future) {
+            free(cb_data);
+            PyErr_SetString(PyExc_RuntimeError, "Unable to create Future object");
+            SWIG_fail;
+        }
+        cb_data->future = future;
+
+        // Pass the bridge callback and the CallbackData structure to the C function.
+        $1 = (callback_t)bridge_callback;
+        $2 = (void *)cb_data;
+    } else {
+        PyErr_SetString(PyExc_TypeError, "Parameter must be callable");
+        SWIG_fail;
+    }
+}
+
+// Inform SWIG that the void* parameter 'callback' should be treated as callback_t.
+%apply (callback_t, void *) { (void (*)(const char *, void *), void *callback_data) };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"

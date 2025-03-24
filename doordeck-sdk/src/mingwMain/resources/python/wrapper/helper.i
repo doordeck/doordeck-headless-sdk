@@ -4,21 +4,29 @@ class Helper(object):
     def __init__(self, resource):
         self.resource = resource
 
-    def upload_platform_logo(self, data):
-        response = json.loads(_doordeck_headless_sdk.uploadPlatformLogoJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
+    async def upload_platform_logo(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.uploadPlatformLogo,
+            [self.resource, json.dumps(dataclasses.asdict(data))]
+        )
 
-    def assisted_login(self, data):
-        response = json.loads(_doordeck_headless_sdk.assistedLoginJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return AssistedLoginResponse(**get_success_result(response))
+    async def assisted_login(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.assistedLogin,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: AssistedLoginResponse(**get_success_result(r))
+        )
 
-    def assisted_register_ephemeral_key(self, data):
-        response = json.loads(_doordeck_headless_sdk.assistedRegisterEphemeralKeyJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return AssistedRegisterEphemeralKeyResponse(**get_success_result(response))
+    async def assisted_register_ephemeral_key(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.assistedRegisterEphemeralKey,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: AssistedRegisterEphemeralKeyResponse(**get_success_result(r))
+        )
 
-    def assisted_register(self, data):
-        response = json.loads(_doordeck_headless_sdk.assistedRegisterJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
+    async def assisted_register(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.assistedRegister,
+            [self.resource, json.dumps(dataclasses.asdict(data))]
+        )
 %}

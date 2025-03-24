@@ -40,11 +40,18 @@ fun ApiEnvironment.getApiEnvironmentByName(name: String): ApiEnvironment {
  * Utility extension for easily building an [SdkConfig] instance externally.
  */
 @CName("buildSdkConfig")
-fun buildSdkConfig(apiEnvironment: ApiEnvironment, cloudAuthToken: String? = null, cloudRefreshToken: String? = null): SdkConfig {
-    return SdkConfig.Builder().setApiEnvironment(apiEnvironment).apply {
-        cloudAuthToken?.let { setCloudAuthToken(it) }
-        cloudRefreshToken?.let { setCloudRefreshToken(it) }
-    }.build()
+fun buildSdkConfig(
+    apiEnvironment: ApiEnvironment,
+    cloudAuthToken: String? = null,
+    cloudRefreshToken: String? = null,
+    fusionHost: String? = null
+): SdkConfig {
+    return SdkConfig.Builder()
+        .setApiEnvironment(apiEnvironment)
+        .setCloudAuthToken(cloudAuthToken)
+        .setCloudRefreshToken(cloudRefreshToken)
+        .setFusionHost(fusionHost)
+        .build()
 }
 
 /**
