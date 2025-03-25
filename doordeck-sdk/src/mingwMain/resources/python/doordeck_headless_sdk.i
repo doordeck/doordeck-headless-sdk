@@ -69,17 +69,17 @@ class InitializeSdk(object):
 #include "../releaseShared/Doordeck.Headless.Sdk_api.h"
 #include <Python.h>
 
-// Global variable to hold the Python callback for login.
-static PyObject *py_login_callback = NULL;
+// Global variable to hold the Python callback for the function.
+static PyObject *py_callback = NULL;
 
-// Bridge function: this is the C function pointer that will be passed to login.
+// Bridge function: this is the C function pointer that will be passed to the function.
 // When the DLL calls this function, it converts the C string argument to a Python string
 // and then calls the stored Python callback.
-void login_bridge_callback(const char *result) {
+void bridge_callback(const char *result) {
     PyGILState_STATE gstate = PyGILState_Ensure();
-    if (py_login_callback) {
+    if (py_callback) {
         PyObject *arglist = Py_BuildValue("(s)", result);
-        PyObject *res = PyObject_CallObject(py_login_callback, arglist);
+        PyObject *res = PyObject_CallObject(py_callback, arglist);
         Py_DECREF(arglist);
         if (res) {
             Py_DECREF(res);
@@ -91,7 +91,7 @@ void login_bridge_callback(const char *result) {
 }
 
 // Define a typedef that represents the callback signature.
-typedef void (*login_callback_t)(const char *);
+typedef void (*callback_t)(const char *);
 %}
 
 // Include standard typemaps.
@@ -99,19 +99,19 @@ typedef void (*login_callback_t)(const char *);
 
 // Apply our custom typemap to our typedef.
 // This typemap converts a Python callable to our C function pointer.
-%typemap(in) login_callback_t {
+%typemap(in) callback_t {
     if (PyCallable_Check($input)) {
         // Increase reference count to ensure the callback is not garbage collected.
         Py_XINCREF($input);
-        py_login_callback = $input;
-        $1 = (login_callback_t)login_bridge_callback;
+        py_callback = $input;
+        $1 = (callback_t)bridge_callback;
     } else {
         PyErr_SetString(PyExc_TypeError, "Parameter must be callable");
         SWIG_fail;
     }
 }
 
-// Inform SWIG that the void* parameter 'callback' should be treated as login_callback_t.
-%apply login_callback_t { void* callback };
+// Inform SWIG that the void* parameter 'callback' should be treated as callback_t.
+%apply callback_t { void* callback };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"
