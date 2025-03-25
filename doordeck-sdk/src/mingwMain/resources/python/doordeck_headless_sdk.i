@@ -67,51 +67,20 @@ class InitializeSdk(object):
 
 %{
 #include "../releaseShared/Doordeck.Headless.Sdk_api.h"
-#include <Python.h>
 
-// Global variable to hold the Python callback for the function.
-static PyObject *py_callback = NULL;
-
-// Bridge function: this is the C function pointer that will be passed to the function.
-// When the DLL calls this function, it converts the C string argument to a Python string
-// and then calls the stored Python callback.
-void bridge_callback(const char *result) {
-    PyGILState_STATE gstate = PyGILState_Ensure();
-    if (py_callback) {
-        PyObject *arglist = Py_BuildValue("(s)", result);
-        PyObject *res = PyObject_CallObject(py_callback, arglist);
-        Py_DECREF(arglist);
-        if (res) {
-            Py_DECREF(res);
-        } else {
-            PyErr_Print();
-        }
-    }
-    PyGILState_Release(gstate);
-}
-
-// Define a typedef that represents the callback signature.
+// Define the callback type.
 typedef void (*callback_t)(const char *);
 %}
 
 // Include standard typemaps.
 %include "typemaps.i"
 
-// Apply our custom typemap to our typedef.
-// This typemap converts a Python callable to our C function pointer.
+// Use SWIG’s callback typemap to convert a Python callable (provided as an integer)
+// to a C function pointer. Here, the Python side must supply the address of a ctypes-wrapped function.
 %typemap(in) callback_t {
-    if (PyCallable_Check($input)) {
-        // Increase reference count to ensure the callback is not garbage collected.
-        Py_XINCREF($input);
-        py_callback = $input;
-        $1 = (callback_t)bridge_callback;
-    } else {
-        PyErr_SetString(PyExc_TypeError, "Parameter must be callable");
-        SWIG_fail;
-    }
+    $1 = (callback_t)PyLong_AsVoidPtr($input);
 }
 
-// Inform SWIG that the void* parameter 'callback' should be treated as callback_t.
 %apply callback_t { void* callback };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"

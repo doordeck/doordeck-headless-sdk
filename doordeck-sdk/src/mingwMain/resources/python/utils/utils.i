@@ -58,6 +58,8 @@ def handle_exception(response):
         raise GatewayTimeoutException(exception_message)
     raise SdkException("Unhandled exception type: " + exception_type)
 
+py_callback_type = ctypes.CFUNCTYPE(None, ctypes.c_char_p)
+
 async def execute_async(sdk_func, args, response_handler = None):
     loop = asyncio.get_running_loop()
     future = loop.create_future()
@@ -71,6 +73,9 @@ async def execute_async(sdk_func, args, response_handler = None):
         except Exception as e:
             loop.call_soon_threadsafe(future.set_exception, e)
 
-    sdk_func(*args, callback)
+    f = py_callback_type(callback)
+    f_ptr = ctypes.cast(f, ctypes.c_void_p).value
+
+    sdk_func(*args, f_ptr)
     return await future
 %}
