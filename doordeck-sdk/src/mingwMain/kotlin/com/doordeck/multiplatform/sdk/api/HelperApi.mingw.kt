@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKeyDat
 import com.doordeck.multiplatform.sdk.model.data.UploadPlatformLogoData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -16,7 +16,7 @@ actual object HelperApi {
 
     @CName("uploadPlatformLogo")
     fun uploadPlatformLogo(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
                 HelperClient.uploadPlatformLogoRequest(
@@ -31,7 +31,7 @@ actual object HelperApi {
 
     @CName("assistedLogin")
     fun assistedLogin(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val assistedLoginData = data.fromJson<AssistedLoginData>()
                 HelperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password)
@@ -42,7 +42,7 @@ actual object HelperApi {
 
     @CName("assistedRegisterEphemeralKey")
     fun assistedRegisterEphemeralKey(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
                 HelperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
@@ -53,7 +53,7 @@ actual object HelperApi {
 
     @CName("assistedRegister")
     fun assistedRegister(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val assistedRegisterData = data.fromJson<AssistedRegisterData>()
                 HelperClient.assistedRegisterRequest(

@@ -64,7 +64,7 @@ fun buildSdkConfig(
  *          the result is wrapped in `SuccessResultData`.
  *          If an exception occurs, it is wrapped in `FailedResultData` along with an error message.
  */
-internal inline fun <reified T>launchCallback(
+internal inline fun <reified T>callback(
     crossinline block: suspend () -> T,
     callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
 ) {

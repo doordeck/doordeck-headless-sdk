@@ -5,7 +5,7 @@ import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.data.AssociateMultipleLocksData
 import com.doordeck.multiplatform.sdk.model.data.GetLocksBelongingToTileData
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -18,7 +18,7 @@ actual object TilesApi {
      */
     @CName("getLocksBelongingToTile")
     fun getLocksBelongingToTile(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getLocksBelongingToTileData = data.fromJson<GetLocksBelongingToTileData>()
                 TilesClient.getLocksBelongingToTileRequest(getLocksBelongingToTileData.tileId)
@@ -35,7 +35,7 @@ actual object TilesApi {
     @SiteAdmin
     @CName("associateMultipleLocks")
     fun associateMultipleLocks(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val associateMultipleLocksData = data.fromJson<AssociateMultipleLocksData>()
                 TilesClient.associateMultipleLocksRequest(

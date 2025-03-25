@@ -39,7 +39,7 @@ import com.doordeck.multiplatform.sdk.model.data.toUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -52,7 +52,7 @@ actual object LockOperationsApi {
      */
     @CName("getSingleLock")
     fun getSingleLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getSingleLockData = data.fromJson<GetSingleLockData>()
                 LockOperationsClient.getSingleLockRequest(getSingleLockData.lockId)
@@ -68,7 +68,7 @@ actual object LockOperationsApi {
      */
     @CName("getLockAuditTrail")
     fun getLockAuditTrail(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getLockAuditTrailData = data.fromJson<GetLockAuditTrailData>()
                 LockOperationsClient.getLockAuditTrailRequest(getLockAuditTrailData.lockId, getLockAuditTrailData.start, getLockAuditTrailData.end)
@@ -84,7 +84,7 @@ actual object LockOperationsApi {
      */
     @CName("getAuditForUser")
     fun getAuditForUser(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getAuditForUserData = data.fromJson<GetAuditForUserData>()
                 LockOperationsClient.getAuditForUserRequest(getAuditForUserData.userId, getAuditForUserData.start, getAuditForUserData.end)
@@ -100,7 +100,7 @@ actual object LockOperationsApi {
      */
     @CName("getUsersForLock")
     fun getUsersForLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUsersForLockData = data.fromJson<GetUsersForLockData>()
                 LockOperationsClient.getUsersForLockRequest(getUsersForLockData.lockId)
@@ -116,7 +116,7 @@ actual object LockOperationsApi {
      */
     @CName("getLocksForUser")
     fun getLocksForUser(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getLocksForUserData = data.fromJson<GetLocksForUserData>()
                 LockOperationsClient.getLocksForUserRequest(getLocksForUserData.userId)
@@ -132,7 +132,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockName")
     fun updateLockName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockNameData = data.fromJson<UpdateLockNameData>()
                 LockOperationsClient.updateLockNameRequest(updateLockNameData.lockId, updateLockNameData.name)
@@ -148,7 +148,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockFavourite")
     fun updateLockFavourite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockFavouriteData = data.fromJson<UpdateLockFavouriteData>()
                 LockOperationsClient.updateLockFavouriteRequest(updateLockFavouriteData.lockId, updateLockFavouriteData.favourite)
@@ -164,7 +164,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockColour")
     fun updateLockColour(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockColourData = data.fromJson<UpdateLockColourData>()
                 LockOperationsClient.updateLockColourRequest(updateLockColourData.lockId, updateLockColourData.colour)
@@ -180,7 +180,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockSettingDefaultName")
     fun updateLockSettingDefaultName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockSettingDefaultNameData = data.fromJson<UpdateLockSettingDefaultNameData>()
                 LockOperationsClient.updateLockSettingDefaultNameRequest(updateLockSettingDefaultNameData.lockId, updateLockSettingDefaultNameData.name)
@@ -196,7 +196,7 @@ actual object LockOperationsApi {
      */
     @CName("setLockSettingPermittedAddresses")
     fun setLockSettingPermittedAddresses(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val setLockSettingPermittedAddressesData = data.fromJson<SetLockSettingPermittedAddressesData>()
                 LockOperationsClient.setLockSettingPermittedAddressesRequest(setLockSettingPermittedAddressesData.lockId, setLockSettingPermittedAddressesData.permittedAddresses)
@@ -212,7 +212,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockSettingHidden")
     fun updateLockSettingHidden(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockSettingHiddenData = data.fromJson<UpdateLockSettingHiddenData>()
                 LockOperationsClient.updateLockSettingHiddenRequest(updateLockSettingHiddenData.lockId, updateLockSettingHiddenData.hidden)
@@ -228,7 +228,7 @@ actual object LockOperationsApi {
      */
     @CName("setLockSettingTimeRestrictions")
     fun setLockSettingTimeRestrictions(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val setLockSettingTimeRestrictionsData = data.fromJson<SetLockSettingTimeRestrictionsData>()
                 LockOperationsClient.setLockSettingTimeRestrictionsRequest(setLockSettingTimeRestrictionsData.lockId, setLockSettingTimeRestrictionsData.times.toTimeRequirementList())
@@ -244,7 +244,7 @@ actual object LockOperationsApi {
      */
     @CName("updateLockSettingLocationRestrictions")
     fun updateLockSettingLocationRestrictions(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateLockSettingLocationRestrictionsData = data.fromJson<UpdateLockSettingLocationRestrictionsData>()
                 LockOperationsClient.updateLockSettingLocationRestrictionsRequest(updateLockSettingLocationRestrictionsData.lockId, updateLockSettingLocationRestrictionsData.location?.toLocationRequirement())
@@ -260,7 +260,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKey")
     fun getUserPublicKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyData = data.fromJson<GetUserPublicKeyData>()
                 LockOperationsClient.getUserPublicKeyRequest(getUserPublicKeyData.userEmail, getUserPublicKeyData.visitor)
@@ -276,7 +276,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByEmail")
     fun getUserPublicKeyByEmail(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyData = data.fromJson<GetUserPublicKeyByEmailData>()
                 LockOperationsClient.getUserPublicKeyByEmailRequest(getUserPublicKeyData.email)
@@ -292,7 +292,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByTelephone")
     fun getUserPublicKeyByTelephone(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByTelephoneData = data.fromJson<GetUserPublicKeyByTelephoneData>()
                 LockOperationsClient.getUserPublicKeyByTelephoneRequest(getUserPublicKeyByTelephoneData.telephone)
@@ -308,7 +308,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByLocalKey")
     fun getUserPublicKeyByLocalKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByLocalKeyData = data.fromJson<GetUserPublicKeyByLocalKeyData>()
                 LockOperationsClient.getUserPublicKeyByLocalKeyRequest(getUserPublicKeyByLocalKeyData.localKey)
@@ -324,7 +324,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByForeignKey")
     fun getUserPublicKeyByForeignKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByForeignKeyData = data.fromJson<GetUserPublicKeyByForeignKeyData>()
                 LockOperationsClient.getUserPublicKeyByForeignKeyRequest(getUserPublicKeyByForeignKeyData.foreignKey)
@@ -340,7 +340,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByIdentity")
     fun getUserPublicKeyByIdentity(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByIdentityData = data.fromJson<GetUserPublicKeyByIdentityData>()
                 LockOperationsClient.getUserPublicKeyByIdentityRequest(getUserPublicKeyByIdentityData.identity)
@@ -356,7 +356,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByEmails")
     fun getUserPublicKeyByEmails(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByEmailsData = data.fromJson<GetUserPublicKeyByEmailsData>()
                 LockOperationsClient.getUserPublicKeyByEmailsRequest(getUserPublicKeyByEmailsData.emails)
@@ -372,7 +372,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByTelephones")
     fun getUserPublicKeyByTelephones(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByTelephonesData = data.fromJson<GetUserPublicKeyByTelephonesData>()
                 LockOperationsClient.getUserPublicKeyByTelephonesRequest(getUserPublicKeyByTelephonesData.telephones)
@@ -388,7 +388,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByLocalKeys")
     fun getUserPublicKeyByLocalKeys(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByLocalKeysData = data.fromJson<GetUserPublicKeyByLocalKeysData>()
                 LockOperationsClient.getUserPublicKeyByLocalKeysRequest(getUserPublicKeyByLocalKeysData.localKeys)
@@ -404,7 +404,7 @@ actual object LockOperationsApi {
      */
     @CName("getUserPublicKeyByForeignKeys")
     fun getUserPublicKeyByForeignKeys(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getUserPublicKeyByForeignKeysData = data.fromJson<GetUserPublicKeyByForeignKeysData>()
                 LockOperationsClient.getUserPublicKeyByForeignKeysRequest(getUserPublicKeyByForeignKeysData.foreignKeys)
@@ -420,7 +420,7 @@ actual object LockOperationsApi {
      */
     @CName("unlock")
     fun unlock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val unlockOperationData = data.fromJson<UnlockOperationData>()
                 LockOperationsClient.unlockRequest(unlockOperationData.toUnlockOperation())
@@ -436,7 +436,7 @@ actual object LockOperationsApi {
      */
     @CName("shareLock")
     fun shareLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val shareLockOperationData = data.fromJson<ShareLockOperationData>()
                 LockOperationsClient.shareLockRequest(shareLockOperationData.toShareLockOperation())
@@ -452,7 +452,7 @@ actual object LockOperationsApi {
      */
     @CName("batchShareLock")
     fun batchShareLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val batchShareLockOperationData = data.fromJson<BatchShareLockOperationData>()
                 LockOperationsClient.batchShareLockRequest(batchShareLockOperationData.toBatchShareLockOperation())
@@ -468,7 +468,7 @@ actual object LockOperationsApi {
      */
     @CName("revokeAccessToLock")
     fun revokeAccessToLock(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val revokeAccessToLockOperationData = data.fromJson<RevokeAccessToLockOperationData>()
                 LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperationData.toRevokeAccessToLockOperation())
@@ -484,7 +484,7 @@ actual object LockOperationsApi {
      */
     @CName("updateSecureSettingUnlockDuration")
     fun updateSecureSettingUnlockDuration(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateSecureSettingUnlockDurationData = data.fromJson<UpdateSecureSettingUnlockDurationData>()
                 LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration())
@@ -500,7 +500,7 @@ actual object LockOperationsApi {
      */
     @CName("updateSecureSettingUnlockBetween")
     fun updateSecureSettingUnlockBetween(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateSecureSettingUnlockBetweenData = data.fromJson<UpdateSecureSettingUnlockBetweenData>()
                 LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetweenData.toUpdateSecureSettingUnlockBetween())
@@ -516,7 +516,7 @@ actual object LockOperationsApi {
      */
     @CName("getPinnedLocks")
     fun getPinnedLocks(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 LockOperationsClient.getPinnedLocksRequest()
             },
@@ -531,7 +531,7 @@ actual object LockOperationsApi {
      */
     @CName("getShareableLocks")
     fun getShareableLocks(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 LockOperationsClient.getShareableLocksRequest()
             },

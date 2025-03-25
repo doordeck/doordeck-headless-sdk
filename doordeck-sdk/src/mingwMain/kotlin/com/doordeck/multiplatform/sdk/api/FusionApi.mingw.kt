@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -17,7 +17,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("loginFusion")
     fun login(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val fusionLoginData = data.fromJson<FusionLoginData>()
                 FusionClient.loginRequest(fusionLoginData.email, fusionLoginData.password)
@@ -29,7 +29,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("getIntegrationType")
     fun getIntegrationType(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 FusionClient.getIntegrationTypeRequest()
             },
@@ -40,7 +40,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("getIntegrationConfiguration")
     fun getIntegrationConfiguration(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val getIntegrationConfigurationData = data.fromJson<GetIntegrationConfigurationData>()
                 FusionClient.getIntegrationConfigurationRequest(getIntegrationConfigurationData.type)
@@ -52,7 +52,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("enableDoor")
     fun enableDoor(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val enableDoorData = data.fromJson<EnableDoorData>()
                 FusionClient.enableDoorRequest(enableDoorData.name, enableDoorData.siteId, enableDoorData.controller)
@@ -64,7 +64,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("deleteDoor")
     fun deleteDoor(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val deviceIdData = data.fromJson<DeviceIdData>()
                 FusionClient.deleteDoorRequest(deviceIdData.deviceId)
@@ -76,7 +76,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("getDoorStatus")
     fun getDoorStatus(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val deviceIdData = data.fromJson<DeviceIdData>()
                 FusionClient.getDoorStatusRequest(deviceIdData.deviceId)
@@ -88,7 +88,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("startDoor")
     fun startDoor(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val deviceIdData = data.fromJson<DeviceIdData>()
                 FusionClient.startDoorRequest(deviceIdData.deviceId)
@@ -100,7 +100,7 @@ actual object FusionApi {
     @DoordeckOnly
     @CName("stopDoor")
     fun stopDoor(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val deviceIdData = data.fromJson<DeviceIdData>()
                 FusionClient.stopDoorRequest(deviceIdData.deviceId)

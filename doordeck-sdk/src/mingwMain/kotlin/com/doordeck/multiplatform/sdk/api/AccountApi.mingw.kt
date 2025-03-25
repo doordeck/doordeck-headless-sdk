@@ -10,7 +10,7 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.model.data.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -24,7 +24,7 @@ actual object AccountApi {
     @DoordeckOnly
     @CName("refreshToken")
     fun refreshToken(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val refreshTokenData = data?.fromJson<RefreshTokenData>()
                 AccountClient.refreshTokenRequest(refreshTokenData?.refreshToken)
@@ -40,7 +40,7 @@ actual object AccountApi {
      */
     @CName("logout")
     fun logout(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 AccountClient.logoutRequest()
             },
@@ -55,7 +55,7 @@ actual object AccountApi {
      */
     @CName("registerEphemeralKey")
     fun registerEphemeralKey(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val registerEphemeralKeyData = data?.fromJson<RegisterEphemeralKeyData>()
                 AccountClient.registerEphemeralKeyRequest(registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
@@ -71,7 +71,7 @@ actual object AccountApi {
      */
     @CName("registerEphemeralKeyWithSecondaryAuthentication")
     fun registerEphemeralKeyWithSecondaryAuthentication(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val registerEphemeralKeyWithSecondaryAuthenticationData = data?.fromJson<RegisterEphemeralKeyWithSecondaryAuthenticationData>()
                 AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(
@@ -89,7 +89,7 @@ actual object AccountApi {
      */
     @CName("verifyEphemeralKeyRegistration")
     fun verifyEphemeralKeyRegistration(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
                 AccountClient.verifyEphemeralKeyRegistrationRequest(
@@ -109,7 +109,7 @@ actual object AccountApi {
     @DoordeckOnly
     @CName("reverifyEmail")
     fun reverifyEmail(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 AccountClient.reverifyEmailRequest()
             },
@@ -125,7 +125,7 @@ actual object AccountApi {
     @DoordeckOnly
     @CName("changePassword")
     fun changePassword(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val changePasswordData = data.fromJson<ChangePasswordData>()
                 AccountClient.changePasswordRequest(changePasswordData.oldPassword, changePasswordData.newPassword)
@@ -141,7 +141,7 @@ actual object AccountApi {
      */
     @CName("getUserDetails")
     fun getUserDetails(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 AccountClient.getUserDetailsRequest()
             },
@@ -156,7 +156,7 @@ actual object AccountApi {
      */
     @CName("updateUserDetails")
     fun updateUserDetails(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val updateUserDetailsData = data.fromJson<UpdateUserDetailsData>()
                 AccountClient.updateUserDetailsRequest(updateUserDetailsData.displayName)
@@ -172,7 +172,7 @@ actual object AccountApi {
      */
     @CName("deleteAccount")
     fun deleteAccount(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 AccountClient.deleteAccountRequest()
             },

@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.clients.SitesClient
 import com.doordeck.multiplatform.sdk.model.data.SiteIdData
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -16,7 +16,7 @@ actual object SitesApi {
      */
     @CName("listSites")
     fun listSites(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 SitesClient.listSitesRequest()
             },
@@ -31,7 +31,7 @@ actual object SitesApi {
      */
     @CName("getLocksForSite")
     fun getLocksForSite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val siteIdData = data.fromJson<SiteIdData>()
                 SitesClient.getLocksForSiteRequest(siteIdData.siteId)
@@ -47,7 +47,7 @@ actual object SitesApi {
      */
     @CName("getUsersForSite")
     fun getUsersForSite(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val siteIdData = data.fromJson<SiteIdData>()
                 SitesClient.getUsersForSiteRequest(siteIdData.siteId)

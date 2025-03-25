@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.model.data.RegistrationData
 import com.doordeck.multiplatform.sdk.model.data.VerifyEmailData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.launchCallback
+import com.doordeck.multiplatform.sdk.util.callback
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
@@ -21,7 +21,7 @@ actual object AccountlessApi {
      */
     @CName("login")
     fun login(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val loginData = data.fromJson<LoginData>()
                 AccountlessClient.loginRequest(
@@ -40,7 +40,7 @@ actual object AccountlessApi {
      */
     @CName("registration")
     fun registration(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val registrationData = data.fromJson<RegistrationData>()
                 AccountlessClient.registrationRequest(
@@ -62,7 +62,7 @@ actual object AccountlessApi {
      */
     @CName("verifyEmail")
     fun verifyEmail(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val verifyEmailData = data.fromJson<VerifyEmailData>()
                 AccountlessClient.verifyEmailRequest(verifyEmailData.code)
@@ -76,7 +76,7 @@ actual object AccountlessApi {
      */
     @CName("passwordReset")
     fun passwordReset(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val passwordResetData = data.fromJson<PasswordResetData>()
                 AccountlessClient.passwordResetRequest(passwordResetData.email)
@@ -90,7 +90,7 @@ actual object AccountlessApi {
      */
     @CName("passwordResetVerify")
     fun passwordResetVerify(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        launchCallback(
+        callback(
             block = {
                 val passwordResetVerifyData = data.fromJson<PasswordResetVerifyData>()
                 AccountlessClient.passwordResetVerifyRequest(
