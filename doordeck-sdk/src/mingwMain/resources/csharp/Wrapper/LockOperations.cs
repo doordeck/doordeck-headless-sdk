@@ -28,7 +28,7 @@ public class LockOperations : IResource
         _symbols->DisposeStablePointer(_lockOperations.pinned);
     }
 
-    public unsafe Task<LockResponse> GetSingleLock(GetSingleLockData data)
+    public unsafe Task<LockResponse> GetSingleLock(LockIdData data)
     {
         return Process<LockResponse>(_lockOperationsApi.getSingleLock_, null, data);
     }
@@ -43,7 +43,7 @@ public class LockOperations : IResource
         return Process<List<AuditResponse>>(_lockOperationsApi.getAuditForUser_, null, data);
     }
 
-    public unsafe Task<List<UserLockResponse>> GetUsersForLock(GetUsersForLockData data)
+    public unsafe Task<List<UserLockResponse>> GetUsersForLock(LockIdData data)
     {
         return Process<List<UserLockResponse>>(_lockOperationsApi.getUsersForLock_, null, data);
     }

@@ -35,7 +35,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetSingleLockData("LOCK_ID");
+var data = new LockIdData("LOCK_ID");
 var response = await sdk.GetLockOperations().GetSingleLock(data);
 ```
 </details>
@@ -45,7 +45,7 @@ var response = await sdk.GetLockOperations().GetSingleLock(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetSingleLockData("LOCK_ID")
+data = doordeck_headless_sdk.LockIdData("LOCK_ID")
 response = await sdk.lockOperations.get_single_lock(data)
 ```
 </details>
@@ -185,7 +185,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUsersForLockData("LOCK_ID");
+var data = new LockIdData("LOCK_ID");
 var response = await sdk.GetLockOperations().GetUsersForLock(data);
 ```
 </details>
@@ -195,7 +195,7 @@ var response = await sdk.GetLockOperations().GetUsersForLock(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetUsersForLockData("LOCK_ID")
+data = doordeck_headless_sdk.LockIdData("LOCK_ID")
 response = await sdk.lockOperations.get_users_for_lock(data)
 ```
 </details>

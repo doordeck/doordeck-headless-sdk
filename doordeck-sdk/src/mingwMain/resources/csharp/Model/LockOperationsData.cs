@@ -1,10 +1,10 @@
 ﻿namespace Doordeck.Headless.Sdk.Model
 {
-    public class GetSingleLockData
+    public class LockIdData
     {
         public string LockId { get; set; }
 
-        public GetSingleLockData(string lockId)
+        public LockIdData(string lockId)
         {
             LockId = lockId;
         }
@@ -35,16 +35,6 @@
             UserId = userId;
             Start = start;
             End = end;
-        }
-    }
-
-    public class GetUsersForLockData
-    {
-        public string LockId { get; set; }
-
-        public GetUsersForLockData(string lockId)
-        {
-            LockId = lockId;
         }
     }
 
