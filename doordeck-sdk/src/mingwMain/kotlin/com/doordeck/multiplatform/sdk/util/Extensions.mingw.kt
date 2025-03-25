@@ -55,14 +55,12 @@ fun buildSdkConfig(
 }
 
 /**
- * Executes a block of code and captures its result. Wraps either the result of the block or any exception thrown
- * during its execution into a serialized JSON `ResultData` string.
+ * Executes a suspend [block] asynchronously and passes its result to a native [callback]. Wraps either the result
+ * of the block or any exception thrown during its execution into a serialized JSON `ResultData` string.
  *
- * @param T The type of the result produced by the block.
- * @param block A lambda function that represents the code to execute.
- * @return A JSON string representing the result. If the block executes successfully,
- *          the result is wrapped in `SuccessResultData`.
- *          If an exception occurs, it is wrapped in `FailedResultData` along with an error message.
+ * @param T The type of the result produced by the [block] function.
+ * @param block A suspend function that returns a result of type [T]. Its successful output is processed as described.
+ * @param callback A pointer to a C function that accepts a C-style string pointer ([CPointer<ByteVar>]) and returns a C-style string pointer.
  */
 internal inline fun <reified T>callback(
     crossinline block: suspend () -> T,
