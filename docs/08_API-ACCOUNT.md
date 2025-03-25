@@ -46,7 +46,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ref
 
 ```csharp
 var data = new RefreshTokenData("REFRESH_TOKEN");
-var response = sdk.GetAccount().RefreshToken(data);
+var response = await sdk.GetAccount().RefreshToken(data);
 ```
 </details>
 
@@ -99,7 +99,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().logout();
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetAccount().Logout();
+await sdk.GetAccount().Logout();
 ```
 </details>
 
@@ -153,7 +153,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ```csharp
 var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY");
-var response = sdk.GetAccount().RegisterEphemeralKey(data);
+var response = await sdk.GetAccount().RegisterEphemeralKey(data);
 ```
 </details>
 
@@ -206,7 +206,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 
 ```csharp
 var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY");
-var response = sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentication(data);
+var response = await sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentication(data);
 ```
 </details>
 
@@ -260,7 +260,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 
 ```csharp
 var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY");
-var response = sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
+var response = await sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
 ```
 </details>
 
@@ -313,7 +313,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().reverifyEmail();
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetAccount().ReverifyEmail();
+await sdk.GetAccount().ReverifyEmail();
 ```
 </details>
 
@@ -366,7 +366,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().changePassword("OLD_
 
 ```csharp
 var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD");
-sdk.GetAccount().ChangePassword(data);
+await sdk.GetAccount().ChangePassword(data);
 ```
 </details>
 
@@ -416,7 +416,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().get
 <summary>Show Details</summary>
 
 ```csharp
-var response = sdk.GetAccount().GetUserDetails();
+var response = await sdk.GetAccount().GetUserDetails();
 ```
 </details>
 
@@ -466,7 +466,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().updateUserDetails("D
 
 ```csharp
 var data = new UpdateUserDetailsData("DISPLAY_NAME");
-sdk.GetAccount().UpdateUserDetails(data);
+await sdk.GetAccount().UpdateUserDetails(data);
 ```
 </details>
 
@@ -522,7 +522,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().deleteAccount();
 <summary>Show Details</summary>
 
 ```csharp
-sdk.GetAccount().DeleteAccount();
+await sdk.GetAccount().DeleteAccount();
 ```
 </details>
 

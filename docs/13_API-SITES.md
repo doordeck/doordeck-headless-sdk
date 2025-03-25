@@ -36,7 +36,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().listS
 <summary>Show Details</summary>
 
 ```csharp
-var response = sdk.GetSites().ListSites();
+var response = await sdk.GetSites().ListSites();
 ```
 </details>
 
@@ -86,7 +86,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getLo
 
 ```csharp
 var data = new SiteIdData("SITE_ID");
-var response = sdk.GetSites().GetLocksForSite(data);
+var response = await sdk.GetSites().GetLocksForSite(data);
 ```
 </details>
 
@@ -137,7 +137,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUs
 
 ```csharp
 var data = new SiteIdData("SITE_ID");
-var response = sdk.GetSites().GetUsersForSite(data);
+var response = await sdk.GetSites().GetUsersForSite(data);
 ```
 </details>
 

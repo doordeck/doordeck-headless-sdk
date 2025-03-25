@@ -40,7 +40,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().logi
 
 ```csharp
 var data = new FusionLoginData("EMAIL", "PASSWORD");
-var response = sdk.GetFusion().Login(data);
+var response = await sdk.GetFusion().Login(data);
 ```
 </details>
 
@@ -80,7 +80,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 <summary>Show Details</summary>
 
 ```csharp
-var response = sdk.GetFusion().GetIntegrationType();
+var response = await sdk.GetFusion().GetIntegrationType();
 ```
 </details>
 
@@ -121,7 +121,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 
 ```csharp
 var data = new GetIntegrationConfigurationData("TYPE");
-var response = sdk.GetFusion().GetIntegrationConfiguration(data);
+var response = await sdk.GetFusion().GetIntegrationConfiguration(data);
 ```
 </details>
 
@@ -167,7 +167,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "S
 ```csharp
 var controllerData = new DemoController();
 var data = new EnableDoorData("NAME", "SITE_ID", controllerData);
-sdk.GetFusion().EnableDoor(data);
+await sdk.GetFusion().EnableDoor(data);
 ```
 </details>
 
@@ -208,7 +208,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID
 
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
-sdk.GetFusion().DeleteDoor(data);
+await sdk.GetFusion().DeleteDoor(data);
 ```
 </details>
 
@@ -249,7 +249,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getD
 
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
-var response = sdk.GetFusion().GetDoorStatus(data);
+var response = await sdk.GetFusion().GetDoorStatus(data);
 ```
 </details>
 
@@ -290,7 +290,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().startDoor("DEVICE_ID"
 
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
-sdk.GetFusion().StartDoor(data);
+await sdk.GetFusion().StartDoor(data);
 ```
 </details>
 
@@ -331,7 +331,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID")
 
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
-sdk.GetFusion().StopDoor(data);
+await sdk.GetFusion().StopDoor(data);
 ```
 </details>
 

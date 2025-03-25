@@ -39,7 +39,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.helper().uploadPlatformLogo("A
 
 ```csharp
 var data = new UploadPlatformLogoData("APPLICATION_ID", "CONTENT_TYPE", "BASE64_IMAGE");
-sdk.GetHelper().UploadPlatformLogo(data);
+await sdk.GetHelper().UploadPlatformLogo(data);
 ```
 </details>
 

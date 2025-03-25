@@ -43,7 +43,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().createApplication(a
 
 ```csharp
 var data = new CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM");
-sdk.GetPlatform().CreateApplication(data);
+await sdk.GetPlatform().CreateApplication(data);
 ```
 </details>
 
@@ -92,7 +92,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().li
 <summary>Show Details</summary>
 
 ```csharp
-var response = sdk.GetPlatform().ListApplications();
+var response = await sdk.GetPlatform().ListApplications();
 ```
 </details>
 
@@ -141,7 +141,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 
 ```csharp
 var data = new ApplicationIdData("APPLICATION_ID");
-var response = sdk.GetPlatform().GetApplication(data);
+var response = await sdk.GetPlatform().GetApplication(data);
 ```
 </details>
 
@@ -191,7 +191,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationNa
 
 ```csharp
 var data = new UpdateApplicationNameData("APPLICATION_ID", "APPLICATION_NAME");
-sdk.GetPlatform().UpdateApplicationName(data);
+await sdk.GetPlatform().UpdateApplicationName(data);
 ```
 </details>
 
@@ -241,7 +241,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationCo
 
 ```csharp
 var data = new UpdateApplicationCompanyNameData("APPLICATION_ID", "APPLICATION_COMPANY_NAME");
-sdk.GetPlatform().UpdateApplicationCompanyName(data);
+await sdk.GetPlatform().UpdateApplicationCompanyName(data);
 ```
 </details>
 
@@ -291,7 +291,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationMa
 
 ```csharp
 var data = new UpdateApplicationMailingAddressData("APPLICATION_ID", "COMPANY@MAIL.COM");
-sdk.GetPlatform().UpdateApplicationMailingAddress(data);
+await sdk.GetPlatform().UpdateApplicationMailingAddress(data);
 ```
 </details>
 
@@ -341,7 +341,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationPr
 
 ```csharp
 var data = new UpdateApplicationPrivacyPolicyData("APPLICATION_ID", "PRIVACY_POLICY");
-sdk.GetPlatform().UpdateApplicationPrivacyPolicy(data);
+await sdk.GetPlatform().UpdateApplicationPrivacyPolicy(data);
 ```
 </details>
 
@@ -391,7 +391,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationSu
 
 ```csharp
 var data = new UpdateApplicationSupportContactData("APPLICATION_ID", "SUPPORT_CONTACT_URL");
-sdk.GetPlatform().UpdateApplicationSupportContact(data);
+await sdk.GetPlatform().UpdateApplicationSupportContact(data);
 ```
 </details>
 
@@ -441,7 +441,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationAp
 
 ```csharp
 var data = new UpdateApplicationAppLinkData("APPLICATION_ID", "APP_LINK");
-sdk.GetPlatform().UpdateApplicationAppLink(data);
+await sdk.GetPlatform().UpdateApplicationAppLink(data);
 ```
 </details>
 
@@ -496,7 +496,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationEm
 ```csharp
 var emailPreferencesData = new EmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", false);
 var data = new UpdateApplicationEmailPreferencesData("APPLICATION_ID", emailPreferencesData);
-sdk.GetPlatform().UpdateApplicationEmailPreferences(data);
+await sdk.GetPlatform().UpdateApplicationEmailPreferences(data);
 ```
 </details>
 
@@ -547,7 +547,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().updateApplicationLo
 
 ```csharp
 var data = new UpdateApplicationLogoUrlData("APPLICATION_ID", "LOGO_URL");
-sdk.GetPlatform().UpdateApplicationLogoUrl(data);
+await sdk.GetPlatform().UpdateApplicationLogoUrl(data);
 ```
 </details>
 
@@ -600,7 +600,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteApplication("
 
 ```csharp
 var data = new ApplicationIdData("APPLICATION_ID");
-sdk.GetPlatform().DeleteApplication(data);
+await sdk.GetPlatform().DeleteApplication(data);
 ```
 </details>
 
@@ -650,7 +650,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 
 ```csharp
 var data = new GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE");
-var response = sdk.GetPlatform().GetLogoUploadUrl(data);
+var response = await sdk.GetPlatform().GetLogoUploadUrl(data);
 ```
 </details>
 
@@ -705,7 +705,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthKey("APPLICA
 ```csharp
 var keyData = new Ed25519KeyData("sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc");
 var data = new AddAuthKeyData("APPLICATION_ID", keyData);
-sdk.GetPlatform().AddAuthKey(data);
+await sdk.GetPlatform().AddAuthKey(data);
 ```
 </details>
 
@@ -756,7 +756,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addAuthIssuer("APPL
 
 ```csharp
 var data = new AuthIssuerData("APPLICATION_ID", "URL");
-sdk.GetPlatform().AddAuthIssuer(data);
+await sdk.GetPlatform().AddAuthIssuer(data);
 ```
 </details>
 
@@ -806,7 +806,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().deleteAuthIssuer("A
 
 ```csharp
 var data = new AuthIssuerData("APPLICATION_ID", "URL");
-sdk.GetPlatform().DeleteAuthIssuer(data);
+await sdk.GetPlatform().DeleteAuthIssuer(data);
 ```
 </details>
 
@@ -856,7 +856,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addCorsDomain("APPL
 
 ```csharp
 var data = new CorsDomainData("APPLICATION_ID", "URL");
-sdk.GetPlatform().AddCorsDomain(data);
+await sdk.GetPlatform().AddCorsDomain(data);
 ```
 </details>
 
@@ -906,7 +906,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeCorsDomain("A
 
 ```csharp
 var data = new CorsDomainData("APPLICATION_ID", "URL");
-sdk.GetPlatform().RemoveCorsDomain(data);
+await sdk.GetPlatform().RemoveCorsDomain(data);
 ```
 </details>
 
@@ -956,7 +956,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().addApplicationOwner
 
 ```csharp
 var data = new ApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
-sdk.GetPlatform().AddApplicationOwner(data);
+await sdk.GetPlatform().AddApplicationOwner(data);
 ```
 </details>
 
@@ -1006,7 +1006,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.platform().removeApplicationOw
 
 ```csharp
 var data = new ApplicationOwnerData("APPLICATION_ID", "OWNER_ID");
-sdk.GetPlatform().RemoveApplicationOwner(data);
+await sdk.GetPlatform().RemoveApplicationOwner(data);
 ```
 </details>
 
@@ -1056,7 +1056,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.platform().ge
 
 ```csharp
 var data = new GetApplicationOwnersDetailsData("APPLICATION_ID");
-var response = sdk.GetPlatform().GetApplicationOwnersDetails(data);
+var response = await sdk.GetPlatform().GetApplicationOwnersDetails(data);
 ```
 </details>
 
