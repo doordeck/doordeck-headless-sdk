@@ -3,9 +3,9 @@ using Doordeck.Headless.Sdk.Model;
 
 namespace Doordeck.Headless.Sdk.Utils;
 
-internal class CallbackHolder<TResponse>
+internal class CallbackHolder<TResponse> : IDisposable
 {
-    private TaskCompletionSource<TResponse> _tcs;
+    private readonly TaskCompletionSource<TResponse> _tcs;
     private GCHandle _handle;
 
     public CallbackHolder(TaskCompletionSource<TResponse> tcs)
@@ -18,14 +18,14 @@ internal class CallbackHolder<TResponse>
     {
         if (ptr == IntPtr.Zero)
         {
-            Release();
+            Dispose();
             return;
         }
 
         var result = Marshal.PtrToStringAnsi(ptr);
         if (result == null)
         {
-            Release();
+            Dispose();
             return;
         }
 
@@ -36,13 +36,17 @@ internal class CallbackHolder<TResponse>
             var r = resultData.Success!.Result ?? default!;
             _tcs.SetResult(r);
         }
+        catch (Exception ex)
+        {
+            _tcs.SetException(ex);
+        }
         finally
         {
-            Release();
+            Dispose();
         }
     }
 
-    private void Release()
+    public void Dispose()
     {
         if (_handle.IsAllocated)
         {

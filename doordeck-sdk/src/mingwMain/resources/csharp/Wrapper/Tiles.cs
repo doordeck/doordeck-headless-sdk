@@ -5,35 +5,19 @@ using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public class Tiles : IResource
+public class Tiles(
+    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi tiles,
+    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesApi_e__Struct tilesApi) : IResource
 {
-    private unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_TilesApi _tiles;
-
-    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._TilesApi_e__Struct _tilesApi;
-
-    unsafe void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
-        Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
-    {
-        _symbols = symbols;
-        _tiles = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.tiles_(sdk);
-        _tilesApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.TilesApi;
-    }
-
-    unsafe void IResource.Release()
-    {
-        _symbols->DisposeStablePointer(_tiles.pinned);
-    }
-
     public unsafe Task<TileLocksResponse> GetLocksBelongingToTile(GetLocksBelongingToTileData data)
     {
-        return Process<TileLocksResponse>(_tilesApi.getLocksBelongingToTile_, null, data);
+        return Process<TileLocksResponse>(tilesApi.getLocksBelongingToTile_, null, data);
     }
 
     public unsafe Task<object> AssociateMultipleLocks(AssociateMultipleLocksData data)
     {
-        return Process<object>(_tilesApi.associateMultipleLocks_, null, data);
+        return Process<object>(tilesApi.associateMultipleLocks_, null, data);
     }
 
     private unsafe Task<TResponse> Process<TResponse>(
@@ -53,11 +37,11 @@ public class Tiles : IResource
             var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
             if (data != null)
             {
-                processWithData(_tiles, sData, callbackPointer.ToPointer());
+                processWithData(tiles, sData, callbackPointer.ToPointer());
             }
             else
             {
-                processWithoutData(_tiles, callbackPointer.ToPointer());
+                processWithoutData(tiles, callbackPointer.ToPointer());
             }
         }
         finally
