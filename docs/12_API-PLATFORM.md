@@ -53,7 +53,7 @@ await sdk.GetPlatform().CreateApplication(data);
 
 ```python
 data = doordeck_headless_sdk.CreateApplicationData("APPLICATION_NAME", "COMPANY_NAME", "COMPANY@MAIL.COM")
-sdk.platform.create_application(data)
+await sdk.platform.create_application(data)
 ```
 </details>
 
@@ -101,7 +101,7 @@ var response = await sdk.GetPlatform().ListApplications();
 <summary>Show Details</summary>
 
 ```python
-response = sdk.platform.list_applications()
+response = await sdk.platform.list_applications()
 ```
 </details>
 
@@ -151,7 +151,7 @@ var response = await sdk.GetPlatform().GetApplication(data);
 
 ```python
 data = doordeck_headless_sdk.ApplicationIdData("APPLICATION_ID")
-response = sdk.platform.get_application(data)
+response = await sdk.platform.get_application(data)
 ```
 </details>
 
@@ -201,7 +201,7 @@ await sdk.GetPlatform().UpdateApplicationName(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationNameData("APPLICATION_ID", "APPLICATION_NAME")
-sdk.platform.update_application_name(data)
+await sdk.platform.update_application_name(data)
 ```
 </details>
 
@@ -251,7 +251,7 @@ await sdk.GetPlatform().UpdateApplicationCompanyName(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationCompanyNameData("APPLICATION_ID", "APPLICATION_COMPANY_NAME")
-sdk.platform.update_application_company_name(data)
+await sdk.platform.update_application_company_name(data)
 ```
 </details>
 
@@ -301,7 +301,7 @@ await sdk.GetPlatform().UpdateApplicationMailingAddress(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationMailingAddressData("APPLICATION_ID", "COMPANY@MAIL.COM")
-sdk.platform.update_application_mailing_address(data)
+await sdk.platform.update_application_mailing_address(data)
 ```
 </details>
 
@@ -351,7 +351,7 @@ await sdk.GetPlatform().UpdateApplicationPrivacyPolicy(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationPrivacyPolicyData("APPLICATION_ID", "PRIVACY_POLICY")
-sdk.platform.update_application_privacy_policy(data)
+await sdk.platform.update_application_privacy_policy(data)
 ```
 </details>
 
@@ -401,7 +401,7 @@ await sdk.GetPlatform().UpdateApplicationSupportContact(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationSupportContactData("APPLICATION_ID", "SUPPORT_CONTACT_URL")
-sdk.platform.update_application_support_contact(data)
+await sdk.platform.update_application_support_contact(data)
 ```
 </details>
 
@@ -451,7 +451,7 @@ await sdk.GetPlatform().UpdateApplicationAppLink(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationAppLinkData("APPLICATION_ID", "APP_LINK")
-sdk.platform.update_application_app_link(data)
+await sdk.platform.update_application_app_link(data)
 ```
 </details>
 
@@ -507,7 +507,7 @@ await sdk.GetPlatform().UpdateApplicationEmailPreferences(data);
 ```python
 emailPreferencesData = doordeck_headless_sdk.EmailPreferencesData("SENDER_EMAIL", "SENDER_NAME", "PRIMARY_COLOR", "SECONDARY_COLOR", False)
 data = doordeck_headless_sdk.UpdateApplicationEmailPreferencesData("APPLICATION_ID", emailPreferencesData)
-sdk.platform.update_application_email_preferences(data)
+await sdk.platform.update_application_email_preferences(data)
 ```
 </details>
 
@@ -557,7 +557,7 @@ await sdk.GetPlatform().UpdateApplicationLogoUrl(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateApplicationLogoUrlData("APPLICATION_ID", "LOGO_URL")
-sdk.platform.update_application_logo_url(data)
+await sdk.platform.update_application_logo_url(data)
 ```
 </details>
 
@@ -610,7 +610,7 @@ await sdk.GetPlatform().DeleteApplication(data);
 
 ```python
 data = doordeck_headless_sdk.ApplicationIdData("APPLICATION_ID")
-sdk.platform.delete_application(data)
+await sdk.platform.delete_application(data)
 ```
 </details>
 
@@ -660,7 +660,7 @@ var response = await sdk.GetPlatform().GetLogoUploadUrl(data);
 
 ```python
 data = doordeck_headless_sdk.GetLogoUploadUrlData("APPLICATION_ID", "CONTENT_TYPE")
-response = sdk.platform.get_logo_upload_url(data)
+response = await sdk.platform.get_logo_upload_url(data)
 ```
 </details>
 
@@ -716,7 +716,7 @@ await sdk.GetPlatform().AddAuthKey(data);
 ```python
 keyData = doordeck_headless_sdk.Ed25519KeyData("sig", "90a983fd-9077-41f9-840c-7220581017f5", "EdDSA", "zVfpB5Nfj4SzYayFpTu4Qm1JaUmk6-FBbFUX3k1qqwc", "Ed25519", "0ufELXg9OUjkAZUs5aGdgVbz664erh8t9cTvFBHicrc")
 data = doordeck_headless_sdk.AddAuthKeyData("APPLICATION_ID", keyData)
-sdk.platform.add_auth_key(data)
+await sdk.platform.add_auth_key(data)
 ```
 </details>
 
@@ -766,7 +766,7 @@ await sdk.GetPlatform().AddAuthIssuer(data);
 
 ```python
 data = doordeck_headless_sdk.AuthIssuerData("APPLICATION_ID", "URL")
-sdk.platform.add_auth_issuer(data)
+await sdk.platform.add_auth_issuer(data)
 ```
 </details>
 
@@ -816,7 +816,7 @@ await sdk.GetPlatform().DeleteAuthIssuer(data);
 
 ```python
 data = doordeck_headless_sdk.AuthIssuerData("APPLICATION_ID", "URL")
-sdk.platform.delete_auth_issuer(data)
+await sdk.platform.delete_auth_issuer(data)
 ```
 </details>
 
@@ -866,7 +866,7 @@ await sdk.GetPlatform().AddCorsDomain(data);
 
 ```python
 data = doordeck_headless_sdk.CorsDomainData("APPLICATION_ID", "URL")
-sdk.platform.add_cors_domain(data)
+await sdk.platform.add_cors_domain(data)
 ```
 </details>
 
@@ -916,7 +916,7 @@ await sdk.GetPlatform().RemoveCorsDomain(data);
 
 ```python
 data = doordeck_headless_sdk.CorsDomainData("APPLICATION_ID", "URL")
-sdk.platform.remove_cors_domain(data)
+await sdk.platform.remove_cors_domain(data)
 ```
 </details>
 
@@ -966,7 +966,7 @@ await sdk.GetPlatform().AddApplicationOwner(data);
 
 ```python
 data = doordeck_headless_sdk.ApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
-sdk.platform.add_application_owner(data)
+await sdk.platform.add_application_owner(data)
 ```
 </details>
 
@@ -1016,7 +1016,7 @@ await sdk.GetPlatform().RemoveApplicationOwner(data);
 
 ```python
 data = doordeck_headless_sdk.ApplicationOwnerData("APPLICATION_ID", "OWNER_ID")
-sdk.platform.remove_application_owner(data)
+await sdk.platform.remove_application_owner(data)
 ```
 </details>
 
@@ -1066,7 +1066,7 @@ var response = await sdk.GetPlatform().GetApplicationOwnersDetails(data);
 
 ```python
 data = doordeck_headless_sdk.GetApplicationOwnersDetailsData("APPLICATION_ID")
-response = sdk.platform.get_application_owners_details(data)
+response = await sdk.platform.get_application_owners_details(data)
 ```
 </details>
 

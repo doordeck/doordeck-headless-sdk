@@ -45,7 +45,7 @@ var response = await sdk.GetSites().ListSites();
 <summary>Show Details</summary>
 
 ```python
-response = sdk.sites.list_sites()
+response = await sdk.sites.list_sites()
 ```
 </details>
 
@@ -96,7 +96,7 @@ var response = await sdk.GetSites().GetLocksForSite(data);
 
 ```python
 data = doordeck_headless_sdk.SiteIdData("SITE_ID")
-response = sdk.sites.get_locks_for_site(data)
+response = await sdk.sites.get_locks_for_site(data)
 ```
 </details>
 
@@ -147,7 +147,7 @@ var response = await sdk.GetSites().GetUsersForSite(data);
 
 ```python
 data = doordeck_headless_sdk.SiteIdData("SITE_ID")
-response = sdk.sites.get_users_for_site(data)
+response = await sdk.sites.get_users_for_site(data)
 ```
 </details>
 

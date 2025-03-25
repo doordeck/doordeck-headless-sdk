@@ -56,7 +56,7 @@ var response = await sdk.GetAccount().RefreshToken(data);
 
 ```python
 data = doordeck_headless_sdk.RefreshTokenData("REFRESH_TOKEN")
-response = sdk.account.refresh_token(data)
+response = await sdk.account.refresh_token(data)
 ```
 </details>
 
@@ -108,7 +108,7 @@ await sdk.GetAccount().Logout();
 <summary>Show Details</summary>
 
 ```python
-sdk.account.logout()
+await sdk.account.logout()
 ```
 </details>
 
@@ -163,7 +163,7 @@ var response = await sdk.GetAccount().RegisterEphemeralKey(data);
 
 ```python
 data = doordeck_headless_sdk.RegisterEphemeralKeyData("BASE64_PUBLIC_KEY")
-response = sdk.account.register_ephemeral_key()
+response = await sdk.account.register_ephemeral_key()
 ```
 </details>
 
@@ -216,7 +216,7 @@ var response = await sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentic
 
 ```python
 data = doordeck_headless_sdk.RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY")
-response = sdk.account.register_ephemeral_key_with_secondary_authentication(data)
+response = await sdk.account.register_ephemeral_key_with_secondary_authentication(data)
 ```
 </details>
 
@@ -270,7 +270,7 @@ var response = await sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
 
 ```python
 data = doordeck_headless_sdk.VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY")
-response = sdk.account.verify_ephemeral_key_registration(data)
+response = await sdk.account.verify_ephemeral_key_registration(data)
 ```
 </details>
 
@@ -322,7 +322,7 @@ await sdk.GetAccount().ReverifyEmail();
 <summary>Show Details</summary>
 
 ```python
-sdk.account.reverify_email()
+await sdk.account.reverify_email()
 ```
 </details>
 
@@ -376,7 +376,7 @@ await sdk.GetAccount().ChangePassword(data);
 
 ```python
 data = doordeck_headless_sdk.ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD")
-sdk.account.change_password(data)
+await sdk.account.change_password(data)
 ```
 </details>
 
@@ -425,7 +425,7 @@ var response = await sdk.GetAccount().GetUserDetails();
 <summary>Show Details</summary>
 
 ```python
-response = sdk.account.get_user_details()
+response = await sdk.account.get_user_details()
 ```
 </details>
 
@@ -476,7 +476,7 @@ await sdk.GetAccount().UpdateUserDetails(data);
 
 ```python
 data = doordeck_headless_sdk.UpdateUserDetailsData("DISPLAY_NAME")
-sdk.account.update_user_details(data)
+await sdk.account.update_user_details(data)
 ```
 </details>
 
@@ -531,7 +531,7 @@ await sdk.GetAccount().DeleteAccount();
 <summary>Show Details</summary>
 
 ```python
-sdk.account.delete_account()
+await sdk.account.delete_account()
 ```
 </details>
 
