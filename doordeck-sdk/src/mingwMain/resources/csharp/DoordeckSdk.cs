@@ -56,20 +56,9 @@ public class DoordeckSdk
         var builder = sdkConfig.Builder.Builder();
         sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
 
-        if (token != null)
-        {
-            sdkConfig.Builder.setCloudAuthToken(builder, token);
-        }
-
-        if (refreshToken != null)
-        {
-            sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
-        }
-
-        if (fHost != null)
-        {
-            sdkConfig.Builder.setFusionHost(builder, fHost);
-        }
+        if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
+        if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
+        if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
 
         try
         {
@@ -77,18 +66,9 @@ public class DoordeckSdk
         }
         finally
         {
-            if (token != null)
-            {
-               Marshal.FreeHGlobal((IntPtr)token);
-            }
-            if (refreshToken != null)
-            {
-                Marshal.FreeHGlobal((IntPtr)refreshToken);
-            }
-            if (fHost != null)
-            {
-                Marshal.FreeHGlobal((IntPtr)fHost);
-            }
+            if (token != null) Marshal.FreeHGlobal((IntPtr)token);
+            if (refreshToken != null) Marshal.FreeHGlobal((IntPtr)refreshToken);
+            if (fHost != null) Marshal.FreeHGlobal((IntPtr)fHost);
         }
 
         _accountApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account_(_sdk);

@@ -1,48 +1,24 @@
-﻿namespace Doordeck.Headless.Sdk.Model
+﻿namespace Doordeck.Headless.Sdk.Model;
+
+public class FusionLoginData(string email, string password)
 {
-    public class FusionLoginData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-
-        public FusionLoginData(string email, string password)
-        {
-            Email = email;
-            Password = password;
-        }
-    }
+    public string Email { get; set; } = email;
+    public string Password { get; set; } = password;
+}
     
-    public class GetIntegrationConfigurationData
-    {
-        public string Type { get; set; }
-
-        public GetIntegrationConfigurationData(string type)
-        {
-            Type = type;
-        }
-    }
+public class GetIntegrationConfigurationData(string type)
+{
+    public string Type { get; set; } = type;
+}
     
-    public class EnableDoorData
-    {
-        public string Name { get; set; }
-        public string SiteId { get; set; }
-        public LockController Controller { get; set; }
+public class EnableDoorData(string name, string siteId, LockController controller)
+{
+    public string Name { get; set; } = name;
+    public string SiteId { get; set; } = siteId;
+    public LockController Controller { get; set; } = controller;
+}
 
-        public EnableDoorData(string name, string siteId, LockController controller)
-        {
-            Name = name;
-            SiteId = siteId;
-            Controller = controller;
-        }
-    }
-
-    public class DeviceIdData
-    {
-        public string DeviceId { get; set; }
-
-        public DeviceIdData(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
-    }
+public class DeviceIdData(string deviceId)
+{
+    public string DeviceId { get; set; } = deviceId;
 }

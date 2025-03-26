@@ -1,12 +1,6 @@
-﻿namespace Doordeck.Headless.Sdk.Model
-{
-    public class SiteIdData
-    {
-        public string SiteId { get; set; }
+﻿namespace Doordeck.Headless.Sdk.Model;
 
-        public SiteIdData(string siteId)
-        {
-            SiteId = siteId;
-        }
-    }
+public class SiteIdData(string siteId)
+{
+    public string SiteId { get; set; } = siteId;
 }

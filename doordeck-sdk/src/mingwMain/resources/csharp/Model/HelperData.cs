@@ -1,54 +1,27 @@
-﻿namespace Doordeck.Headless.Sdk.Model
+﻿namespace Doordeck.Headless.Sdk.Model;
+
+public class UploadPlatformLogoData(string applicationId, string contentType, string image)
 {
-    public class UploadPlatformLogoData
-    {
-        public string ApplicationId { get; set; }
-        public string ContentType { get; set; }
-        public string Image { get; set; }
+    public string ApplicationId { get; set; } = applicationId;
+    public string ContentType { get; set; } = contentType;
+    public string Image { get; set; } = image;
+}
 
-        public UploadPlatformLogoData(string applicationId, string contentType, string image)
-        {
-            ApplicationId = applicationId;
-            ContentType = contentType;
-            Image = image;
-        }
-    }
+public class AssistedLoginData(string email, string password)
+{
+    public string Email { get; set; } = email;
+    public string Password { get; set; } = password;
+}
 
-    public class AssistedLoginData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
+public class AssistedRegisterEphemeralKeyData(string publicKey)
+{
+    public string PublicKey { get; set; } = publicKey;
+}
 
-        public AssistedLoginData(string email, string password)
-        {
-            Email = email;
-            Password = password;
-        }
-    }
-
-    public class AssistedRegisterEphemeralKeyData
-    {
-        public string PublicKey { get; set; }
-
-        public AssistedRegisterEphemeralKeyData(string publicKey)
-        {
-            PublicKey = publicKey;
-        }
-    }
-
-    public class AssistedRegisterData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string? DisplayName { get; set; }
-        public bool Force { get; set; }
-
-        public AssistedRegisterData(string email, string password, string? displayName = null, bool force = false)
-        {
-            Email = email;
-            Password = password;
-            DisplayName = displayName;
-            Force = force;
-        }
-    }
+public class AssistedRegisterData(string email, string password, string? displayName = null, bool force = false)
+{
+    public string Email { get; set; } = email;
+    public string Password { get; set; } = password;
+    public string? DisplayName { get; set; } = displayName;
+    public bool Force { get; set; } = force;
 }
