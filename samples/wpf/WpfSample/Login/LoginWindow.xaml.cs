@@ -14,12 +14,12 @@ public partial class LoginWindow : Window
         InitializeComponent();
     }
 
-    private void SubmitLogin_Click(object sender, RoutedEventArgs e)
+    private async void SubmitLogin_Click(object sender, RoutedEventArgs e)
     {
         try
         {
             // Attempt to log-in
-            App.Sdk
+            await App.Sdk
                 .GetAccountless()
                 .Login(new LoginData(EmailTextBox.Text, PasswordBox.Password));
         }
@@ -40,7 +40,7 @@ public partial class LoginWindow : Window
             .GenerateEncodedKeyPair();
 
         // Register the key pair
-        App.Sdk
+        await App.Sdk
             .GetAccount()
             .RegisterEphemeralKeyWithSecondaryAuthentication(
                 new RegisterEphemeralKeyWithSecondaryAuthenticationData(keyPair.Public));
@@ -51,7 +51,7 @@ public partial class LoginWindow : Window
         try
         {
             // Attempt to verify the key pair
-            var verifyResponse = App.Sdk
+            var verifyResponse = await App.Sdk
                 .GetAccount()
                 .VerifyEphemeralKeyRegistration(
                     new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
