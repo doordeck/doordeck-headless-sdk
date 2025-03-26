@@ -1,16 +1,19 @@
 using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
+using Doordeck.Headless.Sdk.Utils;
 
-namespace Doordeck.Headless.Sdk.Utils;
+namespace Doordeck.Headless.Sdk.Callback;
 
 internal class CallbackHolder<TResponse> : IDisposable
 {
     private readonly TaskCompletionSource<TResponse> _tcs;
     private GCHandle _handle;
+    public Native.CallbackDelegate CallbackDelegate { get; }
 
     public CallbackHolder(TaskCompletionSource<TResponse> tcs)
     {
         _tcs = tcs;
+        CallbackDelegate = Callback;
         _handle = GCHandle.Alloc(this);
     }
 
@@ -31,7 +34,7 @@ internal class CallbackHolder<TResponse> : IDisposable
 
         try
         {
-            var resultData = Utils.FromData<ResultData<TResponse>>(result);
+            var resultData = Utils.Utils.FromData<ResultData<TResponse>>(result);
             resultData.HandleException();
             var r = resultData.Success!.Result ?? default!;
             _tcs.SetResult(r);

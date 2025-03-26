@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Doordeck.Headless.Sdk.Callback;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using Doordeck.Headless.Sdk.Utils;
@@ -8,7 +9,7 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 public class Platform(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi platform,
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi) : IResource
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi)
 {
     public unsafe Task<object> CreateApplication(CreateApplicationData data)
     {
@@ -128,8 +129,7 @@ public class Platform(
         try
         {
             var holder = new CallbackHolder<TResponse>(tcs);
-            IResource.CallbackDelegate callbackDelegate = holder.Callback;
-            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(holder.CallbackDelegate);
             if (data != null)
             {
                 processWithData(platform, sData, callbackPointer.ToPointer());

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Doordeck.Headless.Sdk.Callback;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using Doordeck.Headless.Sdk.Utils;
@@ -8,7 +9,7 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 public class LockOperations(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi lockOperations,
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct lockOperationsApi) : IResource
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct lockOperationsApi)
 {
     public unsafe Task<LockResponse> GetSingleLock(LockIdData data)
     {
@@ -178,8 +179,7 @@ public class LockOperations(
         try
         {
             var holder = new CallbackHolder<TResponse>(tcs);
-            IResource.CallbackDelegate callbackDelegate = holder.Callback;
-            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(holder.CallbackDelegate);
             if (data != null)
             {
                 processWithData(lockOperations, sData, callbackPointer.ToPointer());

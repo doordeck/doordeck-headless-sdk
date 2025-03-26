@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Doordeck.Headless.Sdk.Callback;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using Doordeck.Headless.Sdk.Utils;
@@ -8,7 +9,7 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 public class Accountless(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountlessApi accountless,
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountlessApi_e__Struct accountlessApi) : IResource
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountlessApi_e__Struct accountlessApi)
 {
     public unsafe Task<TokenResponse> Login(LoginData data)
     {
@@ -48,8 +49,7 @@ public class Accountless(
         try
         {
             var holder = new CallbackHolder<TResponse>(tcs);
-            IResource.CallbackDelegate callbackDelegate = holder.Callback;
-            var callbackPointer = Marshal.GetFunctionPointerForDelegate(callbackDelegate);
+            var callbackPointer = Marshal.GetFunctionPointerForDelegate(holder.CallbackDelegate);
             if (data != null)
             {
                 processWithData(accountless, sData, callbackPointer.ToPointer());
