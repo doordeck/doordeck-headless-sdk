@@ -303,7 +303,7 @@ class LockOperationsApiTest : CallbackTest() {
                     callback = staticCFunction(::testCallback)
                 )
             },
-            expectedResponse = USER_PUBLIC_KEY_RESPONSE.toResultDataJson()
+            expectedResponse = BATCH_USER_PUBLIC_KEY_RESPONSE.toResultDataJson()
         )
     }
 
