@@ -7,22 +7,21 @@ import {MatButton} from '@angular/material/button';
 import {NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-two-factor-verify',
-  standalone: true,
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    ReactiveFormsModule,
-    MatFormField,
-    MatDialogActions,
-    MatInput,
-    MatButton,
-    MatLabel,
-    NgIf,
-    MatError
-  ],
-  templateUrl: './two-factor-verify.component.html',
-  styleUrl: './two-factor-verify.component.css'
+    selector: 'app-two-factor-verify',
+    imports: [
+        MatDialogTitle,
+        MatDialogContent,
+        ReactiveFormsModule,
+        MatFormField,
+        MatDialogActions,
+        MatInput,
+        MatButton,
+        MatLabel,
+        NgIf,
+        MatError
+    ],
+    templateUrl: './two-factor-verify.component.html',
+    styleUrl: './two-factor-verify.component.css'
 })
 export class TwoFactorVerifyComponent {
   form: FormGroup;

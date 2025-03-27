@@ -5,33 +5,31 @@ import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
-import {MatStep, MatStepLabel, MatStepper, MatStepperNext, MatStepperPrevious} from '@angular/material/stepper';
+import {MatStep, MatStepper, MatStepperNext, MatStepperPrevious} from '@angular/material/stepper';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 
 @Component({
-  selector: 'app-share-lock',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    NgIf,
-    ReactiveFormsModule,
-    MatStepper,
-    MatStep,
-    MatStepperPrevious,
-    MatStepperNext,
-    MatStepLabel,
-    MatSlideToggle
-  ],
-  templateUrl: './share-lock.component.html',
-  styleUrl: './share-lock.component.css'
+    selector: 'app-share-lock',
+    imports: [
+        FormsModule,
+        MatButton,
+        MatDialogActions,
+        MatDialogContent,
+        MatDialogTitle,
+        MatError,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        NgIf,
+        ReactiveFormsModule,
+        MatStepper,
+        MatStep,
+        MatStepperPrevious,
+        MatStepperNext,
+        MatSlideToggle
+    ],
+    templateUrl: './share-lock.component.html',
+    styleUrl: './share-lock.component.css'
 })
 export class ShareLockComponent {
 

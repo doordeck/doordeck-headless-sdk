@@ -7,22 +7,21 @@ import {NgIf} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'app-change-display-name',
-  standalone: true,
-  imports: [
-    MatButton,
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
-    MatError,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    NgIf,
-    ReactiveFormsModule
-  ],
-  templateUrl: './change-display-name.component.html',
-  styleUrl: './change-display-name.component.css'
+    selector: 'app-change-display-name',
+    imports: [
+        MatButton,
+        MatDialogActions,
+        MatDialogContent,
+        MatDialogTitle,
+        MatError,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        NgIf,
+        ReactiveFormsModule
+    ],
+    templateUrl: './change-display-name.component.html',
+    styleUrl: './change-display-name.component.css'
 })
 export class ChangeDisplayNameComponent {
 

@@ -1,13 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {MatActionList, MatList, MatListItem} from '@angular/material/list';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {NgForOf, NgIf} from '@angular/common';
+import {MatCard, MatCardContent} from '@angular/material/card';
 import {Router} from '@angular/router';
-import {MatDivider} from '@angular/material/divider';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -16,7 +14,7 @@ import {
 } from '@angular/material/expansion';
 import {com, kotlin} from '@doordeck/doordeck-headless-sdk';
 import {accountResource, doordeckUtil, lockOperationResource, sitesResource} from '../../main';
-import {MatTab, MatTabGroup, MatTabHeader} from '@angular/material/tabs';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {
   MatCell,
   MatCellDef,
@@ -37,7 +35,7 @@ import UserLockResponse = com.doordeck.multiplatform.sdk.model.responses.UserLoc
 import UserRole = com.doordeck.multiplatform.sdk.model.common.UserRole;
 import AuditResponse = com.doordeck.multiplatform.sdk.model.responses.AuditResponse;
 import AuditEvent = com.doordeck.multiplatform.sdk.model.common.AuditEvent;
-import {MatFormField, MatFormFieldModule, MatHint, MatLabel} from '@angular/material/form-field';
+import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 import {MatInput, MatInputModule} from '@angular/material/input';
 import {RemoveUserFromLockComponent} from '../remove-user-from-lock/remove-user-from-lock.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -60,62 +58,52 @@ import RevokeAccessToLockOperation = com.doordeck.multiplatform.sdk.model.data.L
 import ShareLockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLockOperation;
 
 @Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    MatList,
-    MatListItem,
-    MatIcon,
-    MatToolbar,
-    MatIconModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatMenu,
-    MatMenuTrigger,
-    MatMenuItem,
-    NgForOf,
-    NgIf,
-    MatActionList,
-    MatCardHeader,
-    MatCard,
-    MatCardContent,
-    AsyncPipe,
-    MatDivider,
-    MatExpansionPanel,
-    MatAccordion,
-    MatExpansionPanelHeader,
-    MatTab,
-    MatTabHeader,
-    MatTabGroup,
-    MatCardTitle,
-    MatExpansionPanelTitle,
-    MatTable,
-    MatColumnDef,
-    MatHeaderCell,
-    MatHeaderCellDef,
-    MatCellDef,
-    MatCell,
-    MatHeaderRow,
-    MatRow,
-    MatRowDef,
-    MatHeaderRowDef,
-    FormsModule,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatDateRangeInput,
-    MatDatepickerToggle,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatHint,
-    ReactiveFormsModule,
-    MatInputModule,
-  ],
-  providers: [
-    provideNativeDateAdapter()
-  ],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+    selector: 'app-dashboard',
+    imports: [
+        MatIcon,
+        MatToolbar,
+        MatIconModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatMenu,
+        MatMenuTrigger,
+        MatMenuItem,
+        NgForOf,
+        NgIf,
+        MatCard,
+        MatCardContent,
+        MatExpansionPanel,
+        MatAccordion,
+        MatExpansionPanelHeader,
+        MatTab,
+        MatTabGroup,
+        MatExpansionPanelTitle,
+        MatTable,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderCellDef,
+        MatCellDef,
+        MatCell,
+        MatHeaderRow,
+        MatRow,
+        MatRowDef,
+        MatHeaderRowDef,
+        FormsModule,
+        MatFormField,
+        MatInput,
+        MatLabel,
+        MatDateRangeInput,
+        MatDatepickerToggle,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+    ],
+    providers: [
+        provideNativeDateAdapter()
+    ],
+    templateUrl: './dashboard.component.html',
+    styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit  {
 

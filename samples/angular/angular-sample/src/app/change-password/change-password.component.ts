@@ -7,8 +7,7 @@ import {MatInput} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-change-password',
-  standalone: true,
+    selector: 'app-change-password',
     imports: [
         FormsModule,
         MatButton,
@@ -22,8 +21,8 @@ import {NgIf} from "@angular/common";
         NgIf,
         ReactiveFormsModule
     ],
-  templateUrl: './change-password.component.html',
-  styleUrl: './change-password.component.css'
+    templateUrl: './change-password.component.html',
+    styleUrl: './change-password.component.css'
 })
 export class ChangePasswordComponent {
 

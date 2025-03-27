@@ -18,23 +18,20 @@ import TooManyRequestsException = com.doordeck.multiplatform.sdk.exceptions.TooM
 import KeyPair = com.doordeck.multiplatform.sdk.model.data.Crypto.KeyPair;
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [
-    MatCardTitle,
-    MatCard,
-    ReactiveFormsModule,
-    MatFormField,
-    MatInput,
-    MatError,
-    MatLabel,
-    MatButton,
-    NgIf,
-    MatAnchor,
-    MatIcon
-  ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+    selector: 'app-login',
+    imports: [
+        MatCardTitle,
+        MatCard,
+        ReactiveFormsModule,
+        MatFormField,
+        MatInput,
+        MatError,
+        MatLabel,
+        MatButton,
+        NgIf
+    ],
+    templateUrl: './login.component.html',
+    styleUrl: './login.component.css'
 })
 export class LoginComponent  {
   loginForm: FormGroup;
