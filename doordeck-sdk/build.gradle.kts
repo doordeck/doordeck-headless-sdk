@@ -98,7 +98,7 @@ kotlin {
     }
 
     js(IR) {
-        moduleName = "doordeck-sdk"
+        outputModuleName = "doordeck-sdk"
         useCommonJs()
         nodejs {
             testTask {
