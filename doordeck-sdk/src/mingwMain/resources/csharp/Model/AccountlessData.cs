@@ -1,66 +1,38 @@
-﻿namespace Doordeck.Headless.Sdk.Model
+﻿namespace Doordeck.Headless.Sdk.Model;
+
+public class LoginData(string email, string password)
 {
-    public class LoginData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
+    public string Email { get; set; } = email;
+    public string Password { get; set; } = password;
+}
 
-        public LoginData(string email, string password)
-        {
-            Email = email;
-            Password = password;
-        }
-    }
+public class RegistrationData(
+    string email,
+    string password,
+    string? displayName = null,
+    bool force = false,
+    string? publicKey = null)
+{
+    public string Email { get; set; } = email;
+    public string Password { get; set; } = password;
+    public string? DisplayName { get; set; } = displayName;
+    public bool Force { get; set; } = force;
+    public string? PublicKey { get; set; } = publicKey;
+}
 
-    public class RegistrationData
-    {
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string? DisplayName { get; set; }
-        public bool Force { get; set; }
-        public string? PublicKey { get; set; }
+public class VerifyEmailData(string code)
+{
+    public string Code { get; set; } = code;
+}
 
-        public RegistrationData(string email, string password, string? displayName = null, bool force = false, string? publicKey = null)
-        {
-            Email = email;
-            Password = password;
-            DisplayName = displayName;
-            Force = force;
-            PublicKey = publicKey;
-        }
-    }
+public class PasswordResetData(string email)
+{
+    public string Email { get; set; } = email;
+}
 
-    public class VerifyEmailData
-    {
-        public string Code { get; set; }
-
-        public VerifyEmailData(string code)
-        {
-            Code = code;
-        }
-    }
-
-    public class PasswordResetData
-    {
-        public string Email { get; set; }
-
-        public PasswordResetData(string email)
-        {
-            Email = email;
-        }
-    }
-
-    public class PasswordResetVerifyData
-    {
-        public string UserId { get; set; }
-        public string Token { get; set; }
-        public string Password { get; set; }
-
-        public PasswordResetVerifyData(string userId, string token, string password)
-        {
-            UserId = userId;
-            Token = token;
-            Password = password;
-        }
-    }
+public class PasswordResetVerifyData(string userId, string token, string password)
+{
+    public string UserId { get; set; } = userId;
+    public string Token { get; set; } = token;
+    public string Password { get; set; } = password;
 }

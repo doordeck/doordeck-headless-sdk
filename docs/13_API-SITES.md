@@ -36,7 +36,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().listS
 <summary>Show Details</summary>
 
 ```csharp
-var response = sdk.GetSites().ListSites();
+var response = await sdk.GetSites().ListSites();
 ```
 </details>
 
@@ -45,7 +45,7 @@ var response = sdk.GetSites().ListSites();
 <summary>Show Details</summary>
 
 ```python
-response = sdk.sites.list_sites()
+response = await sdk.sites.list_sites()
 ```
 </details>
 
@@ -85,8 +85,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getLo
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetLocksForSiteData("SITE_ID");
-var response = sdk.GetSites().GetLocksForSite(data);
+var data = new SiteIdData("SITE_ID");
+var response = await sdk.GetSites().GetLocksForSite(data);
 ```
 </details>
 
@@ -95,8 +95,8 @@ var response = sdk.GetSites().GetLocksForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetLocksForSiteData("SITE_ID")
-response = sdk.sites.get_locks_for_site(data)
+data = doordeck_headless_sdk.SiteIdData("SITE_ID")
+response = await sdk.sites.get_locks_for_site(data)
 ```
 </details>
 
@@ -136,8 +136,8 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.sites().getUs
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUsersForSiteData("SITE_ID");
-var response = sdk.GetSites().GetUsersForSite(data);
+var data = new SiteIdData("SITE_ID");
+var response = await sdk.GetSites().GetUsersForSite(data);
 ```
 </details>
 
@@ -146,8 +146,8 @@ var response = sdk.GetSites().GetUsersForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetUsersForSiteData("SITE_ID")
-response = sdk.sites.get_users_for_site(data)
+data = doordeck_headless_sdk.SiteIdData("SITE_ID")
+response = await sdk.sites.get_users_for_site(data)
 ```
 </details>
 

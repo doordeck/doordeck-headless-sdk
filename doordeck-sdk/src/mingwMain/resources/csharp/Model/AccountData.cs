@@ -1,68 +1,36 @@
-﻿namespace Doordeck.Headless.Sdk.Model
+﻿namespace Doordeck.Headless.Sdk.Model;
+
+public class RefreshTokenData(string refreshToken)
 {
-    public class RefreshTokenData
-    {
-        public string RefreshToken { get; set; }
+    public string RefreshToken { get; set; } = refreshToken;
+}
 
-        public RefreshTokenData(string refreshToken)
-        {
-            RefreshToken = refreshToken;
-        }
-    }
+public class RegisterEphemeralKeyData(string publicKey)
+{
+    public string PublicKey { get; set; } = publicKey;
+}
 
-    public class RegisterEphemeralKeyData
-    {
-        public string PublicKey { get; set; }
+public class RegisterEphemeralKeyWithSecondaryAuthenticationData(
+    string? publicKey = null,
+    TwoFactorMethod? method = null)
+{
+    public string? PublicKey { get; set; } = publicKey;
+    public TwoFactorMethod? Method { get; set; } = method;
+}
 
-        public RegisterEphemeralKeyData(string publicKey)
-        {
-            PublicKey = publicKey;
-        }
-    }
+public class VerifyEphemeralKeyRegistrationData(string code, string? privateKey = null)
+{
+    public string Code { get; set; } = code;
+    public string? PrivateKey { get; set; } = privateKey;
+}
 
-    public class RegisterEphemeralKeyWithSecondaryAuthenticationData
-    {
-        public string? PublicKey { get; set; }
-        public TwoFactorMethod? Method { get; set; }
+public class ChangePasswordData(string oldPassword, string newPassword)
+{
+    public string OldPassword { get; set; } = oldPassword;
+    public string NewPassword { get; set; } = newPassword;
+}
 
-        public RegisterEphemeralKeyWithSecondaryAuthenticationData(string? publicKey = null, TwoFactorMethod? method = null)
-        {
-            PublicKey = publicKey;
-            Method = method;
-        }
-    }
-
-    public class VerifyEphemeralKeyRegistrationData
-    {
-        public string Code { get; set; }
-        public string? PrivateKey { get; set; }
-
-        public VerifyEphemeralKeyRegistrationData(string code, string? privateKey = null)
-        {
-            Code = code;
-            PrivateKey = privateKey;
-        }
-    }
-
-    public class ChangePasswordData
-    {
-        public string OldPassword { get; set; }
-        public string NewPassword { get; set; }
-
-        public ChangePasswordData(string oldPassword, string newPassword)
-        {
-            OldPassword = oldPassword;
-            NewPassword = newPassword;
-        }
-    }
-
-    public class UpdateUserDetailsData
-    {
-        public string DisplayName { get; set; }
-
-        public UpdateUserDetailsData(string displayName)
-        {
-            DisplayName = displayName;
-        }
-    }
+public class UpdateUserDetailsData(string displayName)
+{
+    public string DisplayName { get; set; } = displayName;
 }

@@ -10,7 +10,7 @@ public partial class ChangePassword : Window
         InitializeComponent();
     }
 
-    private void ChangePassword_Click(object sender, RoutedEventArgs e)
+    private async void ChangePassword_Click(object sender, RoutedEventArgs e)
     {
         // Capture the input values
         var currentPassword = CurrentPasswordBox.Password;
@@ -18,7 +18,7 @@ public partial class ChangePassword : Window
 
         try
         {
-            App.Sdk
+            await App.Sdk
                 .GetAccount()
                 .ChangePassword(new ChangePasswordData(currentPassword, newPassword));
 

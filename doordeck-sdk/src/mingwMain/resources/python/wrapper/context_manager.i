@@ -24,6 +24,12 @@ class ContextManager(object):
     def get_cloud_refresh_token(self):
         return _doordeck_headless_sdk.getCloudRefreshToken(self.resource)
 
+    def set_fusion_host(self, data):
+        _doordeck_headless_sdk.setFusionHost(self.resource, data)
+
+    def get_fusion_host(self):
+        return _doordeck_headless_sdk.getFusionHost(self.resource)
+
     def set_fusion_auth_token(self, data):
         _doordeck_headless_sdk.setFusionAuthToken(self.resource, data)
 

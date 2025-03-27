@@ -57,4 +57,25 @@ def handle_exception(response):
     if "GatewayTimeoutException" in exception_type:
         raise GatewayTimeoutException(exception_message)
     raise SdkException("Unhandled exception type: " + exception_type)
+
+py_callback_type = ctypes.CFUNCTYPE(None, ctypes.c_char_p)
+
+async def execute_async(sdk_func, args, response_handler = None):
+    loop = asyncio.get_running_loop()
+    future = loop.create_future()
+
+    def callback(result):
+        try:
+            response = json.loads(result)
+            handle_exception(response)
+            processed = response_handler(response) if response_handler else None
+            loop.call_soon_threadsafe(future.set_result, processed)
+        except Exception as e:
+            loop.call_soon_threadsafe(future.set_exception, e)
+
+    f = py_callback_type(callback)
+    f_ptr = ctypes.cast(f, ctypes.c_void_p).value
+
+    sdk_func(*args, f_ptr)
+    return await future
 %}

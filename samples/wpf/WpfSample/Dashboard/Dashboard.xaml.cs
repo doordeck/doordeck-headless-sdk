@@ -44,26 +44,27 @@ public partial class Dashboard : Window
         LoadSites();
     }
 
-    private void LoadLockUsers(string lockId)
+    private async void LoadLockUsers(string lockId)
     {
         // Clear users
         LockUsers.Clear();
         LockAdmins.Clear();
 
         // Load users
-        App.Sdk
+        var users = await App.Sdk
             .GetLockOperations()
-            .GetUsersForLock(new GetUsersForLockData(lockId))
-            .ForEach(user =>
-            {
-                if (user.Role == UserRole.USER)
-                    LockUsers.Add(user);
-                else
-                    LockAdmins.Add(user);
-            });
+            .GetUsersForLock(new LockIdData(lockId));
+            
+        users.ForEach(user =>
+        {
+            if (user.Role == UserRole.USER)
+                LockUsers.Add(user);
+            else
+                LockAdmins.Add(user);
+        });
     }
 
-    private void LoadLockAudit(string lockId)
+    private async void LoadLockAudit(string lockId)
     {
         if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null) return;
 
@@ -71,36 +72,38 @@ public partial class Dashboard : Window
         Audits.Clear();
 
         // Load audit
-        App.Sdk
+        var lockAudit = await App.Sdk
             .GetLockOperations()
             .GetLockAuditTrail(new GetLockAuditTrailData(lockId,
                 (int)((DateTimeOffset)StartDatePicker.SelectedDate.Value).ToUnixTimeSeconds(),
-                (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds()))
-            .ForEach(audit => Audits.Add(audit));
+                (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds()));
+        lockAudit.ForEach(audit => Audits.Add(audit));
     }
 
-    private void LoadLocksForSite(string siteId)
+    private async void LoadLocksForSite(string siteId)
     {
         // Clear locks
         Locks.Clear();
 
         // Load locks
-        App.Sdk
+        var siteLocks = await App.Sdk
             .GetSites()
-            .GetLocksForSite(new GetLocksForSiteData(siteId))
-            .ForEach(device => Locks.Add(device));
+            .GetLocksForSite(new SiteIdData(siteId));
+        
+        siteLocks.ForEach(device => Locks.Add(device));
     }
 
-    private void LoadSites()
+    private async void LoadSites()
     {
         // Clear sites
         Sites.Clear();
 
         // Load sites
-        App.Sdk
+        var sites = await App.Sdk
             .GetSites()
-            .ListSites()
-            .ForEach(site => Sites.Add(site));
+            .ListSites();
+        
+        sites.ForEach(site => Sites.Add(site));
     }
 
     private void SearchUsers_TextChanged(object sender, TextChangedEventArgs e)
@@ -148,14 +151,14 @@ public partial class Dashboard : Window
         }
     }
 
-    private void Unlock_Click(object sender, RoutedEventArgs e)
+    private async void Unlock_Click(object sender, RoutedEventArgs e)
     {
         if (_selectedLock == null) return;
 
         try
         {
             // Perform unlock
-            App.Sdk
+            await App.Sdk
                 .GetLockOperations()
                 .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
             // Display success message
@@ -170,7 +173,7 @@ public partial class Dashboard : Window
         }
     }
 
-    private void Share_Click(object sender, RoutedEventArgs e)
+    private async void Share_Click(object sender, RoutedEventArgs e)
     {
         if (_selectedLock == null) return;
 
@@ -179,11 +182,11 @@ public partial class Dashboard : Window
 
         try
         {
-            var publicKey = App.Sdk
+            var publicKey = await App.Sdk
                 .GetLockOperations()
                 .GetUserPublicKey(new GetUserPublicKeyData(shareLockWindow.Email));
 
-            App.Sdk
+            await App.Sdk
                 .GetLockOperations()
                 .ShareLock(new ShareLockOperationData(new BaseOperationData(_selectedLock.Id),
                     new ShareLockData(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER,
@@ -253,7 +256,7 @@ public partial class Dashboard : Window
         changeDisplayNameWindow.ShowDialog();
     }
 
-    private void Logout_Click(object sender, RoutedEventArgs e)
+    private async void Logout_Click(object sender, RoutedEventArgs e)
     {
         // Reset everything
         Sites.Clear();
@@ -265,7 +268,7 @@ public partial class Dashboard : Window
         _selectedSite = null;
 
         // Logout
-        App.Sdk
+        await App.Sdk
             .GetAccount()
             .Logout();
 

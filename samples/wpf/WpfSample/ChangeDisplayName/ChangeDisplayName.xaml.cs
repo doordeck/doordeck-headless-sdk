@@ -10,14 +10,14 @@ public partial class ChangeDisplayName : Window
         InitializeComponent();
     }
 
-    private void ChangeDisplayName_Click(object sender, RoutedEventArgs e)
+    private async void ChangeDisplayName_Click(object sender, RoutedEventArgs e)
     {
         // Capture the input value
         var newDisplayName = NewDisplayName.Text.Trim();
 
         try
         {
-            App.Sdk
+            await App.Sdk
                 .GetAccount()
                 .UpdateUserDetails(new UpdateUserDetailsData(newDisplayName));
 

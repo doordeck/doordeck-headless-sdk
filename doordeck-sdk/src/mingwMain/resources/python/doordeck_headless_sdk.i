@@ -46,9 +46,9 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self, api_environment, cloud_auth_token = None, cloud_refresh_token = None):
+    def __init__(self, api_environment, cloud_auth_token = None, cloud_refresh_token = None, fusion_host = None):
         self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment.name)
-        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token)
+        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host)
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))
@@ -67,6 +67,20 @@ class InitializeSdk(object):
 
 %{
 #include "../releaseShared/Doordeck.Headless.Sdk_api.h"
+
+// Define the callback type.
+typedef void (*callback_t)(const char *);
 %}
+
+// Include standard typemaps.
+%include "typemaps.i"
+
+// Use SWIG’s callback typemap to convert a Python callable (provided as an integer)
+// to a C function pointer. Here, the Python side must supply the address of a ctypes-wrapped function.
+%typemap(in) callback_t {
+    $1 = (callback_t)PyLong_AsVoidPtr($input);
+}
+
+%apply callback_t { void* callback };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"

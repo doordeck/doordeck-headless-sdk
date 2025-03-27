@@ -40,7 +40,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var data = new LoginData("EMAIL", "PASSWORD");
-response = sdk.GetAccountless().Login(data);
+var response = await sdk.GetAccountless().Login(data);
 ```
 </details>
 
@@ -50,7 +50,7 @@ response = sdk.GetAccountless().Login(data);
 
 ```python
 data = doordeck_headless_sdk.LoginData("EMAIL", "PASSWORD")
-response = sdk.accountless.login(data)
+response = await sdk.accountless.login(data)
 ```
 </details>
 
@@ -96,7 +96,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 
 ```csharp
 var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY");
-var response = sdk.GetAccountless().Registration(data);
+var response = await sdk.GetAccountless().Registration(data);
 ```
 </details>
 
@@ -106,7 +106,7 @@ var response = sdk.GetAccountless().Registration(data);
 
 ```python
 data = doordeck_headless_sdk.RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", False, "BASE64_PUBLIC_KEY")
-response = sdk.accountless.registration(data)
+response = await sdk.accountless.registration(data)
 ```
 </details>
 
@@ -147,7 +147,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("COD
 
 ```csharp
 var data = new VerifyEmailData("CODE");
-sdk.GetAccountless().VerifyEmail(data);
+await sdk.GetAccountless().VerifyEmail(data);
 ```
 </details>
 
@@ -157,7 +157,7 @@ sdk.GetAccountless().VerifyEmail(data);
 
 ```python
 data = doordeck_headless_sdk.VerifyEmailData("CODE")
-sdk.accountless.verify_email(data)
+await sdk.accountless.verify_email(data)
 ```
 </details>
 
@@ -198,7 +198,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordReset("E
 
 ```csharp
 var data = new PasswordResetData("EMAIL");
-sdk.GetAccountless().PasswordReset(data);
+await sdk.GetAccountless().PasswordReset(data);
 ```
 </details>
 
@@ -208,7 +208,7 @@ sdk.GetAccountless().PasswordReset(data);
 
 ```python
 data = doordeck_headless_sdk.PasswordResetData("EMAIL")
-sdk.accountless.password_reset(data)
+await sdk.accountless.password_reset(data)
 ```
 </details>
 
@@ -249,7 +249,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordResetVer
 
 ```csharp
 var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL");
-sdk.GetAccountless().PasswordResetVerify(data);
+await sdk.GetAccountless().PasswordResetVerify(data);
 ```
 </details>
 
@@ -259,7 +259,7 @@ sdk.GetAccountless().PasswordResetVerify(data);
 
 ```python
 data = doordeck_headless_sdk.PasswordResetVerifyData("USERID", "TOKEN", "EMAIL")
-sdk.accountless.password_reset_verify(data)
+await sdk.accountless.password_reset_verify(data)
 ```
 </details>
 

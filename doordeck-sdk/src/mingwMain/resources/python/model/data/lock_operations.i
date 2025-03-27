@@ -1,6 +1,6 @@
 %pythoncode %{
 @dataclass
-class GetSingleLockData:
+class LockIdData:
     lockId: str
 
 @dataclass
@@ -14,10 +14,6 @@ class GetAuditForUserData:
     userId: str
     start: int
     end: int
-
-@dataclass
-class GetUsersForLockData:
-    lockId: str
 
 @dataclass
 class GetLocksForUserData:

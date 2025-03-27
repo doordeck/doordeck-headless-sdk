@@ -1,18 +1,13 @@
-namespace Doordeck.Headless.Sdk.Model
-{
-    public class OperationContextData
-    {
-        public string UserId { get; set; }
-        public string UserCertificateChain { get; set; }
-        public string UserPublicKey { get; set; }
-        public string UserPrivateKey { get; set; }
+namespace Doordeck.Headless.Sdk.Model;
 
-        public OperationContextData(string userId, string userCertificateChain, string userPublicKey, string userPrivateKey)
-        {
-            UserId = userId;
-            UserCertificateChain = userCertificateChain;
-            UserPublicKey = userPublicKey;
-            UserPrivateKey = userPrivateKey;
-        }
-    }
+public class OperationContextData(
+    string userId,
+    string userCertificateChain,
+    string userPublicKey,
+    string userPrivateKey)
+{
+    public string UserId { get; set; } = userId;
+    public string UserCertificateChain { get; set; } = userCertificateChain;
+    public string UserPublicKey { get; set; } = userPublicKey;
+    public string UserPrivateKey { get; set; } = userPrivateKey;
 }

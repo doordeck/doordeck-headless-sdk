@@ -422,12 +422,12 @@ private val nuspecTemplate = """
     <license type="expression">${nugetPublish.licenseType}</license>
     <readme>README.md</readme>
     <dependencies>
-      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework="net9.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="README.md" target="\" />
-    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="lib\netstandard2.0\" />
+    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="lib\net9.0\" />
     <file src="${nugetPublish.packageName}\**\*" target="contentFiles\cs\any\${nugetPublish.packageName}\" />
   </files>
 </package>
