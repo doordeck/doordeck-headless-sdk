@@ -67,6 +67,20 @@ class InitializeSdk(object):
 
 %{
 #include "../releaseShared/Doordeck.Headless.Sdk_api.h"
+
+// Define the callback type.
+typedef void (*callback_t)(const char *);
 %}
+
+// Include standard typemaps.
+%include "typemaps.i"
+
+// Use SWIG’s callback typemap to convert a Python callable (provided as an integer)
+// to a C function pointer. Here, the Python side must supply the address of a ctypes-wrapped function.
+%typemap(in) callback_t {
+    $1 = (callback_t)PyLong_AsVoidPtr($input);
+}
+
+%apply callback_t { void* callback };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"

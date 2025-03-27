@@ -32,7 +32,7 @@ data class EmailCallToActionData(
 )
 
 @Serializable
-data class GetApplicationData(
+data class ApplicationIdData(
     val applicationId: String
 )
 
@@ -82,11 +82,6 @@ data class UpdateApplicationEmailPreferencesData(
 data class UpdateApplicationLogoUrlData(
     val applicationId: String,
     val logoUrl: String
-)
-
-@Serializable
-data class DeleteApplicationData(
-    val applicationId: String
 )
 
 @Serializable
@@ -149,44 +144,21 @@ data class Ed25519KeyData(
 ): AuthKeyData
 
 @Serializable
-data class AddAuthIssuerData(
+data class AuthIssuerData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-data class DeleteAuthIssuerData(
+data class CorsDomainData(
     val applicationId: String,
     val url: String
 )
 
 @Serializable
-data class AddCorsDomainData(
-    val applicationId: String,
-    val url: String
-)
-
-@Serializable
-data class RemoveCorsDomainData(
-    val applicationId: String,
-    val url: String
-)
-
-@Serializable
-data class AddApplicationOwnerData(
+data class ApplicationOwnerData(
     val applicationId: String,
     val userId: String
-)
-
-@Serializable
-data class RemoveApplicationOwnerData(
-    val applicationId: String,
-    val userId: String
-)
-
-@Serializable
-data class GetApplicationOwnersDetailsData(
-    val applicationId: String
 )
 
 internal fun CreateApplicationData.toCreateApplication() = Platform.CreateApplication(

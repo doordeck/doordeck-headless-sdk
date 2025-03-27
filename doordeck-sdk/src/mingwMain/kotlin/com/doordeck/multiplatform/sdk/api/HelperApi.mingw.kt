@@ -5,72 +5,66 @@ import com.doordeck.multiplatform.sdk.model.data.AssistedLoginData
 import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterData
 import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.model.data.UploadPlatformLogoData
-import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
-import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.resultData
-import kotlinx.coroutines.runBlocking
+import com.doordeck.multiplatform.sdk.util.callback
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.CPointer
 
 actual object HelperApi {
-    fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return runBlocking { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
+
+    @CName("uploadPlatformLogo")
+    fun uploadPlatformLogo(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block = {
+                val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
+                HelperClient.uploadPlatformLogoRequest(
+                    applicationId = uploadPlatformLogoData.applicationId,
+                    contentType = uploadPlatformLogoData.contentType,
+                    image = uploadPlatformLogoData.image.decodeBase64ToByteArray()
+                )
+            },
+            callback = callback
+        )
     }
 
-    @CName("uploadPlatformLogoJson")
-    fun uploadPlatformLogoJson(data: String): String {
-        return resultData {
-            val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
-            uploadPlatformLogo(uploadPlatformLogoData.applicationId, uploadPlatformLogoData.contentType, uploadPlatformLogoData.image.decodeBase64ToByteArray())
-        }
+    @CName("assistedLogin")
+    fun assistedLogin(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block = {
+                val assistedLoginData = data.fromJson<AssistedLoginData>()
+                HelperClient.assistedLoginRequest(assistedLoginData.email, assistedLoginData.password)
+            },
+            callback = callback
+        )
     }
 
-    fun assistedLogin(email: String, password: String): AssistedLoginResponse {
-        return runBlocking { HelperClient.assistedLoginRequest(email, password) }
+    @CName("assistedRegisterEphemeralKey")
+    fun assistedRegisterEphemeralKey(data: String? = null, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block = {
+                val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
+                HelperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
+            },
+            callback = callback
+        )
     }
 
-    @CName("assistedLoginJson")
-    fun assistedLoginJson(data: String): String {
-        return resultData {
-            val assistedLoginData = data.fromJson<AssistedLoginData>()
-            assistedLogin(assistedLoginData.email, assistedLoginData.password)
-        }
-    }
-
-    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
-        return runBlocking { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
-    }
-
-    @CName("assistedRegisterEphemeralKeyJson")
-    fun assistedRegisterEphemeralKeyJson(data: String? = null): String {
-        return resultData {
-            val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
-            assistedRegisterEphemeralKey(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
-        }
-    }
-
-    fun assistedRegister(email: String, password: String, displayName: String? = null, force: Boolean = false) {
-        return runBlocking {
-            HelperClient.assistedRegisterRequest(
-                email = email,
-                password = password,
-                displayName = displayName,
-                force = force
-            )
-        }
-    }
-
-    @CName("assistedRegisterJson")
-    fun assistedRegisterJson(data: String): String {
-        return resultData {
-            val assistedRegisterData = data.fromJson<AssistedRegisterData>()
-            assistedRegister(
-                email = assistedRegisterData.email,
-                password = assistedRegisterData.password,
-                displayName = assistedRegisterData.displayName,
-                force = assistedRegisterData.force
-            )
-        }
+    @CName("assistedRegister")
+    fun assistedRegister(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block = {
+                val assistedRegisterData = data.fromJson<AssistedRegisterData>()
+                HelperClient.assistedRegisterRequest(
+                    email = assistedRegisterData.email,
+                    password = assistedRegisterData.password,
+                    displayName = assistedRegisterData.displayName,
+                    force = assistedRegisterData.force
+                )
+            },
+            callback = callback
+        )
     }
 }
 

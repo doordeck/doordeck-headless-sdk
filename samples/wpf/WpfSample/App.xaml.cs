@@ -16,9 +16,6 @@ public partial class App : Application
         base.OnStartup(e);
 
         ShutdownMode = ShutdownMode.OnLastWindowClose;
-
-        // Initialize
-        Sdk.Initialize();
     }
 
     protected override void OnExit(ExitEventArgs e)

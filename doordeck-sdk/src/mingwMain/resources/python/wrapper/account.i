@@ -4,48 +4,68 @@ class Account(object):
     def __init__(self, resource):
         self.resource = resource
 
-    def refresh_token(self, data):
-        response = json.loads(_doordeck_headless_sdk.refreshTokenJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return TokenResponse(**get_success_result(response))
+    async def refresh_token(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.refreshToken,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: TokenResponse(**get_success_result(r))
+        )
 
-    def logout(self):
-        response = json.loads(_doordeck_headless_sdk.logoutJson(self.resource))
-        handle_exception(response)
+    async def logout(self):
+        return await execute_async(
+            _doordeck_headless_sdk.logout,
+            [self.resource]
+        )
 
-    def register_ephemeral_key(self, data):
-        response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return RegisterEphemeralKeyResponse(**get_success_result(response))
+    async def register_ephemeral_key(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.registerEphemeralKey,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: RegisterEphemeralKeyResponse(**get_success_result(r))
+        )
 
-    def register_ephemeral_key_with_secondary_authentication(self, data):
-        response = json.loads(_doordeck_headless_sdk.registerEphemeralKeyWithSecondaryAuthenticationJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return RegisterEphemeralKeyWithSecondaryAuthenticationResponse(**get_success_result(response))
+    async def register_ephemeral_key_with_secondary_authentication(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.registerEphemeralKeyWithSecondaryAuthentication,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: RegisterEphemeralKeyWithSecondaryAuthenticationResponse(**get_success_result(r))
+        )
 
-    def verify_ephemeral_key_registration(self, data):
-        response = json.loads(_doordeck_headless_sdk.verifyEphemeralKeyRegistrationJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
-        return RegisterEphemeralKeyResponse(**get_success_result(response))
+    async def verify_ephemeral_key_registration(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.verifyEphemeralKeyRegistration,
+            [self.resource, json.dumps(dataclasses.asdict(data))],
+            lambda r: RegisterEphemeralKeyResponse(**get_success_result(r))
+        )
 
-    def reverify_email(self):
-        response = json.loads(_doordeck_headless_sdk.reverifyEmailJson(self.resource))
-        handle_exception(response)
+    async def reverify_email(self):
+        return await execute_async(
+            _doordeck_headless_sdk.reverifyEmail,
+            [self.resource]
+        )
 
-    def change_password(self, data):
-        response = json.loads(_doordeck_headless_sdk.changePasswordJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
+    async def change_password(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.changePassword,
+            [self.resource, json.dumps(dataclasses.asdict(data))]
+        )
 
-    def get_user_details(self):
-        response = json.loads(_doordeck_headless_sdk.getUserDetailsJson(self.resource))
-        handle_exception(response)
-        return UserDetailsResponse(**get_success_result(response))
+    async def get_user_details(self):
+        return await execute_async(
+            _doordeck_headless_sdk.getUserDetails,
+            [self.resource],
+            lambda r: UserDetailsResponse(**get_success_result(r))
+        )
 
-    def update_user_details(self, data):
-        response = json.loads(_doordeck_headless_sdk.updateUserDetailsJson(self.resource, json.dumps(dataclasses.asdict(data))))
-        handle_exception(response)
+    async def update_user_details(self, data):
+        return await execute_async(
+            _doordeck_headless_sdk.updateUserDetails,
+            [self.resource, json.dumps(dataclasses.asdict(data))]
+        )
 
-    def delete_account(self):
-        response = json.loads(_doordeck_headless_sdk.deleteAccountJson(self.resource))
-        handle_exception(response)
+    async def delete_account(self):
+        return await execute_async(
+            _doordeck_headless_sdk.deleteAccount,
+            [self.resource]
+        )
 %}

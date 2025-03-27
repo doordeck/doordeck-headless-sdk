@@ -1,250 +1,85 @@
-﻿using System.Runtime.InteropServices;
-using Doordeck.Headless.Sdk.Model;
+﻿using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
-using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-public unsafe class Platform : IResource
+public class Platform(
+    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi platform,
+    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
+        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi) : AbstractWrapper
 {
-    private Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi _platform;
+    public unsafe Task<object> CreateApplication(CreateApplicationData data) =>
+        Process<object>(platformApi.createApplication_, null, data);
 
-    private Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct _platformApi;
+    public unsafe Task<List<ApplicationResponse>> ListApplications() =>
+        Process<List<ApplicationResponse>>(null, platformApi.listApplications_, null);
 
-    private Doordeck_Headless_Sdk_ExportedSymbols* _symbols;
+    public unsafe Task<ApplicationResponse> GetApplication(ApplicationIdData data) =>
+        Process<ApplicationResponse>(platformApi.getApplication_, null, data);
 
-    void IResource.Initialize(Doordeck_Headless_Sdk_ExportedSymbols* symbols,
-        Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck sdk)
-    {
-        _symbols = symbols;
-        _platform = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.platform_(sdk);
-        _platformApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.api.PlatformApi;
-    }
+    public unsafe Task<object> UpdateApplicationName(UpdateApplicationNameData data) =>
+        Process<object>(platformApi.updateApplicationName_, null, data);
+    
+    public unsafe Task<object> UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data) =>
+        Process<object>(platformApi.updateApplicationCompanyName_, null, data);
 
-    void IResource.Release()
-    {
-        _symbols->DisposeStablePointer(_platform.pinned);
-    }
+    public unsafe Task<object> UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data) =>
+        Process<object>(platformApi.updateApplicationMailingAddress_, null, data);
 
-    public void CreateApplication(CreateApplicationData data)
-    {
-        Process<object>(
-            _platformApi.createApplicationJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data) =>
+        Process<object>(platformApi.updateApplicationPrivacyPolicy_, null, data);
 
-    public List<ApplicationResponse> ListApplications()
-    {
-        return Process<List<ApplicationResponse>>(
-            null,
-            _platformApi.listApplicationsJson_,
-            null
-        );
-    }
+    public unsafe Task<object> UpdateApplicationSupportContact(UpdateApplicationSupportContactData data) =>
+        Process<object>(platformApi.updateApplicationSupportContact_, null, data);
 
-    public ApplicationResponse GetApplication(GetApplicationData data)
-    {
-        return Process<ApplicationResponse>(
-            _platformApi.getApplicationJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> UpdateApplicationAppLink(UpdateApplicationAppLinkData data) =>
+        Process<object>(platformApi.updateApplicationAppLink_, null, data);
 
-    public void UpdateApplicationName(UpdateApplicationNameData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationNameJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data) =>
+        Process<object>(platformApi.updateApplicationEmailPreferences_, null, data);
 
-    public void UpdateApplicationCompanyName(UpdateApplicationCompanyNameData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationCompanyNameJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data) =>
+        Process<object>(platformApi.updateApplicationLogoUrl_, null, data);
 
-    public void UpdateApplicationMailingAddress(UpdateApplicationMailingAddressData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationMailingAddressJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> DeleteApplication(ApplicationIdData data) =>
+        Process<object>(platformApi.deleteApplication_, null, data);
 
-    public void UpdateApplicationPrivacyPolicy(UpdateApplicationPrivacyPolicyData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationPrivacyPolicyJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<GetLogoUploadUrlResponse> GetLogoUploadUrl(GetLogoUploadUrlData data) =>
+        Process<GetLogoUploadUrlResponse>(platformApi.getLogoUploadUrl_, null, data);
 
-    public void UpdateApplicationSupportContact(UpdateApplicationSupportContactData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationSupportContactJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> AddAuthKey(AddAuthKeyData data) =>
+        Process<object>(platformApi.addAuthKey_, null, data);
 
-    public void UpdateApplicationAppLink(UpdateApplicationAppLinkData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationAppLinkJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> AddAuthIssuer(AuthIssuerData data) =>
+        Process<object>(platformApi.addAuthIssuer_, null, data);
 
-    public void UpdateApplicationEmailPreferences(UpdateApplicationEmailPreferencesData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationEmailPreferencesJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> DeleteAuthIssuer(AuthIssuerData data) =>
+        Process<object>(platformApi.deleteAuthIssuer_, null, data);
 
-    public void UpdateApplicationLogoUrl(UpdateApplicationLogoUrlData data)
-    {
-        Process<object>(
-            _platformApi.updateApplicationLogoUrlJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> AddCorsDomain(CorsDomainData data) =>
+        Process<object>(platformApi.addCorsDomain_, null, data);
 
-    public void DeleteApplication(DeleteApplicationData data)
-    {
-        Process<object>(
-            _platformApi.deleteApplicationJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> RemoveCorsDomain(CorsDomainData data) =>
+        Process<object>(platformApi.removeCorsDomain_, null, data);
 
-    public GetLogoUploadUrlResponse GetLogoUploadUrl(GetLogoUploadUrlData data)
-    {
-        return Process<GetLogoUploadUrlResponse>(
-            _platformApi.getLogoUploadUrlJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> AddApplicationOwner(ApplicationOwnerData data) =>
+        Process<object>(platformApi.addApplicationOwner_, null, data);
 
-    public void AddAuthKey(AddAuthKeyData data)
-    {
-        Process<object>(
-            _platformApi.addAuthKeyJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<object> RemoveApplicationOwner(ApplicationOwnerData data) =>
+        Process<object>(platformApi.removeApplicationOwner_, null, data);
 
-    public void AddAuthIssuer(AddAuthIssuerData data)
-    {
-        Process<object>(
-            _platformApi.addAuthIssuerJson_,
-            null,
-            data
-        );
-    }
+    public unsafe Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(ApplicationOwnerData data) =>
+        Process<List<ApplicationOwnerDetailsResponse>>(platformApi.getApplicationOwnersDetails_, null, data);
 
-    public void DeleteAuthIssuer(DeleteAuthIssuerData data)
-    {
-        Process<object>(
-            _platformApi.deleteAuthIssuerJson_,
-            null,
-            data
-        );
-    }
-
-    public void AddCorsDomain(AddCorsDomainData data)
-    {
-        Process<object>(
-            _platformApi.addCorsDomainJson_,
-            null,
-            data
-        );
-    }
-
-    public void RemoveCorsDomain(RemoveCorsDomainData data)
-    {
-        Process<object>(
-            _platformApi.removeCorsDomainJson_,
-            null,
-            data
-        );
-    }
-
-    public void AddApplicationOwner(AddApplicationOwnerData data)
-    {
-        Process<object>(
-            _platformApi.addApplicationOwnerJson_,
-            null,
-            data
-        );
-    }
-
-    public void RemoveApplicationOwner(RemoveApplicationOwnerData data)
-    {
-        Process<object>(
-            _platformApi.removeApplicationOwnerJson_,
-            null,
-            data
-        );
-    }
-
-    public List<ApplicationOwnerDetailsResponse> GetApplicationOwnersDetails(GetApplicationOwnersDetailsData data)
-    {
-        return Process<List<ApplicationOwnerDetailsResponse>>(
-            _platformApi.getApplicationOwnersDetailsJson_,
-            null,
-            data
-        );
-    }
-
-    private TResponse Process<TResponse>(
+    private unsafe Task<TResponse> Process<TResponse>(
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi,
-            sbyte*, sbyte*> processDataWithResponse,
+            sbyte*, void*, void> processWithData,
         delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi,
-            sbyte*> processWithoutDataWithResponse,
-        object? data
-    )
-    {
-        var sData = data != null ? data.ToData() : null;
-        sbyte* result = null;
-        try
-        {
-            var hasData = data != null;
-            result = hasData ? processDataWithResponse(_platform, sData) :
-                processWithoutDataWithResponse(_platform);
-
-            var resultData = result != null
-                ? Utils.Utils.FromData<ResultData<TResponse>>(result)
-                : default!;
-
-            resultData.HandleException();
-
-            return resultData.Success!.Result ?? default!;
-        }
-        finally
-        {
-            if (data != null) Marshal.FreeHGlobal((IntPtr)sData);
-
-            if (result != null) _symbols->DisposeString(result);
-        }
-    }
+            void*, void> processWithoutData,
+        object? data) => 
+        ProcessCommon<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi, TResponse>(
+            platform,
+            data,
+            processWithData,
+            processWithoutData);
 }

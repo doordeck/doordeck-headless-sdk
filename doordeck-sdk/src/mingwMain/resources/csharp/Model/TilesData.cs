@@ -1,26 +1,13 @@
-﻿namespace Doordeck.Headless.Sdk.Model
+﻿namespace Doordeck.Headless.Sdk.Model;
+
+public class GetLocksBelongingToTileData(string tileId)
 {
-    public class GetLocksBelongingToTileData
-    {
-        public string TileId {  get; set; }
+    public string TileId {  get; set; } = tileId;
+}
 
-        public GetLocksBelongingToTileData(string tileId)
-        {
-            TileId = tileId;
-        }
-    }
-
-    public class AssociateMultipleLocksData
-    {
-        public string TileId { get; set; }
-        public string SiteId { get; set; }
-        public List<string> LockIds { get; set; }
-
-        public AssociateMultipleLocksData(string tileId, string siteId, List<string> lockIds)
-        {
-            TileId = tileId;
-            SiteId = siteId;
-            LockIds = lockIds;
-        }
-    }
+public class AssociateMultipleLocksData(string tileId, string siteId, List<string> lockIds)
+{
+    public string TileId { get; set; } = tileId;
+    public string SiteId { get; set; } = siteId;
+    public List<string> LockIds { get; set; } = lockIds;
 }

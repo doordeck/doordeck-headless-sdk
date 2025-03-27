@@ -1,112 +1,116 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
 import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
 import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
 import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.model.data.DeleteDoorData
+import com.doordeck.multiplatform.sdk.model.data.DeviceIdData
 import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
-import com.doordeck.multiplatform.sdk.model.data.GetDoorStatusData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
-import com.doordeck.multiplatform.sdk.model.data.StartDoorData
-import com.doordeck.multiplatform.sdk.model.data.StopDoorData
+import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
-class FusionApiTest : MockTest() {
+class FusionApiTest : CallbackTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        val response = FusionApi.login("", "")
-        assertEquals(FUSION_LOGIN_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldLoginJson() = runTest {
-        val response = FusionApi.loginJson(FusionLoginData("", "").toJson())
-        assertEquals(FUSION_LOGIN_RESPONSE.toResultDataJson(), response)
+        callbackTest(
+            apiCall = {
+                FusionApi.login(FusionLoginData("", "").toJson(), staticCFunction(::testCallback))
+            },
+            expectedResponse = FUSION_LOGIN_RESPONSE.toResultDataJson()
+        )
     }
 
     @Test
     fun shouldGetIntegrationType() = runTest {
-        val response = FusionApi.getIntegrationType()
-        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetIntegrationTypeJson() = runTest {
-        val response = FusionApi.getIntegrationTypeJson()
-        assertEquals(INTEGRATION_TYPE_RESPONSE.toResultDataJson(), response)
+        callbackTest(
+            apiCall = {
+                FusionApi.getIntegrationType(staticCFunction(::testCallback))
+            },
+            expectedResponse = INTEGRATION_TYPE_RESPONSE.toResultDataJson()
+        )
     }
 
     @Test
     fun shouldGetIntegrationConfiguration() = runTest {
-        val response = FusionApi.getIntegrationConfiguration("")
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetIntegrationConfigurationJson() = runTest {
-        val response = FusionApi.getIntegrationConfigurationJson(GetIntegrationConfigurationData("").toJson())
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE.toResultDataJson(), response)
+        callbackTest(
+            apiCall = {
+                FusionApi.getIntegrationConfiguration(
+                    data = GetIntegrationConfigurationData("").toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            },
+            expectedResponse = INTEGRATION_CONFIGURATION_RESPONSE.toResultDataJson()
+        )
     }
 
     @Test
     fun shouldEnableDoor() = runTest {
-        FusionApi.enableDoor("", "", Fusion.DemoController())
-    }
-
-    @Test
-    fun shouldEnableDoorJson() = runTest {
-        FusionApi.enableDoorJson(EnableDoorData("", "", Fusion.DemoController()).toJson())
+        callbackTest(
+            apiCall = {
+                FusionApi.enableDoor(
+                    data = EnableDoorData("", "", Fusion.DemoController()).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+        )
     }
 
     @Test
     fun shouldDeleteDoor() = runTest {
-        FusionApi.deleteDoor(DEFAULT_DEVICE_ID)
-    }
-
-    @Test
-    fun shouldDeleteDoorJson() = runTest {
-        FusionApi.deleteDoorJson(DeleteDoorData(DEFAULT_DEVICE_ID).toJson())
+        callbackTest(
+            apiCall = {
+                FusionApi.deleteDoor(
+                    data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+        )
     }
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        val response = FusionApi.getDoorStatus(DEFAULT_DEVICE_ID)
-        assertEquals(DOOR_STATE_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetDoorStatusJson() = runTest {
-        val response = FusionApi.getDoorStatusJson(GetDoorStatusData(DEFAULT_DEVICE_ID).toJson())
-        assertEquals(DOOR_STATE_RESPONSE.toResultDataJson(), response)
+        callbackTest(
+            apiCall = {
+                FusionApi.getDoorStatus(
+                    data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            },
+            expectedResponse = DOOR_STATE_RESPONSE.toResultDataJson()
+        )
     }
 
     @Test
     fun shouldStartDoor() = runTest {
-        FusionApi.startDoor(DEFAULT_DEVICE_ID)
-    }
-
-    @Test
-    fun shouldStartDoorJson() = runTest {
-        FusionApi.startDoorJson(StartDoorData(DEFAULT_DEVICE_ID).toJson())
+        callbackTest(
+            apiCall = {
+                FusionApi.startDoor(
+                    data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+        )
     }
 
     @Test
     fun shouldStopDoor() = runTest {
-        FusionApi.stopDoor(DEFAULT_DEVICE_ID)
-    }
-
-    @Test
-    fun shouldStopDoorJson() = runTest {
-        FusionApi.stopDoorJson(StopDoorData(DEFAULT_DEVICE_ID).toJson())
+        callbackTest(
+            apiCall = {
+                FusionApi.stopDoor(
+                    data = DeviceIdData(DEFAULT_DEVICE_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+        )
     }
 }

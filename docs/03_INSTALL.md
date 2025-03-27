@@ -98,7 +98,7 @@ The Windows artifacts for C# are available on [NuGet](https://www.nuget.org/pack
 ```bash
 dotnet add package Doordeck.Headless.Sdk
 ```
-💡 **Requirement:** In Visual Studio, it's necessary to enable the unsafe block with ```<AllowUnsafeBlocks>true</AllowUnsafeBlocks>```
+💡 **Requirement:** .NET 9 or higher, with unsafe code enabled.
 </details>
 
 ### Python
