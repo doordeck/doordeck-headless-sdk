@@ -27,4 +27,4 @@ The SDK supports a range of targets for different platforms:
 To start using the Doordeck Headless SDK, refer to the [documentation index](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/01_INDEX.md#index) for detailed setup and usage instructions tailored to your platform.
 
 ## Samples
-We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/15_SAMPLES.md). 
+We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](https://github.com/doordeck/doordeck-headless-sdk/blob/main/docs/15_SAMPLES.md).
