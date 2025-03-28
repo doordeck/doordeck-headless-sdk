@@ -2,6 +2,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
@@ -91,7 +92,7 @@ kotlin {
 
     mingwX64 {
         binaries {
-            sharedLib {
+            sharedLib(listOf(NativeBuildType.RELEASE)) {
                 baseName = nugetPublish.packageName
             }
         }

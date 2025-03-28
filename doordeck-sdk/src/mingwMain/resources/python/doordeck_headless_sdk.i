@@ -17,6 +17,7 @@
 %include "model/data/account.i"
 %include "model/data/accountless.i"
 %include "model/data/context.i"
+%include "model/data/fusion.i"
 %include "model/data/helper.i"
 %include "model/data/lock_operations.i"
 %include "model/data/platform.i"
@@ -26,6 +27,7 @@
 
 // Responses
 %include "model/responses/account.i"
+%include "model/responses/fusion.i"
 %include "model/responses/helper.i"
 %include "model/responses/lock_operation.i"
 %include "model/responses/platform.i"
@@ -37,6 +39,7 @@
 %include "wrapper/accountless.i"
 %include "wrapper/context_manager.i"
 %include "wrapper/crypto_manager.i"
+%include "wrapper/fusion.i"
 %include "wrapper/helper.i"
 %include "wrapper/lock_operations.i"
 %include "wrapper/platform.i"
@@ -52,6 +55,7 @@ class InitializeSdk(object):
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))
+        self.fusion = Fusion(fusion(self.sdk))
         self.helper = Helper(helper(self.sdk))
         self.lockOperations = LockOperations(lockOperations(self.sdk))
         self.platform = Platform(platform(self.sdk))
