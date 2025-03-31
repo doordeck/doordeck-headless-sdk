@@ -17,7 +17,7 @@ class Sites(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def get_users_for_site(self, data: str):
+    async def get_users_for_site(self, siteId: str):
         data = { "siteId": siteId }
         return await execute_async(
             _doordeck_headless_sdk.getUsersForSite,
