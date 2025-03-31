@@ -4,7 +4,7 @@ class LockController:
     type: str = field(init=False)
 
 @dataclass
-class AlpetaController(LockController)
+class AlpetaController(LockController):
     type: str = field(init=False)
     username: str
     password: str
@@ -15,7 +15,7 @@ class AlpetaController(LockController)
         self.type = "alpeta"
 
 @dataclass
-class AmagController(LockController)
+class AmagController(LockController):
     type: str = field(init=False)
     username: str
     password: str
@@ -26,7 +26,7 @@ class AmagController(LockController)
         self.type = "amag"
 
 @dataclass
-class AssaAbloyController(LockController)
+class AssaAbloyController(LockController):
     type: str = field(init=False)
     baseUrl: str
     doorId: str
@@ -35,7 +35,7 @@ class AssaAbloyController(LockController)
         self.type = "assa-abloy"
 
 @dataclass
-class AvigilonController(LockController)
+class AvigilonController(LockController):
     type: str = field(init=False)
     baseUrl: str
     username: str
@@ -46,7 +46,7 @@ class AvigilonController(LockController)
         self.type = "avigilon"
 
 @dataclass
-class AxisController(LockController)
+class AxisController(LockController):
     type: str = field(init=False)
     baseUrl: str
     doorIdentifier: str
@@ -55,7 +55,7 @@ class AxisController(LockController)
         self.type = "axis"
 
 @dataclass
-class CCureController(LockController)
+class CCureController(LockController):
     type: str = field(init=False)
     baseUrl: str
     username: str

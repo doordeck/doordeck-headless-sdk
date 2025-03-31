@@ -1,14 +1,14 @@
 %pythoncode %{
 
 @dataclass
-class TimeRequirementData:
+class TimeRequirement:
     start: str
     end: str
     timezone: str
     days: typing.List[str]
 
 @dataclass
-class LocationRequirementData:
+class LocationRequirement:
     latitude: float
     longitude: float
     enabled: typing.Optional[bool] = None
@@ -16,7 +16,7 @@ class LocationRequirementData:
     accuracy: typing.Optional[int] = None
 
 @dataclass
-class ShareLockData:
+class ShareLock:
     targetUserId: str
     targetUserRole: typing.Literal["ADMIN", "USER"]
     targetUserPublicKey: str
@@ -24,7 +24,7 @@ class ShareLockData:
     end: typing.Optional[int] = None
 
 @dataclass
-class BaseOperationData:
+class BaseOperation:
     lockId: str
     userId: typing.Optional[str] = None
     userCertificateChain: typing.Optional[typing.List[str]] = None
@@ -35,27 +35,27 @@ class BaseOperationData:
     jti: str = field(default_factory=lambda: str(uuid.uuid4()))
 
 @dataclass
-class ShareLockOperationData:
-    baseOperation: BaseOperationData
-    shareLock: ShareLockData
+class ShareLockOperation:
+    baseOperation: BaseOperation
+    shareLock: ShareLock
 
 @dataclass
-class BatchShareLockOperationData:
-    baseOperation: BaseOperationData
-    users: typing.List[ShareLockData]
+class BatchShareLockOperation:
+    baseOperation: BaseOperation
+    users: typing.List[ShareLock]
 
 @dataclass
-class RevokeAccessToLockOperationData:
-    baseOperation: BaseOperationData
+class RevokeAccessToLockOperation:
+    baseOperation: BaseOperation
     users: typing.List[str]
 
 @dataclass
-class UpdateSecureSettingUnlockDurationData:
-    baseOperation: BaseOperationData
+class UpdateSecureSettingUnlockDuration:
+    baseOperation: BaseOperation
     unlockDuration: int
 
 @dataclass
-class UnlockBetweenData:
+class UnlockBetween:
     start: str
     end: str
     timezone: str
@@ -63,12 +63,12 @@ class UnlockBetweenData:
     exceptions: typing.Optional[typing.List[str]] = None
 
 @dataclass
-class UnlockOperationData:
-    baseOperation: BaseOperationData
+class UnlockOperation:
+    baseOperation: BaseOperation
     directAccessEndpoints: typing.Optional[typing.List[str]] = None
 
 @dataclass
-class UpdateSecureSettingUnlockBetweenData:
-    baseOperation: BaseOperationData
-    unlockBetween: typing.Optional[UnlockBetweenData] = None
+class UpdateSecureSettingUnlockBetween:
+    baseOperation: BaseOperation
+    unlockBetween: typing.Optional[UnlockBetween] = None
 %}

@@ -1,39 +1,39 @@
 %pythoncode %{
 @dataclass
-class EmailCallToActionData:
+class EmailCallToAction:
     actionTarget: str
     headline: str
     actionText: str
 
 @dataclass
-class EmailPreferencesData:
+class EmailPreferences:
     senderEmail: typing.Optional[str] = None
     senderName: typing.Optional[str] = None
     primaryColour: typing.Optional[str] = None
     secondaryColour: typing.Optional[str] = None
     onlySendEssentialEmails: typing.Optional[bool] = None
-    callToAction: typing.Optional[EmailCallToActionData] = None
+    callToAction: typing.Optional[EmailCallToAction] = None
 
 @dataclass
-class CreateApplicationData:
+class CreateApplication:
     name: str
     companyName: str
     mailingAddress: str
     privacyPolicy: typing.Optional[str] = None
     supportContact: typing.Optional[str] = None
     appLink: typing.Optional[str] = None
-    emailPreferences: typing.Optional[EmailPreferencesData] = None
+    emailPreferences: typing.Optional[EmailPreferences] = None
     logoUrl: typing.Optional[str] = None
 
 @dataclass
-class AuthKeyData:
+class AuthKey:
     use: str
     kid: str
     alg: typing.Optional[str]
     kty: str = field(init=False)
 
 @dataclass
-class RsaKeyData(AuthKeyData):
+class RsaKey(AuthKey):
     kty: str
     p: str
     q: str
@@ -48,7 +48,7 @@ class RsaKeyData(AuthKeyData):
         self.kty = "RSA"
 
 @dataclass
-class EcKeyData(AuthKeyData):
+class EcKey(AuthKey):
     kty: str
     d: str
     crv: str
@@ -59,7 +59,7 @@ class EcKeyData(AuthKeyData):
         self.kty = "EC"
 
 @dataclass
-class Ed25519KeyData(AuthKeyData):
+class Ed25519Key(AuthKey):
     kty: str
     d: str
     crv: str
