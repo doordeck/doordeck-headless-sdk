@@ -7,7 +7,7 @@ class ContextManager(object):
     def get_api_environment(self):
         env = _doordeck_headless_sdk.getApiEnvironment(self.resource)
         name = _doordeck_headless_sdk.getApiEnvironmentName(env)
-        return ApiEnvironment[name]
+        return name
 
     def set_cloud_auth_token(self, token: str):
         _doordeck_headless_sdk.setCloudAuthToken(self.resource, token)

@@ -18,7 +18,7 @@ class LocationRequirementData:
 @dataclass
 class ShareLockData:
     targetUserId: str
-    targetUserRole: UserRole
+    targetUserRole: typing.Literal["ADMIN", "USER"]
     targetUserPublicKey: str
     start: typing.Optional[int] = None
     end: typing.Optional[int] = None

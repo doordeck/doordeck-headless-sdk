@@ -5,9 +5,6 @@
 %include "exceptions.i"
 %include "utils/utils.i"
 
-// Model
-%include "model/enums.i"
-
 // Data
 %include "model/data/fusion.i"
 %include "model/data/lock_operations.i"
@@ -28,8 +25,8 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self, api_environment: ApiEnvironment, cloud_auth_token: str = None, cloud_refresh_token: str = None, fusion_host: str = None):
-        self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment.name)
+    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD", cloud_auth_token: str = None, cloud_refresh_token: str = None, fusion_host: str = None):
+        self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment)
         self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host)
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
