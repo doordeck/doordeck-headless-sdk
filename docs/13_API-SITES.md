@@ -95,8 +95,7 @@ var response = await sdk.GetSites().GetLocksForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.SiteIdData("SITE_ID")
-response = await sdk.sites.get_locks_for_site(data)
+response = await sdk.sites.get_locks_for_site("SITE_ID")
 ```
 </details>
 
@@ -146,8 +145,7 @@ var response = await sdk.GetSites().GetUsersForSite(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.SiteIdData("SITE_ID")
-response = await sdk.sites.get_users_for_site(data)
+response = await sdk.sites.get_users_for_site("SITE_ID")
 ```
 </details>
 

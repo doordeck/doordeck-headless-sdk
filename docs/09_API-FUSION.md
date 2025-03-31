@@ -44,6 +44,15 @@ var response = await sdk.GetFusion().Login(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = await sdk.fusion.login("EMAIL", "PASSWORD")
+```
+</details>
+
 ## Get integration type
 
 ### JVM & Android
@@ -84,6 +93,15 @@ var response = await sdk.GetFusion().GetIntegrationType();
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = await sdk.fusion.get_integration_type()
+```
+</details>
+
 ## Get integration configuration
 
 ### JVM & Android
@@ -91,7 +109,7 @@ var response = await sdk.GetFusion().GetIntegrationType();
 <summary>Show Details</summary>
 
 ```kotlin
-val response = sdk.fusion().getIntegrationConfiguration("TYPE")
+val response = sdk.fusion().getIntegrationConfiguration("demo")
 ```
 
 💡 **Note:** In Java, use the `getIntegrationConfigurationAsync` function, which returns a `CompletableFuture<List<IntegrationConfigurationResponse>>` instead.
@@ -102,7 +120,7 @@ val response = sdk.fusion().getIntegrationConfiguration("TYPE")
 <summary>Show Details</summary>
 
 ```swift
-let response = sdk.fusion().getIntegrationConfiguration(type: "TYPE")
+let response = sdk.fusion().getIntegrationConfiguration(type: "demo")
 ```
 </details>
 
@@ -111,7 +129,7 @@ let response = sdk.fusion().getIntegrationConfiguration(type: "TYPE")
 <summary>Show Details</summary>
 
 ```js
-const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getIntegrationConfiguration("TYPE");
+const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getIntegrationConfiguration("demo");
 ```
 </details>
 
@@ -120,8 +138,17 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetIntegrationConfigurationData("TYPE");
+var data = new GetIntegrationConfigurationData("demo");
 var response = await sdk.GetFusion().GetIntegrationConfiguration(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = await sdk.fusion.get_integration_configuration("demo")
 ```
 </details>
 
@@ -171,6 +198,16 @@ await sdk.GetFusion().EnableDoor(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+controller = DemoController(8080)
+await sdk.fusion.enable_door("NAME", "SITE_ID", controller)
+```
+</details>
+
 ## Delete door
 
 ### JVM & Android
@@ -209,6 +246,15 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
 await sdk.GetFusion().DeleteDoor(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+await sdk.fusion.delete_door("DEVICE_ID")
 ```
 </details>
 
@@ -253,6 +299,15 @@ var response = await sdk.GetFusion().GetDoorStatus(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+response = await sdk.fusion.get_door_status("DEVICE_ID")
+```
+</details>
+
 ## Start door
 
 ### JVM & Android
@@ -294,6 +349,15 @@ await sdk.GetFusion().StartDoor(data);
 ```
 </details>
 
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+await sdk.fusion.start_door("DEVICE_ID")
+```
+</details>
+
 ## Stop door
 
 ### JVM & Android
@@ -332,6 +396,15 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID")
 ```csharp
 var data = new DeviceIdData("DEVICE_ID");
 await sdk.GetFusion().StopDoor(data);
+```
+</details>
+
+### Python
+<details>
+<summary>Show Details</summary>
+
+```python
+await sdk.fusion.stop_door("DEVICE_ID")
 ```
 </details>
 

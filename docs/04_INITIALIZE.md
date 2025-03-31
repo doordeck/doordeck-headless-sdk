@@ -93,7 +93,7 @@ var sdk = new DoordeckSdk(ApiEnvironment.PROD, "AUTH_TOKEN");
 <summary>Show Details</summary>
 
 ```python
-sdk = doordeck_headless_sdk.InitializeSdk(doordeck_headless_sdk.ApiEnvironment.PROD, "AUTH_TOKEN")
+sdk = doordeck_headless_sdk.InitializeSdk("AUTH_TOKEN")
 ```
 </details>
 

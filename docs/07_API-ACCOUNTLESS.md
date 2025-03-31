@@ -49,8 +49,7 @@ var response = await sdk.GetAccountless().Login(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.LoginData("EMAIL", "PASSWORD")
-response = await sdk.accountless.login(data)
+response = await sdk.accountless.login("EMAIL", "PASSWORD")
 ```
 </details>
 
@@ -105,8 +104,7 @@ var response = await sdk.GetAccountless().Registration(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", False, "BASE64_PUBLIC_KEY")
-response = await sdk.accountless.registration(data)
+response = await sdk.accountless.registration("EMAIL", "PASSWORD", "DISPLAY_NAME", False, "BASE64_PUBLIC_KEY")
 ```
 </details>
 
@@ -156,8 +154,7 @@ await sdk.GetAccountless().VerifyEmail(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.VerifyEmailData("CODE")
-await sdk.accountless.verify_email(data)
+await sdk.accountless.verify_email("CODE")
 ```
 </details>
 
@@ -207,8 +204,7 @@ await sdk.GetAccountless().PasswordReset(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.PasswordResetData("EMAIL")
-await sdk.accountless.password_reset(data)
+await sdk.accountless.password_reset("EMAIL")
 ```
 </details>
 
@@ -258,8 +254,7 @@ await sdk.GetAccountless().PasswordResetVerify(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.PasswordResetVerifyData("USERID", "TOKEN", "EMAIL")
-await sdk.accountless.password_reset_verify(data)
+await sdk.accountless.password_reset_verify("USERID", "TOKEN", "EMAIL")
 ```
 </details>
 
