@@ -107,7 +107,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def set_lock_setting_time_restrictions(self, lockId: str, times: List[TimeRequirementData]):
+    async def set_lock_setting_time_restrictions(self, lockId: str, times: List[TimeRequirement]):
         data = {
             "lockId": lockId,
             "times": dataclasses.asdict(times)
@@ -117,7 +117,7 @@ class LockOperations(object):
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def update_lock_setting_location_restrictions(self, lockId: str, location: LocationRequirementData = None):
+    async def update_lock_setting_location_restrictions(self, lockId: str, location: LocationRequirement = None):
         data = {
             "lockId": lockId,
             "location": dataclasses.asdict(location)
@@ -200,37 +200,37 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def unlock(self, data: UnlockOperationData):
+    async def unlock(self, data: UnlockOperation):
         return await execute_async(
             _doordeck_headless_sdk.unlock,
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def share_lock(self, data: ShareLockOperationData):
+    async def share_lock(self, data: ShareLockOperation):
         return await execute_async(
             _doordeck_headless_sdk.shareLock,
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def batch_share_lock(self, data: BatchShareLockOperationData):
+    async def batch_share_lock(self, data: BatchShareLockOperation):
         return await execute_async(
             _doordeck_headless_sdk.batchShareLock,
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def revoke_access_to_lock(self, data: RevokeAccessToLockOperationData):
+    async def revoke_access_to_lock(self, data: RevokeAccessToLockOperation):
         return await execute_async(
             _doordeck_headless_sdk.revokeAccessToLock,
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def update_secure_setting_unlock_duration(self, data: UpdateSecureSettingUnlockDurationData):
+    async def update_secure_setting_unlock_duration(self, data: UpdateSecureSettingUnlockDuration):
         return await execute_async(
             _doordeck_headless_sdk.updateSecureSettingUnlockDuration,
             [self.resource, json.dumps(dataclasses.asdict(data))]
         )
 
-    async def update_secure_setting_unlock_between(self, data: UpdateSecureSettingUnlockBetweenData):
+    async def update_secure_setting_unlock_between(self, data: UpdateSecureSettingUnlockBetween):
         return await execute_async(
             _doordeck_headless_sdk.updateSecureSettingUnlockBetween,
             [self.resource, json.dumps(dataclasses.asdict(data))]

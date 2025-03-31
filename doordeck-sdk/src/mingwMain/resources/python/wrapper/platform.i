@@ -4,7 +4,7 @@ class Platform(object):
     def __init__(self, resource):
         self.resource = resource
 
-    async def create_application(self, data: CreateApplicationData):
+    async def create_application(self, data: CreateApplication):
         return await execute_async(
             _doordeck_headless_sdk.createApplication,
             [self.resource, json.dumps(dataclasses.asdict(data))]
@@ -83,7 +83,7 @@ class Platform(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_application_email_preferences(self, applicationId: str, emailPreferences: EmailPreferencesData):
+    async def update_application_email_preferences(self, applicationId: str, emailPreferences: EmailPreferences):
         data = {
             "applicationId": applicationId,
             "emailPreferences": dataclasses.asdict(emailPreferences)
@@ -120,7 +120,7 @@ class Platform(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def add_auth_key(self, applicationId: str, key: AuthKeyData):
+    async def add_auth_key(self, applicationId: str, key: AuthKey):
         data = {
             "applicationId": applicationId,
             "key": dataclasses.asdict(key)
