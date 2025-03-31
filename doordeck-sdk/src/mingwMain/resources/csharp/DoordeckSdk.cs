@@ -34,7 +34,7 @@ public class DoordeckSdk
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager _contextApi;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_crypto_CryptoManager _cryptoApi;
 
-    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuthToken = null, string? cloudRefreshToken = null, string? fusionHost = null)
+    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment = ApiEnvironment.PROD, string? cloudAuthToken = null, string? cloudRefreshToken = null, string? fusionHost = null)
     {
         _apiEnvironment = apiEnvironment switch
         {

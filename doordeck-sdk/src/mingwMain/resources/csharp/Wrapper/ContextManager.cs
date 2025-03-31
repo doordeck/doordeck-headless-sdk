@@ -225,9 +225,9 @@ public unsafe class ContextManager(
         return contextManager.isKeyPairValid_(context).ToBoolean();
     }
 
-    public void SetOperationContext(OperationContextData data)
+    public void SetOperationContext(string userId, string userCertificateChain, string userPublicKey, string userPrivateKey)
     {
-        var sData = data.ToData();
+        var sData = new { userId, userCertificateChain, userPublicKey, userPrivateKey }.ToData();
         try
         {
             contextManager.setOperationContextJson_(context, sData);

@@ -8,91 +8,91 @@ public class LockOperations(
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct lockOperationsApi) : AbstractWrapper
 {
-    public unsafe Task<LockResponse> GetSingleLock(LockIdData data) =>
-        Process<LockResponse>(lockOperationsApi.getSingleLock_, null, data);
+    public unsafe Task<LockResponse> GetSingleLock(string lockId) =>
+        Process<LockResponse>(lockOperationsApi.getSingleLock_, null, new { lockId });
 
-    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(GetLockAuditTrailData data) =>
-        Process<List<AuditResponse>>(lockOperationsApi.getLockAuditTrail_, null, data);
+    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, int start, int end) =>
+        Process<List<AuditResponse>>(lockOperationsApi.getLockAuditTrail_, null, new { lockId, start, end });
 
-    public unsafe Task<List<AuditResponse>> GetAuditForUser(GetAuditForUserData data) =>
-        Process<List<AuditResponse>>(lockOperationsApi.getAuditForUser_, null, data);
+    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, int start, int end) =>
+        Process<List<AuditResponse>>(lockOperationsApi.getAuditForUser_, null, new { userId, start, end });
 
-    public unsafe Task<List<UserLockResponse>> GetUsersForLock(LockIdData data) =>
-        Process<List<UserLockResponse>>(lockOperationsApi.getUsersForLock_, null, data);
+    public unsafe Task<List<UserLockResponse>> GetUsersForLock(string lockId) =>
+        Process<List<UserLockResponse>>(lockOperationsApi.getUsersForLock_, null, new { lockId });
 
-    public unsafe Task<LockUserResponse> GetLocksForUser(GetLocksForUserData data) =>
-        Process<LockUserResponse>(lockOperationsApi.getLocksForUser_, null, data);
+    public unsafe Task<LockUserResponse> GetLocksForUser(string userId) =>
+        Process<LockUserResponse>(lockOperationsApi.getLocksForUser_, null, new { userId });
 
-    public unsafe Task<object> UpdateLockName(UpdateLockNameData data) =>
-        Process<object>(lockOperationsApi.updateLockName_, null, data);
+    public unsafe Task<object> UpdateLockName(string lockId, string? name = null) =>
+        Process<object>(lockOperationsApi.updateLockName_, null, new { lockId, name });
 
-    public unsafe Task<object> UpdateLockFavourite(UpdateLockFavouriteData data) =>
-        Process<object>(lockOperationsApi.updateLockFavourite_, null, data);
+    public unsafe Task<object> UpdateLockFavourite(string lockId, bool? favourite = null) =>
+        Process<object>(lockOperationsApi.updateLockFavourite_, null, new { lockId, favourite });
 
-    public unsafe Task<object> UpdateLockColour(UpdateLockColourData data) =>
-        Process<object>(lockOperationsApi.updateLockColour_, null, data);
+    public unsafe Task<object> UpdateLockColour(string lockId, string? colour = null) =>
+        Process<object>(lockOperationsApi.updateLockColour_, null, new { lockId, colour });
 
-    public unsafe Task<object> UpdateLockSettingDefaultName(UpdateLockSettingDefaultNameData data) =>
-        Process<object>(lockOperationsApi.updateLockSettingDefaultName_, null, data);
+    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string? name = null) =>
+        Process<object>(lockOperationsApi.updateLockSettingDefaultName_, null, new { lockId, name });
 
-    public unsafe Task<object> SetLockSettingPermittedAddresses(SetLockSettingPermittedAddressesData data) =>
-        Process<object>(lockOperationsApi.setLockSettingPermittedAddresses_, null, data);
+    public unsafe Task<object> SetLockSettingPermittedAddresses(string lockId, List<string> permittedAddresses) =>
+        Process<object>(lockOperationsApi.setLockSettingPermittedAddresses_, null, new { lockId,  permittedAddresses });
 
-    public unsafe Task<object> UpdateLockSettingHidden(UpdateLockSettingHiddenData data) =>
-        Process<object>(lockOperationsApi.updateLockSettingHidden_, null, data);
+    public unsafe Task<object> UpdateLockSettingHidden(string lockId, bool hidden) =>
+        Process<object>(lockOperationsApi.updateLockSettingHidden_, null, new { lockId, hidden });
 
-    public unsafe Task<object> SetLockSettingTimeRestrictions(SetLockSettingTimeRestrictionsData data) =>
-        Process<object>(lockOperationsApi.setLockSettingTimeRestrictions_, null, data);
+    public unsafe Task<object> SetLockSettingTimeRestrictions(string lockId, List<TimeRequirement> times) =>
+        Process<object>(lockOperationsApi.setLockSettingTimeRestrictions_, null, new { lockId, times });
 
-    public unsafe Task<object> UpdateLockSettingLocationRestrictions(UpdateLockSettingLocationRestrictionsData data) =>
-        Process<object>(lockOperationsApi.updateLockSettingLocationRestrictions_, null, data);
+    public unsafe Task<object> UpdateLockSettingLocationRestrictions(string lockId, LocationRequirement? location = null) =>
+        Process<object>(lockOperationsApi.updateLockSettingLocationRestrictions_, null, new { lockId, location });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKey(GetUserPublicKeyData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKey_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKey(string userEmail, bool visitor = false) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKey_, null, new { userEmail, visitor });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByEmail(GetUserPublicKeyByEmailData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByEmail_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByEmail(string email) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByEmail_, null, new { email });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByTelephone(GetUserPublicKeyByTelephoneData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByTelephone_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByTelephone(string telephone) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByTelephone_, null, new { telephone });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByLocalKey(GetUserPublicKeyByLocalKeyData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByLocalKey_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByLocalKey(string localKey) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByLocalKey_, null, new { localKey });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByForeignKey(GetUserPublicKeyByForeignKeyData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByForeignKey_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByForeignKey(string foreignKey) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByForeignKey_, null, new { foreignKey });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByIdentity(GetUserPublicKeyByIdentityData data) =>
-        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByIdentity_, null, data);
+    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByIdentity(string identity) =>
+        Process<UserPublicKeyResponse>(lockOperationsApi.getUserPublicKeyByIdentity_, null, new { identity });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByEmails(GetUserPublicKeyByEmailsData data) =>
-        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByEmails_, null, data);
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByEmails(List<string> emails) =>
+        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByEmails_, null, new { emails });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByTelephones(GetUserPublicKeyByTelephonesData data) =>
-        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByTelephones_, null, data);
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByTelephones(List<string> telephones) =>
+        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByTelephones_, null, new { telephones });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByLocalKeys(GetUserPublicKeyByLocalKeysData data) =>
-        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByLocalKeys_, null, data);
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByLocalKeys(List<string> localKeys) =>
+        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByLocalKeys_, null, new { localKeys });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByForeignKeys(GetUserPublicKeyByForeignKeysData data) =>
-        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByForeignKeys_, null, data);
+    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByForeignKeys(List<string> foreignKeys) =>
+        Process<List<BatchUserPublicKeyResponse>>(lockOperationsApi.getUserPublicKeyByForeignKeys_, null, new { foreignKeys });
     
-    public unsafe Task<object> Unlock(UnlockOperationData data) =>
+    public unsafe Task<object> Unlock(UnlockOperation data) =>
         Process<object>(lockOperationsApi.unlock_, null, data);
 
-    public unsafe Task<object> ShareLock(ShareLockOperationData data) =>
+    public unsafe Task<object> ShareLock(ShareLockOperation data) =>
         Process<object>(lockOperationsApi.shareLock_, null, data);
 
-    public unsafe Task<object> BatchShareLock(BatchShareLockOperationData data) =>
+    public unsafe Task<object> BatchShareLock(BatchShareLockOperation data) =>
         Process<object>(lockOperationsApi.batchShareLock_, null, data);
 
-    public unsafe Task<object> RevokeAccessToLock(RevokeAccessToLockOperationData data) =>
+    public unsafe Task<object> RevokeAccessToLock(RevokeAccessToLockOperation data) =>
         Process<object>(lockOperationsApi.revokeAccessToLock_, null, data);
 
-    public unsafe Task<object> UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDurationData data) =>
+    public unsafe Task<object> UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDuration data) =>
         Process<object>(lockOperationsApi.updateSecureSettingUnlockDuration_, null, data);
 
-    public unsafe Task<object> UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetweenData data) =>
+    public unsafe Task<object> UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetween data) =>
         Process<object>(lockOperationsApi.updateSecureSettingUnlockBetween_, null, data);
 
     public unsafe Task<List<LockResponse>> GetPinnedLocks() =>

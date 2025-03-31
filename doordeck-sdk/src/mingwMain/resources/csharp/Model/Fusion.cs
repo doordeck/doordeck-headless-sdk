@@ -10,6 +10,7 @@ public interface ILockController;
 [JsonDerivedType(typeof(AssaAbloyController), "assa-abloy")]
 [JsonDerivedType(typeof(AvigilonController), "avigilon")]
 [JsonDerivedType(typeof(AxisController), "axis")]
+[JsonDerivedType(typeof(CCureController), "ccure")]
 [JsonDerivedType(typeof(DemoController), "demo")]
 [JsonDerivedType(typeof(GallagherController), "gallagher")]
 [JsonDerivedType(typeof(GenetecController), "genetec")]
@@ -59,6 +60,15 @@ public class AxisController : LockController
 {
     public string BaseUrl { get; set; } = string.Empty;
     public string DoorIdentifier { get; set; } = string.Empty;
+}
+
+public class CCureController : LockController
+{
+    public string BaseUrl { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public string DoorType { get; set; } = string.Empty;
+    public int DoorId { get; set; } = 0;
 }
 
 public class CCureController : LockController
