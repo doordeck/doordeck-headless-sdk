@@ -7,21 +7,20 @@ class Sites(object):
     async def list_sites(self):
         return await execute_async(
             _doordeck_headless_sdk.listSites,
-            [self.resource],
-            lambda r: [SiteResponse(**item) for item in get_success_result(r)]
+            [self.resource]
         )
 
-    async def get_locks_for_site(self, data):
+    async def get_locks_for_site(self, siteId: str):
+        data = { "siteId": siteId }
         return await execute_async(
             _doordeck_headless_sdk.getLocksForSite,
-            [self.resource, json.dumps(dataclasses.asdict(data))],
-            lambda r: [SiteLocksResponse(**item) for item in get_success_result(r)]
+            [self.resource, json.dumps(data)]
         )
 
-    async def get_users_for_site(self, data):
+    async def get_users_for_site(self, data: str):
+        data = { "siteId": siteId }
         return await execute_async(
             _doordeck_headless_sdk.getUsersForSite,
-            [self.resource, json.dumps(dataclasses.asdict(data))],
-            lambda r: [UserForSiteResponse(**item) for item in get_success_result(r)]
+            [self.resource, json.dumps(data)]
         )
 %}

@@ -26,55 +26,6 @@ class CreateApplicationData:
     logoUrl: typing.Optional[str] = None
 
 @dataclass
-class ApplicationIdData:
-    applicationId: str
-
-@dataclass
-class UpdateApplicationNameData:
-    applicationId: str
-    name: str
-
-@dataclass
-class UpdateApplicationCompanyNameData:
-    applicationId: str
-    companyName: str
-
-@dataclass
-class UpdateApplicationMailingAddressData:
-    applicationId: str
-    mailingAddress: str
-
-@dataclass
-class UpdateApplicationPrivacyPolicyData:
-    applicationId: str
-    privacyPolicy: str
-
-@dataclass
-class UpdateApplicationSupportContactData:
-    applicationId: str
-    supportContact: str
-
-@dataclass
-class UpdateApplicationAppLinkData:
-    applicationId: str
-    appLink: str
-
-@dataclass
-class UpdateApplicationEmailPreferencesData:
-    applicationId: str
-    emailPreferences: EmailPreferencesData
-
-@dataclass
-class UpdateApplicationLogoUrlData:
-    applicationId: str
-    logoUrl: str
-
-@dataclass
-class GetLogoUploadUrlData:
-    applicationId: str
-    contentType: str
-
-@dataclass
 class AuthKeyData:
     use: str
     kid: str
@@ -116,24 +67,4 @@ class Ed25519KeyData(AuthKeyData):
 
     def __post_init__(self):
         self.kty = "OKP"
-
-@dataclass
-class AddAuthKeyData:
-    applicationId: str
-    key: AuthKeyData
-
-@dataclass
-class AuthIssuerData:
-    applicationId: str
-    url: str
-
-@dataclass
-class CorsDomainData:
-    applicationId: str
-    url: str
-
-@dataclass
-class ApplicationOwnerData:
-    applicationId: str
-    userId: str
 %}
