@@ -1,88 +1,39 @@
 %pythoncode %{
 @dataclass
-class EmailCallToActionData:
+class EmailCallToAction:
     actionTarget: str
     headline: str
     actionText: str
 
 @dataclass
-class EmailPreferencesData:
+class EmailPreferences:
     senderEmail: typing.Optional[str] = None
     senderName: typing.Optional[str] = None
     primaryColour: typing.Optional[str] = None
     secondaryColour: typing.Optional[str] = None
     onlySendEssentialEmails: typing.Optional[bool] = None
-    callToAction: typing.Optional[EmailCallToActionData] = None
+    callToAction: typing.Optional[EmailCallToAction] = None
 
 @dataclass
-class CreateApplicationData:
+class CreateApplication:
     name: str
     companyName: str
     mailingAddress: str
     privacyPolicy: typing.Optional[str] = None
     supportContact: typing.Optional[str] = None
     appLink: typing.Optional[str] = None
-    emailPreferences: typing.Optional[EmailPreferencesData] = None
+    emailPreferences: typing.Optional[EmailPreferences] = None
     logoUrl: typing.Optional[str] = None
 
 @dataclass
-class ApplicationIdData:
-    applicationId: str
-
-@dataclass
-class UpdateApplicationNameData:
-    applicationId: str
-    name: str
-
-@dataclass
-class UpdateApplicationCompanyNameData:
-    applicationId: str
-    companyName: str
-
-@dataclass
-class UpdateApplicationMailingAddressData:
-    applicationId: str
-    mailingAddress: str
-
-@dataclass
-class UpdateApplicationPrivacyPolicyData:
-    applicationId: str
-    privacyPolicy: str
-
-@dataclass
-class UpdateApplicationSupportContactData:
-    applicationId: str
-    supportContact: str
-
-@dataclass
-class UpdateApplicationAppLinkData:
-    applicationId: str
-    appLink: str
-
-@dataclass
-class UpdateApplicationEmailPreferencesData:
-    applicationId: str
-    emailPreferences: EmailPreferencesData
-
-@dataclass
-class UpdateApplicationLogoUrlData:
-    applicationId: str
-    logoUrl: str
-
-@dataclass
-class GetLogoUploadUrlData:
-    applicationId: str
-    contentType: str
-
-@dataclass
-class AuthKeyData:
+class AuthKey:
     use: str
     kid: str
     alg: typing.Optional[str]
     kty: str = field(init=False)
 
 @dataclass
-class RsaKeyData(AuthKeyData):
+class RsaKey(AuthKey):
     kty: str
     p: str
     q: str
@@ -97,7 +48,7 @@ class RsaKeyData(AuthKeyData):
         self.kty = "RSA"
 
 @dataclass
-class EcKeyData(AuthKeyData):
+class EcKey(AuthKey):
     kty: str
     d: str
     crv: str
@@ -108,7 +59,7 @@ class EcKeyData(AuthKeyData):
         self.kty = "EC"
 
 @dataclass
-class Ed25519KeyData(AuthKeyData):
+class Ed25519Key(AuthKey):
     kty: str
     d: str
     crv: str
@@ -116,24 +67,4 @@ class Ed25519KeyData(AuthKeyData):
 
     def __post_init__(self):
         self.kty = "OKP"
-
-@dataclass
-class AddAuthKeyData:
-    applicationId: str
-    key: AuthKeyData
-
-@dataclass
-class AuthIssuerData:
-    applicationId: str
-    url: str
-
-@dataclass
-class CorsDomainData:
-    applicationId: str
-    url: str
-
-@dataclass
-class ApplicationOwnerData:
-    applicationId: str
-    userId: str
 %}

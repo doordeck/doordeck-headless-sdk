@@ -46,8 +46,7 @@ var response = await sdk.GetTiles().GetLocksBelongingToTile(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.GetLocksBelongingToTileData("TILE_ID")
-response = await sdk.tiles.get_locks_belonging_to_tile(data)
+response = await sdk.tiles.get_locks_belonging_to_tile("TILE_ID")
 ```
 </details>
 
@@ -98,8 +97,7 @@ await sdk.GetTiles().AssociateMultipleLocks(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"])
-await sdk.tiles.associate_multiple_locks(data)
+await sdk.tiles.associate_multiple_locks("TILE_ID", "SITE_ID", ["LOCK_ID"])
 ```
 </details>
 
