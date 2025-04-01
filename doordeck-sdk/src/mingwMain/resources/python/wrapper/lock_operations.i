@@ -114,7 +114,7 @@ class LockOperations(object):
         }
         return await execute_async(
             _doordeck_headless_sdk.setLockSettingTimeRestrictions,
-            [self.resource, json.dumps(dataclasses.asdict(data))]
+            [self.resource, json.dumps(data)]
         )
 
     async def update_lock_setting_location_restrictions(self, lockId: str, location: LocationRequirement = None):
@@ -124,7 +124,7 @@ class LockOperations(object):
         }
         return await execute_async(
             _doordeck_headless_sdk.updateLockSettingLocationRestrictions,
-            [self.resource, json.dumps(dataclasses.asdict(data))]
+            [self.resource, json.dumps(data)]
         )
 
     async def get_user_public_key(self, userEmail: str, visitor: bool = False):

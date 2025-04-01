@@ -90,7 +90,7 @@ class Platform(object):
         }
         return await execute_async(
             _doordeck_headless_sdk.updateApplicationEmailPreferences,
-            [self.resource, json.dumps(dataclasses.asdict(data))]
+            [self.resource, json.dumps(data)]
         )
 
     async def update_application_logo_url(self, applicationId: str, logoUrl: str):
@@ -127,7 +127,7 @@ class Platform(object):
         }
         return await execute_async(
             _doordeck_headless_sdk.addAuthKey,
-            [self.resource, json.dumps(dataclasses.asdict(data))]
+            [self.resource, json.dumps(data)]
         )
 
     async def add_auth_issuer(self, applicationId: str, url: str):
