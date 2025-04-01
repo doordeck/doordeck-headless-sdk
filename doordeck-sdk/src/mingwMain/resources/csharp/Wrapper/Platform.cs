@@ -47,7 +47,7 @@ public class Platform(
     public unsafe Task<GetLogoUploadUrlResponse> GetLogoUploadUrl(string applicationId, string contentType) =>
         Process<GetLogoUploadUrlResponse>(platformApi.getLogoUploadUrl_, null, new { applicationId, contentType });
 
-    public unsafe Task<object> AddAuthKey(string applicationId, AuthKey key) =>
+    public unsafe Task<object> AddAuthKey(string applicationId, IAuthKey key) =>
         Process<object>(platformApi.addAuthKey_, null, new { applicationId, key });
 
     public unsafe Task<object> AddAuthIssuer(string applicationId, string url) =>

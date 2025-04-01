@@ -64,13 +64,7 @@ public interface IAuthKey
     string? Alg { get; }
 }
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "kty")]
-[JsonDerivedType(typeof(RsaKey), "RSA")]
-[JsonDerivedType(typeof(EcKey), "EC")]
-[JsonDerivedType(typeof(Ed25519Key), "OKP")]
-public abstract class AuthKey : IAuthKey;
-
-public class RsaKey : AuthKey
+public class RsaKey : IAuthKey
 {
     public string Kty { get; private set; } = "RSA";
     public string Use { get; set; }
@@ -101,7 +95,7 @@ public class RsaKey : AuthKey
     }
 }
 
-public class EcKey : AuthKey
+public class EcKey : IAuthKey
 {
     public string Kty { get; private set; } = "EC";
     public string Use { get; set; }
@@ -124,7 +118,7 @@ public class EcKey : AuthKey
     }
 }
 
-public class Ed25519Key : AuthKey
+public class Ed25519Key : IAuthKey
 {
     public string Kty { get; private set; } = "OKP";
     public string Use { get; set; }
