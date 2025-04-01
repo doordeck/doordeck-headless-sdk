@@ -5,6 +5,5 @@ class CryptoManager(object):
         self.resource = resource
 
     def generate_key_pair(self):
-        response = json.loads(_doordeck_headless_sdk.generateEncodedKeyPair(self.resource))
-        return EncodedKeyPair(**response)
+        return json.loads(_doordeck_headless_sdk.generateEncodedKeyPair(self.resource), object_hook=object_hook)
 %}

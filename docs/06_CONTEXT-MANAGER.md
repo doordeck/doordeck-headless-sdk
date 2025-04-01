@@ -49,8 +49,7 @@ sdk.GetContextManager().SetOperationContext(data);
 <summary>Show Details</summary>
 
 ```python
-data = OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY")
-sdk.contextManager.set_operation_context(data)
+sdk.contextManager.set_operation_context("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY")
 ```
 </details>
 

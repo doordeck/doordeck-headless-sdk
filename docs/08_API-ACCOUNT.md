@@ -55,8 +55,7 @@ var response = await sdk.GetAccount().RefreshToken(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RefreshTokenData("REFRESH_TOKEN")
-response = await sdk.account.refresh_token(data)
+response = await sdk.account.refresh_token("REFRESH_TOKEN")
 ```
 </details>
 
@@ -162,8 +161,7 @@ var response = await sdk.GetAccount().RegisterEphemeralKey(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RegisterEphemeralKeyData("BASE64_PUBLIC_KEY")
-response = await sdk.account.register_ephemeral_key()
+response = await sdk.account.register_ephemeral_key("BASE64_PUBLIC_KEY")
 ```
 </details>
 
@@ -215,8 +213,7 @@ var response = await sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentic
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY")
-response = await sdk.account.register_ephemeral_key_with_secondary_authentication(data)
+response = await sdk.account.register_ephemeral_key_with_secondary_authentication("BASE64_PUBLIC_KEY")
 ```
 </details>
 
@@ -269,8 +266,7 @@ var response = await sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY")
-response = await sdk.account.verify_ephemeral_key_registration(data)
+response = await sdk.account.verify_ephemeral_key_registration("CODE", "BASE64_PRIVATE_KEY")
 ```
 </details>
 
@@ -375,8 +371,7 @@ await sdk.GetAccount().ChangePassword(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD")
-await sdk.account.change_password(data)
+await sdk.account.change_password("OLD_PASSWORD", "NEW_PASSWORD")
 ```
 </details>
 
@@ -475,8 +470,7 @@ await sdk.GetAccount().UpdateUserDetails(data);
 <summary>Show Details</summary>
 
 ```python
-data = doordeck_headless_sdk.UpdateUserDetailsData("DISPLAY_NAME")
-await sdk.account.update_user_details(data)
+await sdk.account.update_user_details("DISPLAY_NAME")
 ```
 </details>
 
