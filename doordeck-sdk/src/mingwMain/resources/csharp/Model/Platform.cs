@@ -56,13 +56,19 @@ public class EmailCallToAction(string actionTarget, string headline, string acti
     public string ActionText { get; set; } = actionText;
 }
 
-public interface AuthKey
+public interface IAuthKey
 {
     string Kid { get; }
     string Kty { get; }
     string Use { get; }
     string? Alg { get; }
 }
+
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "kty")]
+[JsonDerivedType(typeof(RsaKey), "RSA")]
+[JsonDerivedType(typeof(EcKey), "EC")]
+[JsonDerivedType(typeof(Ed25519Key), "OKP")]
+public abstract class AuthKey : IAuthKey;
 
 public class RsaKey : AuthKey
 {

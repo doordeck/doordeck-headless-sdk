@@ -71,15 +71,6 @@ public class CCureController : LockController
     public int DoorId { get; set; } = 0;
 }
 
-public class CCureController : LockController
-{
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string DoorType { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
-}
-
 public class DemoController : LockController
 {
     public int Port { get; set; } = 8080;

@@ -14,8 +14,8 @@ public class Fusion(
     public unsafe Task<IntegrationTypeResponse> GetIntegrationType() =>
         Process<IntegrationTypeResponse>(null, fusionApi.getIntegrationType_, null);
 
-    public unsafe Task<IntegrationConfigurationResponse> GetIntegrationConfiguration(string type) =>
-        Process<IntegrationConfigurationResponse>(fusionApi.getIntegrationConfiguration_, null, new { type });
+    public unsafe Task<List<IntegrationConfigurationResponse>> GetIntegrationConfiguration(string type) =>
+        Process<List<IntegrationConfigurationResponse>>(fusionApi.getIntegrationConfiguration_, null, new { type });
 
     public unsafe Task<object> EnableDoor(string name, string siteId, LockController controller) =>
         Process<object>(fusionApi.enableDoor_, null, new { name, siteId, controller });

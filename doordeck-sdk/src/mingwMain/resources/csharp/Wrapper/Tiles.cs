@@ -1,5 +1,4 @@
-﻿using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Model.Responses;
+﻿using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 

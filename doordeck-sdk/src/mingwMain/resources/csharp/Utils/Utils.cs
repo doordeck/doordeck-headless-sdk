@@ -7,9 +7,6 @@ public static class Utils
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
-        Converters = {
-            new AuthKeyResponseConverter()
-        },
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
