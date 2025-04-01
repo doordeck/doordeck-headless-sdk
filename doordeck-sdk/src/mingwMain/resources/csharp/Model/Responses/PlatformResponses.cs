@@ -18,38 +18,32 @@ public class ApplicationResponse
     public string? AppLink { get; set; } = null;
     public string? Slug { get; set; } = null;
     public EmailPreferencesResponse EmailPreferences { get; set; } = new EmailPreferencesResponse();
-    public Dictionary<string, IAuthKeyResponse> AuthKeys { get; set; } = [];
+    public Dictionary<string, AuthKeyResponse> AuthKeys { get; set; } = [];
     public OauthResponse? Oauth { get; set; } = null;
     public bool? IsDoordeckApplication { get; set; } = null;
 }
 
-public interface IAuthKeyResponse
-{
-    string Kid { get; set; }
-    string Use { get; set; }
-    string? Alg { get; set; }
-    List<string>? Ops { get; set; }
-    string? X5u { get; set; }
-    string? X5t { get; set; }
-    string? X5t256 { get; set; }
-    List<string>? X5c { get; set; }
-    int? Exp { get; set; }
-    int? Nbf { get; set; }
-    int? Iat { get; set; }
-}
+public interface IAuthKeyResponse;
 
-public class RsaKeyResponse : IAuthKeyResponse
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "kty")]
+[JsonDerivedType(typeof(RsaKeyResponse), "RSA")]
+[JsonDerivedType(typeof(EcKeyResponse), "EC")]
+[JsonDerivedType(typeof(Ed25519KeyResponse), "OKP")]
+public abstract class AuthKeyResponse : IAuthKeyResponse;
+
+public class RsaKeyResponse : AuthKeyResponse
 {
-    public string Use { get; set; } = string.Empty;
+    public string Kty { get; set; } = string.Empty;
     public string Kid { get; set; } = string.Empty;
+    public string Use { get; set; } = string.Empty;
     public string? Alg { get; set; } = null;
     [JsonPropertyName("key_ops")]
     public List<string>? Ops { get; set; } = null;
-    public string? X5u { get; set; } = null;
-    public string? X5t { get; set; } = null;
-    public string? X5t256 { get; set; } = null;
+    public string? X5U { get; set; } = null;
+    public string? X5T { get; set; } = null;
     [JsonPropertyName("x5t#S256")]
-    public List<string>? X5c { get; set; } = null;
+    public string? X5T256 { get; set; } = null;
+    public List<string>? X5C { get; set; } = null;
     public int? Exp { get; set; } = null;
     public int? Nbf { get; set; } = null;
     public int? Iat { get; set; } = null;
@@ -57,18 +51,19 @@ public class RsaKeyResponse : IAuthKeyResponse
     public string N { get; set; } = string.Empty;
 }
 
-public class EcKeyResponse : IAuthKeyResponse
+public class EcKeyResponse : AuthKeyResponse
 {
-    public string Use { get; set; }
-    public string Kid { get; set; }
+    public string Kty { get; set; } = string.Empty;
+    public string Kid { get; set; } = string.Empty;
+    public string Use { get; set; } = string.Empty;
     public string? Alg { get; set; } = null;
     [JsonPropertyName("key_ops")]
     public List<string>? Ops { get; set; } = null;
-    public string? X5u { get; set; } = null;
-    public string? X5t { get; set; } = null;
+    public string? X5U { get; set; } = null;
+    public string? X5T { get; set; } = null;
     [JsonPropertyName("x5t#S256")]
-    public string? X5t256 { get; set; } = null;
-    public List<string>? X5c { get; set; } = null;
+    public string? X5T256 { get; set; } = null;
+    public List<string>? X5C { get; set; } = null;
     public int? Exp { get; set; } = null;
     public int? Nbf { get; set; } = null;
     public int? Iat { get; set; } = null;
@@ -77,18 +72,19 @@ public class EcKeyResponse : IAuthKeyResponse
     public string Y { get; set; } = string.Empty;
 }
 
-public class Ed25519KeyResponse : IAuthKeyResponse
+public class Ed25519KeyResponse : AuthKeyResponse
 {
-    public string Use { get; set; } = string.Empty;
+    public string Kty { get; set; } = string.Empty;
     public string Kid { get; set; } = string.Empty;
+    public string Use { get; set; } = string.Empty;
     public string? Alg { get; set; } = null;
     [JsonPropertyName("key_ops")]
     public List<string>? Ops { get; set; } = null;
-    public string? X5u { get; set; } = null;
-    public string? X5t { get; set; } = null;
+    public string? X5U { get; set; } = null;
+    public string? X5T { get; set; } = null;
     [JsonPropertyName("x5t#S256")]
-    public string? X5t256 { get; set; } = null;
-    public List<string>? X5c { get; set; } = null;
+    public string? X5T256 { get; set; } = null;
+    public List<string>? X5C { get; set; } = null;
     public int? Exp { get; set; } = null;
     public int? Nbf { get; set; } = null;
     public int? Iat { get; set; } = null;
