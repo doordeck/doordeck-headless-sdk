@@ -38,7 +38,7 @@ runs:
 
     - name: Generate pyproject file
       shell: bash
-      run: ./gradlew -Prelease.useLastTag=true pythonPack
+      run: ./gradlew -Pversion=1.0.0 pythonPack
 
     - name: Download python for windows
       shell: bash
