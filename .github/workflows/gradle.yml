@@ -88,7 +88,7 @@ jobs:
         run: pip install pylint
 
       - name: Python check
-        run: pylint doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk
+        run: pylint --errors-only doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk
 
   pre-release:
     name: Pre-release
