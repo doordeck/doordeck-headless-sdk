@@ -39,8 +39,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().logi
 <summary>Show Details</summary>
 
 ```csharp
-var data = new FusionLoginData("EMAIL", "PASSWORD");
-var response = await sdk.GetFusion().Login(data);
+var response = await sdk.GetFusion().Login("EMAIL", "PASSWORD");
 ```
 </details>
 
@@ -138,8 +137,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getI
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetIntegrationConfigurationData("demo");
-var response = await sdk.GetFusion().GetIntegrationConfiguration(data);
+var response = await sdk.GetFusion().GetIntegrationConfiguration("demo");
 ```
 </details>
 
@@ -192,9 +190,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().enableDoor("NAME", "S
 <summary>Show Details</summary>
 
 ```csharp
-var controllerData = new DemoController();
-var data = new EnableDoorData("NAME", "SITE_ID", controllerData);
-await sdk.GetFusion().EnableDoor(data);
+var controller = new DemoController();
+await sdk.GetFusion().EnableDoor("NAME", "SITE_ID", controller);
 ```
 </details>
 
@@ -244,8 +241,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().deleteDoor("DEVICE_ID
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeviceIdData("DEVICE_ID");
-await sdk.GetFusion().DeleteDoor(data);
+await sdk.GetFusion().DeleteDoor("DEVICE_ID");
 ```
 </details>
 
@@ -294,8 +290,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.fusion().getD
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeviceIdData("DEVICE_ID");
-var response = await sdk.GetFusion().GetDoorStatus(data);
+var response = await sdk.GetFusion().GetDoorStatus("DEVICE_ID");
 ```
 </details>
 
@@ -344,8 +339,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().startDoor("DEVICE_ID"
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeviceIdData("DEVICE_ID");
-await sdk.GetFusion().StartDoor(data);
+await sdk.GetFusion().StartDoor("DEVICE_ID");
 ```
 </details>
 
@@ -394,8 +388,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.fusion().stopDoor("DEVICE_ID")
 <summary>Show Details</summary>
 
 ```csharp
-var data = new DeviceIdData("DEVICE_ID");
-await sdk.GetFusion().StopDoor(data);
+await sdk.GetFusion().StopDoor("DEVICE_ID");
 ```
 </details>
 

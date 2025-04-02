@@ -39,8 +39,7 @@ sdk.contextManager().setOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST,
 <summary>Show Details</summary>
 
 ```csharp
-var data = new OperationContextData("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY");
-sdk.GetContextManager().SetOperationContext(data);
+sdk.GetContextManager().SetOperationContext("USER_ID", USER_CERTIFICATE_CHAIN_LIST_AS_STRING, "BASE64_PUBLIC_KEY", "BASE64_PRIVATE_KEY");
 ```
 </details>
 
