@@ -92,6 +92,7 @@ kotlin {
 
     mingwX64 {
         binaries {
+            // Only generate the release artifact.
             sharedLib(listOf(NativeBuildType.RELEASE)) {
                 baseName = nugetPublish.packageName
             }
