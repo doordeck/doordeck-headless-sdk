@@ -50,7 +50,7 @@ runs:
     - name: Generate bindings
       shell: bash
       run: |
-        swig -python -py3 -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
+        swig -python -D_MSC_VER -o doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk_wrap.c \
           -outdir doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk \
           doordeck-sdk/build/bin/mingwX64/python/doordeck_headless_sdk.i
 
