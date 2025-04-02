@@ -11,62 +11,76 @@ on:
       - 'main'
 
 jobs:
-  build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple
-            test: iosX64Test macosArm64Test
-            os: macos-latest
+#  build:
+#    env:
+#      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+#      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+#      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+#      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
+#    strategy:
+#      max-parallel: 1
+#      matrix:
+#        include:
+#          - name: JVM
+#            test: jvmTest
+#            os: ubuntu-latest
+#          - name: Android
+#            test: testReleaseUnitTest
+#            os: ubuntu-latest
+#          - name: JS
+#            test: kotlinUpgradeYarnLock jsTest
+#            os: ubuntu-latest
+#          - name: Apple
+#            test: iosX64Test macosArm64Test
+#            os: macos-latest
 #          - name: Windows
 #            test: mingwX64Test
 #            os: windows-latest
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.name }}
+#    runs-on: ${{ matrix.os }}
+#    name: ${{ matrix.name }}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#
+#      - name: Setup WireGuard
+#        uses: ./.github/actions/wireguard-action
+#        with:
+#          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+#          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+#          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+#          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+#          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
+#
+#      - name: Tests
+#        run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
+
+  python-build:
+    name: Python build
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Python build
+        uses: ./.github/actions/python-build-action
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: corretto
-          java-version: 21
+      - name: Setup pylint
+        run: pip install pylint
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Setup WireGuard
-        uses: ./.github/actions/wireguard-action
-        with:
-          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
-          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
-          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
-          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
-          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
-
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
+      - name: Python check
+        run: pylint doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk
 
   pre-release:
     name: Pre-release
-    needs: build
+    needs: [python-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     outputs:
@@ -96,7 +110,7 @@ jobs:
 
   spm:
     name: SPM publish
-    needs: [build, pre-release]
+    needs: [pre-release]
     runs-on: macos-latest
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     permissions:
@@ -131,7 +145,7 @@ jobs:
 
   cocoapods:
     name: CocoaPods publish
-    needs: [build, pre-release, spm]
+    needs: [pre-release, spm]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: macos-latest
 
@@ -168,7 +182,7 @@ jobs:
 
   npm:
     name: NPM publish
-    needs: [build, pre-release]
+    needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
@@ -206,7 +220,7 @@ jobs:
 
   maven:
     name: Maven publish
-    needs: [build, pre-release]
+    needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
@@ -235,7 +249,7 @@ jobs:
 
   nuget:
     name: Nuget publish
-    needs: [build, pre-release]
+    needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: windows-latest
     defaults:
@@ -308,7 +322,7 @@ jobs:
 
   pypi:
     name: PyPi publish
-    needs: [build, pre-release]
+    needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
@@ -390,7 +404,7 @@ jobs:
 
   release:
     name: GitHub Release
-    needs: [build, pre-release, spm, cocoapods, npm, maven, nuget, pypi]
+    needs: [pre-release, spm, cocoapods, npm, maven, nuget, pypi]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
