@@ -43,7 +43,12 @@ runs:
 
     - name: Generate pyproject file
       shell: bash
-      run: ./gradlew ${{ inputs.USE_LAST_TAG && '-Prelease.useLastTag=true' }} pythonPack
+      run: |
+        if [ "${{ inputs.USE_LAST_TAG }}" = "true" ]; then
+          ./gradlew -Prelease.useLastTag=true pythonPack
+        else
+          ./gradlew pythonPack
+        fi
 
     - name: Download python for windows
       shell: bash
