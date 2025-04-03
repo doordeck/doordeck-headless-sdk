@@ -1,4 +1,9 @@
-name: Python build
+name: Python bindings generation
+
+inputs:
+  USE_LAST_TAG:
+    description: Determines whether the last tag should be used in the pythonPack Gradle task
+    required: true
 
 runs:
   using: composite
@@ -38,7 +43,7 @@ runs:
 
     - name: Generate pyproject file
       shell: bash
-      run: ./gradlew -Pversion=1.0.0 pythonPack
+      run: ./gradlew ${{ inputs.USE_LAST_TAG && '-Prelease.useLastTag=true' }} pythonPack
 
     - name: Download python for windows
       shell: bash
