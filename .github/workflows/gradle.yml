@@ -67,6 +67,8 @@ jobs:
   python-build:
     name: Python build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout
