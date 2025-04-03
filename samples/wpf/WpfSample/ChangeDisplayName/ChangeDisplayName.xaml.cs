@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Doordeck.Headless.Sdk.Model;
 
 namespace WpfSample.ChangeDisplayName;
 
@@ -19,7 +18,7 @@ public partial class ChangeDisplayName : Window
         {
             await App.Sdk
                 .GetAccount()
-                .UpdateUserDetails(new UpdateUserDetailsData(newDisplayName));
+                .UpdateUserDetails(newDisplayName);
 
             MessageBox.Show("Display name successfully changed!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);

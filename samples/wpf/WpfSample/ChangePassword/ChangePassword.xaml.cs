@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Doordeck.Headless.Sdk.Model;
 
 namespace WpfSample.ChangePassword;
 
@@ -20,7 +19,7 @@ public partial class ChangePassword : Window
         {
             await App.Sdk
                 .GetAccount()
-                .ChangePassword(new ChangePasswordData(currentPassword, newPassword));
+                .ChangePassword(currentPassword, newPassword);
 
             MessageBox.Show("Password successfully changed!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);

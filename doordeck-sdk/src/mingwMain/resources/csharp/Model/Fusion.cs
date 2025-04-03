@@ -10,6 +10,7 @@ public interface ILockController;
 [JsonDerivedType(typeof(AssaAbloyController), "assa-abloy")]
 [JsonDerivedType(typeof(AvigilonController), "avigilon")]
 [JsonDerivedType(typeof(AxisController), "axis")]
+[JsonDerivedType(typeof(CCureController), "ccure")]
 [JsonDerivedType(typeof(DemoController), "demo")]
 [JsonDerivedType(typeof(GallagherController), "gallagher")]
 [JsonDerivedType(typeof(GenetecController), "genetec")]

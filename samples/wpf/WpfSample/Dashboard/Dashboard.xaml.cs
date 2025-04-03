@@ -53,7 +53,7 @@ public partial class Dashboard : Window
         // Load users
         var users = await App.Sdk
             .GetLockOperations()
-            .GetUsersForLock(new LockIdData(lockId));
+            .GetUsersForLock(lockId);
             
         users.ForEach(user =>
         {
@@ -74,9 +74,9 @@ public partial class Dashboard : Window
         // Load audit
         var lockAudit = await App.Sdk
             .GetLockOperations()
-            .GetLockAuditTrail(new GetLockAuditTrailData(lockId,
+            .GetLockAuditTrail(lockId,
                 (int)((DateTimeOffset)StartDatePicker.SelectedDate.Value).ToUnixTimeSeconds(),
-                (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds()));
+                (int)((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds());
         lockAudit.ForEach(audit => Audits.Add(audit));
     }
 
@@ -88,7 +88,7 @@ public partial class Dashboard : Window
         // Load locks
         var siteLocks = await App.Sdk
             .GetSites()
-            .GetLocksForSite(new SiteIdData(siteId));
+            .GetLocksForSite(siteId);
         
         siteLocks.ForEach(device => Locks.Add(device));
     }
@@ -138,7 +138,7 @@ public partial class Dashboard : Window
             {
                 App.Sdk
                     .GetLockOperations()
-                    .RevokeAccessToLock(new RevokeAccessToLockOperationData(new BaseOperationData(_selectedLock.Id),
+                    .RevokeAccessToLock(new RevokeAccessToLockOperation(new BaseOperation(_selectedLock.Id),
                         [lockUser.UserId]));
 
                 MessageBox.Show("User successfully removed", "Information", MessageBoxButton.OK,
@@ -160,7 +160,7 @@ public partial class Dashboard : Window
             // Perform unlock
             await App.Sdk
                 .GetLockOperations()
-                .Unlock(new UnlockOperationData(new BaseOperationData(_selectedLock.Id)));
+                .Unlock(new UnlockOperation(new BaseOperation(_selectedLock.Id)));
             // Display success message
             MessageBox.Show("Lock successfully unlocked!", "Information", MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -184,12 +184,12 @@ public partial class Dashboard : Window
         {
             var publicKey = await App.Sdk
                 .GetLockOperations()
-                .GetUserPublicKey(new GetUserPublicKeyData(shareLockWindow.Email));
+                .GetUserPublicKey(shareLockWindow.Email);
 
             await App.Sdk
                 .GetLockOperations()
-                .ShareLock(new ShareLockOperationData(new BaseOperationData(_selectedLock.Id),
-                    new ShareLockData(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER,
+                .ShareLock(new ShareLockOperation(new BaseOperation(_selectedLock.Id),
+                    new Doordeck.Headless.Sdk.Model.ShareLock(publicKey.Id, shareLockWindow.IsAdmin ? UserRole.ADMIN : UserRole.USER,
                         publicKey.PublicKey)));
 
             MessageBox.Show("User successfully added", "Information", MessageBoxButton.OK, MessageBoxImage.Information);

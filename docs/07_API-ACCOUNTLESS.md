@@ -39,8 +39,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-var data = new LoginData("EMAIL", "PASSWORD");
-var response = await sdk.GetAccountless().Login(data);
+var response = await sdk.GetAccountless().Login("EMAIL", "PASSWORD");
 ```
 </details>
 
@@ -94,8 +93,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.accountless()
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RegistrationData("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY");
-var response = await sdk.GetAccountless().Registration(data);
+var response = await sdk.GetAccountless().Registration("EMAIL", "PASSWORD", "DISPLAY_NAME", false, "BASE64_PUBLIC_KEY");
 ```
 </details>
 
@@ -144,8 +142,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().verifyEmail("COD
 <summary>Show Details</summary>
 
 ```csharp
-var data = new VerifyEmailData("CODE");
-await sdk.GetAccountless().VerifyEmail(data);
+await sdk.GetAccountless().VerifyEmail("CODE");
 ```
 </details>
 
@@ -194,8 +191,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordReset("E
 <summary>Show Details</summary>
 
 ```csharp
-var data = new PasswordResetData("EMAIL");
-await sdk.GetAccountless().PasswordReset(data);
+await sdk.GetAccountless().PasswordReset("EMAIL");
 ```
 </details>
 
@@ -244,8 +240,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.accountless().passwordResetVer
 <summary>Show Details</summary>
 
 ```csharp
-var data = new PasswordResetVerifyData("USERID", "TOKEN", "EMAIL");
-await sdk.GetAccountless().PasswordResetVerify(data);
+await sdk.GetAccountless().PasswordResetVerify("USERID", "TOKEN", "EMAIL");
 ```
 </details>
 
