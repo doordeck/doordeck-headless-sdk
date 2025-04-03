@@ -35,8 +35,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new LockIdData("LOCK_ID");
-var response = await sdk.GetLockOperations().GetSingleLock(data);
+var response = await sdk.GetLockOperations().GetSingleLock("LOCK_ID");
 ```
 </details>
 
@@ -84,8 +83,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetLockAuditTrailData("LOCK_ID", START_EPOCH, END_EPOCH);
-var response = await sdk.GetLockOperations().GetLockAuditTrail(data);
+var response = await sdk.GetLockOperations().GetLockAuditTrail("LOCK_ID", START_EPOCH, END_EPOCH);
 ```
 </details>
 
@@ -133,8 +131,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetAuditForUserData("USER_ID", START_EPOCH, END_EPOCH);
-var response = await sdk.GetLockOperations().GetAuditForUser(data);
+var response = await sdk.GetLockOperations().GetAuditForUser("USER_ID", START_EPOCH, END_EPOCH);
 ```
 </details>
 
@@ -182,8 +179,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new LockIdData("LOCK_ID");
-var response = await sdk.GetLockOperations().GetUsersForLock(data);
+var response = await sdk.GetLockOperations().GetUsersForLock("LOCK_ID");
 ```
 </details>
 
@@ -231,8 +227,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetLocksForUserData("LOCK_ID");
-var response = await sdk.GetLockOperations().GetLocksForUser(data);
+var response = await sdk.GetLockOperations().GetLocksForUser("LOCK_ID");
 ```
 </details>
 
@@ -280,8 +275,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockNam
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateLockNameData("LOCK_ID", "LOCK_NAME");
-await sdk.GetLockOperations().UpdateLockName(data);
+await sdk.GetLockOperations().UpdateLockName("LOCK_ID", "LOCK_NAME");
 ```
 </details>
 
@@ -329,8 +323,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockFav
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateLockFavouriteData("LOCK_ID", true);
-await sdk.GetLockOperations().UpdateLockFavourite(data);
+await sdk.GetLockOperations().UpdateLockFavourite("LOCK_ID", true);
 ```
 </details>
 
@@ -378,8 +371,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockCol
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateLockColourData("LOCK_ID", "COLOR");
-await sdk.GetLockOperations().UpdateLockColour(data);
+await sdk.GetLockOperations().UpdateLockColour("LOCK_ID", "COLOR");
 ```
 </details>
 
@@ -427,8 +419,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateLockSettingDefaultNameData("LOCK_ID", "LOCK_NAME");
-await sdk.GetLockOperations().UpdateLockSettingDefaultName(data);
+await sdk.GetLockOperations().UpdateLockSettingDefaultName("LOCK_ID", "LOCK_NAME");
 ```
 </details>
 
@@ -477,8 +468,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 <summary>Show Details</summary>
 
 ```csharp
-var data = new SetLockSettingPermittedAddressesData("LOCK_ID", ["PERMITTED_ADDRESS"]);
-await sdk.GetLockOperations().SetLockSettingPermittedAddresses(data);
+await sdk.GetLockOperations().SetLockSettingPermittedAddresses("LOCK_ID", ["PERMITTED_ADDRESS"]);
 ```
 </details>
 
@@ -526,8 +516,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateLockSettingHiddenData("LOCK_ID", true);
-await sdk.GetLockOperations().UpdateLockSettingHidden(data);
+await sdk.GetLockOperations().UpdateLockSettingHidden("LOCK_ID", true);
 ```
 </details>
 
@@ -580,9 +569,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().setLockSettin
 <summary>Show Details</summary>
 
 ```csharp
-List<TimeRequirementData> timeRequirementsData = [new TimeRequirementData("START_HH_MM", "END_HH_MM", "TIMEZONE", ["MONDAY"])];
-var data = new SetLockSettingTimeRestrictionsData("LOCK_ID", timeRequirementsData);
-await sdk.GetLockOperations().SetLockSettingTimeRestrictions(data);
+List<TimeRequirement> timeRequirements = [new TimeRequirement("START_HH_MM", "END_HH_MM", "TIMEZONE", ["MONDAY"])];
+await sdk.GetLockOperations().SetLockSettingTimeRestrictions("LOCK_ID", timeRequirements);
 ```
 </details>
 
@@ -635,9 +623,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateLockSet
 <summary>Show Details</summary>
 
 ```csharp
-var locationRequirementData = new LocationRequirementData(LATITUDE, LONGITUDE, true, 100);
-var data = new UpdateLockSettingLocationRestrictionsData("LOCK_ID", locationRequirementData);
-await sdk.GetLockOperations().UpdateLockSettingLocationRestrictions(data);
+var locationRequirement = new LocationRequirement(LATITUDE, LONGITUDE, true, 100);
+await sdk.GetLockOperations().UpdateLockSettingLocationRestrictions("LOCK_ID", locationRequirement);
 ```
 </details>
 
@@ -689,8 +676,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyData("USER_EMAIL", false);
-var response = await sdk.GetLockOperations().GetUserPublicKey(data);
+var response = await sdk.GetLockOperations().GetUserPublicKey("USER_EMAIL", false);
 ```
 </details>
 
@@ -738,8 +724,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByEmailData("USER_EMAIL");
-var response = await sdk.GetLockOperations().GetUserPublicKeyByEmail(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByEmail("USER_EMAIL");
 ```
 </details>
 
@@ -787,8 +772,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByTelephoneData("USER_TELEPHONE");
-var response = await sdk.GetLockOperations().GetUserPublicKeyByTelephone(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByTelephone("USER_TELEPHONE");
 ```
 </details>
 
@@ -836,8 +820,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByLocalKeyData("USER_LOCAL_KEY");
-var response = await sdk.GetLockOperations().GetUserPublicKeyByLocalKey(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByLocalKey("USER_LOCAL_KEY");
 ```
 </details>
 
@@ -885,8 +868,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByForeignKeyData("USER_FOREIGN_KEY");
-var response = await sdk.GetLockOperations().GetUserPublicKeyByForeignKey(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByForeignKey("USER_FOREIGN_KEY");
 ```
 </details>
 
@@ -934,8 +916,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByIdentityData("USER_IDENTITY");
-var response = await sdk.GetLockOperations().GetUserPublicKeyByIdentity(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByIdentity("USER_IDENTITY");
 ```
 </details>
 
@@ -984,8 +965,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByEmailsData(["USER_EMAIL", "USER_EMAIL"]);
-var response = await sdk.GetLockOperations().GetUserPublicKeyByEmails(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByEmails(["USER_EMAIL", "USER_EMAIL"]);
 ```
 </details>
 
@@ -1034,8 +1014,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByTelephonesData(["USER_TELEPHONE", "USER_TELEPHONE"]);
-var response = await sdk.GetLockOperations().GetUserPublicKeyByTelephones(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByTelephones(["USER_TELEPHONE", "USER_TELEPHONE"]);
 ```
 </details>
 
@@ -1084,8 +1063,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByLocalKeysData(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]);
-var response = await sdk.GetLockOperations().GetUserPublicKeyByLocalKeys(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByLocalKeys(["USER_LOCAL_KEY", "USER_LOCAL_KEY"]);
 ```
 </details>
 
@@ -1134,8 +1112,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.lockOperation
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetUserPublicKeyByForeignKeysData(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]);
-var response = await sdk.GetLockOperations().GetUserPublicKeyByForeignKeys(data);
+var response = await sdk.GetLockOperations().GetUserPublicKeyByForeignKeys(["USER_FOREIGN_KEY", "USER_FOREIGN_KEY"]);
 ```
 </details>
 
@@ -1193,8 +1170,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().unlock(unlock
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var data = new UnlockOperationData(baseOperationData);
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new UnlockOperation(baseOperation);
 await sdk.GetLockOperations().Unlock(data);
 ```
 </details>
@@ -1259,9 +1236,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().shareLock(sha
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var shareLockData = new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
-var data = new ShareLockOperationData(baseOperationData, shareLockData);
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var shareLock = new ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY");
+var data = new ShareLockOperation(baseOperation, shareLock);
 await sdk.GetLockOperations().ShareLock(data);
 ```
 </details>
@@ -1273,7 +1250,7 @@ await sdk.GetLockOperations().ShareLock(data);
 ```python
 baseOperation = doordeck_headless_sdk.BaseOperation("LOCK_ID", "USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY")
 shareLock = doordeck_headless_sdk.ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")
-data = doordeck_headless_sdk.ShareLockOperation(baseOperationData, shareLockData)
+data = doordeck_headless_sdk.ShareLockOperation(baseOperation, shareLock)
 await sdk.lockOperations.share_lock(data)
 ```
 </details>
@@ -1330,9 +1307,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().batchShareLoc
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var users = [new ShareLockData("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")];
-var data = new BatchShareLockOperationData(baseOperationData, users);
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var users = [new ShareLock("TARGET_USER_ID", TARGET_USER_ROLE, "BASE64_TARGET_PUBLIC_KEY")];
+var data = new BatchShareLockOperation(baseOperation, users);
 await sdk.GetLockOperations().BatchShareLock(data);
 ```
 </details>
@@ -1395,8 +1372,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().revokeAccessT
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var data = new RevokeAccessToLockOperationData(baseOperationData, ["USER_ID"]);
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new RevokeAccessToLockOperation(baseOperation, ["USER_ID"]);
 await sdk.GetLockOperations().RevokeAccessToLock(data);
 ```
 </details>
@@ -1457,8 +1434,8 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var data = new UpdateSecureSettingUnlockDurationData(baseOperationData, UNLOCK_DURATION)
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var data = new UpdateSecureSettingUnlockDuration(baseOperation, UNLOCK_DURATION)
 await sdk.GetLockOperations().UpdateSecureSettingUnlockDuration(data);
 ```
 </details>
@@ -1522,9 +1499,9 @@ await doordeck.com.doordeck.multiplatform.sdk.api.lockOperations().updateSecureS
 <summary>Show Details</summary>
 
 ```csharp
-var baseOperationData = new BaseOperationData("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
-var unlockBetweenData = new UnlockBetweenData("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
-var data = new UpdateSecureSettingUnlockBetweenData(baseOperationData, unlockBetweenData);
+var baseOperation = new BaseOperation("USER_ID", USER_CERTIFICATE_CHAIN_LIST, "BASE64_PRIVATE_KEY", "LOCK_ID");
+var unlockBetween = new UnlockBetween("START_HH_MM", "END_HH_MM", "TIMEZONE", DAYS_LIST);
+var data = new UpdateSecureSettingUnlockBetween(baseOperation, unlockBetween);
 await sdk.GetLockOperations().UpdateSecureSettingUnlockBetween(data);
 ```
 </details>

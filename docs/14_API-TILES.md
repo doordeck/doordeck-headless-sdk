@@ -36,8 +36,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.tiles().getLo
 <summary>Show Details</summary>
 
 ```csharp
-var data = new GetLocksBelongingToTileData("TILE_ID");
-var response = await sdk.GetTiles().GetLocksBelongingToTile(data);
+var response = await sdk.GetTiles().GetLo;cksBelongingToTile("TILE_ID");
 ```
 </details>
 
@@ -87,8 +86,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.tiles().associateMultipleLocks
 <summary>Show Details</summary>
 
 ```csharp
-var data = new AssociateMultipleLocksData("TILE_ID", "SITE_ID", ["LOCK_ID"]);
-await sdk.GetTiles().AssociateMultipleLocks(data);
+await sdk.GetTiles().AssociateMultipleLocks("TILE_ID", "SITE_ID", ["LOCK_ID"]);
 ```
 </details>
 

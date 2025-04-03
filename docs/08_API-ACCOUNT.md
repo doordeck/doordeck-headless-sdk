@@ -45,8 +45,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ref
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RefreshTokenData("REFRESH_TOKEN");
-var response = await sdk.GetAccount().RefreshToken(data);
+var response = await sdk.GetAccount().RefreshToken("REFRESH_TOKEN");
 ```
 </details>
 
@@ -151,8 +150,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RegisterEphemeralKeyData("BASE64_PUBLIC_KEY");
-var response = await sdk.GetAccount().RegisterEphemeralKey(data);
+var response = await sdk.GetAccount().RegisterEphemeralKey("BASE64_PUBLIC_KEY");
 ```
 </details>
 
@@ -203,8 +201,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().reg
 <summary>Show Details</summary>
 
 ```csharp
-var data = new RegisterEphemeralKeyWithSecondaryAuthenticationData("BASE64_PUBLIC_KEY");
-var response = await sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentication(data);
+var response = await sdk.GetAccount().RegisterEphemeralKeyWithSecondaryAuthentication("BASE64_PUBLIC_KEY");
 ```
 </details>
 
@@ -256,8 +253,7 @@ const response = await doordeck.com.doordeck.multiplatform.sdk.api.account().ver
 <summary>Show Details</summary>
 
 ```csharp
-var data = new VerifyEphemeralKeyRegistrationData("CODE", "BASE64_PRIVATE_KEY");
-var response = await sdk.GetAccount().VerifyEphemeralKeyRegistration(data);
+var response = await sdk.GetAccount().VerifyEphemeralKeyRegistration("CODE", "BASE64_PRIVATE_KEY");
 ```
 </details>
 
@@ -361,8 +357,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().changePassword("OLD_
 <summary>Show Details</summary>
 
 ```csharp
-var data = new ChangePasswordData("OLD_PASSWORD", "NEW_PASSWORD");
-await sdk.GetAccount().ChangePassword(data);
+await sdk.GetAccount().ChangePassword("OLD_PASSWORD", "NEW_PASSWORD");
 ```
 </details>
 
@@ -460,8 +455,7 @@ await doordeck.com.doordeck.multiplatform.sdk.api.account().updateUserDetails("D
 <summary>Show Details</summary>
 
 ```csharp
-var data = new UpdateUserDetailsData("DISPLAY_NAME");
-await sdk.GetAccount().UpdateUserDetails(data);
+await sdk.GetAccount().UpdateUserDetails("DISPLAY_NAME");
 ```
 </details>
 

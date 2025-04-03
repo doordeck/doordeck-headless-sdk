@@ -21,7 +21,7 @@ public partial class LoginWindow : Window
             // Attempt to log-in
             await App.Sdk
                 .GetAccountless()
-                .Login(new LoginData(EmailTextBox.Text, PasswordBox.Password));
+                .Login(EmailTextBox.Text, PasswordBox.Password);
         }
         catch (Exception exception)
         {
@@ -42,8 +42,7 @@ public partial class LoginWindow : Window
         // Register the key pair
         await App.Sdk
             .GetAccount()
-            .RegisterEphemeralKeyWithSecondaryAuthentication(
-                new RegisterEphemeralKeyWithSecondaryAuthenticationData(keyPair.Public));
+            .RegisterEphemeralKeyWithSecondaryAuthentication(keyPair.Public);
 
         // Two factor dialog
         var twoFactorWindow = new TwoFactorVerify.TwoFactorVerify();
@@ -53,14 +52,13 @@ public partial class LoginWindow : Window
             // Attempt to verify the key pair
             var verifyResponse = await App.Sdk
                 .GetAccount()
-                .VerifyEphemeralKeyRegistration(
-                    new VerifyEphemeralKeyRegistrationData(twoFactorWindow.TwoFactorCode, keyPair.Private));
+                .VerifyEphemeralKeyRegistration(twoFactorWindow.TwoFactorCode, keyPair.Private);
 
             // Set the operation context
             App.Sdk
                 .GetContextManager()
-                .SetOperationContext(new OperationContextData(verifyResponse.UserId,
-                    verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private));
+                .SetOperationContext(verifyResponse.UserId,
+                    verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private);
 
             // Display the dashboard
             var dashboard = new Dashboard.Dashboard();

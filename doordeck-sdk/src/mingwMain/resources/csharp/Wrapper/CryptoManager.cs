@@ -1,4 +1,6 @@
-﻿using Doordeck.Headless.Sdk.Model;
+﻿using System.Runtime.InteropServices;
+using Doordeck.Headless.Sdk.Model;
+using Doordeck.Headless.Sdk.Utils;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
