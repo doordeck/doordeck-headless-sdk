@@ -10,6 +10,9 @@ on:
     branches:
       - 'main'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     env:
@@ -73,7 +76,6 @@ jobs:
       tag: ${{ steps.pre-release-tag.outputs.tag }}
     permissions:
       contents: write
-      packages: write
 
     steps:
       - name: Checkout
@@ -395,7 +397,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
 
     steps:
       - name: Checkout
