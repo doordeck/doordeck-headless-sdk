@@ -24,7 +24,7 @@ def handle_exception(response):
     if "MissingContextFieldException" in exception_type:
         raise MissingContextFieldException(exception_message)
     if "BatchShareFailedException" in exception_type:
-        raise BatchShareFailedException(exception_message)
+        raise BatchShareFailedException(exception_message, [])
     if "BadRequestException" in exception_type:
         raise BadRequestException(exception_message)
     if "UnauthorizedException" in exception_type:
