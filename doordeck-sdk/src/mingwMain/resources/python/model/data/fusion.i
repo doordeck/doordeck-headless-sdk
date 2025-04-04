@@ -121,8 +121,8 @@ class MitrefinchController(LockController):
 class PaxtonNet2Controller(LockController):
     type: str = field(init=False)
     host: str
-    username: str
-    password: str
+    username: Optional[str] = None
+    password: Optional[str] = None
     address: str
     output: int
 
