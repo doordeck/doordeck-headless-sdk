@@ -110,8 +110,8 @@ public class MitrefinchController : LockController
 public class PaxtonNet2Controller : LockController
 {
     public string Host { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    public string? Username { get; set; } = null;
+    public string? Password { get; set; } = null;
     public string Address { get; set; } = string.Empty;
     public short Output { get; set; } = 0;
 }
