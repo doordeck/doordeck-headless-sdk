@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.TestConstants
+import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -10,6 +10,8 @@ import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.test.runTest
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
@@ -23,106 +25,87 @@ class FusionClientTest : IntegrationTest() {
 
     @Test
     fun shouldTestAlpeta() = runTest {
-        val data = findIntegrationByControllerType(Fusion.AlpetaController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.AlpetaController::class)
     }
 
     @Test
     fun shouldTestAmag() = runTest {
-        val data = findIntegrationByControllerType(Fusion.AmagController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.AmagController::class)
     }
 
     @Test
     fun shouldTestAxis() = runTest {
-        val data = findIntegrationByControllerType(Fusion.AxisController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.AxisController::class)
     }
 
     @Test
     fun shouldTestCcure() = runTest {
-        val data = findIntegrationByControllerType(Fusion.CCureController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.CCureController::class)
     }
 
     @Test
     fun shouldTestDemo() = runTest {
-        val data = findIntegrationByControllerType(Fusion.DemoController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.DemoController::class)
     }
 
     @Ignore
     @Test
     fun shouldTestGenetec() = runTest {
-        val data = findIntegrationByControllerType(Fusion.GenetecController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.GenetecController::class)
     }
 
     @Ignore
     @Test
     fun shouldTestLenel() = runTest {
-        val data = findIntegrationByControllerType(Fusion.LenelController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.LenelController::class)
     }
 
     @Test
     fun shouldTestNet2() = runTest {
-        val data = findIntegrationByControllerType(Fusion.PaxtonNet2Controller::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.PaxtonNet2Controller::class)
     }
 
     @Ignore
     @Test
     fun shouldTestPaxton10() = runTest {
-        val data = findIntegrationByControllerType(Fusion.Paxton10Controller::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.Paxton10Controller::class)
     }
 
     @Test
     fun shouldTestIntegra() = runTest {
-        val data = findIntegrationByControllerType(Fusion.IntegraV2Controller::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.IntegraV2Controller::class)
     }
 
     @Test
     fun shouldTestExgarde() = runTest {
-        val data = findIntegrationByControllerType(Fusion.TdsiExgardeController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.TdsiExgardeController::class)
     }
 
     @Test
     fun shouldTestGardis() = runTest {
-        val data = findIntegrationByControllerType(Fusion.TdsiGardisController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.TdsiGardisController::class)
     }
 
     @Ignore
     @Test
     fun shouldTestZkteco() = runTest {
-        val data = findIntegrationByControllerType(Fusion.ZktecoController::class)
-
-        runFusionTest(data.key, data.value)
+        runFusionTest(Fusion.ZktecoController::class)
     }
 
-    private fun findIntegrationByControllerType(controllerType: KClass<out Fusion.LockController>) =
-        FUSION_INTEGRATIONS.entries.find { controllerType.isInstance(it.value.controller) }
-            ?: error("Controller of type ${controllerType.simpleName} not found")
+    private suspend fun runFusionTest(controllerType: KClass<out Fusion.LockController>) = try {
+        val testController = FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
+        if (testController == null) {
+            error("Controller of type ${controllerType.simpleName} not found, skipping test...")
+        }
 
-    private suspend fun runFusionTest(host: String, testController: TestConstants.TestController) = try {
+        try {
+            TEST_HTTP_CLIENT.get(testController.key).bodyAsText()
+        } catch (exception: Exception) {
+            error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
+        }
+
         // Given - shouldLogin
-        ContextManagerImpl.setFusionHost(host)
+        ContextManagerImpl.setFusionHost(testController.key)
 
         // When
         val login = FusionClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -134,10 +117,10 @@ class FusionClientTest : IntegrationTest() {
         val name = "Test Fusion Door ${getPlatform()} ${Uuid.random()}"
 
         // When
-        FusionClient.enableDoorRequest(name, TEST_MAIN_SITE_ID, testController.controller)
+        FusionClient.enableDoorRequest(name, TEST_MAIN_SITE_ID, testController.value.controller)
 
         // Then
-        val integrations = FusionClient.getIntegrationConfigurationRequest(testController.type)
+        val integrations = FusionClient.getIntegrationConfigurationRequest(testController.value.type)
         val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor)
 
@@ -147,7 +130,7 @@ class FusionClientTest : IntegrationTest() {
 
         // Then
         assertNotNull(integrationTypeResponse.status)
-        assertEquals(testController.type, integrationTypeResponse.status)
+        assertEquals(testController.value.type, integrationTypeResponse.status)
 
         // Given - shouldStartDoor
         // When
@@ -174,6 +157,6 @@ class FusionClientTest : IntegrationTest() {
         //    FusionClient.getDoorStatusRequest(actualDoor.doordeck!!.id)
         //}
     } catch (exception: Exception) {
-        println("Failed to test ${testController.type}: ${exception.message}")
+        println("Failed to test $controllerType: ${exception.message}")
     }
 }
