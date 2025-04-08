@@ -109,8 +109,8 @@ object Fusion {
     @SerialName("net2")
     data class PaxtonNet2Controller(
         val host: String,
-        val username: String,
-        val password: String,
+        val username: String? = null,
+        val password: String? = null,
         val address: String,
         val output: Short
     ) : LockController

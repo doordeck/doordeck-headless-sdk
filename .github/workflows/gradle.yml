@@ -10,6 +10,9 @@ on:
     branches:
       - 'main'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     env:
@@ -33,9 +36,9 @@ jobs:
           - name: Apple
             test: iosX64Test macosArm64Test
             os: macos-latest
-#          - name: Windows
-#            test: mingwX64Test
-#            os: windows-latest
+          - name: Windows
+            test: mingwX64Test
+            os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
 
@@ -54,6 +57,7 @@ jobs:
 
       - name: Setup WireGuard
         uses: ./.github/actions/wireguard-action
+        continue-on-error: true
         with:
           WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
           WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
@@ -103,7 +107,6 @@ jobs:
       tag: ${{ steps.pre-release-tag.outputs.tag }}
     permissions:
       contents: write
-      packages: write
 
     steps:
       - name: Checkout
@@ -379,7 +382,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
 
     steps:
       - name: Checkout
