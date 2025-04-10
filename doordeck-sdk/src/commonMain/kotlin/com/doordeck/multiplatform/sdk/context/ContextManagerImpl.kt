@@ -110,6 +110,14 @@ internal object ContextManagerImpl : ContextManager {
         } else null
     }
 
+    override fun setKeyPairVerified(verified: Boolean) {
+        secureStorage.setKeyPairVerified(verified)
+    }
+
+    override fun isKeyPairVerified(): Boolean {
+        return secureStorage.getKeyPairVerified() ?: false
+    }
+
     internal fun getPublicKey(): ByteArray? {
         return secureStorage.getPublicKey()
     }

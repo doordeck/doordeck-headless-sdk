@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
@@ -33,7 +34,7 @@ internal object HelperClient {
      *
      *  * Reads the certificate chain from the context and checks if it is about to expire. If so, we will register the key pair again.
      *  * Retrieves the key pair from the context or generates a new one if no key is found.
-     *  * Adds the key pair to the context manager.
+     *  * When a new key is generated, it's added to the context manager.
      *  * Performs the login request using the provided credentials.
      *  * Attempts to register the key pair with context.
      *  * If the previous step fails with a <code>LockedException</code>, retries registration with the secondary authentication endpoint.
@@ -45,27 +46,33 @@ internal object HelperClient {
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val currentKeyPair = ContextManagerImpl.getKeyPair()
-        val requiresKeyRegister = currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire()
+        val currentKeyPairVerified = ContextManagerImpl.isKeyPairVerified()
+        val requiresKeyRegister = currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire() || !currentKeyPairVerified
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair
             ?: CryptoManager.generateKeyPair()
 
-        // Add the key pair to the context manager
-        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+        // Add the new key pair to the context manager
+        if (currentKeyPair == null) {
+            ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+            ContextManagerImpl.setKeyPairVerified(false)
+        }
 
         // Perform the login
         AccountlessClient.loginRequest(email, password)
 
-        val requiresVerification = if (requiresKeyRegister) {
+        val registerKeyResult = if (requiresKeyRegister) {
             // Register the key pair
-            val assistedRegisterEphemeralKeyRequest = assistedRegisterEphemeralKeyRequest(keyPair.public)
-            assistedRegisterEphemeralKeyRequest.requiresVerification
+            assistedRegisterEphemeralKeyRequest(keyPair.public)
         } else {
             // No key pair registration required; verification is not needed
-            false
+            null
         }
-        return AssistedLoginResponse(requiresVerification)
+        return AssistedLoginResponse(
+            requiresVerification = registerKeyResult?.requiresVerification ?: false,
+            requiresRetry = registerKeyResult?.requiresRetry ?: false
+        )
     }
 
     /**
@@ -81,16 +88,19 @@ internal object HelperClient {
         val key = publicKey
             ?: ContextManagerImpl.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
-        val requiresVerification = try {
+        return try {
             // Attempt to register the provided or default public key
             AccountClient.registerEphemeralKeyRequest(key)
-            false
+            AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = false)
         } catch (exception: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
-            AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
-            true
+            try {
+                AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
+                AssistedRegisterEphemeralKeyResponse(requiresVerification = true, requiresRetry = false)
+            } catch (exception: TooManyRequestsException) {
+                AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = true)
+            }
         }
-        return AssistedRegisterEphemeralKeyResponse(requiresVerification)
     }
 
     /**
@@ -108,5 +118,6 @@ internal object HelperClient {
 
         // Add the key pair to the context manager
         ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPairVerified(true)
     }
 }

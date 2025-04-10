@@ -72,6 +72,7 @@ internal object AccountClient {
         }.body<RegisterEphemeralKeyResponse>().also {
             ContextManagerImpl.setUserId(it.userId)
             ContextManagerImpl.setCertificateChain(it.certificateChain)
+            ContextManagerImpl.setKeyPairVerified(true)
         }
     }
 
@@ -107,6 +108,7 @@ internal object AccountClient {
         }.body<RegisterEphemeralKeyResponse>().also {
             ContextManagerImpl.setUserId(it.userId)
             ContextManagerImpl.setCertificateChain(it.certificateChain)
+            ContextManagerImpl.setKeyPairVerified(true)
         }
     }
 
