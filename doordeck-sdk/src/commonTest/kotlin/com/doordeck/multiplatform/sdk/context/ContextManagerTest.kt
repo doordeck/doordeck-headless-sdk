@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
+import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
@@ -32,16 +33,20 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
+        val keyPairVerified = randomBoolean()
         val settings = DefaultSecureStorage(MemorySettings())
-        ContextManagerImpl.setSecureStorageImpl(settings)
-        ContextManagerImpl.setApiEnvironment(apiEnvironment)
-        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
-        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
-        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
-        ContextManagerImpl.setUserId(userId)
-        ContextManagerImpl.setCertificateChain(certificateChain)
-        ContextManagerImpl.setKeyPair(publicKey, privateKey)
-        ContextManagerImpl.setUserEmail(email)
+        ContextManagerImpl.apply {
+            setSecureStorageImpl(settings)
+            setApiEnvironment(apiEnvironment)
+            setCloudAuthToken(cloudAuthToken)
+            setCloudRefreshToken(cloudRefreshToken)
+            setFusionAuthToken(fusionAuthToken)
+            setUserId(userId)
+            setCertificateChain(certificateChain)
+            setKeyPair(publicKey, privateKey)
+            setKeyPairVerified(keyPairVerified)
+            setUserEmail(email)
+        }
 
         // When
         ContextManagerImpl.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
@@ -57,6 +62,7 @@ class ContextManagerTest : IntegrationTest() {
         assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
+        assertEquals(keyPairVerified, ContextManagerImpl.isKeyPairVerified())
         assertEquals(cloudAuthToken, ContextManagerImpl.getCloudAuthToken())
         assertEquals(cloudRefreshToken, ContextManagerImpl.getCloudRefreshToken())
         assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
@@ -74,14 +80,18 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        ContextManagerImpl.setApiEnvironment(apiEnvironment)
-        ContextManagerImpl.setCloudAuthToken(cloudAuthToken)
-        ContextManagerImpl.setCloudRefreshToken(cloudRefreshToken)
-        ContextManagerImpl.setFusionAuthToken(fusionAuthToken)
-        ContextManagerImpl.setUserId(userId)
-        ContextManagerImpl.setCertificateChain(certificateChain)
-        ContextManagerImpl.setKeyPair(publicKey, privateKey)
-        ContextManagerImpl.setUserEmail(email)
+        val keyPairVerified = randomBoolean()
+        ContextManagerImpl.apply {
+            setApiEnvironment(apiEnvironment)
+            setCloudAuthToken(cloudAuthToken)
+            setCloudRefreshToken(cloudRefreshToken)
+            setFusionAuthToken(fusionAuthToken)
+            setUserId(userId)
+            setCertificateChain(certificateChain)
+            setKeyPair(publicKey, privateKey)
+            setKeyPairVerified(keyPairVerified)
+            setUserEmail(email)
+        }
 
         // When
         ContextManagerImpl.clearContext()
@@ -95,6 +105,7 @@ class ContextManagerTest : IntegrationTest() {
         assertNull(ContextManagerImpl.getPublicKey())
         assertNull(ContextManagerImpl.getPrivateKey())
         assertNull(ContextManagerImpl.getKeyPair())
+        assertFalse { ContextManagerImpl.isKeyPairVerified() }
         assertNull(ContextManagerImpl.getCloudAuthToken())
         assertNull(ContextManagerImpl.getCloudRefreshToken())
         assertNull(ContextManagerImpl.getFusionAuthToken())
