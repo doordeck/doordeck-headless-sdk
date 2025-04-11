@@ -53,7 +53,7 @@ class Account(object):
     async def change_password(self, oldPassword: str, newPassword: str):
         data = {
            "oldPassword": oldPassword,
-            "oldPassword": oldPassword
+           "newPassword": newPassword
         }
         return await execute_async(
             _doordeck_headless_sdk.changePassword,
