@@ -220,7 +220,6 @@ kotlin {
                 implementation(libs.libsodium.bindings.js)
                 implementation(npm("asn1js", libs.versions.asn1js.get()))
                 implementation(npm("pkijs", libs.versions.pkijs.get()))
-                implementation(npm("ws", "8.17.1")) // Overrides the original version
             }
         }
 
