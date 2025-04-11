@@ -30,7 +30,7 @@ By default, the SDK stores the context information on its own, as shown in the f
 | Windows  | `Memory`                     |
 
 > [!NOTE]
-> To override the default secure storage, you must implement the `SecureStorage` interface and pass the class through the `setSecureStorageOverride` function from `SdkConfig`.
+> To override the default secure storage, you must implement the `SecureStorage` interface and pass the class through the `setSecureStorageOverride` function from `SdkConfig` builder.
 
 ## Initialize
 

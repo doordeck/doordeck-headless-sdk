@@ -19,6 +19,7 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
     private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
     private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
     private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
+    private val KEY_PAIR_VERIFIED = "KEY_PAIR_VERIFIED"
     private val USER_ID_KEY = "USER_ID_KEY"
     private val USER_EMAIL_KEY = "USER_EMAIL_KEY"
     private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
@@ -77,6 +78,14 @@ internal class DefaultSecureStorage(private val settings: Settings) : SecureStor
 
     override fun getPrivateKey(): ByteArray? {
         return settings.getStringOrNull(PRIVATE_KEY_KEY)?.decodeBase64ToByteArray()
+    }
+
+    override fun setKeyPairVerified(verified: Boolean) {
+        settings.putBoolean(KEY_PAIR_VERIFIED, verified)
+    }
+
+    override fun getKeyPairVerified(): Boolean? {
+        return settings.getBooleanOrNull(KEY_PAIR_VERIFIED)
     }
 
     override fun addUserId(userId: String) {

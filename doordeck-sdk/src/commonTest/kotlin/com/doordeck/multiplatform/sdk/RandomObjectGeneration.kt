@@ -575,9 +575,9 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
 /**
  * Test utils
  */
-private fun randomInt(min: Int = 0, max: Int = Int.MAX_VALUE) = Random.nextInt(min, max)
-private fun randomDouble(from: Double = 0.0, to: Double = 100.0): Double = Random.nextDouble(from, to)
-private fun randomBoolean(): Boolean = Random.nextBoolean()
-private inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
-private fun randomString(): String = Uuid.random().toString()
-private fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))
+internal fun randomInt(min: Int = 0, max: Int = Int.MAX_VALUE) = Random.nextInt(min, max)
+internal fun randomDouble(from: Double = 0.0, to: Double = 100.0): Double = Random.nextDouble(from, to)
+internal fun randomBoolean(): Boolean = Random.nextBoolean()
+internal inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
+internal fun randomString(): String = Uuid.random().toString()
+internal fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))

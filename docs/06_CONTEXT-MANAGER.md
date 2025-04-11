@@ -485,7 +485,7 @@ token = sdk.contextManager.get_fusion_auth_token()
 
 ## Clear context
 
-This function removes all stored context fields from the system but does not clear them from memory.
+This function removes all stored context fields from the secure storage.
 
 ### JVM & Android
 <details>

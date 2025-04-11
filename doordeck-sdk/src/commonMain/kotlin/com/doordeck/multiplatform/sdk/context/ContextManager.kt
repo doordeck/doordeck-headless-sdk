@@ -132,6 +132,17 @@ interface ContextManager {
     fun getKeyPair(): Crypto.KeyPair?
 
     /**
+     * Sets the key pair verification status, the provided values will be automatically stored in secure storage.
+     */
+    fun setKeyPairVerified(verified: Boolean)
+
+    /**
+     * Retrieves the key pair verification status.
+     */
+    @CName("isKeyPairVerified")
+    fun isKeyPairVerified(): Boolean
+
+    /**
      * Checks whether the current key pair is not null and valid by signing a small piece of text and verifying it.
      */
     @CName("isKeyPairValid")
