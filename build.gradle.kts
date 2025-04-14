@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlinCocoapods).apply(false)
     alias(libs.plugins.swift.klib).apply(false)
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
-    id("com.netflix.nebula.release") version "20.1.0"
+    id("com.netflix.nebula.release") version "20.2.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
 }
 
@@ -24,8 +24,5 @@ nexusPublishing {
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
         resolution("cross-spawn", "7.0.6")
-        resolution("ws", "8.17.1")
-        resolution("webpack", "5.94.0")
-        resolution("path-to-regexp", "0.1.12")
     }
 }
