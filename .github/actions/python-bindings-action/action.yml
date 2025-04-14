@@ -16,7 +16,7 @@ runs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ steps.python_version.PYTHON_VERSION }}
+        python-version: ${{ steps.python_version.outputs.PYTHON_VERSION }}
 
     - name: Setup SWIG
       shell: bash
@@ -59,9 +59,9 @@ runs:
     - name: Download python for windows
       shell: bash
       run: |
-        curl -LO https://www.python.org/ftp/python/${{ steps.python_version.PYTHON_VERSION }}/python-${{ steps.python_version.PYTHON_VERSION }}-embed-amd64.zip
-        mv python-${{ steps.python_version.PYTHON_VERSION }}-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
-        unzip doordeck-sdk/build/bin/mingwX64/python/python-${{ steps.python_version.PYTHON_VERSION }}-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
+        curl -LO https://www.python.org/ftp/python/${{ steps.python_version.outputs.PYTHON_VERSION }}/python-${{ steps.python_version.outputs.PYTHON_VERSION }}-embed-amd64.zip
+        mv python-${{ steps.python_version.outputs.PYTHON_VERSION }}-embed-amd64.zip doordeck-sdk/build/bin/mingwX64/python
+        unzip doordeck-sdk/build/bin/mingwX64/python/python-${{ steps.python_version.outputs.PYTHON_VERSION }}-embed-amd64.zip -d doordeck-sdk/build/bin/mingwX64/python/windows-python
 
     - name: Generate bindings
       shell: bash
