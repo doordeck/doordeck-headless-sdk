@@ -45,13 +45,14 @@ runs:
           "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
 
     - name: Generate pyproject file
+      if: inputs.USE_LAST_TAG == 'true'
       shell: bash
-      run: |
-        if [ "${{ inputs.USE_LAST_TAG }}" = "true" ]; then
-          ./gradlew -Prelease.useLastTag=true pythonPack
-        else
-          ./gradlew pythonPack
-        fi
+      run: ./gradlew -Prelease.useLastTag=true pythonPack
+
+    - name: Generate pyproject file
+      if: inputs.USE_LAST_TAG == 'false'
+      shell: bash
+      run: ./gradlew pythonPack
 
     - name: Download python for windows
       shell: bash
