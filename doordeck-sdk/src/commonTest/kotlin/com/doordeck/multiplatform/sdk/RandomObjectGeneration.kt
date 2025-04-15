@@ -175,8 +175,8 @@ internal fun randomLocationRequirementResponse(): LocationRequirementResponse = 
     latitude = randomDouble(),
     longitude = randomDouble(),
     enabled = randomNullable { randomBoolean() },
-    radius = randomNullable { randomInt() },
-    accuracy = randomNullable { randomInt() }
+    radius = randomInt(),
+    accuracy = randomInt()
 )
 
 internal fun randomShareableLockResponse(): ShareableLockResponse = ShareableLockResponse(
