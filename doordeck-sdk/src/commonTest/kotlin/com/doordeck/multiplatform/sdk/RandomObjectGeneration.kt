@@ -434,7 +434,7 @@ internal fun randomTimeRequirement(): LockOperations.TimeRequirement = LockOpera
 internal fun randomLocationRequirement(): LockOperations.LocationRequirement = LockOperations.LocationRequirement(
     latitude = randomDouble(),
     longitude = randomDouble(),
-    enabled = randomNullable { randomBoolean() },
+    enabled = randomBoolean(),
     radius = randomInt(),
     accuracy = randomInt()
 )
