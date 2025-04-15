@@ -100,8 +100,8 @@ data class LocationRequirementData(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean? = null,
-    val radius: Int? = null,
-    val accuracy: Int? = null
+    val radius: Int = 20,
+    val accuracy: Int = 20
 )
 
 @Serializable
