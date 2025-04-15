@@ -56,6 +56,7 @@ internal fun createFusionHttpClient(): HttpClient {
         installContentNegotiation()
         installTimeout()
         installUserAgent()
+        installResponseValidator()
         installDefaultRequest(determineHost = {
             ContextManagerImpl.getFusionHost()
         })
