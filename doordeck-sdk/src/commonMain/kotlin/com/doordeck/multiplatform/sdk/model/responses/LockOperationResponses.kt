@@ -57,7 +57,7 @@ data class TimeRequirementResponse(
 data class LocationRequirementResponse(
     val latitude: Double,
     val longitude: Double,
-    val enabled: Boolean? = null,
+    val enabled: Boolean,
     val radius: Int,
     val accuracy: Int
 )

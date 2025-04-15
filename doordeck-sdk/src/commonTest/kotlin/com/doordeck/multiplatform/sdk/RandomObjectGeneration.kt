@@ -174,7 +174,7 @@ internal fun randomTimeRequirementResponse(): TimeRequirementResponse = TimeRequ
 internal fun randomLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
     latitude = randomDouble(),
     longitude = randomDouble(),
-    enabled = randomNullable { randomBoolean() },
+    enabled = randomBoolean(),
     radius = randomInt(),
     accuracy = randomInt()
 )
