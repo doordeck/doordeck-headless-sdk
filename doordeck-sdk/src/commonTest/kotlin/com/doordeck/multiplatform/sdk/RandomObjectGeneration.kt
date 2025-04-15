@@ -435,8 +435,8 @@ internal fun randomLocationRequirement(): LockOperations.LocationRequirement = L
     latitude = randomDouble(),
     longitude = randomDouble(),
     enabled = randomNullable { randomBoolean() },
-    radius = randomNullable { randomInt() },
-    accuracy = randomNullable { randomInt() }
+    radius = randomInt(),
+    accuracy = randomInt()
 )
 
 internal fun randomUnlockBetween(): LockOperations.UnlockBetween = LockOperations.UnlockBetween(

@@ -12,8 +12,8 @@ class LocationRequirement:
     latitude: float
     longitude: float
     enabled: typing.Optional[bool] = None
-    radius: typing.Optional[int] = None
-    accuracy: typing.Optional[int] = None
+    radius: int = 20
+    accuracy: int = 20
 
 @dataclass
 class ShareLock:

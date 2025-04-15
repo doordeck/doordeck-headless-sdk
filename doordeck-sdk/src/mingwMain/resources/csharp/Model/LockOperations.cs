@@ -12,14 +12,14 @@ public class LocationRequirement(
     double latitude,
     double longitude,
     bool? enabled = null,
-    int? radius = null,
-    int? accuracy = null)
+    int radius = 20,
+    int accuracy = 20)
 {
     public double Latitude { get; set; } = latitude;
     public double Longitude { get; set; } = longitude;
     public bool? Enabled { get; set; } = enabled;
-    public int? Radius { get; set; } = radius;
-    public int? Accuracy { get; set; } = accuracy;
+    public int Radius { get; set; } = radius;
+    public int Accuracy { get; set; } = accuracy;
 }
 
 public class UnlockOperation(BaseOperation baseOperation, List<string>? directAccessEndpoints = null)
