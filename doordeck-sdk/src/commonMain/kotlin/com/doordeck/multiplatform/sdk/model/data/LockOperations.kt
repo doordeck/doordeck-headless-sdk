@@ -42,21 +42,21 @@ object LockOperations {
         val latitude: Double,
         val longitude: Double,
         val enabled: Boolean? = null,
-        val radius: Int? = null,
-        val accuracy: Int? = null
+        val radius: Int = 20,
+        val accuracy: Int = 20
     ) {
         class Builder {
             private var latitude: Double? = null
             private var longitude: Double? = null
             private var enabled: Boolean? = null
-            private var radius: Int? = null
-            private var accuracy: Int? = null
+            private var radius: Int = 20
+            private var accuracy: Int = 20
 
             fun setLatitude(latitude: Double): Builder = apply { this.latitude = latitude }
             fun setLongitude(longitude: Double): Builder = apply { this.longitude = longitude }
             fun setEnabled(enabled: Boolean?): Builder = apply { this.enabled = enabled }
-            fun setRadius(radius: Int?): Builder = apply { this.radius = radius }
-            fun setAccuracy(accuracy: Int?): Builder = apply { this.accuracy = accuracy }
+            fun setRadius(radius: Int): Builder = apply { this.radius = radius }
+            fun setAccuracy(accuracy: Int): Builder = apply { this.accuracy = accuracy }
 
             fun build(): LocationRequirement {
                 return LocationRequirement(
