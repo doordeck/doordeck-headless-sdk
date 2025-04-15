@@ -11,13 +11,13 @@ public class TimeRequirement(string start, string end, string timezone, List<str
 public class LocationRequirement(
     double latitude,
     double longitude,
-    bool? enabled = null,
-    int radius = 20,
-    int accuracy = 20)
+    bool enabled = false,
+    int radius = 100,
+    int accuracy = 200)
 {
     public double Latitude { get; set; } = latitude;
     public double Longitude { get; set; } = longitude;
-    public bool? Enabled { get; set; } = enabled;
+    public bool Enabled { get; set; } = enabled;
     public int Radius { get; set; } = radius;
     public int Accuracy { get; set; } = accuracy;
 }

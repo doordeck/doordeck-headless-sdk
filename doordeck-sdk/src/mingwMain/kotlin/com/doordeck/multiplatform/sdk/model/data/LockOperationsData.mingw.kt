@@ -99,7 +99,7 @@ data class UpdateLockSettingLocationRestrictionsData(
 data class LocationRequirementData(
     val latitude: Double,
     val longitude: Double,
-    val enabled: Boolean? = null,
+    val enabled: Boolean,
     val radius: Int,
     val accuracy: Int
 )
