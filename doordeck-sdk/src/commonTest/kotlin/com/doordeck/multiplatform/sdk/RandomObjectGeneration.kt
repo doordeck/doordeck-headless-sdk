@@ -174,9 +174,9 @@ internal fun randomTimeRequirementResponse(): TimeRequirementResponse = TimeRequ
 internal fun randomLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
     latitude = randomDouble(),
     longitude = randomDouble(),
-    enabled = randomNullable { randomBoolean() },
-    radius = randomNullable { randomInt() },
-    accuracy = randomNullable { randomInt() }
+    enabled = randomBoolean(),
+    radius = randomInt(),
+    accuracy = randomInt()
 )
 
 internal fun randomShareableLockResponse(): ShareableLockResponse = ShareableLockResponse(
@@ -434,9 +434,9 @@ internal fun randomTimeRequirement(): LockOperations.TimeRequirement = LockOpera
 internal fun randomLocationRequirement(): LockOperations.LocationRequirement = LockOperations.LocationRequirement(
     latitude = randomDouble(),
     longitude = randomDouble(),
-    enabled = randomNullable { randomBoolean() },
-    radius = randomNullable { randomInt() },
-    accuracy = randomNullable { randomInt() }
+    enabled = randomBoolean(),
+    radius = randomInt(),
+    accuracy = randomInt()
 )
 
 internal fun randomUnlockBetween(): LockOperations.UnlockBetween = LockOperations.UnlockBetween(

@@ -41,22 +41,22 @@ object LockOperations {
     data class LocationRequirement @JvmOverloads constructor(
         val latitude: Double,
         val longitude: Double,
-        val enabled: Boolean? = null,
-        val radius: Int? = null,
-        val accuracy: Int? = null
+        val enabled: Boolean = false,
+        val radius: Int = 100,
+        val accuracy: Int = 200
     ) {
         class Builder {
             private var latitude: Double? = null
             private var longitude: Double? = null
-            private var enabled: Boolean? = null
-            private var radius: Int? = null
-            private var accuracy: Int? = null
+            private var enabled: Boolean = false
+            private var radius: Int = 100
+            private var accuracy: Int = 200
 
             fun setLatitude(latitude: Double): Builder = apply { this.latitude = latitude }
             fun setLongitude(longitude: Double): Builder = apply { this.longitude = longitude }
-            fun setEnabled(enabled: Boolean?): Builder = apply { this.enabled = enabled }
-            fun setRadius(radius: Int?): Builder = apply { this.radius = radius }
-            fun setAccuracy(accuracy: Int?): Builder = apply { this.accuracy = accuracy }
+            fun setEnabled(enabled: Boolean): Builder = apply { this.enabled = enabled }
+            fun setRadius(radius: Int): Builder = apply { this.radius = radius }
+            fun setAccuracy(accuracy: Int): Builder = apply { this.accuracy = accuracy }
 
             fun build(): LocationRequirement {
                 return LocationRequirement(

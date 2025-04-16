@@ -45,9 +45,9 @@ public class LocationRequirementResponse
 {
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    public bool? Enabled { get; set; } = null;
-    public int? Radius { get; set; } = null;
-    public int? Accuracy { get; set; } = null;
+    public bool Enabled { get; set; };
+    public int Radius { get; set; };
+    public int Accuracy { get; set; };
 }
 
 public class UnlockBetweenSettingResponse

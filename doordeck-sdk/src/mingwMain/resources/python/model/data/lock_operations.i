@@ -11,9 +11,9 @@ class TimeRequirement:
 class LocationRequirement:
     latitude: float
     longitude: float
-    enabled: typing.Optional[bool] = None
-    radius: typing.Optional[int] = None
-    accuracy: typing.Optional[int] = None
+    enabled: bool = False
+    radius: int = 100
+    accuracy: int = 200
 
 @dataclass
 class ShareLock:

@@ -169,7 +169,7 @@ internal data class TimeRequirementRequest(
 internal data class LocationRequirementRequest(
     val latitude: Double,
     val longitude: Double,
-    val enabled: Boolean? = null,
-    val radius: Int? = null,
-    val accuracy: Int? = null
+    val enabled: Boolean,
+    val radius: Int,
+    val accuracy: Int
 )
