@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk
 
-import android.app.Application
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
@@ -34,14 +33,10 @@ class AndroidPlatformTest {
     @Test
     fun shouldInitialize() = runTest {
         // Given
-        val context = ApplicationContext.apply {
-            set(Application())
-        }
         val sdkConfig = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)
             .setCloudAuthToken(Uuid.random().toString())
             .setCloudRefreshToken(Uuid.random().toString())
-            .setApplicationContext(context)
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
