@@ -46,8 +46,6 @@ val sdk = KDoordeckFactory.initialize(SdkConfig.Builder().setCloudAuthToken("AUT
 <details>
 <summary>Show Details</summary>
 
-In Android, you need to pass the Android application context to initialize the SDK:
-
 ```kotlin
 val sdk = KDoordeckFactory.initialize(SdkConfig.Builder().setCloudAuthToken("AUTH_TOKEN").build())
 ```
