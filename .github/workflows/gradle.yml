@@ -313,7 +313,7 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: C# bindings
+      - name: CSharp bindings
         uses: ./.github/actions/csharp-bindings-action
         with:
           USE_LAST_TAG: true
