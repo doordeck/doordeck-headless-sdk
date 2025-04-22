@@ -5,7 +5,7 @@ import java.lang.ref.WeakReference
 
 actual fun getPlatform(): PlatformType = PlatformType.ANDROID
 
-actual object ApplicationContext {
+internal actual object ApplicationContext {
     private var value: WeakReference<Context>? = null
 
     fun set(context: Context) {

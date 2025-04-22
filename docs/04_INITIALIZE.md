@@ -10,7 +10,6 @@ The minimum viable `SdkConfig` is `SdkConfig.Builder().build()`, although the fo
 |                 Cloud auth token                  | `setCloudAuthToken`        |           -            |
 |                Cloud refresh token                | `setCloudRefreshToken`     |           -            |
 |                    Fusion host                    | `setFusionHost`            | http://localhost:27700 |
-|        Application context (Android only)         | `setApplicationContext`    |           -            |
 | [Secure storage](04_INITIALIZE.md#secure-storage) | `setSecureStorageOverride` |           -            |
 
 > [!NOTE]  
@@ -47,14 +46,8 @@ val sdk = KDoordeckFactory.initialize(SdkConfig.Builder().setCloudAuthToken("AUT
 <details>
 <summary>Show Details</summary>
 
-In Android, you need to pass the Android application context to initialize the SDK:
-
 ```kotlin
-val sdk = KDoordeckFactory.initialize(SdkConfig.Builder()
-    .setCloudAuthToken("AUTH_TOKEN")
-    .setApplicationContext(ApplicationContext.apply { it.set(ANDROID_CONTEXT) })
-    .build()
-)
+val sdk = KDoordeckFactory.initialize(SdkConfig.Builder().setCloudAuthToken("AUTH_TOKEN").build())
 ```
 </details>
 

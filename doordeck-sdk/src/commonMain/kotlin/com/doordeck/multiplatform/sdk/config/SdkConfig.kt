@@ -31,7 +31,6 @@ data class SdkConfig @JvmOverloads constructor(
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
         private var fusionHost: String? = null
-        private var applicationContext: ApplicationContext? = null
         private var secureStorage: SecureStorage? = null
 
         /**
@@ -55,12 +54,6 @@ data class SdkConfig @JvmOverloads constructor(
         fun setFusionHost(fusionHost: String?): Builder = apply { this.fusionHost = fusionHost }
 
         /**
-         * Sets the Android application context. This should only be provided on Android.
-         */
-        @JsExport.Ignore
-        fun setApplicationContext(context: ApplicationContext?): Builder = apply { this.applicationContext = context }
-
-        /**
          * Overrides the default secure storage with a custom implementation.
          */
         fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
@@ -71,7 +64,7 @@ data class SdkConfig @JvmOverloads constructor(
          * If no secure storage override is provided, a default secure storage is created.
          */
         fun build(): SdkConfig {
-            val secureStorage = secureStorage ?: createSecureStorage(applicationContext)
+            val secureStorage = secureStorage ?: createSecureStorage(ApplicationContext)
             return SdkConfig(
                 apiEnvironment = apiEnvironment,
                 cloudAuthToken = cloudAuthToken,
