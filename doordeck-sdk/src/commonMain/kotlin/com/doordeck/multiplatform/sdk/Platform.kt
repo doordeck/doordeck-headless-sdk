@@ -95,4 +95,4 @@ internal object HttpClient : BaseHttpClient(::createHttpClient)
 
 expect fun getPlatform(): PlatformType
 
-expect object ApplicationContext
+internal expect object ApplicationContext
