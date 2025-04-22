@@ -373,7 +373,7 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
-            include("**/*.cs")
+            include("**/*.cs", "**/*.csproj")
         }
     }
 }
