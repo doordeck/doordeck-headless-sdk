@@ -369,11 +369,16 @@ tasks.register("csharpPack").configure {
             from(rootProject.layout.projectDirectory.file("README.md"))
             into(outputDir)
         }
+        // Copy csproj
+        copy {
+            from(file("$projectDir/src/mingwMain/resources/csharp/Doordeck.Headless.Sdk.csproj"))
+            into(outputDir)
+        }
         // Copy csharp resources
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp"))
             into(file("$outputDir/${nugetPublish.packageName}"))
-            include("**/*.cs", "**/*.csproj")
+            include("**/*.cs")
         }
     }
 }

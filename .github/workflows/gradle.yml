@@ -97,7 +97,7 @@ jobs:
         run: pylint --errors-only doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --disable=import-error,no-name-in-module
 
   csharp-build:
-    name: Csharp build
+    name: CSharp build
     runs-on: windows-latest
 
     steps:
