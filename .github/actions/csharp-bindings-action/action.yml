@@ -1,10 +1,5 @@
 name: CSharp bindings generation
 
-inputs:
-  USE_LAST_TAG:
-    description: Determines whether the last tag should be used in the csharpPack Gradle task
-    required: true
-
 runs:
   using: composite
   steps:
@@ -46,12 +41,6 @@ runs:
           -e 's/\[.*NativeTypeName([^]]*)\]//g' \
           "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
 
-    - name: Generate .nuspec file
-      if: inputs.USE_LAST_TAG == 'true'
-      shell: bash
-      run: ./gradlew -Prelease.useLastTag=true csharpPack
-
-    - name: Generate .nuspec file
-      if: inputs.USE_LAST_TAG == 'false'
+    - name: Pack csharp files
       shell: bash
       run: ./gradlew csharpPack

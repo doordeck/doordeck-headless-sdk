@@ -361,9 +361,6 @@ tasks.register("csharpPack").configure {
         // Create output directory
         val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
         mkdir(outputDir)
-        // Create nuspec file
-        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
-        nuspecFile.writeText(nuspecTemplate.trim())
         // Copy readme
         copy {
             from(rootProject.layout.projectDirectory.file("README.md"))
@@ -383,14 +380,23 @@ tasks.register("csharpPack").configure {
     }
 }
 
+/**
+ * Generates the .nuspec file, which is required to create the .nupkg file
+ * needed for publishing a package to the NuGet repository.
+ */
+tasks.register("generateNuspecFile").configure {
+    // Define the output folder
+    val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
+    // Create nuspec file
+    val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
+    nuspecFile.writeText(nuspecTemplate.trim())
+}
+
 tasks.register("pythonPack").configure {
     doLast {
         // Create output directory
         val outputDir = file("$projectDir/build/bin/mingwX64/python")
         mkdir(outputDir)
-        // Create pyproject file
-        val setupFile = file("$outputDir/pyproject.toml")
-        setupFile.writeText(pypiTemplate.trim())
         // Copy README & LICENSE
         copy {
             from(rootProject.layout.projectDirectory.file("LICENSE"))
@@ -411,6 +417,17 @@ tasks.register("pythonPack").configure {
         // Create empty __init__.py file
         file("$outputDir/src/${pypiPublish.packageName}/__init__.py").createNewFile()
     }
+}
+
+/**
+ * Generates the .toml file, which is required to run the python build command
+ */
+tasks.register("generateTomlFile").configure {
+    // Define the output folder
+    val outputDir = file("$projectDir/build/bin/mingwX64/python")
+    // Create pyproject file
+    val setupFile = file("$outputDir/pyproject.toml")
+    setupFile.writeText(pypiTemplate.trim())
 }
 
 private val nuspecTemplate = """

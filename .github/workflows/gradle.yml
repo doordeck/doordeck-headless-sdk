@@ -88,12 +88,10 @@ jobs:
       - name: Setup pylint
         run: pip install pylint
 
-      - name: Python bindings
+      - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
-        with:
-          USE_LAST_TAG: false
 
-      - name: Python check
+      - name: Code validator
         run: pylint --errors-only doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --disable=import-error,no-name-in-module
 
   csharp-build:
@@ -113,12 +111,10 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: CSharp bindings
+      - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
-        with:
-          USE_LAST_TAG: false
 
-      - name: CSharp check
+      - name: Code validator
         run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
 
   pre-release:
@@ -313,10 +309,11 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: CSharp bindings
+      - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
-        with:
-          USE_LAST_TAG: true
+
+      - name: Generate .nuspec file
+        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
 
       - name: Generate .nupkg file
         run: |
@@ -354,10 +351,11 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Python bindings
+      - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
-        with:
-          USE_LAST_TAG: true
+
+      - name: Generate .toml file
+        run: ./gradlew -Prelease.useLastTag=true generateTomlFile
 
       - name: Python build
         run: python -m build doordeck-sdk/build/bin/mingwX64/python
