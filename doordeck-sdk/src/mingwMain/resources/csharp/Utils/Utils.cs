@@ -14,10 +14,10 @@ public static class Utils
         JsonSerializer.Serialize(input, JsonSerializerOptions).ToSByte();
 
     public static unsafe T FromData<T>(sbyte* input) =>
-        JsonSerializer.Deserialize<T>(ConvertSByteToString(input), JsonSerializerOptions);
+        JsonSerializer.Deserialize<T>(ConvertSByteToString(input), JsonSerializerOptions)!;
 
     public static T FromData<T>(string input) =>
-        JsonSerializer.Deserialize<T>(input, JsonSerializerOptions);
+        JsonSerializer.Deserialize<T>(input, JsonSerializerOptions)!;
 
     public static unsafe sbyte* ToSByte(this string input) =>
         (sbyte*)Marshal.StringToHGlobalAnsi(input);
