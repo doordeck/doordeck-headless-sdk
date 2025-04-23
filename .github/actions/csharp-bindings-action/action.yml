@@ -1,0 +1,46 @@
+name: CSharp bindings generation
+
+runs:
+  using: composite
+  steps:
+    - name: Setup NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.x
+
+    - name: Setup ClangSharpPInvokeGenerator
+      shell: bash
+      run: dotnet tool install --global ClangSharpPInvokeGenerator
+
+    - name: Generate artifact
+      shell: bash
+      run: ./gradlew mingwX64Binaries
+
+    - name: Adjust header
+      shell: bash
+      run: |
+        sed -i \
+          -e 's/_\$$/_/g' \
+          -e 's/\$//g' \
+          "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+    - name: Generate bindings
+      shell: bash
+      run: |
+        ClangSharpPInvokeGenerator \
+          -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
+          -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
+          -l Doordeck.Headless.Sdk.dll \
+          -n Doordeck.Headless.Sdk
+
+    - name: Adjust bindings
+      shell: bash
+      run: |
+        sed -i \
+          -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
+          -e 's/\[.*NativeTypeName([^]]*)\]//g' \
+          "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+
+    - name: Pack csharp files
+      shell: bash
+      run: ./gradlew csharpPack

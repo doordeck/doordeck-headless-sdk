@@ -1,10 +1,5 @@
 name: Python bindings generation
 
-inputs:
-  USE_LAST_TAG:
-    description: Determines whether the last tag should be used in the pythonPack Gradle task
-    required: true
-
 runs:
   using: composite
   steps:
@@ -34,7 +29,7 @@ runs:
       shell: bash
       run: python -m pip install build
 
-    - name: Generate
+    - name: Generate binaries
       shell: bash
       run: ./gradlew mingwX64Binaries
 
@@ -46,13 +41,7 @@ runs:
           -e 's/\$//g' \
           "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
 
-    - name: Generate pyproject file
-      if: inputs.USE_LAST_TAG == 'true'
-      shell: bash
-      run: ./gradlew -Prelease.useLastTag=true pythonPack
-
-    - name: Generate pyproject file
-      if: inputs.USE_LAST_TAG == 'false'
+    - name: Pack python files
       shell: bash
       run: ./gradlew pythonPack
 
