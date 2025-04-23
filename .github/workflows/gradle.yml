@@ -88,17 +88,38 @@ jobs:
       - name: Setup pylint
         run: pip install pylint
 
-      - name: Python bindings
+      - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
-        with:
-          USE_LAST_TAG: false
 
-      - name: Python check
+      - name: Code validator
         run: pylint --errors-only doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --disable=import-error,no-name-in-module
+
+  csharp-build:
+    name: CSharp build
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Generate bindings
+        uses: ./.github/actions/csharp-bindings-action
+
+      - name: Code validator
+        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
 
   pre-release:
     name: Pre-release
-    needs: [build, python-build]
+    needs: [build, python-build, csharp-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     outputs:
@@ -288,41 +309,11 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Setup NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.x
-
-      - name: Setup ClangSharpPInvokeGenerator
-        run: dotnet tool install --global ClangSharpPInvokeGenerator
-
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
-
-      - name: Adjust header
-        run: |
-          sed -i \
-            -e 's/_\$$/_/g' \
-            -e 's/\$//g' \
-            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
-
       - name: Generate bindings
-        run: |
-          ClangSharpPInvokeGenerator \
-            -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
-            -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
-            -l Doordeck.Headless.Sdk.dll \
-            -n Doordeck.Headless.Sdk
-
-      - name: Adjust bindings
-        run: |
-          sed -i \
-            -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
-            -e 's/\[.*NativeTypeName([^]]*)\]//g' \
-            "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+        uses: ./.github/actions/csharp-bindings-action
 
       - name: Generate .nuspec file
-        run: ./gradlew -Prelease.useLastTag=true csharpPack
+        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
 
       - name: Generate .nupkg file
         run: |
@@ -360,10 +351,11 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Python bindings
+      - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
-        with:
-          USE_LAST_TAG: true
+
+      - name: Generate .toml file
+        run: ./gradlew -Prelease.useLastTag=true generateTomlFile
 
       - name: Python build
         run: python -m build doordeck-sdk/build/bin/mingwX64/python

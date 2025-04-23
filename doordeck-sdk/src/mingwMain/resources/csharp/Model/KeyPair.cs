@@ -2,6 +2,6 @@
 
 public class EncodedKeyPair
 {
-    public string Private { get; set; }
-    public string Public { get; set; }
+    public string Private { get; set; } = String.Empty;
+    public string Public { get; set; } = string.Empty;
 }
