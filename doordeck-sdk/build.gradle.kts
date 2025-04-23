@@ -385,11 +385,13 @@ tasks.register("csharpPack").configure {
  * needed for publishing a package to the NuGet repository.
  */
 tasks.register("generateNuspecFile").configure {
-    // Define the output folder
-    val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
-    // Create nuspec file
-    val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
-    nuspecFile.writeText(nuspecTemplate.trim())
+    doLast {
+        // Define the output folder
+        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
+        // Create nuspec file
+        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
+        nuspecFile.writeText(nuspecTemplate.trim())
+    }
 }
 
 tasks.register("pythonPack").configure {
@@ -423,11 +425,13 @@ tasks.register("pythonPack").configure {
  * Generates the .toml file, which is required to run the python build command
  */
 tasks.register("generateTomlFile").configure {
-    // Define the output folder
-    val outputDir = file("$projectDir/build/bin/mingwX64/python")
-    // Create pyproject file
-    val setupFile = file("$outputDir/pyproject.toml")
-    setupFile.writeText(pypiTemplate.trim())
+    doLast {
+        // Define the output folder
+        val outputDir = file("$projectDir/build/bin/mingwX64/python")
+        // Create pyproject file
+        val setupFile = file("$outputDir/pyproject.toml")
+        setupFile.writeText(pypiTemplate.trim())
+    }
 }
 
 private val nuspecTemplate = """
