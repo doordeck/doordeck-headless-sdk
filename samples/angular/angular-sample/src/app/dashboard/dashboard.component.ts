@@ -13,7 +13,6 @@ import {
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {com, kotlin} from '@doordeck/doordeck-headless-sdk';
-import {accountResource, doordeckUtil, lockOperationResource, sitesResource} from '../../main';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {
   MatCell,
@@ -56,6 +55,8 @@ import UnlockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperation
 import BaseOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation;
 import RevokeAccessToLockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.RevokeAccessToLockOperation;
 import ShareLockOperation = com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLockOperation;
+import Utils = com.doordeck.multiplatform.sdk.util.Utils;
+import api = com.doordeck.multiplatform.sdk.api;
 
 @Component({
     selector: 'app-dashboard',
@@ -139,7 +140,7 @@ export class DashboardComponent implements OnInit  {
       this.dateForm.get('end')!.valueChanges
     ]).subscribe(([startDate, endDate]) => {
       if (startDate && endDate && startDate < endDate) {
-        lockOperationResource.getLockAuditTrail(this.selectedLockId!, Math.floor(startDate.getTime() / 1000), Math.floor((endDate.getTime() / 1000))).then((response) => {
+        api.lockOperations().getLockAuditTrail(this.selectedLockId!, Math.floor(startDate.getTime() / 1000), Math.floor((endDate.getTime() / 1000))).then((response) => {
           this.auditForSelectedLock = new MatTableDataSource<AuditResponse>(response.asJsReadonlyArrayView().map((e) => e));
         });
       }
@@ -148,10 +149,10 @@ export class DashboardComponent implements OnInit  {
 
   ngOnInit(): void {
     // Load the sites
-    sitesResource.listSites().then(response => {
+    api.sites().listSites().then(response => {
       this.sites = response.asJsReadonlyArrayView().map((e) => e);
     });
-    accountResource.getUserDetails().then((response) => {
+    api.account().getUserDetails().then((response) => {
       this.displayName = response.displayName ? response.displayName : response.email;
     });
   }
@@ -161,7 +162,7 @@ export class DashboardComponent implements OnInit  {
     this.selectedSiteIndex = this.selectedSiteIndex === index ? null : index;
 
     // Load the locks for the selected site
-    sitesResource.getLocksForSite(siteId).then(response => {
+    api.sites().getLocksForSite(siteId).then(response => {
       this.locksForSelectedSite = response.asJsReadonlyArrayView().map((e) => e);
     });
   }
@@ -171,14 +172,14 @@ export class DashboardComponent implements OnInit  {
     this.selectedLockId = this.selectedLockId === lockId ? null : lockId;
 
     // Load users for lock
-    lockOperationResource.getUsersForLock(lockId).then(response => {
+    api.lockOperations().getUsersForLock(lockId).then(response => {
       const users = response.asJsReadonlyArrayView().map((e) => e);
       this.usersForSelectedLock = new MatTableDataSource<UserLockResponse>(users.filter(u => u.role == UserRole.USER));
       this.adminsForSelectedLock = new MatTableDataSource<UserLockResponse>(users.filter(u => u.role == UserRole.ADMIN));
     });
 
     // Load lock activity
-    lockOperationResource.getLockAuditTrail(lockId, Math.floor(this.dateForm.get('start')?.value.getTime() / 1000), Math.floor((this.dateForm.get('end')?.value.getTime() / 1000))).then((response) => {
+    api.lockOperations().getLockAuditTrail(lockId, Math.floor(this.dateForm.get('start')?.value.getTime() / 1000), Math.floor((this.dateForm.get('end')?.value.getTime() / 1000))).then((response) => {
       this.auditForSelectedLock = new MatTableDataSource<AuditResponse>(response.asJsReadonlyArrayView().map((e) => e));
     });
   }
@@ -191,8 +192,12 @@ export class DashboardComponent implements OnInit  {
 
   async unlock(lockId: string) {
     // Unlock
-    const operation = new UnlockOperation(new BaseOperation(null, null, null, lockId), null);
-    await lockOperationResource.unlock(operation).then(() => {
+    const operation = new UnlockOperation.Builder()
+      .setBaseOperation(new BaseOperation.Builder()
+        .setLockId(lockId)
+        .build())
+      .build()
+    await api.lockOperations().unlock(operation).then(() => {
       this.openSnackBar("Successfully unlocked", "");
     });
 
@@ -201,7 +206,7 @@ export class DashboardComponent implements OnInit  {
   }
 
   async logout() {
-    await accountResource.logout()
+    await api.account().logout()
     await this.router.navigate(['login']);
   }
 
@@ -227,11 +232,13 @@ export class DashboardComponent implements OnInit  {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         // Remove this user from the lock
-        const operation = new RevokeAccessToLockOperation(
-          new BaseOperation(null, null, null, lockId),
-          KtList.fromJsArray([userId])
-        );
-        await lockOperationResource.revokeAccessToLock(operation).then(() => {
+        const operation = new RevokeAccessToLockOperation.Builder()
+          .setBaseOperation(new BaseOperation.Builder()
+            .setLockId(lockId)
+            .build())
+          .setUsers(KtList.fromJsArray([userId]))
+          .build()
+        await api.lockOperations().revokeAccessToLock(operation).then(() => {
           this.usersForSelectedLock.data = this.usersForSelectedLock.data.filter((u) => u.userId !== userId)
           this.adminsForSelectedLock.data = this.adminsForSelectedLock.data.filter((u) => u.userId !== userId)
         })
@@ -249,19 +256,20 @@ export class DashboardComponent implements OnInit  {
       if (result) {
         const { email, isAdmin } = result;
         // Get the user public key
-        await lockOperationResource.getUserPublicKey(email).then(async (result) => {
+        await api.lockOperations().getUserPublicKey(email).then(async (result) => {
           // Share the lock
-          const shareLock = new ShareLock(
-            result.id,
-            isAdmin ? UserRole.ADMIN : UserRole.USER,
-            doordeckUtil.decodeBase64ToByteArray(result.publicKey),
-            null, null
-          );
-          const operation = new ShareLockOperation(
-            new BaseOperation(null, null, null, lockId),
-            shareLock
-          );
-          await lockOperationResource.shareLock(operation);
+          const shareLock = new ShareLock.Builder()
+            .setTargetUserId(result.id)
+            .setTargetUserRole(isAdmin ? UserRole.ADMIN : UserRole.USER)
+            .setTargetUserPublicKey(Utils.decodeBase64ToByteArray(result.publicKey))
+            .build();
+          const operation = new ShareLockOperation.Builder()
+            .setBaseOperation(new BaseOperation.Builder()
+                .setLockId(lockId)
+                .build())
+            .setShareLock(shareLock)
+            .build();
+          await api.lockOperations().shareLock(operation);
         });
       }
     })
@@ -275,7 +283,7 @@ export class DashboardComponent implements OnInit  {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
-        await accountResource.updateUserDetails(result).then(() => {
+        await api.account().updateUserDetails(result).then(() => {
           this.displayName = result;
           this.openSnackBar("Display name successfully changed", "");
         });
@@ -292,7 +300,7 @@ export class DashboardComponent implements OnInit  {
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result) {
         const { oldPassword, newPassword } = result;
-        await accountResource.changePassword(oldPassword, newPassword).then(() => {
+        await api.account().changePassword(oldPassword, newPassword).then(() => {
           this.openSnackBar("Password successfully changed", "");
         });
       }
