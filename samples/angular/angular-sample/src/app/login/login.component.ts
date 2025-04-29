@@ -3,19 +3,20 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {MatCard, MatCardTitle} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {MatAnchor, MatButton} from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
 import {NgIf} from '@angular/common';
 import {Router} from '@angular/router';
-import {accountlessResource, doordeckSDK, accountResource, doordeckCrypto} from '../../main';
+import {doordeckSDK} from '../../main';
 import {com} from '@doordeck/doordeck-headless-sdk';
 import {TwoFactorVerifyComponent} from '../two-factor-verify/two-factor-verify.component';
 import {MatDialog} from '@angular/material/dialog';
-import {MatIcon} from '@angular/material/icon';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import ForbiddenException = com.doordeck.multiplatform.sdk.exceptions.ForbiddenException;
+import KeyPair = com.doordeck.multiplatform.sdk.model.data.Crypto.KeyPair;
 import UnauthorizedException = com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException;
 import TooManyRequestsException = com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException;
-import KeyPair = com.doordeck.multiplatform.sdk.model.data.Crypto.KeyPair;
+import ForbiddenException = com.doordeck.multiplatform.sdk.exceptions.ForbiddenException;
+import api = com.doordeck.multiplatform.sdk.api;
+import sdk = com.doordeck.multiplatform.sdk;
 
 @Component({
     selector: 'app-login',
@@ -57,7 +58,7 @@ export class LoginComponent  {
 
       try {
         // Attempt to log-in
-        await accountlessResource.login(username, password);
+        await api.accountless().login(username, password);
       } catch (error) {
         if (error instanceof UnauthorizedException) {
           this.openSnackBar("Failed to login", "")
@@ -65,9 +66,9 @@ export class LoginComponent  {
         return;
       }
       // Generate a new key pair
-      this.keyPair = doordeckCrypto.generateKeyPair();
+      this.keyPair = sdk.crypto.crypto().generateKeyPair();
       // Register the key pair
-      await accountResource.registerEphemeralKeyWithSecondaryAuthentication(this.keyPair.public)
+      await api.account().registerEphemeralKeyWithSecondaryAuthentication(this.keyPair.public)
 
       // Two factor dialog
       const dialogRef = this.dialog.open(TwoFactorVerifyComponent, {
@@ -77,7 +78,7 @@ export class LoginComponent  {
         if (result) {
           try {
             // Attempt to verify the key pair
-            await accountResource.verifyEphemeralKeyRegistration(result, this.keyPair!.private).then(async (response) => {
+            await api.account().verifyEphemeralKeyRegistration(result, this.keyPair!.private).then(async (response) => {
               // Set the operation context
               doordeckSDK.contextManager().setOperationContext(response.userId, response.certificateChain, this.keyPair!.public, this.keyPair!.private);
               // Redirect to the dashboard
