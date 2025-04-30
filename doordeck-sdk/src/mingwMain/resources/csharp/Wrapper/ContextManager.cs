@@ -32,7 +32,7 @@ public unsafe class ContextManager(
         try
         {
             result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName_(apiEnvironment);
-            return (ApiEnvironment)Enum.Parse(typeof(ApiEnvironment), Utils.Utils.ConvertSByteToString(result));
+            return Enum.Parse<ApiEnvironment>(Utils.Utils.ConvertSByteToString(result));
         }
         finally
         {
@@ -220,6 +220,16 @@ public unsafe class ContextManager(
 
     // GetKeyPair
 
+    public void SetKeyPairVerified(bool verified)
+    {
+        contextManager.setKeyPairVerified(context, Convert.ToByte(verified));
+    }
+
+    public bool IsKeyPairVerified()
+    {
+        return contextManager.isKeyPairVerified_(context).ToBoolean();
+    }
+
     public bool IsKeyPairValid()
     {
         return contextManager.isKeyPairValid_(context).ToBoolean();
@@ -236,6 +246,11 @@ public unsafe class ContextManager(
         {
             ReleaseMemory(sData, null);
         }
+    }
+
+    public void ClearContext()
+    {
+        contextManager.clearContext_(context);
     }
 
     private void ReleaseMemory(sbyte* data, sbyte* result)
