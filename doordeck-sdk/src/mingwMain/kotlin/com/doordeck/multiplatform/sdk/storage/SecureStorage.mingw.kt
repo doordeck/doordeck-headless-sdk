@@ -6,17 +6,12 @@ import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
-import kotlinx.cinterop.BooleanVar
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
-import kotlinx.cinterop.pointed
-import kotlinx.cinterop.ptr
-import kotlinx.cinterop.value
 
 internal actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {
     return DefaultSecureStorage(MemorySettings())
@@ -24,8 +19,6 @@ internal actual fun createSecureStorage(applicationContext: ApplicationContext?)
 
 internal typealias setStringCallback = CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>
 internal typealias getStringCallback = CPointer<CFunction<() -> CPointer<ByteVar>?>>
-internal typealias setBooleanCallback = CPointer<CFunction<(CPointer<BooleanVar>) -> Unit>>
-internal typealias getBooleanCallback = CPointer<CFunction<() -> CPointer<BooleanVar>?>>
 internal typealias emptyCallback = CPointer<CFunction<() -> Unit>>
 
 internal fun setStringCallback.invokeStringCallback(string: String) = memScoped {
@@ -33,13 +26,7 @@ internal fun setStringCallback.invokeStringCallback(string: String) = memScoped 
     invoke(cString)
 }
 
-internal fun setBooleanCallback.invokeBooleanCallback(boolean: Boolean) = memScoped {
-    val booleanVar = alloc<BooleanVar>().apply {
-        value = boolean
-    }
-    invoke(booleanVar.ptr)
-}
-
+@CName("createMingwSecureStorage")
 fun createMingwSecureStorage(
     setApiEnvironmentCp: setStringCallback,
     getApiEnvironmentCp: getStringCallback,
@@ -55,8 +42,8 @@ fun createMingwSecureStorage(
     getPublicKeyCp: getStringCallback,
     addPrivateKeyCp: setStringCallback,
     getPrivateKeyCp: getStringCallback,
-    setKeyPairVerifiedCp: setBooleanCallback,
-    getKeyPairVerifiedCp: getBooleanCallback,
+    setKeyPairVerifiedCp: setStringCallback,
+    getKeyPairVerifiedCp: getStringCallback,
     addUserIdCp: setStringCallback,
     getUserIdCp: getStringCallback,
     addUserEmailCp: setStringCallback,
@@ -107,8 +94,8 @@ class CallbackSecureStorage(
     private val getPublicKeyCp: getStringCallback,
     private val addPrivateKeyCp: setStringCallback,
     private val getPrivateKeyCp: getStringCallback,
-    private val setKeyPairVerifiedCp: setBooleanCallback,
-    private val getKeyPairVerifiedCp: getBooleanCallback,
+    private val setKeyPairVerifiedCp: setStringCallback,
+    private val getKeyPairVerifiedCp: getStringCallback,
     private val addUserIdCp: setStringCallback,
     private val getUserIdCp: getStringCallback,
     private val addUserEmailCp: setStringCallback,
@@ -177,11 +164,11 @@ class CallbackSecureStorage(
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
-        setKeyPairVerifiedCp.invokeBooleanCallback(verified)
+        setKeyPairVerifiedCp.invokeStringCallback(verified.toString())
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return getKeyPairVerifiedCp()?.pointed?.value
+        return getKeyPairVerifiedCp()?.toString()?.toBoolean()
     }
 
     override fun addUserId(userId: String) {
