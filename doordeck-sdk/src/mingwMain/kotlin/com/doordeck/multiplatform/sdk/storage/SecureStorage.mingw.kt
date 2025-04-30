@@ -12,6 +12,7 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.toKString
 
 internal actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {
     return DefaultSecureStorage(MemorySettings())
@@ -110,7 +111,7 @@ class CallbackSecureStorage(
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return getApiEnvironmentCp()?.toString()?.let {
+        return getApiEnvironmentCp()?.toKString()?.let {
             ApiEnvironment.valueOf(it)
         }
     }
@@ -120,7 +121,7 @@ class CallbackSecureStorage(
     }
 
     override fun getCloudAuthToken(): String? {
-        return getCloudAuthTokenCp()?.toString()
+        return getCloudAuthTokenCp()?.toKString()
     }
 
     override fun addCloudRefreshToken(token: String) {
@@ -128,7 +129,7 @@ class CallbackSecureStorage(
     }
 
     override fun getCloudRefreshToken(): String? {
-        return getCloudRefreshTokenCp()?.toString()
+        return getCloudRefreshTokenCp()?.toKString()
     }
 
     override fun setFusionHost(host: String) {
@@ -136,7 +137,7 @@ class CallbackSecureStorage(
     }
 
     override fun getFusionHost(): String? {
-        return getFusionHostCp()?.toString()
+        return getFusionHostCp()?.toKString()
     }
 
     override fun addFusionAuthToken(token: String) {
@@ -144,7 +145,7 @@ class CallbackSecureStorage(
     }
 
     override fun getFusionAuthToken(): String? {
-        return getFusionAuthTokenCp()?.toString()
+        return getFusionAuthTokenCp()?.toKString()
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
@@ -152,7 +153,7 @@ class CallbackSecureStorage(
     }
 
     override fun getPublicKey(): ByteArray? {
-        return getPublicKeyCp()?.toString()?.decodeBase64ToByteArray()
+        return getPublicKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
@@ -160,7 +161,7 @@ class CallbackSecureStorage(
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return getPrivateKeyCp()?.toString()?.decodeBase64ToByteArray()
+        return getPrivateKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
@@ -168,7 +169,7 @@ class CallbackSecureStorage(
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return getKeyPairVerifiedCp()?.toString()?.toBoolean()
+        return getKeyPairVerifiedCp()?.toKString()?.toBoolean()
     }
 
     override fun addUserId(userId: String) {
@@ -176,7 +177,7 @@ class CallbackSecureStorage(
     }
 
     override fun getUserId(): String? {
-        return getUserIdCp()?.toString()
+        return getUserIdCp()?.toKString()
     }
 
     override fun addUserEmail(email: String) {
@@ -184,7 +185,7 @@ class CallbackSecureStorage(
     }
 
     override fun getUserEmail(): String? {
-        return getUserEmailCp()?.toString()
+        return getUserEmailCp()?.toKString()
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
@@ -192,7 +193,7 @@ class CallbackSecureStorage(
     }
 
     override fun getCertificateChain(): List<String>? {
-        return getCertificateChainCp()?.toString()?.stringToCertificateChain()
+        return getCertificateChainCp()?.toKString()?.stringToCertificateChain()
     }
 
     override fun clear() {
