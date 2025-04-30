@@ -2,41 +2,68 @@ package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
+import kotlinx.cinterop.BooleanVar
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.alloc
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.pointed
+import kotlinx.cinterop.ptr
+import kotlinx.cinterop.value
 
 internal actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {
     return DefaultSecureStorage(MemorySettings())
 }
 
-internal typealias setStringCp = CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>
-internal typealias getStringCp = CPointer<CFunction<() -> CPointer<ByteVar>?>>
+internal typealias setStringCallback = CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>
+internal typealias getStringCallback = CPointer<CFunction<() -> CPointer<ByteVar>?>>
+internal typealias setBooleanCallback = CPointer<CFunction<(CPointer<BooleanVar>) -> Unit>>
+internal typealias getBooleanCallback = CPointer<CFunction<() -> CPointer<BooleanVar>?>>
+internal typealias emptyCallback = CPointer<CFunction<() -> Unit>>
 
-internal fun setStringCp.invokeCallback(string: String) = memScoped {
+internal fun setStringCallback.invokeStringCallback(string: String) = memScoped {
     val cString = string.cstr.ptr
     invoke(cString)
 }
 
+internal fun setBooleanCallback.invokeBooleanCallback(boolean: Boolean) = memScoped {
+    val booleanVar = alloc<BooleanVar>().apply {
+        value = boolean
+    }
+    invoke(booleanVar.ptr)
+}
+
 fun createMingwSecureStorage(
-    setApiEnvironmentCp: setStringCp,
-    getApiEnvironmentCp: getStringCp,
-    addCloudAuthTokenCp: setStringCp,
-    getCloudAuthTokenCp: getStringCp,
-    addCloudRefreshTokenCp: setStringCp,
-    getCloudRefreshTokenCp: getStringCp,
-    setFusionHostCp: setStringCp,
-    getFusionHostCp: getStringCp,
-    addFusionAuthTokenCp: setStringCp,
-    getFusionAuthTokenCp: getStringCp,
-    addUserIdCp: setStringCp,
-    getUserIdCp: getStringCp,
-    addUserEmailCp: setStringCp,
-    getUserEmailCp: getStringCp,
-    clearCp: CPointer<CFunction<() -> Unit>>
+    setApiEnvironmentCp: setStringCallback,
+    getApiEnvironmentCp: getStringCallback,
+    addCloudAuthTokenCp: setStringCallback,
+    getCloudAuthTokenCp: getStringCallback,
+    addCloudRefreshTokenCp: setStringCallback,
+    getCloudRefreshTokenCp: getStringCallback,
+    setFusionHostCp: setStringCallback,
+    getFusionHostCp: getStringCallback,
+    addFusionAuthTokenCp: setStringCallback,
+    getFusionAuthTokenCp: getStringCallback,
+    addPublicKeyCp: setStringCallback,
+    getPublicKeyCp: getStringCallback,
+    addPrivateKeyCp: setStringCallback,
+    getPrivateKeyCp: getStringCallback,
+    setKeyPairVerifiedCp: setBooleanCallback,
+    getKeyPairVerifiedCp: getBooleanCallback,
+    addUserIdCp: setStringCallback,
+    getUserIdCp: getStringCallback,
+    addUserEmailCp: setStringCallback,
+    getUserEmailCp: getStringCallback,
+    addCertificateChainCp: setStringCallback,
+    getCertificateChainCp: getStringCallback,
+    clearCp: emptyCallback
 ): SecureStorage {
     return CallbackSecureStorage(
         setApiEnvironmentCp = setApiEnvironmentCp,
@@ -49,43 +76,60 @@ fun createMingwSecureStorage(
         getFusionHostCp = getFusionHostCp,
         addFusionAuthTokenCp = addFusionAuthTokenCp,
         getFusionAuthTokenCp = getFusionAuthTokenCp,
+        addPublicKeyCp = addPublicKeyCp,
+        getPublicKeyCp = getPublicKeyCp,
+        addPrivateKeyCp = addPrivateKeyCp,
+        getPrivateKeyCp = getPrivateKeyCp,
+        setKeyPairVerifiedCp = setKeyPairVerifiedCp,
+        getKeyPairVerifiedCp = getKeyPairVerifiedCp,
         addUserIdCp = addUserIdCp,
         getUserIdCp = getUserIdCp,
         addUserEmailCp = addUserEmailCp,
         getUserEmailCp = getUserEmailCp,
+        addCertificateChainCp = addCertificateChainCp,
+        getCertificateChainCp = getCertificateChainCp,
         clearCp = clearCp
     )
 }
 
 class CallbackSecureStorage(
-    private val setApiEnvironmentCp: setStringCp,
-    private val getApiEnvironmentCp: getStringCp,
-    private val addCloudAuthTokenCp: setStringCp,
-    private val getCloudAuthTokenCp: getStringCp,
-    private val addCloudRefreshTokenCp: setStringCp,
-    private val getCloudRefreshTokenCp: getStringCp,
-    private val setFusionHostCp: setStringCp,
-    private val getFusionHostCp: getStringCp,
-    private val addFusionAuthTokenCp: setStringCp,
-    private val getFusionAuthTokenCp: getStringCp,
-    private val addUserIdCp: setStringCp,
-    private val getUserIdCp: getStringCp,
-    private val addUserEmailCp: setStringCp,
-    private val getUserEmailCp: getStringCp,
-    private val clearCp: CPointer<CFunction<() -> Unit>>
+    private val setApiEnvironmentCp: setStringCallback,
+    private val getApiEnvironmentCp: getStringCallback,
+    private val addCloudAuthTokenCp: setStringCallback,
+    private val getCloudAuthTokenCp: getStringCallback,
+    private val addCloudRefreshTokenCp: setStringCallback,
+    private val getCloudRefreshTokenCp: getStringCallback,
+    private val setFusionHostCp: setStringCallback,
+    private val getFusionHostCp: getStringCallback,
+    private val addFusionAuthTokenCp: setStringCallback,
+    private val getFusionAuthTokenCp: getStringCallback,
+    private val addPublicKeyCp: setStringCallback,
+    private val getPublicKeyCp: getStringCallback,
+    private val addPrivateKeyCp: setStringCallback,
+    private val getPrivateKeyCp: getStringCallback,
+    private val setKeyPairVerifiedCp: setBooleanCallback,
+    private val getKeyPairVerifiedCp: getBooleanCallback,
+    private val addUserIdCp: setStringCallback,
+    private val getUserIdCp: getStringCallback,
+    private val addUserEmailCp: setStringCallback,
+    private val getUserEmailCp: getStringCallback,
+    private val addCertificateChainCp: setStringCallback,
+    private val getCertificateChainCp: getStringCallback,
+    private val clearCp: emptyCallback
 ) : SecureStorage {
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        setApiEnvironmentCp.invokeCallback(apiEnvironment.name)
+        setApiEnvironmentCp.invokeStringCallback(apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        val apiEnvironment = getApiEnvironmentCp()?.toString()
-        return apiEnvironment?.let { ApiEnvironment.valueOf(it)  }
+        return getApiEnvironmentCp()?.toString()?.let {
+            ApiEnvironment.valueOf(it)
+        }
     }
 
     override fun addCloudAuthToken(token: String) {
-        addCloudAuthTokenCp.invokeCallback(token)
+        addCloudAuthTokenCp.invokeStringCallback(token)
     }
 
     override fun getCloudAuthToken(): String? {
@@ -93,7 +137,7 @@ class CallbackSecureStorage(
     }
 
     override fun addCloudRefreshToken(token: String) {
-        addCloudRefreshTokenCp.invokeCallback(token)
+        addCloudRefreshTokenCp.invokeStringCallback(token)
     }
 
     override fun getCloudRefreshToken(): String? {
@@ -101,7 +145,7 @@ class CallbackSecureStorage(
     }
 
     override fun setFusionHost(host: String) {
-        setFusionHostCp.invokeCallback(host)
+        setFusionHostCp.invokeStringCallback(host)
     }
 
     override fun getFusionHost(): String? {
@@ -109,7 +153,7 @@ class CallbackSecureStorage(
     }
 
     override fun addFusionAuthToken(token: String) {
-        addFusionAuthTokenCp.invokeCallback(token)
+        addFusionAuthTokenCp.invokeStringCallback(token)
     }
 
     override fun getFusionAuthToken(): String? {
@@ -117,28 +161,31 @@ class CallbackSecureStorage(
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
+        addPublicKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPublicKey(): ByteArray? {
-        return null
+        return getPublicKeyCp()?.toString()?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
+        addPrivateKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return null
+        return getPrivateKeyCp()?.toString()?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
+        setKeyPairVerifiedCp.invokeBooleanCallback(verified)
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return null
+        return getKeyPairVerifiedCp()?.pointed?.value
     }
 
     override fun addUserId(userId: String) {
-        addUserIdCp.invokeCallback(userId)
+        addUserIdCp.invokeStringCallback(userId)
     }
 
     override fun getUserId(): String? {
@@ -146,7 +193,7 @@ class CallbackSecureStorage(
     }
 
     override fun addUserEmail(email: String) {
-        addUserEmailCp.invokeCallback(email)
+        addUserEmailCp.invokeStringCallback(email)
     }
 
     override fun getUserEmail(): String? {
@@ -154,11 +201,11 @@ class CallbackSecureStorage(
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-
+        addCertificateChainCp.invokeStringCallback(certificateChain.certificateChainToString())
     }
 
     override fun getCertificateChain(): List<String>? {
-        return null
+        return getCertificateChainCp()?.toString()?.stringToCertificateChain()
     }
 
     override fun clear() {
