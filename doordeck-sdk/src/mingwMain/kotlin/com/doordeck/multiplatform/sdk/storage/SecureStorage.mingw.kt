@@ -53,7 +53,7 @@ fun createMingwSecureStorage(
     getCertificateChainCp: getStringCallback,
     clearCp: emptyCallback
 ): SecureStorage {
-    return CallbackSecureStorage(
+    return MingwSecureStorage(
         setApiEnvironmentCp = setApiEnvironmentCp,
         getApiEnvironmentCp = getApiEnvironmentCp,
         addCloudAuthTokenCp = addCloudAuthTokenCp,
@@ -80,7 +80,7 @@ fun createMingwSecureStorage(
     )
 }
 
-class CallbackSecureStorage(
+class MingwSecureStorage(
     private val setApiEnvironmentCp: setStringCallback,
     private val getApiEnvironmentCp: getStringCallback,
     private val addCloudAuthTokenCp: setStringCallback,
