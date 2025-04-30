@@ -136,7 +136,7 @@ public class DoordeckSdk
             var getCertificateChain = Marshal.GetFunctionPointerForDelegate(getCertificateChainDelegate);
             var clear = Marshal.GetFunctionPointerForDelegate(clearDelegate);
 
-            var secureStorage = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.storage.createMingwSecureStorage(
+            var secureStorage = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.storage.createMingwSecureStorage_(
                 setApiEnvironment.ToPointer(),
                 getApiEnvironment.ToPointer(),
                 addCloudAuthToken.ToPointer(),
