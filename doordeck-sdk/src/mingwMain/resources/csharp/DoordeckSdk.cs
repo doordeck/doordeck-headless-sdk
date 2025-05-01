@@ -34,7 +34,8 @@ public class DoordeckSdk
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager _contextApi;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_crypto_CryptoManager _cryptoApi;
 
-    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment = ApiEnvironment.PROD, string? cloudAuthToken = null, string? cloudRefreshToken = null, string? fusionHost = null)
+    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment = ApiEnvironment.PROD, string? cloudAuthToken = null,
+        string? cloudRefreshToken = null, string? fusionHost = null, ISecureStorage? secureStorageImpl = null)
     {
         _apiEnvironment = apiEnvironment switch
         {
@@ -59,6 +60,115 @@ public class DoordeckSdk
         if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
         if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
         if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
+
+        if (secureStorageImpl != null)
+        {
+            SecureStorage.Implementation = secureStorageImpl;
+
+            SecureStorage.Delegates.SetApiEnvironmentDelegate setApiEnvironmentDelegate =
+                SecureStorage.SetApiEnvironment;
+            SecureStorage.Delegates.GetApiEnvironmentDelegate getApiEnvironmentDelegate =
+                SecureStorage.GetApiEnvironment;
+            SecureStorage.Delegates.AddCloudAuthTokenDelegate addCloudAuthTokenDelegate =
+                SecureStorage.AddCloudAuthToken;
+            SecureStorage.Delegates.GetCloudAuthTokenDelegate getCloudAuthTokenDelegate =
+                SecureStorage.GetCloudAuthToken;
+            SecureStorage.Delegates.AddCloudRefreshTokenDelegate addCloudRefreshTokenDelegate =
+                SecureStorage.AddCloudRefreshToken;
+            SecureStorage.Delegates.GetCloudRefreshTokenDelegate getCloudRefreshTokenDelegate =
+                SecureStorage.GetCloudRefreshToken;
+            SecureStorage.Delegates.SetFusionHostDelegate setFusionHostDelegate =
+                SecureStorage.SetFusionHost;
+            SecureStorage.Delegates.GetFusionHostDelegate getFusionHostDelegate =
+                SecureStorage.GetFusionHost;
+            SecureStorage.Delegates.AddFusionAuthTokenDelegate addFusionAuthTokenDelegate =
+                SecureStorage.AddFusionAuthToken;
+            SecureStorage.Delegates.GetFusionAuthTokenDelegate getFusionAuthTokenDelegate =
+                SecureStorage.GetFusionAuthToken;
+            SecureStorage.Delegates.AddPublicKeyDelegate addPublicKeyDelegate =
+                SecureStorage.AddPublicKey;
+            SecureStorage.Delegates.GetPublicKeyDelegate getPublicKeyDelegate =
+                SecureStorage.GetPublicKey;
+            SecureStorage.Delegates.AddPrivateKeyDelegate addPrivateKeyDelegate =
+                SecureStorage.AddPrivateKey;
+            SecureStorage.Delegates.GetPrivateKeyDelegate getPrivateKeyDelegate =
+                SecureStorage.GetPrivateKey;
+            SecureStorage.Delegates.SetKeyPairVerifiedDelegate setKeyPairVerifiedDelegate =
+                SecureStorage.SetKeyPairVerified;
+            SecureStorage.Delegates.GetKeyPairVerifiedDelegate getKeyPairVerifiedDelegate =
+                SecureStorage.GetKeyPairVerified;
+            SecureStorage.Delegates.AddUserIdDelegate addUserIdDelegate =
+                SecureStorage.AddUserId;
+            SecureStorage.Delegates.GetUserIdDelegate getUserIdDelegate =
+                SecureStorage.GetUserId;
+            SecureStorage.Delegates.AddUserEmailDelegate addUserEmailDelegate =
+                SecureStorage.AddUserEmail;
+            SecureStorage.Delegates.GetUserEmailDelegate getUserEmailDelegate =
+                SecureStorage.GetUserEmail;
+            SecureStorage.Delegates.AddCertificateChainDelegate addCertificateChainDelegate =
+                SecureStorage.AddCertificateChain;
+            SecureStorage.Delegates.GetCertificateChainDelegate getCertificateChainDelegate =
+                SecureStorage.GetCertificateChain;
+            SecureStorage.Delegates.ClearDelegate clearDelegate =
+                SecureStorage.Clear;
+
+            var setApiEnvironment = Marshal.GetFunctionPointerForDelegate(setApiEnvironmentDelegate);
+            var getApiEnvironment = Marshal.GetFunctionPointerForDelegate(getApiEnvironmentDelegate);
+            var addCloudAuthToken = Marshal.GetFunctionPointerForDelegate(addCloudAuthTokenDelegate);
+            var getCloudAuthToken = Marshal.GetFunctionPointerForDelegate(getCloudAuthTokenDelegate);
+            var addCloudRefreshToken = Marshal.GetFunctionPointerForDelegate(addCloudRefreshTokenDelegate);
+            var getCloudRefreshToken = Marshal.GetFunctionPointerForDelegate(getCloudRefreshTokenDelegate);
+            var setFusionHost = Marshal.GetFunctionPointerForDelegate(setFusionHostDelegate);
+            var getFusionHost = Marshal.GetFunctionPointerForDelegate(getFusionHostDelegate);
+            var addFusionAuthToken = Marshal.GetFunctionPointerForDelegate(addFusionAuthTokenDelegate);
+            var getFusionAuthToken = Marshal.GetFunctionPointerForDelegate(getFusionAuthTokenDelegate);
+            var addPublicKey = Marshal.GetFunctionPointerForDelegate(addPublicKeyDelegate);
+            var getPublicKey = Marshal.GetFunctionPointerForDelegate(getPublicKeyDelegate);
+            var addPrivateKey = Marshal.GetFunctionPointerForDelegate(addPrivateKeyDelegate);
+            var getPrivateKey = Marshal.GetFunctionPointerForDelegate(getPrivateKeyDelegate);
+            var setKeyPairVerified = Marshal.GetFunctionPointerForDelegate(setKeyPairVerifiedDelegate);
+            var getKeyPairVerified = Marshal.GetFunctionPointerForDelegate(getKeyPairVerifiedDelegate);
+            var addUserId = Marshal.GetFunctionPointerForDelegate(addUserIdDelegate);
+            var getUserId = Marshal.GetFunctionPointerForDelegate(getUserIdDelegate);
+            var addUserEmail = Marshal.GetFunctionPointerForDelegate(addUserEmailDelegate);
+            var getUserEmail = Marshal.GetFunctionPointerForDelegate(getUserEmailDelegate);
+            var addCertificateChain = Marshal.GetFunctionPointerForDelegate(addCertificateChainDelegate);
+            var getCertificateChain = Marshal.GetFunctionPointerForDelegate(getCertificateChainDelegate);
+            var clear = Marshal.GetFunctionPointerForDelegate(clearDelegate);
+
+            var secureStorage = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.storage.createMingwSecureStorage_(
+                setApiEnvironment.ToPointer(),
+                getApiEnvironment.ToPointer(),
+                addCloudAuthToken.ToPointer(),
+                getCloudAuthToken.ToPointer(),
+                addCloudRefreshToken.ToPointer(),
+                getCloudRefreshToken.ToPointer(),
+                setFusionHost.ToPointer(),
+                getFusionHost.ToPointer(),
+                addFusionAuthToken.ToPointer(),
+                getFusionAuthToken.ToPointer(),
+                addPublicKey.ToPointer(),
+                getPublicKey.ToPointer(),
+                addPrivateKey.ToPointer(),
+                getPrivateKey.ToPointer(),
+                setKeyPairVerified.ToPointer(),
+                getKeyPairVerified.ToPointer(),
+                addUserId.ToPointer(),
+                getUserId.ToPointer(),
+                addUserEmail.ToPointer(),
+                getUserEmail.ToPointer(),
+                addCertificateChain.ToPointer(),
+                getCertificateChain.ToPointer(),
+                clear.ToPointer()
+            );
+
+            var secureStorageP = new Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_storage_SecureStorage
+            {
+                pinned = secureStorage.pinned
+            };
+
+            sdkConfig.Builder.setSecureStorageOverride(builder, secureStorageP);
+        }
 
         try
         {

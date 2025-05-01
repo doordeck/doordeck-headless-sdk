@@ -94,8 +94,6 @@ In C#, we provide a sample build with **WPF** demonstrating how the SDK can be i
 
 </details>
 
-:arrow_left: [Back to index](01_INDEX.md)
-
 ### Python
 <details>
 <summary>Show Details</summary>
@@ -105,3 +103,5 @@ In C#, we provide a sample build with **WPF** demonstrating how the SDK can be i
 ```
 
 </details>
+
+:arrow_left: [Back to index](01_INDEX.md)

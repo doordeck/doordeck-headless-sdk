@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.data.FailedResultData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import io.ktor.client.HttpClientConfig
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
@@ -44,13 +45,15 @@ fun buildSdkConfig(
     apiEnvironment: ApiEnvironment,
     cloudAuthToken: String? = null,
     cloudRefreshToken: String? = null,
-    fusionHost: String? = null
+    fusionHost: String? = null,
+    secureStorage: SecureStorage? = null,
 ): SdkConfig {
     return SdkConfig.Builder()
         .setApiEnvironment(apiEnvironment)
         .setCloudAuthToken(cloudAuthToken)
         .setCloudRefreshToken(cloudRefreshToken)
         .setFusionHost(fusionHost)
+        .setSecureStorageOverride(secureStorage)
         .build()
 }
 
