@@ -25,7 +25,8 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD", cloud_auth_token: str = None, cloud_refresh_token: str = None, fusion_host: str = None):
+    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD",
+        cloud_auth_token: typing.Optional[str] = None, cloud_refresh_token: typing.Optional[str] = None, fusion_host: typing.Optional[str] = None):
         self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment)
         self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host)
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)

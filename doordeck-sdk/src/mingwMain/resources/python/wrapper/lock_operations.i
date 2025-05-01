@@ -47,7 +47,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_name(self, lockId: str, name: str = None):
+    async def update_lock_name(self, lockId: str, name: typing.Optional[str] = None):
         data = {
             "lockId": lockId,
             "name": name
@@ -57,7 +57,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_favourite(self, lockId: str, favourite: bool = None):
+    async def update_lock_favourite(self, lockId: str, favourite: typing.Optional[bool] = None):
         data = {
             "lockId": lockId,
             "favourite": favourite
@@ -67,7 +67,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_colour(self, lockId: str, colour: str = None):
+    async def update_lock_colour(self, lockId: str, colour: typing.Optional[str] = None):
         data = {
             "lockId": lockId,
             "colour": colour
@@ -77,7 +77,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_setting_default_name(self, lockId: str, name: str = None):
+    async def update_lock_setting_default_name(self, lockId: str, name: typing.Optional[str] = None):
         data = {
             "lockId": lockId,
             "name": name
@@ -117,7 +117,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_setting_location_restrictions(self, lockId: str, location: LocationRequirement = None):
+    async def update_lock_setting_location_restrictions(self, lockId: str, location: typing.Optional[LocationRequirement] = None):
         data = {
             "lockId": lockId,
             "location": dataclasses.asdict(location)

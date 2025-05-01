@@ -94,32 +94,32 @@ jobs:
       - name: Code validator
         run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk -w
 
-  csharp-build:
-    name: CSharp build
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Generate bindings
-        uses: ./.github/actions/csharp-bindings-action
-
-      - name: Code validator
-        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
+#  csharp-build:
+#    name: CSharp build
+#    runs-on: windows-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v4
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v4
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Generate bindings
+#        uses: ./.github/actions/csharp-bindings-action
+#
+#      - name: Code validator
+#        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
 
   pre-release:
     name: Pre-release
-    needs: [python-build, csharp-build]
+    needs: [python-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     outputs:

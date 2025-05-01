@@ -1,6 +1,6 @@
 %pythoncode %{
 class SdkException(Exception):
-    def __init__(self, message: str, exception: Exception = None):
+    def __init__(self, message: str, exception: typing.Optional[Exception] = None):
         super().__init__(message)
         self.exception = exception
 
