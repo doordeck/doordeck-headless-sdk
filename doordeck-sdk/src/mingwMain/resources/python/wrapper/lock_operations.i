@@ -110,7 +110,7 @@ class LockOperations(object):
     async def set_lock_setting_time_restrictions(self, lockId: str, times: List[TimeRequirement]):
         data = {
             "lockId": lockId,
-            "times": dataclasses.asdict(times)
+            "times": [dataclasses.asdict(t) for t in times]
         }
         return await execute_async(
             _doordeck_headless_sdk.setLockSettingTimeRestrictions,
@@ -120,7 +120,7 @@ class LockOperations(object):
     async def update_lock_setting_location_restrictions(self, lockId: str, location: typing.Optional[LocationRequirement] = None):
         data = {
             "lockId": lockId,
-            **({"location": asdict(location)} if location is not None else {})
+            **({"location": dataclasses.asdict(location)} if location is not None else {})
         }
         return await execute_async(
             _doordeck_headless_sdk.updateLockSettingLocationRestrictions,
