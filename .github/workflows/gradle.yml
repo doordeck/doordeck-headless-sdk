@@ -91,11 +91,11 @@ jobs:
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
 
-      - name: Generate .toml file
-        run: ./gradlew generateTomlFile
+      - name: Add pyrightconfig file
+        run: echo '{"reportMissingImports":false,"reportAttributeAccessIssue":false}' > pyrightconfig.json
 
       - name: Code validator
-        run: pyright doordeck-sdk/build/bin/mingwX64/python --warnings
+        run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
 
 #  csharp-build:
 #    name: CSharp build

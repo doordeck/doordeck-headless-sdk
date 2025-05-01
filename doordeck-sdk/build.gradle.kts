@@ -484,7 +484,4 @@ classifiers = [
 "Issue tracker" = "${pypiPublish.issues}"
 [tool.setuptools]
 package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
-[tool.pyright]
-reportMissingImports = false
-reportAttributeAccessIssue = false
 """.trimIndent()
