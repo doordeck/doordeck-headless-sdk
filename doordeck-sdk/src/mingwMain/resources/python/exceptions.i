@@ -16,7 +16,7 @@ class MissingAndroidContextException(SdkException):
 
 
 class BatchShareFailedException(SdkException):
-    def __init__(self, message: str, user_ids: list):
+    def __init__(self, message: str, user_ids: typing.List[str]):
         super().__init__(message, user_ids)
         self.user_ids = user_ids
 
