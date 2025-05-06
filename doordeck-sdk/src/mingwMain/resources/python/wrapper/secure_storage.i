@@ -54,7 +54,7 @@ class ISecureStorage:
     def get_user_id(self) -> str | None:
         raise NotImplementedError
 
-    def set_user_email(self, token: str) -> None:
+    def set_user_email(self, user_email: str) -> None:
         raise NotImplementedError
 
     def get_user_email(self) -> str | None:
