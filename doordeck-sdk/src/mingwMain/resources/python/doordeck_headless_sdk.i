@@ -30,6 +30,7 @@ class InitializeSdk(object):
         cloud_auth_token: typing.Optional[str] = None, cloud_refresh_token: typing.Optional[str] = None,
         fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None):
 
+        self.secureStorage = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_storage_SecureStorage()
         if secure_storage_impl is not None:
             SecureStorage.Implementation = secure_storage_impl
 
