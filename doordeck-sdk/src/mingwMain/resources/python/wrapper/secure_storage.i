@@ -153,7 +153,7 @@ class SecureStorage:
     @staticmethod
     def get_key_pair_verified() -> bytes | None:
         r = SecureStorage.Implementation and SecureStorage.Implementation.get_key_pair_verified()
-        return encode_byte_array_to_base64(r).encode() if r is not None else None
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_user_id(result) -> None:
@@ -163,7 +163,7 @@ class SecureStorage:
     @staticmethod
     def get_user_id() -> bytes | None:
         r = SecureStorage.Implementation and SecureStorage.Implementation.get_user_id()
-        return encode_byte_array_to_base64(r).encode() if r is not None else None
+        return r.encode() if r is not None else None
 
     @staticmethod
     def set_user_email(result) -> None:
@@ -173,7 +173,7 @@ class SecureStorage:
     @staticmethod
     def get_user_email() -> bytes | None:
         r = SecureStorage.Implementation and SecureStorage.Implementation.get_user_email()
-        return encode_byte_array_to_base64(r).encode() if r is not None else None
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_certificate_chain(result) -> None:
