@@ -82,9 +82,8 @@ class SecureStorage:
 
     @staticmethod
     def get_api_environment() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_api_environment().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_api_environment()
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_cloud_auth_token(result) -> None:
@@ -93,9 +92,8 @@ class SecureStorage:
 
     @staticmethod
     def get_cloud_auth_token() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_cloud_auth_token().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_cloud_auth_token()
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_cloud_refresh_auth_token(result) -> None:
@@ -104,9 +102,8 @@ class SecureStorage:
 
     @staticmethod
     def get_cloud_refresh_token() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_cloud_refresh_token().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_cloud_refresh_token()
+        return r.encode() if r is not None else None
 
     @staticmethod
     def set_fusion_host(result) -> None:
@@ -115,9 +112,8 @@ class SecureStorage:
 
     @staticmethod
     def get_fusion_host() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_fusion_host().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_fusion_host()
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_fusion_auth_token(result) -> None:
@@ -126,9 +122,8 @@ class SecureStorage:
 
     @staticmethod
     def get_fusion_auth_token() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_fusion_auth_token().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_fusion_auth_token()
+        return r.encode() if r is not None else None
 
     @staticmethod
     def add_public_key(result) -> None:
@@ -137,9 +132,8 @@ class SecureStorage:
 
     @staticmethod
     def get_public_key() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return encode_byte_array_to_base64(SecureStorage.Implementation.get_public_key()).encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_public_key()
+        return encode_byte_array_to_base64(r).encode() if r is not None else None
 
     @staticmethod
     def add_private_key(result) -> None:
@@ -148,9 +142,8 @@ class SecureStorage:
 
     @staticmethod
     def get_private_key() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return encode_byte_array_to_base64(SecureStorage.Implementation.get_private_key()).encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_private_key()
+        return encode_byte_array_to_base64(r).encode() if r is not None else None
 
     @staticmethod
     def set_key_pair_verified(result) -> None:
@@ -159,9 +152,8 @@ class SecureStorage:
 
     @staticmethod
     def get_key_pair_verified() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return str(SecureStorage.Implementation.get_key_pair_verified()).encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_key_pair_verified()
+        return encode_byte_array_to_base64(r).encode() if r is not None else None
 
     @staticmethod
     def add_user_id(result) -> None:
@@ -170,9 +162,8 @@ class SecureStorage:
 
     @staticmethod
     def get_user_id() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_user_id().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_user_id()
+        return encode_byte_array_to_base64(r).encode() if r is not None else None
 
     @staticmethod
     def set_user_email(result) -> None:
@@ -181,9 +172,8 @@ class SecureStorage:
 
     @staticmethod
     def get_user_email() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return SecureStorage.Implementation.get_user_email().encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_user_email()
+        return encode_byte_array_to_base64(r).encode() if r is not None else None
 
     @staticmethod
     def add_certificate_chain(result) -> None:
@@ -192,9 +182,8 @@ class SecureStorage:
 
     @staticmethod
     def get_certificate_chain() -> bytes | None:
-        if SecureStorage.Implementation is not None:
-            return certificate_chain_to_string(SecureStorage.Implementation.get_certificate_chain()).encode()
-        return None
+        r = SecureStorage.Implementation and SecureStorage.Implementation.get_certificate_chain()
+        return certificate_chain_to_string(t).encode() if r is not None else None
 
     @staticmethod
     def clear() -> None:
