@@ -183,7 +183,7 @@ class SecureStorage:
     @staticmethod
     def get_certificate_chain() -> bytes | None:
         r = SecureStorage.Implementation and SecureStorage.Implementation.get_certificate_chain()
-        return certificate_chain_to_string(t).encode() if r is not None else None
+        return certificate_chain_to_string(r).encode() if r is not None else None
 
     @staticmethod
     def clear() -> None:
