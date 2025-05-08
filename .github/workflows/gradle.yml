@@ -14,59 +14,59 @@ permissions:
   contents: read
 
 jobs:
-#  build:
-#    env:
-#      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-#      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-#      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-#      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
-#    strategy:
-#      max-parallel: 1
-#      matrix:
-#        include:
-#          - name: JVM
-#            test: jvmTest
-#            os: ubuntu-latest
-#          - name: Android
-#            test: testReleaseUnitTest
-#            os: ubuntu-latest
-#          - name: JS
-#            test: kotlinUpgradeYarnLock jsTest
-#            os: ubuntu-latest
-#          - name: Apple
-#            test: iosX64Test macosArm64Test
-#            os: macos-latest
-#          - name: Windows
-#            test: mingwX64Test
-#            os: windows-latest
-#    runs-on: ${{ matrix.os }}
-#    name: ${{ matrix.name }}
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#
-#      - name: Set up Java
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: corretto
-#          java-version: 21
-#
-#      - name: Setup Gradle
-#        uses: gradle/actions/setup-gradle@v4
-#
-#      - name: Setup WireGuard
-#        uses: ./.github/actions/wireguard-action
-#        continue-on-error: true
-#        with:
-#          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
-#          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
-#          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
-#          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
-#          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
-#
-#      - name: Tests
-#        run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
+  build:
+    env:
+      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        include:
+          - name: JVM
+            test: jvmTest
+            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
+            os: ubuntu-latest
+          - name: JS
+            test: kotlinUpgradeYarnLock jsTest
+            os: ubuntu-latest
+          - name: Apple
+            test: iosX64Test macosArm64Test
+            os: macos-latest
+          - name: Windows
+            test: mingwX64Test
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup WireGuard
+        uses: ./.github/actions/wireguard-action
+        continue-on-error: true
+        with:
+          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
+
+      - name: Tests
+        run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
 
   python-build:
     name: Python build
@@ -97,28 +97,28 @@ jobs:
       - name: Code validator
         run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
 
-#  csharp-build:
-#    name: CSharp build
-#    runs-on: windows-latest
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v4
-#
-#      - name: Setup Gradle
-#        uses: gradle/actions/setup-gradle@v4
-#
-#      - name: Setup Java
-#        uses: actions/setup-java@v4
-#        with:
-#          distribution: corretto
-#          java-version: 21
-#
-#      - name: Generate bindings
-#        uses: ./.github/actions/csharp-bindings-action
-#
-#      - name: Code validator
-#        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
+  csharp-build:
+    name: CSharp build
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Generate bindings
+        uses: ./.github/actions/csharp-bindings-action
+
+      - name: Code validator
+        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
 
   pre-release:
     name: Pre-release
