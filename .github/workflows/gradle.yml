@@ -122,7 +122,7 @@ jobs:
 
   pre-release:
     name: Pre-release
-    needs: [python-build]
+    needs: [build, python-build, csharp-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     outputs:
