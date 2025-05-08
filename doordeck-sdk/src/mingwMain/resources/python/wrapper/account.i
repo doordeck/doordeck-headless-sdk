@@ -24,7 +24,7 @@ class Account(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def register_ephemeral_key_with_secondary_authentication(self, publicKey: str, method: Optional[typing.Literal["EMAIL", "TELEPHONE", "SMS"]] = None):
+    async def register_ephemeral_key_with_secondary_authentication(self, publicKey: str, method: typing.Optional[typing.Literal["EMAIL", "TELEPHONE", "SMS"]] = None):
         data = {
             "publicKey": publicKey,
             "method": method
@@ -34,7 +34,7 @@ class Account(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def verify_ephemeral_key_registration(self, code: str, privateKey: str = None):
+    async def verify_ephemeral_key_registration(self, code: str, privateKey: typing.Optional[str] = None):
         data = {
             "code": code,
             "privateKey": privateKey

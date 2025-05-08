@@ -1,6 +1,6 @@
 %pythoncode %{
 class SdkException(Exception):
-    def __init__(self, message: str, exception: Exception = None):
+    def __init__(self, message: str, exception: typing.Optional[Exception] = None):
         super().__init__(message)
         self.exception = exception
 
@@ -16,8 +16,8 @@ class MissingAndroidContextException(SdkException):
 
 
 class BatchShareFailedException(SdkException):
-    def __init__(self, message: str, user_ids: list):
-        super().__init__(message, user_ids)
+    def __init__(self, message: str, user_ids: typing.List[str]):
+        super().__init__(message)
         self.user_ids = user_ids
 
 

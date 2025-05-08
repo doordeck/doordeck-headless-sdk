@@ -85,14 +85,17 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Setup pylint
-        run: pip install pylint
+      - name: Setup pyright
+        run: pip install pyright
 
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
 
+      - name: Add pyrightconfig file
+        run: echo '{"reportMissingImports":false,"reportAttributeAccessIssue":false}' > pyrightconfig.json
+
       - name: Code validator
-        run: pylint --errors-only doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --disable=import-error,no-name-in-module
+        run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
 
   csharp-build:
     name: CSharp build
