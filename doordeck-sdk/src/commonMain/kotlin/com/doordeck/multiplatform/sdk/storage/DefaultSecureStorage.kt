@@ -28,7 +28,7 @@ internal class DefaultSecureStorage(
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        storeValue(this.apiEnvironmentKey, apiEnvironment.name)
+        storeValue(apiEnvironmentKey, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
@@ -125,11 +125,11 @@ internal class DefaultSecureStorage(
             is String -> settings.putString(key, value)
             is Boolean -> settings.putBoolean(key, value)
             else -> {
-                Logger.e("Failed to store value, unhandled value type for value: $value and key: $key")
+                Logger.e("Unhandled value type for key: $key")
                 return
             }
         }
-        Logger.d("Successfully stored value: $value with key: $key")
+        Logger.d("Successfully stored value: $value for key: $key")
     }
 
     private inline fun <reified T> retrieveValue(key: String): T? {
@@ -137,11 +137,11 @@ internal class DefaultSecureStorage(
             String::class -> settings.getStringOrNull(key)
             Boolean::class -> settings.getBooleanOrNull(key)
             else -> {
-                Logger.e("Unhandled value type for type: ${T::class.simpleName} and key: $key")
+                Logger.e("Unhandled value type for key: $key")
                 return null
             }
         }
-        Logger.d("Successfully retrieved value: $value with key: $key")
+        Logger.d("Successfully retrieved value: $value for key: $key")
         return value as T
     }
 }

@@ -40,7 +40,7 @@ actual object CryptoManager {
         true
     }
 
-    @Suppress("DUPLICATE_LABEL_IN_WHEN")
+    @Suppress("DUPLICATE_LABEL_IN_WHEN", "KotlinConstantConditions")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
@@ -72,7 +72,7 @@ actual object CryptoManager {
         signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
         signature.update(message.toByteArray())
         signature.verify(this)
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
         false
     }
 }

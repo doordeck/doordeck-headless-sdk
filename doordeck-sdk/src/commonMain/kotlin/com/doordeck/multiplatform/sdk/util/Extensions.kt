@@ -158,7 +158,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
 
             val errorResponse = try {
                 responseException.response.body<ResponseError>()
-            } catch (_: Exception) {
+            } catch (exception: Exception) {
                 null
             }
 
