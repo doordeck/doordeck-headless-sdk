@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.context
 
+import co.touchlab.kermit.Logger
+import co.touchlab.kermit.Severity
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -20,6 +22,10 @@ import kotlin.uuid.Uuid
 internal object ContextManagerImpl : ContextManager {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
+
+    internal fun setDebugLogging(enabled: Boolean) {
+        Logger.mutableConfig.minSeverity = if (enabled) Severity.Debug else Severity.Assert
+    }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         secureStorage.setApiEnvironment(apiEnvironment)

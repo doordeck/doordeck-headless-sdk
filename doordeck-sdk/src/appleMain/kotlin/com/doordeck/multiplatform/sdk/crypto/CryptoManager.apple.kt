@@ -31,6 +31,7 @@ actual object CryptoManager {
         return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
+    @Suppress("DUPLICATE_LABEL_IN_WHEN")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> this

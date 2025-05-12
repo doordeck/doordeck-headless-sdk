@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
+import co.touchlab.kermit.Logger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -7,112 +8,140 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.russhwolf.settings.Settings
 
-internal class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
+internal class DefaultSecureStorage(
+    private val settings: Settings
+) : SecureStorage {
 
     /**
      * Storage Keys
      */
-    private val API_ENVIRONMENT = "API_ENVIRONMENT"
-    private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
-    private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
-    private val FUSION_HOST = "FUSION_HOST"
-    private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
-    private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
-    private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
-    private val KEY_PAIR_VERIFIED = "KEY_PAIR_VERIFIED"
-    private val USER_ID_KEY = "USER_ID_KEY"
-    private val USER_EMAIL_KEY = "USER_EMAIL_KEY"
-    private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
+    private val apiEnvironmentKey = "API_ENVIRONMENT_KEY"
+    private val cloudAuthTokenKey = "CLOUD_AUTH_TOKEN_KEY"
+    private val cloudRefreshTokenKey = "CLOUD_REFRESH_TOKEN_KEY"
+    private val fusionHostKey = "FUSION_HOST_KEY"
+    private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
+    private val publicKeyKey = "PUBLIC_KEY_KEY"
+    private val privateKeyKey = "PRIVATE_KEY_KEY"
+    private val keyPairVerifiedKey = "KEY_PAIR_VERIFIED_KEY"
+    private val userIdKey = "USER_ID_KEY"
+    private val userEmailKey = "USER_EMAIL_KEY"
+    private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        settings.putString(API_ENVIRONMENT, apiEnvironment.name)
+        storeValue(this.apiEnvironmentKey, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return settings.getStringOrNull(API_ENVIRONMENT)?.let { ApiEnvironment.valueOf(it) }
+        return retrieveValue<String>(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
     }
 
     override fun addCloudAuthToken(token: String) {
-        settings.putString(CLOUD_AUTH_TOKEN_KEY, token)
+        storeValue(cloudAuthTokenKey, token)
     }
 
     override fun getCloudAuthToken(): String? {
-        return settings.getStringOrNull(CLOUD_AUTH_TOKEN_KEY)
+        return retrieveValue(cloudAuthTokenKey)
     }
 
     override fun addCloudRefreshToken(token: String) {
-        settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
+        storeValue(cloudRefreshTokenKey, token)
     }
 
     override fun getCloudRefreshToken(): String? {
-        return settings.getStringOrNull(CLOUD_REFRESH_TOKEN_KEY)
+        return retrieveValue(cloudRefreshTokenKey)
     }
 
     override fun setFusionHost(host: String) {
-        settings.putString(FUSION_HOST, host)
+        storeValue(fusionHostKey, host)
     }
 
     override fun getFusionHost(): String? {
-        return settings.getStringOrNull(FUSION_HOST)
+        return retrieveValue(fusionHostKey)
     }
 
     override fun addFusionAuthToken(token: String) {
-        settings.putString(FUSION_AUTH_TOKEN_KEY, token)
+        storeValue(fusionAuthTokenKey, token)
     }
 
     override fun getFusionAuthToken(): String? {
-        return settings.getStringOrNull(FUSION_AUTH_TOKEN_KEY)
+        return retrieveValue(fusionAuthTokenKey)
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
-        settings.putString(PUBLIC_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        storeValue(publicKeyKey, byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPublicKey(): ByteArray? {
-        return settings.getStringOrNull(PUBLIC_KEY_KEY)?.decodeBase64ToByteArray()
+        return retrieveValue<String>(publicKeyKey)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
-        settings.putString(PRIVATE_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        storeValue(privateKeyKey, byteArray.encodeByteArrayToBase64())
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return settings.getStringOrNull(PRIVATE_KEY_KEY)?.decodeBase64ToByteArray()
+        return retrieveValue<String>(privateKeyKey)?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
-        settings.putBoolean(KEY_PAIR_VERIFIED, verified)
+        storeValue(keyPairVerifiedKey, verified)
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return settings.getBooleanOrNull(KEY_PAIR_VERIFIED)
+        return retrieveValue<Boolean>(keyPairVerifiedKey)
     }
 
     override fun addUserId(userId: String) {
-        settings.putString(USER_ID_KEY, userId)
+        storeValue(userIdKey, userId)
     }
 
     override fun getUserId(): String? {
-        return settings.getStringOrNull(USER_ID_KEY)
+        return retrieveValue(userIdKey)
     }
 
     override fun addUserEmail(email: String) {
-        settings.putString(USER_EMAIL_KEY, email)
+        storeValue(userEmailKey, email)
     }
 
     override fun getUserEmail(): String? {
-        return settings.getStringOrNull(USER_EMAIL_KEY)
+        return retrieveValue(userEmailKey)
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-        settings.putString(CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString())
+        storeValue(certificateChainKey, certificateChain.certificateChainToString())
     }
 
     override fun getCertificateChain(): List<String>? {
-        return settings.getStringOrNull(CERTIFICATE_CHAIN_KEY)?.stringToCertificateChain()
+        return retrieveValue<String>(certificateChainKey)?.stringToCertificateChain()
     }
 
     override fun clear() {
         settings.clear()
+        Logger.d("Successfully cleared storage")
+    }
+
+    private fun storeValue(key: String, value: Any) {
+        when (value) {
+            is String -> settings.putString(key, value)
+            is Boolean -> settings.putBoolean(key, value)
+            else -> {
+                Logger.e("Failed to store value, unhandled value type for value: $value and key: $key")
+                return
+            }
+        }
+        Logger.d("Successfully stored value: $value with key: $key")
+    }
+
+    private inline fun <reified T> retrieveValue(key: String): T? {
+        val value = when (T::class) {
+            String::class -> settings.getStringOrNull(key)
+            Boolean::class -> settings.getBooleanOrNull(key)
+            else -> {
+                Logger.e("Unhandled value type for type: ${T::class.simpleName} and key: $key")
+                return null
+            }
+        }
+        Logger.d("Successfully retrieved value: $value with key: $key")
+        return value as T
     }
 }

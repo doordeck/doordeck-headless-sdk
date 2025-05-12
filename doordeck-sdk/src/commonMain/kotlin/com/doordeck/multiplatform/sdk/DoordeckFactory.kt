@@ -9,6 +9,7 @@ internal object DoordeckFactory {
         // Add the provided values into the context
         ContextManagerImpl.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)
+            context.setDebugLogging(sdkConfig.debugLogging ?: false)
             sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
             sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
             sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }

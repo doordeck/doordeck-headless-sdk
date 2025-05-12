@@ -1,11 +1,11 @@
 [versions]
 agp = "8.5.2"
-bouncycastle = "1.80"
+bouncy-castle = "1.80"
 kotlin = "2.1.20"
 multiplatform-settings = "1.3.0"
-android-minSdk = "26"
-android-compileSdk = "34"
-ios-minSdk = "14"
+android-min-sdk = "26"
+android-compile-sdk = "34"
+ios-min-sdk = "14"
 ktor-client = "3.1.2"
 libsodium = "0.9.2"
 security-crypto = "1.1.0-alpha07"
@@ -14,9 +14,10 @@ kotlin-coroutines-test = "1.10.1"
 swift-klib = "0.6.4"
 asn1js = "3.0.6"
 pkijs = "3.2.5"
+kermit = "2.0.5"
 
 [libraries]
-bouncycastle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncycastle" }
+bouncy-castle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatform-settings" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines-test" }
@@ -41,10 +42,11 @@ libsodium-bindings-mingwx64 = { module = "com.ionspin.kotlin:multiplatform-crypt
 # Utils
 security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 swift-klib = { id = "io.github.ttypic.swiftklib", version.ref = "swift-klib" }

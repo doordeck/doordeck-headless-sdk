@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-
+import co.touchlab.kermit.Logger
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -14,7 +14,9 @@ actual object CryptoManager {
 
     init {
         if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initializeWithCallback {  }
+            LibsodiumInitializer.initializeWithCallback {
+                Logger.d("Successfully initialized Libsodium")
+            }
         }
     }
 
@@ -39,6 +41,7 @@ actual object CryptoManager {
         return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
+    @Suppress("DUPLICATE_LABEL_IN_WHEN")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> this
@@ -65,9 +68,13 @@ actual object CryptoManager {
     }
 
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
-        Signature.verifyDetached(toUByteArray(), message.toByteArray().toUByteArray(), publicKey.toPlatformPublicKey().toUByteArray())
+        Signature.verifyDetached(
+            signature = toUByteArray(),
+            message = message.toByteArray().toUByteArray(),
+            publicKey = publicKey.toPlatformPublicKey().toUByteArray()
+        )
         true
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         false
     }
 }

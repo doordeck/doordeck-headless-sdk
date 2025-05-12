@@ -36,10 +36,11 @@ actual object CryptoManager {
         certificate.notAfter?.let {
             Clock.System.now() >= it.toInstant().toKotlinInstant() - MIN_CERTIFICATE_LIFETIME_DAYS
         } ?: true
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         true
     }
 
+    @Suppress("DUPLICATE_LABEL_IN_WHEN")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
@@ -71,7 +72,7 @@ actual object CryptoManager {
         signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
         signature.update(message.toByteArray())
         signature.verify(this)
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         false
     }
 }

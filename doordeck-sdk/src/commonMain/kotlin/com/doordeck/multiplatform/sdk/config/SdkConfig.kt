@@ -18,7 +18,8 @@ data class SdkConfig @JvmOverloads constructor(
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
     val fusionHost: String?,
-    val secureStorage: SecureStorage
+    val secureStorage: SecureStorage,
+    val debugLogging: Boolean? = null
 ) {
     /**
      * Builder for constructing [SdkConfig] instances.
@@ -32,6 +33,7 @@ data class SdkConfig @JvmOverloads constructor(
         private var cloudRefreshToken: String? = null
         private var fusionHost: String? = null
         private var secureStorage: SecureStorage? = null
+        private var debugLogging: Boolean? = null
 
         /**
          * Sets the API environment for the SDK.
@@ -59,6 +61,11 @@ data class SdkConfig @JvmOverloads constructor(
         fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
 
         /**
+         *
+         */
+        fun setDebugLogging(enabled: Boolean?): Builder = apply { this.debugLogging = enabled }
+
+        /**
          * Builds a new [SdkConfig] instance.
          *
          * If no secure storage override is provided, a default secure storage is created.
@@ -70,7 +77,8 @@ data class SdkConfig @JvmOverloads constructor(
                 cloudAuthToken = cloudAuthToken,
                 cloudRefreshToken = cloudRefreshToken,
                 fusionHost = fusionHost,
-                secureStorage = secureStorage
+                secureStorage = secureStorage,
+                debugLogging = debugLogging
             )
         }
     }

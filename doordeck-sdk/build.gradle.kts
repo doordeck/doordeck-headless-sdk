@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
 plugins {
-    alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
-    alias(libs.plugins.kotlinxSerialization)
-    alias(libs.plugins.kotlinCocoapods)
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.swift.klib)
     `maven-publish`
     signing
@@ -142,7 +142,7 @@ kotlin {
         authors = cocoapodsPublish.author
         version = "${project.version}"
         source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
-        ios.deploymentTarget = libs.versions.ios.minSdk.get()
+        ios.deploymentTarget = libs.versions.ios.min.sdk.get()
         name = cocoapodsPublish.packageName
         framework {
             baseName = cocoapodsPublish.packageName
@@ -183,6 +183,7 @@ kotlin {
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.multiplatform.settings)
+                implementation(libs.kermit.logger)
             }
         }
 
@@ -198,7 +199,7 @@ kotlin {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.security.crypto)
-                implementation(libs.bouncycastle)
+                implementation(libs.bouncy.castle)
             }
         }
 
@@ -235,7 +236,7 @@ kotlin {
     targets.withType<KotlinNativeTarget> {
         compilations["main"].compileTaskProvider.configure {
             compilerOptions {
-                val version = libs.versions.ios.minSdk.get().toInt()
+                val version = libs.versions.ios.min.sdk.get().toInt()
                 freeCompilerArgs.addAll("-Xoverride-konan-properties=osVersionMin.ios_x64=$version.0;osVersionMin.ios_arm64=$version.0;osVersionMin.macos_arm64=$version.0;osVersionMin.ios_simulator_arm64=$version.0")
             }
         }
@@ -304,9 +305,9 @@ signing {
 
 android {
     namespace = "com.doordeck.multiplatform.sdk"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compile.sdk.get().toInt()
     defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
     }
 }
 
@@ -314,8 +315,8 @@ swiftklib {
     create("KCryptoKit") {
         path = file("native/KCryptoKit")
         packageName("com.doordeck.multiplatform.sdk.kcryptokit")
-        minMacos = libs.versions.ios.minSdk.get().toInt()
-        minIos = libs.versions.ios.minSdk.get().toInt()
+        minMacos = libs.versions.ios.min.sdk.get().toInt()
+        minIos = libs.versions.ios.min.sdk.get().toInt()
     }
 }
 

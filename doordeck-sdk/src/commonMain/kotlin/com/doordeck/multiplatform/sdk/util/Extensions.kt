@@ -38,6 +38,9 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
@@ -128,6 +131,17 @@ internal fun HttpClientConfig<*>.installTimeout() {
     }
 }
 
+internal fun HttpClientConfig<*>.installLogging() {
+    install(Logging) {
+        logger = object : Logger {
+            override fun log(message: String) {
+                co.touchlab.kermit.Logger.d(message)
+            }
+        }
+        level = LogLevel.ALL
+    }
+}
+
 /**
  * Installs a response validator for the [HttpClientConfig].
  * This validator ensures that failed API responses are mapped to appropriate exceptions
@@ -144,7 +158,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
 
             val errorResponse = try {
                 responseException.response.body<ResponseError>()
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 null
             }
 

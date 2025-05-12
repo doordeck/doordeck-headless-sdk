@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import co.touchlab.kermit.Logger
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.jsmodule.ASN1
 import com.doordeck.multiplatform.sdk.jsmodule.PKI
@@ -18,7 +19,9 @@ actual object CryptoManager {
 
     init {
         if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initializeWithCallback {  }
+            LibsodiumInitializer.initializeWithCallback {
+                Logger.d("Successfully initialized Libsodium")
+            }
         }
     }
 
@@ -40,10 +43,11 @@ actual object CryptoManager {
         certificate.fromSchema(asn1.result)
         val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
         Clock.System.now() >= Instant.parse(notAfterDate) - MIN_CERTIFICATE_LIFETIME_DAYS
-    } catch (exception: Throwable) {
+    } catch (_: Throwable) {
         true
     }
 
+    @Suppress("DUPLICATE_LABEL_IN_WHEN")
     @JsExport.Ignore
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
@@ -74,9 +78,13 @@ actual object CryptoManager {
 
     @JsExport.Ignore
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
-        Signature.verifyDetached(toUByteArray(), message.toByteArray().toUByteArray(), publicKey.toPlatformPublicKey().toUByteArray())
+        Signature.verifyDetached(
+            signature = toUByteArray(),
+            message = message.toByteArray().toUByteArray(),
+            publicKey = publicKey.toPlatformPublicKey().toUByteArray()
+        )
         true
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         false
     }
 }
