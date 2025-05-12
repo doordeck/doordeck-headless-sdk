@@ -12,7 +12,7 @@ internal fun String.isCertificateAboutToExpire(): Boolean = try {
     val notAfter = extractNotAfter(decodeBase64ToByteArray())
     val notAfterInstant = parseNotAfter(notAfter.decodeToString())
     Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
-} catch (exception: Exception) {
+} catch (_: Exception) {
     true
 }
 

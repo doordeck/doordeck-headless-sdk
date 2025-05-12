@@ -19,6 +19,7 @@ class SdkConfigTest {
             .setCloudRefreshToken(sdkConfig.cloudRefreshToken)
             .setFusionHost(sdkConfig.fusionHost)
             .setSecureStorageOverride(sdkConfig.secureStorage)
+            .setDebugLogging(sdkConfig.debugLogging)
             .build()
 
         // Then

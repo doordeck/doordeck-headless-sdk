@@ -23,7 +23,7 @@ internal object LocalUnlockClient {
                         addRequestHeaders(true)
                         setBody(request)
                     }
-                } catch (exception: Exception) {
+                } catch (_: Exception) {
                     null
                 }
             }

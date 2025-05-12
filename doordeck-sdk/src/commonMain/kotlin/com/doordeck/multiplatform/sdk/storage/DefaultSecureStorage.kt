@@ -32,7 +32,7 @@ internal class DefaultSecureStorage(
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return retrieveValue<String>(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
+        return retrieveValue<String?>(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
     }
 
     override fun addCloudAuthToken(token: String) {
@@ -72,7 +72,7 @@ internal class DefaultSecureStorage(
     }
 
     override fun getPublicKey(): ByteArray? {
-        return retrieveValue<String>(publicKeyKey)?.decodeBase64ToByteArray()
+        return retrieveValue<String?>(publicKeyKey)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
@@ -80,7 +80,7 @@ internal class DefaultSecureStorage(
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return retrieveValue<String>(privateKeyKey)?.decodeBase64ToByteArray()
+        return retrieveValue<String?>(privateKeyKey)?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
@@ -88,7 +88,7 @@ internal class DefaultSecureStorage(
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return retrieveValue<Boolean>(keyPairVerifiedKey)
+        return retrieveValue<Boolean?>(keyPairVerifiedKey)
     }
 
     override fun addUserId(userId: String) {
@@ -112,7 +112,7 @@ internal class DefaultSecureStorage(
     }
 
     override fun getCertificateChain(): List<String>? {
-        return retrieveValue<String>(certificateChainKey)?.stringToCertificateChain()
+        return retrieveValue<String?>(certificateChainKey)?.stringToCertificateChain()
     }
 
     override fun clear() {
