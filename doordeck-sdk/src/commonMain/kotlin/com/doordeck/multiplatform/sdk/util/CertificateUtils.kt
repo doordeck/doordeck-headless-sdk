@@ -11,9 +11,9 @@ internal fun String.isCertificateAboutToExpire(): Boolean {
     return try {
         // Retrieve the 'Not After' element
         val notAfterElement = Asn1Element.parse(decodeBase64ToByteArray())
-            .asSequence().children.elementAtOrNull(0)?.asSequence()
-            ?.children?.elementAtOrNull(4)?.asSequence()    // Validity
-            ?.children?.elementAtOrNull(1)  // Not after
+            .asSequence().children.elementAtOrNull(0)?.asSequence() // Tabs
+            ?.children?.elementAtOrNull(4)?.asSequence() // Validity
+            ?.children?.elementAtOrNull(1) // Not after
         if (notAfterElement == null) {
             return true
         }
