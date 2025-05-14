@@ -1,12 +1,11 @@
 package com.doordeck.multiplatform.sdk.context
 
-import co.touchlab.kermit.Logger
-import co.touchlab.kermit.Severity
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
@@ -24,7 +23,7 @@ internal object ContextManagerImpl : ContextManager {
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
     internal fun setDebugLogging(enabled: Boolean) {
-        Logger.mutableConfig.minSeverity = if (enabled) Severity.Debug else Severity.Assert
+        SdkLogger.enableDebugLogging(enabled)
     }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {

@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
-import co.touchlab.kermit.Logger
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -117,7 +117,7 @@ internal class DefaultSecureStorage(
 
     override fun clear() {
         settings.clear()
-        Logger.d("Successfully cleared storage")
+        SdkLogger.d("Successfully cleared storage")
     }
 
     private fun storeValue(key: String, value: Any) {
@@ -125,11 +125,11 @@ internal class DefaultSecureStorage(
             is String -> settings.putString(key, value)
             is Boolean -> settings.putBoolean(key, value)
             else -> {
-                Logger.e("Unhandled value type for key: $key")
+                SdkLogger.e("Unhandled value type for key: $key")
                 return
             }
         }
-        Logger.d("Successfully stored value: $value for key: $key")
+        SdkLogger.d("Successfully stored value: $value for key: $key")
     }
 
     private inline fun <reified T> retrieveValue(key: String): T? {
@@ -137,11 +137,11 @@ internal class DefaultSecureStorage(
             String::class -> settings.getStringOrNull(key)
             Boolean::class -> settings.getBooleanOrNull(key)
             else -> {
-                Logger.e("Unhandled value type for key: $key")
+                SdkLogger.e("Unhandled value type for key: $key")
                 return null
             }
         }
-        Logger.d("Successfully retrieved value: $value for key: $key")
+        SdkLogger.d("Successfully retrieved value: $value for key: $key")
         return value as T
     }
 }

@@ -20,7 +20,7 @@ internal fun String.isCertificateAboutToExpire(): Boolean {
         val notAfterInstant = Asn1Time.decodeFromDer(notAfterElement.derEncoded)
             .instant
         return Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
-    } catch (exception: Throwable) {
+    } catch (_: Throwable) {
         true
     }
 }

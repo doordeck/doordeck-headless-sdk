@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import co.touchlab.kermit.Logger
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
@@ -15,7 +15,7 @@ actual object CryptoManager {
     init {
         if (!LibsodiumInitializer.isInitialized()) {
             LibsodiumInitializer.initializeWithCallback {
-                Logger.d("Successfully initialized Libsodium")
+                SdkLogger.d("Successfully initialized Libsodium")
             }
         }
     }

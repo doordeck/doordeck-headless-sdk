@@ -72,7 +72,7 @@ actual object CryptoManager {
         signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
         signature.update(message.toByteArray())
         signature.verify(this)
-    } catch (exception: Exception) {
+    } catch (_: Exception) {
         false
     }
 }

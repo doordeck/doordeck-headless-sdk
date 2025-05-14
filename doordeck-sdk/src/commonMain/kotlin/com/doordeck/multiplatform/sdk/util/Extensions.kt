@@ -19,6 +19,7 @@ import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
@@ -135,7 +136,7 @@ internal fun HttpClientConfig<*>.installLogging() {
     install(Logging) {
         logger = object : Logger {
             override fun log(message: String) {
-                co.touchlab.kermit.Logger.d(message)
+                SdkLogger.d(message)
             }
         }
         level = LogLevel.ALL
@@ -158,7 +159,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
 
             val errorResponse = try {
                 responseException.response.body<ResponseError>()
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 null
             }
 
