@@ -74,7 +74,8 @@ actual object CryptoManager {
             publicKey = publicKey.toPlatformPublicKey().toUByteArray()
         )
         true
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
+        SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }

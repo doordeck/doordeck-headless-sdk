@@ -41,9 +41,11 @@ actual object CryptoManager {
         val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)
-        val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
-        Clock.System.now() >= Instant.parse(notAfterDate) - MIN_CERTIFICATE_LIFETIME_DAYS
-    } catch (_: Throwable) {
+        val notAfterInstant = Instant.parse(Date(certificate.notAfter.value.toString()).toISOString())
+        SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
+        Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+    } catch (exception: Throwable) {
+        SdkLogger.e(exception) { "Failed to parse the certificate" }
         true
     }
 
@@ -84,7 +86,8 @@ actual object CryptoManager {
             publicKey = publicKey.toPlatformPublicKey().toUByteArray()
         )
         true
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
+        SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }

@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.crypto
 
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.datetime.Clock
@@ -37,14 +38,21 @@ actual object CryptoManager {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
-        val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
-        val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
-        certificate.notAfter?.let {
-            Clock.System.now() >= it.toInstant().toKotlinInstant() - MIN_CERTIFICATE_LIFETIME_DAYS
-        } ?: true
-    } catch (_: Exception) {
-        true
+    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+        return try {
+            val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
+            val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+            val notAfterInstant = certificate.notAfter?.toInstant()?.toKotlinInstant()
+            if (notAfterInstant == null) {
+                SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
+                return true
+            }
+            SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
+            return Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+        } catch (exception: Exception) {
+            SdkLogger.e(exception) { "Failed to parse the certificate" }
+            true
+        }
     }
 
     @Suppress("DUPLICATE_LABEL_IN_WHEN", "KotlinConstantConditions")
@@ -79,7 +87,8 @@ actual object CryptoManager {
         signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
         signature.update(message.toByteArray())
         signature.verify(this)
-    } catch (_: Exception) {
+    } catch (exception: Exception) {
+        SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }
