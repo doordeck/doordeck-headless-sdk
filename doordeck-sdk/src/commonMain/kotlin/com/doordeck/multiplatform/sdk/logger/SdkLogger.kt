@@ -3,11 +3,11 @@ package com.doordeck.multiplatform.sdk.logger
 import co.touchlab.kermit.Logger
 import co.touchlab.kermit.NoTagFormatter
 import co.touchlab.kermit.Severity
-import co.touchlab.kermit.loggerConfigInit
+import co.touchlab.kermit.mutableLoggerConfigInit
 import co.touchlab.kermit.platformLogWriter
 
 internal object SdkLogger : Logger(
-    config = loggerConfigInit(
+    config = mutableLoggerConfigInit(
         platformLogWriter(NoTagFormatter),
         minSeverity = Severity.Assert
     )
