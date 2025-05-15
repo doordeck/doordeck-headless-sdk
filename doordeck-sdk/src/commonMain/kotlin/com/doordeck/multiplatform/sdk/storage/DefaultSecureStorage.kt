@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
+import com.doordeck.multiplatform.sdk.util.mask
 import com.russhwolf.settings.Settings
 
 internal class DefaultSecureStorage(
@@ -28,91 +29,91 @@ internal class DefaultSecureStorage(
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        storeValue(apiEnvironmentKey, apiEnvironment.name)
+        storeStringValue(apiEnvironmentKey, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return retrieveValue<String?>(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
+        return retrieveStringValue(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
     }
 
     override fun addCloudAuthToken(token: String) {
-        storeValue(cloudAuthTokenKey, token)
+        storeStringValue(cloudAuthTokenKey, token, true)
     }
 
     override fun getCloudAuthToken(): String? {
-        return retrieveValue(cloudAuthTokenKey)
+        return retrieveStringValue(cloudAuthTokenKey, true)
     }
 
     override fun addCloudRefreshToken(token: String) {
-        storeValue(cloudRefreshTokenKey, token)
+        storeStringValue(cloudRefreshTokenKey, token, true)
     }
 
     override fun getCloudRefreshToken(): String? {
-        return retrieveValue(cloudRefreshTokenKey)
+        return retrieveStringValue(cloudRefreshTokenKey, true)
     }
 
     override fun setFusionHost(host: String) {
-        storeValue(fusionHostKey, host)
+        storeStringValue(fusionHostKey, host)
     }
 
     override fun getFusionHost(): String? {
-        return retrieveValue(fusionHostKey)
+        return retrieveStringValue(fusionHostKey)
     }
 
     override fun addFusionAuthToken(token: String) {
-        storeValue(fusionAuthTokenKey, token)
+        storeStringValue(fusionAuthTokenKey, token, true)
     }
 
     override fun getFusionAuthToken(): String? {
-        return retrieveValue(fusionAuthTokenKey)
+        return retrieveStringValue(fusionAuthTokenKey, true)
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
-        storeValue(publicKeyKey, byteArray.encodeByteArrayToBase64())
+        storeStringValue(publicKeyKey, byteArray.encodeByteArrayToBase64(), true)
     }
 
     override fun getPublicKey(): ByteArray? {
-        return retrieveValue<String?>(publicKeyKey)?.decodeBase64ToByteArray()
+        return retrieveStringValue(publicKeyKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
-        storeValue(privateKeyKey, byteArray.encodeByteArrayToBase64())
+        storeStringValue(privateKeyKey, byteArray.encodeByteArrayToBase64(), true)
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return retrieveValue<String?>(privateKeyKey)?.decodeBase64ToByteArray()
+        return retrieveStringValue(privateKeyKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
-        storeValue(keyPairVerifiedKey, verified)
+        storeBooleanValue(keyPairVerifiedKey, verified)
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return retrieveValue<Boolean?>(keyPairVerifiedKey)
+        return retrieveBooleanValue(keyPairVerifiedKey)
     }
 
     override fun addUserId(userId: String) {
-        storeValue(userIdKey, userId)
+        storeStringValue(userIdKey, userId)
     }
 
     override fun getUserId(): String? {
-        return retrieveValue(userIdKey)
+        return retrieveStringValue(userIdKey)
     }
 
     override fun addUserEmail(email: String) {
-        storeValue(userEmailKey, email)
+        storeStringValue(userEmailKey, email)
     }
 
     override fun getUserEmail(): String? {
-        return retrieveValue(userEmailKey)
+        return retrieveStringValue(userEmailKey)
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-        storeValue(certificateChainKey, certificateChain.certificateChainToString())
+        storeStringValue(certificateChainKey, certificateChain.certificateChainToString(), true)
     }
 
     override fun getCertificateChain(): List<String>? {
-        return retrieveValue<String?>(certificateChainKey)?.stringToCertificateChain()
+        return retrieveStringValue(certificateChainKey, true)?.stringToCertificateChain()
     }
 
     override fun clear() {
@@ -120,28 +121,27 @@ internal class DefaultSecureStorage(
         SdkLogger.d("Successfully cleared storage")
     }
 
-    private fun storeValue(key: String, value: Any) {
-        when (value) {
-            is String -> settings.putString(key, value)
-            is Boolean -> settings.putBoolean(key, value)
-            else -> {
-                SdkLogger.e("Unhandled value type for key: $key")
-                return
-            }
-        }
-        SdkLogger.d("Successfully stored value: $value for key: $key")
+    private fun storeStringValue(key: String, value: String, maskValue: Boolean = false) {
+        settings.putString(key, value)
+        SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
     }
 
-    private inline fun <reified T> retrieveValue(key: String): T? {
-        val value = when (T::class) {
-            String::class -> settings.getStringOrNull(key)
-            Boolean::class -> settings.getBooleanOrNull(key)
-            else -> {
-                SdkLogger.e("Unhandled value type for key: $key")
-                return null
-            }
-        }
-        SdkLogger.d("Successfully retrieved value: $value for key: $key")
-        return value as T
+    private fun retrieveStringValue(key: String, maskValue: Boolean = false): String? {
+        val value = settings.getStringOrNull(key)
+        SdkLogger.d("Retrieved value: ${if (maskValue) value?.mask() else value} for key: $key")
+        return value
+    }
+
+    @Suppress("SameParameterValue")
+    private fun storeBooleanValue(key: String, value: Boolean) {
+        settings.putBoolean(key, value)
+        SdkLogger.d("Stored value: $value for key: $key")
+    }
+
+    @Suppress("SameParameterValue")
+    private fun retrieveBooleanValue(key: String): Boolean? {
+        val value = settings.getBooleanOrNull(key)
+        SdkLogger.d("Retrieved value: $value for key: $key")
+        return value
     }
 }

@@ -231,3 +231,5 @@ internal expect fun HttpClientConfig<*>.installCertificatePinner()
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
 
 internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this)
+
+internal fun String.mask(): String = "${take(3)}***"
