@@ -32,7 +32,7 @@ class Helper(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def assisted_register(self, email: str, password: str, force: bool = False, displayName: str = None):
+    async def assisted_register(self, email: str, password: str, force: bool = False, displayName: typing.Optional[str] = None):
         data = {
             "email": email,
             "password": password,
