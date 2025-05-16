@@ -9,7 +9,7 @@ class AlpetaController(LockController):
     username: str
     password: str
     doorId: int
-    baseUrl: str = None
+    baseUrl: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "alpeta"
@@ -20,7 +20,7 @@ class AmagController(LockController):
     username: str
     password: str
     doorId: int
-    baseUrl: str = None
+    baseUrl: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "amag"
@@ -79,7 +79,7 @@ class GallagherController(LockController):
     type: str = field(init=False)
     apiKey: str
     doorId: str
-    baseUrl: Optional[str] = None
+    baseUrl: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "gallagher"
@@ -121,10 +121,10 @@ class MitrefinchController(LockController):
 class PaxtonNet2Controller(LockController):
     type: str = field(init=False)
     host: str
-    username: Optional[str] = None
-    password: Optional[str] = None
     address: str
     output: int
+    username: typing.Optional[str] = None
+    password: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "net2"
@@ -157,7 +157,7 @@ class IntegraV2Controller(LockController):
     sessionId: str
     controllerId: int
     cardholderId: int
-    pinCode: Optional[int] = None
+    pinCode: typing.Optional[int] = None
 
     def __post_init__(self):
         self.type = "integra-v2"
@@ -185,7 +185,7 @@ class TdsiExgardeController(LockController):
     username: str
     password: str
     doorId: int
-    dbUrl: Optional[str] = None
+    dbUrl: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "tdsi-exgarde"
@@ -207,7 +207,7 @@ class ZktecoController(LockController):
     clientSecret: str
     doorId: str
     entityType: typing.Literal["DOOR", "FLOOR"]
-    baseUrl: str = None
+    baseUrl: typing.Optional[str] = None
 
     def __post_init__(self):
         self.type = "zkteco-zkbio-cvsecurity"
