@@ -92,12 +92,12 @@ internal object HelperClient {
             // Attempt to register the provided or default public key
             AccountClient.registerEphemeralKeyRequest(key)
             AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = false)
-        } catch (exception: LockedException) {
+        } catch (_: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
             try {
                 AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
                 AssistedRegisterEphemeralKeyResponse(requiresVerification = true, requiresRetry = false)
-            } catch (exception: TooManyRequestsException) {
+            } catch (_: TooManyRequestsException) {
                 AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = true)
             }
         }

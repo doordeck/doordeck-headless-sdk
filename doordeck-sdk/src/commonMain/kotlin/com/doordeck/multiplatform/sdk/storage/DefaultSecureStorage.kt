@@ -1,118 +1,150 @@
 package com.doordeck.multiplatform.sdk.storage
 
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
+import com.doordeck.multiplatform.sdk.util.mask
 import com.russhwolf.settings.Settings
 
-internal class DefaultSecureStorage(private val settings: Settings) : SecureStorage {
+internal class DefaultSecureStorage(
+    private val settings: Settings
+) : SecureStorage {
 
     /**
      * Storage Keys
      */
-    private val API_ENVIRONMENT = "API_ENVIRONMENT"
-    private val CLOUD_AUTH_TOKEN_KEY = "CLOUD_AUTH_TOKEN_KEY"
-    private val CLOUD_REFRESH_TOKEN_KEY = "CLOUD_REFRESH_TOKEN_KEY"
-    private val FUSION_HOST = "FUSION_HOST"
-    private val FUSION_AUTH_TOKEN_KEY = "FUSION_AUTH_TOKEN_KEY"
-    private val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
-    private val PRIVATE_KEY_KEY = "PRIVATE_KEY_KEY"
-    private val KEY_PAIR_VERIFIED = "KEY_PAIR_VERIFIED"
-    private val USER_ID_KEY = "USER_ID_KEY"
-    private val USER_EMAIL_KEY = "USER_EMAIL_KEY"
-    private val CERTIFICATE_CHAIN_KEY = "CERTIFICATE_CHAIN_KEY"
+    private val apiEnvironmentKey = "API_ENVIRONMENT_KEY"
+    private val cloudAuthTokenKey = "CLOUD_AUTH_TOKEN_KEY"
+    private val cloudRefreshTokenKey = "CLOUD_REFRESH_TOKEN_KEY"
+    private val fusionHostKey = "FUSION_HOST_KEY"
+    private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
+    private val publicKeyKey = "PUBLIC_KEY_KEY"
+    private val privateKeyKey = "PRIVATE_KEY_KEY"
+    @Deprecated("The new key is KEY_PAIR_VERIFIED_KEY")
+    private val keyPairVerifiedDeprecatedKey = "KEY_PAIR_VERIFIED"
+    private val keyPairVerifiedKey = "KEY_PAIR_VERIFIED_KEY"
+    private val userIdKey = "USER_ID_KEY"
+    private val userEmailKey = "USER_EMAIL_KEY"
+    private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        settings.putString(API_ENVIRONMENT, apiEnvironment.name)
+        storeStringValue(apiEnvironmentKey, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return settings.getStringOrNull(API_ENVIRONMENT)?.let { ApiEnvironment.valueOf(it) }
+        return retrieveStringValue(apiEnvironmentKey)?.let { ApiEnvironment.valueOf(it) }
     }
 
     override fun addCloudAuthToken(token: String) {
-        settings.putString(CLOUD_AUTH_TOKEN_KEY, token)
+        storeStringValue(cloudAuthTokenKey, token, true)
     }
 
     override fun getCloudAuthToken(): String? {
-        return settings.getStringOrNull(CLOUD_AUTH_TOKEN_KEY)
+        return retrieveStringValue(cloudAuthTokenKey, true)
     }
 
     override fun addCloudRefreshToken(token: String) {
-        settings.putString(CLOUD_REFRESH_TOKEN_KEY, token)
+        storeStringValue(cloudRefreshTokenKey, token, true)
     }
 
     override fun getCloudRefreshToken(): String? {
-        return settings.getStringOrNull(CLOUD_REFRESH_TOKEN_KEY)
+        return retrieveStringValue(cloudRefreshTokenKey, true)
     }
 
     override fun setFusionHost(host: String) {
-        settings.putString(FUSION_HOST, host)
+        storeStringValue(fusionHostKey, host)
     }
 
     override fun getFusionHost(): String? {
-        return settings.getStringOrNull(FUSION_HOST)
+        return retrieveStringValue(fusionHostKey)
     }
 
     override fun addFusionAuthToken(token: String) {
-        settings.putString(FUSION_AUTH_TOKEN_KEY, token)
+        storeStringValue(fusionAuthTokenKey, token, true)
     }
 
     override fun getFusionAuthToken(): String? {
-        return settings.getStringOrNull(FUSION_AUTH_TOKEN_KEY)
+        return retrieveStringValue(fusionAuthTokenKey, true)
     }
 
     override fun addPublicKey(byteArray: ByteArray) {
-        settings.putString(PUBLIC_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        storeStringValue(publicKeyKey, byteArray.encodeByteArrayToBase64(), true)
     }
 
     override fun getPublicKey(): ByteArray? {
-        return settings.getStringOrNull(PUBLIC_KEY_KEY)?.decodeBase64ToByteArray()
+        return retrieveStringValue(publicKeyKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(byteArray: ByteArray) {
-        settings.putString(PRIVATE_KEY_KEY, byteArray.encodeByteArrayToBase64())
+        storeStringValue(privateKeyKey, byteArray.encodeByteArrayToBase64(), true)
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return settings.getStringOrNull(PRIVATE_KEY_KEY)?.decodeBase64ToByteArray()
+        return retrieveStringValue(privateKeyKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(verified: Boolean) {
-        settings.putBoolean(KEY_PAIR_VERIFIED, verified)
+        storeBooleanValue(keyPairVerifiedKey, verified)
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return settings.getBooleanOrNull(KEY_PAIR_VERIFIED)
+        return retrieveBooleanValue(keyPairVerifiedDeprecatedKey)
+            ?: retrieveBooleanValue(keyPairVerifiedKey)
     }
 
     override fun addUserId(userId: String) {
-        settings.putString(USER_ID_KEY, userId)
+        storeStringValue(userIdKey, userId)
     }
 
     override fun getUserId(): String? {
-        return settings.getStringOrNull(USER_ID_KEY)
+        return retrieveStringValue(userIdKey)
     }
 
     override fun addUserEmail(email: String) {
-        settings.putString(USER_EMAIL_KEY, email)
+        storeStringValue(userEmailKey, email)
     }
 
     override fun getUserEmail(): String? {
-        return settings.getStringOrNull(USER_EMAIL_KEY)
+        return retrieveStringValue(userEmailKey)
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-        settings.putString(CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString())
+        storeStringValue(certificateChainKey, certificateChain.certificateChainToString(), true)
     }
 
     override fun getCertificateChain(): List<String>? {
-        return settings.getStringOrNull(CERTIFICATE_CHAIN_KEY)?.stringToCertificateChain()
+        return retrieveStringValue(certificateChainKey, true)?.stringToCertificateChain()
     }
 
     override fun clear() {
         settings.clear()
+        SdkLogger.d("Successfully cleared storage")
+    }
+
+    private fun storeStringValue(key: String, value: String, maskValue: Boolean = false) {
+        settings.putString(key, value)
+        SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
+    }
+
+    private fun retrieveStringValue(key: String, maskValue: Boolean = false): String? {
+        val value = settings.getStringOrNull(key)
+        SdkLogger.d("Retrieved value: ${if (maskValue) value?.mask() else value} for key: $key")
+        return value
+    }
+
+    @Suppress("SameParameterValue")
+    private fun storeBooleanValue(key: String, value: Boolean) {
+        settings.putBoolean(key, value)
+        SdkLogger.d("Stored value: $value for key: $key")
+    }
+
+    @Suppress("SameParameterValue")
+    private fun retrieveBooleanValue(key: String): Boolean? {
+        val value = settings.getBooleanOrNull(key)
+        SdkLogger.d("Retrieved value: $value for key: $key")
+        return value
     }
 }

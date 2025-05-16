@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.jsmodule.ASN1
 import com.doordeck.multiplatform.sdk.jsmodule.PKI
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
@@ -18,7 +19,9 @@ actual object CryptoManager {
 
     init {
         if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initializeWithCallback {  }
+            LibsodiumInitializer.initializeWithCallback {
+                SdkLogger.d("Successfully initialized Libsodium")
+            }
         }
     }
 
@@ -38,12 +41,15 @@ actual object CryptoManager {
         val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)
-        val notAfterDate = Date(certificate.notAfter.value.toString()).toISOString()
-        Clock.System.now() >= Instant.parse(notAfterDate) - MIN_CERTIFICATE_LIFETIME_DAYS
+        val notAfterInstant = Instant.parse(Date(certificate.notAfter.value.toString()).toISOString())
+        SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
+        Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
     } catch (exception: Throwable) {
+        SdkLogger.e(exception) { "Failed to parse the certificate" }
         true
     }
 
+    @Suppress("DUPLICATE_LABEL_IN_WHEN")
     @JsExport.Ignore
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
@@ -74,9 +80,14 @@ actual object CryptoManager {
 
     @JsExport.Ignore
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
-        Signature.verifyDetached(toUByteArray(), message.toByteArray().toUByteArray(), publicKey.toPlatformPublicKey().toUByteArray())
+        Signature.verifyDetached(
+            signature = toUByteArray(),
+            message = message.toByteArray().toUByteArray(),
+            publicKey = publicKey.toPlatformPublicKey().toUByteArray()
+        )
         true
     } catch (exception: Exception) {
+        SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }

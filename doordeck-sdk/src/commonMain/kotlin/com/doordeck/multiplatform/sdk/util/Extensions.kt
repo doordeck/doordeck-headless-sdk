@@ -19,6 +19,7 @@ import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
@@ -38,6 +39,9 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
@@ -128,6 +132,17 @@ internal fun HttpClientConfig<*>.installTimeout() {
     }
 }
 
+internal fun HttpClientConfig<*>.installLogging() {
+    install(Logging) {
+        logger = object : Logger {
+            override fun log(message: String) {
+                SdkLogger.d(message)
+            }
+        }
+        level = LogLevel.INFO
+    }
+}
+
 /**
  * Installs a response validator for the [HttpClientConfig].
  * This validator ensures that failed API responses are mapped to appropriate exceptions
@@ -144,7 +159,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
 
             val errorResponse = try {
                 responseException.response.body<ResponseError>()
-            } catch (exception: Exception) {
+            } catch (_: Exception) {
                 null
             }
 
@@ -216,3 +231,5 @@ internal expect fun HttpClientConfig<*>.installCertificatePinner()
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
 
 internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this)
+
+internal fun String.mask(): String = "${take(3)}***"

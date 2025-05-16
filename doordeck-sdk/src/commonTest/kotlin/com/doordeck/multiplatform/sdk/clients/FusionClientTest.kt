@@ -100,7 +100,7 @@ class FusionClientTest : IntegrationTest() {
 
         try {
             TEST_HTTP_CLIENT.get(testController.key).bodyAsText()
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
 

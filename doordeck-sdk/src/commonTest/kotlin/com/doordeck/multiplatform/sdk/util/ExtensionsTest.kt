@@ -269,4 +269,16 @@ class ExtensionsTest {
         // Then
         assertEquals("application/vnd.doordeck.api-v3+json", result)
     }
+
+    @Test
+    fun shouldMaskLoggedValue() = runTest {
+        // Given
+        val password = "awesomepassword"
+
+        // When
+        val result = password.mask()
+
+        // Then
+        assertEquals("awe***", result)
+    }
 }
