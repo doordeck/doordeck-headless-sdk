@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import io.ktor.util.decodeBase64String
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -12,18 +13,26 @@ internal object JwtUtils {
     private const val TOKEN_EXPIRE_AT_FIELD = "exp"
 
     private fun getClaims(token: String): Map<String, String> {
-        val parts = token.split(".")
-        if (parts.size != 3) {
-            return emptyMap()
+        return try {
+            return JSON.parseToJsonElement(token.split(".")[1].decodeBase64String())
+                .jsonObject
+                .map { it.key to it.value.jsonPrimitive.content }
+                .toMap()
+        } catch (exception: Exception) {
+            SdkLogger.e(exception) { "Failed to parse JWT token" }
+            emptyMap()
         }
-        val decodedPayload = parts[1].decodeBase64String()
-        val json = JSON.parseToJsonElement(decodedPayload)
-        return json.jsonObject.map { it.key to it.value.jsonPrimitive.content }.toMap()
     }
 
     fun String.isJwtTokenAboutToExpire(): Boolean {
-        return getClaims(this)[TOKEN_EXPIRE_AT_FIELD]?.let {
-            Clock.System.now() >= Instant.fromEpochSeconds(it.toLong()) - 1.days
-        } ?: true
+        val expiration = getClaims(this)[TOKEN_EXPIRE_AT_FIELD]?.let {
+            Instant.fromEpochSeconds(it.toLong())
+        }
+        if (expiration == null) {
+            SdkLogger.d { "Unable to retrieve the expiration claim from the JWT" }
+            return true
+        }
+        SdkLogger.d { "JWT expiration date is $expiration" }
+        return Clock.System.now() >= expiration - 1.days
     }
 }
