@@ -61,7 +61,7 @@ public class DoordeckSdk
         if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
         if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
         if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
-        if (debugLogging != null) sdkConfig.Builder.setDebugLogging(builder, Convert.ToByte(debugLogging))
+        if (debugLogging != null) sdkConfig.Builder.setDebugLogging(builder, Convert.ToByte(debugLogging));
 
         if (secureStorageImpl != null)
         {
