@@ -28,7 +28,8 @@ class InitializeSdk(object):
 
     def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD",
         cloud_auth_token: typing.Optional[str] = None, cloud_refresh_token: typing.Optional[str] = None,
-        fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None):
+        fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None,
+        debug_logging: typing.Optional[bool] = None):
 
         self.secureStorage = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_storage_SecureStorage()
         if secure_storage_impl is not None:
@@ -74,7 +75,8 @@ class InitializeSdk(object):
             )
 
         self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment)
-        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host, self.secureStorage)
+        self.debugLogging = 'False' if debug_logging is None else str(debug_logging)
+        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host, self.secureStorage, self.debugLogging)
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))

@@ -47,7 +47,7 @@ fun buildSdkConfig(
     cloudRefreshToken: String? = null,
     fusionHost: String? = null,
     secureStorage: SecureStorage? = null,
-    debugLogging: Boolean? = null
+    debugLogging: String? = null
 ): SdkConfig {
     return SdkConfig.Builder()
         .setApiEnvironment(apiEnvironment)
@@ -55,7 +55,7 @@ fun buildSdkConfig(
         .setCloudRefreshToken(cloudRefreshToken)
         .setFusionHost(fusionHost)
         .setSecureStorageOverride(secureStorage)
-        .setDebugLogging(debugLogging)
+        .setDebugLogging(debugLogging?.toBoolean())
         .build()
 }
 
