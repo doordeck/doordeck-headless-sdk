@@ -61,7 +61,7 @@ data class SdkConfig @JvmOverloads constructor(
         fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
 
         /**
-         *
+         * Enables debug logging. Beware: it may output sensitive information.
          */
         fun setDebugLogging(enabled: Boolean?): Builder = apply { this.debugLogging = enabled }
 
