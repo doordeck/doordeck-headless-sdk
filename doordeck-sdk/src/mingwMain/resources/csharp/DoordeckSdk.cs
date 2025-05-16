@@ -54,6 +54,8 @@ public class DoordeckSdk
         var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
         var refreshToken = cloudRefreshToken != null ? Utils.Utils.ToSByte(cloudRefreshToken) : null;
         var fHost = fusionHost != null ? Utils.Utils.ToSByte(fusionHost) : null;
+        var dLogging = _symbols->createNullableBoolean(Convert.ToByte(debugLogging ?? false));
+
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
         var builder = sdkConfig.Builder.Builder();
         sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
@@ -61,7 +63,7 @@ public class DoordeckSdk
         if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
         if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
         if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
-        if (debugLogging != null) sdkConfig.Builder.setDebugLogging(builder, Convert.ToByte(debugLogging));
+        sdkConfig.Builder.setDebugLogging(builder, dLogging);
 
         if (secureStorageImpl != null)
         {
