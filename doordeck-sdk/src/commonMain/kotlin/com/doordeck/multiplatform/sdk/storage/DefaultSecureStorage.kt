@@ -23,6 +23,8 @@ internal class DefaultSecureStorage(
     private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
     private val publicKeyKey = "PUBLIC_KEY_KEY"
     private val privateKeyKey = "PRIVATE_KEY_KEY"
+    @Deprecated("The new key is KEY_PAIR_VERIFIED_KEY")
+    private val keyPairVerifiedDeprecatedKey = "KEY_PAIR_VERIFIED"
     private val keyPairVerifiedKey = "KEY_PAIR_VERIFIED_KEY"
     private val userIdKey = "USER_ID_KEY"
     private val userEmailKey = "USER_EMAIL_KEY"
@@ -89,7 +91,8 @@ internal class DefaultSecureStorage(
     }
 
     override fun getKeyPairVerified(): Boolean? {
-        return retrieveBooleanValue(keyPairVerifiedKey)
+        return retrieveBooleanValue(keyPairVerifiedDeprecatedKey)
+            ?: retrieveBooleanValue(keyPairVerifiedKey)
     }
 
     override fun addUserId(userId: String) {
