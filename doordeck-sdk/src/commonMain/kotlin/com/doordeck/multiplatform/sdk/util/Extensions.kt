@@ -139,7 +139,7 @@ internal fun HttpClientConfig<*>.installLogging() {
                 SdkLogger.d(message)
             }
         }
-        level = LogLevel.ALL
+        level = LogLevel.INFO
     }
 }
 
