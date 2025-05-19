@@ -10,10 +10,20 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 
+/**
+ * Internal implementation of the local unlock API client.
+ * Handles all network requests related to local unlock.
+ */
 internal object LocalUnlockClient {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
+    /**
+     * Attempts to send unlock requests to all local endpoints concurrently, completing as soon as any request succeeds.
+     *
+     * @param directAccessEndpoints The list of local IP addresses to which unlock requests should be sent.
+     * @param request The unlock request as base64.
+     */
     fun unlock(directAccessEndpoints: List<String>, request: String) {
         // Launch the request at the direct access endpoints
         val requests = directAccessEndpoints.map {
