@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.util.installAuth
 import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
+import com.doordeck.multiplatform.sdk.util.installLogging
 import com.doordeck.multiplatform.sdk.util.installResponseValidator
 import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
@@ -36,6 +37,7 @@ internal fun createCloudHttpClient(): HttpClient {
         installAuth()
         installCertificatePinner()
         installUserAgent()
+        installLogging()
         installResponseValidator()
         installDefaultRequest(
             determineHost = {
@@ -56,6 +58,7 @@ internal fun createFusionHttpClient(): HttpClient {
         installContentNegotiation()
         installTimeout()
         installUserAgent()
+        installLogging()
         installResponseValidator()
         installDefaultRequest(determineHost = {
             ContextManagerImpl.getFusionHost()

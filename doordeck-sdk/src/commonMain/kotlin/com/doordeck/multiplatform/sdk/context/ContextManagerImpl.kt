@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
@@ -20,6 +21,10 @@ import kotlin.uuid.Uuid
 internal object ContextManagerImpl : ContextManager {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
+
+    internal fun setDebugLogging(enabled: Boolean) {
+        SdkLogger.enableDebugLogging(enabled)
+    }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         secureStorage.setApiEnvironment(apiEnvironment)
@@ -135,7 +140,7 @@ internal object ContextManagerImpl : ContextManager {
         val text = Uuid.random().toString()
         val signature = try {
             text.signWithPrivateKey(actualUserPrivateKey)
-        } catch (exception: Exception) {
+        } catch (_: Exception) {
             return false
         }
         return signature.verifySignature(actualUserPublicKey, text)

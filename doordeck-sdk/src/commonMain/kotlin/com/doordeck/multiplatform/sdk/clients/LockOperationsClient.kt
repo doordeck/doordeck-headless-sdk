@@ -352,7 +352,7 @@ internal object LockOperationsClient {
                         shareLock = shareLock
                     ))
                     null
-                } catch (exception: Exception) {
+                } catch (_: Exception) {
                     shareLock
                 }
             }

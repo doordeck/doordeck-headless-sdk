@@ -569,7 +569,8 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
     cloudAuthToken = randomNullable { randomString() },
     cloudRefreshToken = randomNullable { randomString() },
     fusionHost = randomNullable { randomString() },
-    secureStorage = DefaultSecureStorage(MemorySettings())
+    secureStorage = DefaultSecureStorage(MemorySettings()),
+    debugLogging = randomNullable { randomBoolean() }
 )
 
 /**
