@@ -32,7 +32,7 @@ import io.ktor.client.request.setBody
  */
 internal object AccountClient {
     /**
-     * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl]
+     * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl].
      *
      * @param refreshToken The refresh token to use for the request. If null,
      *  uses the refresh token from [ContextManagerImpl].
@@ -71,7 +71,7 @@ internal object AccountClient {
     }
 
     /**
-     * Registers an ephemeral key and stores the user ID and the certificate chain from the response in [ContextManagerImpl].
+     * Registers an ephemeral key and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
      * @param publicKey The public key to use for the request. If null,
@@ -122,7 +122,7 @@ internal object AccountClient {
     }
 
     /**
-     * Verifies the ephemeral key registration and stores the user ID and the certificate chain from the response in [ContextManagerImpl].
+     * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
      * @param privateKey The private key to use for the request. If null,

@@ -5,67 +5,82 @@ import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
+/**
+ * Platform-specific implementations of accountless-related API calls.
+ */
 actual object AccountlessApi {
     /**
-     * Login
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
+     * @see AccountlessClient.loginRequest
      */
     suspend fun login(email: String, password: String): TokenResponse {
         return AccountlessClient.loginRequest(email, password)
     }
 
+    /**
+     * Async variant of [AccountlessApi.login] returning [CompletableFuture].
+     */
     fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
         return completableFuture { login(email, password) }
     }
 
     /**
-     * Registration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
+     * @see AccountlessClient.registrationRequest
      */
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
         return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
     }
 
+    /**
+     * Async variant of [AccountlessApi.registration] returning [CompletableFuture].
+     */
     fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): CompletableFuture<TokenResponse> {
         return completableFuture { registration(email, password, displayName, force, publicKey) }
     }
 
     /**
-     * Verify email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
+     * @see AccountlessClient.verifyEmailRequest
      */
     suspend fun verifyEmail(code: String) {
         return AccountlessClient.verifyEmailRequest(code)
     }
 
+    /**
+     * Async variant of [AccountlessApi.verifyEmail] returning [CompletableFuture].
+     */
     fun verifyEmailAsync(code: String): CompletableFuture<Unit> {
         return completableFuture { verifyEmail(code) }
     }
 
     /**
-     * Password reset
+     * @see AccountlessClient.passwordResetRequest
      */
     suspend fun passwordReset(email: String) {
         return AccountlessClient.passwordResetRequest(email)
     }
 
+    /**
+     * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
+     */
     fun passwordResetAsync(email: String): CompletableFuture<Unit> {
         return completableFuture { passwordReset(email) }
     }
 
     /**
-     * Password reset verify
+     * @see AccountlessClient.passwordResetRequest
      */
     suspend fun passwordResetVerify(userId: String, token: String, password: String) {
         return AccountlessClient.passwordResetVerifyRequest(userId, token, password)
     }
 
+    /**
+     * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
+     */
     fun passwordResetVerifyAsync(userId: String, token: String, password: String): CompletableFuture<Unit> {
         return completableFuture { passwordResetVerify(userId, token, password) }
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [AccountlessApi]
+ */
 actual fun accountless(): AccountlessApi = AccountlessApi
