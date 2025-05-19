@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AssociateMultipleLocksRequest
@@ -12,10 +13,17 @@ import io.ktor.client.request.get
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 
+/**
+ * Internal implementation of the tiles API client.
+ * Handles all network requests related to tiles.
+ */
 internal object TilesClient {
-
     /**
-     * Get locks belonging to tile
+     * Retrieves all devices associated with the specified tile.
+     *
+     * @param tileId The tile ID.
+     * @return [TileLocksResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
@@ -26,7 +34,12 @@ internal object TilesClient {
     }
 
     /**
-     * Associate multiple locks (devices) to a single tile
+     * Associates multiple devices with a single tile.
+     *
+     * @param tileId The tile ID.
+     * @param siteId The Site ID.
+     * @param lockIds The list of device IDs.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
      */
