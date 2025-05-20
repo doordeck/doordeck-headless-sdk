@@ -1,7 +1,12 @@
 package com.doordeck.multiplatform.sdk.model.network
 
+/**
+ * Contains all API endpoint paths for the Doordeck cloud service.
+ */
 internal object Paths {
-    // Account
+    /**
+     * Account
+     */
     fun getLoginPath() = "/auth/token"
     fun getRegistrationPath() = "/auth/register"
     fun getRefreshTokenPath() = "/auth/token/refresh"
@@ -18,16 +23,22 @@ internal object Paths {
     fun getPasswordResetPath() = "/account/password/reset/initialize"
     fun getPasswordResetVerifyPath() = "/account/password/reset/verify"
 
-    // Sites
+    /**
+     * Sites
+     */
     fun getListSites() = "/site"
     fun getLocksForSitePath(siteId: String) = "/site/$siteId/device"
     fun getUsersForSitePath(siteId: String) = "/site/$siteId/user"
 
-    // Tiles
+    /**
+     * Tiles
+     */
     fun getLocksBelongingToTilePath(tileId: String) = "/tile/$tileId"
     fun getAssociateMultipleLocksToASingleTilePath(tileId: String) = "/tile/$tileId"
 
-    // Lock Operations
+    /**
+     * Lock operations
+     */
     fun getSingleLockPath(lockId: String) = "/device/$lockId"
     fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
     fun getAuditForUserPath(userId: String) = "/user/$userId/log"
@@ -40,7 +51,9 @@ internal object Paths {
     fun getPinnedLocksPath() = "/device/favourite"
     fun getShareableLocksPath() = "/device/shareable"
 
-    // Platform
+    /**
+     * Platform
+     */
     fun getCreateApplicationPath() = "/platform/application"
     fun getListApplicationsPath() = "/platform/application"
     fun getApplicationPath(applicationId: String) = "/platform/application/$applicationId"
@@ -56,11 +69,20 @@ internal object Paths {
     fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
 
+    /**
+     * Determines if a given API path requires authentication.
+     */
     internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
             path != getVerifyEmailPath()
 }
 
+/**
+ * Contains all API endpoint paths for the Fusion service.
+ */
 internal object FusionPaths {
+    /**
+     * Fusion
+     */
     fun getLoginPath() = "/api/auth/token"
     fun getConfigurationTypePath() = "/api/configuration/type"
     fun getIntegrationConfiguration() = "/api/configuration"
@@ -70,5 +92,8 @@ internal object FusionPaths {
     fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
     fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"
 
+    /**
+     * Determines if a given API path requires authentication.
+     */
     internal fun requiresAuth(path: String) = path != getLoginPath()
 }
