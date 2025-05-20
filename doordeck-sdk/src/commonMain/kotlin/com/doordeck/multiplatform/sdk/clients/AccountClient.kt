@@ -34,11 +34,9 @@ internal object AccountClient {
     /**
      * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl].
      *
-     * @param refreshToken The refresh token to use for the request. If null,
-     *  uses the refresh token from [ContextManagerImpl].
+     * @param refreshToken The refresh token to use for the request. If null, uses the refresh token from [ContextManagerImpl].
      * @return [TokenResponse].
-     * @throws MissingContextFieldException if no refresh token is available
-     *  (when [refreshToken] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no refresh token is available (when [refreshToken] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
@@ -74,11 +72,9 @@ internal object AccountClient {
      * Registers an ephemeral key and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
-     * @param publicKey The public key to use for the request. If null,
-     *  uses the public key from [ContextManagerImpl].
+     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
      * @return [RegisterEphemeralKeyResponse].
-     * @throws MissingContextFieldException if no public key is available
-     *  (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
@@ -100,12 +96,10 @@ internal object AccountClient {
     /**
      * Registers an ephemeral key with secondary authentication
      *
-     * @param publicKey The public key to use for the request. If null,
-     *  uses the public key from [ContextManagerImpl].
+     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
      * @param method The preferred two factor method. If null the server will decide the best method.
      * @return [RegisterEphemeralKeyWithSecondaryAuthenticationResponse].
-     * @throws MissingContextFieldException if no public key is available
-     *  (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
@@ -125,11 +119,9 @@ internal object AccountClient {
      * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
-     * @param privateKey The private key to use for the request. If null,
-     *  uses the private key from [ContextManagerImpl].
+     * @param privateKey The private key to use for the request. If null, uses the private key from [ContextManagerImpl].
      * @param code The two-factor code.
-     * @throws MissingContextFieldException if no private key is available
-     *  (when [privateKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no private key is available (when [privateKey] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>

@@ -29,7 +29,7 @@ internal object SitesClient {
     /**
      * Retrieves all user-accessible locks in the specified site.
      *
-     * @param siteId The site ID.
+     * @param siteId The site's unique identifier.
      * @return List of [SiteLocksResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -43,7 +43,7 @@ internal object SitesClient {
      * Retrieves users for the specified site, filtered to only include locks
      * where the current user has administrator privileges.
      *
-     * @param siteId The site ID.
+     * @param siteId The site's unique identifier.
      * @return List of [UserForSiteResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *

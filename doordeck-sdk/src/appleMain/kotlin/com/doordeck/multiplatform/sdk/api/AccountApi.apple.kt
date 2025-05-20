@@ -8,11 +8,12 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSe
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 
+/**
+ * Platform-specific implementations of account-related API calls.
+ */
 actual object AccountApi {
     /**
-     * Refresh token
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
+     * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -21,9 +22,7 @@ actual object AccountApi {
     }
 
     /**
-     * Logout
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
+     * @see AccountClient.logoutRequest
      */
     @Throws(Exception::class)
     suspend fun logout() {
@@ -31,9 +30,7 @@ actual object AccountApi {
     }
 
     /**
-     * Register ephemeral key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
+     * @see AccountClient.registerEphemeralKeyRequest
      */
     @Throws(Exception::class)
     suspend fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse {
@@ -41,9 +38,7 @@ actual object AccountApi {
     }
 
     /**
-     * Register ephemeral key with secondary authentication
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
+     * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     @Throws(Exception::class)
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
@@ -51,9 +46,7 @@ actual object AccountApi {
     }
 
     /**
-     * Verify ephemeral key registration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
+     * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
     @Throws(Exception::class)
     suspend fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
@@ -61,9 +54,7 @@ actual object AccountApi {
     }
 
     /**
-     * Reverify email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
+     * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -72,9 +63,7 @@ actual object AccountApi {
     }
 
     /**
-     * Change password
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
+     * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -83,9 +72,7 @@ actual object AccountApi {
     }
 
     /**
-     * Get user details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
+     * @see AccountClient.getUserDetailsRequest
      */
     @Throws(Exception::class)
     suspend fun getUserDetails(): UserDetailsResponse {
@@ -113,4 +100,7 @@ actual object AccountApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [AccountApi]
+ */
 actual fun account(): AccountApi = AccountApi

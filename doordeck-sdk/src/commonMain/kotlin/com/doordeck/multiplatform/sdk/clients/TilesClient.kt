@@ -19,9 +19,9 @@ import io.ktor.client.request.setBody
  */
 internal object TilesClient {
     /**
-     * Retrieves all devices associated with the specified tile.
+     * Retrieves all devices associated with the specified tile ID.
      *
-     * @param tileId The tile ID.
+     * @param tileId The tile unique identifier.
      * @return [TileLocksResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -36,9 +36,9 @@ internal object TilesClient {
     /**
      * Associates multiple devices with a single tile.
      *
-     * @param tileId The tile ID.
-     * @param siteId The Site ID.
-     * @param lockIds The list of device IDs.
+     * @param tileId The tile's unique identifier.
+     * @param siteId The site's unique identifier.
+     * @param lockIds The list of device unique identifiers.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>

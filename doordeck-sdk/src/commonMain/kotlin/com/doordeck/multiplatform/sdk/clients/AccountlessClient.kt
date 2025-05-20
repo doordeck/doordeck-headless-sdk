@@ -117,7 +117,7 @@ internal object AccountlessClient {
     /**
      * Verifies the user's password reset request.
      *
-     * @param userId The user's ID.
+     * @param userId The user's unique identifier.
      * @param token The token sent to the user's email.
      * @param password The new user's password.
      * @throws SdkException if an unexpected error occurs while processing the request.

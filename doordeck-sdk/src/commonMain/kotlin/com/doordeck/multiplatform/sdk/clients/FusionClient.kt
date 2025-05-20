@@ -67,7 +67,7 @@ internal object FusionClient {
     /**
      * Enables the integration for the given controller.
      * @param name The device's name.
-     * @param siteId The site's ID.
+     * @param siteId The site's unique identifier.
      * @param controller The controller to be enabled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
@@ -80,7 +80,7 @@ internal object FusionClient {
 
     /**
      * Deletes the device for the given ID.
-     * @param deviceId The device's ID.
+     * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun deleteDoorRequest(deviceId: String) {
@@ -89,7 +89,7 @@ internal object FusionClient {
 
     /**
      * Retrieves the device status for the given ID.
-     * @param deviceId The device's ID.
+     * @param deviceId The device's unique identifier.
      * @return [DoorStateResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
@@ -99,7 +99,7 @@ internal object FusionClient {
 
     /**
      * Enables the device for the given ID.
-     * @param deviceId The device's ID.
+     * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun startDoorRequest(deviceId: String) {
@@ -108,7 +108,7 @@ internal object FusionClient {
 
     /**
      * Disables the device for the given ID.
-     * @param deviceId The device's ID.
+     * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun stopDoorRequest(deviceId: String) {
