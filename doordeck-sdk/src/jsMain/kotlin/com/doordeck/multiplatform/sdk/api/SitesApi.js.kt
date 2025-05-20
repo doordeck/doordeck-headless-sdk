@@ -7,30 +7,27 @@ import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
+/**
+ * Platform-specific implementations of sites-related API calls.
+ */
 @JsExport
 actual object SitesApi {
     /**
-     * List sites
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
+     * @see SitesClient.listSitesRequest
      */
     fun listSites(): Promise<List<SiteResponse>> {
         return promise { SitesClient.listSitesRequest() }
     }
 
     /**
-     * Get locks for site
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
+     * @see SitesClient.getLocksForSiteRequest
      */
     fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>> {
         return promise { SitesClient.getLocksForSiteRequest(siteId) }
     }
 
     /**
-     * Get users for a site
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
+     * @see SitesClient.getUsersForSiteRequest
      */
     fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>> {
         return promise { SitesClient.getUsersForSiteRequest(siteId) }
@@ -39,5 +36,8 @@ actual object SitesApi {
 
 private val sites = SitesApi
 
+/**
+ * Defines the platform-specific implementation of [SitesApi]
+ */
 @JsExport
 actual fun sites(): SitesApi = sites

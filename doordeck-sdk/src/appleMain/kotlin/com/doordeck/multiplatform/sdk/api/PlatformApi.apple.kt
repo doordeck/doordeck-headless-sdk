@@ -7,6 +7,9 @@ import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsRes
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 
+/**
+ * Platform-specific implementations of platform-related API calls.
+ */
 actual object PlatformApi {
     /**
      * @see PlatformClient.createApplicationRequest

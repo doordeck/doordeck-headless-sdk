@@ -80,9 +80,7 @@ actual object AccountApi {
     }
 
     /**
-     * Update user details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
+     * @see AccountClient.updateUserDetailsRequest
      */
     @Throws(Exception::class)
     suspend fun updateUserDetails(displayName: String) {
@@ -90,9 +88,7 @@ actual object AccountApi {
     }
 
     /**
-     * Delete account
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
+     * @see AccountClient.deleteAccountRequest
      */
     @Throws(Exception::class)
     suspend fun deleteAccount() {
