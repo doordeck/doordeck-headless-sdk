@@ -10,6 +10,10 @@ import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.utils.io.core.toByteArray
 
+/**
+ * Platform-specific implementation of [CryptoManager].
+ * Provides cryptographic operations using the Ed25519 algorithm with Libsodium.
+ */
 actual object CryptoManager {
 
     init {
@@ -20,6 +24,9 @@ actual object CryptoManager {
         }
     }
 
+    /**
+     * @see [CryptoManager.generateKeyPair]
+     */
     actual fun generateKeyPair(): Crypto.KeyPair {
         val keyPair = Signature.keypair()
         return Crypto.KeyPair(
@@ -28,6 +35,9 @@ actual object CryptoManager {
         )
     }
 
+    /**
+     * @see [CryptoManager.generateEncodedKeyPair]
+     */
     @CName("generateEncodedKeyPair")
     actual fun generateEncodedKeyPair(): String {
         val keyPair = generateKeyPair()
@@ -37,10 +47,16 @@ actual object CryptoManager {
         ).toJson()
     }
 
+    /**
+     * @see [CryptoManager.isCertificateAboutToExpire]
+     */
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
         return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPublicKey]
+     */
     @Suppress("DUPLICATE_LABEL_IN_WHEN")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
@@ -50,6 +66,9 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown public key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPrivateKey]
+     */
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE -> Signature.seedKeypair(toUByteArray()).secretKey.toByteArray()
         SODIUM_PRIVATE_KEY_SIZE -> this
@@ -58,6 +77,9 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown private key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.signWithPrivateKey]
+     */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
         Signature.detached(
             message = toByteArray().toUByteArray(),
@@ -67,6 +89,9 @@ actual object CryptoManager {
         throw SdkException("Failed to sign with private key", exception)
     }
 
+    /**
+     * @see [CryptoManager.verifySignature]
+     */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
         Signature.verifyDetached(
             signature = toUByteArray(),

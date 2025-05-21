@@ -16,6 +16,10 @@ import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
 
+/**
+ * Platform-specific implementation of [CryptoManager].
+ * Provides cryptographic operations using the Ed25519 algorithm with Bouncy Castle.
+ */
 actual object CryptoManager {
 
     private const val ALGORITHM = "Ed25519"
@@ -26,6 +30,9 @@ actual object CryptoManager {
         Security.addProvider(BouncyCastleProvider())
     }
 
+    /**
+     * @see [CryptoManager.generateKeyPair]
+     */
     actual fun generateKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
         return Crypto.KeyPair(
@@ -34,10 +41,19 @@ actual object CryptoManager {
         )
     }
 
+    /**
+     * This method is not implemented and will throw [NotImplementedError]. Use [generateKeyPair] instead.
+     *
+     * @throws [NotImplementedError].
+     */
+    @Suppress("UNUSED")
     actual fun generateEncodedKeyPair(): String {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
+    /**
+     * @see [CryptoManager.isCertificateAboutToExpire]
+     */
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
         return try {
             val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
@@ -55,6 +71,9 @@ actual object CryptoManager {
         }
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPublicKey]
+     */
     @Suppress("DUPLICATE_LABEL_IN_WHEN", "KotlinConstantConditions")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
@@ -64,6 +83,9 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown public key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPrivateKey]
+     */
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when(size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE,
         SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
@@ -72,6 +94,9 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown private key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.signWithPrivateKey]
+     */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
         Signature.getInstance(ALGORITHM).apply {
             initSign(KeyFactory.getInstance(ALGORITHM)
@@ -82,6 +107,9 @@ actual object CryptoManager {
         throw SdkException("Failed to sign with private key", exception)
     }
 
+    /**
+     * @see [CryptoManager.verifySignature]
+     */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
         val signature = Signature.getInstance(ALGORITHM)
         signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
