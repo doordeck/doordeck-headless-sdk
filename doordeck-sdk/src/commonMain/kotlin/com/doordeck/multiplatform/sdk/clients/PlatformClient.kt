@@ -45,7 +45,7 @@ internal object PlatformClient {
      * Creates a new application; Applications are used to divide users between third-parties within Doordeck
      * and define branding, UI, and authentication elements.
      *
-     * @param application The [Platform.CreateApplication] to be created.
+     * @param application Contains new application definition to be created.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
@@ -173,7 +173,7 @@ internal object PlatformClient {
      * Updates the email preferences of an existing application.
      *
      * @param applicationId The application's unique identifier.
-     * @param emailPreferences The new email preferences configuration.
+     * @param emailPreferences Contains new email preferences configuration to be updated.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
@@ -258,7 +258,7 @@ internal object PlatformClient {
      * Adds a permitted authentication key (RSA/EC/Ed25519) for application users.
      *
      * @param applicationId The application's unique identifier.
-     * @param key The new key to be added.
+     * @param key Contains new key definition to be added.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
