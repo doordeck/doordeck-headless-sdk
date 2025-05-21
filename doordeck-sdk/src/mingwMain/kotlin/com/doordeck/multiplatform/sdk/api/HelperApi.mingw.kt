@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterData
 import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.model.data.UploadPlatformLogoData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer

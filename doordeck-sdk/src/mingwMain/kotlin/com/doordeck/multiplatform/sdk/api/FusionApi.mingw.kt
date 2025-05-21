@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.model.data.DeviceIdData
 import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
-import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer

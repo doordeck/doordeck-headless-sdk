@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.FailedResultData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import io.ktor.client.HttpClientConfig
 import kotlinx.cinterop.ByteVar

@@ -7,8 +7,8 @@ import com.doordeck.multiplatform.sdk.model.data.PasswordResetVerifyData
 import com.doordeck.multiplatform.sdk.model.data.RegistrationData
 import com.doordeck.multiplatform.sdk.model.data.VerifyEmailData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer
