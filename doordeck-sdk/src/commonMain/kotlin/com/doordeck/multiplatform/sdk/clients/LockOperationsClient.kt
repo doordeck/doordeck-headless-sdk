@@ -57,8 +57,8 @@ import io.ktor.client.request.setBody
 import kotlin.uuid.Uuid
 
 /**
- * Internal implementation of the lock API client.
- * Handles all network requests related to lock operations.
+ * Internal implementation of the lock operations API client.
+ * Handles all network requests related to lock management and operations.
  */
 internal object LockOperationsClient {
     /**
@@ -254,7 +254,7 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Handles a [UpdateLockPropertiesRequest] request.
+     * Handles the request to update a property of an existing lock.
      *
      * @param lockId The lock's unique identifier.
      * @param request The specific [UpdateLockPropertiesRequest] request to be handled.
@@ -346,7 +346,7 @@ internal object LockOperationsClient {
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
     /**
-     * Handles a [UserPublicKeyRequest] request.
+     * Handles the public key request of an existing user.
      *
      * @param request The specific [UserPublicKeyRequest] request to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
@@ -407,7 +407,7 @@ internal object LockOperationsClient {
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
 
     /**
-     * Handles a [BatchUserPublicKeyRequest] request.
+     * Handles the batch public key request of existing users.
      *
      * @param request The specific [BatchUserPublicKeyRequest] request to be handled.
      * @return List of [BatchUserPublicKeyResponse].
@@ -456,7 +456,7 @@ internal object LockOperationsClient {
 
     /**
      * Shares device access with multiple users in a single batch operation.
-     * If the lock supports batch operations, all shares will be processed at once. Otherwise, shares will be handled sequentially.
+     * Falls back to sequential sharing if batch operations aren't supported by the lock.
      *
      * @param batchShareLockOperation The specific [LockOperations.BatchShareLockOperation] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
@@ -521,7 +521,7 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Updates the number of seconds for the lock to remain unlocked.
+     * Updates the unlock duration setting (how long lock stays unlocked).
      *
      * @param updateSecureSettingUnlockDuration The specific [LockOperations.UpdateSecureSettingUnlockDuration] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
@@ -561,7 +561,7 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Performs a secure operation by constructing and signing a JWT request,
+     * Handles a secure operation by constructing and signing a JWT request,
      * then dispatching it to both cloud and (optionally) direct access endpoints.
      *
      * @throws SdkException if an unexpected error occurs while processing the request.

@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.Platform
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
@@ -34,10 +35,18 @@ import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
+/**
+ * Internal implementation of the platform API client.
+ * Handles all network requests related to platform.
+ */
 internal object PlatformClient {
 
     /**
-     * Create application
+     * Creates a new application; Applications are used to divide users between third-parties within Doordeck
+     * and define branding, UI, and authentication elements.
+     *
+     * @param application The [Platform.CreateApplication] to be created.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
@@ -50,7 +59,10 @@ internal object PlatformClient {
     }
 
     /**
-     * List applications
+     * Lists all application's owned by the current user.
+     *
+     * @return List of [ApplicationResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
@@ -60,7 +72,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Get application
+     * Retrieves the application by its application ID.
+     *
+     * @param applicationId The application's unique identifier.
+     * @return [ApplicationResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
@@ -70,7 +86,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Name
+     * Updates the display name of an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param name The new display name.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -80,7 +100,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Company name
+     * Updates the company name of an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param companyName The new company name.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -90,7 +114,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Mailing address
+     * Updates the company's registered address of an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param mailingAddress The new mailing address.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -100,7 +128,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Privacy policy
+     * Updates the privacy policy URL from an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param privacyPolicy The URL from the new privacy policy, must start with https.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -110,7 +142,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Support contact
+     * Updates the support contact URL from an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param supportContact The URL from the new support contact, must start with https or mailto.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -120,7 +156,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - App link
+     * Updates the deep link URL from an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param appLink The URL from the new application deep link.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -130,7 +170,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Email preferences
+     * Updates the email preferences of an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param emailPreferences The new email preferences configuration.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -153,7 +197,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Update application - Logo url
+     * Updates the application's logo URL with a new image.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param logoUrl The new logo URL, must be hosted on https or cdn.doordeck.com.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
@@ -162,6 +210,13 @@ internal object PlatformClient {
         updateApplication(applicationId, UpdateApplicationLogoUrlRequest(logoUrl))
     }
 
+    /**
+     * Handles the request to update an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param request The specific [UpdateApplicationRequest] request to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     */
     private suspend fun updateApplication(applicationId: String, request: UpdateApplicationRequest) {
         CloudHttpClient.client.post(Paths.getUpdateApplicationPath(applicationId)) {
             addRequestHeaders()
@@ -170,7 +225,10 @@ internal object PlatformClient {
     }
 
     /**
-     * Delete application
+     * Permanently deletes an application and all associated resources.
+     *
+     * @param applicationId The application's unique identifier.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
@@ -180,7 +238,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Get logo upload URL
+     * Generates a pre-signed URL ready for uploading the application logo to.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param contentType Content-type of the logo (image/png or image/jpeg).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
@@ -193,7 +255,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Add auth key
+     * Adds a permitted authentication key (RSA/EC/Ed25519) for application users.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param key The new key to be added.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
@@ -206,7 +272,14 @@ internal object PlatformClient {
     }
 
     /**
-     * Add auth issuer
+     * Registers a unique authentication issuer URL for third-party applications.
+     * The issuer must:
+     * - Be a globally unique URL controlled by your application (e.g., "https://myapp.com")
+     * - Exactly match the `iss` field in all your application's auth tokens
+     *
+     * @param applicationId The application's unique identifier.
+     * @param url The url issuer.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
@@ -219,7 +292,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Delete auth issuer
+     * Deletes an auth issuer.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param url The url issuer.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
@@ -232,7 +309,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Add CORS domain
+     * Adds a new CORS domain to the allowed origins for an application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param url The CORS domain to be added.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
@@ -245,7 +326,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Remove CORS domain
+     * Removes a CORS domain from the allowed origins for an application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param url The CORS domain to be removed.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
@@ -258,7 +343,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Add application owner
+     * Adds a new owner to an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param userId The user's unique identifier.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
@@ -271,7 +360,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Remove application owner
+     * Removes an owner from an existing application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param userId The user's unique identifier.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
@@ -284,7 +377,11 @@ internal object PlatformClient {
     }
 
     /**
-     * Get application owners details
+     * Retrieves the details of all owners of an application, the requesting user should be the application owner.
+     *
+     * @param applicationId The application's unique identifier.
+     * @return List of [ApplicationOwnerDetailsResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
