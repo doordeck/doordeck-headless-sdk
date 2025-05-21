@@ -179,21 +179,29 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun updateApplicationEmailPreferencesRequest(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        updateApplication(applicationId, UpdateApplicationEmailPreferencesRequest(EmailPreferencesRequest(
-            senderEmail = emailPreferences.senderEmail,
-            senderName = emailPreferences.senderName,
-            primaryColour = emailPreferences.primaryColour,
-            secondaryColour = emailPreferences.secondaryColour,
-            onlySendEssentialEmails = emailPreferences.onlySendEssentialEmails,
-            callToAction = emailPreferences.callToAction?.let {
-                CallToActionRequest(
-                    actionTarget = it.actionTarget,
-                    headline = it.headline,
-                    actionText = it.actionText
+    suspend fun updateApplicationEmailPreferencesRequest(
+        applicationId: String,
+        emailPreferences: Platform.EmailPreferences
+    ) {
+        updateApplication(
+            applicationId = applicationId,
+            request = UpdateApplicationEmailPreferencesRequest(
+                EmailPreferencesRequest(
+                    senderEmail = emailPreferences.senderEmail,
+                    senderName = emailPreferences.senderName,
+                    primaryColour = emailPreferences.primaryColour,
+                    secondaryColour = emailPreferences.secondaryColour,
+                    onlySendEssentialEmails = emailPreferences.onlySendEssentialEmails,
+                    callToAction = emailPreferences.callToAction?.let {
+                        CallToActionRequest(
+                            actionTarget = it.actionTarget,
+                            headline = it.headline,
+                            actionText = it.actionText
+                        )
+                    }
                 )
-            }
-        )))
+            )
+        )
     }
 
     /**

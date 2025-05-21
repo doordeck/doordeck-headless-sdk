@@ -8,8 +8,8 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -203,7 +203,10 @@ internal object LockOperationsClient {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: List<String>) {
-        updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses)))
+        updateLockProperties(
+            lockId = lockId,
+            request = UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses))
+        )
     }
 
     /**
@@ -229,11 +232,23 @@ internal object LockOperationsClient {
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
     suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        updateLockProperties(lockId, UpdateLockSettingRequest(
-            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingTimeUsageRequirementRequest(
-                time = times.map { TimeRequirementRequest(it.start, it.end, it.timezone, it.days) }
-            ))
-        ))
+        updateLockProperties(
+            lockId = lockId,
+            request = UpdateLockSettingRequest(
+                settings = UpdateLockSettingUsageRequirementRequest(
+                    usageRequirements = UpdateLockSettingTimeUsageRequirementRequest(
+                        time = times.map {
+                            TimeRequirementRequest(
+                                start = it.start,
+                                end = it.end,
+                                timezone = it.timezone,
+                                days = it.days
+                            )
+                        }
+                    )
+                )
+            )
+        )
     }
 
     /**
@@ -245,12 +260,28 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun updateLockSettingLocationRestrictionsRequest(lockId: String, location: LockOperations.LocationRequirement?) {
-        updateLockProperties(lockId, UpdateLockSettingRequest(
-            UpdateLockSettingUsageRequirementRequest(UpdateLockSettingLocationUsageRequirementRequest(
-                location?.let { LocationRequirementRequest(it.latitude, it.longitude, it.enabled, it.radius, it.accuracy) }
-            ))
-        ))
+    suspend fun updateLockSettingLocationRestrictionsRequest(
+        lockId: String,
+        location: LockOperations.LocationRequirement?
+    ) {
+        updateLockProperties(
+            lockId = lockId,
+            request = UpdateLockSettingRequest(
+                settings = UpdateLockSettingUsageRequirementRequest(
+                    usageRequirements = UpdateLockSettingLocationUsageRequirementRequest(
+                        location = location?.let {
+                            LocationRequirementRequest(
+                                latitude = it.latitude,
+                                longitude = it.longitude,
+                                enabled = it.enabled,
+                                radius = it.radius,
+                                accuracy = it.accuracy
+                            )
+                        }
+                    )
+                )
+            )
+        )
     }
 
     /**
@@ -465,20 +496,22 @@ internal object LockOperationsClient {
      */
     suspend fun batchShareLockRequest(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
         /** Verify whether the operation device currently supports the batch sharing operation **/
-        val isSupported = CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
-            ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
-                CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
-            }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
+        val isSupported =
+            CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
+                ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
+                    CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
+                }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
 
         /** If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually **/
         if (!isSupported) {
             val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
                 try {
                     shareLockRequest(
-                        LockOperations.ShareLockOperation(
-                        baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString()),
-                        shareLock = shareLock
-                    ))
+                        shareLockOperation = LockOperations.ShareLockOperation(
+                            baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString()),
+                            shareLock = shareLock
+                        )
+                    )
                     null
                 } catch (_: Exception) {
                     shareLock
@@ -566,8 +599,10 @@ internal object LockOperationsClient {
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    private suspend fun performOperation(baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
-                                         directAccessEndpoints: List<String>? = null) {
+    private suspend fun performOperation(
+        baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
+        directAccessEndpoints: List<String>? = null
+    ) {
         val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
@@ -580,7 +615,8 @@ internal object LockOperationsClient {
         )
         val headerB64 = operationHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
         val bodyB64 = operationBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
-        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(baseOperationRequest.userPrivateKey).encodeByteArrayToBase64()
+        val signatureB64 =
+            "$headerB64.$bodyB64".signWithPrivateKey(baseOperationRequest.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
 
         // Launch the calls to the direct access endpoints

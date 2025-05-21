@@ -104,8 +104,11 @@ internal object AccountClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        val publicKeyEncoded =  publicKey?.encodeByteArrayToBase64()
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
+        publicKey: ByteArray? = null,
+        method: TwoFactorMethod? = null
+    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
             ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
             ?: throw MissingContextFieldException("Public key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
@@ -126,7 +129,10 @@ internal object AccountClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    suspend fun verifyEphemeralKeyRegistrationRequest(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun verifyEphemeralKeyRegistrationRequest(
+        code: String,
+        privateKey: ByteArray? = null
+    ): RegisterEphemeralKeyResponse {
         val key = privateKey
             ?: ContextManagerImpl.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
