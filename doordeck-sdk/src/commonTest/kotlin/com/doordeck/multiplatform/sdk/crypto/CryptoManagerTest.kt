@@ -34,9 +34,9 @@ class CryptoManagerTest {
     fun shouldGenerateEncodedCryptoKeyPair() = runTest {
         when(getPlatform()) {
             PlatformType.JVM,
+            PlatformType.JS,
             PlatformType.ANDROID,
-            PlatformType.APPLE,
-            PlatformType.WINDOWS -> {
+            PlatformType.APPLE -> {
                 val exception = assertFails {
                     CryptoManager.generateEncodedKeyPair()
                 }
