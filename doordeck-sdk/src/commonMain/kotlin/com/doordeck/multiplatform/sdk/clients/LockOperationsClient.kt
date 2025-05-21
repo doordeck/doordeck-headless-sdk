@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
@@ -55,10 +56,17 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlin.uuid.Uuid
 
+/**
+ * Internal implementation of the lock API client.
+ * Handles all network requests related to lock operations.
+ */
 internal object LockOperationsClient {
-
     /**
-     * Get a single lock
+     * Retrieves a single lock by its ID.
+     *
+     * @param lockId The unique identifier of the lock.
+     * @return [LockResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
@@ -69,7 +77,13 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get lock audit trail
+     * Retrieves all log events associated with a particular lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param start Start of the date range (epoch timestamp).
+     * @param end End of date range (epoch timestamp).
+     * @return List of [AuditResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
@@ -82,7 +96,13 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get audit for a user
+     * Retrieves all log events associated with a particular user.
+     *
+     * @param userId The user's unique identifier.
+     * @param start Start of the date range (epoch timestamp).
+     * @param end End of date range (epoch timestamp).
+     * @return List of [AuditResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
@@ -95,7 +115,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get users for a lock
+     * Retrieves all users associated with a particular lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @return List of [UserLockResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
@@ -104,7 +128,12 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get locks for a user
+     * Retrieves basic user information, including the user's public key and all locks for this particular user.
+     * The list will contain only the locks where the current user is an administrator.
+     *
+     * @param userId The user's unique identifier.
+     * @return [LockUserResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
@@ -113,7 +142,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Name
+     * Updates the user's alias for the lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param name The new alias for the lock (use `null` to remove the existing alias).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -122,7 +155,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Favourite
+     * Updates the lock's favorite flag for the current user.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param favourite `true` to mark the lock as a favorite, `false` or `null` to remove the favorite status.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -131,7 +168,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Colour
+     * Updates the lock's display colour.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param colour Hex representation of the colour (e.g., "#FF5733"), use `null` to remove the colour.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -140,7 +181,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Settings - Default name
+     * Updates the lock's default name (visible to all users without a custom alias).
+     *
+     * @param lockId The lock's unique identifier.
+     * @param name The new lock's name, use `null` to remove the default name.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -149,7 +194,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Set lock properties - Settings - Permitted addresses
+     * Updates the list of permitted public IPs allowed to control this lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param permittedAddresses The full list of allowed public IP addresses (replaces any existing list).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -158,7 +207,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Settings - Hidden
+     * Sets whether the device should be hidden from the favorites list.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param hidden `true` to hide from favorites, `false` to make it visible.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -167,7 +220,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Set lock properties - Settings - Usage requirements - Time
+     * Configures time-based usage restrictions for the lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param times List of allowed time windows (replaces existing restrictions).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -180,7 +237,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update lock properties - Settings - Usage requirements - Location
+     * Configures geofence-based access restrictions for the lock.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param location The geofence configuration (use `null` to remove existing restrictions).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
@@ -192,6 +253,13 @@ internal object LockOperationsClient {
         ))
     }
 
+    /**
+     * Handles a [UpdateLockPropertiesRequest] request.
+     *
+     * @param lockId The lock's unique identifier.
+     * @param request The specific [UpdateLockPropertiesRequest] request to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     */
     private suspend fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest) {
         CloudHttpClient.client.put(Paths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
@@ -200,7 +268,12 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get user’s public key
+     * Retrieves the user's public key along with their ID. If the user is not found, one is created for the specified email.
+     *
+     * @param userEmail The user's email address.
+     * @param visitor Defaults to `false`, set to `true` to direct the visitor to a purely web based experience.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
      */
@@ -213,7 +286,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get a user’s public key by email
+     * Retrieves a user's public key using their email address.
+     *
+     * @param email The user's email address.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
@@ -221,7 +298,11 @@ internal object LockOperationsClient {
         getUserPublicKey(UserPublicKeyRequest(email = email))
 
     /**
-     * Get a user’s public key by telephone
+     * Retrieves a user's public key using their telephone number.
+     *
+     * @param telephone The user's telephone number.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
@@ -229,7 +310,11 @@ internal object LockOperationsClient {
         getUserPublicKey(UserPublicKeyRequest(telephone = telephone))
 
     /**
-     * Get a user’s public key by local key
+     * Retrieves a user's public key using their local key.
+     *
+     * @param localKey The user's local key.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
@@ -237,7 +322,11 @@ internal object LockOperationsClient {
         getUserPublicKey(UserPublicKeyRequest(localKey = localKey))
 
     /**
-     * Get a user’s public key by foreign key
+     * Retrieves a user's public key using their third-party application's identifier for a user.
+     *
+     * @param foreignKey The user's third-party application's identifier.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
@@ -245,13 +334,23 @@ internal object LockOperationsClient {
         getUserPublicKey(UserPublicKeyRequest(foreignKey = foreignKey))
 
     /**
-     * Get a user’s public key
+     * Retrieves a user's public key using their encrypted OpenID token of user.
+     *
+     * @param identity The user's encrypted OpenID token of user.
+     * @return [UserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByIdentityRequest(identity: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
+    /**
+     * Handles a [UserPublicKeyRequest] request.
+     *
+     * @param request The specific [UserPublicKeyRequest] request to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     */
     private suspend fun getUserPublicKey(request: UserPublicKeyRequest): UserPublicKeyResponse {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders()
@@ -260,7 +359,11 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get a user’s public key by email
+     * Retrieves public keys for up to 25 users by their email addresses.
+     *
+     * @param emails List of user email addresses (max 25 entries).
+     * @return List of [BatchUserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
@@ -268,7 +371,11 @@ internal object LockOperationsClient {
         batchGetUserPublicKey(BatchUserPublicKeyRequest(email = emails))
 
     /**
-     * Get a user’s public key by telephone
+     * Retrieves public keys for up to 25 users by their telephone numbers.
+     *
+     * @param telephones List of user email addresses (max 25 entries).
+     * @return List of [BatchUserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
@@ -276,7 +383,11 @@ internal object LockOperationsClient {
         batchGetUserPublicKey(BatchUserPublicKeyRequest(telephone = telephones))
 
     /**
-     * Get a user’s public key by local key
+     * Retrieves public keys for up to 25 users by their local keys.
+     *
+     * @param localKeys List of user local keys (max 25 entries).
+     * @return List of [BatchUserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
@@ -284,13 +395,24 @@ internal object LockOperationsClient {
         batchGetUserPublicKey(BatchUserPublicKeyRequest(localKey = localKeys))
 
     /**
-     * Get a user’s public key by foreign key
+     * Retrieves public keys for up to 25 users by their third-party application's identifier for a user.
+     *
+     * @param foreignKeys List of user third-party application's identifiers (max 25 entries).
+     * @return List of [BatchUserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
     suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
 
+    /**
+     * Handles a [BatchUserPublicKeyRequest] request.
+     *
+     * @param request The specific [BatchUserPublicKeyRequest] request to be handled.
+     * @return List of [BatchUserPublicKeyResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     */
     private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BatchUserPublicKeyResponse> {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
@@ -299,7 +421,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Unlock
+     * Unlocks a device.
+     *
+     * @param unlockOperation The specific [LockOperations.UnlockOperation] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
@@ -310,7 +435,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Share a lock
+     * Shares access to a device with another user.
+     *
+     * @param shareLockOperation The specific [LockOperations.ShareLockOperation] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
@@ -327,22 +455,22 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Batch share a lock
+     * Shares device access with multiple users in a single batch operation.
+     * If the lock supports batch operations, all shares will be processed at once. Otherwise, shares will be handled sequentially.
+     *
+     * @param batchShareLockOperation The specific [LockOperations.BatchShareLockOperation] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
      */
     suspend fun batchShareLockRequest(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
-        /**
-         * Verify whether the operation device currently supports the batch sharing operation
-         */
+        /** Verify whether the operation device currently supports the batch sharing operation **/
         val isSupported = CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
             ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
                 CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
             }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
 
-        /**
-         * If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually
-         */
+        /** If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually **/
         if (!isSupported) {
             val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
                 try {
@@ -379,7 +507,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Revoke access to a lock
+     * Revokes a user's access permissions to a specific lock.
+     *
+     * @param revokeAccessToLockOperation The specific [LockOperations.RevokeAccessToLockOperation] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
@@ -390,7 +521,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update secure settings - Unlock duration
+     * Updates the number of seconds for the lock to remain unlocked.
+     *
+     * @param updateSecureSettingUnlockDuration The specific [LockOperations.UpdateSecureSettingUnlockDuration] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
@@ -403,7 +537,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Update secure settings - Unlock between
+     * Updates the unlock between definition.
+     *
+     * @param updateSecureSettingUnlockBetween The specific [LockOperations.UpdateSecureSettingUnlockBetween] to be handled.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
@@ -423,6 +560,12 @@ internal object LockOperationsClient {
         performOperation(baseOperationRequest, operationRequest)
     }
 
+    /**
+     * Performs a secure operation by constructing and signing a JWT request,
+     * then dispatching it to both cloud and (optionally) direct access endpoints.
+     *
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     */
     private suspend fun performOperation(baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
                                          directAccessEndpoints: List<String>? = null) {
         val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
@@ -452,7 +595,10 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get pinned locks
+     * Retrieves all pinned locks for the current user.
+     *
+     * @return List of [LockResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
@@ -461,7 +607,9 @@ internal object LockOperationsClient {
     }
 
     /**
-     * Get shareable locks
+     * Retrieves all locks where the current user has administrator privileges.
+     * @return List of [ShareableLockResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
@@ -469,6 +617,15 @@ internal object LockOperationsClient {
         return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
     }
 
+    /**
+     * Converts a [LockOperations.BaseOperation] to a [BaseOperationRequest].
+     * Validates that required fields (userId, userCertificateChain, userPrivateKey) are available
+     * either in the input or the [ContextManagerImpl].
+     *
+     * @return [BaseOperationRequest].
+     * @throws MissingContextFieldException if any required field (userId, userCertificateChain,
+     *         or userPrivateKey) is missing from both the input and the [ContextManagerImpl].
+     */
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
             ?: ContextManagerImpl.getUserId()
