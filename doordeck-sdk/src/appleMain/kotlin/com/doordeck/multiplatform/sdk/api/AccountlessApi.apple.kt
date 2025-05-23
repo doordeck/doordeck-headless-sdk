@@ -3,11 +3,12 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 
+/**
+ * Platform-specific implementations of accountless-related API calls.
+ */
 actual object AccountlessApi {
     /**
-     * Login
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
+     * @see AccountlessClient.loginRequest
      */
     @Throws(Exception::class)
     suspend fun login(email: String, password: String): TokenResponse {
@@ -15,9 +16,7 @@ actual object AccountlessApi {
     }
 
     /**
-     * Registration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
+     * @see AccountlessClient.registrationRequest
      */
     @Throws(Exception::class)
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
@@ -25,9 +24,7 @@ actual object AccountlessApi {
     }
 
     /**
-     * Verify email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
+     * @see AccountlessClient.verifyEmailRequest
      */
     @Throws(Exception::class)
     suspend fun verifyEmail(code: String) {
@@ -35,7 +32,7 @@ actual object AccountlessApi {
     }
 
     /**
-     * Password reset
+     * @see AccountlessClient.passwordResetRequest
      */
     @Throws(Exception::class)
     suspend fun passwordReset(email: String) {
@@ -43,7 +40,7 @@ actual object AccountlessApi {
     }
 
     /**
-     * Password reset verify
+     * @see AccountlessClient.passwordResetRequest
      */
     @Throws(Exception::class)
     suspend fun passwordResetVerify(userId: String, token: String, password: String) {
@@ -51,4 +48,7 @@ actual object AccountlessApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [AccountlessApi]
+ */
 actual fun accountless(): AccountlessApi = AccountlessApi

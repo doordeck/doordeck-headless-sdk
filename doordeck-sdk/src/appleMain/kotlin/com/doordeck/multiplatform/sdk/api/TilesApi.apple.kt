@@ -4,11 +4,12 @@ import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 
+/**
+ * Platform-specific implementations of tile-related API calls.
+ */
 actual object TilesApi {
     /**
-     * Get locks belonging to tile
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
+     * @see TilesClient.getLocksBelongingToTileRequest
      */
     @Throws(Exception::class)
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
@@ -16,9 +17,7 @@ actual object TilesApi {
     }
 
     /**
-     * Associate multiple locks (devices) to a single tile
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
+     * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
     @Throws(Exception::class)
@@ -27,4 +26,7 @@ actual object TilesApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [TilesApi]
+ */
 actual fun tiles(): TilesApi = TilesApi

@@ -5,11 +5,12 @@ import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 
+/**
+ * Platform-specific implementations of sites-related API calls.
+ */
 actual object SitesApi {
     /**
-     * List sites
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
+     * @see SitesClient.listSitesRequest
      */
     @Throws(Exception::class)
     suspend fun listSites(): List<SiteResponse> {
@@ -17,9 +18,7 @@ actual object SitesApi {
     }
 
     /**
-     * Get locks for site
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
+     * @see SitesClient.getLocksForSiteRequest
      */
     @Throws(Exception::class)
     suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
@@ -27,9 +26,7 @@ actual object SitesApi {
     }
 
     /**
-     * Get users for a site
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
+     * @see SitesClient.getUsersForSiteRequest
      */
     @Throws(Exception::class)
     suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
@@ -37,4 +34,7 @@ actual object SitesApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [SitesApi]
+ */
 actual fun sites(): SitesApi = SitesApi

@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.SitesClient
 import com.doordeck.multiplatform.sdk.model.data.SiteIdData
-import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CFunction
 import kotlinx.cinterop.CPointer

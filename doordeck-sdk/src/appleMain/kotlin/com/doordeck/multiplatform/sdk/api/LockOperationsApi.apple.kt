@@ -11,11 +11,12 @@ import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 
+/**
+ * Platform-specific implementations of lock-related API calls.
+ */
 actual object LockOperationsApi {
     /**
-     * Get a single lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
+     * @see LockOperationsClient.getSingleLockRequest
      */
     @Throws(Exception::class)
     suspend fun getSingleLock(lockId: String): LockResponse {
@@ -23,9 +24,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get lock audit trail
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
+     * @see LockOperationsClient.getLockAuditTrailRequest
      */
     @Throws(Exception::class)
     suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
@@ -33,9 +32,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get audit for a user
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
+     * @see LockOperationsClient.getAuditForUserRequest
      */
     @Throws(Exception::class)
     suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
@@ -43,9 +40,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get users for a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
+     * @see LockOperationsClient.getUsersForLockRequest
      */
     @Throws(Exception::class)
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
@@ -53,9 +48,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get locks for a user
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
+     * @see LockOperationsClient.getLocksForUserRequest
      */
     @Throws(Exception::class)
     suspend fun getLocksForUser(userId: String): LockUserResponse {
@@ -63,9 +56,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockNameRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockName(lockId: String, name: String? = null) {
@@ -73,9 +64,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Favourite
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockFavouriteRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
@@ -83,9 +72,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Colour
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockColourRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockColour(lockId: String, colour: String? = null) {
@@ -93,9 +80,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Settings - Default name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
@@ -103,9 +88,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Set lock properties - Settings - Permitted addresses
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
     @Throws(Exception::class)
     suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
@@ -113,9 +96,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Settings - Hidden
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
@@ -123,9 +104,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Set lock properties - Settings - Usage requirements - Time
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
     @Throws(Exception::class)
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
@@ -133,9 +112,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update lock properties - Settings - Usage requirements - Location
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
     @Throws(Exception::class)
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
@@ -143,9 +120,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get user’s public key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -154,9 +129,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
@@ -164,9 +137,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by telephone
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
@@ -174,9 +145,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by local key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
@@ -184,9 +153,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by foreign key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
@@ -194,9 +161,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
@@ -204,9 +169,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
@@ -214,9 +177,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by telephone
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
@@ -224,9 +185,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by local key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
@@ -234,9 +193,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get a user’s public key by foreign key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
     @Throws(Exception::class)
     suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
@@ -244,9 +201,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Unlock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     * @see LockOperationsClient.unlockRequest
      */
     @Throws(Exception::class)
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
@@ -254,9 +209,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Share a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
+     * @see LockOperationsClient.shareLockRequest
      */
     @Throws(Exception::class)
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
@@ -264,9 +217,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Batch share a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     * @see LockOperationsClient.batchShareLockRequest
      */
     @Throws(Exception::class)
     suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
@@ -274,9 +225,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Revoke access to a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
+     * @see LockOperationsClient.revokeAccessToLockRequest
      */
     @Throws(Exception::class)
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
@@ -284,9 +233,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update secure settings - Unlock duration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
     @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
@@ -294,9 +241,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update secure settings - Unlock between
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
     @Throws(Exception::class)
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
@@ -304,9 +249,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get pinned locks
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
+     * @see LockOperationsClient.getPinnedLocksRequest
      */
     @Throws(Exception::class)
     suspend fun getPinnedLocks(): List<LockResponse> {
@@ -314,9 +257,7 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get shareable locks
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
+     * @see LockOperationsClient.getShareableLocksRequest
      */
     @Throws(Exception::class)
     suspend fun getShareableLocks(): List<ShareableLockResponse> {
@@ -324,4 +265,7 @@ actual object LockOperationsApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [LockOperationsApi]
+ */
 actual fun lockOperations(): LockOperationsApi = LockOperationsApi

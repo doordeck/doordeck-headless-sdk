@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -25,10 +26,18 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
+/**
+ * Internal implementation of the account API client.
+ * Handles all network requests related to user account.
+ */
 internal object AccountClient {
-
     /**
-     * Refresh token
+     * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl].
+     *
+     * @param refreshToken The refresh token to use for the request. If null, uses the refresh token from [ContextManagerImpl].
+     * @return [TokenResponse].
+     * @throws MissingContextFieldException if no refresh token is available (when [refreshToken] is null and [ContextManagerImpl] has none).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
@@ -46,7 +55,9 @@ internal object AccountClient {
     }
 
     /**
-     * Logout
+     * Logs out the current user and resets the [ContextManagerImpl].
+     *
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
@@ -58,7 +69,13 @@ internal object AccountClient {
     }
 
     /**
-     * Register ephemeral key
+     * Registers an ephemeral key and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
+     * Also marks the key pair as verified in [ContextManagerImpl].
+     *
+     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @return [RegisterEphemeralKeyResponse].
+     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
@@ -77,12 +94,21 @@ internal object AccountClient {
     }
 
     /**
-     * Register ephemeral key with secondary authentication
+     * Registers an ephemeral key with secondary authentication
+     *
+     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @param method The preferred two factor method. If null the server will decide the best method.
+     * @return [RegisterEphemeralKeyWithSecondaryAuthenticationResponse].
+     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        val publicKeyEncoded =  publicKey?.encodeByteArrayToBase64()
+    suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
+        publicKey: ByteArray? = null,
+        method: TwoFactorMethod? = null
+    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+        val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
             ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
             ?: throw MissingContextFieldException("Public key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
@@ -93,11 +119,20 @@ internal object AccountClient {
     }
 
     /**
-     * Verify ephemeral key registration
+     * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
+     * Also marks the key pair as verified in [ContextManagerImpl].
+     *
+     * @param privateKey The private key to use for the request. If null, uses the private key from [ContextManagerImpl].
+     * @param code The two-factor code.
+     * @throws MissingContextFieldException if no private key is available (when [privateKey] is null and [ContextManagerImpl] has none).
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    suspend fun verifyEphemeralKeyRegistrationRequest(code: String, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun verifyEphemeralKeyRegistrationRequest(
+        code: String,
+        privateKey: ByteArray? = null
+    ): RegisterEphemeralKeyResponse {
         val key = privateKey
             ?: ContextManagerImpl.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
@@ -113,7 +148,9 @@ internal object AccountClient {
     }
 
     /**
-     * Reverify email
+     * Requests a new verification code for email address validation.
+     *
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
      */
@@ -123,7 +160,11 @@ internal object AccountClient {
     }
 
     /**
-     * Change password
+     * Requests a password change for the current user.
+     *
+     * @param oldPassword The old password.
+     * @param newPassword The new password.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
      */
@@ -133,15 +174,18 @@ internal object AccountClient {
             addRequestHeaders()
             setBody(
                 ChangePasswordRequest(
-                oldPassword = oldPassword,
-                newPassword = newPassword
-            )
+                    oldPassword = oldPassword,
+                    newPassword = newPassword
+                )
             )
         }
     }
 
     /**
-     * Get user details
+     * Retrieves the current user's information.
+     *
+     * @return [UserDetailsResponse].
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
@@ -150,7 +194,10 @@ internal object AccountClient {
     }
 
     /**
-     * Update user details
+     * Updates the current user's profile details.
+     *
+     * @param displayName The new display name.
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
@@ -162,7 +209,9 @@ internal object AccountClient {
     }
 
     /**
-     * Delete account
+     * Deletes the current user's account and resets the [ContextManagerImpl].
+     *
+     * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */

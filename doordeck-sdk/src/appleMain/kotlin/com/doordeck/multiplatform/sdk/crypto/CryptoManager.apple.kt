@@ -11,8 +11,15 @@ import kotlinx.cinterop.usePinned
 import platform.Foundation.*
 import platform.posix.memcpy
 
+/**
+ * Platform-specific implementation of [CryptoManager].
+ * Provides cryptographic operations using the Ed25519 algorithm with standard Apple Crypto Kit APIs.
+ */
 actual object CryptoManager {
 
+    /**
+     * @see [CryptoManager.generateKeyPair]
+     */
     actual fun generateKeyPair(): Crypto.KeyPair {
         val key = KCryptoKit.generateKeyPair()
         val privateKeyData = key["privateKey"] as NSData
@@ -23,14 +30,24 @@ actual object CryptoManager {
         )
     }
 
+    /**
+     * This method is not implemented and will throw [NotImplementedError]. Use [generateKeyPair] instead.
+     * @throws [NotImplementedError].
+     */
     actual fun generateEncodedKeyPair(): String {
         throw NotImplementedError("Use generateKeyPair() instead")
     }
 
+    /**
+     * @see [CryptoManager.isCertificateAboutToExpire]
+     */
     actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
         return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPublicKey]
+     */
     @Suppress("DUPLICATE_LABEL_IN_WHEN")
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when(size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
@@ -40,6 +57,9 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown public key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.toPlatformPrivateKey]
+     */
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE -> this
         SODIUM_PRIVATE_KEY_SIZE -> sliceArray(0 until RAW_KEY_SIZE)
@@ -48,11 +68,17 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown private key size: $size")
     }
 
+    /**
+     * @see [CryptoManager.signWithPrivateKey]
+     */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray {
         return KCryptoKit.signWithPrivateKey(this, privateKey.toPlatformPrivateKey().toNSData())?.toByteArray()
             ?: throw SdkException("Failed to sign with private key")
     }
 
+    /**
+     * @see [CryptoManager.verifySignature]
+     */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean {
         return KCryptoKit.verifySignature(publicKey.toPlatformPublicKey().toNSData(), message, toNSData())
     }

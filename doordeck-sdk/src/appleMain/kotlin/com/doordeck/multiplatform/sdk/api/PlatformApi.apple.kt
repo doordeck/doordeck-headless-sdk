@@ -7,11 +7,12 @@ import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsRes
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 
+/**
+ * Platform-specific implementations of platform-related API calls.
+ */
 actual object PlatformApi {
     /**
-     * Create application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
+     * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -20,9 +21,7 @@ actual object PlatformApi {
     }
 
     /**
-     * List applications
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
+     * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -31,9 +30,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
+     * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -42,9 +39,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -53,9 +48,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Company name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -64,9 +57,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Mailing address
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -75,9 +66,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Privacy policy
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -86,9 +75,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Support contact
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -97,9 +84,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - App link
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -108,9 +93,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Email preferences
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -119,9 +102,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Logo url
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -130,9 +111,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Delete application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
+     * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -141,9 +120,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get logo upload URL
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
+     * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -152,9 +129,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add auth key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
+     * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -163,9 +138,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add auth issuer
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
+     * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -174,9 +147,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Delete auth issuer
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
+     * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -185,9 +156,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add CORS domain
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
+     * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -196,9 +165,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Remove CORS domain
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
+     * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -207,9 +174,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add application owner
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
+     * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -218,9 +183,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Remove application owner
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
+     * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -229,9 +192,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get application owners details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
+     * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
@@ -240,4 +201,7 @@ actual object PlatformApi {
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [PlatformApi]
+ */
 actual fun platform(): PlatformApi = PlatformApi

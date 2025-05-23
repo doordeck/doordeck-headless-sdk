@@ -9,12 +9,13 @@ import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
+/**
+ * Platform-specific implementations of platform-related API calls.
+ */
 @JsExport
 actual object PlatformApi {
     /**
-     * Create application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
+     * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
     fun createApplication(application: Platform.CreateApplication): Promise<dynamic> {
@@ -22,9 +23,7 @@ actual object PlatformApi {
     }
 
     /**
-     * List applications
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
+     * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
     fun listApplications(): Promise<List<ApplicationResponse>> {
@@ -32,9 +31,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
+     * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
     fun getApplication(applicationId: String): Promise<ApplicationResponse> {
@@ -42,9 +39,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
     fun updateApplicationName(applicationId: String, name: String): Promise<dynamic> {
@@ -52,9 +47,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Company name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
     fun updateApplicationCompanyName(applicationId: String, companyName: String): Promise<dynamic> {
@@ -62,9 +55,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Mailing address
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
     fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String): Promise<dynamic> {
@@ -72,9 +63,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Privacy policy
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
     fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String): Promise<dynamic> {
@@ -82,9 +71,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Support contact
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
     fun updateApplicationSupportContact(applicationId: String, supportContact: String): Promise<dynamic> {
@@ -92,9 +79,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - App link
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
     fun updateApplicationAppLink(applicationId: String, appLink: String): Promise<dynamic> {
@@ -102,9 +87,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Email preferences
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
     fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences): Promise<dynamic> {
@@ -112,9 +95,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Update application - Logo url
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
+     * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
     fun updateApplicationLogoUrl(applicationId: String, logoUrl: String): Promise<dynamic> {
@@ -122,9 +103,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Delete application
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
+     * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
     fun deleteApplication(applicationId: String): Promise<dynamic> {
@@ -132,9 +111,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get logo upload URL
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
+     * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
     fun getLogoUploadUrl(applicationId: String, contentType: String): Promise<GetLogoUploadUrlResponse> {
@@ -142,9 +119,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add auth key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
+     * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
     fun addAuthKey(applicationId: String, key: Platform.AuthKey): Promise<dynamic> {
@@ -152,9 +127,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add auth issuer
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
+     * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
     fun addAuthIssuer(applicationId: String, url: String): Promise<dynamic> {
@@ -162,9 +135,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Delete auth issuer
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
+     * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
     fun deleteAuthIssuer(applicationId: String, url: String): Promise<dynamic> {
@@ -172,9 +143,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add CORS domain
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
+     * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
     fun addCorsDomain(applicationId: String, url: String): Promise<dynamic> {
@@ -182,9 +151,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Remove CORS domain
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
+     * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
     fun removeCorsDomain(applicationId: String, url: String): Promise<dynamic> {
@@ -192,9 +159,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Add application owner
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
+     * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
     fun addApplicationOwner(applicationId: String, userId: String): Promise<dynamic> {
@@ -202,9 +167,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Remove application owner
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
+     * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
     fun removeApplicationOwner(applicationId: String, userId: String): Promise<dynamic> {
@@ -212,9 +175,7 @@ actual object PlatformApi {
     }
 
     /**
-     * Get application owners details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
+     * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
     fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>> {
@@ -224,5 +185,8 @@ actual object PlatformApi {
 
 private val platform = PlatformApi
 
+/**
+ * Defines the platform-specific implementation of [PlatformApi]
+ */
 @JsExport
 actual fun platform(): PlatformApi = platform

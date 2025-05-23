@@ -47,7 +47,8 @@ internal object HelperClient {
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val currentKeyPair = ContextManagerImpl.getKeyPair()
         val currentKeyPairVerified = ContextManagerImpl.isKeyPairVerified()
-        val requiresKeyRegister = currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire() || !currentKeyPairVerified
+        val requiresKeyRegister =
+            currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire() || !currentKeyPairVerified
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair

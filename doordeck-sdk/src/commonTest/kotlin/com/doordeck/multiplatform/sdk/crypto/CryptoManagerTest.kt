@@ -1,10 +1,13 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
+import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -25,6 +28,23 @@ class CryptoManagerTest {
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
         CryptoManager.generateKeyPair()
+    }
+
+    @Test
+    fun shouldGenerateEncodedCryptoKeyPair() = runTest {
+        when(getPlatform()) {
+            PlatformType.JVM,
+            PlatformType.JS,
+            PlatformType.ANDROID,
+            PlatformType.APPLE -> {
+                val exception = assertFails {
+                    CryptoManager.generateEncodedKeyPair()
+                }
+                assertTrue { exception is NotImplementedError }
+            } else -> {
+                CryptoManager.generateEncodedKeyPair()
+            }
+        }
     }
 
     @Test

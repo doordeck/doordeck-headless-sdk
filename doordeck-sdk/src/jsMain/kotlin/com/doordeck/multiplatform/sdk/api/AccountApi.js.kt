@@ -10,12 +10,13 @@ import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
+/**
+ * Platform-specific implementations of account-related API calls.
+ */
 @JsExport
 actual object AccountApi {
     /**
-     * Refresh token
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
+     * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
     fun refreshToken(refreshToken: String? = null): Promise<TokenResponse> {
@@ -23,45 +24,35 @@ actual object AccountApi {
     }
 
     /**
-     * Logout
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
+     * @see AccountClient.logoutRequest
      */
     fun logout(): Promise<dynamic> {
         return promise { AccountClient.logoutRequest() }
     }
 
     /**
-     * Register ephemeral key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
+     * @see AccountClient.registerEphemeralKeyRequest
      */
     fun registerEphemeralKey(publicKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
         return promise { AccountClient.registerEphemeralKeyRequest(publicKey) }
     }
 
     /**
-     * Register ephemeral key with secondary authentication
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
+     * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
         return promise { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method) }
     }
 
     /**
-     * Verify ephemeral key registration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
+     * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
     fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
         return promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
     }
 
     /**
-     * Reverify email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
+     * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
     fun reverifyEmail(): Promise<dynamic> {
@@ -69,9 +60,7 @@ actual object AccountApi {
     }
 
     /**
-     * Change password
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
+     * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
     fun changePassword(oldPassword: String, newPassword: String): Promise<dynamic> {
@@ -79,27 +68,21 @@ actual object AccountApi {
     }
 
     /**
-     * Get user details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
+     * @see AccountClient.getUserDetailsRequest
      */
     fun getUserDetails(): Promise<UserDetailsResponse> {
         return promise { AccountClient.getUserDetailsRequest() }
     }
 
     /**
-     * Update user details
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
+     * @see AccountClient.updateUserDetailsRequest
      */
     fun updateUserDetails(displayName: String): Promise<dynamic> {
         return promise { AccountClient.updateUserDetailsRequest(displayName) }
     }
 
     /**
-     * Delete account
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
+     * @see AccountClient.deleteAccountRequest
      */
     fun deleteAccount(): Promise<dynamic> {
         return promise { AccountClient.deleteAccountRequest() }
@@ -108,5 +91,8 @@ actual object AccountApi {
 
 private val account = AccountApi
 
+/**
+ * Defines the platform-specific implementation of [AccountApi]
+ */
 @JsExport
 actual fun account(): AccountApi = account

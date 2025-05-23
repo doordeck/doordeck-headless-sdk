@@ -56,11 +56,31 @@ import io.ktor.http.encodedPath
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 
+/**
+ * Default content type for regular API requests.
+ */
 private val DEFAULT_REQUEST_CONTENT_TYPE = ContentType.Application.Json.toString()
+
+/**
+ * Default content type for signed API requests.
+ */
 private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
+/**
+ * Converts an API version to its corresponding header value.
+ * 
+ * @return The formatted header value for the API version.
+ */
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
+/**
+ * Adds common request headers to an HTTP request.
+ * 
+ * @param signedRequest Whether this is a signed request (affects content type).
+ * @param contentType The content type to use, defaults based on signedRequest parameter.
+ * @param apiVersion Optional API version to include in Accept header.
+ * @param token Optional authentication token to include in Authorization header.
+ */
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     contentType: String? = if (signedRequest) DEFAULT_SIGNED_REQUEST_CONTENT_TYPE else DEFAULT_REQUEST_CONTENT_TYPE,
@@ -80,12 +100,19 @@ internal fun HttpRequestBuilder.addRequestHeaders(
     }
 }
 
+/**
+ * Installs content negotiation for JSON serialization/deserialization.
+ */
 internal fun HttpClientConfig<*>.installContentNegotiation() {
     install(ContentNegotiation) {
         json(JSON)
     }
 }
 
+/**
+ * Installs authentication handling with automatic token refresh.
+ * When a token expires, this will use the refresh token to obtain a new access token.
+ */
 internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
@@ -110,6 +137,11 @@ internal fun HttpClientConfig<*>.installAuth() {
     }
 }
 
+/**
+ * Installs default request configuration with the specified host.
+ * 
+ * @param determineHost Function that returns the host URL to use for requests.
+ */
 internal fun HttpClientConfig<*>.installDefaultRequest(
     determineHost: () -> String
 ) {
@@ -118,6 +150,10 @@ internal fun HttpClientConfig<*>.installDefaultRequest(
     }
 }
 
+/**
+ * Installs a User-Agent header for the HTTP client.
+ * This is skipped for JavaScript platform.
+ */
 internal fun HttpClientConfig<*>.installUserAgent() {
     if (getPlatform() != PlatformType.JS) {
         install(UserAgent) {
@@ -126,12 +162,20 @@ internal fun HttpClientConfig<*>.installUserAgent() {
     }
 }
 
+/**
+ * Installs timeout configuration for the HTTP client.
+ * Sets a socket timeout of 60 seconds.
+ */
 internal fun HttpClientConfig<*>.installTimeout() {
     install(HttpTimeout) {
         socketTimeoutMillis = 60_000
     }
 }
 
+/**
+ * Installs logging for HTTP requests and responses.
+ * Logs are sent to the SDK logger at INFO level.
+ */
 internal fun HttpClientConfig<*>.installLogging() {
     install(Logging) {
         logger = object : Logger {
@@ -191,6 +235,13 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
     }
 }
 
+/**
+ * Adds an authentication interceptor to the HTTP client.
+ * This interceptor automatically adds an Authorization header to requests that require authentication.
+ * 
+ * @param requiresAuth Function that determines if a path requires authentication.
+ * @param getAuthToken Function that provides the authentication token.
+ */
 internal fun HttpClient.addAuthInterceptor(
     requiresAuth: (String) -> Boolean,
     getAuthToken: () -> String?
@@ -226,10 +277,30 @@ internal fun HttpClient.addExceptionInterceptor() {
     }
 }
 
+/**
+ * Platform-specific implementation for certificate pinning.
+ * This ensures that the client only trusts specific certificates.
+ */
 internal expect fun HttpClientConfig<*>.installCertificatePinner()
 
+/**
+ * Converts an object to its JSON string representation.
+ *
+ * @return JSON string representation of the object
+ */
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
 
+/**
+ * Parses a JSON string into an object of type T.
+ *
+ * @return Object of type T parsed from the JSON string
+ */
 internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this)
 
+/**
+ * Masks a string for logging or display purposes.
+ * Shows only the first 3 characters followed by asterisks.
+ *
+ * @return Masked string
+ */
 internal fun String.mask(): String = "${take(3)}***"

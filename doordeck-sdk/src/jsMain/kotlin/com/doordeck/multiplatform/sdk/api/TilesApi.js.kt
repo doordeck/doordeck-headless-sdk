@@ -6,21 +6,20 @@ import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
+/**
+ * Platform-specific implementations of tile-related API calls.
+ */
 @JsExport
 actual object TilesApi {
     /**
-     * Get locks belonging to tile
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
+     * @see TilesClient.getLocksBelongingToTileRequest
      */
     fun getLocksBelongingToTile(tileId: String): Promise<TileLocksResponse> {
         return promise { TilesClient.getLocksBelongingToTileRequest(tileId) }
     }
 
     /**
-     * Associate multiple locks (devices) to a single tile
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
+     * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
     fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>): Promise<dynamic> {
@@ -30,5 +29,8 @@ actual object TilesApi {
 
 private val tiles = TilesApi
 
+/**
+ * Defines the platform-specific implementation of [TilesApi]
+ */
 @JsExport
 actual fun tiles(): TilesApi = tiles

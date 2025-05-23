@@ -13,369 +13,400 @@ import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
+/**
+ * Platform-specific implementations of lock-related API calls.
+ */
 actual object LockOperationsApi {
     /**
-     * Get a single lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
+     * @see LockOperationsClient.getSingleLockRequest
      */
     suspend fun getSingleLock(lockId: String): LockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getSingleLock] returning [CompletableFuture].
+     */
     fun getSingleLockAsync(lockId: String): CompletableFuture<LockResponse> {
         return completableFuture { getSingleLock(lockId) }
     }
 
     /**
-     * Get lock audit trail
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
+     * @see LockOperationsClient.getLockAuditTrailRequest
      */
     suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
+     */
     fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getLockAuditTrail(lockId, start, end) }
     }
 
     /**
-     * Get audit for a user
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
+     * @see LockOperationsClient.getAuditForUserRequest
      */
     suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
+     */
     fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getAuditForUser(userId, start, end) }
     }
 
     /**
-     * Get users for a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
+     * @see LockOperationsClient.getUsersForLockRequest
      */
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
         return LockOperationsClient.getUsersForLockRequest(lockId)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUsersForLock] returning [CompletableFuture].
+     */
     fun getUsersForLockAsync(lockId: String): CompletableFuture<List<UserLockResponse>> {
         return completableFuture { getUsersForLock(lockId) }
     }
 
     /**
-     * Get locks for a user
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
+     * @see LockOperationsClient.getLocksForUserRequest
      */
     suspend fun getLocksForUser(userId: String): LockUserResponse {
         return LockOperationsClient.getLocksForUserRequest(userId)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getLocksForUser] returning [CompletableFuture].
+     */
     fun getLocksForUserAsync(userId: String): CompletableFuture<LockUserResponse> {
         return completableFuture { getLocksForUser(userId) }
     }
 
     /**
-     * Update lock properties - Name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockNameRequest
      */
     suspend fun updateLockName(lockId: String, name: String? = null) {
         return LockOperationsClient.updateLockNameRequest(lockId, name)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockName] returning [CompletableFuture].
+     */
     fun updateLockNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockName(lockId, name) }
     }
 
     /**
-     * Update lock properties - Favourite
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockFavouriteRequest
      */
     suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
         return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockFavourite] returning [CompletableFuture].
+     */
     fun updateLockFavouriteAsync(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockFavourite(lockId, favourite) }
     }
 
     /**
-     * Update lock properties - Colour
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockColourRequest
      */
     suspend fun updateLockColour(lockId: String, colour: String? = null) {
         return LockOperationsClient.updateLockColourRequest(lockId, colour)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockColour] returning [CompletableFuture].
+     */
     fun updateLockColourAsync(lockId: String, colour: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockColour(lockId, colour) }
     }
 
     /**
-     * Update lock properties - Settings - Default name
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
     suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
         return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockSettingDefaultName] returning [CompletableFuture].
+     */
     fun updateLockSettingDefaultNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingDefaultName(lockId, name) }
     }
 
     /**
-     * Set lock properties - Settings - Permitted addresses
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
     suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
         return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.setLockSettingPermittedAddresses] returning [CompletableFuture].
+     */
     fun setLockSettingPermittedAddressesAsync(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit> {
         return completableFuture { setLockSettingPermittedAddresses(lockId, permittedAddresses) }
     }
 
     /**
-     * Update lock properties - Settings - Hidden
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
     suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
         return LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockSettingHidden] returning [CompletableFuture].
+     */
     fun updateLockSettingHiddenAsync(lockId: String, hidden: Boolean): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingHidden(lockId, hidden) }
     }
 
     /**
-     * Set lock properties - Settings - Usage requirements - Time
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
         return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.setLockSettingTimeRestrictions] returning [CompletableFuture].
+     */
     fun setLockSettingTimeRestrictionsAsync(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
         return completableFuture { setLockSettingTimeRestrictions(lockId, times) }
     }
 
     /**
-     * Update lock properties - Settings - Usage requirements - Location
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
         return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateLockSettingLocationRestrictions] returning [CompletableFuture].
+     */
     fun updateLockSettingLocationRestrictionsAsync(lockId: String, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingLocationRestrictions(lockId, location) }
     }
 
     /**
-     * Get user’s public key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKey] returning [CompletableFuture].
+     */
     @DoordeckOnly
     suspend fun getUserPublicKeyAsync(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKey(userEmail, visitor) }
     }
 
     /**
-     * Get a user’s public key by email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByEmail] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByEmailAsync(email: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByEmail(email) }
     }
 
     /**
-     * Get a user’s public key by telephone
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByTelephone] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByTelephoneAsync(telephone: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByTelephone(telephone) }
     }
 
     /**
-     * Get a user’s public key by local key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByLocalKey] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByLocalKeyAsync(localKey: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByLocalKey(localKey) }
     }
 
     /**
-     * Get a user’s public key by foreign key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByForeignKey] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByForeignKeyAsync(foreignKey: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByForeignKey(foreignKey) }
     }
 
     /**
-     * Get a user’s public key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByIdentity] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByIdentity(identity) }
     }
 
     /**
-     * Get a user’s public key by email
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
     suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByEmails] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByEmailsAsync(emails: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByEmails(emails) }
     }
 
     /**
-     * Get a user’s public key by telephone
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
     suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByTelephones] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByTelephonesAsync(telephones: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByTelephones(telephones) }
     }
 
     /**
-     * Get a user’s public key by local key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
     suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByLocalKeys] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByLocalKeysAsync(localKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByLocalKeys(localKeys) }
     }
 
     /**
-     * Get a user’s public key by foreign key
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
     suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getUserPublicKeyByForeignKeys] returning [CompletableFuture].
+     */
     fun getUserPublicKeyByForeignKeysAsync(foreignKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByForeignKeys(foreignKeys) }
     }
 
     /**
-     * Unlock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     * @see LockOperationsClient.unlockRequest
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
         return LockOperationsClient.unlockRequest(unlockOperation)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.unlock] returning [CompletableFuture].
+     */
     fun unlockAsync(unlockOperation: LockOperations.UnlockOperation): CompletableFuture<Unit> {
         return completableFuture { unlock(unlockOperation) }
     }
 
     /**
-     * Share a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
+     * @see LockOperationsClient.shareLockRequest
      */
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
         return LockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.shareLock] returning [CompletableFuture].
+     */
     fun shareLockAsync(shareLockOperation: LockOperations.ShareLockOperation): CompletableFuture<Unit> {
         return completableFuture { shareLock(shareLockOperation) }
     }
 
     /**
-     * Batch share a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     * @see LockOperationsClient.batchShareLockRequest
      */
     suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
         return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.batchShareLock] returning [CompletableFuture].
+     */
     fun batchShareLockAsync(batchShareLockOperation: LockOperations.BatchShareLockOperation): CompletableFuture<Unit> {
         return completableFuture { batchShareLock(batchShareLockOperation) }
     }
 
     /**
-     * Revoke access to a lock
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
+     * @see LockOperationsClient.revokeAccessToLockRequest
      */
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
         return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.revokeAccessToLock] returning [CompletableFuture].
+     */
     fun revokeAccessToLockAsync(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation): CompletableFuture<Unit> {
         return completableFuture { revokeAccessToLock(revokeAccessToLockOperation) }
     }
 
     /**
-     * Update secure settings - Unlock duration
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
         return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateSecureSettingUnlockDuration] returning [CompletableFuture].
+     */
     fun updateSecureSettingUnlockDurationAsync(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration): CompletableFuture<Unit> {
         return completableFuture {
             updateSecureSettingUnlockDuration(
@@ -385,14 +416,15 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Update secure settings - Unlock between
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
         return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
+    /**
+     * Async variant of [LockOperationsApi.updateSecureSettingUnlockBetween] returning [CompletableFuture].
+     */
     fun updateSecureSettingUnlockBetweenAsync(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween): CompletableFuture<Unit> {
         return completableFuture {
             updateSecureSettingUnlockBetween(
@@ -402,30 +434,35 @@ actual object LockOperationsApi {
     }
 
     /**
-     * Get pinned locks
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
+     * @see LockOperationsClient.getPinnedLocksRequest
      */
     suspend fun getPinnedLocks(): List<LockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getPinnedLocks] returning [CompletableFuture].
+     */
     fun getPinnedLocksAsync(): CompletableFuture<List<LockResponse>> {
         return completableFuture { getPinnedLocks() }
     }
 
     /**
-     * Get shareable locks
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
+     * @see LockOperationsClient.getShareableLocksRequest
      */
     suspend fun getShareableLocks(): List<ShareableLockResponse> {
         return LockOperationsClient.getShareableLocksRequest()
     }
 
+    /**
+     * Async variant of [LockOperationsApi.getShareableLocks] returning [CompletableFuture].
+     */
     fun getShareableLocksAsync(): CompletableFuture<List<ShareableLockResponse>> {
         return completableFuture { getShareableLocks() }
     }
 }
 
+/**
+ * Defines the platform-specific implementation of [LockOperationsApi]
+ */
 actual fun lockOperations(): LockOperationsApi = LockOperationsApi
