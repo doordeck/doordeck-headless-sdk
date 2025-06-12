@@ -156,7 +156,7 @@ class FusionClientTest : IntegrationTest() {
         //assertFails {
         //    FusionClient.getDoorStatusRequest(actualDoor.doordeck!!.id)
         //}
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
 }

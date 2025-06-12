@@ -101,9 +101,7 @@ class AuthPluginTest : IntegrationTest() {
         assertTrue { exception is UnauthorizedException }
         assertEquals(currentAuthToken, ContextManagerImpl.getCloudAuthToken())
         assertEquals(currentRefreshToken, ContextManagerImpl.getCloudRefreshToken())
-
     }
-
 
     /**
      * In this test, we don't have a refresh token, so the plugin cannot attempt to refresh the tokens and
@@ -132,7 +130,7 @@ class AuthPluginTest : IntegrationTest() {
 
         // Then
         assertTrue { exception is UnauthorizedException }
-        assertNull(ContextManagerImpl.getCloudRefreshToken())
+        assertNull(ContextManagerImpl.getCloudAuthToken())
         assertNull(ContextManagerImpl.getCloudRefreshToken())
     }
 }
