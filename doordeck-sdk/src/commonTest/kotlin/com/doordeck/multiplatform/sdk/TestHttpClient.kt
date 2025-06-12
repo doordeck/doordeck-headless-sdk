@@ -55,7 +55,7 @@ private val TEST_ENGINE = MockEngine { request ->
     val path = request.url.encodedPath
     when (request.method) {
         HttpMethod.Get -> {
-            when(path) {
+            when (path) {
                 Paths.getLocksBelongingToTilePath(DEFAULT_TILE_ID) -> respondContent(TILE_LOCKS_RESPONSE)
                 Paths.getListSites() -> respondContent(LIST_SITES_RESPONSE)
                 Paths.getLocksForSitePath(DEFAULT_SITE_ID) -> respondContent(LOCKS_FOR_SITE_RESPONSE)
@@ -144,7 +144,7 @@ internal val TEST_FUSION_CLIENT = createFusionHttpClient()
 internal val TEST_CLOUD_CLIENT = createCloudHttpClient()
 internal val TEST_HTTP_CLIENT = createHttpClient()
 
-private inline fun <reified T> MockRequestHandleScope.respondContent(content: T): HttpResponseData =
+internal inline fun <reified T> MockRequestHandleScope.respondContent(content: T): HttpResponseData =
     respond(
         content = ByteReadChannel(content.toJson().toByteArray(Charsets.UTF_8)),
         status = HttpStatusCode.OK,
