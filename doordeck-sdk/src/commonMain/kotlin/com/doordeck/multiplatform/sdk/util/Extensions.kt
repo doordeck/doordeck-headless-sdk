@@ -50,9 +50,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.URLProtocol
 import io.ktor.http.append
 import io.ktor.http.encodedPath
+import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 
@@ -111,17 +111,16 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
 
 /**
  * Installs authentication handling with automatic token refresh.
- * When a token expires, this will use the refresh token to obtain a new access token.
+ * Attempts to request a new auth token whenever any API call returns an unauthorized response.
  */
 internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
             refreshTokens {
                 ContextManagerImpl.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: TokenResponse = client.post(Paths.getRefreshTokenPath()) {
+                    val refreshTokens: TokenResponse = client.post(ContextManagerImpl.getApiEnvironment().cloudHost) {
                         url {
-                            protocol = URLProtocol.HTTPS
-                            host = ContextManagerImpl.getApiEnvironment().cloudHost
+                            path(Paths.getRefreshTokenPath())
                         }
                         headers {
                             append(HttpHeaders.ContentType, ContentType.Application.Json)
