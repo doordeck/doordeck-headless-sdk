@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
+import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.test.runTest
@@ -99,7 +100,13 @@ class FusionClientTest : IntegrationTest() {
         }
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key).bodyAsText()
+            TEST_HTTP_CLIENT.get(testController.key){
+                timeout {
+                    connectTimeoutMillis = 10_000
+                    socketTimeoutMillis = 30_000
+                    requestTimeoutMillis = 60_000
+                }
+            }.bodyAsText()
         } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }

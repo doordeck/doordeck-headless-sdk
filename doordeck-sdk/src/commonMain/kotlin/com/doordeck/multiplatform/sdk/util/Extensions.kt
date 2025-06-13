@@ -167,7 +167,7 @@ internal fun HttpClientConfig<*>.installUserAgent() {
  */
 internal fun HttpClientConfig<*>.installTimeout() {
     install(HttpTimeout) {
-        socketTimeoutMillis = 30_000
+        socketTimeoutMillis = 60_000
     }
 }
 
