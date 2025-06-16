@@ -58,7 +58,7 @@ class AccountClientTest : IntegrationTest() {
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
         assertNotNull(ContextManagerImpl.getCertificateChain())
-        assertFalse { ContextManagerImpl.isCertificateChainAboutToExpire() }
+        assertFalse { ContextManagerImpl.isCertificateChainInvalidOrExpired() }
     }
 
     @Test

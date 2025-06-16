@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
-import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenAboutToExpire
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.fromJson
@@ -43,8 +43,8 @@ internal object ContextManagerImpl : ContextManager {
         return secureStorage.getCloudAuthToken()
     }
 
-    override fun isCloudAuthTokenAboutToExpire(): Boolean {
-        return getCloudAuthToken()?.isJwtTokenAboutToExpire() ?: true
+    override fun isCloudAuthTokenInvalidOrExpired(): Boolean {
+        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired() ?: true
     }
 
     override fun setCloudRefreshToken(token: String) {
@@ -96,9 +96,9 @@ internal object ContextManagerImpl : ContextManager {
         return secureStorage.getCertificateChain()
     }
 
-    override fun isCertificateChainAboutToExpire(): Boolean {
+    override fun isCertificateChainInvalidOrExpired(): Boolean {
         return getCertificateChain()?.firstOrNull()?.let {
-            CryptoManager.isCertificateAboutToExpire(it)
+            CryptoManager.isCertificateInvalidOrExpired(it)
         } ?: true
     }
 

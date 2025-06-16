@@ -39,9 +39,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.isCertificateAboutToExpire]
+     * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+    actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
         return base64Certificate.isCertificateAboutToExpire() // Fallback
     }
 

@@ -9,6 +9,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.time.Duration.Companion.days
 
+internal val MIN_TOKEN_LIFETIME_DAYS = 1.days
+
 internal object JwtUtils {
     private const val TOKEN_EXPIRE_AT_FIELD = "exp"
 
@@ -24,7 +26,7 @@ internal object JwtUtils {
         }
     }
 
-    fun String.isJwtTokenAboutToExpire(): Boolean {
+    fun String.isJwtTokenInvalidOrExpired(): Boolean {
         val expiration = getClaims(this)[TOKEN_EXPIRE_AT_FIELD]?.let {
             Instant.fromEpochSeconds(it.toLong())
         }
@@ -33,6 +35,6 @@ internal object JwtUtils {
             return true
         }
         SdkLogger.d { "JWT expiration date is $expiration" }
-        return Clock.System.now() >= expiration - 1.days
+        return Clock.System.now() >= expiration - MIN_TOKEN_LIFETIME_DAYS
     }
 }

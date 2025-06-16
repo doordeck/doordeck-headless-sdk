@@ -48,7 +48,7 @@ internal object HelperClient {
         val currentKeyPair = ContextManagerImpl.getKeyPair()
         val currentKeyPairVerified = ContextManagerImpl.isKeyPairVerified()
         val requiresKeyRegister =
-            currentKeyPair == null || ContextManagerImpl.isCertificateChainAboutToExpire() || !currentKeyPairVerified
+            currentKeyPair == null || ContextManagerImpl.isCertificateChainInvalidOrExpired() || !currentKeyPairVerified
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair
