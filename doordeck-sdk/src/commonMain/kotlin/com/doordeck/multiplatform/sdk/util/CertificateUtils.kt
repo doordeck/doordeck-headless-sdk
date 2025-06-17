@@ -1,8 +1,9 @@
 package com.doordeck.multiplatform.sdk.util
 
-import at.asitplus.signum.indispensable.asn1.Asn1Element
+/*import at.asitplus.signum.indispensable.asn1.Asn1Element
 import at.asitplus.signum.indispensable.asn1.Asn1Time
 import at.asitplus.signum.indispensable.asn1.encoding.parse
+ */
 import com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -21,6 +22,7 @@ import kotlinx.datetime.Clock
  *  - `false` If the certificate has more than [MIN_CERTIFICATE_LIFETIME_DAYS] days remaining before expiration
  */
 internal fun String.isCertificateAboutToExpire(): Boolean {
+    /*
     return try {
         // Retrieve the 'Not After' element
         val notAfterElement = Asn1Element.parse(decodeBase64ToByteArray())
@@ -41,4 +43,6 @@ internal fun String.isCertificateAboutToExpire(): Boolean {
         SdkLogger.e(exception) { "Failed to parse the certificate" }
         true
     }
+     */
+    return true
 }

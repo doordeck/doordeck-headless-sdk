@@ -187,7 +187,7 @@ kotlin {
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.multiplatform.settings)
-                implementation(libs.indispensable.asn1)
+                //implementation(libs.indispensable.asn1)
                 implementation(libs.kermit.logger)
             }
         }
