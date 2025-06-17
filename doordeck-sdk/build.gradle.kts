@@ -72,9 +72,13 @@ kotlin {
     }
 
     val xcf = XCFramework(cocoapodsPublish.packageName)
-    val iosTargets = listOf(iosX64(), iosArm64(), macosArm64(), iosSimulatorArm64())
+    val appleTargets = listOf(
+        iosX64(), iosArm64(), iosSimulatorArm64(),              // iOS
+        macosArm64(),                                           // macOS
+        watchosX64(), watchosArm64(), watchosSimulatorArm64()   // watchOS
+    )
 
-    iosTargets.forEach {
+    appleTargets.forEach {
         it.binaries.framework {
             baseName = cocoapodsPublish.packageName
             binaryOption("bundleId", cocoapodsPublish.bundleId)
