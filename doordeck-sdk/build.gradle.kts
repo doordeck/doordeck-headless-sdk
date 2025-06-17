@@ -173,6 +173,7 @@ kotlin {
                 optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
                 optIn("kotlinx.cinterop.BetaInteropApi")
+                optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }

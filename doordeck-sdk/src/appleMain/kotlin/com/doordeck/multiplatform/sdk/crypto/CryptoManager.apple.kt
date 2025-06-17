@@ -91,5 +91,5 @@ internal fun NSData.toByteArray(): ByteArray = ByteArray(length.toInt()).apply {
 }
 
 internal fun ByteArray.toNSData(): NSData = memScoped {
-    NSData.create(bytes = allocArrayOf(this@toNSData), length = this@toNSData.size.toULong())
+    NSData.create(bytes = allocArrayOf(this@toNSData), length = this@toNSData.size.toUInt())
 }
