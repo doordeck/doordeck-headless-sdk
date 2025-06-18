@@ -147,6 +147,7 @@ kotlin {
         version = "${project.version}"
         source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
         ios.deploymentTarget = libs.versions.ios.min.sdk.get()
+        watchos.deploymentTarget = "9.6"
         name = cocoapodsPublish.packageName
         framework {
             baseName = cocoapodsPublish.packageName
