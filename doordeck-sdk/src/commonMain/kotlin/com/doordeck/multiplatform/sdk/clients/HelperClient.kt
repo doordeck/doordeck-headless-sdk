@@ -32,7 +32,7 @@ internal object HelperClient {
     /**
      * Performs the standard login process in a single function. This function performs the following steps:
      *
-     *  * Reads the certificate chain from the context and checks if it is about to expire. If so, we will register the key pair again.
+     *  * Reads the certificate chain from the context and checks if it is invalid or expired. If so, we will register the key pair again.
      *  * Retrieves the key pair from the context or generates a new one if no key is found.
      *  * When a new key is generated, it's added to the context manager.
      *  * Performs the login request using the provided credentials.
