@@ -324,6 +324,7 @@ swiftklib {
         packageName("com.doordeck.multiplatform.sdk.kcryptokit")
         minMacos = libs.versions.ios.min.sdk.get().toInt()
         minIos = libs.versions.ios.min.sdk.get().toInt()
+        minWatchos = libs.versions.watchos.min.sdk.get().toInt()
     }
 }
 

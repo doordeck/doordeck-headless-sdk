@@ -6,9 +6,11 @@ import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.allocArrayOf
+import kotlinx.cinterop.convert
 import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.usePinned
 import platform.Foundation.*
+import platform.darwin.NSUInteger
 import platform.posix.memcpy
 
 /**
@@ -91,5 +93,8 @@ internal fun NSData.toByteArray(): ByteArray = ByteArray(length.toInt()).apply {
 }
 
 internal fun ByteArray.toNSData(): NSData = memScoped {
-    NSData.create(bytes = allocArrayOf(this@toNSData), length = this@toNSData.size.toULong())
+    NSData.create(
+        bytes = allocArrayOf(this@toNSData),
+        length = this@toNSData.size.convert<NSUInteger>()
+    )
 }
