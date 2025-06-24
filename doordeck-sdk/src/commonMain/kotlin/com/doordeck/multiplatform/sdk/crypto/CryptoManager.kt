@@ -93,13 +93,13 @@ expect object CryptoManager {
     fun generateEncodedKeyPair(): String
 
     /**
-     * Checks if a certificate is about to expire based on its base64 encoded representation.
+     * Checks if a certificate is invalid (e.g., null, malformed) or expired.
+     * (we consider it expired if it will expire within the next [MIN_CERTIFICATE_LIFETIME_DAYS] days).
      *
      * @param base64Certificate The certificate in base64 encoded DER format.
-     * @return true if the certificate is expired or about to expire within [MIN_CERTIFICATE_LIFETIME_DAYS],
-     *         or if there was an error parsing the certificate; false otherwise.
+     * @return true if the certificate is invalid or expired; false otherwise.
      */
-    fun isCertificateAboutToExpire(base64Certificate: String): Boolean
+    fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean
 
     /**
      * Converts a byte array representing a public key to the platform-specific format.

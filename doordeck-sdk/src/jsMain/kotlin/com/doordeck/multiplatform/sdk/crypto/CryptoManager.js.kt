@@ -49,9 +49,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.isCertificateAboutToExpire]
+     * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean = try {
+    actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean = try {
         val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)

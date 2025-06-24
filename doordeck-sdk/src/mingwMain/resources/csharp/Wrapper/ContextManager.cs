@@ -67,9 +67,9 @@ public unsafe class ContextManager(
         }
     }
 
-    public bool IsCloudAuthTokenAboutToExpire()
+    public bool IsCloudAuthTokenInvalidOrExpired()
     {
-        return contextManager.isCloudAuthTokenAboutToExpire_(context).ToBoolean();
+        return contextManager.isCloudAuthTokenInvalidOrExpired_(context).ToBoolean();
     }
 
     public void SetCloudRefreshToken(string token)
@@ -211,9 +211,9 @@ public unsafe class ContextManager(
 
     // GetCertificateChain
 
-    public bool IsCertificateChainAboutToExpire()
+    public bool IsCertificateChainInvalidOrExpired()
     {
-        return contextManager.isCertificateChainAboutToExpire_(context).ToBoolean();
+        return contextManager.isCertificateChainInvalidOrExpired_(context).ToBoolean();
     }
 
     // SetKeyPair

@@ -168,7 +168,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.reset()
 
         // When
-        val result = ContextManagerImpl.isCloudAuthTokenAboutToExpire()
+        val result = ContextManagerImpl.isCloudAuthTokenInvalidOrExpired()
 
         // Then
         assertTrue { result }
@@ -180,7 +180,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManagerImpl.reset()
 
         // When
-        val result = ContextManagerImpl.isCertificateChainAboutToExpire()
+        val result = ContextManagerImpl.isCertificateChainInvalidOrExpired()
 
         // Then
         assertTrue { result }
