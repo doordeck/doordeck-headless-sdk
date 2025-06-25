@@ -14,8 +14,8 @@ public class Account(
     public unsafe Task<object> Logout() =>
         Process<object>(null, accountApi.logout_, null);
 
-    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(string? publicKey = null) =>
-        Process<RegisterEphemeralKeyResponse>(accountApi.registerEphemeralKey_, null, new { publicKey });
+    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(string? publicKey = null, string? privateKey = null) =>
+        Process<RegisterEphemeralKeyResponse>(accountApi.registerEphemeralKey_, null, new { publicKey, privateKey });
 
     public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(string? publicKey = null, TwoFactorMethod? method = null) =>
         Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(accountApi.registerEphemeralKeyWithSecondaryAuthentication_, null, new { publicKey, method });

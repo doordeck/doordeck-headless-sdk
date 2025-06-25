@@ -33,8 +33,8 @@ actual object AccountApi {
      * @see AccountClient.registerEphemeralKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        return AccountClient.registerEphemeralKeyRequest(publicKey)
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+        return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
     }
 
     /**

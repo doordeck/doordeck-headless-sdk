@@ -10,7 +10,8 @@ data class RefreshTokenData(
 
 @Serializable
 data class RegisterEphemeralKeyData(
-    val publicKey: String
+    val publicKey: String,
+    val privateKey: String
 )
 
 @Serializable

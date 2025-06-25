@@ -29,6 +29,8 @@ internal fun setStringCallback.invokeStringCallback(string: String) = memScoped 
 
 @CName("createMingwSecureStorage")
 fun createMingwSecureStorage(
+    setStorageVersionCp: setStringCallback,
+    getStringCallbackCp: getStringCallback,
     setApiEnvironmentCp: setStringCallback,
     getApiEnvironmentCp: getStringCallback,
     addCloudAuthTokenCp: setStringCallback,
@@ -45,15 +47,19 @@ fun createMingwSecureStorage(
     getPrivateKeyCp: getStringCallback,
     setKeyPairVerifiedCp: setStringCallback,
     getKeyPairVerifiedCp: getStringCallback,
+    removeVerifiedKeyPairCp: emptyCallback,
     addUserIdCp: setStringCallback,
     getUserIdCp: getStringCallback,
     addUserEmailCp: setStringCallback,
     getUserEmailCp: getStringCallback,
     addCertificateChainCp: setStringCallback,
     getCertificateChainCp: getStringCallback,
-    clearCp: emptyCallback
+    clearCp: emptyCallback,
+    migrateCp: emptyCallback
 ): SecureStorage {
     return MingwSecureStorage(
+        setStorageVersionCp = setStorageVersionCp,
+        getStorageVersionCp = getStringCallbackCp,
         setApiEnvironmentCp = setApiEnvironmentCp,
         getApiEnvironmentCp = getApiEnvironmentCp,
         addCloudAuthTokenCp = addCloudAuthTokenCp,
@@ -70,17 +76,21 @@ fun createMingwSecureStorage(
         getPrivateKeyCp = getPrivateKeyCp,
         setKeyPairVerifiedCp = setKeyPairVerifiedCp,
         getKeyPairVerifiedCp = getKeyPairVerifiedCp,
+        removeVerifiedKeyPairCp = removeVerifiedKeyPairCp,
         addUserIdCp = addUserIdCp,
         getUserIdCp = getUserIdCp,
         addUserEmailCp = addUserEmailCp,
         getUserEmailCp = getUserEmailCp,
         addCertificateChainCp = addCertificateChainCp,
         getCertificateChainCp = getCertificateChainCp,
-        clearCp = clearCp
+        clearCp = clearCp,
+        migrateCp = migrateCp
     )
 }
 
 class MingwSecureStorage(
+    private val setStorageVersionCp: setStringCallback,
+    private val getStorageVersionCp: getStringCallback,
     private val setApiEnvironmentCp: setStringCallback,
     private val getApiEnvironmentCp: getStringCallback,
     private val addCloudAuthTokenCp: setStringCallback,
@@ -97,14 +107,23 @@ class MingwSecureStorage(
     private val getPrivateKeyCp: getStringCallback,
     private val setKeyPairVerifiedCp: setStringCallback,
     private val getKeyPairVerifiedCp: getStringCallback,
+    private val removeVerifiedKeyPairCp: emptyCallback,
     private val addUserIdCp: setStringCallback,
     private val getUserIdCp: getStringCallback,
     private val addUserEmailCp: setStringCallback,
     private val getUserEmailCp: getStringCallback,
     private val addCertificateChainCp: setStringCallback,
     private val getCertificateChainCp: getStringCallback,
-    private val clearCp: emptyCallback
+    private val clearCp: emptyCallback,
+    private val migrateCp: emptyCallback
 ) : SecureStorage {
+    override fun setStorageVersion(version: Int) {
+        setStorageVersionCp.invokeStringCallback(version.toString())
+    }
+
+    override fun getStorageVersion(): Int? {
+        return getStorageVersionCp()?.toKString()?.toInt()
+    }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         setApiEnvironmentCp.invokeStringCallback(apiEnvironment.name)
@@ -148,28 +167,32 @@ class MingwSecureStorage(
         return getFusionAuthTokenCp()?.toKString()
     }
 
-    override fun addPublicKey(byteArray: ByteArray) {
-        addPublicKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
+    override fun addPublicKey(publicKey: ByteArray) {
+        addPublicKeyCp.invokeStringCallback(publicKey.encodeByteArrayToBase64())
     }
 
     override fun getPublicKey(): ByteArray? {
         return getPublicKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
-    override fun addPrivateKey(byteArray: ByteArray) {
-        addPrivateKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
+    override fun addPrivateKey(privateKey: ByteArray) {
+        addPrivateKeyCp.invokeStringCallback(privateKey.encodeByteArrayToBase64())
     }
 
     override fun getPrivateKey(): ByteArray? {
         return getPrivateKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        setKeyPairVerifiedCp.invokeStringCallback(verified.toString())
+    override fun setKeyPairVerified(publicKey: ByteArray) {
+        setKeyPairVerifiedCp.invokeStringCallback(publicKey.encodeByteArrayToBase64())
     }
 
-    override fun getKeyPairVerified(): Boolean? {
-        return getKeyPairVerifiedCp()?.toKString()?.toBoolean()
+    override fun getKeyPairVerified(): ByteArray? {
+        return getKeyPairVerifiedCp()?.toKString()?.decodeBase64ToByteArray()
+    }
+
+    override fun removeVerifiedKeyPair() {
+        return removeVerifiedKeyPairCp.invoke()
     }
 
     override fun addUserId(userId: String) {
@@ -198,5 +221,9 @@ class MingwSecureStorage(
 
     override fun clear() {
        clearCp.invoke()
+    }
+
+    override fun migrate() {
+        migrateCp.invoke()
     }
 }
