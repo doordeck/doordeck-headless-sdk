@@ -4,7 +4,6 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
-import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
@@ -33,7 +32,6 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val keyPairVerified = randomBoolean()
         val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.apply {
             setSecureStorageImpl(settings)
@@ -44,7 +42,7 @@ class ContextManagerTest : IntegrationTest() {
             setUserId(userId)
             setCertificateChain(certificateChain)
             setKeyPair(publicKey, privateKey)
-            setKeyPairVerified(keyPairVerified)
+            setKeyPairVerified(publicKey)
             setUserEmail(email)
         }
 
@@ -62,7 +60,7 @@ class ContextManagerTest : IntegrationTest() {
         assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
-        assertEquals(keyPairVerified, ContextManagerImpl.isKeyPairVerified())
+        assertTrue { ContextManagerImpl.isKeyPairVerified() }
         assertEquals(cloudAuthToken, ContextManagerImpl.getCloudAuthToken())
         assertEquals(cloudRefreshToken, ContextManagerImpl.getCloudRefreshToken())
         assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
@@ -80,7 +78,6 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val keyPairVerified = randomBoolean()
         ContextManagerImpl.apply {
             setApiEnvironment(apiEnvironment)
             setCloudAuthToken(cloudAuthToken)
@@ -89,7 +86,7 @@ class ContextManagerTest : IntegrationTest() {
             setUserId(userId)
             setCertificateChain(certificateChain)
             setKeyPair(publicKey, privateKey)
-            setKeyPairVerified(keyPairVerified)
+            setKeyPairVerified(publicKey)
             setUserEmail(email)
         }
 

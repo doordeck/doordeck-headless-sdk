@@ -107,6 +107,14 @@ internal object ContextManagerImpl : ContextManager {
         secureStorage.addPrivateKey(privateKey)
     }
 
+    internal fun setPublicKey(publicKey: ByteArray) {
+        secureStorage.addPublicKey(publicKey)
+    }
+
+    internal fun setPrivateKey(privateKey: ByteArray) {
+        secureStorage.addPrivateKey(privateKey)
+    }
+
     override fun getKeyPair(): Crypto.KeyPair? {
         val actualUserPublicKey = getPublicKey()
         val actualUserPrivateKey = getPrivateKey()
@@ -115,12 +123,21 @@ internal object ContextManagerImpl : ContextManager {
         } else null
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        secureStorage.setKeyPairVerified(verified)
+    override fun setKeyPairVerified(publicKey: ByteArray) {
+        secureStorage.setKeyPairVerified(publicKey)
+    }
+
+    override fun removeVerifiedKeyPair() {
+        secureStorage.removeVerifiedKeyPair()
     }
 
     override fun isKeyPairVerified(): Boolean {
-        return secureStorage.getKeyPairVerified() ?: false
+        val publicKey = secureStorage.getPublicKey()
+        val verifiedKey = secureStorage.getKeyPairVerified()
+        if (publicKey == null || verifiedKey == null) {
+            return false
+        }
+        return publicKey.contentEquals(verifiedKey)
     }
 
     internal fun getPublicKey(): ByteArray? {

@@ -10,6 +10,9 @@ import kotlin.js.JsExport
 @JsExport
 interface SecureStorage {
 
+    fun addStorageVersion(version: Int)
+    fun getStorageVersion(): Int?
+
     /**
      * Stores the API environment on which the SDK will operate
      * @param apiEnvironment The api environment to be stored.
@@ -97,13 +100,15 @@ interface SecureStorage {
      * Stores the key pair verification status.
      * @param verified The key pair verification status
      */
-    fun setKeyPairVerified(verified: Boolean)
+    fun setKeyPairVerified(publicKey: ByteArray)
+
+    fun removeVerifiedKeyPair()
 
     /**
      * Retrieves the key pair verification status
      * @return The stored key pair verification status a boolean, or null if not found.
      */
-    fun getKeyPairVerified(): Boolean?
+    fun getKeyPairVerified(): ByteArray?
 
     /**
      * Stores the user ID.
@@ -145,6 +150,8 @@ interface SecureStorage {
      * Clears all stored data.
      */
     fun clear()
+
+    fun migrate()
 }
 
 internal expect fun createSecureStorage(applicationContext: ApplicationContext? = null): SecureStorage

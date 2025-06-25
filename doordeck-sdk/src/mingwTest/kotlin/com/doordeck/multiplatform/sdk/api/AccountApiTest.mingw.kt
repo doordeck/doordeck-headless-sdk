@@ -59,7 +59,10 @@ class AccountApiTest : CallbackTest() {
         callbackTest(
             apiCall = {
                 AccountApi.registerEphemeralKey(
-                    data = RegisterEphemeralKeyData(byteArrayOf().encodeByteArrayToBase64()).toJson(),
+                    data = RegisterEphemeralKeyData(
+                        publicKey = byteArrayOf().encodeByteArrayToBase64(),
+                        privateKey = byteArrayOf().encodeByteArrayToBase64()
+                    ).toJson(),
                     callback = staticCFunction(::testCallback)
                 )
             },

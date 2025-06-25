@@ -33,7 +33,7 @@ class AccountApiTest : MockTest() {
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        val response = AccountApi.registerEphemeralKey(byteArrayOf()).await()
+        val response = AccountApi.registerEphemeralKey(byteArrayOf(), byteArrayOf()).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 

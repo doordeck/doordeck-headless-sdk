@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.storage.migrations.Migrations.migrations
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -23,12 +24,21 @@ internal class DefaultSecureStorage(
     private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
     private val publicKeyKey = "PUBLIC_KEY_KEY"
     private val privateKeyKey = "PRIVATE_KEY_KEY"
-    @Deprecated("The new key is KEY_PAIR_VERIFIED_KEY")
-    private val keyPairVerifiedDeprecatedKey = "KEY_PAIR_VERIFIED"
-    private val keyPairVerifiedKey = "KEY_PAIR_VERIFIED_KEY"
+    private val verifiedKeyPairKey = "VERIFIED_KEY_PAIR_KEY"
     private val userIdKey = "USER_ID_KEY"
     private val userEmailKey = "USER_EMAIL_KEY"
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
+    private val storageVersionKey = "STORAGE_VERSION_KEY"
+    // This value should be updated to match the maximum version from the migrations
+    private val currentStorageVersion = 2
+
+    override fun addStorageVersion(version: Int) {
+        storeIntValue(storageVersionKey, version)
+    }
+
+    override fun getStorageVersion(): Int? {
+        return retrieveIntValue(storageVersionKey)
+    }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         storeStringValue(apiEnvironmentKey, apiEnvironment.name)
@@ -86,13 +96,16 @@ internal class DefaultSecureStorage(
         return retrieveStringValue(privateKeyKey, true)?.decodeBase64ToByteArray()
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        storeBooleanValue(keyPairVerifiedKey, verified)
+    override fun setKeyPairVerified(publicKey: ByteArray) {
+        storeStringValue(verifiedKeyPairKey, publicKey.encodeByteArrayToBase64(), true)
     }
 
-    override fun getKeyPairVerified(): Boolean? {
-        return retrieveBooleanValue(keyPairVerifiedDeprecatedKey)
-            ?: retrieveBooleanValue(keyPairVerifiedKey)
+    override fun removeVerifiedKeyPair() {
+        settings.remove(verifiedKeyPairKey)
+    }
+
+    override fun getKeyPairVerified(): ByteArray? {
+        return retrieveStringValue(verifiedKeyPairKey)?.decodeBase64ToByteArray()
     }
 
     override fun addUserId(userId: String) {
@@ -124,6 +137,19 @@ internal class DefaultSecureStorage(
         SdkLogger.d("Successfully cleared storage")
     }
 
+    override fun migrate() {
+        val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
+        if (storedVersion < currentStorageVersion) {
+            migrations
+                .sortedBy { it.fromVersion }
+                .filter { it.fromVersion >= storedVersion }
+                .forEach { migration ->
+                    migration.migrate(settings)
+                    addStorageVersion(migration.toVersion)
+                }
+        }
+    }
+
     private fun storeStringValue(key: String, value: String, maskValue: Boolean = false) {
         settings.putString(key, value)
         SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
@@ -136,14 +162,14 @@ internal class DefaultSecureStorage(
     }
 
     @Suppress("SameParameterValue")
-    private fun storeBooleanValue(key: String, value: Boolean) {
-        settings.putBoolean(key, value)
+    private fun storeIntValue(key: String, value: Int) {
+        settings.putInt(key, value)
         SdkLogger.d("Stored value: $value for key: $key")
     }
 
     @Suppress("SameParameterValue")
-    private fun retrieveBooleanValue(key: String): Boolean? {
-        val value = settings.getBooleanOrNull(key)
+    private fun retrieveIntValue(key: String): Int? {
+        val value = settings.getIntOrNull(key)
         SdkLogger.d("Retrieved value: $value for key: $key")
         return value
     }
