@@ -15,8 +15,8 @@ class ContextManager(object):
     def get_cloud_auth_token(self):
         return _doordeck_headless_sdk.getCloudAuthToken(self.resource)
 
-    def is_cloud_auth_token_about_to_expire(self):
-        return _doordeck_headless_sdk.isCloudAuthTokenAboutToExpire(self.resource)
+    def is_cloud_auth_token_invalid_or_expired(self):
+        return _doordeck_headless_sdk.isCloudAuthTokenInvalidOrExpired(self.resource)
 
     def set_cloud_refresh_token(self, token: str):
         _doordeck_headless_sdk.setCloudRefreshToken(self.resource, token)
@@ -48,8 +48,8 @@ class ContextManager(object):
     def get_user_email(self):
         return _doordeck_headless_sdk.getUserEmail(self.resource)
 
-    def is_certificate_chain_about_to_expire(self):
-        return _doordeck_headless_sdk.isCertificateChainAboutToExpire(self.resource)
+    def is_certificate_chain_invalid_or_expired(self):
+        return _doordeck_headless_sdk.isCertificateChainInvalidOrExpired(self.resource)
 
     def is_key_pair_valid(self):
         return _doordeck_headless_sdk.isKeyPairValid(self.resource)

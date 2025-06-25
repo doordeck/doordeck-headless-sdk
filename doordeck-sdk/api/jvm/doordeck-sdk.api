@@ -293,19 +293,22 @@ public final class com/doordeck/multiplatform/sdk/config/SdkConfig {
 	public fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)V
 	public fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)V
 	public fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)V
-	public synthetic fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;Ljava/lang/Boolean;)V
+	public synthetic fun <init> (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;Ljava/lang/Boolean;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun <init> (Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)V
 	public final fun component1 ()Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;
 	public final fun component2 ()Ljava/lang/String;
 	public final fun component3 ()Ljava/lang/String;
 	public final fun component4 ()Ljava/lang/String;
 	public final fun component5 ()Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;
-	public final fun copy (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig;
-	public static synthetic fun copy$default (Lcom/doordeck/multiplatform/sdk/config/SdkConfig;Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;ILjava/lang/Object;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig;
+	public final fun component6 ()Ljava/lang/Boolean;
+	public final fun copy (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;Ljava/lang/Boolean;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig;
+	public static synthetic fun copy$default (Lcom/doordeck/multiplatform/sdk/config/SdkConfig;Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;Ljava/lang/Boolean;ILjava/lang/Object;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getApiEnvironment ()Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;
 	public final fun getCloudAuthToken ()Ljava/lang/String;
 	public final fun getCloudRefreshToken ()Ljava/lang/String;
+	public final fun getDebugLogging ()Ljava/lang/Boolean;
 	public final fun getFusionHost ()Ljava/lang/String;
 	public final fun getSecureStorage ()Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;
 	public fun hashCode ()I
@@ -318,6 +321,7 @@ public final class com/doordeck/multiplatform/sdk/config/SdkConfig$Builder {
 	public final fun setApiEnvironment (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
 	public final fun setCloudAuthToken (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
 	public final fun setCloudRefreshToken (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
+	public final fun setDebugLogging (Ljava/lang/Boolean;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
 	public final fun setFusionHost (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
 	public final fun setSecureStorageOverride (Lcom/doordeck/multiplatform/sdk/storage/SecureStorage;)Lcom/doordeck/multiplatform/sdk/config/SdkConfig$Builder;
 }
@@ -333,8 +337,8 @@ public abstract interface class com/doordeck/multiplatform/sdk/context/ContextMa
 	public abstract fun getKeyPair ()Lcom/doordeck/multiplatform/sdk/model/data/Crypto$KeyPair;
 	public abstract fun getUserEmail ()Ljava/lang/String;
 	public abstract fun getUserId ()Ljava/lang/String;
-	public abstract fun isCertificateChainAboutToExpire ()Z
-	public abstract fun isCloudAuthTokenAboutToExpire ()Z
+	public abstract fun isCertificateChainInvalidOrExpired ()Z
+	public abstract fun isCloudAuthTokenInvalidOrExpired ()Z
 	public abstract fun isKeyPairValid ()Z
 	public abstract fun isKeyPairVerified ()Z
 	public abstract fun setApiEnvironment (Lcom/doordeck/multiplatform/sdk/model/data/ApiEnvironment;)V
@@ -355,7 +359,7 @@ public final class com/doordeck/multiplatform/sdk/crypto/CryptoManager {
 	public static final field INSTANCE Lcom/doordeck/multiplatform/sdk/crypto/CryptoManager;
 	public final fun generateEncodedKeyPair ()Ljava/lang/String;
 	public final fun generateKeyPair ()Lcom/doordeck/multiplatform/sdk/model/data/Crypto$KeyPair;
-	public final fun isCertificateAboutToExpire (Ljava/lang/String;)Z
+	public final fun isCertificateInvalidOrExpired (Ljava/lang/String;)Z
 }
 
 public final class com/doordeck/multiplatform/sdk/exceptions/BadRequestException : com/doordeck/multiplatform/sdk/exceptions/SdkException {

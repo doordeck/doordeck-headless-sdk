@@ -36,10 +36,11 @@ interface ContextManager {
     fun getCloudAuthToken(): String?
 
     /**
-     * Checks whether the cloud authentication token is null or will expire within the next 24 hours.
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or expired.
+     * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS] days).
      */
-    @CName("isCloudAuthTokenAboutToExpire")
-    fun isCloudAuthTokenAboutToExpire(): Boolean
+    @CName("isCloudAuthTokenInvalidOrExpired")
+    fun isCloudAuthTokenInvalidOrExpired(): Boolean
 
     /**
      * Sets the cloud refresh token, the provided value will be automatically stored in secure storage.
@@ -116,10 +117,11 @@ interface ContextManager {
     fun getCertificateChain(): List<String>?
 
     /**
-     * Checks whether the certificate chain is null or will expire within the next 7 days.
+     * Checks whether the certificate chain is invalid (e.g., null, malformed) or expired.
+     * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS] days).
      */
-    @CName("isCertificateChainAboutToExpire")
-    fun isCertificateChainAboutToExpire(): Boolean
+    @CName("isCertificateChainInvalidOrExpired")
+    fun isCertificateChainInvalidOrExpired(): Boolean
 
     /**
      * Sets the key pair for the context, the provided values will be automatically stored in secure storage.

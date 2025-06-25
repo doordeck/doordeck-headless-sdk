@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.isCertificateAboutToExpire
+import com.doordeck.multiplatform.sdk.util.isCertificateInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
@@ -48,10 +48,10 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.isCertificateAboutToExpire]
+     * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
-        return base64Certificate.isCertificateAboutToExpire() // Fallback
+    actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
+        return base64Certificate.isCertificateInvalidOrExpired() // Fallback
     }
 
     /**

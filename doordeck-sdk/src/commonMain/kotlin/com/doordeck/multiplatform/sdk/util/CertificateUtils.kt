@@ -9,8 +9,10 @@ import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 
 /**
- * Checks whether the certificate represented by this Base64-encoded string is about to expire within
- * [MIN_CERTIFICATE_LIFETIME_DAYS] days. The function parses the certificate's ASN.1 structure to find the
+ * Checks whether the certificate represented by this Base64-encoded string is invalid or expired
+ * (we consider it expired if it will expire within the next [MIN_CERTIFICATE_LIFETIME_DAYS] days).
+ *
+ * The function parses the certificate's ASN.1 structure to find the
  * 'Not After' validity date and compares it against the current time minus the minimum required certificate lifetime.
  *
  * @receiver A Base64-encoded string containing certificate data
@@ -20,7 +22,7 @@ import kotlinx.datetime.Clock
  *  - `true` If any exception occurs during certificate parsing
  *  - `false` If the certificate has more than [MIN_CERTIFICATE_LIFETIME_DAYS] days remaining before expiration
  */
-internal fun String.isCertificateAboutToExpire(): Boolean {
+internal fun String.isCertificateInvalidOrExpired(): Boolean {
     return try {
         // Retrieve the 'Not After' element
         val notAfterElement = Asn1Element.parse(decodeBase64ToByteArray())

@@ -43,9 +43,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.isCertificateAboutToExpire]
+     * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
-    actual fun isCertificateAboutToExpire(base64Certificate: String): Boolean {
+    actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
         return try {
             val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
             val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
