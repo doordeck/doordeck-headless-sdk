@@ -4,7 +4,7 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.contains
 
 /**
- * Renames KEY_PAIR_VERIFIED key to KEY_PAIR_VERIFIED_KEY
+ * Renames KEY_PAIR_VERIFIED key to KEY_PAIR_VERIFIED_KEY.
  */
 internal object Migrate0To1 : StorageMigration {
 

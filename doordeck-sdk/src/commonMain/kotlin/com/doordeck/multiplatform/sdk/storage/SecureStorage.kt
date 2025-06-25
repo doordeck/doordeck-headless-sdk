@@ -15,7 +15,7 @@ interface SecureStorage {
      *
      * @param version The storage version to be stored.
      */
-    fun addStorageVersion(version: Int)
+    fun setStorageVersion(version: Int)
 
     /**
      * Retrieves the storage version.
@@ -95,9 +95,9 @@ interface SecureStorage {
     /**
      * Stores the public key.
      *
-     * @param byteArray The public key as a byte array.
+     * @param publicKey The public key as a byte array.
      */
-    fun addPublicKey(byteArray: ByteArray)
+    fun addPublicKey(publicKey: ByteArray)
 
     /**
      * Retrieves the public key.
@@ -109,9 +109,9 @@ interface SecureStorage {
     /**
      * Stores the private key.
      *
-     * @param byteArray The private key as a byte array.
+     * @param privateKey The private key as a byte array.
      */
-    fun addPrivateKey(byteArray: ByteArray)
+    fun addPrivateKey(privateKey: ByteArray)
 
     /**
      * Retrieves the private key.
@@ -121,19 +121,23 @@ interface SecureStorage {
     fun getPrivateKey(): ByteArray?
 
     /**
-     * Stores the key pair verification status.
-     * @param verified The key pair verification status
+     * Stores the public key from the verified key pair.
+     *
+     * @param publicKey The public key from the verified key pair.
      */
     fun setKeyPairVerified(publicKey: ByteArray)
 
-    fun removeVerifiedKeyPair()
-
     /**
-     * Retrieves the key pair verification status.
+     * Retrieves the verified public key.
      *
-     * @return The stored key pair verification status a boolean, or null if not found.
+     * @return The stored verified public key, or null if not found.
      */
     fun getKeyPairVerified(): ByteArray?
+
+    /**
+     * Deletes the verified public key.
+     */
+    fun removeVerifiedKeyPair()
 
     /**
      * Stores the user ID.

@@ -32,7 +32,7 @@ internal class DefaultSecureStorage(
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
     private val storageVersionKey = "STORAGE_VERSION_KEY"
 
-    override fun addStorageVersion(version: Int) {
+    override fun setStorageVersion(version: Int) {
         storeIntValue(storageVersionKey, version)
     }
 
@@ -80,16 +80,16 @@ internal class DefaultSecureStorage(
         return retrieveStringValue(fusionAuthTokenKey, true)
     }
 
-    override fun addPublicKey(byteArray: ByteArray) {
-        storeStringValue(publicKeyKey, byteArray.encodeByteArrayToBase64(), true)
+    override fun addPublicKey(publicKey: ByteArray) {
+        storeStringValue(publicKeyKey, publicKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPublicKey(): ByteArray? {
         return retrieveStringValue(publicKeyKey, true)?.decodeBase64ToByteArray()
     }
 
-    override fun addPrivateKey(byteArray: ByteArray) {
-        storeStringValue(privateKeyKey, byteArray.encodeByteArrayToBase64(), true)
+    override fun addPrivateKey(privateKey: ByteArray) {
+        storeStringValue(privateKeyKey, privateKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPrivateKey(): ByteArray? {
@@ -100,12 +100,12 @@ internal class DefaultSecureStorage(
         storeStringValue(verifiedKeyPairKey, publicKey.encodeByteArrayToBase64(), true)
     }
 
-    override fun removeVerifiedKeyPair() {
-        settings.remove(verifiedKeyPairKey)
-    }
-
     override fun getKeyPairVerified(): ByteArray? {
         return retrieveStringValue(verifiedKeyPairKey)?.decodeBase64ToByteArray()
+    }
+
+    override fun removeVerifiedKeyPair() {
+        settings.remove(verifiedKeyPairKey)
     }
 
     override fun addUserId(userId: String) {
@@ -146,7 +146,7 @@ internal class DefaultSecureStorage(
                     .filter { it.fromVersion >= storedVersion }
                     .forEach { migration ->
                         migration.migrate(settings)
-                        addStorageVersion(migration.toVersion)
+                        setStorageVersion(migration.toVersion)
                     }
             } catch (exception: Exception) {
                 throw SdkException("Failed to perform storage migrations", exception)
