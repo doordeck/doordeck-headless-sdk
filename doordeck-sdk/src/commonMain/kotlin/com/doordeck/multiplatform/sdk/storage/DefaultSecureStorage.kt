@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.storage
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.storage.migrations.CURRENT_STORAGE_VERSION
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrations.migrations
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -30,8 +31,6 @@ internal class DefaultSecureStorage(
     private val userEmailKey = "USER_EMAIL_KEY"
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
     private val storageVersionKey = "STORAGE_VERSION_KEY"
-    // This value should be updated to match the highest version (toVersion) from the migrations.
-    private val currentStorageVersion = 2
 
     override fun addStorageVersion(version: Int) {
         storeIntValue(storageVersionKey, version)
@@ -140,7 +139,7 @@ internal class DefaultSecureStorage(
 
     override fun migrate() {
         val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
-        if (storedVersion < currentStorageVersion) {
+        if (storedVersion < CURRENT_STORAGE_VERSION) {
             try {
                 migrations
                     .sortedBy { it.fromVersion }

@@ -3,7 +3,10 @@ package com.doordeck.multiplatform.sdk.storage.migrations
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.contains
 
-object Migrate1To2 : StorageMigration {
+/**
+ * Removes KEY_PAIR_VERIFIED_KEY and adds VERIFIED_KEY_PAIR_KEY with the public key as its value.
+ */
+internal object Migrate1To2 : StorageMigration {
 
     override val fromVersion: Int = 1
     override val toVersion: Int = 2
@@ -12,9 +15,6 @@ object Migrate1To2 : StorageMigration {
     private const val VERIFIED_KEY_PAIR_KEY = "VERIFIED_KEY_PAIR_KEY"
     private const val PUBLIC_KEY_KEY = "PUBLIC_KEY_KEY"
 
-    /**
-     * Removes KEY_PAIR_VERIFIED_KEY and adds VERIFIED_KEY_PAIR_KEY with the public key as its value.
-     */
     override fun migrate(settings: Settings) {
         val keyPairVerified = settings.getBooleanOrNull(KEY_PAIR_VERIFIED_KEY)
         if (keyPairVerified != null) {
