@@ -11,6 +11,20 @@ import kotlin.js.JsExport
 interface SecureStorage {
 
     /**
+     * Stores the storage version.
+     *
+     * @param version The storage version to be stored.
+     */
+    fun setStorageVersion(version: Int)
+
+    /**
+     * Retrieves the storage version.
+     *
+     * @return The stored storage version, or null if not found.
+     */
+    fun getStorageVersion(): Int?
+
+    /**
      * Stores the API environment on which the SDK will operate
      * @param apiEnvironment The api environment to be stored.
      */
@@ -145,6 +159,11 @@ interface SecureStorage {
      * Clears all stored data.
      */
     fun clear()
+
+    /**
+     * Performs the storage migrations.
+     */
+    fun migrate()
 }
 
 internal expect fun createSecureStorage(applicationContext: ApplicationContext? = null): SecureStorage
