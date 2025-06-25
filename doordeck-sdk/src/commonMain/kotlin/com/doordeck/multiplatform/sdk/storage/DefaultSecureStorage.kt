@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrations.migrations
@@ -29,7 +30,7 @@ internal class DefaultSecureStorage(
     private val userEmailKey = "USER_EMAIL_KEY"
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
     private val storageVersionKey = "STORAGE_VERSION_KEY"
-    // This value should be updated to match the maximum version from the migrations
+    // This value should be updated to match the highest version (toVersion) from the migrations.
     private val currentStorageVersion = 2
 
     override fun addStorageVersion(version: Int) {
@@ -140,13 +141,17 @@ internal class DefaultSecureStorage(
     override fun migrate() {
         val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
         if (storedVersion < currentStorageVersion) {
-            migrations
-                .sortedBy { it.fromVersion }
-                .filter { it.fromVersion >= storedVersion }
-                .forEach { migration ->
-                    migration.migrate(settings)
-                    addStorageVersion(migration.toVersion)
-                }
+            try {
+                migrations
+                    .sortedBy { it.fromVersion }
+                    .filter { it.fromVersion >= storedVersion }
+                    .forEach { migration ->
+                        migration.migrate(settings)
+                        addStorageVersion(migration.toVersion)
+                    }
+            } catch (exception: Exception) {
+                throw SdkException("Failed to perform storage migrations", exception)
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import kotlin.js.JsExport
 interface SecureStorage {
 
     fun addStorageVersion(version: Int)
+
     fun getStorageVersion(): Int?
 
     /**

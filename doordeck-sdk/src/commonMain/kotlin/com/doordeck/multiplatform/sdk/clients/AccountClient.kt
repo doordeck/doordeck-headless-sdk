@@ -158,7 +158,7 @@ internal object AccountClient {
                 setUserId(it.userId)
                 setCertificateChain(it.certificateChain)
                 setPrivateKey(privateKey)
-                // The public key is added with the previous step from the verification, so it should be there
+                // The public key was added in the previous step, so it should already be present.
                 getPublicKey()?.let { publicKey ->
                     setKeyPairVerified(publicKey)
                 }
