@@ -16,9 +16,10 @@ class MigrationTest {
         val deprecatedKey = "KEY_PAIR_VERIFIED"
         val newKey = "KEY_PAIR_VERIFIED_KEY"
         val verified = randomBoolean()
-        val settings = MemorySettings()
+        val settings = MemorySettings().apply {
+            putBoolean(deprecatedKey, verified)
+        }
         val storage = DefaultSecureStorage(settings)
-        settings.putBoolean(deprecatedKey, verified)
 
         // When
         storage.migrate()
@@ -35,9 +36,10 @@ class MigrationTest {
         // Given
         val key = "STORAGE_VERSION_KEY"
         val newKey = "KEY_PAIR_VERIFIED_KEY"
-        val settings = MemorySettings()
+        val settings = MemorySettings().apply {
+            putInt(key, 1)
+        }
         val storage = DefaultSecureStorage(settings)
-        settings.putInt(key, 1)
 
         // When
         storage.migrate()
