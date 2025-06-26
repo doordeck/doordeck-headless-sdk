@@ -29,8 +29,6 @@ internal fun setStringCallback.invokeStringCallback(string: String) = memScoped 
 
 @CName("createMingwSecureStorage")
 fun createMingwSecureStorage(
-    setStorageVersionCp: setStringCallback,
-    getStringCallbackCp: getStringCallback,
     setApiEnvironmentCp: setStringCallback,
     getApiEnvironmentCp: getStringCallback,
     addCloudAuthTokenCp: setStringCallback,
@@ -53,12 +51,9 @@ fun createMingwSecureStorage(
     getUserEmailCp: getStringCallback,
     addCertificateChainCp: setStringCallback,
     getCertificateChainCp: getStringCallback,
-    clearCp: emptyCallback,
-    migrateCp: emptyCallback
+    clearCp: emptyCallback
 ): SecureStorage {
     return MingwSecureStorage(
-        setStorageVersionCp = setStorageVersionCp,
-        getStorageVersionCp = getStringCallbackCp,
         setApiEnvironmentCp = setApiEnvironmentCp,
         getApiEnvironmentCp = getApiEnvironmentCp,
         addCloudAuthTokenCp = addCloudAuthTokenCp,
@@ -81,14 +76,11 @@ fun createMingwSecureStorage(
         getUserEmailCp = getUserEmailCp,
         addCertificateChainCp = addCertificateChainCp,
         getCertificateChainCp = getCertificateChainCp,
-        clearCp = clearCp,
-        migrateCp = migrateCp
+        clearCp = clearCp
     )
 }
 
 class MingwSecureStorage(
-    private val setStorageVersionCp: setStringCallback,
-    private val getStorageVersionCp: getStringCallback,
     private val setApiEnvironmentCp: setStringCallback,
     private val getApiEnvironmentCp: getStringCallback,
     private val addCloudAuthTokenCp: setStringCallback,
@@ -111,17 +103,8 @@ class MingwSecureStorage(
     private val getUserEmailCp: getStringCallback,
     private val addCertificateChainCp: setStringCallback,
     private val getCertificateChainCp: getStringCallback,
-    private val clearCp: emptyCallback,
-    private val migrateCp: emptyCallback
+    private val clearCp: emptyCallback
 ) : SecureStorage {
-
-    override fun setStorageVersion(version: Int) {
-        setStorageVersionCp.invokeStringCallback(version.toString())
-    }
-
-    override fun getStorageVersion(): Int? {
-        return getStorageVersionCp()?.toKString()?.toInt()
-    }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         setApiEnvironmentCp.invokeStringCallback(apiEnvironment.name)
@@ -215,9 +198,5 @@ class MingwSecureStorage(
 
     override fun clear() {
        clearCp.invoke()
-    }
-
-    override fun migrate() {
-        migrateCp.invoke()
     }
 }

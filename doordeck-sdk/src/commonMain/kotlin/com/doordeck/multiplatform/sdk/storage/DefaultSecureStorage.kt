@@ -32,11 +32,15 @@ internal class DefaultSecureStorage(
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"
     private val storageVersionKey = "STORAGE_VERSION_KEY"
 
-    override fun setStorageVersion(version: Int) {
+    init {
+        migrate()
+    }
+
+    fun setStorageVersion(version: Int) {
         storeIntValue(storageVersionKey, version)
     }
 
-    override fun getStorageVersion(): Int? {
+    fun getStorageVersion(): Int? {
         return retrieveIntValue(storageVersionKey)
     }
 
@@ -133,7 +137,7 @@ internal class DefaultSecureStorage(
         SdkLogger.d("Successfully cleared storage")
     }
 
-    override fun migrate() {
+    internal fun migrate() {
         val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
         if (storedVersion < CURRENT_STORAGE_VERSION) {
             try {
