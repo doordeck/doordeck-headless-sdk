@@ -8,13 +8,13 @@ internal object DoordeckFactory {
 
     fun initialize(sdkConfig: SdkConfig): Doordeck {
         // Add the provided values into the context
-        ContextManagerImpl.apply {
-            setSecureStorageImpl(sdkConfig.secureStorage)
-            setDebugLogging(sdkConfig.debugLogging ?: false)
-            sdkConfig.apiEnvironment?.let { setApiEnvironment(it) }
-            sdkConfig.cloudAuthToken?.let { setCloudAuthToken(it) }
-            sdkConfig.cloudRefreshToken?.let { setCloudRefreshToken(it) }
-            sdkConfig.fusionHost?.let { setFusionHost(it) }
+        ContextManagerImpl.also { context ->
+            context.setSecureStorageImpl(sdkConfig.secureStorage)
+            context.setDebugLogging(sdkConfig.debugLogging ?: false)
+            sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
+            sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
+            sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
+            sdkConfig.fusionHost?.let { context.setFusionHost(it) }
         }
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
