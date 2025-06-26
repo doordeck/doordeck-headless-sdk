@@ -137,7 +137,7 @@ internal class DefaultSecureStorage(
         SdkLogger.d("Successfully cleared storage")
     }
 
-    fun migrate() {
+    private fun migrate() {
         val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
         if (storedVersion < CURRENT_STORAGE_VERSION) {
             try {

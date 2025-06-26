@@ -19,10 +19,9 @@ class MigrationTest {
         val settings = MemorySettings().apply {
             putBoolean(deprecatedKey, verified)
         }
-        val storage = DefaultSecureStorage(settings)
 
         // When
-        storage.migrate()
+        val storage = DefaultSecureStorage(settings)
 
         // Then
         assertEquals(1, storage.getStorageVersion())
@@ -39,10 +38,9 @@ class MigrationTest {
         val settings = MemorySettings().apply {
             putInt(key, 1)
         }
-        val storage = DefaultSecureStorage(settings)
 
         // When
-        storage.migrate()
+        val storage = DefaultSecureStorage(settings)
 
         // Then
         assertEquals(1, storage.getStorageVersion())
