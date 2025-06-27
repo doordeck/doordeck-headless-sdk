@@ -244,7 +244,17 @@ kotlin {
         compilations["main"].compileTaskProvider.configure {
             compilerOptions {
                 val version = libs.versions.ios.min.sdk.get().toInt()
-                freeCompilerArgs.addAll("-Xoverride-konan-properties=osVersionMin.ios_x64=$version.0;osVersionMin.ios_arm64=$version.0;osVersionMin.macos_arm64=$version.0;osVersionMin.ios_simulator_arm64=$version.0")
+                val watchOSVersion = libs.versions.watchos.min.sdk.get().toInt()
+                val arguments = """-Xoverride-konan-properties=
+                    osVersionMin.ios_x64=$version.0;
+                    osVersionMin.ios_arm64=$version.0;
+                    osVersionMin.ios_simulator_arm64=$version.0;
+                    osVersionMin.macos_arm64=$version.0;
+                    osVersionMin.watchos_x64=$watchOSVersion.0;
+                    osVersionMin.watchos_arm64=$watchOSVersion.0;
+                    osVersionMin.watchos_simulator_arm64=$watchOSVersion.0
+                """.trimIndent().replace(" ", "").replace("\n", "")
+                freeCompilerArgs.addAll(arguments)
             }
         }
     }
