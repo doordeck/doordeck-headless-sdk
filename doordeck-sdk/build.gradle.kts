@@ -72,9 +72,13 @@ kotlin {
     }
 
     val xcf = XCFramework(cocoapodsPublish.packageName)
-    val iosTargets = listOf(iosX64(), iosArm64(), macosArm64(), iosSimulatorArm64())
+    val appleTargets = listOf(
+        iosX64(), iosArm64(), iosSimulatorArm64(),                                      // iOS
+        macosArm64(),                                                                   // macOS
+        watchosX64(), watchosArm64(), watchosSimulatorArm64()                           // watchOS
+    )
 
-    iosTargets.forEach {
+    appleTargets.forEach {
         it.binaries.framework {
             baseName = cocoapodsPublish.packageName
             binaryOption("bundleId", cocoapodsPublish.bundleId)
@@ -143,6 +147,7 @@ kotlin {
         version = "${project.version}"
         source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
         ios.deploymentTarget = libs.versions.ios.min.sdk.get()
+        watchos.deploymentTarget = libs.versions.watchos.min.sdk.get()
         name = cocoapodsPublish.packageName
         framework {
             baseName = cocoapodsPublish.packageName
@@ -169,6 +174,7 @@ kotlin {
                 optIn("com.russhwolf.settings.ExperimentalSettingsImplementation")
                 optIn("kotlinx.cinterop.ExperimentalForeignApi")
                 optIn("kotlinx.cinterop.BetaInteropApi")
+                optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
         }
@@ -318,6 +324,7 @@ swiftklib {
         packageName("com.doordeck.multiplatform.sdk.kcryptokit")
         minMacos = libs.versions.ios.min.sdk.get().toInt()
         minIos = libs.versions.ios.min.sdk.get().toInt()
+        minWatchos = libs.versions.watchos.min.sdk.get().toInt()
     }
 }
 
