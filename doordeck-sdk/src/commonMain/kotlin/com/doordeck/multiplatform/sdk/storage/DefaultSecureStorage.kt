@@ -26,7 +26,7 @@ internal class DefaultSecureStorage(
     private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
     private val publicKeyKey = "PUBLIC_KEY_KEY"
     private val privateKeyKey = "PRIVATE_KEY_KEY"
-    private val keyPairVerifiedKey = "KEY_PAIR_VERIFIED_KEY"
+    private val keyPairVerifiedKey = "VERIFIED_KEY_PAIR_KEY"
     private val userIdKey = "USER_ID_KEY"
     private val userEmailKey = "USER_EMAIL_KEY"
     private val certificateChainKey = "CERTIFICATE_CHAIN_KEY"

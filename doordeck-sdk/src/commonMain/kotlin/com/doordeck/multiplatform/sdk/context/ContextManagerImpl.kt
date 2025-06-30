@@ -172,14 +172,17 @@ internal object ContextManagerImpl : ContextManager {
     override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
         setUserId(userId)
         setCertificateChain(certificateChain)
-        setKeyPair(publicKey, privateKey)
+        setKeyPair(publicKey = publicKey, privateKey = privateKey)
     }
 
     override fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<Context.OperationContextData>()
         setUserId(operationContextData.userId)
         setCertificateChain(operationContextData.userCertificateChain.stringToCertificateChain())
-        setKeyPair(operationContextData.userPublicKey.decodeBase64ToByteArray(), operationContextData.userPrivateKey.decodeBase64ToByteArray())
+        setKeyPair(
+            publicKey = operationContextData.userPublicKey.decodeBase64ToByteArray(),
+            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
+        )
     }
 
     internal fun setSecureStorageImpl(secureStorage: SecureStorage) {

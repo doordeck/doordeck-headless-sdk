@@ -56,7 +56,7 @@ internal object HelperClient {
 
         // Add the new key pair to the context manager
         if (currentKeyPair == null) {
-            ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+            ContextManagerImpl.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
             ContextManagerImpl.setKeyPairVerified(null)
         }
 
@@ -118,7 +118,7 @@ internal object HelperClient {
         AccountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)
 
         // Add the key pair to the context manager
-        ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
+        ContextManagerImpl.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
         ContextManagerImpl.setKeyPairVerified(keyPair.public)
     }
 }

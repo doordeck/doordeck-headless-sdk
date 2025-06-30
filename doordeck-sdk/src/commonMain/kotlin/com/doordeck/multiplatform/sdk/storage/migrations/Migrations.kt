@@ -18,7 +18,7 @@ internal object Migrations {
         get() = _migrations
 
     /**
-     * Internal function used in tests to override the default migration list
+     * Internal function used in testing to override the migration list.
      */
     internal fun overrideMigrations(list: List<StorageMigration>) {
         _migrations = list

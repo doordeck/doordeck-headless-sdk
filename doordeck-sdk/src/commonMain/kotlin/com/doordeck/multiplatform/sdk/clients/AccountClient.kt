@@ -95,7 +95,7 @@ internal object AccountClient {
         }.body<RegisterEphemeralKeyResponse>().also {
             ContextManagerImpl.setUserId(it.userId)
             ContextManagerImpl.setCertificateChain(it.certificateChain)
-            ContextManagerImpl.setKeyPair(publicKey, privateKey)
+            ContextManagerImpl.setKeyPair(publicKey = publicKey, privateKey = privateKey)
             ContextManagerImpl.setKeyPairVerified(publicKey)
         }
     }

@@ -57,8 +57,6 @@ class AccountClientTest : IntegrationTest() {
         val result = AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
 
         // Then
-        println("isCertificateChainInvalidOrExpired: ${ContextManagerImpl.isCertificateChainInvalidOrExpired()}")
-        println("isKeyPairVerified: ${ContextManagerImpl.isKeyPairVerified()}")
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
         assertEquals(result.userId, ContextManagerImpl.getUserId())
