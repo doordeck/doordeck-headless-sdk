@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.randomBoolean
+import com.doordeck.multiplatform.sdk.storage.migrations.Migrate0To1
+import com.doordeck.multiplatform.sdk.storage.migrations.Migrations
 import com.russhwolf.settings.contains
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -13,6 +15,7 @@ class MigrationTest {
     @Test
     fun shouldMigrateStorageTest() = runTest {
         // Given
+        Migrations.overrideMigrations(listOf(Migrate0To1))
         val deprecatedKey = "KEY_PAIR_VERIFIED"
         val newKey = "KEY_PAIR_VERIFIED_KEY"
         val verified = randomBoolean()
@@ -33,6 +36,7 @@ class MigrationTest {
     @Test
     fun shouldNotRunMigrationsTest() = runTest {
         // Given
+        Migrations.overrideMigrations(listOf(Migrate0To1))
         val key = "STORAGE_VERSION_KEY"
         val newKey = "KEY_PAIR_VERIFIED_KEY"
         val settings = MemorySettings().apply {

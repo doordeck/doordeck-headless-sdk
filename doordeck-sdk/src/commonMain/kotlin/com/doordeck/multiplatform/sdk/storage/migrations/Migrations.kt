@@ -9,8 +9,18 @@ internal const val CURRENT_STORAGE_VERSION = 2
  * Simple object that holds the list of migrations.
  */
 internal object Migrations {
-    val migrations = listOf(
+    private var _migrations: List<StorageMigration> = listOf(
         Migrate0To1,
         Migrate1To2
     )
+
+    val migrations: List<StorageMigration>
+        get() = _migrations
+
+    /**
+     * Internal function used in tests to override the default migration list
+     */
+    internal fun overrideMigrations(list: List<StorageMigration>) {
+        _migrations = list
+    }
 }

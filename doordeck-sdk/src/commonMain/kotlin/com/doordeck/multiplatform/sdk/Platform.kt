@@ -87,6 +87,9 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
     val client: HttpClient
         get() = _client
 
+    /**
+     * Internal function used in tests to override the default http client
+     */
     internal fun overrideClient(httpClient: HttpClient) {
         _client = httpClient
     }
