@@ -136,7 +136,7 @@ interface ContextManager {
     /**
      * Sets the key pair verification status, the provided values will be automatically stored in secure storage.
      */
-    fun setKeyPairVerified(verified: Boolean)
+    fun setKeyPairVerified(publicKey: ByteArray?)
 
     /**
      * Retrieves the key pair verification status.

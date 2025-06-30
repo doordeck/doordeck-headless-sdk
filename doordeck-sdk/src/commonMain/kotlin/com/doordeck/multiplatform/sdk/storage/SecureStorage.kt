@@ -95,15 +95,15 @@ interface SecureStorage {
 
     /**
      * Stores the key pair verification status.
-     * @param verified The key pair verification status
+     * @param publicKey The key pair verification status
      */
-    fun setKeyPairVerified(verified: Boolean)
+    fun setKeyPairVerified(publicKey: ByteArray?)
 
     /**
      * Retrieves the key pair verification status
      * @return The stored key pair verification status a boolean, or null if not found.
      */
-    fun getKeyPairVerified(): Boolean?
+    fun getKeyPairVerified(): ByteArray?
 
     /**
      * Stores the user ID.

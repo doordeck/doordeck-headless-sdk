@@ -100,12 +100,12 @@ internal class DefaultSecureStorage(
         return retrieveStringValue(privateKeyKey, true)?.decodeBase64ToByteArray()
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        storeBooleanValue(keyPairVerifiedKey, verified)
+    override fun setKeyPairVerified(publicKey: ByteArray?) {
+        storeStringValue(keyPairVerifiedKey, publicKey?.encodeByteArrayToBase64(), true)
     }
 
-    override fun getKeyPairVerified(): Boolean? {
-        return retrieveBooleanValue(keyPairVerifiedKey)
+    override fun getKeyPairVerified(): ByteArray? {
+        return retrieveStringValue(keyPairVerifiedKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun addUserId(userId: String) {
@@ -154,9 +154,14 @@ internal class DefaultSecureStorage(
         }
     }
 
-    private fun storeStringValue(key: String, value: String, maskValue: Boolean = false) {
-        settings.putString(key, value)
-        SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
+    private fun storeStringValue(key: String, value: String?, maskValue: Boolean = false) {
+        if (value == null) {
+            settings.remove(key)
+            SdkLogger.d { "Removed key $key" }
+        } else {
+            settings.putString(key, value)
+            SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
+        }
     }
 
     private fun retrieveStringValue(key: String, maskValue: Boolean = false): String? {

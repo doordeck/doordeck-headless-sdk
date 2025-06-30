@@ -57,7 +57,7 @@ internal object HelperClient {
         // Add the new key pair to the context manager
         if (currentKeyPair == null) {
             ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
-            ContextManagerImpl.setKeyPairVerified(false)
+            ContextManagerImpl.setKeyPairVerified(null)
         }
 
         // Perform the login
@@ -119,6 +119,6 @@ internal object HelperClient {
 
         // Add the key pair to the context manager
         ContextManagerImpl.setKeyPair(keyPair.public, keyPair.private)
-        ContextManagerImpl.setKeyPairVerified(true)
+        ContextManagerImpl.setKeyPairVerified(keyPair.public)
     }
 }

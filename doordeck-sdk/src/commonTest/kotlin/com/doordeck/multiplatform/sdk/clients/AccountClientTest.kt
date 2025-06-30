@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -12,7 +13,6 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -49,16 +49,21 @@ class AccountClientTest : IntegrationTest() {
     fun shouldRegisterEphemeralKey() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val key = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+        val publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
+        val privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
 
         // When
-        val result = AccountClient.registerEphemeralKeyRequest(key)
+        val result = AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
 
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
-        assertNotNull(ContextManagerImpl.getCertificateChain())
+        assertEquals(result.userId, ContextManagerImpl.getUserId())
+        assertEquals(result.certificateChain, ContextManagerImpl.getCertificateChain())
+        assertEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertFalse { ContextManagerImpl.isCertificateChainInvalidOrExpired() }
+        assertTrue { ContextManagerImpl.isKeyPairVerified() }
     }
 
     @Test
