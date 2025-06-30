@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -56,12 +57,14 @@ class AccountClientTest : IntegrationTest() {
         val result = AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
 
         // Then
+        println("isCertificateChainInvalidOrExpired: ${ContextManagerImpl.isCertificateChainInvalidOrExpired()}")
+        println("isKeyPairVerified: ${ContextManagerImpl.isKeyPairVerified()}")
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
         assertEquals(result.userId, ContextManagerImpl.getUserId())
         assertEquals(result.certificateChain, ContextManagerImpl.getCertificateChain())
-        assertEquals(publicKey, ContextManagerImpl.getPublicKey())
-        assertEquals(privateKey, ContextManagerImpl.getPrivateKey())
+        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
+        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertFalse { ContextManagerImpl.isCertificateChainInvalidOrExpired() }
         assertTrue { ContextManagerImpl.isKeyPairVerified() }
     }
