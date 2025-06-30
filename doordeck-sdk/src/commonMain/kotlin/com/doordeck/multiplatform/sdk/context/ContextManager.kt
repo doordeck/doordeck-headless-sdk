@@ -153,7 +153,7 @@ interface ContextManager {
     /**
      * Sets all necessary fields to perform secure operations, the provided values will be automatically stored in secure storage.
      */
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
+    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray, isKeyPairVerified: Boolean = true)
 
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.

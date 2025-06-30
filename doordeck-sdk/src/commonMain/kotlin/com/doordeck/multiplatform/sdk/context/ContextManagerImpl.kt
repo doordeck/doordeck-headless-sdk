@@ -169,19 +169,22 @@ internal object ContextManagerImpl : ContextManager {
         clearContext()
     }
 
-    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
+    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
+                                     privateKey: ByteArray, isKeyPairVerified: Boolean) {
         setUserId(userId)
         setCertificateChain(certificateChain)
         setKeyPair(publicKey = publicKey, privateKey = privateKey)
+        setKeyPairVerified(if (isKeyPairVerified) publicKey else null)
     }
 
     override fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<Context.OperationContextData>()
-        setUserId(operationContextData.userId)
-        setCertificateChain(operationContextData.userCertificateChain.stringToCertificateChain())
-        setKeyPair(
+        setOperationContext(
+            userId = operationContextData.userId,
+            certificateChain = operationContextData.userCertificateChain.stringToCertificateChain(),
             publicKey = operationContextData.userPublicKey.decodeBase64ToByteArray(),
-            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray()
+            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray(),
+            isKeyPairVerified = operationContextData.isKeyPairVerified
         )
     }
 
