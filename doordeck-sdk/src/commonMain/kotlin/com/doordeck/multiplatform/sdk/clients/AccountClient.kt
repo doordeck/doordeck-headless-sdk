@@ -73,8 +73,11 @@ internal object AccountClient {
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
      * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @param privateKey The private key to be stored alongside the provided public key.
+     *  This private key is not used in the request. It is only persisted in the [ContextManagerImpl].
+     *  This value should only be provided if the private key isn't already stored in the [ContextManagerImpl].
      * @return [RegisterEphemeralKeyResponse].
-     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public/private keys are available (when [publicKey] or [privateKey] are null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
