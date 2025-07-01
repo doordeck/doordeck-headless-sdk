@@ -34,7 +34,7 @@ public interface ISecureStorage
 
     public void SetKeyPairVerified(byte[]? publicKey);
 
-    public bool? GetKeyPairVerified();
+    public byte[]? GetKeyPairVerified();
 
     public void AddUserId(string userId);
 

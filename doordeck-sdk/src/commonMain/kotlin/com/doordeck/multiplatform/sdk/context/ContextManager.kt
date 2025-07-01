@@ -134,7 +134,7 @@ interface ContextManager {
     fun getKeyPair(): Crypto.KeyPair?
 
     /**
-     * Sets the key pair verification status, the provided values will be automatically stored in secure storage.
+     * Sets the public key that has been verified via two-factor authentication. The provided value will be automatically stored in secure storage.
      */
     fun setKeyPairVerified(publicKey: ByteArray?)
 
