@@ -65,7 +65,7 @@ internal object HelperClient {
 
         val registerKeyResult = if (requiresKeyRegister) {
             // Register the key pair
-            assistedRegisterEphemeralKeyRequest(keyPair.public)
+            assistedRegisterEphemeralKeyRequest(publicKey = keyPair.public, privateKey = keyPair.private)
         } else {
             // No key pair registration required; verification is not needed
             null
@@ -84,19 +84,25 @@ internal object HelperClient {
      *  (`AssistedRegisterEphemeralKeyResponse.requiresVerification` is true),
      *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
-    suspend fun assistedRegisterEphemeralKeyRequest(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
+    suspend fun assistedRegisterEphemeralKeyRequest(
+        publicKey: ByteArray? = null,
+        privateKey: ByteArray? = null
+    ): AssistedRegisterEphemeralKeyResponse {
         // Define which key should be registered
-        val key = publicKey
+        val publicKey = publicKey
             ?: ContextManagerImpl.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
+        val privateKey = privateKey
+            ?: ContextManagerImpl.getPrivateKey()
+            ?: throw MissingContextFieldException("Private key is missing")
         return try {
             // Attempt to register the provided or default public key
-            AccountClient.registerEphemeralKeyRequest(key)
+            AccountClient.registerEphemeralKeyRequest(publicKey = publicKey, privateKey = privateKey)
             AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = false)
         } catch (_: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
             try {
-                AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(key)
+                AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey)
                 AssistedRegisterEphemeralKeyResponse(requiresVerification = true, requiresRetry = false)
             } catch (_: TooManyRequestsException) {
                 AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = true)

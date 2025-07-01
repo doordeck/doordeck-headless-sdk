@@ -25,8 +25,8 @@ class Helper(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def assisted_register_ephemeral_key(self, publicKey: str):
-        data = { "publicKey": publicKey }
+    async def assisted_register_ephemeral_key(self, publicKey: str, privateKey: str):
+        data = { "publicKey": publicKey, "privateKey": privateKey }
         return await execute_async(
             _doordeck_headless_sdk.assistedRegisterEphemeralKey,
             [self.resource, json.dumps(data)]
