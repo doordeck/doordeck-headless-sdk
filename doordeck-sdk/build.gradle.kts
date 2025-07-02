@@ -345,6 +345,14 @@ tasks.withType<AbstractTestTask>().configureEach {
     }
 }
 
+// Propagate env variables to the simulators
+tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest>().configureEach {
+    environment("SIMCTL_CHILD_TEST_ENV_VAR", System.getenv("TEST_ENV_VAR"))
+    environment("SIMCTL_CHILD_TEST_MAIN_USER_PASSWORD", System.getenv("TEST_MAIN_USER_PASSWORD"))
+    environment("SIMCTL_CHILD_TEST_MAIN_USER_PRIVATE_KEY", System.getenv("TEST_MAIN_USER_PRIVATE_KEY"))
+    environment("SIMCTL_CHILD_FUSION_INTEGRATIONS", System.getenv("FUSION_INTEGRATIONS"))
+}
+
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
     doLast {
         // Specify the directory where the package is generated
