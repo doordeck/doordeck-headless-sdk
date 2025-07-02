@@ -178,6 +178,11 @@ kotlin {
                 optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
+
+            // Include the version file
+            commonMain {
+                kotlin.srcDir("$projectDir/build/generated/version")
+            }
         }
 
         val commonMain by getting {
@@ -360,6 +365,23 @@ tasks.withType<KotlinNativeSimulatorTest>().configureEach {
     System.getenv("FUSION_INTEGRATIONS")?.let {
         environment("SIMCTL_CHILD_FUSION_INTEGRATIONS", it)
     }
+}
+
+val versionFile by tasks.registering {
+    val outputDir = file("$projectDir/build/generated/version")
+    mkdir(outputDir)
+
+   file("$outputDir/Version.kt").apply {
+       writeText("""
+           // Generated file - DO NOT EDIT
+           object ProjectVersion {
+                const val VERSION: String = "${project.version}"
+           }
+       """.trimIndent())
+    }.createNewFile()
+}
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    dependsOn(versionFile)
 }
 
 tasks.named("jsBrowserProductionLibraryDistribution").configure {
