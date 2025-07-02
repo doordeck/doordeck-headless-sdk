@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -273,14 +274,14 @@ val versionFile by tasks.registering {
     file("$outputDir/Version.kt").apply {
         writeText("""
            // Generated file - DO NOT EDIT
-           object ProjectVersion {
+           internal object ProjectVersion {
                 const val VERSION: String = "${project.version}"
            }
        """.trimIndent())
     }.createNewFile()
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<AbstractKotlinCompile<*>>().configureEach {
     dependsOn(versionFile)
 }
 
