@@ -19,9 +19,13 @@ import kotlinx.serialization.json.Json
 enum class PlatformType {
     JVM,
     ANDROID,
-    APPLE,
+    APPLE_WATCH,
+    APPLE_PHONE,
+    APPLE_MAC,
     WINDOWS,
-    JS
+    JS_BROWSER,
+    JS_NODE,
+    UNKNOWN
 }
 
 internal val JSON = Json {
@@ -96,6 +100,6 @@ internal object CloudHttpClient : BaseHttpClient(::createCloudHttpClient)
 internal object FusionHttpClient : BaseHttpClient(::createFusionHttpClient)
 internal object HttpClient : BaseHttpClient(::createHttpClient)
 
-expect fun getPlatform(): PlatformType
+expect val platformType: PlatformType
 
 internal expect object ApplicationContext
