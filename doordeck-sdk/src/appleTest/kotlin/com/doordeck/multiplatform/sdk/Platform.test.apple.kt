@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import platform.Foundation.NSProcessInfo
+import kotlinx.cinterop.toKString
+import platform.posix.getenv
 
 actual fun getEnvironmentVariable(name: String): String? =
-    NSProcessInfo.processInfo.environment[name] as? String
+    getenv(name)?.toKString()
