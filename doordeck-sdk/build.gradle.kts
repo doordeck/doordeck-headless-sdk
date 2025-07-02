@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -282,6 +283,10 @@ val versionFile by tasks.registering {
 }
 
 tasks.withType<AbstractKotlinCompile<*>>().configureEach {
+    dependsOn(versionFile)
+}
+
+tasks.withType<KotlinNativeCompile>().configureEach {
     dependsOn(versionFile)
 }
 
