@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -342,6 +343,22 @@ swiftklib {
 tasks.withType<AbstractTestTask>().configureEach {
     testLogging {
         events = setOf(TestLogEvent.STARTED, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED, TestLogEvent.STANDARD_OUT, TestLogEvent.STANDARD_ERROR)
+    }
+}
+
+// Propagate env variables to the apple simulators
+tasks.withType<KotlinNativeSimulatorTest>().configureEach {
+    System.getenv("TEST_ENV_VAR")?.let {
+        environment("SIMCTL_CHILD_TEST_ENV_VAR", it)
+    }
+    System.getenv("TEST_MAIN_USER_PASSWORD")?.let {
+        environment("SIMCTL_CHILD_TEST_MAIN_USER_PASSWORD", it)
+    }
+    System.getenv("TEST_MAIN_USER_PRIVATE_KEY")?.let {
+        environment("SIMCTL_CHILD_TEST_MAIN_USER_PRIVATE_KEY", it)
+    }
+    System.getenv("FUSION_INTEGRATIONS")?.let {
+        environment("SIMCTL_CHILD_FUSION_INTEGRATIONS", it)
     }
 }
 
