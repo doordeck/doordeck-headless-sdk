@@ -34,7 +34,7 @@ jobs:
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
           - name: Apple
-            test: watchosSimulatorArm64Test iosSimulatorArm64Test macosArm64Test
+            test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
             os: macos-latest
           - name: Windows
             test: mingwX64Test
