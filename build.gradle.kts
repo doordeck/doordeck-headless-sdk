@@ -14,6 +14,7 @@ group = "com.doordeck"
 nexusPublishing {
     repositories {
         sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
             username = System.getenv("MAVEN_USERNAME")
             password = System.getenv("MAVEN_TOKEN")
         }
