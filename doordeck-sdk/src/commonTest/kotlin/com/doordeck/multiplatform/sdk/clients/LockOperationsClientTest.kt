@@ -332,7 +332,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUnlock() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val baseOperation = LockOperations.BaseOperation(
@@ -350,7 +353,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUnlockUsingContext() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         ContextManagerImpl.setOperationContext(
@@ -368,7 +374,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldShareAndRevokeLock() = runTest {
         // Given - shouldShareLock
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val shareBaseOperation = LockOperations.BaseOperation(
@@ -417,7 +426,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldBatchShareAndRevokeLock() = runTest {
         // Given - shouldShareLockUsingContext
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val shareBaseOperation = LockOperations.BaseOperation(
@@ -487,7 +499,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         ContextManagerImpl.setOperationContext(
@@ -530,7 +545,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldBatchShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         ContextManagerImpl.setOperationContext(
@@ -594,7 +612,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val updatedUnlockDuration = Random.nextInt(30, 60)
@@ -621,7 +642,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val updatedUnlockDuration = 1
@@ -649,7 +673,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateAndRemoveSecureSettingUnlockBetween() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val now = Clock.System.now()
@@ -708,7 +735,10 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContext() = runTest {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray())
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountClient.registerEphemeralKeyRequest(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+        )
             .certificateChain
             .certificateChainToString()
         val now = Clock.System.now()

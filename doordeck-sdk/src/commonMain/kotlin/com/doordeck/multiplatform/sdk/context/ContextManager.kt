@@ -134,9 +134,9 @@ interface ContextManager {
     fun getKeyPair(): Crypto.KeyPair?
 
     /**
-     * Sets the key pair verification status, the provided values will be automatically stored in secure storage.
+     * Sets the public key that has been verified via two-factor authentication. The provided value will be automatically stored in secure storage.
      */
-    fun setKeyPairVerified(verified: Boolean)
+    fun setKeyPairVerified(publicKey: ByteArray?)
 
     /**
      * Retrieves the key pair verification status.
@@ -153,7 +153,7 @@ interface ContextManager {
     /**
      * Sets all necessary fields to perform secure operations, the provided values will be automatically stored in secure storage.
      */
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
+    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray, isKeyPairVerified: Boolean = true)
 
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.

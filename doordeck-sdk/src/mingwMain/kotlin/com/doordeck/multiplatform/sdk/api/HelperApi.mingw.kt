@@ -45,7 +45,10 @@ actual object HelperApi {
         callback(
             block = {
                 val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
-                HelperClient.assistedRegisterEphemeralKeyRequest(assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
+                HelperClient.assistedRegisterEphemeralKeyRequest(
+                    publicKey = assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray(),
+                    privateKey = assistedRegisterEphemeralKeyData?.privateKey?.decodeBase64ToByteArray()
+                )
             },
             callback = callback
         )

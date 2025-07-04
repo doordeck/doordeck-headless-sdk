@@ -115,12 +115,25 @@ internal object ContextManagerImpl : ContextManager {
         } else null
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        secureStorage.setKeyPairVerified(verified)
+    internal fun setPublicKey(publicKey: ByteArray) {
+        secureStorage.addPublicKey(publicKey)
+    }
+
+    internal fun setPrivateKey(privateKey: ByteArray) {
+        secureStorage.addPrivateKey(privateKey)
+    }
+
+    override fun setKeyPairVerified(publicKey: ByteArray?) {
+        secureStorage.setKeyPairVerified(publicKey)
     }
 
     override fun isKeyPairVerified(): Boolean {
-        return secureStorage.getKeyPairVerified() ?: false
+        val verified = secureStorage.getKeyPairVerified()
+        val publicKey = secureStorage.getPublicKey()
+        if (verified == null || publicKey == null) {
+            return false
+        }
+        return verified.contentEquals(publicKey)
     }
 
     internal fun getPublicKey(): ByteArray? {
@@ -156,17 +169,23 @@ internal object ContextManagerImpl : ContextManager {
         clearContext()
     }
 
-    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray) {
+    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
+                                     privateKey: ByteArray, isKeyPairVerified: Boolean) {
         setUserId(userId)
         setCertificateChain(certificateChain)
-        setKeyPair(publicKey, privateKey)
+        setKeyPair(publicKey = publicKey, privateKey = privateKey)
+        setKeyPairVerified(if (isKeyPairVerified) publicKey else null)
     }
 
     override fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<Context.OperationContextData>()
-        setUserId(operationContextData.userId)
-        setCertificateChain(operationContextData.userCertificateChain.stringToCertificateChain())
-        setKeyPair(operationContextData.userPublicKey.decodeBase64ToByteArray(), operationContextData.userPrivateKey.decodeBase64ToByteArray())
+        setOperationContext(
+            userId = operationContextData.userId,
+            certificateChain = operationContextData.userCertificateChain.stringToCertificateChain(),
+            publicKey = operationContextData.userPublicKey.decodeBase64ToByteArray(),
+            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray(),
+            isKeyPairVerified = operationContextData.isKeyPairVerified
+        )
     }
 
     internal fun setSecureStorageImpl(secureStorage: SecureStorage) {

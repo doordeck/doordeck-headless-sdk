@@ -28,8 +28,8 @@ actual object HelperApi {
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
-        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey)
+    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey)
     }
 
     /**

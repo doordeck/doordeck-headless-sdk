@@ -28,8 +28,8 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null): Promise<AssistedRegisterEphemeralKeyResponse> {
-        return promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey) }
+    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<AssistedRegisterEphemeralKeyResponse> {
+        return promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey) }
     }
 
     /**

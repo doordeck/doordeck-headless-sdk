@@ -33,7 +33,7 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val keyPairVerified = randomBoolean()
+        val keyPairVerified = publicKey
         val settings = DefaultSecureStorage(MemorySettings())
         ContextManagerImpl.apply {
             setSecureStorageImpl(settings)
@@ -62,7 +62,7 @@ class ContextManagerTest : IntegrationTest() {
         assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
         assertContentEquals(publicKey, ContextManagerImpl.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManagerImpl.getKeyPair()?.private)
-        assertEquals(keyPairVerified, ContextManagerImpl.isKeyPairVerified())
+        assertTrue { ContextManagerImpl.isKeyPairVerified() }
         assertEquals(cloudAuthToken, ContextManagerImpl.getCloudAuthToken())
         assertEquals(cloudRefreshToken, ContextManagerImpl.getCloudRefreshToken())
         assertEquals(fusionAuthToken, ContextManagerImpl.getFusionAuthToken())
@@ -80,7 +80,7 @@ class ContextManagerTest : IntegrationTest() {
         val certificateChain = (1..3).map { Uuid.random().toString() }
         val publicKey = Uuid.random().toString().encodeToByteArray()
         val privateKey = Uuid.random().toString().encodeToByteArray()
-        val keyPairVerified = randomBoolean()
+        val keyPairVerified = publicKey
         ContextManagerImpl.apply {
             setApiEnvironment(apiEnvironment)
             setCloudAuthToken(cloudAuthToken)

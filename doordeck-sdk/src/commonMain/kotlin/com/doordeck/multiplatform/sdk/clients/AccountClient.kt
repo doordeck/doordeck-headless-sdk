@@ -73,23 +73,33 @@ internal object AccountClient {
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
      * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @param privateKey The private key to be stored alongside the provided public key.
+     *  This private key is not used in the request. It is only persisted in the [ContextManagerImpl].
+     *  This value should only be provided if the private key isn't already stored in the [ContextManagerImpl].
      * @return [RegisterEphemeralKeyResponse].
-     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public/private keys are available (when [publicKey] or [privateKey] are null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    suspend fun registerEphemeralKeyRequest(publicKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
-            ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
+    suspend fun registerEphemeralKeyRequest(
+        publicKey: ByteArray? = null,
+        privateKey: ByteArray? = null
+    ): RegisterEphemeralKeyResponse {
+        val publicKey = publicKey
+            ?: ContextManagerImpl.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
+        val privateKey = privateKey
+            ?: ContextManagerImpl.getPrivateKey()
+            ?: throw MissingContextFieldException("Private key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
-            setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
+            setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
         }.body<RegisterEphemeralKeyResponse>().also {
             ContextManagerImpl.setUserId(it.userId)
             ContextManagerImpl.setCertificateChain(it.certificateChain)
-            ContextManagerImpl.setKeyPairVerified(true)
+            ContextManagerImpl.setKeyPair(publicKey = publicKey, privateKey = privateKey)
+            ContextManagerImpl.setKeyPairVerified(publicKey)
         }
     }
 
@@ -108,14 +118,17 @@ internal object AccountClient {
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
     ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        val publicKeyEncoded = publicKey?.encodeByteArrayToBase64()
-            ?: ContextManagerImpl.getPublicKey()?.encodeByteArrayToBase64()
+        val publicKey = publicKey
+            ?: ContextManagerImpl.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
-            setBody(RegisterEphemeralKeyRequest(publicKeyEncoded))
+            setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
             method?.let { parameter(Params.METHOD, it.name) }
-        }.body()
+        }.body<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
+            ContextManagerImpl.setKeyPairVerified(null)
+            ContextManagerImpl.setPublicKey(publicKey)
+        }
     }
 
     /**
@@ -133,17 +146,20 @@ internal object AccountClient {
         code: String,
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
-        val key = privateKey
+        val privateKey = privateKey
             ?: ContextManagerImpl.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
-        val codeSignature = code.signWithPrivateKey(key).encodeByteArrayToBase64()
+        val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         return CloudHttpClient.client.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body<RegisterEphemeralKeyResponse>().also {
             ContextManagerImpl.setUserId(it.userId)
             ContextManagerImpl.setCertificateChain(it.certificateChain)
-            ContextManagerImpl.setKeyPairVerified(true)
+            ContextManagerImpl.setPrivateKey(privateKey)
+            ContextManagerImpl.getPublicKey()?.let { publicKey ->
+                ContextManagerImpl.setKeyPairVerified(publicKey)
+            }
         }
     }
 

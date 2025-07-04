@@ -159,10 +159,8 @@ internal static class SecureStorage
     
     public static void SetKeyPairVerified(IntPtr c)
     {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.SetKeyPairVerified(bool.Parse(result));
-        }
+        var result = GetStringFromPtr(c);
+        Implementation?.SetKeyPairVerified(result?.DecodeBase64ToByteArray());
     }
     
     public static IntPtr GetKeyPairVerified() =>

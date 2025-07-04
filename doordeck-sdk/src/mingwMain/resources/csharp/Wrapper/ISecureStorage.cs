@@ -32,9 +32,9 @@ public interface ISecureStorage
 
     public byte[]? GetPrivateKey();
 
-    public void SetKeyPairVerified(bool isKeyVerified);
+    public void SetKeyPairVerified(byte[]? publicKey);
 
-    public bool? GetKeyPairVerified();
+    public byte[]? GetKeyPairVerified();
 
     public void AddUserId(string userId);
 
