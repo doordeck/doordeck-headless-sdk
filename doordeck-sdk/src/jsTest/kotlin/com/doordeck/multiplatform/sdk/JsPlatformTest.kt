@@ -24,10 +24,10 @@ class JsPlatformTest {
     @Test
     fun shouldTestPlatformType() = runTest {
         // Given
-        val platform = getPlatform()
+        val platform = platformType
 
         // Then
-        assertEquals(platform, PlatformType.JS)
+        assertTrue { platform.name.startsWith("JS_") }
     }
 
     @Test

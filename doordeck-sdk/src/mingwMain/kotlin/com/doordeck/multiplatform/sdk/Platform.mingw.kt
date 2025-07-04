@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk
 
-actual fun getPlatform(): PlatformType = PlatformType.WINDOWS
+actual val platformType: PlatformType = PlatformType.WINDOWS
 
 internal actual object ApplicationContext

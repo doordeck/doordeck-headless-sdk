@@ -8,8 +8,8 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,7 +25,7 @@ class PlatformClientTest : IntegrationTest() {
         // Given - shouldCreateApplication
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = Platform.CreateApplication(
-            name = "Test Application ${getPlatform()} ${Uuid.random()}",
+            name = "Test Application $platformType ${Uuid.random()}",
             companyName = Uuid.random().toString(),
             mailingAddress = "test@doordeck.com",
             privacyPolicy = "https://www.doordeck.com/privacy",
@@ -47,7 +47,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application ${getPlatform()} ${Uuid.random()}"
+        val updatedApplicationName = "Test Application $platformType ${Uuid.random()}"
 
         // When
         PlatformClient.updateApplicationNameRequest(application.applicationId, updatedApplicationName)

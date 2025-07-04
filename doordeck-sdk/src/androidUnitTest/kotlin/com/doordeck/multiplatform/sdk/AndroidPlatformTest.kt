@@ -24,7 +24,7 @@ class AndroidPlatformTest {
     @Test
     fun shouldTestPlatformType() = runTest {
         // Given
-        val platform = getPlatform()
+        val platform = platformType
 
         // Then
         assertEquals(platform, PlatformType.ANDROID)

@@ -17,9 +17,9 @@ import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -160,7 +160,7 @@ class ExtensionsTest {
         }
 
         // Then
-        if (getPlatform() == PlatformType.JS) {
+        if (platformType == PlatformType.JS_BROWSER) {
             assertNull(httpClient.pluginOrNull(UserAgent))
         } else {
             assertNotNull(httpClient.pluginOrNull(UserAgent))

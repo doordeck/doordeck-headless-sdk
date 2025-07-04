@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
+import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -178,6 +180,11 @@ kotlin {
                 optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
+
+            // Include the version file
+            commonMain {
+                kotlin.srcDir("$projectDir/build/generated/version")
+            }
         }
 
         val commonMain by getting {
@@ -259,6 +266,28 @@ kotlin {
             }
         }
     }
+}
+
+val versionFile by tasks.registering {
+    val outputDir = file("$projectDir/build/generated/version")
+    mkdir(outputDir)
+
+    file("$outputDir/Version.kt").apply {
+        writeText("""
+           // Generated file - DO NOT EDIT
+           internal object ProjectVersion {
+                const val VERSION: String = "${project.version}"
+           }
+       """.trimIndent())
+    }.createNewFile()
+}
+
+tasks.withType<AbstractKotlinCompile<*>>().configureEach {
+    dependsOn(versionFile)
+}
+
+tasks.withType<KotlinNativeCompile>().configureEach {
+    dependsOn(versionFile)
 }
 
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central

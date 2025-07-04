@@ -7,9 +7,9 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
+import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -121,7 +121,7 @@ class FusionClientTest : IntegrationTest() {
         assertTrue { login.authToken.isNotEmpty() }
 
         // Given - shouldEnableDoor
-        val name = "Test Fusion Door ${getPlatform()} ${Uuid.random()}"
+        val name = "Test Fusion Door $platformType ${Uuid.random()}"
 
         // When
         FusionClient.enableDoorRequest(name, TEST_MAIN_SITE_ID, testController.value.controller)
