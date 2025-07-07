@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
     alias(libs.plugins.android.library).apply(false)
     alias(libs.plugins.kotlin.multiplatform).apply(false)
@@ -14,10 +16,15 @@ group = "com.doordeck"
 nexusPublishing {
     repositories {
         sonatype {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
             username = System.getenv("MAVEN_USERNAME")
             password = System.getenv("MAVEN_TOKEN")
         }
     }
+
+    // Increase timeouts
+    connectTimeout.set(Duration.ofMinutes(10))
+    clientTimeout.set(Duration.ofMinutes(10))
 }
 
 // Force some JS dependencies to use specific versions (yarn.lock)
