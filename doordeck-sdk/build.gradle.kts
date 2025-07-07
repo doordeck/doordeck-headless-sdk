@@ -181,7 +181,7 @@ kotlin {
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
 
-            // Include the version file
+            // Include version file as generated source
             commonMain {
                 kotlin.srcDir("$projectDir/build/generated/version")
             }
