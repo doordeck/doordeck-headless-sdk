@@ -78,7 +78,7 @@ kotlin {
     val appleTargets = listOf(
         iosX64(), iosArm64(), iosSimulatorArm64(),                                      // iOS
         macosArm64(),                                                                   // macOS
-        watchosX64(), watchosArm64(), watchosSimulatorArm64()                           // watchOS
+        watchosX64(), watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()     // watchOS
     )
 
     appleTargets.forEach {
