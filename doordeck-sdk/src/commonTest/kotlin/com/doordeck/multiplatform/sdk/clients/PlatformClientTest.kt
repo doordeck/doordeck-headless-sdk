@@ -145,18 +145,18 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addedApplicationAuthIssuer = "https://test.com"
+        val addApplicationAuthIssuer = "https://${Uuid.random()}.com"
 
         // When
-        PlatformClient.addAuthIssuerRequest(application.applicationId, addedApplicationAuthIssuer)
+        PlatformClient.addAuthIssuerRequest(application.applicationId, addApplicationAuthIssuer)
 
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
-        assertTrue { application!!.authDomains!!.any { it.equals(addedApplicationAuthIssuer, true) } }
+        assertTrue { application.authDomains.any { it.equals(addApplicationAuthIssuer, true) } }
 
         // Given - shouldDeleteAuthIssuer
-        val removedApplicationAuthIssuer = "https://test.com"
+        val removedApplicationAuthIssuer = addApplicationAuthIssuer
 
         // When
         PlatformClient.deleteAuthIssuerRequest(application.applicationId, removedApplicationAuthIssuer)
@@ -164,10 +164,10 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
-        assertFalse { application!!.authDomains!!.any { it.equals(removedApplicationAuthIssuer, true) } }
+        assertFalse { application.authDomains.any { it.equals(removedApplicationAuthIssuer, true) } }
 
         // Given - shouldAddCorsDomain
-        val addedApplicationCorsDomain = "https://test.com"
+        val addedApplicationCorsDomain = "https://${Uuid.random()}.com"
 
         // When
         PlatformClient.addCorsDomainRequest(application.applicationId, addedApplicationCorsDomain)
@@ -175,10 +175,10 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
-        assertTrue { application!!.corsDomains!!.any { it.equals(addedApplicationCorsDomain, true) } }
+        assertTrue { application.corsDomains.any { it.equals(addedApplicationCorsDomain, true) } }
 
         // Given - shouldDeleteCorsDomain
-        val removedApplicationCorsDomain = "https://test.com"
+        val removedApplicationCorsDomain = addedApplicationCorsDomain
 
         // When
         PlatformClient.removeCorsDomainRequest(application.applicationId, removedApplicationCorsDomain)
@@ -186,7 +186,7 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
-        assertFalse { application!!.corsDomains!!.any { it.equals(removedApplicationCorsDomain, true) } }
+        assertFalse { application.corsDomains.any { it.equals(removedApplicationCorsDomain, true) } }
 
         // Given - shouldAddEd25519AuthKey
         val ed25519Key = Platform.Ed25519Key(
