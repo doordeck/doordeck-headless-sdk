@@ -38,7 +38,7 @@ class CryptoManagerTest {
             PlatformType.JS_NODE,
             PlatformType.ANDROID,
             PlatformType.APPLE_WATCH,
-            PlatformType.APPLE_PHONE,
+            PlatformType.APPLE_IOS,
             PlatformType.APPLE_MAC -> {
                 val exception = assertFails {
                     CryptoManager.generateEncodedKeyPair()

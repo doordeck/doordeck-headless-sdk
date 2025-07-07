@@ -19,13 +19,13 @@ import kotlinx.serialization.json.Json
 enum class PlatformType {
     JVM,
     ANDROID,
-    APPLE_WATCH,
-    APPLE_PHONE,
+    APPLE,
     APPLE_MAC,
+    APPLE_IOS,
+    APPLE_WATCH,
     WINDOWS,
     JS_BROWSER,
-    JS_NODE,
-    UNKNOWN
+    JS_NODE
 }
 
 internal val JSON = Json {
