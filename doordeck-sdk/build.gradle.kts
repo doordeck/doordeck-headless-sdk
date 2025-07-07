@@ -268,7 +268,8 @@ kotlin {
     }
 }
 
-val versionFile by tasks.registering {
+// Generates a version file containing the project version as a constant
+val versionFileTask by tasks.registering {
     val outputDir = file("$projectDir/build/generated/version")
     mkdir(outputDir)
 
@@ -282,12 +283,14 @@ val versionFile by tasks.registering {
     }.createNewFile()
 }
 
+// Triggers the version file generation task before each AbstractKotlinCompile task execution
 tasks.withType<AbstractKotlinCompile<*>>().configureEach {
-    dependsOn(versionFile)
+    dependsOn(versionFileTask)
 }
 
+// Triggers the version file generation task before each KotlinNativeCompile task execution
 tasks.withType<KotlinNativeCompile>().configureEach {
-    dependsOn(versionFile)
+    dependsOn(versionFileTask)
 }
 
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central

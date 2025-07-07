@@ -88,6 +88,9 @@ jobs:
       - name: Setup pyright
         run: pip install pyright
 
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
+
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
 
@@ -113,6 +116,9 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
 
       - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
@@ -179,7 +185,7 @@ jobs:
           aws-region: eu-west-1
 
       - name: Generate artifact
-        run: ./gradlew assembleDoordeckSDKReleaseXCFramework
+        run: ./gradlew -Prelease.useLastTag=true assembleDoordeckSDKReleaseXCFramework
 
       - name: Publish
         run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ needs.pre-release.outputs.tag }}/
@@ -312,6 +318,9 @@ jobs:
           distribution: corretto
           java-version: 21
 
+      - name: Generate artifact
+        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+
       - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
 
@@ -353,6 +362,9 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Generate artifact
+        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
 
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
