@@ -24,6 +24,7 @@ internal class DefaultSecureStorage(
     private val cloudRefreshTokenKey = "CLOUD_REFRESH_TOKEN_KEY"
     private val fusionHostKey = "FUSION_HOST_KEY"
     private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
+    private val tempPublicKeyKey = "TEMP_PUBLIC_KEY_KEY"
     private val publicKeyKey = "PUBLIC_KEY_KEY"
     private val privateKeyKey = "PRIVATE_KEY_KEY"
     private val keyPairVerifiedKey = "VERIFIED_KEY_PAIR_KEY"
@@ -84,16 +85,24 @@ internal class DefaultSecureStorage(
         return retrieveStringValue(fusionAuthTokenKey, true)
     }
 
-    override fun addPublicKey(byteArray: ByteArray) {
-        storeStringValue(publicKeyKey, byteArray.encodeByteArrayToBase64(), true)
+    override fun addTempPublicKey(publicKey: ByteArray?) {
+        storeStringValue(tempPublicKeyKey, publicKey?.encodeByteArrayToBase64(), true)
+    }
+
+    override fun getTempPublicKey(): ByteArray? {
+        return retrieveStringValue(tempPublicKeyKey, true)?.decodeBase64ToByteArray()
+    }
+
+    override fun addPublicKey(publicKey: ByteArray) {
+        storeStringValue(publicKeyKey, publicKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPublicKey(): ByteArray? {
         return retrieveStringValue(publicKeyKey, true)?.decodeBase64ToByteArray()
     }
 
-    override fun addPrivateKey(byteArray: ByteArray) {
-        storeStringValue(privateKeyKey, byteArray.encodeByteArrayToBase64(), true)
+    override fun addPrivateKey(privateKey: ByteArray) {
+        storeStringValue(privateKeyKey, privateKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPrivateKey(): ByteArray? {
@@ -167,19 +176,6 @@ internal class DefaultSecureStorage(
     private fun retrieveStringValue(key: String, maskValue: Boolean = false): String? {
         val value = settings.getStringOrNull(key)
         SdkLogger.d("Retrieved value: ${if (maskValue) value?.mask() else value} for key: $key")
-        return value
-    }
-
-    @Suppress("SameParameterValue")
-    private fun storeBooleanValue(key: String, value: Boolean) {
-        settings.putBoolean(key, value)
-        SdkLogger.d("Stored value: $value for key: $key")
-    }
-
-    @Suppress("SameParameterValue")
-    private fun retrieveBooleanValue(key: String): Boolean? {
-        val value = settings.getBooleanOrNull(key)
-        SdkLogger.d("Retrieved value: $value for key: $key")
         return value
     }
 

@@ -3,8 +3,6 @@ package com.doordeck.multiplatform.sdk.context
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
@@ -13,10 +11,10 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
+import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.fromJson
-import kotlin.uuid.Uuid
 
 internal object ContextManagerImpl : ContextManager {
 
@@ -115,14 +113,6 @@ internal object ContextManagerImpl : ContextManager {
         } else null
     }
 
-    internal fun setPublicKey(publicKey: ByteArray) {
-        secureStorage.addPublicKey(publicKey)
-    }
-
-    internal fun setPrivateKey(privateKey: ByteArray) {
-        secureStorage.addPrivateKey(privateKey)
-    }
-
     override fun setKeyPairVerified(publicKey: ByteArray?) {
         secureStorage.setKeyPairVerified(publicKey)
     }
@@ -136,6 +126,14 @@ internal object ContextManagerImpl : ContextManager {
         return verified.contentEquals(publicKey)
     }
 
+    internal fun setTempPublicKey(publicKey: ByteArray?) {
+        secureStorage.addTempPublicKey(publicKey)
+    }
+
+    internal fun getTempPublicKey(): ByteArray? {
+        return secureStorage.getTempPublicKey()
+    }
+
     internal fun getPublicKey(): ByteArray? {
         return secureStorage.getPublicKey()
     }
@@ -145,23 +143,12 @@ internal object ContextManagerImpl : ContextManager {
     }
 
     override fun isKeyPairValid(): Boolean {
-        val actualUserPublicKey = getPublicKey()
-        val actualUserPrivateKey = getPrivateKey()
-        if (actualUserPublicKey == null || actualUserPrivateKey == null) {
+        val publicKey = getPublicKey()
+        val privateKey = getPrivateKey()
+        if (publicKey == null || privateKey == null) {
             return false
         }
-        val text = Uuid.random().toString()
-        val signature = try {
-            text.signWithPrivateKey(actualUserPrivateKey)
-        } catch (_: Exception) {
-            return false
-        }
-        return signature.verifySignature(actualUserPublicKey, text)
-    }
-
-    internal fun setTokens(token: String, refreshToken: String) {
-        setCloudAuthToken(token)
-        setCloudRefreshToken(refreshToken)
+        return KeyPairUtils.isKeyPairValid(publicKey, privateKey)
     }
 
     internal fun reset() {

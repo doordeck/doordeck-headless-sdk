@@ -49,8 +49,10 @@ internal object AccountClient {
         return CloudHttpClient.client.post(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
         }.body<TokenResponse>().also {
-            ContextManagerImpl.setCloudAuthToken(it.authToken)
-            ContextManagerImpl.setCloudRefreshToken(it.refreshToken)
+            ContextManagerImpl.also { context ->
+                context.setCloudAuthToken(it.authToken)
+                context.setCloudRefreshToken(it.refreshToken)
+            }
         }
     }
 
@@ -96,10 +98,13 @@ internal object AccountClient {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
         }.body<RegisterEphemeralKeyResponse>().also {
-            ContextManagerImpl.setUserId(it.userId)
-            ContextManagerImpl.setCertificateChain(it.certificateChain)
-            ContextManagerImpl.setKeyPair(publicKey = publicKey, privateKey = privateKey)
-            ContextManagerImpl.setKeyPairVerified(publicKey)
+            ContextManagerImpl.also { context ->
+                context.setUserId(it.userId)
+                context.setCertificateChain(it.certificateChain)
+                context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
+                context.setKeyPairVerified(publicKey)
+                context.setTempPublicKey(null)
+            }
         }
     }
 
@@ -126,8 +131,10 @@ internal object AccountClient {
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
             method?.let { parameter(Params.METHOD, it.name) }
         }.body<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
-            ContextManagerImpl.setKeyPairVerified(null)
-            ContextManagerImpl.setPublicKey(publicKey)
+            ContextManagerImpl.also { context ->
+                context.setKeyPairVerified(null)
+                context.setTempPublicKey(publicKey)
+            }
         }
     }
 
@@ -154,11 +161,14 @@ internal object AccountClient {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body<RegisterEphemeralKeyResponse>().also {
-            ContextManagerImpl.setUserId(it.userId)
-            ContextManagerImpl.setCertificateChain(it.certificateChain)
-            ContextManagerImpl.setPrivateKey(privateKey)
-            ContextManagerImpl.getPublicKey()?.let { publicKey ->
-                ContextManagerImpl.setKeyPairVerified(publicKey)
+            ContextManagerImpl.also { context ->
+                context.setUserId(it.userId)
+                context.setCertificateChain(it.certificateChain)
+                context.getTempPublicKey()?.let { publicKey ->
+                    context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
+                    context.setKeyPairVerified(publicKey)
+                    context.setTempPublicKey(null)
+                }
             }
         }
     }

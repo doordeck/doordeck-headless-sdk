@@ -79,11 +79,23 @@ interface SecureStorage {
     fun getFusionAuthToken(): String?
 
     /**
+     * Stores the temporary public key.
+     *
+     * @param publicKey The public key as a byte array.
+     */
+    fun addTempPublicKey(publicKey: ByteArray?)
+
+    /**
+     * Retrieves the temporary public key.
+     */
+    fun getTempPublicKey(): ByteArray?
+
+    /**
      * Stores the public key.
      *
-     * @param byteArray The public key as a byte array.
+     * @param publicKey The public key as a byte array.
      */
-    fun addPublicKey(byteArray: ByteArray)
+    fun addPublicKey(publicKey: ByteArray)
 
     /**
      * Retrieves the public key.
@@ -95,9 +107,9 @@ interface SecureStorage {
     /**
      * Stores the private key.
      *
-     * @param byteArray The private key as a byte array.
+     * @param privateKey The private key as a byte array.
      */
-    fun addPrivateKey(byteArray: ByteArray)
+    fun addPrivateKey(privateKey: ByteArray)
 
     /**
      * Retrieves the private key.

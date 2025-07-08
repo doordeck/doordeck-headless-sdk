@@ -128,7 +128,10 @@ internal fun HttpClientConfig<*>.installAuth() {
                         }
                         markAsRefreshTokenRequest()
                     }.body()
-                    ContextManagerImpl.setTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                    ContextManagerImpl.also { context ->
+                        context.setCloudAuthToken(refreshTokens.authToken)
+                        context.setCloudRefreshToken(refreshTokens.refreshToken)
+                    }
                     BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                 }
             }
