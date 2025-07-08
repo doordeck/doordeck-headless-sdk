@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
+import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
@@ -165,6 +166,14 @@ internal object ContextManagerImpl : ContextManager {
             privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray(),
             isKeyPairVerified = operationContextData.isKeyPairVerified
         )
+    }
+
+    override fun getContextState(): ContextState {
+        if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
+        if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
+        if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
+        if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }
+        return ContextState.READY
     }
 
     internal fun setSecureStorageImpl(secureStorage: SecureStorage) {

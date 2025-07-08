@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import kotlin.js.JsExport
@@ -160,6 +161,12 @@ interface ContextManager {
      */
     @CName("setOperationContextJson")
     fun setOperationContextJson(data: String)
+
+    /**
+     * Checks the context and returns a [ContextState] representing its state.
+     */
+    @CName("getContextState")
+    fun getContextState(): ContextState
 
     /**
      * Clears all the values stored in secure storage.
