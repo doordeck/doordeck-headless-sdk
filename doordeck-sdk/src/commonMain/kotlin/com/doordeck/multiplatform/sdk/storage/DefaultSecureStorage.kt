@@ -24,7 +24,6 @@ internal class DefaultSecureStorage(
     private val cloudRefreshTokenKey = "CLOUD_REFRESH_TOKEN_KEY"
     private val fusionHostKey = "FUSION_HOST_KEY"
     private val fusionAuthTokenKey = "FUSION_AUTH_TOKEN_KEY"
-    private val tempPublicKeyKey = "TEMP_PUBLIC_KEY_KEY"
     private val publicKeyKey = "PUBLIC_KEY_KEY"
     private val privateKeyKey = "PRIVATE_KEY_KEY"
     private val keyPairVerifiedKey = "VERIFIED_KEY_PAIR_KEY"
@@ -83,14 +82,6 @@ internal class DefaultSecureStorage(
 
     override fun getFusionAuthToken(): String? {
         return retrieveStringValue(fusionAuthTokenKey, true)
-    }
-
-    override fun addTempPublicKey(publicKey: ByteArray?) {
-        storeStringValue(tempPublicKeyKey, publicKey?.encodeByteArrayToBase64(), true)
-    }
-
-    override fun getTempPublicKey(): ByteArray? {
-        return retrieveStringValue(tempPublicKeyKey, true)?.decodeBase64ToByteArray()
     }
 
     override fun addPublicKey(publicKey: ByteArray) {

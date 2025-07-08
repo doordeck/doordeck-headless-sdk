@@ -83,9 +83,10 @@ actual object AccountApi {
      */
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
+        publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
-        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey)
+        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
     }
 
     /**
@@ -93,9 +94,10 @@ actual object AccountApi {
      */
     fun verifyEphemeralKeyRegistrationAsync(
         code: String,
+        publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return completableFuture { verifyEphemeralKeyRegistration(code, privateKey) }
+        return completableFuture { verifyEphemeralKeyRegistration(code, publicKey, privateKey) }
     }
 
     /**

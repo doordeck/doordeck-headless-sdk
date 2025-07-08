@@ -103,7 +103,6 @@ internal object AccountClient {
                 context.setCertificateChain(it.certificateChain)
                 context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
                 context.setKeyPairVerified(publicKey)
-                context.setTempPublicKey(null)
             }
         }
     }
@@ -133,7 +132,6 @@ internal object AccountClient {
         }.body<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
             ContextManagerImpl.also { context ->
                 context.setKeyPairVerified(null)
-                context.setTempPublicKey(publicKey)
             }
         }
     }
@@ -142,8 +140,11 @@ internal object AccountClient {
      * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
      * Also marks the key pair as verified in [ContextManagerImpl].
      *
-     * @param privateKey The private key to use for the request. If null, uses the private key from [ContextManagerImpl].
      * @param code The two-factor code.
+     * @param publicKey The public key to be stored alongside the provided private key.
+     *  This public key is not used in the request. It is only persisted in the [ContextManagerImpl].
+     *  This value should only be provided if the public key isn't already stored in the [ContextManagerImpl].
+     * @param privateKey The private key to use for the request. If null, uses the private key from [ContextManagerImpl].
      * @throws MissingContextFieldException if no private key is available (when [privateKey] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -151,8 +152,12 @@ internal object AccountClient {
      */
     suspend fun verifyEphemeralKeyRegistrationRequest(
         code: String,
+        publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
+        val publicKey = publicKey
+            ?: ContextManagerImpl.getPublicKey()
+            ?: throw MissingContextFieldException("Public key is missing")
         val privateKey = privateKey
             ?: ContextManagerImpl.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
@@ -164,11 +169,8 @@ internal object AccountClient {
             ContextManagerImpl.also { context ->
                 context.setUserId(it.userId)
                 context.setCertificateChain(it.certificateChain)
-                context.getTempPublicKey()?.let { publicKey ->
-                    context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
-                    context.setKeyPairVerified(publicKey)
-                    context.setTempPublicKey(null)
-                }
+                context.setKeyPair(publicKey, privateKey)
+                context.setKeyPairVerified(publicKey)
             }
         }
     }

@@ -45,8 +45,6 @@ fun createMingwSecureStorage(
     getFusionHostCp: getStringCallback,
     addFusionAuthTokenCp: setStringCallback,
     getFusionAuthTokenCp: getStringCallback,
-    addTempPublicKeyCp: setNullableStringCallback,
-    getTempPublicKeyCp: getStringCallback,
     addPublicKeyCp: setStringCallback,
     getPublicKeyCp: getStringCallback,
     addPrivateKeyCp: setStringCallback,
@@ -72,8 +70,6 @@ fun createMingwSecureStorage(
         getFusionHostCp = getFusionHostCp,
         addFusionAuthTokenCp = addFusionAuthTokenCp,
         getFusionAuthTokenCp = getFusionAuthTokenCp,
-        addTempPublicKeyCp = addTempPublicKeyCp,
-        getTempPublicKeyCp = getTempPublicKeyCp,
         addPublicKeyCp = addPublicKeyCp,
         getPublicKeyCp = getPublicKeyCp,
         addPrivateKeyCp = addPrivateKeyCp,
@@ -101,8 +97,6 @@ class MingwSecureStorage(
     private val getFusionHostCp: getStringCallback,
     private val addFusionAuthTokenCp: setStringCallback,
     private val getFusionAuthTokenCp: getStringCallback,
-    private val addTempPublicKeyCp: setNullableStringCallback,
-    private val getTempPublicKeyCp: getStringCallback,
     private val addPublicKeyCp: setStringCallback,
     private val getPublicKeyCp: getStringCallback,
     private val addPrivateKeyCp: setStringCallback,
@@ -158,14 +152,6 @@ class MingwSecureStorage(
 
     override fun getFusionAuthToken(): String? {
         return getFusionAuthTokenCp()?.toKString()
-    }
-
-    override fun addTempPublicKey(publicKey: ByteArray?) {
-        addTempPublicKeyCp.invokeNullableStringCallback(publicKey?.encodeByteArrayToBase64())
-    }
-
-    override fun getTempPublicKey(): ByteArray? {
-        return getTempPublicKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
     override fun addPublicKey(publicKey: ByteArray) {

@@ -126,14 +126,6 @@ internal object ContextManagerImpl : ContextManager {
         return verified.contentEquals(publicKey)
     }
 
-    internal fun setTempPublicKey(publicKey: ByteArray?) {
-        secureStorage.addTempPublicKey(publicKey)
-    }
-
-    internal fun getTempPublicKey(): ByteArray? {
-        return secureStorage.getTempPublicKey()
-    }
-
     internal fun getPublicKey(): ByteArray? {
         return secureStorage.getPublicKey()
     }

@@ -34,9 +34,10 @@ class Account(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def verify_ephemeral_key_registration(self, code: str, privateKey: typing.Optional[str] = None):
+    async def verify_ephemeral_key_registration(self, code: str, publicKey: typing.Optional[str] = None, privateKey: typing.Optional[str] = None):
         data = {
             "code": code,
+            "publicKey": publicKey,
             "privateKey": privateKey
         }
         return await execute_async(

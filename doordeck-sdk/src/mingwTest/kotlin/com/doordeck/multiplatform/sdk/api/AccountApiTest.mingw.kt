@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_RESPONSE
 import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE
 import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.USER_DETAILS_RESPONSE
 import com.doordeck.multiplatform.sdk.model.data.ChangePasswordData
 import com.doordeck.multiplatform.sdk.model.data.RefreshTokenData
@@ -108,7 +109,7 @@ class AccountApiTest : CallbackTest() {
         callbackTest(
             apiCall = {
                 AccountApi.verifyEphemeralKeyRegistration(
-                    data = VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PRIVATE_KEY).toJson(),
+                    data = VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PUBLIC_KEY,TEST_MAIN_USER_PRIVATE_KEY).toJson(),
                     callback = staticCFunction(::testCallback)
                 )
             },

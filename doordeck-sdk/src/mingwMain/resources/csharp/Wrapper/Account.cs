@@ -20,8 +20,8 @@ public class Account(
     public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(string? publicKey = null, TwoFactorMethod? method = null) =>
         Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(accountApi.registerEphemeralKeyWithSecondaryAuthentication_, null, new { publicKey, method });
 
-    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, string? privateKey = null) =>
-        Process<RegisterEphemeralKeyResponse>(accountApi.verifyEphemeralKeyRegistration_, null, new { code, privateKey });
+    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, string? publicKey = null, string? privateKey = null) =>
+        Process<RegisterEphemeralKeyResponse>(accountApi.verifyEphemeralKeyRegistration_, null, new { code, publicKey, privateKey });
 
     public unsafe Task<object> ReverifyEmail() =>
         Process<object>(null, accountApi.reverifyEmail_, null);

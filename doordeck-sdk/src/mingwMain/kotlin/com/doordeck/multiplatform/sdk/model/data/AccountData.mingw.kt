@@ -22,6 +22,7 @@ data class RegisterEphemeralKeyWithSecondaryAuthenticationData(
 @Serializable
 data class VerifyEphemeralKeyRegistrationData(
     val code: String,
+    val publicKey: String? = null,
     val privateKey: String? = null
 )
 
