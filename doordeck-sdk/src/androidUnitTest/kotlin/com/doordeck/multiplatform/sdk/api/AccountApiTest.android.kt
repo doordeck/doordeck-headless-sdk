@@ -105,7 +105,7 @@ class AccountApiTest : MockTest() {
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationAsync() = runTest {
-        val response = AccountApi.verifyEphemeralKeyRegistrationAsync("", TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
+        val response = AccountApi.verifyEphemeralKeyRegistrationAsync("", TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 

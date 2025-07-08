@@ -145,7 +145,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addedApplicationAuthIssuer = "https://test.com"
+        val addedApplicationAuthIssuer = "https://${Uuid.random()}.com"
 
         // When
         PlatformClient.addAuthIssuerRequest(application.applicationId, addedApplicationAuthIssuer)
@@ -167,7 +167,7 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { application!!.authDomains!!.any { it.equals(removedApplicationAuthIssuer, true) } }
 
         // Given - shouldAddCorsDomain
-        val addedApplicationCorsDomain = "https://test.com"
+        val addedApplicationCorsDomain = "https://${Uuid.random()}.com"
 
         // When
         PlatformClient.addCorsDomainRequest(application.applicationId, addedApplicationCorsDomain)
