@@ -5,7 +5,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.getPlatform
+import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -31,7 +31,7 @@ class AccountlessClientTest : IntegrationTest() {
     @Test
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
-        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+${getPlatform()}-${Uuid.random()}@")
+        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${Uuid.random()}@")
         val keyPair = CryptoManager.generateKeyPair()
 
         // When
