@@ -5,8 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
-import org.jetbrains.kotlin.gradle.tasks.AbstractKotlinCompile
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -14,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.swift.klib)
+    alias(libs.plugins.buildkonfig)
     `maven-publish`
     signing
 }
@@ -180,11 +180,6 @@ kotlin {
                 optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
             }
-
-            // Include version file as generated source
-            commonMain {
-                kotlin.srcDir("$projectDir/build/generated/version")
-            }
         }
 
         val commonMain by getting {
@@ -269,28 +264,12 @@ kotlin {
 }
 
 // Generates a version file containing the project version as a constant
-val versionFileTask by tasks.registering {
-    val outputDir = file("$projectDir/build/generated/version")
-    mkdir(outputDir)
-
-    file("$outputDir/Version.kt").apply {
-        writeText("""
-           // Generated file - DO NOT EDIT
-           internal object ProjectVersion {
-                const val VERSION: String = "${project.version}"
-           }
-       """.trimIndent())
-    }.createNewFile()
-}
-
-// Triggers the version file generation task before each AbstractKotlinCompile task execution
-tasks.withType<AbstractKotlinCompile<*>>().configureEach {
-    dependsOn(versionFileTask)
-}
-
-// Triggers the version file generation task before each KotlinNativeCompile task execution
-tasks.withType<KotlinNativeCompile>().configureEach {
-    dependsOn(versionFileTask)
+buildkonfig {
+    packageName = "com.doordeck.multiplatform.sdk"
+    objectName = "ProjectVersion"
+    defaultConfigs {
+        buildConfigField(STRING, "VERSION", "${project.version}")
+    }
 }
 
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central
