@@ -29,10 +29,6 @@ runs:
       shell: bash
       run: python -m pip install build
 
-    - name: Generate binaries
-      shell: bash
-      run: ./gradlew mingwX64Binaries
-
     - name: Adjust header
       shell: bash
       run: |

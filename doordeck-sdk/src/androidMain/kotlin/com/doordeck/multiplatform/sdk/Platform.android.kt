@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk
 import android.content.Context
 import java.lang.ref.WeakReference
 
-actual fun getPlatform(): PlatformType = PlatformType.ANDROID
+actual val platformType: PlatformType = PlatformType.ANDROID
 
 internal actual object ApplicationContext {
     private var value: WeakReference<Context>? = null

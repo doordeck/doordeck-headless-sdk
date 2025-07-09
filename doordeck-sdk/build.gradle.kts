@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -12,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.swift.klib)
+    alias(libs.plugins.buildkonfig)
     `maven-publish`
     signing
 }
@@ -258,6 +260,15 @@ kotlin {
                 freeCompilerArgs.addAll(arguments)
             }
         }
+    }
+}
+
+// Generates a version file containing the project version as a constant
+buildkonfig {
+    packageName = "com.doordeck.multiplatform.sdk"
+    objectName = "ProjectVersion"
+    defaultConfigs {
+        buildConfigField(STRING, "VERSION", "${project.version}")
     }
 }
 

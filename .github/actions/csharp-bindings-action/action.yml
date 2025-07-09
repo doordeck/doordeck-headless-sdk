@@ -12,10 +12,6 @@ runs:
       shell: bash
       run: dotnet tool install --global ClangSharpPInvokeGenerator
 
-    - name: Generate artifact
-      shell: bash
-      run: ./gradlew mingwX64Binaries
-
     - name: Adjust header
       shell: bash
       run: |

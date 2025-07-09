@@ -20,8 +20,12 @@ enum class PlatformType {
     JVM,
     ANDROID,
     APPLE,
+    APPLE_MAC,
+    APPLE_IOS,
+    APPLE_WATCH,
     WINDOWS,
-    JS
+    JS_BROWSER,
+    JS_NODE
 }
 
 internal val JSON = Json {
@@ -99,6 +103,6 @@ internal object CloudHttpClient : BaseHttpClient(::createCloudHttpClient)
 internal object FusionHttpClient : BaseHttpClient(::createFusionHttpClient)
 internal object HttpClient : BaseHttpClient(::createHttpClient)
 
-expect fun getPlatform(): PlatformType
+expect val platformType: PlatformType
 
 internal expect object ApplicationContext

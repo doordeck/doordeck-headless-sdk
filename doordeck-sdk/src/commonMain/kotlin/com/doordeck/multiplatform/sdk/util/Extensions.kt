@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
+import com.doordeck.multiplatform.sdk.ProjectVersion
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
@@ -18,12 +19,12 @@ import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
@@ -154,12 +155,12 @@ internal fun HttpClientConfig<*>.installDefaultRequest(
 
 /**
  * Installs a User-Agent header for the HTTP client.
- * This is skipped for JavaScript platform.
+ * This is skipped for JavaScript (Browser) platform.
  */
 internal fun HttpClientConfig<*>.installUserAgent() {
-    if (getPlatform() != PlatformType.JS) {
+    if (platformType != PlatformType.JS_BROWSER) {
         install(UserAgent) {
-            agent = "KMP SDK ${getPlatform()}"
+            agent = "KMP SDK $platformType - v${ProjectVersion.VERSION}"
         }
     }
 }

@@ -8,8 +8,8 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
-import com.doordeck.multiplatform.sdk.getPlatform
 import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -25,7 +25,7 @@ class PlatformClientTest : IntegrationTest() {
         // Given - shouldCreateApplication
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = Platform.CreateApplication(
-            name = "Test Application ${getPlatform()} ${Uuid.random()}",
+            name = "Test Application $platformType ${Uuid.random()}",
             companyName = Uuid.random().toString(),
             mailingAddress = "test@doordeck.com",
             privacyPolicy = "https://www.doordeck.com/privacy",
@@ -47,7 +47,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application ${getPlatform()} ${Uuid.random()}"
+        val updatedApplicationName = "Test Application $platformType ${Uuid.random()}"
 
         // When
         PlatformClient.updateApplicationNameRequest(application.applicationId, updatedApplicationName)
@@ -145,18 +145,18 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addedApplicationAuthIssuer = "https://${Uuid.random()}.com"
+        val addApplicationAuthIssuer = "https://${Uuid.random()}.com"
 
         // When
-        PlatformClient.addAuthIssuerRequest(application.applicationId, addedApplicationAuthIssuer)
+        PlatformClient.addAuthIssuerRequest(application.applicationId, addApplicationAuthIssuer)
 
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
-        assertTrue { application!!.authDomains!!.any { it.equals(addedApplicationAuthIssuer, true) } }
+        assertTrue { application.authDomains.any { it.equals(addApplicationAuthIssuer, true) } }
 
         // Given - shouldDeleteAuthIssuer
-        val removedApplicationAuthIssuer = "https://test.com"
+        val removedApplicationAuthIssuer = addApplicationAuthIssuer
 
         // When
         PlatformClient.deleteAuthIssuerRequest(application.applicationId, removedApplicationAuthIssuer)
@@ -164,7 +164,7 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.authDomains)
-        assertFalse { application!!.authDomains!!.any { it.equals(removedApplicationAuthIssuer, true) } }
+        assertFalse { application.authDomains.any { it.equals(removedApplicationAuthIssuer, true) } }
 
         // Given - shouldAddCorsDomain
         val addedApplicationCorsDomain = "https://${Uuid.random()}.com"
@@ -175,10 +175,10 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
-        assertTrue { application!!.corsDomains!!.any { it.equals(addedApplicationCorsDomain, true) } }
+        assertTrue { application.corsDomains.any { it.equals(addedApplicationCorsDomain, true) } }
 
         // Given - shouldDeleteCorsDomain
-        val removedApplicationCorsDomain = "https://test.com"
+        val removedApplicationCorsDomain = addedApplicationCorsDomain
 
         // When
         PlatformClient.removeCorsDomainRequest(application.applicationId, removedApplicationCorsDomain)
@@ -186,7 +186,7 @@ class PlatformClientTest : IntegrationTest() {
         // Then
         application = PlatformClient.getApplicationRequest(application.applicationId)
         assertNotNull(application.corsDomains)
-        assertFalse { application!!.corsDomains!!.any { it.equals(removedApplicationCorsDomain, true) } }
+        assertFalse { application.corsDomains.any { it.equals(removedApplicationCorsDomain, true) } }
 
         // Given - shouldAddEd25519AuthKey
         val ed25519Key = Platform.Ed25519Key(
