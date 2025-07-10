@@ -295,7 +295,7 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype -x test
 
   maven-close:
-    name: Maven close
+    name: Maven close staging repository
     needs: [maven-publish]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -305,7 +305,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
-          sparse-checkout: gradle,build.gradle.kts,gradle.properties,gradlew,gradlew.bat
+          sparse-checkout: |
+            gradle
+            build.gradle.kts
+            gradle.properties
+            gradlew
+            gradlew.bat
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -316,14 +321,14 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Publish
+      - name: Close staging repository
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-        run: ./gradlew findSonatypeStagingRepository closeSonatypeStagingRepository -x test
+        run: ./gradlew findSonatypeStagingRepository closeSonatypeStagingRepository
 
   maven-release:
-    name: Maven release
+    name: Maven release repository
     needs: [maven-close]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
@@ -333,7 +338,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
-          sparse-checkout: gradle,build.gradle.kts,gradle.properties,gradlew,gradlew.bat
+          sparse-checkout: |
+            gradle
+            build.gradle.kts
+            gradle.properties
+            gradlew
+            gradlew.bat
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -344,11 +354,11 @@ jobs:
           distribution: corretto
           java-version: 21
 
-      - name: Publish
+      - name: Release repository
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-        run: ./gradlew findSonatypeStagingRepository releaseSonatypeStagingRepository -x test
+        run: ./gradlew findSonatypeStagingRepository releaseSonatypeStagingRepository
 
   nuget:
     name: Nuget publish
