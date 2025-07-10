@@ -265,7 +265,7 @@ jobs:
           cd build/js/packages/doordeck-sdk
           npm publish --access public
 
-  maven:
+  maven-publish:
     name: Maven publish
     needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
@@ -292,7 +292,63 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
           MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype closeAndReleaseSonatypeStagingRepository -x test
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype -x test
+
+  maven-close:
+    name: Maven close
+    needs: [maven-publish]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
+          sparse-checkout: gradle,build.gradle.kts,gradle.properties,gradlew,gradlew.bat
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+        run: ./gradlew findSonatypeStagingRepository closeSonatypeStagingRepository -x test
+
+  maven-release:
+    name: Maven release
+    needs: [maven-close]
+    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
+          sparse-checkout: gradle,build.gradle.kts,gradle.properties,gradlew,gradlew.bat
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Publish
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
+          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
+        run: ./gradlew findSonatypeStagingRepository releaseSonatypeStagingRepository -x test
 
   nuget:
     name: Nuget publish
@@ -382,7 +438,7 @@ jobs:
 
   release:
     name: GitHub Release
-    needs: [pre-release, spm, cocoapods, npm, maven, nuget, pypi]
+    needs: [pre-release, spm, cocoapods, npm, maven-release, nuget, pypi]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
@@ -407,7 +463,7 @@ jobs:
 
   spm-release:
     name: SPM release
-    needs: [pre-release, release]
+    needs: [release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     continue-on-error: true

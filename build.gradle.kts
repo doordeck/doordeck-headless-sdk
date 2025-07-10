@@ -24,8 +24,8 @@ nexusPublishing {
     }
 
     // Increase timeouts
-    connectTimeout.set(Duration.ofMinutes(10))
-    clientTimeout.set(Duration.ofMinutes(10))
+    connectTimeout.set(Duration.ofMinutes(15))
+    clientTimeout.set(Duration.ofMinutes(15))
 }
 
 // Force some JS dependencies to use specific versions (yarn.lock)
