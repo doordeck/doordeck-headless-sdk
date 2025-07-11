@@ -296,7 +296,7 @@ jobs:
 
   maven-close:
     name: Maven close staging repository
-    needs: [maven-publish]
+    needs: [pre-release, maven-publish]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
@@ -329,7 +329,7 @@ jobs:
 
   maven-release:
     name: Maven release repository
-    needs: [maven-close]
+    needs: [pre-release, maven-close]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
 
