@@ -473,7 +473,7 @@ jobs:
 
   spm-release:
     name: SPM release
-    needs: [release]
+    needs: [pre-release, release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     continue-on-error: true
