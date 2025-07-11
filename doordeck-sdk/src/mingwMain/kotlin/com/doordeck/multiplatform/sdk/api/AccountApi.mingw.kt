@@ -94,6 +94,7 @@ actual object AccountApi {
                 val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
                 AccountClient.verifyEphemeralKeyRegistrationRequest(
                     code = verifyEphemeralKeyRegistrationData.code,
+                    publicKey = verifyEphemeralKeyRegistrationData.publicKey?.decodeBase64ToByteArray(),
                     privateKey = verifyEphemeralKeyRegistrationData.privateKey?.decodeBase64ToByteArray()
                 )
             },

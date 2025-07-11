@@ -17,8 +17,8 @@ class Account(object):
             [self.resource]
         )
 
-    async def register_ephemeral_key(self, publicKey: str):
-        data = { "publicKey": publicKey }
+    async def register_ephemeral_key(self, publicKey: str, privateKey: str):
+        data = { "publicKey": publicKey, "privateKey": privateKey }
         return await execute_async(
             _doordeck_headless_sdk.registerEphemeralKey,
             [self.resource, json.dumps(data)]
@@ -34,9 +34,10 @@ class Account(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def verify_ephemeral_key_registration(self, code: str, privateKey: typing.Optional[str] = None):
+    async def verify_ephemeral_key_registration(self, code: str, publicKey: typing.Optional[str] = None, privateKey: typing.Optional[str] = None):
         data = {
             "code": code,
+            "publicKey": publicKey,
             "privateKey": privateKey
         }
         return await execute_async(

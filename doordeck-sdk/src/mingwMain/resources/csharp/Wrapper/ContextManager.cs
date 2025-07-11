@@ -220,10 +220,7 @@ public unsafe class ContextManager(
 
     // GetKeyPair
 
-    public void SetKeyPairVerified(bool verified)
-    {
-        contextManager.setKeyPairVerified(context, Convert.ToByte(verified));
-    }
+    // SetKeyPairVerified
 
     public bool IsKeyPairVerified()
     {
@@ -235,9 +232,9 @@ public unsafe class ContextManager(
         return contextManager.isKeyPairValid_(context).ToBoolean();
     }
 
-    public void SetOperationContext(string userId, string userCertificateChain, string userPublicKey, string userPrivateKey)
+    public void SetOperationContext(string userId, string userCertificateChain, string userPublicKey, string userPrivateKey, bool isKeyPairVerified)
     {
-        var sData = new { userId, userCertificateChain, userPublicKey, userPrivateKey }.ToData();
+        var sData = new { userId, userCertificateChain, userPublicKey, userPrivateKey, isKeyPairVerified }.ToData();
         try
         {
             contextManager.setOperationContextJson_(context, sData);

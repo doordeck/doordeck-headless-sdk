@@ -13,8 +13,8 @@ public class Helper(
     public unsafe Task<AssistedLoginResponse> AssistedLogin(string email, string password) =>
         Process<AssistedLoginResponse>(helperApi.assistedLogin_, null, new { email, password });
 
-    public unsafe Task<AssistedRegisterEphemeralKeyResponse> AssistedRegisterEphemeralKey(string? publicKey = null) =>
-        Process<AssistedRegisterEphemeralKeyResponse>(helperApi.assistedRegisterEphemeralKey_, null, new { publicKey });
+    public unsafe Task<AssistedRegisterEphemeralKeyResponse> AssistedRegisterEphemeralKey(string? publicKey = null, string? privateKey = null) =>
+        Process<AssistedRegisterEphemeralKeyResponse>(helperApi.assistedRegisterEphemeralKey_, null, new { publicKey, privateKey });
 
     public unsafe Task<object> AssistedRegister(string email, string password, string? displayName = null, bool force = false) =>
         Process<object>(helperApi.assistedRegister_, null, new { email, password, displayName, force });

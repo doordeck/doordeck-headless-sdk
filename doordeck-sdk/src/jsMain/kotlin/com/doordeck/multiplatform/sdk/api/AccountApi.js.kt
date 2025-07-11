@@ -33,8 +33,8 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    fun registerEphemeralKey(publicKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
-        return promise { AccountClient.registerEphemeralKeyRequest(publicKey) }
+    fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
+        return promise { AccountClient.registerEphemeralKeyRequest(publicKey, privateKey) }
     }
 
     /**
@@ -47,8 +47,8 @@ actual object AccountApi {
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
-    fun verifyEphemeralKeyRegistration(code: String, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
-        return promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, privateKey) }
+    fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
+        return promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey) }
     }
 
     /**

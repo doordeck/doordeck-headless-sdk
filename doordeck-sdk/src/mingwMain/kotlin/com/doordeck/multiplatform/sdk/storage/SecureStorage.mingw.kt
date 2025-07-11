@@ -19,11 +19,17 @@ internal actual fun createSecureStorage(applicationContext: ApplicationContext?)
 }
 
 internal typealias setStringCallback = CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>
+internal typealias setNullableStringCallback = CPointer<CFunction<(CPointer<ByteVar>?) -> Unit>>
 internal typealias getStringCallback = CPointer<CFunction<() -> CPointer<ByteVar>?>>
 internal typealias emptyCallback = CPointer<CFunction<() -> Unit>>
 
 internal fun setStringCallback.invokeStringCallback(string: String) = memScoped {
     val cString = string.cstr.ptr
+    invoke(cString)
+}
+
+internal fun setNullableStringCallback.invokeNullableStringCallback(string: String?) = memScoped {
+    val cString = string?.cstr?.ptr
     invoke(cString)
 }
 
@@ -43,7 +49,7 @@ fun createMingwSecureStorage(
     getPublicKeyCp: getStringCallback,
     addPrivateKeyCp: setStringCallback,
     getPrivateKeyCp: getStringCallback,
-    setKeyPairVerifiedCp: setStringCallback,
+    setKeyPairVerifiedCp: setNullableStringCallback,
     getKeyPairVerifiedCp: getStringCallback,
     addUserIdCp: setStringCallback,
     getUserIdCp: getStringCallback,
@@ -95,7 +101,7 @@ class MingwSecureStorage(
     private val getPublicKeyCp: getStringCallback,
     private val addPrivateKeyCp: setStringCallback,
     private val getPrivateKeyCp: getStringCallback,
-    private val setKeyPairVerifiedCp: setStringCallback,
+    private val setKeyPairVerifiedCp: setNullableStringCallback,
     private val getKeyPairVerifiedCp: getStringCallback,
     private val addUserIdCp: setStringCallback,
     private val getUserIdCp: getStringCallback,
@@ -148,28 +154,28 @@ class MingwSecureStorage(
         return getFusionAuthTokenCp()?.toKString()
     }
 
-    override fun addPublicKey(byteArray: ByteArray) {
-        addPublicKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
+    override fun addPublicKey(publicKey: ByteArray) {
+        addPublicKeyCp.invokeStringCallback(publicKey.encodeByteArrayToBase64())
     }
 
     override fun getPublicKey(): ByteArray? {
         return getPublicKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
-    override fun addPrivateKey(byteArray: ByteArray) {
-        addPrivateKeyCp.invokeStringCallback(byteArray.encodeByteArrayToBase64())
+    override fun addPrivateKey(privateKey: ByteArray) {
+        addPrivateKeyCp.invokeStringCallback(privateKey.encodeByteArrayToBase64())
     }
 
     override fun getPrivateKey(): ByteArray? {
         return getPrivateKeyCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
-    override fun setKeyPairVerified(verified: Boolean) {
-        setKeyPairVerifiedCp.invokeStringCallback(verified.toString())
+    override fun setKeyPairVerified(publicKey: ByteArray?) {
+        setKeyPairVerifiedCp.invokeNullableStringCallback(publicKey?.toString())
     }
 
-    override fun getKeyPairVerified(): Boolean? {
-        return getKeyPairVerifiedCp()?.toKString()?.toBoolean()
+    override fun getKeyPairVerified(): ByteArray? {
+        return getKeyPairVerifiedCp()?.toKString()?.decodeBase64ToByteArray()
     }
 
     override fun addUserId(userId: String) {

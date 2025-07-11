@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import kotlin.js.JsExport
@@ -134,9 +135,9 @@ interface ContextManager {
     fun getKeyPair(): Crypto.KeyPair?
 
     /**
-     * Sets the key pair verification status, the provided values will be automatically stored in secure storage.
+     * Sets the public key that has been verified via two-factor authentication. The provided value will be automatically stored in secure storage.
      */
-    fun setKeyPairVerified(verified: Boolean)
+    fun setKeyPairVerified(publicKey: ByteArray?)
 
     /**
      * Retrieves the key pair verification status.
@@ -153,13 +154,19 @@ interface ContextManager {
     /**
      * Sets all necessary fields to perform secure operations, the provided values will be automatically stored in secure storage.
      */
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray)
+    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray, privateKey: ByteArray, isKeyPairVerified: Boolean = true)
 
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.
      */
     @CName("setOperationContextJson")
     fun setOperationContextJson(data: String)
+
+    /**
+     * Checks the context and returns a [ContextState] representing its state.
+     */
+    @CName("getContextState")
+    fun getContextState(): ContextState
 
     /**
      * Clears all the values stored in secure storage.

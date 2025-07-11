@@ -41,15 +41,15 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
-        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey)
+    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey)
     }
 
     /**
      * Async variant of [HelperApi.assistedRegisterEphemeralKey] returning [CompletableFuture].
      */
-    fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray? = null): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
-        return completableFuture { assistedRegisterEphemeralKey(publicKey) }
+    fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
+        return completableFuture { assistedRegisterEphemeralKey(publicKey, privateKey) }
     }
 
     /**

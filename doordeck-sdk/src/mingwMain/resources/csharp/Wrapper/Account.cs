@@ -14,14 +14,14 @@ public class Account(
     public unsafe Task<object> Logout() =>
         Process<object>(null, accountApi.logout_, null);
 
-    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(string? publicKey = null) =>
-        Process<RegisterEphemeralKeyResponse>(accountApi.registerEphemeralKey_, null, new { publicKey });
+    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(string? publicKey = null, string? privateKey = null) =>
+        Process<RegisterEphemeralKeyResponse>(accountApi.registerEphemeralKey_, null, new { publicKey, privateKey });
 
     public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(string? publicKey = null, TwoFactorMethod? method = null) =>
         Process<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(accountApi.registerEphemeralKeyWithSecondaryAuthentication_, null, new { publicKey, method });
 
-    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, string? privateKey = null) =>
-        Process<RegisterEphemeralKeyResponse>(accountApi.verifyEphemeralKeyRegistration_, null, new { code, privateKey });
+    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, string? publicKey = null, string? privateKey = null) =>
+        Process<RegisterEphemeralKeyResponse>(accountApi.verifyEphemeralKeyRegistration_, null, new { code, publicKey, privateKey });
 
     public unsafe Task<object> ReverifyEmail() =>
         Process<object>(null, accountApi.reverifyEmail_, null);
