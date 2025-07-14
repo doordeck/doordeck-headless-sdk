@@ -36,10 +36,12 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.generateEncodedKeyPair]
+     * Generates a new Ed25519 key pair and returns it as a JSON-encoded string.
+     *
+     * @return JSON string representation of the generated key pair.
      */
     @CName("generateEncodedKeyPair")
-    actual fun generateEncodedKeyPair(): String {
+    fun generateEncodedKeyPair(): String {
         val keyPair = generateKeyPair()
         return Crypto.EncodedKeyPair(
             private = keyPair.private.encodeByteArrayToBase64(),

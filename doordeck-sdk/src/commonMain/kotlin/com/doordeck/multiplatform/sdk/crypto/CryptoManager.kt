@@ -86,13 +86,6 @@ expect object CryptoManager {
     fun generateKeyPair(): Crypto.KeyPair
 
     /**
-     * Generates a new Ed25519 key pair and returns it as a JSON-encoded string.
-     *
-     * @return JSON string representation of the generated key pair.
-     */
-    fun generateEncodedKeyPair(): String
-
-    /**
      * Checks if a certificate is invalid (e.g., null, malformed) or expired.
      * (we consider it expired if it will expire within the next [MIN_CERTIFICATE_LIFETIME_DAYS] days).
      *
