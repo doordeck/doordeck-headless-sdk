@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
 
 namespace WpfSample.Login;
 
@@ -50,16 +49,10 @@ public partial class LoginWindow : Window
         try
         {
             // Attempt to verify the key pair
-            var verifyResponse = await App.Sdk
+            await App.Sdk
                 .GetAccount()
-                .VerifyEphemeralKeyRegistration(twoFactorWindow.TwoFactorCode, keyPair.Private);
-
-            // Set the operation context
-            App.Sdk
-                .GetContextManager()
-                .SetOperationContext(verifyResponse.UserId,
-                    verifyResponse.CertificateChain.CertificateChainToString(), keyPair.Public, keyPair.Private);
-
+                .VerifyEphemeralKeyRegistration(twoFactorWindow.TwoFactorCode, keyPair.Public, keyPair.Private);
+            
             // Display the dashboard
             var dashboard = new Dashboard.Dashboard();
             dashboard.Show();
