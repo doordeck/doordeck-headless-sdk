@@ -41,14 +41,6 @@ actual object CryptoManager {
     }
 
     /**
-     * This method is not implemented and will throw [NotImplementedError]. Use [generateKeyPair] instead.
-     * @throws [NotImplementedError].
-     */
-    actual fun generateEncodedKeyPair(): String {
-        throw NotImplementedError("Use generateKeyPair() instead")
-    }
-
-    /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean = try {
