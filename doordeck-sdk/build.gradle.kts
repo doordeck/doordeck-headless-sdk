@@ -77,7 +77,7 @@ kotlin {
     val xcf = XCFramework(cocoapodsPublish.packageName)
     val appleTargets = listOf(
         iosX64(), iosArm64(), iosSimulatorArm64(),                                      // iOS
-        macosArm64(),                                                                   // macOS
+        macosX64(), macosArm64(),                                                       // macOS
         watchosX64(), watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()     // watchOS
     )
 
@@ -254,6 +254,7 @@ kotlin {
                     "osVersionMin.ios_x64=$iosVersion.0",
                     "osVersionMin.ios_arm64=$iosVersion.0",
                     "osVersionMin.ios_simulator_arm64=$iosVersion.0",
+                    "osVersionMin.macos_x64=$macosVersion.0",
                     "osVersionMin.macos_arm64=$macosVersion.0",
                     "osVersionMin.watchos_x64=$watchosVersion.0",
                     "osVersionMin.watchos_arm64=$watchosVersion.0",
@@ -347,7 +348,7 @@ swiftklib {
     create("KCryptoKit") {
         path = file("native/KCryptoKit")
         packageName("com.doordeck.multiplatform.sdk.kcryptokit")
-        minMacos = libs.versions.ios.min.sdk.get().toInt()
+        minMacos = libs.versions.macos.min.sdk.get().toInt()
         minIos = libs.versions.ios.min.sdk.get().toInt()
         minWatchos = libs.versions.watchos.min.sdk.get().toInt()
     }
