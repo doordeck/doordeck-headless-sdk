@@ -150,6 +150,7 @@ kotlin {
         version = "${project.version}"
         source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
         ios.deploymentTarget = libs.versions.ios.min.sdk.get()
+        osx.deploymentTarget = libs.versions.macos.min.sdk.get()
         watchos.deploymentTarget = libs.versions.watchos.min.sdk.get()
         name = cocoapodsPublish.packageName
         framework {
@@ -246,17 +247,19 @@ kotlin {
     targets.withType<KotlinNativeTarget> {
         compilations["main"].compileTaskProvider.configure {
             compilerOptions {
-                val version = libs.versions.ios.min.sdk.get().toInt()
-                val watchOSVersion = libs.versions.watchos.min.sdk.get().toInt()
-                val arguments = """-Xoverride-konan-properties=
-                    osVersionMin.ios_x64=$version.0;
-                    osVersionMin.ios_arm64=$version.0;
-                    osVersionMin.ios_simulator_arm64=$version.0;
-                    osVersionMin.macos_arm64=$version.0;
-                    osVersionMin.watchos_x64=$watchOSVersion.0;
-                    osVersionMin.watchos_arm64=$watchOSVersion.0;
-                    osVersionMin.watchos_simulator_arm64=$watchOSVersion.0
-                """.trimIndent().replace(" ", "").replace("\n", "")
+                val iosVersion = libs.versions.ios.min.sdk.get().toInt()
+                val macosVersion = libs.versions.macos.min.sdk.get().toInt()
+                val watchosVersion = libs.versions.watchos.min.sdk.get().toInt()
+                val arguments = "-Xoverride-konan-properties=" + listOf(
+                    "osVersionMin.ios_x64=$iosVersion.0",
+                    "osVersionMin.ios_arm64=$iosVersion.0",
+                    "osVersionMin.ios_simulator_arm64=$iosVersion.0",
+                    "osVersionMin.macos_arm64=$macosVersion.0",
+                    "osVersionMin.watchos_x64=$watchosVersion.0",
+                    "osVersionMin.watchos_arm64=$watchosVersion.0",
+                    "osVersionMin.watchos_device_arm64=$watchosVersion.0",
+                    "osVersionMin.watchos_simulator_arm64=$watchosVersion.0"
+                ).joinToString(";")
                 freeCompilerArgs.addAll(arguments)
             }
         }
