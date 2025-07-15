@@ -6,7 +6,6 @@ import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
 import {NgIf} from '@angular/common';
 import {Router} from '@angular/router';
-import {doordeckSDK} from '../../main';
 import {com} from '@doordeck/doordeck-headless-sdk';
 import {TwoFactorVerifyComponent} from '../two-factor-verify/two-factor-verify.component';
 import {MatDialog} from '@angular/material/dialog';
@@ -78,9 +77,7 @@ export class LoginComponent  {
         if (result) {
           try {
             // Attempt to verify the key pair
-            await api.account().verifyEphemeralKeyRegistration(result, this.keyPair!.private).then(async (response) => {
-              // Set the operation context
-              doordeckSDK.contextManager().setOperationContext(response.userId, response.certificateChain, this.keyPair!.public, this.keyPair!.private);
+            await api.account().verifyEphemeralKeyRegistration(result, this.keyPair!.public, this.keyPair!.private).then(async (_) => {
               // Redirect to the dashboard
               await this.router.navigate(['dashboard']);
             });
