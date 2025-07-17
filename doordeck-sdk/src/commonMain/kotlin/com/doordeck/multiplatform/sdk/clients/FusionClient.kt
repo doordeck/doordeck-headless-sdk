@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
@@ -37,7 +37,7 @@ internal object FusionClient {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
         }.body<FusionLoginResponse>().also {
-            ContextManagerImpl.setFusionAuthToken(it.authToken)
+            Context.setFusionAuthToken(it.authToken)
         }
     }
 

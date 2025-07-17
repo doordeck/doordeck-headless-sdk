@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -184,7 +184,7 @@ class ExtensionsTest {
         val httpClient = HttpClient().also {
             it.addAuthInterceptor(
                 requiresAuth = Paths::requiresAuth,
-                getAuthToken = ContextManagerImpl::getCloudAuthToken
+                getAuthToken = Context::getCloudAuthToken
             )
         }
 

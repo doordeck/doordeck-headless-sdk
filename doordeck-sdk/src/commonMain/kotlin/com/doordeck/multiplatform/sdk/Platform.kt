@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
@@ -45,14 +45,14 @@ internal fun createCloudHttpClient(): HttpClient {
         installResponseValidator()
         installDefaultRequest(
             determineHost = {
-                ContextManagerImpl.getApiEnvironment().cloudHost
+                Context.getApiEnvironment().cloudHost
             }
         )
     }.also {
         it.addExceptionInterceptor()
         it.addAuthInterceptor(
             requiresAuth = Paths::requiresAuth,
-            getAuthToken = ContextManagerImpl::getCloudAuthToken
+            getAuthToken = Context::getCloudAuthToken
         )
     }
 }
@@ -65,13 +65,13 @@ internal fun createFusionHttpClient(): HttpClient {
         installLogging()
         installResponseValidator()
         installDefaultRequest(determineHost = {
-            ContextManagerImpl.getFusionHost()
+            Context.getFusionHost()
         })
     }.also {
         it.addExceptionInterceptor()
         it.addAuthInterceptor(
             requiresAuth = FusionPaths::requiresAuth,
-            getAuthToken = ContextManagerImpl::getFusionAuthToken
+            getAuthToken = Context::getFusionAuthToken
         )
     }
 }

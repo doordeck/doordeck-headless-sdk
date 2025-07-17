@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.clients
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
@@ -24,8 +24,8 @@ class AccountlessClientTest : IntegrationTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManagerImpl.getCloudAuthToken())
-        assertEquals(response.refreshToken, ContextManagerImpl.getCloudRefreshToken())
+        assertEquals(response.authToken, Context.getCloudAuthToken())
+        assertEquals(response.refreshToken, Context.getCloudRefreshToken())
     }
 
     @Test
@@ -40,16 +40,16 @@ class AccountlessClientTest : IntegrationTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManagerImpl.getCloudAuthToken())
-        assertEquals(response.refreshToken, ContextManagerImpl.getCloudRefreshToken())
+        assertEquals(response.authToken, Context.getCloudAuthToken())
+        assertEquals(response.refreshToken, Context.getCloudRefreshToken())
 
         // Given - shouldDelete
         // When
         AccountClient.deleteAccountRequest()
 
         // Then
-        assertNull(ContextManagerImpl.getCloudAuthToken())
-        assertNull(ContextManagerImpl.getCloudRefreshToken())
+        assertNull(Context.getCloudAuthToken())
+        assertNull(Context.getCloudRefreshToken())
         assertFails {
             AccountlessClient.loginRequest(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }

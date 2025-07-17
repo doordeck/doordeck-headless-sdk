@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Params
@@ -40,7 +40,7 @@ internal object AccountlessClient {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.body<TokenResponse>().also {
-            ContextManagerImpl.also { context ->
+            Context.also { context ->
                 context.setUserEmail(email)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
@@ -81,7 +81,7 @@ internal object AccountlessClient {
             )
             parameter(Params.FORCE, force)
         }.body<TokenResponse>().also {
-            ContextManagerImpl.also { context ->
+            Context.also { context ->
                 context.setUserEmail(email)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)

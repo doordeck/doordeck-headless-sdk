@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.Constants
 import com.doordeck.multiplatform.sdk.HttpClient
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
@@ -45,10 +45,10 @@ internal object HelperClient {
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
-        val currentKeyPair = ContextManagerImpl.getKeyPair()
-        val currentKeyPairVerified = ContextManagerImpl.isKeyPairVerified()
+        val currentKeyPair = Context.getKeyPair()
+        val currentKeyPairVerified = Context.isKeyPairVerified()
         val requiresKeyRegister =
-            currentKeyPair == null || ContextManagerImpl.isCertificateChainInvalidOrExpired() || !currentKeyPairVerified
+            currentKeyPair == null || Context.isCertificateChainInvalidOrExpired() || !currentKeyPairVerified
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair
@@ -56,8 +56,8 @@ internal object HelperClient {
 
         // Add the new key pair to the context manager
         if (currentKeyPair == null) {
-            ContextManagerImpl.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
-            ContextManagerImpl.setKeyPairVerified(null)
+            Context.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
+            Context.setKeyPairVerified(null)
         }
 
         // Perform the login
@@ -90,10 +90,10 @@ internal object HelperClient {
     ): AssistedRegisterEphemeralKeyResponse {
         // Define which key should be registered
         val publicKey = publicKey
-            ?: ContextManagerImpl.getPublicKey()
+            ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         val privateKey = privateKey
-            ?: ContextManagerImpl.getPrivateKey()
+            ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         return try {
             // Attempt to register the provided or default public key
@@ -124,7 +124,7 @@ internal object HelperClient {
         AccountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)
 
         // Add the key pair to the context manager
-        ContextManagerImpl.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
-        ContextManagerImpl.setKeyPairVerified(keyPair.public)
+        Context.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
+        Context.setKeyPairVerified(keyPair.public)
     }
 }

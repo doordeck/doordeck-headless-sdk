@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Ignore
@@ -59,12 +59,12 @@ class AccountClientTest : IntegrationTest() {
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(TEST_MAIN_USER_ID, result.userId)
-        assertEquals(result.userId, ContextManagerImpl.getUserId())
-        assertEquals(result.certificateChain, ContextManagerImpl.getCertificateChain())
-        assertContentEquals(publicKey, ContextManagerImpl.getPublicKey())
-        assertContentEquals(privateKey, ContextManagerImpl.getPrivateKey())
-        assertFalse { ContextManagerImpl.isCertificateChainInvalidOrExpired() }
-        assertTrue { ContextManagerImpl.isKeyPairVerified() }
+        assertEquals(result.userId, Context.getUserId())
+        assertEquals(result.certificateChain, Context.getCertificateChain())
+        assertContentEquals(publicKey, Context.getPublicKey())
+        assertContentEquals(privateKey, Context.getPrivateKey())
+        assertFalse { Context.isCertificateChainInvalidOrExpired() }
+        assertTrue { Context.isKeyPairVerified() }
     }
 
     @Test
@@ -90,8 +90,8 @@ class AccountClientTest : IntegrationTest() {
         // Then
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(ContextManagerImpl.getCloudAuthToken(), response.authToken)
-        assertEquals(ContextManagerImpl.getCloudRefreshToken(), response.refreshToken)
+        assertEquals(Context.getCloudAuthToken(), response.authToken)
+        assertEquals(Context.getCloudRefreshToken(), response.refreshToken)
     }
 
     @Test
@@ -103,8 +103,8 @@ class AccountClientTest : IntegrationTest() {
         AccountClient.logoutRequest()
 
         // Then
-        assertNull(ContextManagerImpl.getCloudAuthToken())
-        assertNull(ContextManagerImpl.getCloudRefreshToken())
-        assertNull(ContextManagerImpl.getFusionAuthToken())
+        assertNull(Context.getCloudAuthToken())
+        assertNull(Context.getCloudRefreshToken())
+        assertNull(Context.getFusionAuthToken())
     }
 }

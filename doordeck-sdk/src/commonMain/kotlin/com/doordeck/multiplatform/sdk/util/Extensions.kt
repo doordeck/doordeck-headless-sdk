@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.ProjectVersion
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -118,8 +118,8 @@ internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
             refreshTokens {
-                ContextManagerImpl.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: TokenResponse = client.post(ContextManagerImpl.getApiEnvironment().cloudHost) {
+                Context.getCloudRefreshToken()?.let { currentRefreshToken ->
+                    val refreshTokens: TokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
                             path(Paths.getRefreshTokenPath())
                         }
@@ -129,7 +129,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                         }
                         markAsRefreshTokenRequest()
                     }.body()
-                    ContextManagerImpl.also { context ->
+                    Context.also { context ->
                         context.setCloudAuthToken(refreshTokens.authToken)
                         context.setCloudRefreshToken(refreshTokens.refreshToken)
                     }

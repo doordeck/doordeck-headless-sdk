@@ -6,18 +6,14 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.Context
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
-import com.doordeck.multiplatform.sdk.util.fromJson
 
-internal object ContextManagerImpl : ContextManager {
+internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
@@ -25,88 +21,88 @@ internal object ContextManagerImpl : ContextManager {
         SdkLogger.enableDebugLogging(enabled)
     }
 
-    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         secureStorage.setApiEnvironment(apiEnvironment)
     }
 
-    override fun getApiEnvironment(): ApiEnvironment {
+    fun getApiEnvironment(): ApiEnvironment {
         return secureStorage.getApiEnvironment()
             ?: ApiEnvironment.PROD
     }
 
-    override fun setCloudAuthToken(token: String) {
+    fun setCloudAuthToken(token: String) {
         secureStorage.addCloudAuthToken(token)
     }
 
-    override fun getCloudAuthToken(): String? {
+    fun getCloudAuthToken(): String? {
         return secureStorage.getCloudAuthToken()
     }
 
-    override fun isCloudAuthTokenInvalidOrExpired(): Boolean {
+    fun isCloudAuthTokenInvalidOrExpired(): Boolean {
         return getCloudAuthToken()?.isJwtTokenInvalidOrExpired() ?: true
     }
 
-    override fun setCloudRefreshToken(token: String) {
+    fun setCloudRefreshToken(token: String) {
         secureStorage.addCloudRefreshToken(token)
     }
 
-    override fun getCloudRefreshToken(): String? {
+    fun getCloudRefreshToken(): String? {
         return secureStorage.getCloudRefreshToken()
     }
 
-    override fun setFusionHost(host: String) {
+    fun setFusionHost(host: String) {
         secureStorage.setFusionHost(host)
     }
 
-    override fun getFusionHost(): String {
+    fun getFusionHost(): String {
         return secureStorage.getFusionHost()
             ?: DEFAULT_FUSION_HOST
     }
 
-    override fun setFusionAuthToken(token: String) {
+    fun setFusionAuthToken(token: String) {
         secureStorage.addFusionAuthToken(token)
     }
 
-    override fun getFusionAuthToken(): String? {
+    fun getFusionAuthToken(): String? {
         return secureStorage.getFusionAuthToken()
     }
 
-    override fun setUserId(userId: String) {
+    fun setUserId(userId: String) {
         secureStorage.addUserId(userId)
     }
 
-    override fun getUserId(): String? {
+    fun getUserId(): String? {
         return secureStorage.getUserId()
     }
 
-    override fun setUserEmail(email: String) {
+    fun setUserEmail(email: String) {
         secureStorage.addUserEmail(email)
     }
 
-    override fun getUserEmail(): String? {
+    fun getUserEmail(): String? {
         return secureStorage.getUserEmail()
     }
 
-    override fun setCertificateChain(certificateChain: List<String>) {
+    fun setCertificateChain(certificateChain: List<String>) {
         secureStorage.addCertificateChain(certificateChain)
     }
 
-    override fun getCertificateChain(): List<String>? {
+    fun getCertificateChain(): List<String>? {
         return secureStorage.getCertificateChain()
     }
 
-    override fun isCertificateChainInvalidOrExpired(): Boolean {
+    fun isCertificateChainInvalidOrExpired(): Boolean {
         return getCertificateChain()?.firstOrNull()?.let {
             CryptoManager.isCertificateInvalidOrExpired(it)
         } ?: true
     }
 
-    override fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
+    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         secureStorage.addPublicKey(publicKey)
         secureStorage.addPrivateKey(privateKey)
     }
 
-    override fun getKeyPair(): Crypto.KeyPair? {
+    fun getKeyPair(): Crypto.KeyPair? {
         val actualUserPublicKey = getPublicKey()
         val actualUserPrivateKey = getPrivateKey()
         return if (actualUserPublicKey != null && actualUserPrivateKey != null) {
@@ -114,11 +110,11 @@ internal object ContextManagerImpl : ContextManager {
         } else null
     }
 
-    override fun setKeyPairVerified(publicKey: ByteArray?) {
+    fun setKeyPairVerified(publicKey: ByteArray?) {
         secureStorage.setKeyPairVerified(publicKey)
     }
 
-    override fun isKeyPairVerified(): Boolean {
+    fun isKeyPairVerified(): Boolean {
         val verified = secureStorage.getKeyPairVerified()
         val publicKey = secureStorage.getPublicKey()
         if (verified == null || publicKey == null) {
@@ -135,7 +131,7 @@ internal object ContextManagerImpl : ContextManager {
         return secureStorage.getPrivateKey()
     }
 
-    override fun isKeyPairValid(): Boolean {
+    fun isKeyPairValid(): Boolean {
         val publicKey = getPublicKey()
         val privateKey = getPrivateKey()
         if (publicKey == null || privateKey == null) {
@@ -149,7 +145,7 @@ internal object ContextManagerImpl : ContextManager {
         clearContext()
     }
 
-    override fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
+    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
                                      privateKey: ByteArray, isKeyPairVerified: Boolean) {
         setUserId(userId)
         setCertificateChain(certificateChain)
@@ -157,18 +153,7 @@ internal object ContextManagerImpl : ContextManager {
         setKeyPairVerified(if (isKeyPairVerified) publicKey else null)
     }
 
-    override fun setOperationContextJson(data: String) {
-        val operationContextData = data.fromJson<Context.OperationContextData>()
-        setOperationContext(
-            userId = operationContextData.userId,
-            certificateChain = operationContextData.userCertificateChain.stringToCertificateChain(),
-            publicKey = operationContextData.userPublicKey.decodeBase64ToByteArray(),
-            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray(),
-            isKeyPairVerified = operationContextData.isKeyPairVerified
-        )
-    }
-
-    override fun getContextState(): ContextState {
+    fun getContextState(): ContextState {
         if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
@@ -180,7 +165,7 @@ internal object ContextManagerImpl : ContextManager {
         this.secureStorage = secureStorage
     }
 
-    override fun clearContext() {
+    fun clearContext() {
         secureStorage.clear()
     }
 }
