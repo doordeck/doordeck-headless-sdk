@@ -20,6 +20,7 @@ public class SiteLocksResponse
     public string? Colour { get; set; } = null;
     public UserRole Role { get; set; }
     public SiteLockSettingsResponse Settings { get; set; } = new SiteLockSettingsResponse();
+    public SiteStateResponse? State { get; set; } = null;
 }
 
 public class SiteLockSettingsResponse
@@ -28,7 +29,6 @@ public class SiteLockSettingsResponse
     public List<string> PermittedAddresses { get; set; } = [];
     public string DefaultName { get; set; } = string.Empty;
     public List<string> Tiles { get; set; } = [];
-    public SiteStateResponse? State { get; set; } = null;
     public bool? Favourite { get; set; } = null;
 }
 
