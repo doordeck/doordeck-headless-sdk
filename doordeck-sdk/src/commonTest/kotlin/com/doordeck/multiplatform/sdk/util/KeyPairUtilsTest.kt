@@ -12,7 +12,7 @@ class KeyPairUtilsTest {
     @Test
     fun shouldCheckValidKeyPair() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
 
         // When
         val result = KeyPairUtils.isKeyPairValid(keyPair.public, keyPair.private)
@@ -37,8 +37,8 @@ class KeyPairUtilsTest {
     @Test
     fun shouldCheckInvalidKeyPair() = runTest {
         // Given
-        val publicKey = CryptoManager.generateKeyPair().public
-        val privateKey = CryptoManager.generateKeyPair().private
+        val publicKey = CryptoManager.generateRawKeyPair().public
+        val privateKey = CryptoManager.generateRawKeyPair().private
 
         // When
         val result = KeyPairUtils.isKeyPairValid(publicKey, privateKey)

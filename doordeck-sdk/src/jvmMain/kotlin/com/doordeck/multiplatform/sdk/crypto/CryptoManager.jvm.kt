@@ -7,6 +7,7 @@ import io.ktor.util.decodeBase64Bytes
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
+import java.security.KeyPair
 import java.security.KeyPairGenerator
 import java.security.Signature
 import java.security.cert.CertificateFactory
@@ -24,14 +25,18 @@ actual object CryptoManager {
     private const val CERTIFICATE_TYPE = "X.509"
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
-        val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
+        val key = generateKeyPair()
         return Crypto.KeyPair(
             private = key.private.encoded,
             public = key.public.encoded
         )
+    }
+
+    fun generateKeyPair(): KeyPair {
+        return KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
     }
 
     /**

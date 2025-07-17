@@ -193,8 +193,8 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldCheckKeyPairValidityWithNonMatchingKeys() = runTest {
         // Given
-        val publicKey = CryptoManager.generateKeyPair().public
-        val privateKey = CryptoManager.generateKeyPair().private
+        val publicKey = CryptoManager.generateRawKeyPair().public
+        val privateKey = CryptoManager.generateRawKeyPair().private
         Context.setKeyPair(publicKey, privateKey)
 
         // When
@@ -207,7 +207,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
         Context.setKeyPair(keyPair.public, keyPair.private)
 
         // When
@@ -256,7 +256,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsNotVerified() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
         Context.setCloudAuthToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjQwMzhmODE5MmZmMTZiMGQ4N2E3OWYyZjFlOTYyZWIwIn0.eyJleHAiOiIyNTUzNzczMjYxIn0.0O36vfj7QasI-PkE3qEqg4Vm1lF4vGxmmJzso7zLp23qmljOuBd6NaknPG9ZxxIo5WEbaJrgN8zAuRxtA8sYzA")
         Context.setKeyPair(keyPair.public, keyPair.private)
 
@@ -270,7 +270,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateCertificateChainIsInvalid() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
         Context.setCloudAuthToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjQwMzhmODE5MmZmMTZiMGQ4N2E3OWYyZjFlOTYyZWIwIn0.eyJleHAiOiIyNTUzNzczMjYxIn0.0O36vfj7QasI-PkE3qEqg4Vm1lF4vGxmmJzso7zLp23qmljOuBd6NaknPG9ZxxIo5WEbaJrgN8zAuRxtA8sYzA")
         Context.setKeyPair(keyPair.public, keyPair.private)
         Context.setKeyPairVerified(keyPair.public)
@@ -286,7 +286,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateReady() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
         Context.setCloudAuthToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjQwMzhmODE5MmZmMTZiMGQ4N2E3OWYyZjFlOTYyZWIwIn0.eyJleHAiOiIyNTUzNzczMjYxIn0.0O36vfj7QasI-PkE3qEqg4Vm1lF4vGxmmJzso7zLp23qmljOuBd6NaknPG9ZxxIo5WEbaJrgN8zAuRxtA8sYzA")
         Context.setKeyPair(keyPair.public, keyPair.private)
         Context.setKeyPairVerified(keyPair.public)

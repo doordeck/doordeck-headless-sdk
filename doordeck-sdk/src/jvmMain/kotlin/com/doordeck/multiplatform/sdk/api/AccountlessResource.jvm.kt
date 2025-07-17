@@ -3,6 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.security.PublicKey
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -26,14 +28,14 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.registrationRequest
      */
-    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
-        return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
+    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: PublicKey? = null): TokenResponse {
+        return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey?.encoded)
     }
 
     /**
      * Async variant of [AccountlessApi.registration] returning [CompletableFuture].
      */
-    fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): CompletableFuture<TokenResponse> {
+    fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: PublicKey? = null): CompletableFuture<TokenResponse> {
         return completableFuture { registration(email, password, displayName, force, publicKey) }
     }
 
@@ -68,14 +70,14 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordResetVerify(userId: String, token: String, password: String) {
-        return AccountlessClient.passwordResetVerifyRequest(userId, token, password)
+    suspend fun passwordResetVerify(userId: UUID, token: String, password: String) {
+        return AccountlessClient.passwordResetVerifyRequest(userId.toString(), token, password)
     }
 
     /**
      * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
      */
-    fun passwordResetVerifyAsync(userId: String, token: String, password: String): CompletableFuture<Unit> {
+    fun passwordResetVerifyAsync(userId: UUID, token: String, password: String): CompletableFuture<Unit> {
         return completableFuture { passwordResetVerify(userId, token, password) }
     }
 }

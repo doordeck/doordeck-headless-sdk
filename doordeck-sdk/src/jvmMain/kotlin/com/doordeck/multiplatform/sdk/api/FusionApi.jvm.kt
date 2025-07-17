@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -66,15 +67,15 @@ actual object FusionApi {
      * @see FusionClient.enableDoorRequest
      */
     @DoordeckOnly
-    suspend fun enableDoor(name: String, siteId: String, controller: Fusion.LockController) {
-        return FusionClient.enableDoorRequest(name, siteId, controller)
+    suspend fun enableDoor(name: String, siteId: UUID, controller: Fusion.LockController) {
+        return FusionClient.enableDoorRequest(name, siteId.toString(), controller)
     }
 
     /**
      * Async variant of [FusionApi.enableDoor] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun enableDoorAsync(name: String, siteId: String, controller: Fusion.LockController): CompletableFuture<Unit> {
+    fun enableDoorAsync(name: String, siteId: UUID, controller: Fusion.LockController): CompletableFuture<Unit> {
         return completableFuture { enableDoor(name, siteId, controller) }
     }
 
@@ -82,15 +83,15 @@ actual object FusionApi {
      * @see FusionClient.deleteDoorRequest
      */
     @DoordeckOnly
-    suspend fun deleteDoor(deviceId: String) {
-        return FusionClient.deleteDoorRequest(deviceId)
+    suspend fun deleteDoor(deviceId: UUID) {
+        return FusionClient.deleteDoorRequest(deviceId.toString())
     }
 
     /**
      * Async variant of [FusionApi.deleteDoor] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun deleteDoorAsync(deviceId: String): CompletableFuture<Unit> {
+    fun deleteDoorAsync(deviceId: UUID): CompletableFuture<Unit> {
         return completableFuture { deleteDoor(deviceId) }
     }
 
@@ -98,15 +99,15 @@ actual object FusionApi {
      * @see FusionClient.getDoorStatusRequest
      */
     @DoordeckOnly
-    suspend fun getDoorStatus(deviceId: String): DoorStateResponse {
-        return FusionClient.getDoorStatusRequest(deviceId)
+    suspend fun getDoorStatus(deviceId: UUID): DoorStateResponse {
+        return FusionClient.getDoorStatusRequest(deviceId.toString())
     }
 
     /**
      * Async variant of [FusionApi.getDoorStatus] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getDoorStatusAsync(deviceId: String): CompletableFuture<DoorStateResponse> {
+    fun getDoorStatusAsync(deviceId: UUID): CompletableFuture<DoorStateResponse> {
         return completableFuture { getDoorStatus(deviceId) }
     }
 
@@ -114,15 +115,15 @@ actual object FusionApi {
      * @see FusionClient.startDoorRequest
      */
     @DoordeckOnly
-    suspend fun startDoor(deviceId: String) {
-        return FusionClient.startDoorRequest(deviceId)
+    suspend fun startDoor(deviceId: UUID) {
+        return FusionClient.startDoorRequest(deviceId.toString())
     }
 
     /**
      * Async variant of [FusionApi.startDoor] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun startDoorAsync(deviceId: String): CompletableFuture<Unit> {
+    fun startDoorAsync(deviceId: UUID): CompletableFuture<Unit> {
         return completableFuture { startDoor(deviceId) }
     }
 
@@ -130,15 +131,15 @@ actual object FusionApi {
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
-    suspend fun stopDoor(deviceId: String) {
-        return FusionClient.stopDoorRequest(deviceId)
+    suspend fun stopDoor(deviceId: UUID) {
+        return FusionClient.stopDoorRequest(deviceId.toString())
     }
 
     /**
      * Async variant of [FusionApi.stopDoor] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun stopDoorAsync(deviceId: String): CompletableFuture<Unit> {
+    fun stopDoorAsync(deviceId: UUID): CompletableFuture<Unit> {
         return completableFuture { stopDoor(deviceId) }
     }
 }

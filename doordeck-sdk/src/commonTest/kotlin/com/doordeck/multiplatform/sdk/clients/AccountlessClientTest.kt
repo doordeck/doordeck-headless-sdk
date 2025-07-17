@@ -32,7 +32,7 @@ class AccountlessClientTest : IntegrationTest() {
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
         val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${Uuid.random()}@")
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
 
         // When
         val response = AccountlessClient.registrationRequest(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false, keyPair.public)

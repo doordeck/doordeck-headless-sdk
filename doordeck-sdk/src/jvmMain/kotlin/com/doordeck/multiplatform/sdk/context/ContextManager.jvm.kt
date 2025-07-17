@@ -2,7 +2,11 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.util.toUUID
+import java.security.KeyPair
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.util.UUID
 
 actual object ContextManager {
 
@@ -50,12 +54,12 @@ actual object ContextManager {
         return Context.getFusionAuthToken()
     }
 
-    fun setUserId(userId: String) {
-        Context.setUserId(userId)
+    fun setUserId(userId: UUID) {
+        Context.setUserId(userId.toString())
     }
 
-    fun getUserId(): String? {
-        return Context.getUserId()
+    fun getUserId(): UUID? {
+        return Context.getUserId()?.toUUID()
     }
 
     fun setUserEmail(email: String) {
@@ -78,16 +82,16 @@ actual object ContextManager {
         return Context.isCertificateChainInvalidOrExpired()
     }
 
-    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
-        Context.setKeyPair(publicKey, privateKey)
+    fun setKeyPair(publicKey: PublicKey, privateKey: PrivateKey) {
+        Context.setKeyPair(publicKey.encoded, privateKey.encoded)
     }
 
-    fun getKeyPair(): Crypto.KeyPair? {
+    fun getKeyPair(): KeyPair? {
         return Context.getKeyPair()
     }
 
-    fun setKeyPairVerified(publicKey: ByteArray?) {
-        Context.setKeyPairVerified(publicKey)
+    fun setKeyPairVerified(publicKey: PublicKey?) {
+        Context.setKeyPairVerified(publicKey?.encoded)
     }
 
     fun isKeyPairVerified(): Boolean {
@@ -98,9 +102,15 @@ actual object ContextManager {
         return Context.isKeyPairValid()
     }
 
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
-                            privateKey: ByteArray, isKeyPairVerified: Boolean) {
-        Context.setOperationContext(userId, certificateChain, privateKey, publicKey, isKeyPairVerified)
+    fun setOperationContext(userId: UUID, certificateChain: List<String>, publicKey: PublicKey,
+                            privateKey: PrivateKey, isKeyPairVerified: Boolean) {
+        Context.setOperationContext(
+            userId = userId.toString(),
+            certificateChain = certificateChain,
+            publicKey = privateKey.encoded,
+            privateKey = publicKey.encoded,
+            isKeyPairVerified = isKeyPairVerified
+        )
     }
 
     fun getContextState(): ContextState {

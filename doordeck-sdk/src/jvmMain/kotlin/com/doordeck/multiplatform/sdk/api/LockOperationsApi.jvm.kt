@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -20,182 +21,182 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
-    suspend fun getSingleLock(lockId: String): LockResponse {
-        return LockOperationsClient.getSingleLockRequest(lockId)
+    suspend fun getSingleLock(lockId: UUID): LockResponse {
+        return LockOperationsClient.getSingleLockRequest(lockId.toString())
     }
 
     /**
      * Async variant of [LockOperationsApi.getSingleLock] returning [CompletableFuture].
      */
-    fun getSingleLockAsync(lockId: String): CompletableFuture<LockResponse> {
+    fun getSingleLockAsync(lockId: UUID): CompletableFuture<LockResponse> {
         return completableFuture { getSingleLock(lockId) }
     }
 
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
-        return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
+    suspend fun getLockAuditTrail(lockId: UUID, start: Int, end: Int): List<AuditResponse> {
+        return LockOperationsClient.getLockAuditTrailRequest(lockId.toString(), start, end)
     }
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getLockAuditTrailAsync(lockId: UUID, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getLockAuditTrail(lockId, start, end) }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
-        return LockOperationsClient.getAuditForUserRequest(userId, start, end)
+    suspend fun getAuditForUser(userId: UUID, start: Int, end: Int): List<AuditResponse> {
+        return LockOperationsClient.getAuditForUserRequest(userId.toString(), start, end)
     }
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getAuditForUserAsync(userId: UUID, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getAuditForUser(userId, start, end) }
     }
 
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
-    suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
-        return LockOperationsClient.getUsersForLockRequest(lockId)
+    suspend fun getUsersForLock(lockId: UUID): List<UserLockResponse> {
+        return LockOperationsClient.getUsersForLockRequest(lockId.toString())
     }
 
     /**
      * Async variant of [LockOperationsApi.getUsersForLock] returning [CompletableFuture].
      */
-    fun getUsersForLockAsync(lockId: String): CompletableFuture<List<UserLockResponse>> {
+    fun getUsersForLockAsync(lockId: UUID): CompletableFuture<List<UserLockResponse>> {
         return completableFuture { getUsersForLock(lockId) }
     }
 
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
-    suspend fun getLocksForUser(userId: String): LockUserResponse {
-        return LockOperationsClient.getLocksForUserRequest(userId)
+    suspend fun getLocksForUser(userId: UUID): LockUserResponse {
+        return LockOperationsClient.getLocksForUserRequest(userId.toString())
     }
 
     /**
      * Async variant of [LockOperationsApi.getLocksForUser] returning [CompletableFuture].
      */
-    fun getLocksForUserAsync(userId: String): CompletableFuture<LockUserResponse> {
+    fun getLocksForUserAsync(userId: UUID): CompletableFuture<LockUserResponse> {
         return completableFuture { getLocksForUser(userId) }
     }
 
     /**
      * @see LockOperationsClient.updateLockNameRequest
      */
-    suspend fun updateLockName(lockId: String, name: String? = null) {
-        return LockOperationsClient.updateLockNameRequest(lockId, name)
+    suspend fun updateLockName(lockId: UUID, name: String? = null) {
+        return LockOperationsClient.updateLockNameRequest(lockId.toString(), name)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockName] returning [CompletableFuture].
      */
-    fun updateLockNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit> {
+    fun updateLockNameAsync(lockId: UUID, name: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockName(lockId, name) }
     }
 
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
-        return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
+    suspend fun updateLockFavourite(lockId: UUID, favourite: Boolean? = null) {
+        return LockOperationsClient.updateLockFavouriteRequest(lockId.toString(), favourite)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockFavourite] returning [CompletableFuture].
      */
-    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit> {
+    fun updateLockFavouriteAsync(lockId: UUID, favourite: Boolean? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockFavourite(lockId, favourite) }
     }
 
     /**
      * @see LockOperationsClient.updateLockColourRequest
      */
-    suspend fun updateLockColour(lockId: String, colour: String? = null) {
-        return LockOperationsClient.updateLockColourRequest(lockId, colour)
+    suspend fun updateLockColour(lockId: UUID, colour: String? = null) {
+        return LockOperationsClient.updateLockColourRequest(lockId.toString(), colour)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockColour] returning [CompletableFuture].
      */
-    fun updateLockColourAsync(lockId: String, colour: String? = null): CompletableFuture<Unit> {
+    fun updateLockColourAsync(lockId: UUID, colour: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockColour(lockId, colour) }
     }
 
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
-        return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
+    suspend fun updateLockSettingDefaultName(lockId: UUID, name: String? = null) {
+        return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId.toString(), name)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockSettingDefaultName] returning [CompletableFuture].
      */
-    fun updateLockSettingDefaultNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit> {
+    fun updateLockSettingDefaultNameAsync(lockId: UUID, name: String? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingDefaultName(lockId, name) }
     }
 
     /**
      * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
-    suspend fun setLockSettingPermittedAddresses(lockId: String, permittedAddresses: List<String>) {
-        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId, permittedAddresses)
+    suspend fun setLockSettingPermittedAddresses(lockId: UUID, permittedAddresses: List<String>) {
+        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId.toString(), permittedAddresses)
     }
 
     /**
      * Async variant of [LockOperationsApi.setLockSettingPermittedAddresses] returning [CompletableFuture].
      */
-    fun setLockSettingPermittedAddressesAsync(lockId: String, permittedAddresses: List<String>): CompletableFuture<Unit> {
+    fun setLockSettingPermittedAddressesAsync(lockId: UUID, permittedAddresses: List<String>): CompletableFuture<Unit> {
         return completableFuture { setLockSettingPermittedAddresses(lockId, permittedAddresses) }
     }
 
     /**
      * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
-    suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean) {
-        return LockOperationsClient.updateLockSettingHiddenRequest(lockId, hidden)
+    suspend fun updateLockSettingHidden(lockId: UUID, hidden: Boolean) {
+        return LockOperationsClient.updateLockSettingHiddenRequest(lockId.toString(), hidden)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockSettingHidden] returning [CompletableFuture].
      */
-    fun updateLockSettingHiddenAsync(lockId: String, hidden: Boolean): CompletableFuture<Unit> {
+    fun updateLockSettingHiddenAsync(lockId: UUID, hidden: Boolean): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingHidden(lockId, hidden) }
     }
 
     /**
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
-    suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
+    suspend fun setLockSettingTimeRestrictions(lockId: UUID, times: List<LockOperations.TimeRequirement>) {
+        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId.toString(), times)
     }
 
     /**
      * Async variant of [LockOperationsApi.setLockSettingTimeRestrictions] returning [CompletableFuture].
      */
-    fun setLockSettingTimeRestrictionsAsync(lockId: String, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
+    fun setLockSettingTimeRestrictionsAsync(lockId: UUID, times: List<LockOperations.TimeRequirement>): CompletableFuture<Unit> {
         return completableFuture { setLockSettingTimeRestrictions(lockId, times) }
     }
 
     /**
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
-    suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
-        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
+    suspend fun updateLockSettingLocationRestrictions(lockId: UUID, location: LockOperations.LocationRequirement? = null) {
+        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId.toString(), location)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockSettingLocationRestrictions] returning [CompletableFuture].
      */
-    fun updateLockSettingLocationRestrictionsAsync(lockId: String, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit> {
+    fun updateLockSettingLocationRestrictionsAsync(lockId: UUID, location: LockOperations.LocationRequirement? = null): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingLocationRestrictions(lockId, location) }
     }
 

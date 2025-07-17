@@ -52,7 +52,7 @@ internal object HelperClient {
 
         // Generate a new key pair if the key pair from the context manager is null
         val keyPair = currentKeyPair
-            ?: CryptoManager.generateKeyPair()
+            ?: CryptoManager.generateRawKeyPair()
 
         // Add the new key pair to the context manager
         if (currentKeyPair == null) {
@@ -118,7 +118,7 @@ internal object HelperClient {
      */
     suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Generate a new cryptographic key pair
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
 
         // Register the account with the provided details
         AccountlessClient.registrationRequest(email, password, displayName, force, keyPair.public)

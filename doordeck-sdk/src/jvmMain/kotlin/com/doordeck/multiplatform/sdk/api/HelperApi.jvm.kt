@@ -4,6 +4,9 @@ import com.doordeck.multiplatform.sdk.clients.HelperClient
 import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -13,14 +16,14 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image)
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: ByteArray) {
+        return HelperClient.uploadPlatformLogoRequest(applicationId.toString(), contentType, image)
     }
 
     /**
      * Async variant of [HelperApi.uploadPlatformLogo] returning [CompletableFuture].
      */
-    fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
+    fun uploadPlatformLogoAsync(applicationId: UUID, contentType: String, image: ByteArray): CompletableFuture<Unit> {
         return completableFuture { uploadPlatformLogo(applicationId, contentType, image) }
     }
 
@@ -41,14 +44,14 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
-        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey)
+    suspend fun assistedRegisterEphemeralKey(publicKey: PublicKey? = null, privateKey: PrivateKey? = null): AssistedRegisterEphemeralKeyResponse {
+        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey?.encoded, privateKey?.encoded)
     }
 
     /**
      * Async variant of [HelperApi.assistedRegisterEphemeralKey] returning [CompletableFuture].
      */
-    fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
+    fun assistedRegisterEphemeralKeyAsync(publicKey: PublicKey? = null, privateKey: PrivateKey? = null): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
         return completableFuture { assistedRegisterEphemeralKey(publicKey, privateKey) }
     }
 

@@ -19,6 +19,7 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.toUUID
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -28,142 +29,142 @@ class LockOperationsApiTest : MockTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        val response = LockOperationsApi.getSingleLock(DEFAULT_LOCK_ID)
+        val response = LockOperationsApi.getSingleLock(DEFAULT_LOCK_ID.toUUID())
         assertEquals(LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetSingleLockAsync() = runTest {
-        val response = LockOperationsApi.getSingleLockAsync(DEFAULT_LOCK_ID).await()
+        val response = LockOperationsApi.getSingleLockAsync(DEFAULT_LOCK_ID.toUUID()).await()
         assertEquals(LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID, 0, 0)
+        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID.toUUID(), 0, 0)
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLockAuditTrailAsync() = runTest {
-        val response = LockOperationsApi.getLockAuditTrailAsync(DEFAULT_LOCK_ID, 0, 0).await()
+        val response = LockOperationsApi.getLockAuditTrailAsync(DEFAULT_LOCK_ID.toUUID(), 0, 0).await()
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID, 0, 0)
+        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID.toUUID(), 0, 0)
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetAuditForUserAsync() = runTest {
-        val response = LockOperationsApi.getAuditForUserAsync(DEFAULT_USER_ID, 0, 0).await()
+        val response = LockOperationsApi.getAuditForUserAsync(DEFAULT_USER_ID.toUUID(), 0, 0).await()
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUsersForLock() = runTest {
-        val response = LockOperationsApi.getUsersForLock(DEFAULT_LOCK_ID)
+        val response = LockOperationsApi.getUsersForLock(DEFAULT_LOCK_ID.toUUID())
         assertEquals(USER_LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetUsersForLockAsync() = runTest {
-        val response = LockOperationsApi.getUsersForLockAsync(DEFAULT_LOCK_ID).await()
+        val response = LockOperationsApi.getUsersForLockAsync(DEFAULT_LOCK_ID.toUUID()).await()
         assertEquals(USER_LOCK_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLocksForUser() = runTest {
-        val response = LockOperationsApi.getLocksForUser(DEFAULT_USER_ID)
+        val response = LockOperationsApi.getLocksForUser(DEFAULT_USER_ID.toUUID())
         assertEquals(LOCK_USER_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLocksForUserAsync() = runTest {
-        val response = LockOperationsApi.getLocksForUserAsync(DEFAULT_USER_ID).await()
+        val response = LockOperationsApi.getLocksForUserAsync(DEFAULT_USER_ID.toUUID()).await()
         assertEquals(LOCK_USER_RESPONSE, response)
     }
 
     @Test
     fun shouldUpdateLockName() = runTest {
-        LockOperationsApi.updateLockName(DEFAULT_LOCK_ID, "")
+        LockOperationsApi.updateLockName(DEFAULT_LOCK_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateLockNameAsync() = runTest {
-        LockOperationsApi.updateLockNameAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsApi.updateLockNameAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
-        LockOperationsApi.updateLockFavourite(DEFAULT_LOCK_ID, false)
+        LockOperationsApi.updateLockFavourite(DEFAULT_LOCK_ID.toUUID(), false)
     }
 
     @Test
     fun shouldUpdateLockFavouriteAsync() = runTest {
-        LockOperationsApi.updateLockFavouriteAsync(DEFAULT_LOCK_ID, false).await()
+        LockOperationsApi.updateLockFavouriteAsync(DEFAULT_LOCK_ID.toUUID(), false).await()
     }
 
     @Test
     fun shouldUpdateLockColour() = runTest {
-        LockOperationsApi.updateLockColour(DEFAULT_LOCK_ID, "")
+        LockOperationsApi.updateLockColour(DEFAULT_LOCK_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateLockColourAsync() = runTest {
-        LockOperationsApi.updateLockColourAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsApi.updateLockColourAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
-        LockOperationsApi.updateLockSettingDefaultName(DEFAULT_LOCK_ID, "")
+        LockOperationsApi.updateLockSettingDefaultName(DEFAULT_LOCK_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultNameAsync() = runTest {
-        LockOperationsApi.updateLockSettingDefaultNameAsync(DEFAULT_LOCK_ID, "").await()
+        LockOperationsApi.updateLockSettingDefaultNameAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldSetLockSettingPermittedAddresses() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID, listOf("1.1.1.1"))
+        LockOperationsApi.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID.toUUID(), listOf("1.1.1.1"))
     }
 
     @Test
     fun shouldSetLockSettingPermittedAddressesAsync() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddressesAsync(DEFAULT_LOCK_ID, listOf("1.1.1.1")).await()
+        LockOperationsApi.setLockSettingPermittedAddressesAsync(DEFAULT_LOCK_ID.toUUID(), listOf("1.1.1.1")).await()
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
-        LockOperationsApi.updateLockSettingHidden(DEFAULT_LOCK_ID, true)
+        LockOperationsApi.updateLockSettingHidden(DEFAULT_LOCK_ID.toUUID(), true)
     }
 
     @Test
     fun shouldUpdateLockSettingHiddenAsync() = runTest {
-        LockOperationsApi.updateLockSettingHiddenAsync(DEFAULT_LOCK_ID, true).await()
+        LockOperationsApi.updateLockSettingHiddenAsync(DEFAULT_LOCK_ID.toUUID(), true).await()
     }
 
     @Test
     fun shouldSetLockSettingTimeRestrictions() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID, emptyList())
+        LockOperationsApi.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID.toUUID(), emptyList())
     }
 
     @Test
     fun shouldSetLockSettingTimeRestrictionsAsync() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictionsAsync(DEFAULT_LOCK_ID, emptyList()).await()
+        LockOperationsApi.setLockSettingTimeRestrictionsAsync(DEFAULT_LOCK_ID.toUUID(), emptyList()).await()
     }
 
     @Test
     fun shouldUpdateLockSettingLocationRestrictions() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID, null)
+        LockOperationsApi.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID.toUUID(), null)
     }
 
     @Test
     fun shouldUpdateLockSettingLocationRestrictionsAsync() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictionsAsync(DEFAULT_LOCK_ID, null).await()
+        LockOperationsApi.updateLockSettingLocationRestrictionsAsync(DEFAULT_LOCK_ID.toUUID(), null).await()
     }
 
     @Test
