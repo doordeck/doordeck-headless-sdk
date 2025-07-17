@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.toUUID
@@ -87,7 +89,9 @@ actual object ContextManager {
     }
 
     fun getKeyPair(): KeyPair? {
-        return Context.getKeyPair()
+        return Context.getKeyPair()?.let {
+            KeyPair(it.public.toPublicKey(), it.private.toPrivateKey())
+        }
     }
 
     fun setKeyPairVerified(publicKey: PublicKey?) {

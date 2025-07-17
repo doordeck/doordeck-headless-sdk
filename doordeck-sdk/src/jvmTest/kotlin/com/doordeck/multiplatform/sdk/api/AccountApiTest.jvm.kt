@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.USER_DETAILS_RESPONSE
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
@@ -51,13 +53,19 @@ class AccountApiTest : MockTest() {
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        val response = AccountApi.registerEphemeralKey(byteArrayOf(), byteArrayOf())
+        val response = AccountApi.registerEphemeralKey(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+        )
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldRegisterEphemeralKeyAsync() = runTest {
-        val response = AccountApi.registerEphemeralKeyAsync(byteArrayOf(), byteArrayOf()).await()
+        val response = AccountApi.registerEphemeralKeyAsync(
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+        ).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 
@@ -75,13 +83,17 @@ class AccountApiTest : MockTest() {
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
-        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf())
+        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthentication(
+            publicKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPublicKey()
+        )
         assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
     }
 
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationAsync() = runTest {
-        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthenticationAsync(byteArrayOf()).await()
+        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthenticationAsync(
+            publicKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPublicKey()
+        ).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
     }
 
@@ -99,13 +111,21 @@ class AccountApiTest : MockTest() {
 
     @Test
     fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        val response = AccountApi.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray())
+        val response = AccountApi.verifyEphemeralKeyRegistration(
+            code = "",
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+        )
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 
     @Test
     fun shouldVerifyEphemeralKeyRegistrationAsync() = runTest {
-        val response = AccountApi.verifyEphemeralKeyRegistrationAsync("", TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
+        val response = AccountApi.verifyEphemeralKeyRegistrationAsync(
+            code = "",
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey(),
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+        ).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
     }
 

@@ -9,6 +9,8 @@ import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.Signature
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -37,6 +39,16 @@ actual object CryptoManager {
 
     fun generateKeyPair(): KeyPair {
         return KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
+    }
+
+    internal fun ByteArray.toPublicKey(): PublicKey {
+        return KeyFactory.getInstance(ALGORITHM)
+            .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
+    }
+
+    internal fun ByteArray.toPrivateKey(): PrivateKey {
+        return KeyFactory.getInstance(ALGORITHM)
+            .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
     }
 
     /**
@@ -87,8 +99,7 @@ actual object CryptoManager {
      */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
         Signature.getInstance(ALGORITHM).apply {
-            initSign(KeyFactory.getInstance(ALGORITHM)
-                .generatePrivate(PKCS8EncodedKeySpec(privateKey.toPlatformPrivateKey())))
+            initSign(privateKey.toPlatformPrivateKey().toPrivateKey())
             update(toByteArray())
         }.sign()
     } catch (exception: Exception) {
@@ -100,7 +111,7 @@ actual object CryptoManager {
      */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
         val signature = Signature.getInstance(ALGORITHM)
-        signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
+        signature.initVerify(publicKey.toPlatformPublicKey().toPublicKey())
         signature.update(message.toByteArray())
         signature.verify(this)
     } catch (exception: Exception) {
