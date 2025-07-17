@@ -84,7 +84,7 @@ class AccountApiTest : MockTest() {
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
         val response = AccountApi.registerEphemeralKeyWithSecondaryAuthentication(
-            publicKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPublicKey()
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey()
         )
         assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
     }
@@ -92,7 +92,7 @@ class AccountApiTest : MockTest() {
     @Test
     fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationAsync() = runTest {
         val response = AccountApi.registerEphemeralKeyWithSecondaryAuthenticationAsync(
-            publicKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPublicKey()
+            publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey()
         ).await()
         assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
     }
