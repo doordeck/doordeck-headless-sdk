@@ -14,58 +14,72 @@ actual object ContextManager {
         Context.setApiEnvironment(apiEnvironment)
     }
 
+    @CName("getApiEnvironment")
     fun getApiEnvironment(): ApiEnvironment {
         return Context.getApiEnvironment()
     }
 
+    @CName("setCloudAuthToken")
     fun setCloudAuthToken(token: String) {
         Context.setCloudAuthToken(token)
     }
 
+    @CName("getCloudAuthToken")
     fun getCloudAuthToken(): String? {
         return Context.getCloudAuthToken()
     }
 
+    @CName("isCloudAuthTokenInvalidOrExpired")
     fun isCloudAuthTokenInvalidOrExpired(): Boolean {
         return Context.isCloudAuthTokenInvalidOrExpired()
     }
 
+    @CName("setCloudRefreshToken")
     fun setCloudRefreshToken(token: String) {
         Context.setCloudRefreshToken(token)
     }
 
+    @CName("getCloudRefreshToken")
     fun getCloudRefreshToken(): String? {
         return Context.getCloudRefreshToken()
     }
 
+    @CName("setFusionHost")
     fun setFusionHost(host: String) {
         Context.setFusionHost(host)
     }
 
+    @CName("getFusionHost")
     fun getFusionHost(): String {
         return Context.getFusionHost()
     }
 
+    @CName("setFusionAuthToken")
     fun setFusionAuthToken(token: String) {
         Context.setFusionAuthToken(token)
     }
 
+    @CName("getFusionAuthToken")
     fun getFusionAuthToken(): String? {
         return Context.getFusionAuthToken()
     }
 
+    @CName("setUserId")
     fun setUserId(userId: String) {
         Context.setUserId(userId)
     }
 
+    @CName("getUserId")
     fun getUserId(): String? {
         return Context.getUserId()
     }
 
+    @CName("setUserEmail")
     fun setUserEmail(email: String) {
         Context.setUserEmail(email)
     }
 
+    @CName("getUserEmail")
     fun getUserEmail(): String? {
         return Context.getUserEmail()
     }
@@ -78,6 +92,7 @@ actual object ContextManager {
         return Context.getCertificateChain()
     }
 
+    @CName("isCertificateChainInvalidOrExpired")
     fun isCertificateChainInvalidOrExpired(): Boolean {
         return Context.isCertificateChainInvalidOrExpired()
     }
@@ -94,10 +109,12 @@ actual object ContextManager {
         Context.setKeyPairVerified(publicKey)
     }
 
+    @CName("isKeyPairVerified")
     fun isKeyPairVerified(): Boolean {
         return Context.isKeyPairVerified()
     }
 
+    @CName("isKeyPairValid")
     fun isKeyPairValid(): Boolean {
         return Context.isKeyPairValid()
     }
@@ -107,6 +124,10 @@ actual object ContextManager {
         Context.setOperationContext(userId, certificateChain, privateKey, publicKey, isKeyPairVerified)
     }
 
+    /**
+     * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.
+     */
+    @CName("setOperationContextJson")
     fun setOperationContextJson(data: String) {
         val operationContextData = data.fromJson<OperationContextData>()
         setOperationContext(
@@ -118,10 +139,12 @@ actual object ContextManager {
         )
     }
 
+    @CName("getContextState")
     fun getContextState(): ContextState {
         return Context.getContextState()
     }
 
+    @CName("clearContext")
     fun clearContext() {
         Context.clearContext()
     }
