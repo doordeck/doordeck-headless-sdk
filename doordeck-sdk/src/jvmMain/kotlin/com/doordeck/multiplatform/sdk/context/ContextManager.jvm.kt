@@ -1,13 +1,16 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toCertificate
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toUUID
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
+import java.security.cert.X509Certificate
 import java.util.UUID
 
 actual object ContextManager {
@@ -72,12 +75,12 @@ actual object ContextManager {
         return Context.getUserEmail()
     }
 
-    fun setCertificateChain(certificateChain: List<String>) {
-        Context.setCertificateChain(certificateChain)
+    fun setCertificateChain(certificateChain: List<X509Certificate>) {
+        Context.setCertificateChain(certificateChain.map { it.encoded.encodeByteArrayToBase64() })
     }
 
-    fun getCertificateChain(): List<String>? {
-        return Context.getCertificateChain()
+    fun getCertificateChain(): List<X509Certificate>? {
+        return Context.getCertificateChain()?.map { it.toCertificate() }
     }
 
     fun isCertificateChainInvalidOrExpired(): Boolean {
@@ -106,11 +109,11 @@ actual object ContextManager {
         return Context.isKeyPairValid()
     }
 
-    fun setOperationContext(userId: UUID, certificateChain: List<String>, publicKey: PublicKey,
+    fun setOperationContext(userId: UUID, certificateChain: List<X509Certificate>, publicKey: PublicKey,
                             privateKey: PrivateKey, isKeyPairVerified: Boolean) {
         Context.setOperationContext(
             userId = userId.toString(),
-            certificateChain = certificateChain,
+            certificateChain = certificateChain.map { it.encoded.encodeByteArrayToBase64() },
             publicKey = privateKey.encoded,
             privateKey = publicKey.encoded,
             isKeyPairVerified = isKeyPairVerified

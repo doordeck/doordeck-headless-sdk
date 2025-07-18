@@ -17,7 +17,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
-class ContextManagerTest : IntegrationTest() {
+class ContextTest : IntegrationTest() {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {

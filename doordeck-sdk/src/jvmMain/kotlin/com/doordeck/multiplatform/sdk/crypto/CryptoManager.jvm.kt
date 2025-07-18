@@ -51,13 +51,17 @@ actual object CryptoManager {
             .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
     }
 
+    internal fun String.toCertificate(): X509Certificate {
+        return CertificateFactory.getInstance(CERTIFICATE_TYPE)
+            .generateCertificate(decodeBase64Bytes().inputStream()) as X509Certificate
+    }
+
     /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
         return try {
-            val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
-            val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+            val certificate = base64Certificate.toCertificate()
             val notAfterInstant = certificate.notAfter?.toInstant()?.toKotlinInstant()
             if (notAfterInstant == null) {
                 SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
