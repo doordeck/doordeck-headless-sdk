@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
 import com.doordeck.multiplatform.sdk.exceptions.GatewayTimeoutException
 import com.doordeck.multiplatform.sdk.exceptions.GoneException
+import com.doordeck.multiplatform.sdk.exceptions.HttpException
 import com.doordeck.multiplatform.sdk.exceptions.InternalServerErrorException
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MethodNotAllowedException
@@ -19,6 +20,7 @@ import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -69,14 +71,14 @@ private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 /**
  * Converts an API version to its corresponding header value.
- * 
+ *
  * @return The formatted header value for the API version.
  */
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
 /**
  * Adds common request headers to an HTTP request.
- * 
+ *
  * @param signedRequest Whether this is a signed request (affects content type).
  * @param contentType The content type to use, defaults based on signedRequest parameter.
  * @param apiVersion Optional API version to include in Accept header.
@@ -142,7 +144,7 @@ internal fun HttpClientConfig<*>.installAuth() {
 
 /**
  * Installs default request configuration with the specified host.
- * 
+ *
  * @param determineHost Function that returns the host URL to use for requests.
  */
 internal fun HttpClientConfig<*>.installDefaultRequest(
@@ -217,22 +219,23 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
             }
             """.trimIndent()
 
-            throw when (responseException.response.status) {
-                HttpStatusCode.BadRequest -> BadRequestException(message)
-                HttpStatusCode.Unauthorized -> UnauthorizedException(message)
-                HttpStatusCode.Forbidden -> ForbiddenException(message)
-                HttpStatusCode.NotFound -> NotFoundException(message)
-                HttpStatusCode.MethodNotAllowed -> MethodNotAllowedException(message)
-                HttpStatusCode.NotAcceptable -> NotAcceptableException(message)
-                HttpStatusCode.Conflict -> ConflictException(message)
-                HttpStatusCode.Gone -> GoneException(message)
-                HttpStatusCode.Locked -> LockedException(message)
-                HttpStatusCode.TooEarly -> TooEarlyException(message)
-                HttpStatusCode.TooManyRequests -> TooManyRequestsException(message)
-                HttpStatusCode.InternalServerError -> InternalServerErrorException(message)
-                HttpStatusCode.ServiceUnavailable -> ServiceUnavailableException(message)
-                HttpStatusCode.GatewayTimeout -> GatewayTimeoutException(message)
-                else -> SdkException(message)
+            throw when (val status = responseException.response.status) {
+                HttpStatusCode.BadRequest -> BadRequestException(message, status.value)
+                HttpStatusCode.Unauthorized -> UnauthorizedException(message, status.value)
+                HttpStatusCode.Forbidden -> ForbiddenException(message, status.value)
+                HttpStatusCode.NotFound -> NotFoundException(message, status.value)
+                HttpStatusCode.MethodNotAllowed -> MethodNotAllowedException(message, status.value)
+                HttpStatusCode.NotAcceptable -> NotAcceptableException(message, status.value)
+                HttpStatusCode.Conflict -> ConflictException(message, status.value)
+                HttpStatusCode.Gone -> GoneException(message, status.value)
+                HttpStatusCode.UnprocessableEntity -> UnprocessableEntityException(message, status.value)
+                HttpStatusCode.Locked -> LockedException(message, status.value)
+                HttpStatusCode.TooEarly -> TooEarlyException(message, status.value)
+                HttpStatusCode.TooManyRequests -> TooManyRequestsException(message, status.value)
+                HttpStatusCode.InternalServerError -> InternalServerErrorException(message, status.value)
+                HttpStatusCode.ServiceUnavailable -> ServiceUnavailableException(message, status.value)
+                HttpStatusCode.GatewayTimeout -> GatewayTimeoutException(message, status.value)
+                else -> HttpException(message, status.value)
             }
         }
     }
@@ -241,7 +244,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
 /**
  * Adds an authentication interceptor to the HTTP client.
  * This interceptor automatically adds an Authorization header to requests that require authentication.
- * 
+ *
  * @param requiresAuth Function that determines if a path requires authentication.
  * @param getAuthToken Function that provides the authentication token.
  */
