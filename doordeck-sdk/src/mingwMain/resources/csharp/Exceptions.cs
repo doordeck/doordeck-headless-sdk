@@ -31,6 +31,8 @@ public class ConflictException(string message) : SdkException(message);
 
 public class GoneException(string message) : SdkException(message);
 
+public class UnprocessableEntityException(string message) : SdkException(message);
+
 public class LockedException(string message) : SdkException(message);
 
 public class TooEarlyException(string message) : SdkException(message);

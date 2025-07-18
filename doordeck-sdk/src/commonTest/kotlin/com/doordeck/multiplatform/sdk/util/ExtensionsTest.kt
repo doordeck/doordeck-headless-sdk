@@ -17,6 +17,7 @@ import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.platformType
@@ -48,6 +49,7 @@ import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
 import io.ktor.http.HttpStatusCode.Companion.TooEarly
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
+import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -195,7 +197,7 @@ class ExtensionsTest {
     @Test
     fun shouldInstallResponseValidator() = runTest {
         val status = listOf(BadRequest, Unauthorized, Forbidden, NotFound, MethodNotAllowed, NotAcceptable, Conflict,
-            Gone, Locked, TooEarly, TooManyRequests, InternalServerError, ServiceUnavailable, GatewayTimeout
+            Gone, UnprocessableEntity, Locked, TooEarly, TooManyRequests, InternalServerError, ServiceUnavailable, GatewayTimeout
         )
         status.forEach { responseStatus ->
             val httpClient = HttpClient(MockEngine {
@@ -221,6 +223,7 @@ class ExtensionsTest {
                 NotAcceptable -> assertTrue { response is NotAcceptableException }
                 Conflict -> assertTrue { response is ConflictException }
                 Gone -> assertTrue { response is GoneException }
+                UnprocessableEntity -> assertTrue { response is UnprocessableEntityException }
                 Locked -> assertTrue { response is LockedException }
                 TooEarly -> assertTrue { response is TooEarlyException }
                 TooManyRequests -> assertTrue { response is TooManyRequestsException }
