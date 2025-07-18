@@ -11,10 +11,10 @@ public class LockOperations(
     public unsafe Task<LockResponse> GetSingleLock(string lockId) =>
         Process<LockResponse>(lockOperationsApi.getSingleLock_, null, new { lockId });
 
-    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, int start, int end) =>
+    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, long start, long end) =>
         Process<List<AuditResponse>>(lockOperationsApi.getLockAuditTrail_, null, new { lockId, start, end });
 
-    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, int start, int end) =>
+    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, long start, long end) =>
         Process<List<AuditResponse>>(lockOperationsApi.getAuditForUser_, null, new { userId, start, end });
 
     public unsafe Task<List<UserLockResponse>> GetUsersForLock(string lockId) =>

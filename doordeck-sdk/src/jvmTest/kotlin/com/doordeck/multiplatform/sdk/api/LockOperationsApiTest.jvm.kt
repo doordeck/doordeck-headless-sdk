@@ -24,6 +24,8 @@ import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Clock
+import kotlin.time.toJavaInstant
 
 class LockOperationsApiTest : MockTest() {
 
@@ -41,25 +43,25 @@ class LockOperationsApiTest : MockTest() {
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID.toUUID(), 0, 0)
+        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID.toUUID(), Clock.System.now(), Clock.System.now())
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLockAuditTrailAsync() = runTest {
-        val response = LockOperationsApi.getLockAuditTrailAsync(DEFAULT_LOCK_ID.toUUID(), 0, 0).await()
+        val response = LockOperationsApi.getLockAuditTrailAsync(DEFAULT_LOCK_ID.toUUID(), Clock.System.now().toJavaInstant(), Clock.System.now().toJavaInstant()).await()
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID.toUUID(), 0, 0)
+        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID.toUUID(), Clock.System.now(), Clock.System.now())
         assertEquals(AUDIT_RESPONSE, response)
     }
 
     @Test
     fun shouldGetAuditForUserAsync() = runTest {
-        val response = LockOperationsApi.getAuditForUserAsync(DEFAULT_USER_ID.toUUID(), 0, 0).await()
+        val response = LockOperationsApi.getAuditForUserAsync(DEFAULT_USER_ID.toUUID(), Clock.System.now().toJavaInstant(), Clock.System.now().toJavaInstant()).await()
         assertEquals(AUDIT_RESPONSE, response)
     }
 

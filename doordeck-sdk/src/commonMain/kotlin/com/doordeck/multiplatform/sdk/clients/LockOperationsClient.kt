@@ -87,7 +87,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -106,7 +106,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)

@@ -27,7 +27,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
     @Throws(Exception::class)
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
@@ -35,7 +35,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getAuditForUserRequest
      */
     @Throws(Exception::class)
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 

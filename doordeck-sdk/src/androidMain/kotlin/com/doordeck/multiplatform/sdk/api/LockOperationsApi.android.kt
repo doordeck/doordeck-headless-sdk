@@ -34,28 +34,28 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getLockAuditTrailAsync(lockId: String, start: Long, end: Long): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getLockAuditTrail(lockId, start, end) }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getAuditForUserAsync(userId: String, start: Long, end: Long): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getAuditForUser(userId, start, end) }
     }
 

@@ -13,6 +13,9 @@ import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
+import kotlin.time.Instant
+import kotlin.time.toKotlinInstant
+import java.time.Instant as JInstant
 
 /**
  * Platform-specific implementations of lock-related API calls.
@@ -35,29 +38,49 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    suspend fun getLockAuditTrail(lockId: UUID, start: Int, end: Int): List<AuditResponse> {
-        return LockOperationsClient.getLockAuditTrailRequest(lockId.toString(), start, end)
+    suspend fun getLockAuditTrail(lockId: UUID, start: Instant, end: Instant): List<AuditResponse> {
+        return LockOperationsClient.getLockAuditTrailRequest(
+            lockId = lockId.toString(),
+            start = start.epochSeconds,
+            end = end.epochSeconds
+        )
     }
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: UUID, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
-        return completableFuture { getLockAuditTrail(lockId, start, end) }
+    fun getLockAuditTrailAsync(lockId: UUID, start: JInstant, end: JInstant): CompletableFuture<List<AuditResponse>> {
+        return completableFuture {
+            getLockAuditTrail(
+                lockId = lockId,
+                start = start.toKotlinInstant(),
+                end = end.toKotlinInstant()
+            )
+        }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: UUID, start: Int, end: Int): List<AuditResponse> {
-        return LockOperationsClient.getAuditForUserRequest(userId.toString(), start, end)
+    suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<AuditResponse> {
+        return LockOperationsClient.getAuditForUserRequest(
+            userId = userId.toString(),
+            start = start.epochSeconds,
+            end = end.epochSeconds
+        )
     }
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: UUID, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
-        return completableFuture { getAuditForUser(userId, start, end) }
+    fun getAuditForUserAsync(userId: UUID, start: JInstant, end: JInstant): CompletableFuture<List<AuditResponse>> {
+        return completableFuture {
+            getAuditForUser(
+                userId = userId,
+                start = start.toKotlinInstant(),
+                end = end.toKotlinInstant()
+            )
+        }
     }
 
     /**
