@@ -11,6 +11,7 @@ object Crypto {
         val public: ByteArray
     )
 
+    // TODO this class should be moved to mingw
     @Serializable
     data class EncodedKeyPair(
         val private: String,

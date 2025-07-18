@@ -31,9 +31,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
+    actual fun generateRawKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
         return Crypto.KeyPair(
             private = key.private.encoded,

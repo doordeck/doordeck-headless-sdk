@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.clients
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
@@ -87,7 +87,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -106,7 +106,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -664,13 +664,13 @@ internal object LockOperationsClient {
      */
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
-            ?: ContextManagerImpl.getUserId()
+            ?: Context.getUserId()
             ?: throw MissingContextFieldException("User ID is missing")
         val userCertificateChain = userCertificateChain
-            ?: ContextManagerImpl.getCertificateChain()
+            ?: Context.getCertificateChain()
             ?: throw MissingContextFieldException("Certificate chain is missing")
         val userPrivateKey = userPrivateKey
-            ?: ContextManagerImpl.getPrivateKey()
+            ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         return BaseOperationRequest(
             userId = userId,

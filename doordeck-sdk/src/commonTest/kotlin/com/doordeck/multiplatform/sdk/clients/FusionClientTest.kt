@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.platformType
@@ -112,7 +112,7 @@ class FusionClientTest : IntegrationTest() {
         }
 
         // Given - shouldLogin
-        ContextManagerImpl.setFusionHost(testController.key)
+        Context.setFusionHost(testController.key)
 
         // When
         val login = FusionClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)

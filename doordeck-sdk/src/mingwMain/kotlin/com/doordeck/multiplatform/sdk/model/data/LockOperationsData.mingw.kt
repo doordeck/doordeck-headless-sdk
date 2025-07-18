@@ -18,15 +18,15 @@ data class GetSingleLockData(
 @Serializable
 data class GetLockAuditTrailData(
     val lockId: String,
-    val start: Int,
-    val end: Int
+    val start: Long,
+    val end: Long
 )
 
 @Serializable
 data class GetAuditForUserData(
     val userId: String,
-    val start: Int,
-    val end: Int
+    val start: Long,
+    val end: Long
 )
 
 @Serializable

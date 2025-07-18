@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -13,14 +14,14 @@ actual object TilesApi {
     /**
      * @see TilesClient.getLocksBelongingToTileRequest
      */
-    suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return TilesClient.getLocksBelongingToTileRequest(tileId)
+    suspend fun getLocksBelongingToTile(tileId: UUID): TileLocksResponse {
+        return TilesClient.getLocksBelongingToTileRequest(tileId.toString())
     }
 
     /**
      * Async variant of [TilesApi.getLocksBelongingToTile] returning [CompletableFuture].
      */
-    fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse> {
+    fun getLocksBelongingToTileAsync(tileId: UUID): CompletableFuture<TileLocksResponse> {
         return completableFuture { getLocksBelongingToTile(tileId) }
     }
 
@@ -28,16 +29,25 @@ actual object TilesApi {
      * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: List<String>) {
-        return TilesClient.associateMultipleLocksRequest(tileId, siteId, lockIds)
+    suspend fun associateMultipleLocks(tileId: UUID, siteId: UUID, lockIds: List<UUID>) {
+        return TilesClient.associateMultipleLocksRequest(
+            tileId = tileId.toString(),
+            siteId = siteId.toString(),
+            lockIds = lockIds.map { it.toString() })
     }
 
     /**
      * Async variant of [TilesApi.associateMultipleLocks] returning [CompletableFuture].
      */
     @SiteAdmin
-    fun associateMultipleLocksAsync(tileId: String, siteId: String, lockIds: List<String>): CompletableFuture<Unit> {
-        return completableFuture { associateMultipleLocks(tileId, siteId, lockIds) }
+    fun associateMultipleLocksAsync(tileId: UUID, siteId: UUID, lockIds: List<UUID>): CompletableFuture<Unit> {
+        return completableFuture {
+            associateMultipleLocks(
+                tileId = tileId,
+                siteId = siteId,
+                lockIds = lockIds
+            )
+        }
     }
 }
 

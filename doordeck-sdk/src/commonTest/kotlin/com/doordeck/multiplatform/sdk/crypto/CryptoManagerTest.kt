@@ -24,14 +24,14 @@ class CryptoManagerTest {
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {
-        CryptoManager.generateKeyPair()
+        CryptoManager.generateRawKeyPair()
     }
 
     @Test
     fun shouldSignWithPrivateKey() = runTest {
         // Given
         val content = "hello"
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
 
         // When
         val result = content.signWithPrivateKey(keyPair.private)

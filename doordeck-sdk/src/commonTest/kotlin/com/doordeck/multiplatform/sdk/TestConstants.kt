@@ -35,12 +35,12 @@ internal object TestConstants {
     )
 
     // Default values used on the Mock http client
-    const val DEFAULT_TILE_ID = "TILE_ID"
-    const val DEFAULT_SITE_ID = "SITE_ID"
-    const val DEFAULT_APPLICATION_ID = "APPLICATION_ID"
-    const val DEFAULT_DEVICE_ID = "DEVICE_ID"
-    const val DEFAULT_LOCK_ID = "LOCK_ID"
-    const val DEFAULT_USER_ID = "USER_ID"
+    const val DEFAULT_TILE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_SITE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_APPLICATION_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_DEVICE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_LOCK_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000000"
     const val DEFAULT_USER_EMAIL = "USER_EMAIL"
     const val DEFAULT_UPLOAD_URL_PATH = "/upload"
     const val DEFAULT_UPLOAD_URL = "https://example.com$DEFAULT_UPLOAD_URL_PATH"
