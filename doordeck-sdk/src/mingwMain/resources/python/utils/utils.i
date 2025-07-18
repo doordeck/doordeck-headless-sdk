@@ -41,6 +41,8 @@ def handle_exception(response):
         raise ConflictException(exception_message)
     if "GoneException" in exception_type:
         raise GoneException(exception_message)
+    if "UnprocessableEntityException" in exception_type:
+        raise UnprocessableEntityException(exception_message)
     if "LockedException" in exception_type:
         raise LockedException(exception_message)
     if "TooEarlyException" in exception_type:

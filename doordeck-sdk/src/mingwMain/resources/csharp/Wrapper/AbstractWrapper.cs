@@ -110,6 +110,7 @@ public abstract class AbstractWrapper
         if (exceptionType.Contains("NotAcceptableException")) throw new NotAcceptableException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("ConflictException")) throw new ConflictException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("GoneException")) throw new GoneException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("UnprocessableEntityException")) throw new UnprocessableEntityException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("LockedException")) throw new LockedException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("TooEarlyException")) throw new TooEarlyException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("TooManyRequestsException")) throw new TooManyRequestsException(input.Failure.ExceptionMessage);
