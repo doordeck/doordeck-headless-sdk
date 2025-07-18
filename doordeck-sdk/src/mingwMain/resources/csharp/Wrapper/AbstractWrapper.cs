@@ -17,14 +17,14 @@ public abstract class AbstractWrapper
         private readonly TaskCompletionSource<TResponse> _tcs;
         private GCHandle _handle;
         public Native.CallbackDelegate CallbackDelegate { get; }
-    
+
         public CallbackHolder(TaskCompletionSource<TResponse> tcs)
         {
             _tcs = tcs;
             CallbackDelegate = Callback;
             _handle = GCHandle.Alloc(this);
         }
-    
+
         private void Callback(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -32,14 +32,14 @@ public abstract class AbstractWrapper
                 Dispose();
                 return;
             }
-    
+
             var result = Marshal.PtrToStringAnsi(ptr);
             if (result == null)
             {
                 Dispose();
                 return;
             }
-    
+
             try
             {
                 var resultData = Utils.Utils.FromData<ResultData<TResponse>>(result);
@@ -56,7 +56,7 @@ public abstract class AbstractWrapper
                 Dispose();
             }
         }
-    
+
         public void Dispose()
         {
             if (_handle.IsAllocated)
@@ -65,7 +65,7 @@ public abstract class AbstractWrapper
             }
         }
     }
-    
+
     internal static unsafe Task<TResponse> ProcessCommon<TApi, TResponse>(
         TApi api,
         object? data,
@@ -94,11 +94,13 @@ public abstract class AbstractWrapper
 
         return tcs.Task;
     }
-    
+
     private static void HandleException<T>(ResultData<T> input)
     {
         if (input.IsSuccess) return;
         var exceptionType = input.Failure!.ExceptionType;
+        // TODO get status code, if null throw a SdkException,
+        // otherwise add the statusCode to each exception which parent is HttpException
         if (exceptionType.Contains("SdkException")) throw new SdkException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("MissingContextFieldException")) throw new MissingContextFieldException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("BatchShareFailedException")) throw new BatchShareFailedException(input.Failure.ExceptionMessage, []);
@@ -110,6 +112,7 @@ public abstract class AbstractWrapper
         if (exceptionType.Contains("NotAcceptableException")) throw new NotAcceptableException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("ConflictException")) throw new ConflictException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("GoneException")) throw new GoneException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("UnprocessableEntityException")) throw new UnprocessableEntityException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("LockedException")) throw new LockedException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("TooEarlyException")) throw new TooEarlyException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("TooManyRequestsException")) throw new TooManyRequestsException(input.Failure.ExceptionMessage);
