@@ -795,8 +795,8 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
         // When
         val lockAuditTrail = LockOperationsClient.getLockAuditTrailRequest(TEST_MAIN_LOCK_ID, start, end)
@@ -810,8 +810,8 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
         // When
         val auditForUser = LockOperationsClient.getAuditForUserRequest(TEST_MAIN_USER_ID, start, end)

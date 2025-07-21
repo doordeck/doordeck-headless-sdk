@@ -56,6 +56,8 @@ import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.values.Id
+import com.doordeck.multiplatform.sdk.model.values.toId
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlin.random.Random
@@ -416,9 +418,9 @@ internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteRespo
  * Tile responses
  */
 internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
-    siteId = randomString(),
-    tileId = randomString(),
-    deviceIds = (1..3).map { randomString() }
+    siteId = randomId(),
+    tileId = randomId(),
+    deviceIds = (1..3).map { randomId() }
 )
 
 /**
@@ -572,6 +574,11 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
     secureStorage = DefaultSecureStorage(MemorySettings()),
     debugLogging = randomNullable { randomBoolean() }
 )
+
+/**
+ * Values
+ */
+internal fun randomId(): Id = Uuid.random().toString().toId()
 
 /**
  * Test utils
