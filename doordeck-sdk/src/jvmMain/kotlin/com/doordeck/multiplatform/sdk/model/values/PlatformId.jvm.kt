@@ -3,12 +3,12 @@ package com.doordeck.multiplatform.sdk.model.values
 import com.doordeck.multiplatform.sdk.util.toUUID
 import java.util.UUID
 
-actual typealias Id = UUID
+actual typealias PlatformId = UUID
 
-actual fun String.toId(): Id {
+internal actual fun String.toPlatformId(): PlatformId {
     return toUUID()
 }
 
-actual fun Id.toStringRepresentation(): String {
+internal actual fun PlatformId.toPlatformIdString(): String {
     return toString()
 }

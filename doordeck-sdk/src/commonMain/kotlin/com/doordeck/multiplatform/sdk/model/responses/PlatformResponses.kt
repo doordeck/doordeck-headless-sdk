@@ -1,14 +1,19 @@
+@file:UseSerializers(PlatformIdSerializer::class)
+
 package com.doordeck.multiplatform.sdk.model.responses
 
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlinx.serialization.json.JsonClassDiscriminator
 import kotlin.js.JsExport
 
 @JsExport
 @Serializable
 data class ApplicationResponse(
-    val applicationId: String,
+    val applicationId: PlatformId,
     val name: String,
     val lastUpdated: Double? = null,
     val owners: List<String>? = null,
@@ -139,7 +144,7 @@ data class OauthResponse(
 @JsExport
 @Serializable
 data class ApplicationOwnerDetailsResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean,

@@ -1,27 +1,34 @@
+@file:UseSerializers(PlatformIdSerializer::class, PlatformInstantSerializer::class)
+
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
 
 @JsExport
 @Serializable
 data class SiteResponse(
-    val id: String,
+    val id: PlatformId,
     val name: String,
     val colour: String,
     val longitude: Double,
     val latitude: Double,
     val radius: Int,
     val passBackground: String,
-    val created: String,
-    val updated: String
+    val created: PlatformInstant,
+    val updated: PlatformInstant
 )
 
 @JsExport
 @Serializable
 data class SiteLocksResponse(
-    val id: String,
+    val id: PlatformId,
     val name: String,
     val colour: String? = null,
     val role: UserRole,
@@ -31,10 +38,10 @@ data class SiteLocksResponse(
 @JsExport
 @Serializable
 data class SiteLockSettingsResponse(
-    val unlockTime: Double,
-    val permittedAddresses: List<String>,
+    val unlockTime: Double, // Duration
+    val permittedAddresses: List<String>, // InetAddress
     val defaultName: String,
-    val tiles: List<String>,
+    val tiles: List<PlatformId>,
     val state: SiteStateResponse? = null,
     val favourite: Boolean? = null
 )
@@ -48,7 +55,7 @@ data class SiteStateResponse(
 @JsExport
 @Serializable
 data class UserForSiteResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean

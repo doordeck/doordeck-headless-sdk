@@ -1,7 +1,16 @@
+@file:UseSerializers(PlatformIdSerializer::class, PlatformPublicKeySerializer::class, PlatformCertificateSerializer::class)
+
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
+import com.doordeck.multiplatform.sdk.model.values.PlatformCertificate
+import com.doordeck.multiplatform.sdk.model.values.PlatformCertificateSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKey
+import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKeySerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
 
 @JsExport
@@ -17,14 +26,14 @@ data class UserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
-    val publicKey: String
+    val publicKey: PlatformPublicKey
 )
 
 @JsExport
 @Serializable
 data class RegisterEphemeralKeyResponse(
-    val certificateChain: List<String>,
-    val userId: String
+    val certificateChain: List<PlatformCertificate>,
+    val userId: PlatformId
 )
 
 @JsExport

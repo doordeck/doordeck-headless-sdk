@@ -1,38 +1,54 @@
+@file:UseSerializers(
+    PlatformIdSerializer::class,
+    PlatformPublicKeySerializer::class,
+    PlatformInstantSerializer::class,
+    PlatformDurationSerializer::class
+)
+
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.values.PlatformDuration
+import com.doordeck.multiplatform.sdk.model.values.PlatformDurationSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKey
+import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKeySerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
 
 @JsExport
 @Serializable
 data class LockResponse(
-    val id: String,
+    val id: PlatformId,
     val name: String,
     val colour: String? = null,
-    val start: String? = null,
-    val end: String? = null,
+    val start: PlatformInstant? = null,
+    val end: PlatformInstant? = null,
     val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: Double? = null
+    val unlockTime: PlatformDuration? = null
 )
 
 @JsExport
 @Serializable
 data class LockSettingsResponse(
-    val unlockTime: Double,
-    val permittedAddresses: List<String>,
+    val unlockTime: PlatformDuration,
+    val permittedAddresses: List<String>, // InetAddress
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
-    val tiles: List<String>,
+    val tiles: List<PlatformId>,
     val hidden: Boolean,
-    val directAccessEndpoints: List<String> = emptyList(),
+    val directAccessEndpoints: List<String> = emptyList(), // URIs
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
@@ -46,10 +62,10 @@ data class UsageRequirementsResponse(
 @JsExport
 @Serializable
 data class TimeRequirementResponse(
-    val start: String,
-    val end: String,
-    val timezone: String,
-    val days: List<String>
+    val start: String, // LocalTime
+    val end: String, // LocalTime
+    val timezone: String, // ZoneId
+    val days: List<String> // DayOfWeek
 )
 
 @JsExport
@@ -65,11 +81,11 @@ data class LocationRequirementResponse(
 @JsExport
 @Serializable
 data class UnlockBetweenSettingResponse(
-    val start: String,
-    val end: String,
-    val timezone: String,
-    val days: List<String>,
-    val exceptions: List<String>? = null
+    val start: String, // LocalTime HH:mm
+    val end: String, // LocalTime HH:mm
+    val timezone: String, // ZoneId
+    val days: List<String>, // DayOfWeek
+    val exceptions: List<String>? = null // Local date yyyy-MM-dd
 )
 
 @JsExport
@@ -82,33 +98,33 @@ data class LockStateResponse(
 @JsExport
 @Serializable
 data class UserPublicKeyResponse(
-    val id: String,
-    val publicKey: String
+    val id: PlatformId,
+    val publicKey: PlatformPublicKey
 )
 
 @JsExport
 @Serializable
 data class BatchUserPublicKeyResponse(
-    val id: String,
+    val id: PlatformId,
     val email: String? = null,
     val foreignKey: String? = null,
     val phone: String? = null,
-    val publicKey: String
+    val publicKey: PlatformPublicKey
 )
 
 @JsExport
 @Serializable
 data class ShareableLockResponse(
-    val id: String,
+    val id: PlatformId,
     val name: String
 )
 
 @JsExport
 @Serializable
 data class UserLockResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String,
-    val publicKey: String,
+    val publicKey: PlatformPublicKey,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
@@ -120,9 +136,9 @@ data class UserLockResponse(
 @JsExport
 @Serializable
 data class LockUserResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String,
-    val publicKey: String,
+    val publicKey: PlatformPublicKey,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
@@ -134,7 +150,7 @@ data class LockUserResponse(
 @JsExport
 @Serializable
 data class LockUserDetailsResponse(
-    val deviceId: String,
+    val deviceId: PlatformId,
     val role: UserRole,
     val start: Double? = null,
     val end: Double? = null
@@ -143,7 +159,7 @@ data class LockUserDetailsResponse(
 @JsExport
 @Serializable
 data class AuditResponse(
-    val deviceId: String,
+    val deviceId: PlatformId,
     val timestamp: Double,
     val type: AuditEvent,
     val issuer: AuditIssuerResponse,
@@ -155,7 +171,7 @@ data class AuditResponse(
 @JsExport
 @Serializable
 data class AuditIssuerResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String? = null,
     val ip: String? = null
 )
@@ -163,7 +179,7 @@ data class AuditIssuerResponse(
 @JsExport
 @Serializable
 data class AuditSubjectResponse(
-    val userId: String,
+    val userId: PlatformId,
     val email: String,
     val displayName: String? = null
 )

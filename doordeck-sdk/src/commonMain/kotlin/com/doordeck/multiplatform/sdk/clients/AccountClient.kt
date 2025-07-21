@@ -17,6 +17,8 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyRespon
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.values.toPlatformCertificateString
+import com.doordeck.multiplatform.sdk.model.values.toPlatformIdString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
@@ -99,8 +101,8 @@ internal object AccountClient {
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
         }.body<RegisterEphemeralKeyResponse>().also {
             Context.also { context ->
-                context.setUserId(it.userId)
-                context.setCertificateChain(it.certificateChain)
+                context.setUserId(it.userId.toPlatformIdString())
+                context.setCertificateChain(it.certificateChain.map { cert -> cert.toPlatformCertificateString() })
                 context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
                 context.setKeyPairVerified(publicKey)
             }
@@ -167,8 +169,8 @@ internal object AccountClient {
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body<RegisterEphemeralKeyResponse>().also {
             Context.also { context ->
-                context.setUserId(it.userId)
-                context.setCertificateChain(it.certificateChain)
+                context.setUserId(it.userId.toPlatformIdString())
+                context.setCertificateChain(it.certificateChain.map { cert -> cert.toPlatformCertificateString() })
                 context.setKeyPair(publicKey, privateKey)
                 context.setKeyPairVerified(publicKey)
             }

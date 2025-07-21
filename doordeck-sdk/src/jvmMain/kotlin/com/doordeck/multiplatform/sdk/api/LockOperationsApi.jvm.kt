@@ -14,8 +14,6 @@ import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Instant
-import kotlin.time.toKotlinInstant
-import java.time.Instant as JInstant
 
 /**
  * Platform-specific implementations of lock-related API calls.
@@ -49,12 +47,12 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: UUID, start: JInstant, end: JInstant): CompletableFuture<List<AuditResponse>> {
+    fun getLockAuditTrailAsync(lockId: UUID, start: Instant, end: Instant): CompletableFuture<List<AuditResponse>> {
         return completableFuture {
             getLockAuditTrail(
                 lockId = lockId,
-                start = start.toKotlinInstant(),
-                end = end.toKotlinInstant()
+                start = start,
+                end = end
             )
         }
     }
@@ -73,12 +71,12 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: UUID, start: JInstant, end: JInstant): CompletableFuture<List<AuditResponse>> {
+    fun getAuditForUserAsync(userId: UUID, start: Instant, end: Instant): CompletableFuture<List<AuditResponse>> {
         return completableFuture {
             getAuditForUser(
                 userId = userId,
-                start = start.toKotlinInstant(),
-                end = end.toKotlinInstant()
+                start = start,
+                end = end
             )
         }
     }

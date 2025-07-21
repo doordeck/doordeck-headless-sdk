@@ -1,9 +1,9 @@
-@file:UseSerializers(IdSerializer::class)
+@file:UseSerializers(PlatformIdSerializer::class)
 
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.values.Id
-import com.doordeck.multiplatform.sdk.model.values.IdSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
@@ -11,7 +11,7 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class TileLocksResponse(
-    val siteId: Id,
-    val tileId: Id,
-    val deviceIds: List<Id>
+    val siteId: PlatformId,
+    val tileId: PlatformId,
+    val deviceIds: List<PlatformId>
 )

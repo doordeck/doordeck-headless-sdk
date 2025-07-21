@@ -1,8 +1,13 @@
+@file:UseSerializers(PlatformIdSerializer::class)
+
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.values.PlatformId
+import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
 
 @JsExport
@@ -34,7 +39,7 @@ data class IntegrationConfigurationResponse(
 @JsExport
 @Serializable
 data class ControllerResponse(
-    val id: String,
+    val id: PlatformId,
     val name: String? = null,
     val role: UserRole? = null
 )
