@@ -1,8 +1,10 @@
-@file:UseSerializers(PlatformIdSerializer::class, PlatformInstantSerializer::class)
+@file:UseSerializers(PlatformIdSerializer::class, PlatformInstantSerializer::class, PlatformDurationSerializer::class)
 
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.values.PlatformDuration
+import com.doordeck.multiplatform.sdk.model.values.PlatformDurationSerializer
 import com.doordeck.multiplatform.sdk.model.values.PlatformId
 import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
 import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
@@ -39,8 +41,8 @@ data class SiteLocksResponse(
 @JsExport
 @Serializable
 data class SiteLockSettingsResponse(
-    val unlockTime: Double, // Duration
-    val permittedAddresses: List<String>, // InetAddress
+    val unlockTime: PlatformDuration,
+    val permittedAddresses: List<String>,
     val defaultName: String,
     val tiles: List<PlatformId>,
     val favourite: Boolean? = null

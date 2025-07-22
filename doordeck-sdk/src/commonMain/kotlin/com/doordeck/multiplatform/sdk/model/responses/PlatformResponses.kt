@@ -1,9 +1,11 @@
-@file:UseSerializers(PlatformIdSerializer::class)
+@file:UseSerializers(PlatformIdSerializer::class, PlatformInstantSerializer::class)
 
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.values.PlatformId
 import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
+import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -15,7 +17,7 @@ import kotlin.js.JsExport
 data class ApplicationResponse(
     val applicationId: PlatformId,
     val name: String,
-    val lastUpdated: Double? = null,
+    val lastUpdated: PlatformInstant? = null,
     val owners: List<String>? = null,
     val corsDomains: List<String>? = null,
     val authDomains: List<String>? = null,
