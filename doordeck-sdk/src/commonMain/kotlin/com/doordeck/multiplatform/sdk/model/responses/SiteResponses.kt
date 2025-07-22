@@ -26,7 +26,8 @@ data class SiteLocksResponse(
     val colour: String? = null,
     val role: UserRole,
     val settings: SiteLockSettingsResponse,
-    val state: SiteStateResponse? = null
+    val state: SiteStateResponse,
+    val favourite: Boolean
 )
 
 @JsExport
@@ -36,7 +37,7 @@ data class SiteLockSettingsResponse(
     val permittedAddresses: List<String>,
     val defaultName: String,
     val tiles: List<String>,
-    val favourite: Boolean? = null
+    val hidden: Boolean
 )
 
 @JsExport
