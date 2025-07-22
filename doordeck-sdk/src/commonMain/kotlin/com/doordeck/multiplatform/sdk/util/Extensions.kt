@@ -19,6 +19,7 @@ import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -226,6 +227,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
                 HttpStatusCode.NotAcceptable -> NotAcceptableException(message)
                 HttpStatusCode.Conflict -> ConflictException(message)
                 HttpStatusCode.Gone -> GoneException(message)
+                HttpStatusCode.UnprocessableEntity -> UnprocessableEntityException(message)
                 HttpStatusCode.Locked -> LockedException(message)
                 HttpStatusCode.TooEarly -> TooEarlyException(message)
                 HttpStatusCode.TooManyRequests -> TooManyRequestsException(message)

@@ -398,7 +398,8 @@ internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
     name = randomString(),
     colour = randomNullable { randomString() },
     role = UserRole.entries.random(),
-    settings = randomSiteLockSettingsResponse()
+    settings = randomSiteLockSettingsResponse(),
+    state = randomSiteStateResponse(),
 )
 
 internal fun randomSiteLockSettingsResponse(): SiteLockSettingsResponse = SiteLockSettingsResponse(
@@ -406,7 +407,6 @@ internal fun randomSiteLockSettingsResponse(): SiteLockSettingsResponse = SiteLo
     permittedAddresses = (1..3).map { randomString() },
     defaultName = randomString(),
     tiles = (1..3).map { randomId() },
-    state = randomSiteStateResponse(),
     favourite = randomBoolean()
 )
 

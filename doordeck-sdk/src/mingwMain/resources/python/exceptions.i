@@ -60,6 +60,9 @@ class GoneException(SdkException):
     def __init__(self, message: str):
         super().__init__(message)
 
+class UnprocessableEntityException(SdkException):
+    def __init__(self, message: str):
+        super().__init__(message)
 
 class LockedException(SdkException):
     def __init__(self, message: str):

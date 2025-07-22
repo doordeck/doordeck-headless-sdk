@@ -33,6 +33,9 @@ class GoneException(override val message: String) : SdkException(message)
 class LockedException(override val message: String) : SdkException(message)
 
 @JsExport
+class UnprocessableEntityException(override val message: String) : SdkException(message)
+
+@JsExport
 class TooEarlyException(override val message: String) : SdkException(message)
 
 @JsExport
