@@ -1,8 +1,6 @@
 @file:UseSerializers(
-    PlatformIdSerializer::class,
-    PlatformPublicKeySerializer::class,
-    PlatformInstantSerializer::class,
-    PlatformDurationSerializer::class
+    PlatformIdSerializer::class, PlatformPublicKeySerializer::class, PlatformInstantSerializer::class,
+    PlatformDurationSerializer::class, PlatformLocalTimeSerializer::class, PlatformLocalDateSerializer::class
 )
 
 package com.doordeck.multiplatform.sdk.model.responses
@@ -17,6 +15,10 @@ import com.doordeck.multiplatform.sdk.model.values.PlatformId
 import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
 import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
 import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformLocalDate
+import com.doordeck.multiplatform.sdk.model.values.PlatformLocalDateSerializer
+import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTime
+import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTimeSerializer
 import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKey
 import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKeySerializer
 import kotlinx.serialization.Serializable
@@ -42,13 +44,13 @@ data class LockResponse(
 @Serializable
 data class LockSettingsResponse(
     val unlockTime: PlatformDuration,
-    val permittedAddresses: List<String>, // InetAddress
+    val permittedAddresses: List<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: List<PlatformId>,
     val hidden: Boolean,
-    val directAccessEndpoints: List<String> = emptyList(), // URIs
+    val directAccessEndpoints: List<String> = emptyList(),
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
@@ -62,8 +64,8 @@ data class UsageRequirementsResponse(
 @JsExport
 @Serializable
 data class TimeRequirementResponse(
-    val start: String, // LocalTime
-    val end: String, // LocalTime
+    val start: PlatformLocalTime,
+    val end: PlatformLocalTime,
     val timezone: String, // ZoneId
     val days: List<String> // DayOfWeek
 )
@@ -81,11 +83,11 @@ data class LocationRequirementResponse(
 @JsExport
 @Serializable
 data class UnlockBetweenSettingResponse(
-    val start: String, // LocalTime HH:mm
-    val end: String, // LocalTime HH:mm
+    val start: PlatformLocalTime,
+    val end: PlatformLocalTime,
     val timezone: String, // ZoneId
     val days: List<String>, // DayOfWeek
-    val exceptions: List<String>? = null // Local date yyyy-MM-dd
+    val exceptions: List<PlatformLocalDate>? = null
 )
 
 @JsExport
@@ -129,8 +131,8 @@ data class UserLockResponse(
     val orphan: Boolean,
     val foreign: Boolean,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: PlatformInstant? = null,
+    val end: PlatformInstant? = null
 )
 
 @JsExport
@@ -142,8 +144,8 @@ data class LockUserResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val start: Double? = null,
-    val end: Double? = null,
+    val start: PlatformInstant? = null,
+    val end: PlatformInstant? = null,
     val devices: List<LockUserDetailsResponse>
 )
 
@@ -152,15 +154,15 @@ data class LockUserResponse(
 data class LockUserDetailsResponse(
     val deviceId: PlatformId,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: PlatformInstant? = null,
+    val end: PlatformInstant? = null
 )
 
 @JsExport
 @Serializable
 data class AuditResponse(
     val deviceId: PlatformId,
-    val timestamp: Double,
+    val timestamp: PlatformInstant,
     val type: AuditEvent,
     val issuer: AuditIssuerResponse,
     val subject: AuditSubjectResponse? = null,
