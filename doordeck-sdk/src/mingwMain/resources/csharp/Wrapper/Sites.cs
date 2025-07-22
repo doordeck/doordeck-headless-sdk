@@ -10,8 +10,8 @@ public class Sites(
     public unsafe Task<List<SiteResponse>> ListSites() =>
         Process<List<SiteResponse>>(null, sitesApi.listSites_, null);
 
-    public unsafe Task<List<SiteLocksResponse>> GetLocksForSite(string siteId) =>
-        Process<List<SiteLocksResponse>>(sitesApi.getLocksForSite_, null, new { siteId });
+    public unsafe Task<List<LockResponse>> GetLocksForSite(string siteId) =>
+        Process<List<LockResponse>>(sitesApi.getLocksForSite_, null, new { siteId });
 
     public unsafe Task<List<UserForSiteResponse>> GetUsersForSite(string siteId) =>
         Process<List<UserForSiteResponse>>(sitesApi.getUsersForSite_, null, new { siteId });
