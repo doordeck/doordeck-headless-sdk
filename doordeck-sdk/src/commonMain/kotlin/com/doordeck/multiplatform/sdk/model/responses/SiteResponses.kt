@@ -2,8 +2,6 @@
 
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.values.PlatformDuration
 import com.doordeck.multiplatform.sdk.model.values.PlatformDurationSerializer
 import com.doordeck.multiplatform.sdk.model.values.PlatformId
 import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
@@ -27,32 +25,7 @@ data class SiteResponse(
     val updated: PlatformInstant
 )
 
-@JsExport
-@Serializable
-data class SiteLocksResponse(
-    val id: PlatformId,
-    val name: String,
-    val colour: String? = null,
-    val role: UserRole,
-    val settings: SiteLockSettingsResponse,
-    val state: SiteStateResponse? = null
-)
-
-@JsExport
-@Serializable
-data class SiteLockSettingsResponse(
-    val unlockTime: PlatformDuration,
-    val permittedAddresses: List<String>,
-    val defaultName: String,
-    val tiles: List<PlatformId>,
-    val favourite: Boolean? = null
-)
-
-@JsExport
-@Serializable
-data class SiteStateResponse(
-    val connected: Boolean
-)
+typealias SiteLocksResponse = LockResponse
 
 @JsExport
 @Serializable

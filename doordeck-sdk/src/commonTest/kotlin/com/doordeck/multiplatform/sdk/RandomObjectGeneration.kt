@@ -44,10 +44,8 @@ import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteLockSettingsResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.TimeRequirementResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
@@ -398,21 +396,11 @@ internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
     name = randomString(),
     colour = randomNullable { randomString() },
     role = UserRole.entries.random(),
-    settings = randomSiteLockSettingsResponse(),
-    state = randomSiteStateResponse(),
-)
-
-internal fun randomSiteLockSettingsResponse(): SiteLockSettingsResponse = SiteLockSettingsResponse(
-    unlockTime = randomDouble(),
-    permittedAddresses = (1..3).map { randomString() },
-    defaultName = randomString(),
-    tiles = (1..3).map { randomId() },
+    settings = randomLockSettingsResponse(),
+    state = randomLockStateResponse(),
     favourite = randomBoolean()
 )
 
-internal fun randomSiteStateResponse(): SiteStateResponse = SiteStateResponse(
-    connected = randomBoolean()
-)
 
 internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteResponse(
     userId = randomId(),
