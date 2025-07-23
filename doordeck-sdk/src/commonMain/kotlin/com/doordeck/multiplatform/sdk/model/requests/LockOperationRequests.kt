@@ -29,9 +29,9 @@ internal data class BaseOperationRequest(
     val userCertificateChain: List<String>,
     val userPrivateKey: ByteArray,
     val lockId: String,
-    val notBefore: Int,
-    val issuedAt: Int,
-    val expiresAt: Int,
+    val notBefore: Long,
+    val issuedAt: Long,
+    val expiresAt: Long,
     val jti: String
 )
 

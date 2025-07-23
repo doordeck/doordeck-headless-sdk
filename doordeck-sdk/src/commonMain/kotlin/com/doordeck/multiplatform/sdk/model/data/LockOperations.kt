@@ -2,7 +2,16 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTime
+import com.doordeck.multiplatform.sdk.model.values.CertificateValue
+import com.doordeck.multiplatform.sdk.model.values.IdValue
+import com.doordeck.multiplatform.sdk.model.values.InstantValue
+import com.doordeck.multiplatform.sdk.model.values.LocalDateValue
+import com.doordeck.multiplatform.sdk.model.values.LocalTimeValue
+import com.doordeck.multiplatform.sdk.model.values.PrivateKeyValue
+import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValueString
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
@@ -13,19 +22,19 @@ import kotlin.uuid.Uuid
 object LockOperations {
 
     data class TimeRequirement(
-        val start: PlatformLocalTime, // HH:mm
-        val end: PlatformLocalTime, // HH:mm
+        val start: LocalTimeValue,
+        val end: LocalTimeValue,
         val timezone: String,
         val days: List<DayOfWeek>
     ) {
         class Builder {
-            private var start: PlatformLocalTime? = null
-            private var end: PlatformLocalTime? = null
+            private var start: LocalTimeValue? = null
+            private var end: LocalTimeValue? = null
             private var timezone: String? = null
             private var days: List<DayOfWeek>? = null
 
-            fun setStart(start: PlatformLocalTime): Builder = apply { this.start = start }
-            fun setEnd(end: PlatformLocalTime): Builder = apply { this.end = end }
+            fun setStart(start: LocalTimeValue): Builder = apply { this.start = start }
+            fun setEnd(end: LocalTimeValue): Builder = apply { this.end = end }
             fun setTimezone(timezone: String) = apply { this.timezone = timezone }
             fun setDays(days: List<DayOfWeek>) = apply { this.days = days }
 
@@ -73,24 +82,24 @@ object LockOperations {
     }
 
     data class UnlockBetween @JvmOverloads constructor(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
+        val start: LocalTimeValue,
+        val end: LocalTimeValue,
         val timezone: String,
-        val days: List<String>,
-        val exceptions: List<String>? = null
+        val days: List<DayOfWeek>,
+        val exceptions: List<LocalDateValue>? = null
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
+            private var start: LocalTimeValue? = null
+            private var end: LocalTimeValue? = null
             private var timezone: String? = null
-            private var days: List<String>? = null
-            private var exceptions: List<String>? = null
+            private var days: List<DayOfWeek>? = null
+            private var exceptions: List<LocalDateValue>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
+            fun setStart(start: LocalTimeValue): Builder = apply { this.start = start }
+            fun setEnd(end: LocalTimeValue): Builder = apply { this.end = end }
             fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
-            fun setDays(days: List<String>): Builder = apply { this.days = days }
-            fun setExceptions(exceptions: List<String>?): Builder = apply { this.exceptions = exceptions }
+            fun setDays(days: List<DayOfWeek>): Builder = apply { this.days = days }
+            fun setExceptions(exceptions: List<LocalDateValue>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
                 return UnlockBetween(
@@ -145,24 +154,24 @@ object LockOperations {
     }
 
     data class ShareLock @JvmOverloads constructor(
-        val targetUserId: String,
+        val targetUserId: IdValue,
         val targetUserRole: UserRole,
-        val targetUserPublicKey: ByteArray,
-        val start: Int? = null,
-        val end: Int? = null
+        val targetUserPublicKey: PublicKeyValue,
+        val start: InstantValue? = null,
+        val end: InstantValue? = null
     ) {
         class Builder {
-            private var targetUserId: String? = null
+            private var targetUserId: IdValue? = null
             private var targetUserRole: UserRole? = null
-            private var targetUserPublicKey: ByteArray? = null
-            private var start: Int? = null
-            private var end: Int? = null
+            private var targetUserPublicKey: PublicKeyValue? = null
+            private var start: InstantValue? = null
+            private var end: InstantValue? = null
 
-            fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
+            fun setTargetUserId(targetUserId: IdValue): Builder = apply { this.targetUserId = targetUserId }
             fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
-            fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
-            fun setStart(start: Int?): Builder = apply { this.start = start }
-            fun setEnd(end: Int?): Builder = apply { this.end = end }
+            fun setTargetUserPublicKey(targetUserPublicKey: PublicKeyValue): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
+            fun setStart(start: InstantValue?): Builder = apply { this.start = start }
+            fun setEnd(end: InstantValue?): Builder = apply { this.end = end }
 
             fun build(): ShareLock {
                 return ShareLock(
@@ -198,14 +207,14 @@ object LockOperations {
 
     data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
-        val users: List<String>
+        val users: List<IdValue>
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var users: List<String>? = null
+            private var users: List<IdValue>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUsers(users: List<String>): Builder = apply { this.users = users }
+            fun setUsers(users: List<IdValue>): Builder = apply { this.users = users }
 
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
@@ -257,33 +266,33 @@ object LockOperations {
     }
 
     data class BaseOperation @JvmOverloads constructor(
-        val userId: String? = null,
-        val userCertificateChain: List<String>? = null,
-        val userPrivateKey: ByteArray? = null,
-        val lockId: String,
-        val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-        val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-        val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val jti: String = Uuid.random().toString()
+        val userId: IdValue? = null,
+        val userCertificateChain: List<CertificateValue>? = null,
+        val userPrivateKey: PrivateKeyValue? = null,
+        val lockId: IdValue,
+        val notBefore: InstantValue = Clock.System.now().epochSeconds.toInstantValue(),
+        val issuedAt: InstantValue = Clock.System.now().epochSeconds.toInstantValue(),
+        val expiresAt: InstantValue = (Clock.System.now() + 1.minutes).epochSeconds.toInstantValue(),
+        val jti: IdValue = Uuid.random().toString().toIdValue()
     ) {
         class Builder {
-            private var userId: String? = null
-            private var userCertificateChain: List<String>? = null
-            private var userPrivateKey: ByteArray? = null
-            private var lockId: String? = null
-            private var notBefore: Int = Clock.System.now().epochSeconds.toInt()
-            private var issuedAt: Int = Clock.System.now().epochSeconds.toInt()
-            private var expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt()
-            private var jti: String = Uuid.random().toString()
+            private var userId: IdValue? = null
+            private var userCertificateChain: List<CertificateValue>? = null
+            private var userPrivateKey: PrivateKeyValue? = null
+            private var lockId: IdValue? = null
+            private var notBefore: InstantValue = Clock.System.now().epochSeconds.toInstantValue()
+            private var issuedAt: InstantValue = Clock.System.now().epochSeconds.toInstantValue()
+            private var expiresAt: InstantValue = (Clock.System.now() + 1.minutes).epochSeconds.toInstantValue()
+            private var jti: IdValue = Uuid.random().toString().toIdValue()
 
-            fun setUserId(userId: String?): Builder = apply { this.userId = userId }
-            fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
-            fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
-            fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
-            fun setNotBefore(notBefore: Int): Builder = apply { this.notBefore = notBefore }
-            fun setIssuedAt(issuedAt: Int): Builder = apply { this.issuedAt = issuedAt }
-            fun setExpiresAt(expiresAt: Int): Builder = apply { this.expiresAt = expiresAt }
-            fun setJti(jti: String): Builder = apply { this.jti = jti }
+            fun setUserId(userId: IdValue?): Builder = apply { this.userId = userId }
+            fun setUserCertificateChain(userCertificateChain: List<CertificateValue>?): Builder = apply { this.userCertificateChain = userCertificateChain }
+            fun setUserPrivateKey(userPrivateKey: PrivateKeyValue?): Builder = apply { this.userPrivateKey = userPrivateKey }
+            fun setLockId(lockId: IdValue): Builder = apply { this.lockId = lockId }
+            fun setNotBefore(notBefore: InstantValue): Builder = apply { this.notBefore = notBefore }
+            fun setIssuedAt(issuedAt: InstantValue): Builder = apply { this.issuedAt = issuedAt }
+            fun setExpiresAt(expiresAt: InstantValue): Builder = apply { this.expiresAt = expiresAt }
+            fun setJti(jti: IdValue): Builder = apply { this.jti = jti }
 
             fun build(): BaseOperation {
                 return BaseOperation(

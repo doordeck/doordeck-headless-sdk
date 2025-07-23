@@ -1,6 +1,6 @@
 @file:UseSerializers(
-    PlatformIdSerializer::class, PlatformPublicKeySerializer::class, PlatformInstantSerializer::class,
-    PlatformDurationSerializer::class, PlatformLocalTimeSerializer::class, PlatformLocalDateSerializer::class
+    IdValueSerializer::class, PublicKeyValueSerializer::class, InstantValueSerializer::class,
+    DurationValueSerializer::class, LocalTimeValueSerializer::class, LocalDateValueSerializer::class
 )
 
 package com.doordeck.multiplatform.sdk.model.responses
@@ -10,18 +10,18 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.values.PlatformDuration
-import com.doordeck.multiplatform.sdk.model.values.PlatformDurationSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformId
-import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
-import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformLocalDate
-import com.doordeck.multiplatform.sdk.model.values.PlatformLocalDateSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTime
-import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTimeSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKey
-import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKeySerializer
+import com.doordeck.multiplatform.sdk.model.values.DurationValue
+import com.doordeck.multiplatform.sdk.model.values.DurationValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.IdValue
+import com.doordeck.multiplatform.sdk.model.values.IdValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.InstantValue
+import com.doordeck.multiplatform.sdk.model.values.InstantValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.LocalDateValue
+import com.doordeck.multiplatform.sdk.model.values.LocalDateValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.LocalTimeValue
+import com.doordeck.multiplatform.sdk.model.values.LocalTimeValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
+import com.doordeck.multiplatform.sdk.model.values.PublicKeyValueSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
 import kotlin.js.JsExport
@@ -29,27 +29,27 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class LockResponse(
-    val id: PlatformId,
+    val id: IdValue,
     val name: String,
     val colour: String? = null,
-    val start: PlatformInstant? = null,
-    val end: PlatformInstant? = null,
+    val start: InstantValue? = null,
+    val end: InstantValue? = null,
     val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean,
-    val unlockTime: PlatformDuration? = null
+    val unlockTime: DurationValue? = null
 )
 
 @JsExport
 @Serializable
 data class LockSettingsResponse(
-    val unlockTime: PlatformDuration,
+    val unlockTime: DurationValue,
     val permittedAddresses: List<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
-    val tiles: List<PlatformId>,
+    val tiles: List<IdValue>,
     val hidden: Boolean,
     val directAccessEndpoints: List<String> = emptyList(),
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
@@ -65,8 +65,8 @@ data class UsageRequirementsResponse(
 @JsExport
 @Serializable
 data class TimeRequirementResponse(
-    val start: PlatformLocalTime,
-    val end: PlatformLocalTime,
+    val start: LocalTimeValue,
+    val end: LocalTimeValue,
     val timezone: String,
     val days: List<DayOfWeek>
 )
@@ -84,11 +84,11 @@ data class LocationRequirementResponse(
 @JsExport
 @Serializable
 data class UnlockBetweenSettingResponse(
-    val start: PlatformLocalTime,
-    val end: PlatformLocalTime,
+    val start: LocalTimeValue,
+    val end: LocalTimeValue,
     val timezone: String,
     val days: List<DayOfWeek>,
-    val exceptions: List<PlatformLocalDate>? = null
+    val exceptions: List<LocalDateValue>? = null
 )
 
 @JsExport
@@ -101,69 +101,69 @@ data class LockStateResponse(
 @JsExport
 @Serializable
 data class UserPublicKeyResponse(
-    val id: PlatformId,
-    val publicKey: PlatformPublicKey
+    val id: IdValue,
+    val publicKey: PublicKeyValue
 )
 
 @JsExport
 @Serializable
 data class BatchUserPublicKeyResponse(
-    val id: PlatformId,
+    val id: IdValue,
     val email: String? = null,
     val foreignKey: String? = null,
     val phone: String? = null,
-    val publicKey: PlatformPublicKey
+    val publicKey: PublicKeyValue
 )
 
 @JsExport
 @Serializable
 data class ShareableLockResponse(
-    val id: PlatformId,
+    val id: IdValue,
     val name: String
 )
 
 @JsExport
 @Serializable
 data class UserLockResponse(
-    val userId: PlatformId,
+    val userId: IdValue,
     val email: String,
-    val publicKey: PlatformPublicKey,
+    val publicKey: PublicKeyValue,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
     val role: UserRole,
-    val start: PlatformInstant? = null,
-    val end: PlatformInstant? = null
+    val start: InstantValue? = null,
+    val end: InstantValue? = null
 )
 
 @JsExport
 @Serializable
 data class LockUserResponse(
-    val userId: PlatformId,
+    val userId: IdValue,
     val email: String,
-    val publicKey: PlatformPublicKey,
+    val publicKey: PublicKeyValue,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val start: PlatformInstant? = null,
-    val end: PlatformInstant? = null,
+    val start: InstantValue? = null,
+    val end: InstantValue? = null,
     val devices: List<LockUserDetailsResponse>
 )
 
 @JsExport
 @Serializable
 data class LockUserDetailsResponse(
-    val deviceId: PlatformId,
+    val deviceId: IdValue,
     val role: UserRole,
-    val start: PlatformInstant? = null,
-    val end: PlatformInstant? = null
+    val start: InstantValue? = null,
+    val end: InstantValue? = null
 )
 
 @JsExport
 @Serializable
 data class AuditResponse(
-    val deviceId: PlatformId,
-    val timestamp: PlatformInstant,
+    val deviceId: IdValue,
+    val timestamp: InstantValue,
     val type: AuditEvent,
     val issuer: AuditIssuerResponse,
     val subject: AuditSubjectResponse? = null,
@@ -174,7 +174,7 @@ data class AuditResponse(
 @JsExport
 @Serializable
 data class AuditIssuerResponse(
-    val userId: PlatformId,
+    val userId: IdValue,
     val email: String? = null,
     val ip: String? = null
 )
@@ -182,7 +182,7 @@ data class AuditIssuerResponse(
 @JsExport
 @Serializable
 data class AuditSubjectResponse(
-    val userId: PlatformId,
+    val userId: IdValue,
     val email: String,
     val displayName: String? = null
 )

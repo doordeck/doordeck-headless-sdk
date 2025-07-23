@@ -55,12 +55,12 @@ import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.values.PlatformId
-import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
-import com.doordeck.multiplatform.sdk.model.values.PlatformPublicKey
-import com.doordeck.multiplatform.sdk.model.values.toPlatformId
-import com.doordeck.multiplatform.sdk.model.values.toPlatformInstant
-import com.doordeck.multiplatform.sdk.model.values.toPlatformPublicKey
+import com.doordeck.multiplatform.sdk.model.values.IdValue
+import com.doordeck.multiplatform.sdk.model.values.InstantValue
+import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValue
+import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -574,9 +574,9 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
 /**
  * Values
  */
-internal fun randomId(): PlatformId = Uuid.random().toString().toPlatformId()
-internal fun randomPublicKey(): PlatformPublicKey = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64().toPlatformPublicKey()
-internal fun randomInstant(): PlatformInstant = Clock.System.now().toString().toPlatformInstant()
+internal fun randomId(): IdValue = Uuid.random().toString().toIdValue()
+internal fun randomPublicKey(): PublicKeyValue = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64().toPublicKeyValue()
+internal fun randomInstant(): InstantValue = Clock.System.now().toString().toInstantValue()
 
 /**
  * Test utils

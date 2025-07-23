@@ -11,9 +11,9 @@ import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
-import kotlin.time.Instant
 
 /**
  * Platform-specific implementations of lock-related API calls.
@@ -39,8 +39,8 @@ actual object LockOperationsApi {
     suspend fun getLockAuditTrail(lockId: UUID, start: Instant, end: Instant): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(
             lockId = lockId.toString(),
-            start = start.epochSeconds,
-            end = end.epochSeconds
+            start = start.epochSecond,
+            end = end.epochSecond
         )
     }
 
@@ -63,8 +63,8 @@ actual object LockOperationsApi {
     suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(
             userId = userId.toString(),
-            start = start.epochSeconds,
-            end = end.epochSeconds
+            start = start.epochSecond,
+            end = end.epochSecond
         )
     }
 

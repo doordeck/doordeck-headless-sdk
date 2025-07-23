@@ -1,11 +1,11 @@
-@file:UseSerializers(PlatformIdSerializer::class, PlatformInstantSerializer::class)
+@file:UseSerializers(IdValueSerializer::class, InstantValueSerializer::class)
 
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.values.PlatformId
-import com.doordeck.multiplatform.sdk.model.values.PlatformIdSerializer
-import com.doordeck.multiplatform.sdk.model.values.PlatformInstant
-import com.doordeck.multiplatform.sdk.model.values.PlatformInstantSerializer
+import com.doordeck.multiplatform.sdk.model.values.IdValue
+import com.doordeck.multiplatform.sdk.model.values.IdValueSerializer
+import com.doordeck.multiplatform.sdk.model.values.InstantValue
+import com.doordeck.multiplatform.sdk.model.values.InstantValueSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -15,9 +15,9 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class ApplicationResponse(
-    val applicationId: PlatformId,
+    val applicationId: IdValue,
     val name: String,
-    val lastUpdated: PlatformInstant? = null,
+    val lastUpdated: InstantValue? = null,
     val owners: List<String>? = null,
     val corsDomains: List<String>? = null,
     val authDomains: List<String>? = null,
@@ -146,7 +146,7 @@ data class OauthResponse(
 @JsExport
 @Serializable
 data class ApplicationOwnerDetailsResponse(
-    val userId: PlatformId,
+    val userId: IdValue,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean,

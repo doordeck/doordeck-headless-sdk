@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockBetween
+import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
@@ -212,7 +213,7 @@ data class UnlockBetweenData(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<String>,
+    val days: List<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 
@@ -258,7 +259,7 @@ internal fun BaseOperationData.toBaseOperation() = BaseOperation(
 internal fun ShareLockData.toShareLock() = ShareLock(
     targetUserId = targetUserId,
     targetUserRole = targetUserRole,
-    targetUserPublicKey = targetUserPublicKey.decodeBase64ToByteArray(),
+    targetUserPublicKey = targetUserPublicKey.toPublicKeyValue(),
     start = start,
     end = end
 )
