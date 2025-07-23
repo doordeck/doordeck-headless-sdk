@@ -64,6 +64,7 @@ import com.doordeck.multiplatform.sdk.model.values.toPlatformPublicKey
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import kotlinx.datetime.DayOfWeek
 import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -162,7 +163,7 @@ internal fun randomUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse 
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = (1..3).map { randomString() },
+    days = DayOfWeek.entries.toTypedArray().take(3),
     exceptions = randomNullable { (1..3).map { randomString() } }
 )
 

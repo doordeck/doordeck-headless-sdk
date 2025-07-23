@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.values.PlatformLocalTime
 import kotlinx.datetime.Clock
 import kotlin.js.JsExport
 import kotlin.jvm.JvmOverloads
@@ -11,21 +13,21 @@ import kotlin.uuid.Uuid
 object LockOperations {
 
     data class TimeRequirement(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
+        val start: PlatformLocalTime, // HH:mm
+        val end: PlatformLocalTime, // HH:mm
         val timezone: String,
-        val days: List<String>
+        val days: List<DayOfWeek>
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
+            private var start: PlatformLocalTime? = null
+            private var end: PlatformLocalTime? = null
             private var timezone: String? = null
-            private var days: List<String>? = null
+            private var days: List<DayOfWeek>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
+            fun setStart(start: PlatformLocalTime): Builder = apply { this.start = start }
+            fun setEnd(end: PlatformLocalTime): Builder = apply { this.end = end }
             fun setTimezone(timezone: String) = apply { this.timezone = timezone }
-            fun setDays(days: List<String>) = apply { this.days = days }
+            fun setDays(days: List<DayOfWeek>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(

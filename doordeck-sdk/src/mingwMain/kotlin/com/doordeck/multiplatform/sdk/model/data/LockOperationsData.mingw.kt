@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
@@ -227,7 +228,7 @@ internal fun TimeRequirementData.toTimeRequirement() = LockOperations.TimeRequir
     start = start,
     end = end,
     timezone = timezone,
-    days = days
+    days = days.map { DayOfWeek.valueOf(it) }
 )
 
 internal fun LocationRequirementData.toLocationRequirement() = LockOperations.LocationRequirement(

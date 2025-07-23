@@ -8,6 +8,7 @@ package com.doordeck.multiplatform.sdk.model.responses
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.values.PlatformDuration
 import com.doordeck.multiplatform.sdk.model.values.PlatformDurationSerializer
@@ -66,8 +67,8 @@ data class UsageRequirementsResponse(
 data class TimeRequirementResponse(
     val start: PlatformLocalTime,
     val end: PlatformLocalTime,
-    val timezone: String, // ZoneId
-    val days: List<String> // DayOfWeek
+    val timezone: String,
+    val days: List<DayOfWeek>
 )
 
 @JsExport
@@ -85,8 +86,8 @@ data class LocationRequirementResponse(
 data class UnlockBetweenSettingResponse(
     val start: PlatformLocalTime,
     val end: PlatformLocalTime,
-    val timezone: String, // ZoneId
-    val days: List<String>, // DayOfWeek
+    val timezone: String,
+    val days: List<DayOfWeek>,
     val exceptions: List<PlatformLocalDate>? = null
 )
 

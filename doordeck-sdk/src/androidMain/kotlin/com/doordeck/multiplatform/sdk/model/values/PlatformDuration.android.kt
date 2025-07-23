@@ -1,11 +1,11 @@
 package com.doordeck.multiplatform.sdk.model.values
 
-actual typealias PlatformDuration = String
+actual typealias PlatformDuration = Double
 
-internal actual fun String.toPlatformDuration(): PlatformDuration {
+internal actual fun Double.toPlatformDuration(): PlatformDuration {
     return this
 }
 
-internal actual fun PlatformDuration.toPlatformDurationString(): String {
+internal actual fun PlatformDuration.toPlatformDurationDouble(): Double {
     return this
 }

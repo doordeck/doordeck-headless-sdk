@@ -8,10 +8,10 @@ actual class PlatformDuration internal constructor(
     val duration: Duration
 )
 
-internal actual fun String.toPlatformDuration(): PlatformDuration {
-    return PlatformDuration(toDouble().toDuration(DurationUnit.SECONDS))
+internal actual fun Double.toPlatformDuration(): PlatformDuration {
+    return PlatformDuration(toDuration(DurationUnit.SECONDS))
 }
 
-internal actual fun PlatformDuration.toPlatformDurationString(): String {
-    return duration.inWholeSeconds.toDouble().toString()
+internal actual fun PlatformDuration.toPlatformDurationDouble(): Double {
+    return duration.inWholeSeconds.toDouble()
 }

@@ -10,16 +10,16 @@ import kotlinx.serialization.encoding.Encoder
 expect class PlatformDuration
 
 internal object PlatformDurationSerializer : KSerializer<PlatformDuration> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("PlatformDuration", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("PlatformDuration", PrimitiveKind.DOUBLE)
 
     override fun serialize(encoder: Encoder, value: PlatformDuration) {
-        encoder.encodeString(value.toPlatformDurationString())
+        encoder.encodeDouble(value.toPlatformDurationDouble())
     }
 
     override fun deserialize(decoder: Decoder): PlatformDuration {
-        return decoder.decodeString().toPlatformDuration()
+        return decoder.decodeDouble().toPlatformDuration()
     }
 }
 
-internal expect fun String.toPlatformDuration(): PlatformDuration
-internal expect fun PlatformDuration.toPlatformDurationString(): String
+internal expect fun Double.toPlatformDuration(): PlatformDuration
+internal expect fun PlatformDuration.toPlatformDurationDouble(): Double

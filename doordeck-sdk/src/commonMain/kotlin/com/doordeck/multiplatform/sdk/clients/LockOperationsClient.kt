@@ -45,6 +45,7 @@ import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.values.toPlatformLocalTimeString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -239,8 +240,8 @@ internal object LockOperationsClient {
                     usageRequirements = UpdateLockSettingTimeUsageRequirementRequest(
                         time = times.map {
                             TimeRequirementRequest(
-                                start = it.start,
-                                end = it.end,
+                                start = it.start.toPlatformLocalTimeString(),
+                                end = it.end.toPlatformLocalTimeString(),
                                 timezone = it.timezone,
                                 days = it.days
                             )
