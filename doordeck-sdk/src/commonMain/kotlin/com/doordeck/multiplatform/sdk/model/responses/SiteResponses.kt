@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
@@ -18,32 +17,7 @@ data class SiteResponse(
     val updated: String
 )
 
-@JsExport
-@Serializable
-data class SiteLocksResponse(
-    val id: String,
-    val name: String,
-    val colour: String? = null,
-    val role: UserRole,
-    val settings: SiteLockSettingsResponse,
-    val state: SiteStateResponse? = null
-)
-
-@JsExport
-@Serializable
-data class SiteLockSettingsResponse(
-    val unlockTime: Double,
-    val permittedAddresses: List<String>,
-    val defaultName: String,
-    val tiles: List<String>,
-    val favourite: Boolean? = null
-)
-
-@JsExport
-@Serializable
-data class SiteStateResponse(
-    val connected: Boolean
-)
+typealias SiteLocksResponse = LockResponse
 
 @JsExport
 @Serializable
