@@ -4,7 +4,6 @@ import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
-import io.ktor.client.call.body
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -15,7 +14,7 @@ actual object TilesApi {
      * @see TilesClient.getLocksBelongingToTileRequest
      */
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
-        return TilesClient.getLocksBelongingToTileRequest(tileId).body()
+        return TilesClient.getLocksBelongingToTileRequest(tileId)
     }
 
     /**

@@ -8,8 +8,12 @@ actual class DurationValue internal constructor(
     val duration: Duration
 )
 
+fun Duration.toDurationValue(): DurationValue {
+    return DurationValue(this)
+}
+
 internal actual fun Double.toDurationValue(): DurationValue {
-    return DurationValue(toDuration(DurationUnit.SECONDS))
+    return toDuration(DurationUnit.SECONDS).toDurationValue()
 }
 
 internal actual fun DurationValue.toDurationValueDouble(): Double {

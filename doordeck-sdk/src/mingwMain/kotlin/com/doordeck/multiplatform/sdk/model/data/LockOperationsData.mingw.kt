@@ -5,6 +5,12 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockBetween
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValue
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValue
+import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValue
+import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValueString
 import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
@@ -169,9 +175,9 @@ data class BaseOperationData(
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: String? = null,
     val lockId: String,
-    val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-    val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-    val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+    val notBefore: Long = Clock.System.now().epochSeconds,
+    val issuedAt: Long = Clock.System.now().epochSeconds,
+    val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
     val jti: String = Uuid.random().toString()
 )
 
@@ -180,8 +186,8 @@ data class ShareLockData(
     val targetUserId: String,
     val targetUserRole: UserRole,
     val targetUserPublicKey: String,
-    val start: Int? = null,
-    val end: Int? = null
+    val start: Long? = null,
+    val end: Long? = null
 )
 
 @Serializable
@@ -246,18 +252,18 @@ internal fun UnlockOperationData.toUnlockOperation() = LockOperations.UnlockOper
 )
 
 internal fun BaseOperationData.toBaseOperation() = BaseOperation(
-    userId = userId,
-    userCertificateChain = userCertificateChain,
-    userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
-    lockId = lockId,
-    notBefore = notBefore,
-    issuedAt = issuedAt,
-    expiresAt = expiresAt,
-    jti = jti
+    userId = userId?.toIdValue(),
+    userCertificateChain = userCertificateChain?.map { it.toCertificateValue() },
+    userPrivateKey = userPrivateKey?.toPrivateKeyValue(),
+    lockId = lockId.toIdValue(),
+    notBefore = notBefore.toInstantValue(),
+    issuedAt = issuedAt.toInstantValue(),
+    expiresAt = expiresAt.toInstantValue(),
+    jti = jti.toIdValue()
 )
 
 internal fun ShareLockData.toShareLock() = ShareLock(
-    targetUserId = targetUserId,
+    targetUserId = targetUserId.toIdValue(),
     targetUserRole = targetUserRole,
     targetUserPublicKey = targetUserPublicKey.toPublicKeyValue(),
     start = start,

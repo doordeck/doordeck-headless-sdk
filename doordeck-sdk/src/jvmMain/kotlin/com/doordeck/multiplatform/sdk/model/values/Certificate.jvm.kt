@@ -8,8 +8,12 @@ actual class CertificateValue internal constructor(
     val certificate: X509Certificate
 )
 
+fun X509Certificate.toCertificateValue(): CertificateValue {
+    return CertificateValue(this)
+}
+
 internal actual fun String.toCertificateValue(): CertificateValue {
-    return CertificateValue(toCertificate())
+    return toCertificate().toCertificateValue()
 }
 
 internal actual fun CertificateValue.toCertificateValueString(): String {
