@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
+import com.doordeck.multiplatform.sdk.randomUUID
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -55,11 +56,11 @@ class AccountlessApiTest : MockTest() {
 
     @Test
     fun shouldVerifyResetPassword() = runTest {
-        AccountlessApi.passwordResetVerify("", "", "")
+        AccountlessApi.passwordResetVerify(randomUUID(), "", "")
     }
 
     @Test
     fun shouldVerifyResetPasswordAsync() = runTest {
-        AccountlessApi.passwordResetVerifyAsync("", "", "").await()
+        AccountlessApi.passwordResetVerifyAsync(randomUUID(), "", "").await()
     }
 }

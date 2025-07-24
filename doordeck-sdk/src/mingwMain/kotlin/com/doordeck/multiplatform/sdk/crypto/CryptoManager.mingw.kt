@@ -25,9 +25,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
+    actual fun generateRawKeyPair(): Crypto.KeyPair {
         val keyPair = Signature.keypair()
         return Crypto.KeyPair(
             private = keyPair.secretKey.toByteArray(),
@@ -42,7 +42,7 @@ actual object CryptoManager {
      */
     @CName("generateEncodedKeyPair")
     fun generateEncodedKeyPair(): String {
-        val keyPair = generateKeyPair()
+        val keyPair = generateRawKeyPair()
         return Crypto.EncodedKeyPair(
             private = keyPair.private.encodeByteArrayToBase64(),
             public = keyPair.public.encodeByteArrayToBase64()

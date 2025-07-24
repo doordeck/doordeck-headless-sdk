@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_US
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.common.UserRole
@@ -359,11 +359,12 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        ContextManagerImpl.setOperationContext(
+        Context.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            isKeyPairVerified = true
         )
 
         // When
@@ -505,11 +506,12 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        ContextManagerImpl.setOperationContext(
+        Context.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            isKeyPairVerified = true
         )
         val shareLock = LockOperations.ShareLock(
             targetUserId = TEST_SUPPLEMENTARY_USER_ID,
@@ -551,11 +553,12 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        ContextManagerImpl.setOperationContext(
+        Context.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            isKeyPairVerified = true
         )
         val batchShareLock = listOf(
             LockOperations.ShareLock(
@@ -649,11 +652,12 @@ class LockOperationsClientTest : IntegrationTest() {
             .certificateChain
             .certificateChainToString()
         val updatedUnlockDuration = 1
-        ContextManagerImpl.setOperationContext(
+        Context.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            isKeyPairVerified = true
         )
 
         // When
@@ -751,11 +755,12 @@ class LockOperationsClientTest : IntegrationTest() {
             days = listOf(min.dayOfWeek.name),
             exceptions = emptyList()
         )
-        ContextManagerImpl.setOperationContext(
+        Context.setOperationContext(
             userId = TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             publicKey = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+            privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
+            isKeyPairVerified = true
         )
 
         // When
@@ -790,8 +795,8 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
         // When
         val lockAuditTrail = LockOperationsClient.getLockAuditTrailRequest(TEST_MAIN_LOCK_ID, start, end)
@@ -805,8 +810,8 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds.toInt()
-        val end = now.epochSeconds.toInt()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
         // When
         val auditForUser = LockOperationsClient.getAuditForUserRequest(TEST_MAIN_USER_ID, start, end)

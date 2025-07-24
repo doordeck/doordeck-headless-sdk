@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -28,28 +29,28 @@ actual object SitesApi {
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
-    suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
-        return SitesClient.getLocksForSiteRequest(siteId)
+    suspend fun getLocksForSite(siteId: UUID): List<SiteLocksResponse> {
+        return SitesClient.getLocksForSiteRequest(siteId.toString())
     }
 
     /**
      * Async variant of [SitesApi.getLocksForSite] returning [CompletableFuture].
      */
-    fun getLocksForSiteAsync(siteId: String): CompletableFuture<List<SiteLocksResponse>> {
+    fun getLocksForSiteAsync(siteId: UUID): CompletableFuture<List<SiteLocksResponse>> {
         return completableFuture { getLocksForSite(siteId) }
     }
 
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
-    suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
-        return SitesClient.getUsersForSiteRequest(siteId)
+    suspend fun getUsersForSite(siteId: UUID): List<UserForSiteResponse> {
+        return SitesClient.getUsersForSiteRequest(siteId.toString())
     }
 
     /**
      * Async variant of [SitesApi.getUsersForSite] returning [CompletableFuture].
      */
-    fun getUsersForSiteAsync(siteId: String): CompletableFuture<List<UserForSiteResponse>> {
+    fun getUsersForSiteAsync(siteId: UUID): CompletableFuture<List<UserForSiteResponse>> {
         return completableFuture { getUsersForSite(siteId) }
     }
 }

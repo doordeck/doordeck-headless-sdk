@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
 import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.randomUUID
+import com.doordeck.multiplatform.sdk.util.toUUID
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -52,53 +54,53 @@ class FusionApiTest : MockTest() {
 
     @Test
     fun shouldEnableDoor() = runTest {
-        FusionApi.enableDoor("", "", Fusion.DemoController())
+        FusionApi.enableDoor("", randomUUID(), Fusion.DemoController())
     }
 
     @Test
     fun shouldEnableDoorAsync() = runTest {
-        FusionApi.enableDoorAsync("", "", Fusion.DemoController()).await()
+        FusionApi.enableDoorAsync("", randomUUID(), Fusion.DemoController()).await()
     }
 
     @Test
     fun shouldDeleteDoor() = runTest {
-        FusionApi.deleteDoor(DEFAULT_DEVICE_ID)
+        FusionApi.deleteDoor(DEFAULT_DEVICE_ID.toUUID())
     }
 
     @Test
     fun shouldDeleteDoorAsync() = runTest {
-        FusionApi.deleteDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionApi.deleteDoorAsync(DEFAULT_DEVICE_ID.toUUID()).await()
     }
 
     @Test
     fun shouldGetDoorStatus() = runTest {
-        val response = FusionApi.getDoorStatus(DEFAULT_DEVICE_ID)
+        val response = FusionApi.getDoorStatus(DEFAULT_DEVICE_ID.toUUID())
         assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test
     fun shouldGetDoorStatusAsync() = runTest {
-        val response = FusionApi.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
+        val response = FusionApi.getDoorStatusAsync(DEFAULT_DEVICE_ID.toUUID()).await()
         assertEquals(DOOR_STATE_RESPONSE, response)
     }
 
     @Test
     fun shouldStartDoor() = runTest {
-        FusionApi.startDoor(DEFAULT_DEVICE_ID)
+        FusionApi.startDoor(DEFAULT_DEVICE_ID.toUUID())
     }
 
     @Test
     fun shouldStartDoorAsync() = runTest {
-        FusionApi.startDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionApi.startDoorAsync(DEFAULT_DEVICE_ID.toUUID()).await()
     }
 
     @Test
     fun shouldStopDoor() = runTest {
-        FusionApi.stopDoor(DEFAULT_DEVICE_ID)
+        FusionApi.stopDoor(DEFAULT_DEVICE_ID.toUUID())
     }
 
     @Test
     fun shouldStopDoorAsync() = runTest {
-        FusionApi.stopDoorAsync(DEFAULT_DEVICE_ID).await()
+        FusionApi.stopDoorAsync(DEFAULT_DEVICE_ID.toUUID()).await()
     }
 }

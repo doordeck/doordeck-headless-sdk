@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
 import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.randomUUID
+import com.doordeck.multiplatform.sdk.util.toUUID
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -38,197 +40,197 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldGetApplication() = runTest {
-        val response = PlatformApi.getApplication(DEFAULT_APPLICATION_ID)
+        val response = PlatformApi.getApplication(DEFAULT_APPLICATION_ID.toUUID())
         assertEquals(APPLICATION_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplicationAsync() = runTest {
-        val response = PlatformApi.getApplicationAsync(DEFAULT_APPLICATION_ID).await()
+        val response = PlatformApi.getApplicationAsync(DEFAULT_APPLICATION_ID.toUUID()).await()
         assertEquals(APPLICATION_RESPONSE, response)
     }
 
     @Test
     fun shouldUpdateApplicationName() = runTest {
-        PlatformApi.updateApplicationName(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationName(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationNameAsync() = runTest {
-        PlatformApi.updateApplicationNameAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationNameAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateApplicationCompanyName() = runTest {
-        PlatformApi.updateApplicationCompanyName(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationCompanyName(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationCompanyNameAsync() = runTest {
-        PlatformApi.updateApplicationCompanyNameAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationCompanyNameAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
     
     @Test
     fun shouldUpdateApplicationMailingAddress() = runTest {
-        PlatformApi.updateApplicationMailingAddress(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationMailingAddress(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationMailingAddressAsync() = runTest {
-        PlatformApi.updateApplicationMailingAddressAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationMailingAddressAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
     
     @Test
     fun shouldUpdateApplicationPrivacyPolicy() = runTest {
-        PlatformApi.updateApplicationPrivacyPolicy(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationPrivacyPolicy(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationPrivacyPolicyAsync() = runTest {
-        PlatformApi.updateApplicationPrivacyPolicyAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationPrivacyPolicyAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateApplicationSupportContact() = runTest {
-        PlatformApi.updateApplicationSupportContact(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationSupportContact(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationSupportContactAsync() = runTest {
-        PlatformApi.updateApplicationSupportContactAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationSupportContactAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateApplicationAppLink() = runTest {
-        PlatformApi.updateApplicationAppLink(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationAppLink(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationAppLinkAsync() = runTest {
-        PlatformApi.updateApplicationAppLinkAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationAppLinkAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldUpdateApplicationEmailPreferences() = runTest {
-        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, Platform.EmailPreferences())
+        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID.toUUID(), Platform.EmailPreferences())
     }
 
     @Test
     fun shouldUpdateApplicationEmailPreferencesAsync() = runTest {
-        PlatformApi.updateApplicationEmailPreferencesAsync(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
+        PlatformApi.updateApplicationEmailPreferencesAsync(DEFAULT_APPLICATION_ID.toUUID(), Platform.EmailPreferences()).await()
     }
 
     @Test
     fun shouldUpdateApplicationLogoUrl() = runTest {
-        PlatformApi.updateApplicationLogoUrl(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.updateApplicationLogoUrl(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldUpdateApplicationLogoUrlAsync() = runTest {
-        PlatformApi.updateApplicationLogoUrlAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.updateApplicationLogoUrlAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldDeleteApplication() = runTest {
-        PlatformApi.deleteApplication(DEFAULT_APPLICATION_ID)
+        PlatformApi.deleteApplication(DEFAULT_APPLICATION_ID.toUUID())
     }
 
     @Test
     fun shouldDeleteApplicationAsync() = runTest {
-        PlatformApi.deleteApplicationAsync(DEFAULT_APPLICATION_ID).await()
+        PlatformApi.deleteApplicationAsync(DEFAULT_APPLICATION_ID.toUUID()).await()
     }
 
     @Test
     fun shouldGetLogoUploadUrl() = runTest {
-        val response = PlatformApi.getLogoUploadUrl(DEFAULT_APPLICATION_ID, "")
+        val response = PlatformApi.getLogoUploadUrl(DEFAULT_APPLICATION_ID.toUUID(), "")
         assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
     }
 
     @Test
     fun shouldGetLogoUploadUrlAsync() = runTest {
-        val response = PlatformApi.getLogoUploadUrlAsync(DEFAULT_APPLICATION_ID, "").await()
+        val response = PlatformApi.getLogoUploadUrlAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
         assertEquals(LOGO_UPLOAD_URL_RESPONSE, response)
     }
 
     @Test
     fun shouldAddAuthKey() = runTest {
-        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
+        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID.toUUID(), Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
     }
 
     @Test
     fun shouldAddAuthKeyAsync() = runTest {
-        PlatformApi.addAuthKeyAsync(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
+        PlatformApi.addAuthKeyAsync(DEFAULT_APPLICATION_ID.toUUID(), Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test
     fun shouldAddAuthIssuer() = runTest {
-        PlatformApi.addAuthIssuer(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.addAuthIssuer(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldAddAuthIssuerAsync() = runTest {
-        PlatformApi.addAuthIssuerAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.addAuthIssuerAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldDeleteAuthIssuer() = runTest {
-        PlatformApi.deleteAuthIssuer(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.deleteAuthIssuer(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldDeleteAuthIssuerAsync() = runTest {
-        PlatformApi.deleteAuthIssuerAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.deleteAuthIssuerAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldAddCorsDomain() = runTest {
-        PlatformApi.addCorsDomain(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.addCorsDomain(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldAddCorsDomainAsync() = runTest {
-        PlatformApi.addCorsDomainAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.addCorsDomainAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldRemoveCorsDomain() = runTest {
-        PlatformApi.removeCorsDomain(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.removeCorsDomain(DEFAULT_APPLICATION_ID.toUUID(), "")
     }
 
     @Test
     fun shouldRemoveCorsDomainAsync() = runTest {
-        PlatformApi.removeCorsDomainAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.removeCorsDomainAsync(DEFAULT_APPLICATION_ID.toUUID(), "").await()
     }
 
     @Test
     fun shouldAddApplicationOwner() = runTest {
-        PlatformApi.addApplicationOwner(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.addApplicationOwner(DEFAULT_APPLICATION_ID.toUUID(), randomUUID())
     }
 
     @Test
     fun shouldAddApplicationOwnerAsync() = runTest {
-        PlatformApi.addApplicationOwnerAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.addApplicationOwnerAsync(DEFAULT_APPLICATION_ID.toUUID(), randomUUID()).await()
     }
 
     @Test
     fun shouldRemoveApplicationOwner() = runTest {
-        PlatformApi.removeApplicationOwner(DEFAULT_APPLICATION_ID, "")
+        PlatformApi.removeApplicationOwner(DEFAULT_APPLICATION_ID.toUUID(), randomUUID())
     }
 
     @Test
     fun shouldRemoveApplicationOwnerAsync() = runTest {
-        PlatformApi.removeApplicationOwnerAsync(DEFAULT_APPLICATION_ID, "").await()
+        PlatformApi.removeApplicationOwnerAsync(DEFAULT_APPLICATION_ID.toUUID(), randomUUID()).await()
     }
 
     @Test
     fun shouldGetApplicationOwnersDetails() = runTest {
-        val response = PlatformApi.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID)
+        val response = PlatformApi.getApplicationOwnersDetails(DEFAULT_APPLICATION_ID.toUUID())
         assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
     }
 
     @Test
     fun shouldGetApplicationOwnersDetailsAsync() = runTest {
-        val response = PlatformApi.getApplicationOwnersDetailsAsync(DEFAULT_APPLICATION_ID).await()
+        val response = PlatformApi.getApplicationOwnersDetailsAsync(DEFAULT_APPLICATION_ID.toUUID()).await()
         assertEquals(APPLICATION_OWNER_DETAILS_RESPONSE, response)
     }
 }

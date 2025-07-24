@@ -8,6 +8,8 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSe
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -47,14 +49,14 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
+    suspend fun registerEphemeralKey(publicKey: PublicKey? = null, privateKey: PrivateKey? = null): RegisterEphemeralKeyResponse {
+        return AccountClient.registerEphemeralKeyRequest(publicKey?.encoded, privateKey?.encoded)
     }
 
     /**
      * Async variant of [AccountApi.registerEphemeralKey] returning [CompletableFuture].
      */
-    fun registerEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKeyResponse> {
+    fun registerEphemeralKeyAsync(publicKey: PublicKey? = null, privateKey: PrivateKey? = null): CompletableFuture<RegisterEphemeralKeyResponse> {
         return completableFuture { registerEphemeralKey(publicKey, privateKey) }
     }
 
@@ -62,17 +64,17 @@ actual object AccountApi {
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
-        publicKey: ByteArray? = null,
+        publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
     ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey?.encoded, method)
     }
 
     /**
      * Async variant of [AccountApi.registerEphemeralKeyWithSecondaryAuthentication] returning [CompletableFuture].
      */
     fun registerEphemeralKeyWithSecondaryAuthenticationAsync(
-        publicKey: ByteArray? = null,
+        publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
     ): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
         return completableFuture { registerEphemeralKeyWithSecondaryAuthentication(publicKey, method) }
@@ -83,10 +85,10 @@ actual object AccountApi {
      */
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
-        publicKey: ByteArray? = null,
-        privateKey: ByteArray? = null
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
     ): RegisterEphemeralKeyResponse {
-        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
+        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey?.encoded, privateKey?.encoded)
     }
 
     /**
@@ -94,8 +96,8 @@ actual object AccountApi {
      */
     fun verifyEphemeralKeyRegistrationAsync(
         code: String,
-        publicKey: ByteArray? = null,
-        privateKey: ByteArray? = null
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> {
         return completableFuture { verifyEphemeralKeyRegistration(code, publicKey, privateKey) }
     }

@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsRes
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -49,15 +50,15 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
-    suspend fun getApplication(applicationId: String): ApplicationResponse {
-        return PlatformClient.getApplicationRequest(applicationId)
+    suspend fun getApplication(applicationId: UUID): ApplicationResponse {
+        return PlatformClient.getApplicationRequest(applicationId.toString())
     }
 
     /**
      * Async variant of [PlatformApi.getApplication] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getApplicationAsync(applicationId: String): CompletableFuture<ApplicationResponse> {
+    fun getApplicationAsync(applicationId: UUID): CompletableFuture<ApplicationResponse> {
         return completableFuture { getApplication(applicationId) }
     }
 
@@ -65,15 +66,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationName(applicationId: String, name: String) {
-        return PlatformClient.updateApplicationNameRequest(applicationId, name)
+    suspend fun updateApplicationName(applicationId: UUID, name: String) {
+        return PlatformClient.updateApplicationNameRequest(applicationId.toString(), name)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationName] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationNameAsync(applicationId: String, name: String): CompletableFuture<Unit> {
+    fun updateApplicationNameAsync(applicationId: UUID, name: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationName(applicationId, name) }
     }
 
@@ -81,15 +82,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return PlatformClient.updateApplicationCompanyNameRequest(applicationId, companyName)
+    suspend fun updateApplicationCompanyName(applicationId: UUID, companyName: String) {
+        return PlatformClient.updateApplicationCompanyNameRequest(applicationId.toString(), companyName)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationCompanyName] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationCompanyNameAsync(applicationId: String, companyName: String): CompletableFuture<Unit> {
+    fun updateApplicationCompanyNameAsync(applicationId: UUID, companyName: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationCompanyName(applicationId, companyName) }
     }
 
@@ -97,15 +98,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return PlatformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress)
+    suspend fun updateApplicationMailingAddress(applicationId: UUID, mailingAddress: String) {
+        return PlatformClient.updateApplicationMailingAddressRequest(applicationId.toString(), mailingAddress)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationMailingAddress] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationMailingAddressAsync(applicationId: String, mailingAddress: String): CompletableFuture<Unit> {
+    fun updateApplicationMailingAddressAsync(applicationId: UUID, mailingAddress: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationMailingAddress(applicationId, mailingAddress) }
     }
 
@@ -113,15 +114,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
+    suspend fun updateApplicationPrivacyPolicy(applicationId: UUID, privacyPolicy: String) {
+        return PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId.toString(), privacyPolicy)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationPrivacyPolicy] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationPrivacyPolicyAsync(applicationId: String, privacyPolicy: String): CompletableFuture<Unit> {
+    fun updateApplicationPrivacyPolicyAsync(applicationId: UUID, privacyPolicy: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationPrivacyPolicy(applicationId, privacyPolicy) }
     }
 
@@ -129,15 +130,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return PlatformClient.updateApplicationSupportContactRequest(applicationId, supportContact)
+    suspend fun updateApplicationSupportContact(applicationId: UUID, supportContact: String) {
+        return PlatformClient.updateApplicationSupportContactRequest(applicationId.toString(), supportContact)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationSupportContact] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationSupportContactAsync(applicationId: String, supportContact: String): CompletableFuture<Unit> {
+    fun updateApplicationSupportContactAsync(applicationId: UUID, supportContact: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationSupportContact(applicationId, supportContact) }
     }
 
@@ -145,15 +146,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return PlatformClient.updateApplicationAppLinkRequest(applicationId, appLink)
+    suspend fun updateApplicationAppLink(applicationId: UUID, appLink: String) {
+        return PlatformClient.updateApplicationAppLinkRequest(applicationId.toString(), appLink)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationAppLink] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationAppLinkAsync(applicationId: String, appLink: String): CompletableFuture<Unit> {
+    fun updateApplicationAppLinkAsync(applicationId: UUID, appLink: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationAppLink(applicationId, appLink) }
     }
 
@@ -161,15 +162,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
-        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
+    suspend fun updateApplicationEmailPreferences(applicationId: UUID, emailPreferences: Platform.EmailPreferences) {
+        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId.toString(), emailPreferences)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationEmailPreferences] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferencesAsync(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
+    fun updateApplicationEmailPreferencesAsync(applicationId: UUID, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
         return completableFuture { updateApplicationEmailPreferences(applicationId, emailPreferences) }
     }
 
@@ -177,15 +178,15 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return PlatformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl)
+    suspend fun updateApplicationLogoUrl(applicationId: UUID, logoUrl: String) {
+        return PlatformClient.updateApplicationLogoUrlRequest(applicationId.toString(), logoUrl)
     }
 
     /**
      * Async variant of [PlatformApi.updateApplicationLogoUrl] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationLogoUrlAsync(applicationId: String, logoUrl: String): CompletableFuture<Unit> {
+    fun updateApplicationLogoUrlAsync(applicationId: UUID, logoUrl: String): CompletableFuture<Unit> {
         return completableFuture { updateApplicationLogoUrl(applicationId, logoUrl) }
     }
 
@@ -193,15 +194,15 @@ actual object PlatformApi {
      * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
-    suspend fun deleteApplication(applicationId: String) {
-        return PlatformClient.deleteApplicationRequest(applicationId)
+    suspend fun deleteApplication(applicationId: UUID) {
+        return PlatformClient.deleteApplicationRequest(applicationId.toString())
     }
 
     /**
      * Async variant of [PlatformApi.deleteApplication] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun deleteApplicationAsync(applicationId: String): CompletableFuture<Unit> {
+    fun deleteApplicationAsync(applicationId: UUID): CompletableFuture<Unit> {
         return completableFuture { deleteApplication(applicationId) }
     }
 
@@ -209,15 +210,15 @@ actual object PlatformApi {
      * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
-    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
+    suspend fun getLogoUploadUrl(applicationId: UUID, contentType: String): GetLogoUploadUrlResponse {
+        return PlatformClient.getLogoUploadUrlRequest(applicationId.toString(), contentType)
     }
 
     /**
      * Async variant of [PlatformApi.getLogoUploadUrl] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getLogoUploadUrlAsync(applicationId: String, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
+    fun getLogoUploadUrlAsync(applicationId: UUID, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
         return completableFuture { getLogoUploadUrl(applicationId, contentType) }
     }
 
@@ -225,15 +226,15 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
-        return PlatformClient.addAuthKeyRequest(applicationId, key)
+    suspend fun addAuthKey(applicationId: UUID, key: Platform.AuthKey) {
+        return PlatformClient.addAuthKeyRequest(applicationId.toString(), key)
     }
 
     /**
      * Async variant of [PlatformApi.addAuthKey] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addAuthKeyAsync(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit> {
+    fun addAuthKeyAsync(applicationId: UUID, key: Platform.AuthKey): CompletableFuture<Unit> {
         return completableFuture { addAuthKey(applicationId, key) }
     }
 
@@ -241,15 +242,15 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
-    suspend fun addAuthIssuer(applicationId: String, url: String) {
-        return PlatformClient.addAuthIssuerRequest(applicationId, url)
+    suspend fun addAuthIssuer(applicationId: UUID, url: String) {
+        return PlatformClient.addAuthIssuerRequest(applicationId.toString(), url)
     }
 
     /**
      * Async variant of [PlatformApi.addAuthIssuer] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
+    fun addAuthIssuerAsync(applicationId: UUID, url: String): CompletableFuture<Unit> {
         return completableFuture { addAuthIssuer(applicationId, url) }
     }
 
@@ -257,15 +258,15 @@ actual object PlatformApi {
      * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
-    suspend fun deleteAuthIssuer(applicationId: String, url: String) {
-        return PlatformClient.deleteAuthIssuerRequest(applicationId, url)
+    suspend fun deleteAuthIssuer(applicationId: UUID, url: String) {
+        return PlatformClient.deleteAuthIssuerRequest(applicationId.toString(), url)
     }
 
     /**
      * Async variant of [PlatformApi.deleteAuthIssuer] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun deleteAuthIssuerAsync(applicationId: String, url: String): CompletableFuture<Unit> {
+    fun deleteAuthIssuerAsync(applicationId: UUID, url: String): CompletableFuture<Unit> {
         return completableFuture { deleteAuthIssuer(applicationId, url) }
     }
 
@@ -273,15 +274,15 @@ actual object PlatformApi {
      * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
-    suspend fun addCorsDomain(applicationId: String, url: String) {
-        return PlatformClient.addCorsDomainRequest(applicationId, url)
+    suspend fun addCorsDomain(applicationId: UUID, url: String) {
+        return PlatformClient.addCorsDomainRequest(applicationId.toString(), url)
     }
 
     /**
      * Async variant of [PlatformApi.addCorsDomain] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
+    fun addCorsDomainAsync(applicationId: UUID, url: String): CompletableFuture<Unit> {
         return completableFuture { addCorsDomain(applicationId, url) }
     }
 
@@ -289,15 +290,15 @@ actual object PlatformApi {
      * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
-    suspend fun removeCorsDomain(applicationId: String, url: String) {
-        return PlatformClient.removeCorsDomainRequest(applicationId, url)
+    suspend fun removeCorsDomain(applicationId: UUID, url: String) {
+        return PlatformClient.removeCorsDomainRequest(applicationId.toString(), url)
     }
 
     /**
      * Async variant of [PlatformApi.removeCorsDomain] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun removeCorsDomainAsync(applicationId: String, url: String): CompletableFuture<Unit> {
+    fun removeCorsDomainAsync(applicationId: UUID, url: String): CompletableFuture<Unit> {
         return completableFuture { removeCorsDomain(applicationId, url) }
     }
 
@@ -305,15 +306,15 @@ actual object PlatformApi {
      * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
-    suspend fun addApplicationOwner(applicationId: String, userId: String) {
-        return PlatformClient.addApplicationOwnerRequest(applicationId, userId)
+    suspend fun addApplicationOwner(applicationId: UUID, userId: UUID) {
+        return PlatformClient.addApplicationOwnerRequest(applicationId.toString(), userId.toString())
     }
 
     /**
      * Async variant of [PlatformApi.addApplicationOwner] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
+    fun addApplicationOwnerAsync(applicationId: UUID, userId: UUID): CompletableFuture<Unit> {
         return completableFuture { addApplicationOwner(applicationId, userId) }
     }
 
@@ -321,15 +322,15 @@ actual object PlatformApi {
      * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
-    suspend fun removeApplicationOwner(applicationId: String, userId: String) {
-        return PlatformClient.removeApplicationOwnerRequest(applicationId, userId)
+    suspend fun removeApplicationOwner(applicationId: UUID, userId: UUID) {
+        return PlatformClient.removeApplicationOwnerRequest(applicationId.toString(), userId.toString())
     }
 
     /**
      * Async variant of [PlatformApi.removeApplicationOwner] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun removeApplicationOwnerAsync(applicationId: String, userId: String): CompletableFuture<Unit> {
+    fun removeApplicationOwnerAsync(applicationId: UUID, userId: UUID): CompletableFuture<Unit> {
         return completableFuture { removeApplicationOwner(applicationId, userId) }
     }
 
@@ -337,15 +338,15 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
+    suspend fun getApplicationOwnersDetails(applicationId: UUID): List<ApplicationOwnerDetailsResponse> {
+        return PlatformClient.getApplicationOwnersDetailsRequest(applicationId.toString())
     }
 
     /**
      * Async variant of [PlatformApi.getApplicationOwnersDetails] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetailsAsync(applicationId: String): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
+    fun getApplicationOwnersDetailsAsync(applicationId: UUID): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
         return completableFuture { getApplicationOwnersDetails(applicationId) }
     }
 }

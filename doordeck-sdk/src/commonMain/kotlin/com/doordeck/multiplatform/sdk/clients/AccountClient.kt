@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
@@ -17,6 +17,8 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyRespon
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
+import com.doordeck.multiplatform.sdk.model.values.toIdValueString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
@@ -44,12 +46,12 @@ internal object AccountClient {
     @DoordeckOnly
     suspend fun refreshTokenRequest(refreshToken: String? = null): TokenResponse {
         val token = refreshToken
-            ?: ContextManagerImpl.getCloudRefreshToken()
+            ?: Context.getCloudRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
         return CloudHttpClient.client.post(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
         }.body<TokenResponse>().also {
-            ContextManagerImpl.also { context ->
+            Context.also { context ->
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
             }
@@ -67,7 +69,7 @@ internal object AccountClient {
         CloudHttpClient.client.post(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
-        ContextManagerImpl.reset()
+        Context.reset()
     }
 
     /**
@@ -89,18 +91,18 @@ internal object AccountClient {
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
         val publicKey = publicKey
-            ?: ContextManagerImpl.getPublicKey()
+            ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         val privateKey = privateKey
-            ?: ContextManagerImpl.getPrivateKey()
+            ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
         }.body<RegisterEphemeralKeyResponse>().also {
-            ContextManagerImpl.also { context ->
-                context.setUserId(it.userId)
-                context.setCertificateChain(it.certificateChain)
+            Context.also { context ->
+                context.setUserId(it.userId.toIdValueString())
+                context.setCertificateChain(it.certificateChain.map { cert -> cert.toCertificateValueString() })
                 context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
                 context.setKeyPairVerified(publicKey)
             }
@@ -123,14 +125,14 @@ internal object AccountClient {
         method: TwoFactorMethod? = null
     ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         val publicKey = publicKey
-            ?: ContextManagerImpl.getPublicKey()
+            ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
             method?.let { parameter(Params.METHOD, it.name) }
         }.body<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
-            ContextManagerImpl.also { context ->
+            Context.also { context ->
                 context.setKeyPairVerified(null)
             }
         }
@@ -156,19 +158,19 @@ internal object AccountClient {
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
         val publicKey = publicKey
-            ?: ContextManagerImpl.getPublicKey()
+            ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
         val privateKey = privateKey
-            ?: ContextManagerImpl.getPrivateKey()
+            ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
         return CloudHttpClient.client.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body<RegisterEphemeralKeyResponse>().also {
-            ContextManagerImpl.also { context ->
-                context.setUserId(it.userId)
-                context.setCertificateChain(it.certificateChain)
+            Context.also { context ->
+                context.setUserId(it.userId.toIdValueString())
+                context.setCertificateChain(it.certificateChain.map { cert -> cert.toCertificateValueString() })
                 context.setKeyPair(publicKey, privateKey)
                 context.setKeyPairVerified(publicKey)
             }
@@ -245,6 +247,6 @@ internal object AccountClient {
      */
     suspend fun deleteAccountRequest() {
         CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
-        ContextManagerImpl.reset()
+        Context.reset()
     }
 }

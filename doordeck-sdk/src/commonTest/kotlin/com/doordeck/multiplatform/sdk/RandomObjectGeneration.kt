@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_UPLOAD_URL
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
@@ -54,9 +55,18 @@ import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.values.IdValue
+import com.doordeck.multiplatform.sdk.model.values.InstantValue
+import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValue
+import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import kotlinx.datetime.DayOfWeek
 import kotlin.random.Random
+import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
 /**
@@ -71,12 +81,12 @@ internal fun randomUserDetailsResponse(): UserDetailsResponse = UserDetailsRespo
     email = randomString(),
     displayName = randomNullable { randomString() },
     emailVerified = randomBoolean(),
-    publicKey = randomString()
+    publicKey = randomPublicKey()
 )
 
 internal fun randomRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
-    certificateChain = (1..3).map { randomString() },
-    userId = randomString()
+    certificateChain = emptyList(),
+    userId = randomId()
 )
 
 internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
@@ -105,7 +115,7 @@ internal fun randomIntegrationConfigurationResponse(): IntegrationConfigurationR
 )
 
 internal fun randomControllerResponse(): ControllerResponse = ControllerResponse(
-    id = randomString(),
+    id = randomId(),
     name = randomNullable { randomString() },
     role = UserRole.entries.random()
 )
@@ -125,11 +135,11 @@ internal fun randomFusionController(): Fusion.LockController = Fusion.DemoContro
  * Lock operation responses
  */
 internal fun randomLockResponse(): LockResponse = LockResponse(
-    id = randomString(),
+    id = randomId(),
     name = randomString(),
     colour = randomNullable { randomString() },
-    start = randomNullable { randomString() },
-    end = randomNullable { randomString() },
+    start = randomNullable { randomInstant() },
+    end = randomNullable { randomInstant() },
     role = UserRole.entries.random(),
     settings = randomLockSettingsResponse(),
     state = randomLockStateResponse(),
@@ -153,7 +163,7 @@ internal fun randomUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse 
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = (1..3).map { randomString() },
+    days = DayOfWeek.entries.toTypedArray().take(3),
     exceptions = randomNullable { (1..3).map { randomString() } }
 )
 
@@ -178,28 +188,28 @@ internal fun randomLocationRequirementResponse(): LocationRequirementResponse = 
 )
 
 internal fun randomShareableLockResponse(): ShareableLockResponse = ShareableLockResponse(
-    id = randomString(),
+    id = randomId(),
     name = randomString()
 )
 
 
 internal fun randomUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
-    id = randomString(),
-    publicKey = randomString()
+    id = randomId(),
+    publicKey = randomPublicKey()
 )
 
 internal fun randomBatchUserPublicKeyResponse(): BatchUserPublicKeyResponse = BatchUserPublicKeyResponse(
-    id = randomString(),
+    id = randomId(),
     email = randomNullable { randomString() },
     foreignKey = randomNullable { randomString() },
     phone = randomNullable { randomString() },
-    publicKey = randomString()
+    publicKey = randomPublicKey()
 )
 
 internal fun randomLockUserResponse(): LockUserResponse = LockUserResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomString(),
-    publicKey = randomString(),
+    publicKey = randomPublicKey(),
     displayName = randomNullable { randomString() },
     orphan = randomBoolean(),
     foreign = randomBoolean(),
@@ -209,9 +219,9 @@ internal fun randomLockUserResponse(): LockUserResponse = LockUserResponse(
 )
 
 internal fun randomUserLockResponse(): UserLockResponse = UserLockResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomString(),
-    publicKey = randomString(),
+    publicKey = randomPublicKey(),
     displayName = randomNullable { randomString() },
     orphan = randomBoolean(),
     foreign = randomBoolean(),
@@ -221,7 +231,7 @@ internal fun randomUserLockResponse(): UserLockResponse = UserLockResponse(
 )
 
 internal fun randomLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
-    deviceId = randomString(),
+    deviceId = randomId(),
     role = UserRole.entries.random(),
     start = randomNullable { randomDouble() },
     end = randomNullable { randomDouble() }
@@ -233,7 +243,7 @@ internal fun randomLockStateResponse(): LockStateResponse = LockStateResponse(
 )
 
 internal fun randomAuditResponse(): AuditResponse = AuditResponse(
-    deviceId = randomString(),
+    deviceId = randomId(),
     timestamp = randomDouble(),
     type = AuditEvent.entries.random(),
     issuer = randomAuditIssuerResponse(),
@@ -243,13 +253,13 @@ internal fun randomAuditResponse(): AuditResponse = AuditResponse(
 )
 
 internal fun randomAuditSubjectResponse(): AuditSubjectResponse = AuditSubjectResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() }
 )
 
 internal fun randomAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomNullable { randomString() },
     ip = randomNullable { randomString() }
 )
@@ -258,7 +268,7 @@ internal fun randomAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerRespo
  * Platform responses
  */
 internal fun randomApplicationResponse(): ApplicationResponse = ApplicationResponse(
-    applicationId = randomString(),
+    applicationId = randomId(),
     name = randomString(),
     lastUpdated = randomNullable { randomDouble() },
     owners = (1..3).map { randomString() },
@@ -356,7 +366,7 @@ internal fun randomOauthResponse(): OauthResponse = OauthResponse(
 )
 
 internal fun randomApplicationOwnerDetailsResponse(): ApplicationOwnerDetailsResponse = ApplicationOwnerDetailsResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() },
     orphan = randomBoolean(),
@@ -371,19 +381,19 @@ internal fun randomGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLog
  * Site responses
  */
 internal fun randomSiteResponse(): SiteResponse = SiteResponse(
-    id = randomString(),
+    id = randomId(),
     name = randomString(),
     colour = randomString(),
     longitude = randomDouble(),
     latitude = randomDouble(),
     radius = randomInt(),
     passBackground = randomString(),
-    created = randomString(),
-    updated = randomString()
+    created = randomInstant(),
+    updated = randomInstant()
 )
 
 internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
-    id = randomString(),
+    id = randomId(),
     name = randomString(),
     colour = randomNullable { randomString() },
     role = UserRole.entries.random(),
@@ -392,8 +402,9 @@ internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
     favourite = randomBoolean()
 )
 
+
 internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteResponse(
-    userId = randomString(),
+    userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() },
     orphan = randomBoolean()
@@ -403,9 +414,9 @@ internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteRespo
  * Tile responses
  */
 internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
-    siteId = randomString(),
-    tileId = randomString(),
-    deviceIds = (1..3).map { randomString() }
+    siteId = randomId(),
+    tileId = randomId(),
+    deviceIds = (1..3).map { randomId() }
 )
 
 /**
@@ -559,6 +570,13 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
     secureStorage = DefaultSecureStorage(MemorySettings()),
     debugLogging = randomNullable { randomBoolean() }
 )
+
+/**
+ * Values
+ */
+internal fun randomId(): IdValue = Uuid.random().toString().toIdValue()
+internal fun randomPublicKey(): PublicKeyValue = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64().toPublicKeyValue()
+internal fun randomInstant(): InstantValue = Clock.System.now().toString().toInstantValue()
 
 /**
  * Test utils

@@ -1,9 +1,17 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockBetween
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValue
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toInstantValue
+import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValue
+import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValueString
+import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
@@ -18,15 +26,15 @@ data class GetSingleLockData(
 @Serializable
 data class GetLockAuditTrailData(
     val lockId: String,
-    val start: Int,
-    val end: Int
+    val start: Long,
+    val end: Long
 )
 
 @Serializable
 data class GetAuditForUserData(
     val userId: String,
-    val start: Int,
-    val end: Int
+    val start: Long,
+    val end: Long
 )
 
 @Serializable
@@ -167,9 +175,9 @@ data class BaseOperationData(
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: String? = null,
     val lockId: String,
-    val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-    val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-    val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+    val notBefore: Long = Clock.System.now().epochSeconds,
+    val issuedAt: Long = Clock.System.now().epochSeconds,
+    val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
     val jti: String = Uuid.random().toString()
 )
 
@@ -178,8 +186,8 @@ data class ShareLockData(
     val targetUserId: String,
     val targetUserRole: UserRole,
     val targetUserPublicKey: String,
-    val start: Int? = null,
-    val end: Int? = null
+    val start: Long? = null,
+    val end: Long? = null
 )
 
 @Serializable
@@ -211,7 +219,7 @@ data class UnlockBetweenData(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<String>,
+    val days: List<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 
@@ -227,7 +235,7 @@ internal fun TimeRequirementData.toTimeRequirement() = LockOperations.TimeRequir
     start = start,
     end = end,
     timezone = timezone,
-    days = days
+    days = days.map { DayOfWeek.valueOf(it) }
 )
 
 internal fun LocationRequirementData.toLocationRequirement() = LockOperations.LocationRequirement(
@@ -244,20 +252,20 @@ internal fun UnlockOperationData.toUnlockOperation() = LockOperations.UnlockOper
 )
 
 internal fun BaseOperationData.toBaseOperation() = BaseOperation(
-    userId = userId,
-    userCertificateChain = userCertificateChain,
-    userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
-    lockId = lockId,
-    notBefore = notBefore,
-    issuedAt = issuedAt,
-    expiresAt = expiresAt,
-    jti = jti
+    userId = userId?.toIdValue(),
+    userCertificateChain = userCertificateChain?.map { it.toCertificateValue() },
+    userPrivateKey = userPrivateKey?.toPrivateKeyValue(),
+    lockId = lockId.toIdValue(),
+    notBefore = notBefore.toInstantValue(),
+    issuedAt = issuedAt.toInstantValue(),
+    expiresAt = expiresAt.toInstantValue(),
+    jti = jti.toIdValue()
 )
 
 internal fun ShareLockData.toShareLock() = ShareLock(
-    targetUserId = targetUserId,
+    targetUserId = targetUserId.toIdValue(),
     targetUserRole = targetUserRole,
-    targetUserPublicKey = targetUserPublicKey.decodeBase64ToByteArray(),
+    targetUserPublicKey = targetUserPublicKey.toPublicKeyValue(),
     start = start,
     end = end
 )

@@ -29,14 +29,14 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
     fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<AuditResponse>> {
-        return promise { LockOperationsClient.getLockAuditTrailRequest(lockId, start, end) }
+        return promise { LockOperationsClient.getLockAuditTrailRequest(lockId, start.toLong(), end.toLong()) }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
     fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<AuditResponse>> {
-        return promise { LockOperationsClient.getAuditForUserRequest(userId, start, end) }
+        return promise { LockOperationsClient.getAuditForUserRequest(userId, start.toLong(), end.toLong()) }
     }
 
     /**

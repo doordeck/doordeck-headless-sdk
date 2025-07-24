@@ -7,7 +7,10 @@ import io.ktor.util.decodeBase64Bytes
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
+import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.Signature
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -24,14 +27,33 @@ actual object CryptoManager {
     private const val CERTIFICATE_TYPE = "X.509"
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
-        val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
+        val key = generateKeyPair()
         return Crypto.KeyPair(
             private = key.private.encoded,
             public = key.public.encoded
         )
+    }
+
+    fun generateKeyPair(): KeyPair {
+        return KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
+    }
+
+    internal fun ByteArray.toPublicKey(): PublicKey {
+        return KeyFactory.getInstance(ALGORITHM)
+            .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
+    }
+
+    internal fun ByteArray.toPrivateKey(): PrivateKey {
+        return KeyFactory.getInstance(ALGORITHM)
+            .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
+    }
+
+    internal fun String.toCertificate(): X509Certificate {
+        return CertificateFactory.getInstance(CERTIFICATE_TYPE)
+            .generateCertificate(decodeBase64Bytes().inputStream()) as X509Certificate
     }
 
     /**
@@ -39,8 +61,7 @@ actual object CryptoManager {
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
         return try {
-            val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
-            val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+            val certificate = base64Certificate.toCertificate()
             val notAfterInstant = certificate.notAfter?.toInstant()?.toKotlinInstant()
             if (notAfterInstant == null) {
                 SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
@@ -82,8 +103,7 @@ actual object CryptoManager {
      */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
         Signature.getInstance(ALGORITHM).apply {
-            initSign(KeyFactory.getInstance(ALGORITHM)
-                .generatePrivate(PKCS8EncodedKeySpec(privateKey.toPlatformPrivateKey())))
+            initSign(privateKey.toPlatformPrivateKey().toPrivateKey())
             update(toByteArray())
         }.sign()
     } catch (exception: Exception) {
@@ -95,7 +115,7 @@ actual object CryptoManager {
      */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
         val signature = Signature.getInstance(ALGORITHM)
-        signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
+        signature.initVerify(publicKey.toPlatformPublicKey().toPublicKey())
         signature.update(message.toByteArray())
         signature.verify(this)
     } catch (exception: Exception) {

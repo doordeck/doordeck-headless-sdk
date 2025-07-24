@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.clients
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
@@ -45,6 +45,15 @@ import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
+import com.doordeck.multiplatform.sdk.model.values.toIdValue
+import com.doordeck.multiplatform.sdk.model.values.toIdValueString
+import com.doordeck.multiplatform.sdk.model.values.toInstantValueString
+import com.doordeck.multiplatform.sdk.model.values.toLocalDateValueString
+import com.doordeck.multiplatform.sdk.model.values.toLocalTimeValueString
+import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValueString
+import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValueString
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -87,7 +96,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -106,7 +115,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -239,8 +248,8 @@ internal object LockOperationsClient {
                     usageRequirements = UpdateLockSettingTimeUsageRequirementRequest(
                         time = times.map {
                             TimeRequirementRequest(
-                                start = it.start,
-                                end = it.end,
+                                start = it.start.toLocalTimeValueString(),
+                                end = it.end.toLocalTimeValueString(),
                                 timezone = it.timezone,
                                 days = it.days
                             )
@@ -475,11 +484,11 @@ internal object LockOperationsClient {
      */
     suspend fun shareLockRequest(shareLockOperation: LockOperations.ShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
-            user = shareLockOperation.shareLock.targetUserId,
-            publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
+            user = shareLockOperation.shareLock.targetUserId.toIdValueString(),
+            publicKey = shareLockOperation.shareLock.targetUserPublicKey.toPublicKeyValueString(),
             role = shareLockOperation.shareLock.targetUserRole,
-            start = shareLockOperation.shareLock.start?.toLong(),
-            end = shareLockOperation.shareLock.end?.toLong()
+            start = shareLockOperation.shareLock.start?.toInstantValueString(),
+            end = shareLockOperation.shareLock.end?.toInstantValueString()
         )
         val baseOperationRequest = shareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
@@ -497,9 +506,9 @@ internal object LockOperationsClient {
     suspend fun batchShareLockRequest(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
         /** Verify whether the operation device currently supports the batch sharing operation **/
         val isSupported =
-            CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
-                ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId).also {
-                    CapabilityCache.put(batchShareLockOperation.baseOperation.lockId, it.settings.capabilities)
+            CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId.toIdValueString(), CapabilityType.BATCH_SHARING_25)
+                ?: getSingleLockRequest(batchShareLockOperation.baseOperation.lockId.toIdValueString()).also {
+                    CapabilityCache.put(batchShareLockOperation.baseOperation.lockId.toIdValueString(), it.settings.capabilities)
                 }.settings.capabilities.containsKey(CapabilityType.BATCH_SHARING_25)
 
         /** If the device does not support the batch sharing operation, we will call the single-user sharing operation for each user individually **/
@@ -508,7 +517,7 @@ internal object LockOperationsClient {
                 try {
                     shareLockRequest(
                         shareLockOperation = LockOperations.ShareLockOperation(
-                            baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString()),
+                            baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString().toIdValue()),
                             shareLock = shareLock
                         )
                     )
@@ -519,7 +528,7 @@ internal object LockOperationsClient {
             }
 
             if (failedOperations.isNotEmpty()) {
-                throw BatchShareFailedException("Batch share failed", failedOperations.map { it.targetUserId })
+                throw BatchShareFailedException("Batch share failed", failedOperations.map { it.targetUserId.toIdValueString() })
             }
             return
         }
@@ -527,11 +536,11 @@ internal object LockOperationsClient {
         val operationRequest = BatchShareLockOperationRequest(
             users = batchShareLockOperation.users.map {
                 ShareLockOperationRequest(
-                    user = it.targetUserId,
-                    publicKey = it.targetUserPublicKey.encodeByteArrayToBase64(),
+                    user = it.targetUserId.toIdValueString(),
+                    publicKey = it.targetUserPublicKey.toPublicKeyValueString(),
                     role = it.targetUserRole,
-                    start = it.start?.toLong(),
-                    end = it.end?.toLong()
+                    start = it.start?.toInstantValueString(),
+                    end = it.end?.toInstantValueString()
                 )
             }
         )
@@ -548,7 +557,7 @@ internal object LockOperationsClient {
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
+        val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users.map { it.toIdValueString() })
         val baseOperationRequest = revokeAccessToLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
     }
@@ -581,11 +590,11 @@ internal object LockOperationsClient {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
-                    start = it.start,
-                    end = it.end,
+                    start = it.start.toLocalTimeValueString(),
+                    end = it.end.toLocalTimeValueString(),
                     timezone = it.timezone,
                     days = it.days,
-                    exceptions = it.exceptions
+                    exceptions = it.exceptions?.map { ex -> ex.toLocalDateValueString() }
                 )
             }
         )
@@ -663,24 +672,24 @@ internal object LockOperationsClient {
      *         or userPrivateKey) is missing from both the input and the [ContextManagerImpl].
      */
     private fun LockOperations.BaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
-        val userId = userId
-            ?: ContextManagerImpl.getUserId()
+        val userId = userId?.toIdValueString()
+            ?: Context.getUserId()
             ?: throw MissingContextFieldException("User ID is missing")
-        val userCertificateChain = userCertificateChain
-            ?: ContextManagerImpl.getCertificateChain()
+        val userCertificateChain = userCertificateChain?.map { it.toCertificateValueString() }
+            ?: Context.getCertificateChain()
             ?: throw MissingContextFieldException("Certificate chain is missing")
-        val userPrivateKey = userPrivateKey
-            ?: ContextManagerImpl.getPrivateKey()
+        val userPrivateKey = userPrivateKey?.toPrivateKeyValueString()?.decodeBase64ToByteArray()
+            ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         return BaseOperationRequest(
             userId = userId,
             userCertificateChain = userCertificateChain,
             userPrivateKey = userPrivateKey,
-            lockId = lockId,
-            notBefore = notBefore,
-            issuedAt = issuedAt,
-            expiresAt = expiresAt,
-            jti = jti
+            lockId = lockId.toIdValueString(),
+            notBefore = notBefore.toInstantValueString(),
+            issuedAt = issuedAt.toInstantValueString(),
+            expiresAt = expiresAt.toInstantValueString(),
+            jti = jti.toIdValueString()
         )
     }
 }
