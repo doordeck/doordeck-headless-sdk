@@ -1,0 +1,6 @@
+package com.doordeck.multiplatform.sdk.model.responses
+
+typealias TokenResponse = NetworkTokenResponse
+typealias UserDetailsResponse = NetworkUserDetailsResponse
+typealias RegisterEphemeralKeyResponse = NetworkRegisterEphemeralKeyResponse
+typealias RegisterEphemeralKeyWithSecondaryAuthenticationResponse = NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse

@@ -1,0 +1,18 @@
+package com.doordeck.multiplatform.sdk.model.responses
+
+typealias LockResponse = NetworkLockResponse
+typealias LockSettingsResponse = NetworkLockSettingsResponse
+typealias UsageRequirementsResponse = NetworkUsageRequirementsResponse
+typealias TimeRequirementResponse = NetworkTimeRequirementResponse
+typealias LocationRequirementResponse = NetworkLocationRequirementResponse
+typealias UnlockBetweenSettingResponse = NetworkUnlockBetweenSettingResponse
+typealias LockStateResponse = NetworkLockStateResponse
+typealias UserPublicKeyResponse = NetworkUserPublicKeyResponse
+typealias BatchUserPublicKeyResponse = NetworkBatchUserPublicKeyResponse
+typealias ShareableLockResponse = NetworkShareableLockResponse
+typealias UserLockResponse = NetworkUserLockResponse
+typealias LockUserResponse = NetworkLockUserResponse
+typealias LockUserDetailsResponse = NetworkLockUserDetailsResponse
+typealias AuditResponse = NetworkAuditResponse
+typealias AuditIssuerResponse = NetworkAuditIssuerResponse
+typealias AuditSubjectResponse = NetworkAuditSubjectResponse

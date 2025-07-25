@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTileLocksResponse
 
 /**
  * Platform-specific implementations of tile-related API calls.
@@ -12,7 +12,7 @@ actual object TilesApi {
      * @see TilesClient.getLocksBelongingToTileRequest
      */
     @Throws(Exception::class)
-    suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
+    suspend fun getLocksBelongingToTile(tileId: String): NetworkTileLocksResponse {
         return TilesClient.getLocksBelongingToTileRequest(tileId)
     }
 

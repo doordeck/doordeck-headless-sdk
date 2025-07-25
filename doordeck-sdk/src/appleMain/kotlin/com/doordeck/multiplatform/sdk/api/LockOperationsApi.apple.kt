@@ -2,14 +2,14 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkBatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserPublicKeyResponse
 
 /**
  * Platform-specific implementations of lock-related API calls.
@@ -19,7 +19,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getSingleLockRequest
      */
     @Throws(Exception::class)
-    suspend fun getSingleLock(lockId: String): LockResponse {
+    suspend fun getSingleLock(lockId: String): NetworkLockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId)
     }
 
@@ -27,7 +27,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
     @Throws(Exception::class)
-    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
+    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<NetworkAuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
     }
 
@@ -35,7 +35,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getAuditForUserRequest
      */
     @Throws(Exception::class)
-    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
+    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<NetworkAuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
     }
 
@@ -43,7 +43,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUsersForLockRequest
      */
     @Throws(Exception::class)
-    suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
+    suspend fun getUsersForLock(lockId: String): List<NetworkUserLockResponse> {
         return LockOperationsClient.getUsersForLockRequest(lockId)
     }
 
@@ -51,7 +51,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getLocksForUserRequest
      */
     @Throws(Exception::class)
-    suspend fun getLocksForUser(userId: String): LockUserResponse {
+    suspend fun getLocksForUser(userId: String): NetworkLockUserResponse {
         return LockOperationsClient.getLocksForUserRequest(userId)
     }
 
@@ -107,7 +107,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
     @Throws(Exception::class)
-    suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
+    suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<BasicLockOperations.BasicTimeRequirement>) {
         return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
     }
 
@@ -115,7 +115,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
     @Throws(Exception::class)
-    suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
+    suspend fun updateLockSettingLocationRestrictions(lockId: String, location: BasicLockOperations.BasicLocationRequirement? = null) {
         return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
     }
 
@@ -124,7 +124,7 @@ actual object LockOperationsApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
+    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
     }
 
@@ -132,7 +132,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByEmail(email: String): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
     }
 
@@ -140,7 +140,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByTelephone(telephone: String): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
     }
 
@@ -148,7 +148,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByLocalKey(localKey: String): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
     }
 
@@ -156,7 +156,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
     }
 
@@ -164,7 +164,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByIdentity(identity: String): NetworkUserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
     }
 
@@ -172,7 +172,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<NetworkBatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
     }
 
@@ -180,7 +180,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<NetworkBatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
     }
 
@@ -188,7 +188,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<NetworkBatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
     }
 
@@ -196,7 +196,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<NetworkBatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
     }
 
@@ -204,7 +204,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.unlockRequest
      */
     @Throws(Exception::class)
-    suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
+    suspend fun unlock(unlockOperation: BasicLockOperations.BasicUnlockOperation) {
         return LockOperationsClient.unlockRequest(unlockOperation)
     }
 
@@ -212,7 +212,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.shareLockRequest
      */
     @Throws(Exception::class)
-    suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
+    suspend fun shareLock(shareLockOperation: BasicLockOperations.BasicShareLockOperation) {
         return LockOperationsClient.shareLockRequest(shareLockOperation)
     }
 
@@ -220,7 +220,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.batchShareLockRequest
      */
     @Throws(Exception::class)
-    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
+    suspend fun batchShareLock(batchShareLockOperation: BasicLockOperations.BasicBatchShareLockOperation) {
         return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
     }
 
@@ -228,7 +228,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.revokeAccessToLockRequest
      */
     @Throws(Exception::class)
-    suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
+    suspend fun revokeAccessToLock(revokeAccessToLockOperation: BasicLockOperations.BasicRevokeAccessToLockOperation) {
         return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
     }
 
@@ -236,7 +236,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
     @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
+    suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: BasicLockOperations.BasicUpdateSecureSettingUnlockDuration) {
         return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
     }
 
@@ -244,7 +244,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
     @Throws(Exception::class)
-    suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
+    suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: BasicLockOperations.BasicUpdateSecureSettingUnlockBetween) {
         return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
     }
 
@@ -252,7 +252,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getPinnedLocksRequest
      */
     @Throws(Exception::class)
-    suspend fun getPinnedLocks(): List<LockResponse> {
+    suspend fun getPinnedLocks(): List<NetworkLockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
     }
 
@@ -260,7 +260,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getShareableLocksRequest
      */
     @Throws(Exception::class)
-    suspend fun getShareableLocks(): List<ShareableLockResponse> {
+    suspend fun getShareableLocks(): List<NetworkShareableLockResponse> {
         return LockOperationsClient.getShareableLocksRequest()
     }
 }

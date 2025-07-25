@@ -24,7 +24,7 @@ import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -120,7 +120,7 @@ internal fun HttpClientConfig<*>.installAuth() {
         bearer {
             refreshTokens {
                 Context.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: TokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
+                    val refreshTokens: NetworkTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
                             path(Paths.getRefreshTokenPath())
                         }

@@ -1,0 +1,8 @@
+package com.doordeck.multiplatform.sdk.model.responses
+
+typealias ApplicationResponse = NetworkApplicationResponse
+typealias EmailPreferencesResponse = NetworkEmailPreferencesResponse
+typealias EmailCallToActionResponse = NetworkEmailCallToActionResponse
+typealias OauthResponse = NetworkOauthResponse
+typealias ApplicationOwnerDetailsResponse = NetworkApplicationOwnerDetailsResponse
+typealias GetLogoUploadUrlResponse = NetworkGetLogoUploadUrlResponse

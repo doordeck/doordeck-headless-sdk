@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.SitesClient
-import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserForSiteResponse
 
 /**
  * Platform-specific implementations of sites-related API calls.
@@ -13,7 +13,7 @@ actual object SitesApi {
      * @see SitesClient.listSitesRequest
      */
     @Throws(Exception::class)
-    suspend fun listSites(): List<SiteResponse> {
+    suspend fun listSites(): List<NetworkSiteResponse> {
         return SitesClient.listSitesRequest()
     }
 
@@ -21,7 +21,7 @@ actual object SitesApi {
      * @see SitesClient.getLocksForSiteRequest
      */
     @Throws(Exception::class)
-    suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
+    suspend fun getLocksForSite(siteId: String): List<NetworkSiteLocksResponse> {
         return SitesClient.getLocksForSiteRequest(siteId)
     }
 
@@ -29,7 +29,7 @@ actual object SitesApi {
      * @see SitesClient.getUsersForSiteRequest
      */
     @Throws(Exception::class)
-    suspend fun getUsersForSite(siteId: String): List<UserForSiteResponse> {
+    suspend fun getUsersForSite(siteId: String): List<NetworkUserForSiteResponse> {
         return SitesClient.getUsersForSiteRequest(siteId)
     }
 }

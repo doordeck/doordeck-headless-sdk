@@ -10,86 +10,79 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
-import com.doordeck.multiplatform.sdk.model.data.Platform
-import com.doordeck.multiplatform.sdk.model.data.Platform.EmailCallToAction
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditIssuerResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditSubjectResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuthKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform.BasicEmailCallToAction
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditIssuerResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditSubjectResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuthKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkBatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.ControllerResponse
 import com.doordeck.multiplatform.sdk.model.responses.DiscoveredDeviceResponse
 import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.EmailCallToActionResponse
-import com.doordeck.multiplatform.sdk.model.responses.EmailPreferencesResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkEcKeyResponseNetwork
+import com.doordeck.multiplatform.sdk.model.responses.NetworkEd25519KeyResponseNetwork
+import com.doordeck.multiplatform.sdk.model.responses.NetworkEmailCallToActionResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkEmailPreferencesResponse
 import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
-import com.doordeck.multiplatform.sdk.model.responses.LocationRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockSettingsResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.OauthResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLocationRequirementResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockSettingsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockStateResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkOauthResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRsaKeyResponseNetwork
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.TimeRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UnlockBetweenSettingResponse
-import com.doordeck.multiplatform.sdk.model.responses.UsageRequirementsResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.values.IdValue
-import com.doordeck.multiplatform.sdk.model.values.InstantValue
-import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
-import com.doordeck.multiplatform.sdk.model.values.toIdValue
-import com.doordeck.multiplatform.sdk.model.values.toInstantValue
-import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
+import com.doordeck.multiplatform.sdk.model.responses.NetworkShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTimeRequirementResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUnlockBetweenSettingResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUsageRequirementsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlinx.datetime.DayOfWeek
 import kotlin.random.Random
-import kotlin.time.Clock
 import kotlin.uuid.Uuid
 
 /**
  * Account responses
  */
-internal fun randomTokenResponse(): TokenResponse = TokenResponse(
+internal fun randomTokenResponse(): NetworkTokenResponse = NetworkTokenResponse(
     authToken = randomString(),
     refreshToken = randomString(),
 )
 
-internal fun randomUserDetailsResponse(): UserDetailsResponse = UserDetailsResponse(
+internal fun randomUserDetailsResponse(): NetworkUserDetailsResponse = NetworkUserDetailsResponse(
     email = randomString(),
     displayName = randomNullable { randomString() },
     emailVerified = randomBoolean(),
     publicKey = randomPublicKey()
 )
 
-internal fun randomRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
+internal fun randomRegisterEphemeralKeyResponse(): NetworkRegisterEphemeralKeyResponse = NetworkRegisterEphemeralKeyResponse(
     certificateChain = emptyList(),
     userId = randomId()
 )
 
-internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse = NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     method = TwoFactorMethod.entries.random()
 )
 
@@ -134,7 +127,7 @@ internal fun randomFusionController(): Fusion.LockController = Fusion.DemoContro
 /**
  * Lock operation responses
  */
-internal fun randomLockResponse(): LockResponse = LockResponse(
+internal fun randomLockResponse(): NetworkLockResponse = NetworkLockResponse(
     id = randomId(),
     name = randomString(),
     colour = randomNullable { randomString() },
@@ -147,7 +140,7 @@ internal fun randomLockResponse(): LockResponse = LockResponse(
     unlockTime = randomNullable { randomDouble() }
 )
 
-internal fun randomLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
+internal fun randomLockSettingsResponse(): NetworkLockSettingsResponse = NetworkLockSettingsResponse(
     unlockTime = randomDouble(),
     permittedAddresses = (1..3).map { randomString() },
     defaultName = randomString(),
@@ -159,7 +152,7 @@ internal fun randomLockSettingsResponse(): LockSettingsResponse = LockSettingsRe
     capabilities = (1..3).associate { CapabilityType.entries.random() to CapabilityStatus.entries.random() }
 )
 
-internal fun randomUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
+internal fun randomUnlockBetweenSettingResponse(): NetworkUnlockBetweenSettingResponse = NetworkUnlockBetweenSettingResponse(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
@@ -167,19 +160,19 @@ internal fun randomUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse 
     exceptions = randomNullable { (1..3).map { randomString() } }
 )
 
-internal fun randomUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
+internal fun randomUsageRequirementsResponse(): NetworkUsageRequirementsResponse = NetworkUsageRequirementsResponse(
     time = randomNullable { (1..3).map { randomTimeRequirementResponse() } },
     location = randomLocationRequirementResponse()
 )
 
-internal fun randomTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
+internal fun randomTimeRequirementResponse(): NetworkTimeRequirementResponse = NetworkTimeRequirementResponse(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
     days = (1..3).map { randomString() }
 )
 
-internal fun randomLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
+internal fun randomLocationRequirementResponse(): NetworkLocationRequirementResponse = NetworkLocationRequirementResponse(
     latitude = randomDouble(),
     longitude = randomDouble(),
     enabled = randomBoolean(),
@@ -187,18 +180,18 @@ internal fun randomLocationRequirementResponse(): LocationRequirementResponse = 
     accuracy = randomInt()
 )
 
-internal fun randomShareableLockResponse(): ShareableLockResponse = ShareableLockResponse(
+internal fun randomShareableLockResponse(): NetworkShareableLockResponse = NetworkShareableLockResponse(
     id = randomId(),
     name = randomString()
 )
 
 
-internal fun randomUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
+internal fun randomUserPublicKeyResponse(): NetworkUserPublicKeyResponse = NetworkUserPublicKeyResponse(
     id = randomId(),
     publicKey = randomPublicKey()
 )
 
-internal fun randomBatchUserPublicKeyResponse(): BatchUserPublicKeyResponse = BatchUserPublicKeyResponse(
+internal fun randomBatchUserPublicKeyResponse(): NetworkBatchUserPublicKeyResponse = NetworkBatchUserPublicKeyResponse(
     id = randomId(),
     email = randomNullable { randomString() },
     foreignKey = randomNullable { randomString() },
@@ -206,7 +199,7 @@ internal fun randomBatchUserPublicKeyResponse(): BatchUserPublicKeyResponse = Ba
     publicKey = randomPublicKey()
 )
 
-internal fun randomLockUserResponse(): LockUserResponse = LockUserResponse(
+internal fun randomLockUserResponse(): NetworkLockUserResponse = NetworkLockUserResponse(
     userId = randomId(),
     email = randomString(),
     publicKey = randomPublicKey(),
@@ -218,7 +211,7 @@ internal fun randomLockUserResponse(): LockUserResponse = LockUserResponse(
     devices = (1..3).map { randomLockUserDetailsResponse() }
 )
 
-internal fun randomUserLockResponse(): UserLockResponse = UserLockResponse(
+internal fun randomUserLockResponse(): NetworkUserLockResponse = NetworkUserLockResponse(
     userId = randomId(),
     email = randomString(),
     publicKey = randomPublicKey(),
@@ -230,19 +223,19 @@ internal fun randomUserLockResponse(): UserLockResponse = UserLockResponse(
     end = randomNullable { randomDouble() }
 )
 
-internal fun randomLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
+internal fun randomLockUserDetailsResponse(): NetworkLockUserDetailsResponse = NetworkLockUserDetailsResponse(
     deviceId = randomId(),
     role = UserRole.entries.random(),
     start = randomNullable { randomDouble() },
     end = randomNullable { randomDouble() }
 )
 
-internal fun randomLockStateResponse(): LockStateResponse = LockStateResponse(
+internal fun randomLockStateResponse(): NetworkLockStateResponse = NetworkLockStateResponse(
     locked = randomBoolean(),
     connected = randomBoolean()
 )
 
-internal fun randomAuditResponse(): AuditResponse = AuditResponse(
+internal fun randomAuditResponse(): NetworkAuditResponse = NetworkAuditResponse(
     deviceId = randomId(),
     timestamp = randomDouble(),
     type = AuditEvent.entries.random(),
@@ -252,13 +245,13 @@ internal fun randomAuditResponse(): AuditResponse = AuditResponse(
     rejected = randomBoolean()
 )
 
-internal fun randomAuditSubjectResponse(): AuditSubjectResponse = AuditSubjectResponse(
+internal fun randomAuditSubjectResponse(): NetworkAuditSubjectResponse = NetworkAuditSubjectResponse(
     userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() }
 )
 
-internal fun randomAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerResponse(
+internal fun randomAuditIssuerResponse(): NetworkAuditIssuerResponse = NetworkAuditIssuerResponse(
     userId = randomId(),
     email = randomNullable { randomString() },
     ip = randomNullable { randomString() }
@@ -267,7 +260,7 @@ internal fun randomAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerRespo
 /**
  * Platform responses
  */
-internal fun randomApplicationResponse(): ApplicationResponse = ApplicationResponse(
+internal fun randomApplicationResponse(): NetworkApplicationResponse = NetworkApplicationResponse(
     applicationId = randomId(),
     name = randomString(),
     lastUpdated = randomNullable { randomDouble() },
@@ -287,14 +280,14 @@ internal fun randomApplicationResponse(): ApplicationResponse = ApplicationRespo
     isDoordeckApplication = randomBoolean()
 )
 
-internal fun randomAuthKeyResponse(): AuthKeyResponse = when(listOf(RsaKeyResponse::class, EcKeyResponse::class, Ed25519KeyResponse::class).random()) {
-    RsaKeyResponse::class -> randomRsaKeyResponse()
-    EcKeyResponse::class -> randomEcKeyResponse()
-    Ed25519KeyResponse::class -> randomEd25519KeyResponse()
+internal fun randomAuthKeyResponse(): NetworkAuthKeyResponse = when(listOf(NetworkRsaKeyResponseNetwork::class, NetworkEcKeyResponseNetwork::class, NetworkEd25519KeyResponseNetwork::class).random()) {
+    NetworkRsaKeyResponseNetwork::class -> randomRsaKeyResponse()
+    NetworkEcKeyResponseNetwork::class -> randomEcKeyResponse()
+    NetworkEd25519KeyResponseNetwork::class -> randomEd25519KeyResponse()
     else -> error("Unknown key class")
 }
 
-internal fun randomRsaKeyResponse(): RsaKeyResponse = RsaKeyResponse(
+internal fun randomRsaKeyResponse(): NetworkRsaKeyResponseNetwork = NetworkRsaKeyResponseNetwork(
     use = randomString(),
     kid = randomString(),
     alg = randomNullable { randomString() },
@@ -310,7 +303,7 @@ internal fun randomRsaKeyResponse(): RsaKeyResponse = RsaKeyResponse(
     n = randomString()
 )
 
-internal fun randomEcKeyResponse(): EcKeyResponse = EcKeyResponse(
+internal fun randomEcKeyResponse(): NetworkEcKeyResponseNetwork = NetworkEcKeyResponseNetwork(
     use = randomString(),
     kid = randomString(),
     alg = randomNullable { randomString() },
@@ -327,7 +320,7 @@ internal fun randomEcKeyResponse(): EcKeyResponse = EcKeyResponse(
     y = randomString()
 )
 
-internal fun randomEd25519KeyResponse(): Ed25519KeyResponse = Ed25519KeyResponse(
+internal fun randomEd25519KeyResponse(): NetworkEd25519KeyResponseNetwork = NetworkEd25519KeyResponseNetwork(
     use = randomString(),
     kid = randomString(),
     alg = randomNullable { randomString() },
@@ -344,7 +337,7 @@ internal fun randomEd25519KeyResponse(): Ed25519KeyResponse = Ed25519KeyResponse
     x = randomString()
 )
 
-internal fun randomEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
+internal fun randomEmailPreferencesResponse(): NetworkEmailPreferencesResponse = NetworkEmailPreferencesResponse(
     senderEmail = randomNullable { randomString() },
     senderName = randomNullable { randomString() },
     primaryColour = randomString(),
@@ -353,19 +346,19 @@ internal fun randomEmailPreferencesResponse(): EmailPreferencesResponse = EmailP
     callToAction = randomEmailCallToActionResponse()
 )
 
-internal fun randomEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
+internal fun randomEmailCallToActionResponse(): NetworkEmailCallToActionResponse = NetworkEmailCallToActionResponse(
     actionTarget = randomString(),
     headline = randomString(),
     actionText = randomString()
 )
 
-internal fun randomOauthResponse(): OauthResponse = OauthResponse(
+internal fun randomOauthResponse(): NetworkOauthResponse = NetworkOauthResponse(
     authorizationEndpoint = randomString(),
     clientId = randomString(),
     grantType = randomString()
 )
 
-internal fun randomApplicationOwnerDetailsResponse(): ApplicationOwnerDetailsResponse = ApplicationOwnerDetailsResponse(
+internal fun randomApplicationOwnerDetailsResponse(): NetworkApplicationOwnerDetailsResponse = NetworkApplicationOwnerDetailsResponse(
     userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() },
@@ -373,14 +366,14 @@ internal fun randomApplicationOwnerDetailsResponse(): ApplicationOwnerDetailsRes
     foreign = randomBoolean()
 )
 
-internal fun randomGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
+internal fun randomGetLogoUploadUrlResponse(): NetworkGetLogoUploadUrlResponse = NetworkGetLogoUploadUrlResponse(
     uploadUrl = DEFAULT_UPLOAD_URL
 )
 
 /**
  * Site responses
  */
-internal fun randomSiteResponse(): SiteResponse = SiteResponse(
+internal fun randomSiteResponse(): NetworkSiteResponse = NetworkSiteResponse(
     id = randomId(),
     name = randomString(),
     colour = randomString(),
@@ -392,7 +385,7 @@ internal fun randomSiteResponse(): SiteResponse = SiteResponse(
     updated = randomInstant()
 )
 
-internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
+internal fun randomSiteLocksResponse(): NetworkSiteLocksResponse = NetworkSiteLocksResponse(
     id = randomId(),
     name = randomString(),
     colour = randomNullable { randomString() },
@@ -403,7 +396,7 @@ internal fun randomSiteLocksResponse(): SiteLocksResponse = SiteLocksResponse(
 )
 
 
-internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteResponse(
+internal fun randomUserForSiteResponse(): NetworkUserForSiteResponse = NetworkUserForSiteResponse(
     userId = randomId(),
     email = randomString(),
     displayName = randomNullable { randomString() },
@@ -413,7 +406,7 @@ internal fun randomUserForSiteResponse(): UserForSiteResponse = UserForSiteRespo
 /**
  * Tile responses
  */
-internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
+internal fun randomTileLocksResponse(): NetworkTileLocksResponse = NetworkTileLocksResponse(
     siteId = randomId(),
     tileId = randomId(),
     deviceIds = (1..3).map { randomId() }
@@ -422,14 +415,14 @@ internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
 /**
  * Lock operation data
  */
-internal fun randomTimeRequirement(): LockOperations.TimeRequirement = LockOperations.TimeRequirement(
+internal fun randomTimeRequirement(): BasicLockOperations.BasicTimeRequirement = BasicLockOperations.BasicTimeRequirement(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
     days = (1..3).map { randomString() }
 )
 
-internal fun randomLocationRequirement(): LockOperations.LocationRequirement = LockOperations.LocationRequirement(
+internal fun randomLocationRequirement(): BasicLockOperations.BasicLocationRequirement = BasicLockOperations.BasicLocationRequirement(
     latitude = randomDouble(),
     longitude = randomDouble(),
     enabled = randomBoolean(),
@@ -437,7 +430,7 @@ internal fun randomLocationRequirement(): LockOperations.LocationRequirement = L
     accuracy = randomInt()
 )
 
-internal fun randomUnlockBetween(): LockOperations.UnlockBetween = LockOperations.UnlockBetween(
+internal fun randomUnlockBetween(): BasicLockOperations.BasicUnlockBetween = BasicLockOperations.BasicUnlockBetween(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
@@ -445,37 +438,37 @@ internal fun randomUnlockBetween(): LockOperations.UnlockBetween = LockOperation
     exceptions = randomNullable { (1..3).map { randomString() } }
 )
 
-internal fun randomUnlockOperation(): LockOperations.UnlockOperation = LockOperations.UnlockOperation(
+internal fun randomUnlockOperation(): BasicLockOperations.BasicUnlockOperation = BasicLockOperations.BasicUnlockOperation(
     baseOperation = randomBaseOperation(),
     directAccessEndpoints = randomNullable { (1..3).map { randomString() } }
 )
 
-internal fun randomShareLockOperation(): LockOperations.ShareLockOperation = LockOperations.ShareLockOperation(
+internal fun randomShareLockOperation(): BasicLockOperations.BasicShareLockOperation = BasicLockOperations.BasicShareLockOperation(
     baseOperation = randomBaseOperation(),
     shareLock = randomShareLock()
 )
 
-internal fun randomBatchShareLockOperation(): LockOperations.BatchShareLockOperation = LockOperations.BatchShareLockOperation(
+internal fun randomBatchShareLockOperation(): BasicLockOperations.BasicBatchShareLockOperation = BasicLockOperations.BasicBatchShareLockOperation(
     baseOperation = randomBaseOperation(),
     users = (1..3).map { randomShareLock() }
 )
 
-internal fun randomRevokeAccessToLockOperation(): LockOperations.RevokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+internal fun randomRevokeAccessToLockOperation(): BasicLockOperations.BasicRevokeAccessToLockOperation = BasicLockOperations.BasicRevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
     users = (1..3).map { randomString() }
 )
 
-internal fun randomUpdateSecureSettingUnlockDuration(): LockOperations.UpdateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
+internal fun randomUpdateSecureSettingUnlockDuration(): BasicLockOperations.BasicUpdateSecureSettingUnlockDuration = BasicLockOperations.BasicUpdateSecureSettingUnlockDuration(
     baseOperation = randomBaseOperation(),
     unlockDuration = randomInt()
 )
 
-internal fun randomUpdateSecureSettingUnlockBetween(): LockOperations.UpdateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+internal fun randomUpdateSecureSettingUnlockBetween(): BasicLockOperations.BasicUpdateSecureSettingUnlockBetween = BasicLockOperations.BasicUpdateSecureSettingUnlockBetween(
     baseOperation = randomBaseOperation(),
     unlockBetween = randomNullable { randomUnlockBetween() }
 )
 
-internal fun randomShareLock(): LockOperations.ShareLock = LockOperations.ShareLock(
+internal fun randomShareLock(): BasicLockOperations.BasicShareLock = BasicLockOperations.BasicShareLock(
     targetUserId = randomString(),
     targetUserRole = UserRole.entries.random(),
     targetUserPublicKey = randomByteArray(),
@@ -483,7 +476,7 @@ internal fun randomShareLock(): LockOperations.ShareLock = LockOperations.ShareL
     end = randomNullable { randomInt() }
 )
 
-internal fun randomBaseOperation(): LockOperations.BaseOperation = LockOperations.BaseOperation(
+internal fun randomBaseOperation(): BasicLockOperations.BasicBaseOperation = BasicLockOperations.BasicBaseOperation(
     userId = randomNullable { randomString() },
     userCertificateChain = randomNullable { (1..3).map { randomString() } },
     userPrivateKey = randomNullable { randomByteArray() },
@@ -497,7 +490,7 @@ internal fun randomBaseOperation(): LockOperations.BaseOperation = LockOperation
 /**
  * Platform data
  */
-internal fun randomCreateApplication(): Platform.CreateApplication = Platform.CreateApplication(
+internal fun randomCreateApplication(): BasicPlatform.BasicCreateApplication = BasicPlatform.BasicCreateApplication(
     name = randomString(),
     companyName = randomString(),
     mailingAddress = randomString(),
@@ -508,7 +501,7 @@ internal fun randomCreateApplication(): Platform.CreateApplication = Platform.Cr
     logoUrl = randomNullable { randomString() }
 )
 
-internal fun randomEmailPreferences(): Platform.EmailPreferences = Platform.EmailPreferences(
+internal fun randomEmailPreferences(): BasicPlatform.BasicEmailPreferences = BasicPlatform.BasicEmailPreferences(
     senderEmail = randomNullable { randomString() },
     senderName = randomNullable { randomString() },
     primaryColour = randomNullable { randomString() },
@@ -517,13 +510,13 @@ internal fun randomEmailPreferences(): Platform.EmailPreferences = Platform.Emai
     callToAction = randomNullable { randomEmailCallToAction() }
 )
 
-internal fun randomEmailCallToAction(): EmailCallToAction = EmailCallToAction(
+internal fun randomEmailCallToAction(): BasicEmailCallToAction = BasicEmailCallToAction(
     actionTarget = randomString(),
     headline = randomString(),
     actionText = randomString()
 )
 
-internal fun randomRsaKey(): Platform.RsaKey = Platform.RsaKey(
+internal fun randomRsaKey(): BasicPlatform.BasicRsaKey = BasicPlatform.BasicRsaKey(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),
@@ -538,7 +531,7 @@ internal fun randomRsaKey(): Platform.RsaKey = Platform.RsaKey(
     n = randomString()
 )
 
-internal fun randomEcKey(): Platform.EcKey = Platform.EcKey(
+internal fun randomEcKey(): BasicPlatform.BasicEcKey = BasicPlatform.BasicEcKey(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),
@@ -549,7 +542,7 @@ internal fun randomEcKey(): Platform.EcKey = Platform.EcKey(
     y = randomString()
 )
 
-internal fun randomEd25519Key(): Platform.Ed25519Key = Platform.Ed25519Key(
+internal fun randomEd25519Key(): BasicPlatform.BasicEd25519Key = BasicPlatform.BasicEd25519Key(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),
@@ -570,13 +563,6 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
     secureStorage = DefaultSecureStorage(MemorySettings()),
     debugLogging = randomNullable { randomBoolean() }
 )
-
-/**
- * Values
- */
-internal fun randomId(): IdValue = Uuid.random().toString().toIdValue()
-internal fun randomPublicKey(): PublicKeyValue = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64().toPublicKeyValue()
-internal fun randomInstant(): InstantValue = Clock.System.now().toString().toInstantValue()
 
 /**
  * Test utils

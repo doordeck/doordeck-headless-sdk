@@ -3,6 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.toBasicBatchShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicLocationRequirement
+import com.doordeck.multiplatform.sdk.model.data.toBasicRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
+import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.LockResponse
@@ -175,7 +183,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
+        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times.toBasicTimeRequirement())
     }
 
     /**
@@ -189,7 +197,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
-        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
+        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location?.toBasicLocationRequirement())
     }
 
     /**
@@ -345,7 +353,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.unlockRequest
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return LockOperationsClient.unlockRequest(unlockOperation)
+        return LockOperationsClient.unlockRequest(unlockOperation.toBasicUnlockOperation())
     }
 
     /**
@@ -359,7 +367,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.shareLockRequest
      */
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return LockOperationsClient.shareLockRequest(shareLockOperation)
+        return LockOperationsClient.shareLockRequest(shareLockOperation.toBasicShareLockOperation())
     }
 
     /**
@@ -373,7 +381,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.batchShareLockRequest
      */
     suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
-        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
+        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation.toBasicBatchShareLockOperation())
     }
 
     /**
@@ -387,7 +395,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.revokeAccessToLockRequest
      */
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
+        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation())
     }
 
     /**
@@ -401,7 +409,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
+        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration())
     }
 
     /**
@@ -419,7 +427,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween())
     }
 
     /**

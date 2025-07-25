@@ -3,10 +3,17 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
 import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
+import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import com.nimbusds.jose.jwk.JWK
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
@@ -19,7 +26,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     suspend fun createApplication(application: Platform.CreateApplication) {
-        return PlatformClient.createApplicationRequest(application)
+        return PlatformClient.createApplicationRequest(application.toBasicCreateApplication())
     }
 
     /**
@@ -36,6 +43,7 @@ actual object PlatformApi {
     @DoordeckOnly
     suspend fun listApplications(): List<ApplicationResponse> {
         return PlatformClient.listApplicationsRequest()
+            .toApplicationResponse()
     }
 
     /**
@@ -52,6 +60,7 @@ actual object PlatformApi {
     @DoordeckOnly
     suspend fun getApplication(applicationId: UUID): ApplicationResponse {
         return PlatformClient.getApplicationRequest(applicationId.toString())
+            .toApplicationResponse()
     }
 
     /**
@@ -163,7 +172,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     suspend fun updateApplicationEmailPreferences(applicationId: UUID, emailPreferences: Platform.EmailPreferences) {
-        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId.toString(), emailPreferences)
+        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId.toString(), emailPreferences.toBasicEmailPreferences())
     }
 
     /**
@@ -212,6 +221,7 @@ actual object PlatformApi {
     @DoordeckOnly
     suspend fun getLogoUploadUrl(applicationId: UUID, contentType: String): GetLogoUploadUrlResponse {
         return PlatformClient.getLogoUploadUrlRequest(applicationId.toString(), contentType)
+            .toGetLogoUploadUrlResponse()
     }
 
     /**
@@ -226,15 +236,15 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    suspend fun addAuthKey(applicationId: UUID, key: Platform.AuthKey) {
-        return PlatformClient.addAuthKeyRequest(applicationId.toString(), key)
+    suspend fun addAuthKey(applicationId: UUID, key: JWK) {
+        return PlatformClient.addAuthKeyRequest(applicationId.toString(), key.toBasicAuthKey())
     }
 
     /**
      * Async variant of [PlatformApi.addAuthKey] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addAuthKeyAsync(applicationId: UUID, key: Platform.AuthKey): CompletableFuture<Unit> {
+    fun addAuthKeyAsync(applicationId: UUID, key: JWK): CompletableFuture<Unit> {
         return completableFuture { addAuthKey(applicationId, key) }
     }
 
@@ -340,6 +350,7 @@ actual object PlatformApi {
     @DoordeckOnly
     suspend fun getApplicationOwnersDetails(applicationId: UUID): List<ApplicationOwnerDetailsResponse> {
         return PlatformClient.getApplicationOwnersDetailsRequest(applicationId.toString())
+            .toApplicationOwnerDetailsResponse()
     }
 
     /**

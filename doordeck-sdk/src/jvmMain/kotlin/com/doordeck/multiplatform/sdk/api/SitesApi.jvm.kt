@@ -4,6 +4,9 @@ import com.doordeck.multiplatform.sdk.clients.SitesClient
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
@@ -17,6 +20,7 @@ actual object SitesApi {
      */
     suspend fun listSites(): List<SiteResponse> {
         return SitesClient.listSitesRequest()
+            .toSiteResponse()
     }
 
     /**
@@ -31,6 +35,7 @@ actual object SitesApi {
      */
     suspend fun getLocksForSite(siteId: UUID): List<SiteLocksResponse> {
         return SitesClient.getLocksForSiteRequest(siteId.toString())
+            .toLockResponse()
     }
 
     /**
@@ -45,6 +50,7 @@ actual object SitesApi {
      */
     suspend fun getUsersForSite(siteId: UUID): List<UserForSiteResponse> {
         return SitesClient.getUsersForSiteRequest(siteId.toString())
+            .toUserForSiteResponse()
     }
 
     /**

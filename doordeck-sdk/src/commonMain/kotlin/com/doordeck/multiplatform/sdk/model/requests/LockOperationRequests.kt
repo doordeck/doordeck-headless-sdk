@@ -80,7 +80,7 @@ internal data class UnlockBetweenSettingRequest(
 )
 
 @Serializable
-sealed interface OperationRequest
+internal sealed interface OperationRequest
 
 @Serializable
 internal data class UserPublicKeyRequest(
@@ -100,7 +100,7 @@ internal data class BatchUserPublicKeyRequest(
 )
 
 @Serializable
-sealed interface UpdateLockPropertiesRequest
+internal sealed interface UpdateLockPropertiesRequest
 
 @Serializable
 internal data class UpdateLockNameRequest(
@@ -123,7 +123,7 @@ internal data class UpdateLockSettingRequest(
 ): UpdateLockPropertiesRequest
 
 @Serializable
-sealed interface LockSettingsRequest
+internal sealed interface LockSettingsRequest
 
 @Serializable
 internal data class LockSettingsDefaultNameRequest(
@@ -141,7 +141,7 @@ internal data class LockSettingsHiddenRequest(
 ): LockSettingsRequest
 
 @Serializable
-sealed interface UsageRequirementRequest
+internal sealed interface UsageRequirementRequest
 
 @Serializable
 internal data class UpdateLockSettingUsageRequirementRequest(

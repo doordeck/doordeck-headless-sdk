@@ -2,10 +2,10 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Platform
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkGetLogoUploadUrlResponse
 
 /**
  * Platform-specific implementations of platform-related API calls.
@@ -16,7 +16,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun createApplication(application: Platform.CreateApplication) {
+    suspend fun createApplication(application: BasicPlatform.BasicCreateApplication) {
         return PlatformClient.createApplicationRequest(application)
     }
 
@@ -25,7 +25,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun listApplications(): List<ApplicationResponse> {
+    suspend fun listApplications(): List<NetworkApplicationResponse> {
         return PlatformClient.listApplicationsRequest()
     }
 
@@ -34,7 +34,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplication(applicationId: String): ApplicationResponse {
+    suspend fun getApplication(applicationId: String): NetworkApplicationResponse {
         return PlatformClient.getApplicationRequest(applicationId)
     }
 
@@ -97,7 +97,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
+    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: BasicPlatform.BasicEmailPreferences) {
         return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
     }
 
@@ -124,7 +124,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): NetworkGetLogoUploadUrlResponse {
         return PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
     }
 
@@ -133,7 +133,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
+    suspend fun addAuthKey(applicationId: String, key: BasicPlatform.BasicAuthKey) {
         return PlatformClient.addAuthKeyRequest(applicationId, key)
     }
 
@@ -196,7 +196,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
+    suspend fun getApplicationOwnersDetails(applicationId: String): List<NetworkApplicationOwnerDetailsResponse> {
         return PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
     }
 }

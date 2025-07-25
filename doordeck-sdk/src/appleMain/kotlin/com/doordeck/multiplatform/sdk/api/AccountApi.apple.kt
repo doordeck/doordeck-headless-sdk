@@ -3,10 +3,10 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserDetailsResponse
 
 /**
  * Platform-specific implementations of account-related API calls.
@@ -17,7 +17,7 @@ actual object AccountApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
+    suspend fun refreshToken(refreshToken: String? = null): NetworkTokenResponse {
         return AccountClient.refreshTokenRequest(refreshToken)
     }
 
@@ -33,7 +33,7 @@ actual object AccountApi {
      * @see AccountClient.registerEphemeralKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): NetworkRegisterEphemeralKeyResponse {
         return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
     }
 
@@ -41,7 +41,7 @@ actual object AccountApi {
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
     }
 
@@ -49,7 +49,7 @@ actual object AccountApi {
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
     @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): NetworkRegisterEphemeralKeyResponse {
         return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
     }
 
@@ -75,7 +75,7 @@ actual object AccountApi {
      * @see AccountClient.getUserDetailsRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserDetails(): UserDetailsResponse {
+    suspend fun getUserDetails(): NetworkUserDetailsResponse {
         return AccountClient.getUserDetailsRequest()
     }
 

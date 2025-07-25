@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
@@ -17,7 +17,7 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    suspend fun createApplication(application: Platform.CreateApplication) {
+    suspend fun createApplication(application: BasicPlatform.BasicCreateApplication) {
         return PlatformClient.createApplicationRequest(application)
     }
 
@@ -25,7 +25,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.createApplication] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun createApplicationAsync(application: Platform.CreateApplication): CompletableFuture<Unit> {
+    fun createApplicationAsync(application: BasicPlatform.BasicCreateApplication): CompletableFuture<Unit> {
         return completableFuture { createApplication(application) }
     }
 
@@ -161,7 +161,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences) {
+    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: BasicPlatform.BasicEmailPreferences) {
         return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences)
     }
 
@@ -169,7 +169,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.updateApplicationEmailPreferences] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferencesAsync(applicationId: String, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
+    fun updateApplicationEmailPreferencesAsync(applicationId: String, emailPreferences: BasicPlatform.BasicEmailPreferences): CompletableFuture<Unit> {
         return completableFuture { updateApplicationEmailPreferences(applicationId, emailPreferences) }
     }
 
@@ -225,7 +225,7 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    suspend fun addAuthKey(applicationId: String, key: Platform.AuthKey) {
+    suspend fun addAuthKey(applicationId: String, key: BasicPlatform.BasicAuthKey) {
         return PlatformClient.addAuthKeyRequest(applicationId, key)
     }
 
@@ -233,7 +233,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.addAuthKey] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun addAuthKeyAsync(applicationId: String, key: Platform.AuthKey): CompletableFuture<Unit> {
+    fun addAuthKeyAsync(applicationId: String, key: BasicPlatform.BasicAuthKey): CompletableFuture<Unit> {
         return completableFuture { addAuthKey(applicationId, key) }
     }
 

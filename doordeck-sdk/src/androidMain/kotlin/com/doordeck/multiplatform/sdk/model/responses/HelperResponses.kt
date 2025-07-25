@@ -1,0 +1,4 @@
+package com.doordeck.multiplatform.sdk.model.responses
+
+typealias AssistedLoginResponse = NetworkAssistedLoginResponse
+typealias AssistedRegisterEphemeralKeyResponse = NetworkAssistedRegisterEphemeralKeyResponse

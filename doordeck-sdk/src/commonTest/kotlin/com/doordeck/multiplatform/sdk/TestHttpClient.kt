@@ -11,28 +11,28 @@ import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.network.Paths
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkBatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.toHeaderValue
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -154,27 +154,27 @@ internal inline fun <reified T> MockRequestHandleScope.respondContent(content: T
 private fun HttpRequestData.isVersion(apiVersion: ApiVersion): Boolean =
     headers.contains(HttpHeaders.Accept, apiVersion.toHeaderValue())
 
-internal val TOKEN_RESPONSE: TokenResponse = randomTokenResponse()
-internal val TILE_LOCKS_RESPONSE: TileLocksResponse = randomTileLocksResponse()
-internal val LIST_SITES_RESPONSE: List<SiteResponse> = (1..3).map { randomSiteResponse() }
-internal val LOCKS_FOR_SITE_RESPONSE: List<SiteLocksResponse> = (1..3).map { randomSiteLocksResponse() }
-internal val USER_FOR_SITE_RESPONSE: List<UserForSiteResponse> = (1..3).map { randomUserForSiteResponse() }
-internal val REGISTER_EPHEMERAL_KEY_RESPONSE: RegisterEphemeralKeyResponse = randomRegisterEphemeralKeyResponse()
-internal val REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE: RegisterEphemeralKeyWithSecondaryAuthenticationResponse = randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
-internal val USER_DETAILS_RESPONSE: UserDetailsResponse = randomUserDetailsResponse()
-internal val LOGO_UPLOAD_URL_RESPONSE: GetLogoUploadUrlResponse = randomGetLogoUploadUrlResponse()
+internal val TOKEN_RESPONSE: NetworkTokenResponse = randomTokenResponse()
+internal val TILE_LOCKS_RESPONSE: NetworkTileLocksResponse = randomTileLocksResponse()
+internal val LIST_SITES_RESPONSE: List<NetworkSiteResponse> = (1..3).map { randomSiteResponse() }
+internal val LOCKS_FOR_SITE_RESPONSE: List<NetworkSiteLocksResponse> = (1..3).map { randomSiteLocksResponse() }
+internal val USER_FOR_SITE_RESPONSE: List<NetworkUserForSiteResponse> = (1..3).map { randomUserForSiteResponse() }
+internal val REGISTER_EPHEMERAL_KEY_RESPONSE: NetworkRegisterEphemeralKeyResponse = randomRegisterEphemeralKeyResponse()
+internal val REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE: NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse = randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
+internal val USER_DETAILS_RESPONSE: NetworkUserDetailsResponse = randomUserDetailsResponse()
+internal val LOGO_UPLOAD_URL_RESPONSE: NetworkGetLogoUploadUrlResponse = randomGetLogoUploadUrlResponse()
 internal val FUSION_LOGIN_RESPONSE: FusionLoginResponse = randomFusionLoginResponse()
 internal val INTEGRATION_TYPE_RESPONSE: IntegrationTypeResponse = randomIntegrationTypeResponse()
 internal val INTEGRATION_CONFIGURATION_RESPONSE: List<IntegrationConfigurationResponse> = (1..3).map { randomIntegrationConfigurationResponse() }
 internal val DOOR_STATE_RESPONSE: DoorStateResponse = randomDoorStateResponse()
-internal val APPLICATION_RESPONSE: ApplicationResponse = randomApplicationResponse()
+internal val APPLICATION_RESPONSE: NetworkApplicationResponse = randomApplicationResponse()
 internal val APPLICATION_LIST_RESPONSE = (1..3).map { randomApplicationResponse() }
-internal val APPLICATION_OWNER_DETAILS_RESPONSE: List<ApplicationOwnerDetailsResponse> = (1..3).map { randomApplicationOwnerDetailsResponse() }
-internal val LOCK_RESPONSE: LockResponse = randomLockResponse()
-internal val AUDIT_RESPONSE: List<AuditResponse> = (1..3).map { randomAuditResponse() }
-internal val USER_LOCK_RESPONSE: List<UserLockResponse> = (1..3).map { randomUserLockResponse() }
-internal val LOCK_USER_RESPONSE: LockUserResponse = randomLockUserResponse()
-internal val USER_PUBLIC_KEY_RESPONSE: UserPublicKeyResponse = randomUserPublicKeyResponse()
-internal val BATCH_USER_PUBLIC_KEY_RESPONSE: List<BatchUserPublicKeyResponse> = (1..3).map { randomBatchUserPublicKeyResponse() }
-internal val PINNED_LOCKS_RESPONSE: List<LockResponse> = (1..3).map { randomLockResponse() }
-internal val SHAREABLE_LOCKS_RESPONSE: List<ShareableLockResponse> = (1..3).map { randomShareableLockResponse() }
+internal val APPLICATION_OWNER_DETAILS_RESPONSE: List<NetworkApplicationOwnerDetailsResponse> = (1..3).map { randomApplicationOwnerDetailsResponse() }
+internal val LOCK_RESPONSE: NetworkLockResponse = randomLockResponse()
+internal val AUDIT_RESPONSE: List<NetworkAuditResponse> = (1..3).map { randomAuditResponse() }
+internal val USER_LOCK_RESPONSE: List<NetworkUserLockResponse> = (1..3).map { randomUserLockResponse() }
+internal val LOCK_USER_RESPONSE: NetworkLockUserResponse = randomLockUserResponse()
+internal val USER_PUBLIC_KEY_RESPONSE: NetworkUserPublicKeyResponse = randomUserPublicKeyResponse()
+internal val BATCH_USER_PUBLIC_KEY_RESPONSE: List<NetworkBatchUserPublicKeyResponse> = (1..3).map { randomBatchUserPublicKeyResponse() }
+internal val PINNED_LOCKS_RESPONSE: List<NetworkLockResponse> = (1..3).map { randomLockResponse() }
+internal val SHAREABLE_LOCKS_RESPONSE: List<NetworkShareableLockResponse> = (1..3).map { randomShareableLockResponse() }
