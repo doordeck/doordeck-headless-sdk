@@ -6,9 +6,7 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 internal data class NetworkLockResponse(
     val id: String,
@@ -23,7 +21,6 @@ internal data class NetworkLockResponse(
     val unlockTime: Double? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkLockSettingsResponse(
     val unlockTime: Double,
@@ -37,14 +34,12 @@ internal data class NetworkLockSettingsResponse(
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
-@JsExport
 @Serializable
 internal data class NetworkUsageRequirementsResponse(
     val time: List<NetworkTimeRequirementResponse>? = null,
     val location: NetworkLocationRequirementResponse? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkTimeRequirementResponse(
     val start: String,
@@ -53,7 +48,6 @@ internal data class NetworkTimeRequirementResponse(
     val days: List<DayOfWeek>
 )
 
-@JsExport
 @Serializable
 internal data class NetworkLocationRequirementResponse(
     val latitude: Double,
@@ -63,7 +57,6 @@ internal data class NetworkLocationRequirementResponse(
     val accuracy: Int
 )
 
-@JsExport
 @Serializable
 internal data class NetworkUnlockBetweenSettingResponse(
     val start: String,
@@ -73,21 +66,18 @@ internal data class NetworkUnlockBetweenSettingResponse(
     val exceptions: List<String>? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkLockStateResponse(
     val locked: Boolean,
     val connected: Boolean
 )
 
-@JsExport
 @Serializable
 internal data class NetworkUserPublicKeyResponse(
     val id: String,
     val publicKey: String
 )
 
-@JsExport
 @Serializable
 internal data class NetworkBatchUserPublicKeyResponse(
     val id: String,
@@ -97,14 +87,12 @@ internal data class NetworkBatchUserPublicKeyResponse(
     val publicKey: String
 )
 
-@JsExport
 @Serializable
 internal data class NetworkShareableLockResponse(
     val id: String,
     val name: String
 )
 
-@JsExport
 @Serializable
 internal data class NetworkUserLockResponse(
     val userId: String,
@@ -118,7 +106,6 @@ internal data class NetworkUserLockResponse(
     val end: Double? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkLockUserResponse(
     val userId: String,
@@ -132,7 +119,6 @@ internal data class NetworkLockUserResponse(
     val devices: List<NetworkLockUserDetailsResponse>
 )
 
-@JsExport
 @Serializable
 internal data class NetworkLockUserDetailsResponse(
     val deviceId: String,
@@ -141,7 +127,6 @@ internal data class NetworkLockUserDetailsResponse(
     val end: Double? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkAuditResponse(
     val deviceId: String,
@@ -153,7 +138,6 @@ internal data class NetworkAuditResponse(
     val rejected: Boolean
 )
 
-@JsExport
 @Serializable
 internal data class NetworkAuditIssuerResponse(
     val userId: String,
@@ -161,7 +145,6 @@ internal data class NetworkAuditIssuerResponse(
     val ip: String? = null
 )
 
-@JsExport
 @Serializable
 internal data class NetworkAuditSubjectResponse(
     val userId: String,

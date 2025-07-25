@@ -4,9 +4,7 @@ import com.doordeck.multiplatform.sdk.model.common.GrantType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 internal data class NetworkApplicationResponse(
     val applicationId: String,
@@ -28,7 +26,6 @@ internal data class NetworkApplicationResponse(
     val isDoordeckApplication: Boolean? = null
 )
 
-@JsExport
 @Serializable
 @JsonClassDiscriminator("kty")
 internal sealed interface NetworkAuthKeyResponse {
@@ -45,7 +42,6 @@ internal sealed interface NetworkAuthKeyResponse {
     val iat: Int?
 }
 
-@JsExport
 @Serializable
 @SerialName("RSA")
 internal data class NetworkRsaKeyResponseNetwork(
@@ -66,7 +62,6 @@ internal data class NetworkRsaKeyResponseNetwork(
     val n: String
 ): NetworkAuthKeyResponse
 
-@JsExport
 @Serializable
 @SerialName("EC")
 internal data class NetworkEcKeyResponseNetwork(
@@ -88,7 +83,6 @@ internal data class NetworkEcKeyResponseNetwork(
     val y: String
 ): NetworkAuthKeyResponse
 
-@JsExport
 @Serializable
 @SerialName("OKP")
 internal data class NetworkEd25519KeyResponseNetwork(
@@ -110,7 +104,6 @@ internal data class NetworkEd25519KeyResponseNetwork(
     val x: String
 ): NetworkAuthKeyResponse
 
-@JsExport
 @Serializable
 internal data class NetworkEmailPreferencesResponse(
     val senderEmail: String? = null,
@@ -121,7 +114,6 @@ internal data class NetworkEmailPreferencesResponse(
     val callToAction: NetworkEmailCallToActionResponse? = null,
 )
 
-@JsExport
 @Serializable
 internal data class NetworkEmailCallToActionResponse(
     val actionTarget: String,
@@ -129,7 +121,6 @@ internal data class NetworkEmailCallToActionResponse(
     val actionText: String
 )
 
-@JsExport
 @Serializable
 internal data class NetworkOauthResponse(
     val authorizationEndpoint: String,
@@ -137,7 +128,6 @@ internal data class NetworkOauthResponse(
     val grantType: GrantType
 )
 
-@JsExport
 @Serializable
 internal data class NetworkApplicationOwnerDetailsResponse(
     val userId: String,
@@ -147,7 +137,6 @@ internal data class NetworkApplicationOwnerDetailsResponse(
     val foreign: Boolean
 )
 
-@JsExport
 @Serializable
 internal data class NetworkGetLogoUploadUrlResponse(
     val uploadUrl: String

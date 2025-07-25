@@ -1,9 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
 internal data class NetworkSiteResponse(
     val id: String,
@@ -19,7 +17,6 @@ internal data class NetworkSiteResponse(
 
 internal typealias NetworkSiteLocksResponse = NetworkLockResponse
 
-@JsExport
 @Serializable
 internal data class NetworkUserForSiteResponse(
     val userId: String,
