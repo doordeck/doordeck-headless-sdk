@@ -18,6 +18,13 @@ import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -30,6 +37,7 @@ actual object LockOperationsApi {
      */
     suspend fun getSingleLock(lockId: String): LockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId)
+            .toLockResponse()
     }
 
     /**
@@ -44,6 +52,7 @@ actual object LockOperationsApi {
      */
     suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
+            .toAuditResponse()
     }
 
     /**
@@ -58,6 +67,7 @@ actual object LockOperationsApi {
      */
     suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
+            .toAuditResponse()
     }
 
     /**
@@ -72,6 +82,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
         return LockOperationsClient.getUsersForLockRequest(lockId)
+            .toUserLockResponse()
     }
 
     /**
@@ -86,6 +97,7 @@ actual object LockOperationsApi {
      */
     suspend fun getLocksForUser(userId: String): LockUserResponse {
         return LockOperationsClient.getLocksForUserRequest(userId)
+            .toLockUserResponse()
     }
 
     /**
@@ -213,6 +225,7 @@ actual object LockOperationsApi {
     @DoordeckOnly
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -228,6 +241,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -242,6 +256,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -256,6 +271,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -270,6 +286,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -284,6 +301,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -298,6 +316,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -312,6 +331,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -326,6 +346,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -340,6 +361,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -446,6 +468,7 @@ actual object LockOperationsApi {
      */
     suspend fun getPinnedLocks(): List<LockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
+            .toLockResponse()
     }
 
     /**
@@ -460,6 +483,7 @@ actual object LockOperationsApi {
      */
     suspend fun getShareableLocks(): List<ShareableLockResponse> {
         return LockOperationsClient.getShareableLocksRequest()
+            .toShareableLockResponse()
     }
 
     /**

@@ -26,6 +26,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.net.InetAddress
 import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
@@ -186,14 +187,14 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
-    suspend fun setLockSettingPermittedAddresses(lockId: UUID, permittedAddresses: List<String>) {
-        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId.toString(), permittedAddresses)
+    suspend fun setLockSettingPermittedAddresses(lockId: UUID, permittedAddresses: List<InetAddress>) {
+        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId.toString(), permittedAddresses.map { it.toString() })
     }
 
     /**
      * Async variant of [LockOperationsApi.setLockSettingPermittedAddresses] returning [CompletableFuture].
      */
-    fun setLockSettingPermittedAddressesAsync(lockId: UUID, permittedAddresses: List<String>): CompletableFuture<Unit> {
+    fun setLockSettingPermittedAddressesAsync(lockId: UUID, permittedAddresses: List<InetAddress>): CompletableFuture<Unit> {
         return completableFuture { setLockSettingPermittedAddresses(lockId, permittedAddresses) }
     }
 

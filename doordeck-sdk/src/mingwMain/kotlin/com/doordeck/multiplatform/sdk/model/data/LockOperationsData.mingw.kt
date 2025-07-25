@@ -249,9 +249,9 @@ internal fun BaseOperationData.toBaseOperation() = BasicBaseOperation(
     userCertificateChain = userCertificateChain,
     userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
     lockId = lockId,
-    notBefore = notBefore.toInt(),
-    issuedAt = issuedAt.toInt(),
-    expiresAt = expiresAt.toInt(),
+    notBefore = notBefore,
+    issuedAt = issuedAt,
+    expiresAt = expiresAt,
     jti = jti
 )
 
@@ -259,8 +259,8 @@ internal fun ShareLockData.toShareLock() = BasicShareLock(
     targetUserId = targetUserId,
     targetUserRole = targetUserRole,
     targetUserPublicKey = targetUserPublicKey.decodeBase64ToByteArray(),
-    start = start?.toInt(),
-    end = end?.toInt()
+    start = start,
+    end = end
 )
 
 internal fun ShareLockOperationData.toShareLockOperation() = BasicLockOperations.BasicShareLockOperation(
