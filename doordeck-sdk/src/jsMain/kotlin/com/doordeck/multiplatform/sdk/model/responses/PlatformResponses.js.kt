@@ -1,8 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
-import com.doordeck.multiplatform.sdk.model.data.Platform
 import kotlinx.serialization.SerialName
 import kotlin.js.JsExport
 
