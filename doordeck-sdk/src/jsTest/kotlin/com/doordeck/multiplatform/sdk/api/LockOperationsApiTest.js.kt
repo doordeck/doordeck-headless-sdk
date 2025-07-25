@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.USER_LOCK_RESPONSE
 import com.doordeck.multiplatform.sdk.USER_PUBLIC_KEY_RESPONSE
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
@@ -158,20 +158,20 @@ class LockOperationsApiTest : MockTest() {
 
     @Test
     fun shouldUnlockUsingContext() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
+        LockOperationsApi.unlock(BasicLockOperations.BasicUnlockOperation(BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID))).await()
     }
 
     @Test
     fun shouldUnlock() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
+        LockOperationsApi.unlock(BasicLockOperations.BasicUnlockOperation(BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
     }
 
     @Test
     fun shouldShareLockUsingContext() = runTest {
         LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            BasicLockOperations.BasicShareLockOperation(
+                baseOperation = BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID),
+                shareLock = BasicLockOperations.BasicShareLock("", UserRole.USER, byteArrayOf())
             )).await()
     }
 
@@ -179,9 +179,9 @@ class LockOperationsApiTest : MockTest() {
     fun shouldBatchShareLockUsingContext() = runTest {
         CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            BasicLockOperations.BasicBatchShareLockOperation(
+                baseOperation = BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID),
+                users = listOf(BasicLockOperations.BasicShareLock("", UserRole.USER, byteArrayOf()))
             )
         ).await()
     }
@@ -189,9 +189,9 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldShareLock() = runTest {
         LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
+            BasicLockOperations.BasicShareLockOperation(
+                baseOperation = BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                shareLock = BasicLockOperations.BasicShareLock("", UserRole.USER, byteArrayOf())
         )).await()
     }
 
@@ -199,9 +199,9 @@ class LockOperationsApiTest : MockTest() {
     fun shouldBatchShareLock() = runTest {
         CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
         LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
+            BasicLockOperations.BasicBatchShareLockOperation(
+                baseOperation = BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+                users = listOf(BasicLockOperations.BasicShareLock("", UserRole.USER, byteArrayOf()))
             )
         ).await()
     }
@@ -209,8 +209,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldRevokeAccessToLockUsingContext() = runTest {
         LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicRevokeAccessToLockOperation(
+            baseOperation = BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID),
             users = emptyList()
         )).await()
     }
@@ -218,8 +218,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldRevokeAccessToLock() = runTest {
         LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicRevokeAccessToLockOperation(
+            baseOperation = BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             users = emptyList()
         )).await()
     }
@@ -227,8 +227,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicUpdateSecureSettingUnlockDuration(
+            baseOperation = BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
     }
@@ -236,8 +236,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicUpdateSecureSettingUnlockDuration(
+            baseOperation = BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockDuration = 0
         )).await()
     }
@@ -245,8 +245,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
         LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicUpdateSecureSettingUnlockBetween(
+            baseOperation = BasicLockOperations.BasicBaseOperation(lockId = DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
     }
@@ -254,8 +254,8 @@ class LockOperationsApiTest : MockTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockBetween() = runTest {
         LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
+            BasicLockOperations.BasicUpdateSecureSettingUnlockBetween(
+            baseOperation = BasicLockOperations.BasicBaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
             unlockBetween = null
         )).await()
     }

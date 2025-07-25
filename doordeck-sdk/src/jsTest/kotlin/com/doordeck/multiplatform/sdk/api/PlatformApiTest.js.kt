@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
 import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -16,7 +16,7 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldCreateApplication() = runTest {
-        PlatformApi.createApplication(Platform.CreateApplication("name", "companyName", "mailingAddress")).await()
+        PlatformApi.createApplication(BasicPlatform.BasicCreateApplication("name", "companyName", "mailingAddress")).await()
     }
 
     @Test
@@ -63,7 +63,7 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldUpdateApplicationEmailPreferences() = runTest {
-        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, Platform.EmailPreferences()).await()
+        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID, BasicPlatform.BasicEmailPreferences()).await()
     }
 
     @Test
@@ -84,7 +84,7 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldAddAuthKey() = runTest {
-        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID, Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
+        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID, BasicPlatform.BasicEcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test

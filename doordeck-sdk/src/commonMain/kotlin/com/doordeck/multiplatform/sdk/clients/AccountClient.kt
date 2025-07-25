@@ -13,12 +13,10 @@ import com.doordeck.multiplatform.sdk.model.requests.ChangePasswordRequest
 import com.doordeck.multiplatform.sdk.model.requests.RegisterEphemeralKeyRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateUserDetailsRequest
 import com.doordeck.multiplatform.sdk.model.requests.VerifyEphemeralKeyRegistrationRequest
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
-import com.doordeck.multiplatform.sdk.model.values.toIdValueString
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.NetworkUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
@@ -37,20 +35,20 @@ internal object AccountClient {
      * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl].
      *
      * @param refreshToken The refresh token to use for the request. If null, uses the refresh token from [ContextManagerImpl].
-     * @return [TokenResponse].
+     * @return [NetworkTokenResponse].
      * @throws MissingContextFieldException if no refresh token is available (when [refreshToken] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun refreshTokenRequest(refreshToken: String? = null): TokenResponse {
+    suspend fun refreshTokenRequest(refreshToken: String? = null): NetworkTokenResponse {
         val token = refreshToken
             ?: Context.getCloudRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
         return CloudHttpClient.client.post(Paths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
-        }.body<TokenResponse>().also {
+        }.body<NetworkTokenResponse>().also {
             Context.also { context ->
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
@@ -80,7 +78,7 @@ internal object AccountClient {
      * @param privateKey The private key to be stored alongside the provided public key.
      *  This private key is not used in the request. It is only persisted in the [ContextManagerImpl].
      *  This value should only be provided if the private key isn't already stored in the [ContextManagerImpl].
-     * @return [RegisterEphemeralKeyResponse].
+     * @return [NetworkRegisterEphemeralKeyResponse].
      * @throws MissingContextFieldException if no public/private keys are available (when [publicKey] or [privateKey] are null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -89,7 +87,7 @@ internal object AccountClient {
     suspend fun registerEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): RegisterEphemeralKeyResponse {
+    ): NetworkRegisterEphemeralKeyResponse {
         val publicKey = publicKey
             ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
@@ -99,10 +97,10 @@ internal object AccountClient {
         return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
-        }.body<RegisterEphemeralKeyResponse>().also {
+        }.body<NetworkRegisterEphemeralKeyResponse>().also {
             Context.also { context ->
-                context.setUserId(it.userId.toIdValueString())
-                context.setCertificateChain(it.certificateChain.map { cert -> cert.toCertificateValueString() })
+                context.setUserId(it.userId)
+                context.setCertificateChain(it.certificateChain)
                 context.setKeyPair(publicKey = publicKey, privateKey = privateKey)
                 context.setKeyPairVerified(publicKey)
             }
@@ -114,7 +112,7 @@ internal object AccountClient {
      *
      * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
      * @param method The preferred two factor method. If null the server will decide the best method.
-     * @return [RegisterEphemeralKeyWithSecondaryAuthenticationResponse].
+     * @return [NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse].
      * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -123,7 +121,7 @@ internal object AccountClient {
     suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
-    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+    ): NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         val publicKey = publicKey
             ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
@@ -131,7 +129,7 @@ internal object AccountClient {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
             method?.let { parameter(Params.METHOD, it.name) }
-        }.body<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
+        }.body<NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
             Context.also { context ->
                 context.setKeyPairVerified(null)
             }
@@ -156,7 +154,7 @@ internal object AccountClient {
         code: String,
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): RegisterEphemeralKeyResponse {
+    ): NetworkRegisterEphemeralKeyResponse {
         val publicKey = publicKey
             ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
@@ -167,10 +165,10 @@ internal object AccountClient {
         return CloudHttpClient.client.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
-        }.body<RegisterEphemeralKeyResponse>().also {
+        }.body<NetworkRegisterEphemeralKeyResponse>().also {
             Context.also { context ->
-                context.setUserId(it.userId.toIdValueString())
-                context.setCertificateChain(it.certificateChain.map { cert -> cert.toCertificateValueString() })
+                context.setUserId(it.userId)
+                context.setCertificateChain(it.certificateChain)
                 context.setKeyPair(publicKey, privateKey)
                 context.setKeyPairVerified(publicKey)
             }
@@ -214,12 +212,12 @@ internal object AccountClient {
     /**
      * Retrieves the current user's information.
      *
-     * @return [UserDetailsResponse].
+     * @return [NetworkUserDetailsResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
-    suspend fun getUserDetailsRequest(): UserDetailsResponse {
+    suspend fun getUserDetailsRequest(): NetworkUserDetailsResponse {
         return CloudHttpClient.client.get(Paths.getUserDetailsPath()).body()
     }
 

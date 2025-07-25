@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -14,14 +15,14 @@ actual object AccountlessApi {
      * @see AccountlessClient.loginRequest
      */
     fun login(email: String, password: String): Promise<TokenResponse> {
-        return promise { AccountlessClient.loginRequest(email, password) }
+        return promise { AccountlessClient.loginRequest(email, password).toTokenResponse() }
     }
 
     /**
      * @see AccountlessClient.registrationRequest
      */
     fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): Promise<TokenResponse> {
-        return promise { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey) }
+        return promise { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey).toTokenResponse() }
     }
 
     /**

@@ -4,6 +4,9 @@ import com.doordeck.multiplatform.sdk.clients.SitesClient
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -16,21 +19,21 @@ actual object SitesApi {
      * @see SitesClient.listSitesRequest
      */
     fun listSites(): Promise<List<SiteResponse>> {
-        return promise { SitesClient.listSitesRequest() }
+        return promise { SitesClient.listSitesRequest().toSiteResponse() }
     }
 
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
     fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>> {
-        return promise { SitesClient.getLocksForSiteRequest(siteId) }
+        return promise { SitesClient.getLocksForSiteRequest(siteId).toLockResponse() }
     }
 
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
     fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>> {
-        return promise { SitesClient.getUsersForSiteRequest(siteId) }
+        return promise { SitesClient.getUsersForSiteRequest(siteId).toUserForSiteResponse() }
     }
 }
 

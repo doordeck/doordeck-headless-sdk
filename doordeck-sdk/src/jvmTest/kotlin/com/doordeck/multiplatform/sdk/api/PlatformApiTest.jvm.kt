@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.APPLICATION_RESPONSE
 import com.doordeck.multiplatform.sdk.LOGO_UPLOAD_URL_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_APPLICATION_ID
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
 import com.doordeck.multiplatform.sdk.randomUUID
 import com.doordeck.multiplatform.sdk.util.toUUID
 import kotlinx.coroutines.future.await
@@ -18,12 +18,12 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldCreateApplication() = runTest {
-        PlatformApi.createApplication(Platform.CreateApplication("name", "companyName", "mailingAddress"))
+        PlatformApi.createApplication(BasicPlatform.BasicCreateApplication("name", "companyName", "mailingAddress"))
     }
 
     @Test
     fun shouldCreateApplicationAsync() = runTest {
-        PlatformApi.createApplicationAsync(Platform.CreateApplication("name", "companyName", "mailingAddress")).await()
+        PlatformApi.createApplicationAsync(BasicPlatform.BasicCreateApplication("name", "companyName", "mailingAddress")).await()
     }
 
     @Test
@@ -112,12 +112,12 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldUpdateApplicationEmailPreferences() = runTest {
-        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID.toUUID(), Platform.EmailPreferences())
+        PlatformApi.updateApplicationEmailPreferences(DEFAULT_APPLICATION_ID.toUUID(), BasicPlatform.BasicEmailPreferences())
     }
 
     @Test
     fun shouldUpdateApplicationEmailPreferencesAsync() = runTest {
-        PlatformApi.updateApplicationEmailPreferencesAsync(DEFAULT_APPLICATION_ID.toUUID(), Platform.EmailPreferences()).await()
+        PlatformApi.updateApplicationEmailPreferencesAsync(DEFAULT_APPLICATION_ID.toUUID(), BasicPlatform.BasicEmailPreferences()).await()
     }
 
     @Test
@@ -154,12 +154,12 @@ class PlatformApiTest : MockTest() {
 
     @Test
     fun shouldAddAuthKey() = runTest {
-        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID.toUUID(), Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
+        PlatformApi.addAuthKey(DEFAULT_APPLICATION_ID.toUUID(), BasicPlatform.BasicEcKey(use = "", kid = "", d = "", crv = "", x = "", y = ""))
     }
 
     @Test
     fun shouldAddAuthKeyAsync() = runTest {
-        PlatformApi.addAuthKeyAsync(DEFAULT_APPLICATION_ID.toUUID(), Platform.EcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
+        PlatformApi.addAuthKeyAsync(DEFAULT_APPLICATION_ID.toUUID(), BasicPlatform.BasicEcKey(use = "", kid = "", d = "", crv = "", x = "", y = "")).await()
     }
 
     @Test
