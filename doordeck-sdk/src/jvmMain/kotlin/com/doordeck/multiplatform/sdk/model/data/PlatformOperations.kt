@@ -114,8 +114,8 @@ object PlatformOperations {
     }
 }
 
-internal fun CreateApplication.toBasicCreateApplication(): BasicPlatformOperations.BasicCreateApplication {
-    return BasicPlatformOperations.BasicCreateApplication(
+internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplication {
+    return BasicCreateApplication(
         name = name,
         companyName = companyName,
         mailingAddress = mailingAddress,
@@ -127,9 +127,9 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicPlatformOperatio
     )
 }
 
-internal fun JWK.toBasicAuthKey(): BasicPlatformOperations.BasicAuthKey {
+internal fun JWK.toBasicAuthKey(): BasicAuthKey {
     return when(this) {
-        is ECKey -> BasicPlatformOperations.BasicEcKey(
+        is ECKey -> BasicEcKey(
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
@@ -138,7 +138,7 @@ internal fun JWK.toBasicAuthKey(): BasicPlatformOperations.BasicAuthKey {
             x = x.toString(),
             y = y.toString()
         )
-        is RSAKey -> BasicPlatformOperations.BasicRsaKey(
+        is RSAKey -> BasicRsaKey(
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
@@ -151,7 +151,7 @@ internal fun JWK.toBasicAuthKey(): BasicPlatformOperations.BasicAuthKey {
             dq = secondFactorCRTExponent.toString(),
             n = modulus.toString()
         )
-        is OctetKeyPair -> BasicPlatformOperations.BasicEd25519Key(
+        is OctetKeyPair -> BasicEd25519Key(
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
@@ -163,8 +163,8 @@ internal fun JWK.toBasicAuthKey(): BasicPlatformOperations.BasicAuthKey {
     }
 }
 
-internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicPlatformOperations.BasicEmailPreferences {
-    return BasicPlatformOperations.BasicEmailPreferences(
+internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicEmailPreferences {
+    return BasicEmailPreferences(
         senderEmail = senderEmail,
         senderName = senderName,
         primaryColour = primaryColour,
@@ -174,8 +174,8 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
     )
 }
 
-internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicPlatformOperations.BasicEmailCallToAction {
-    return BasicPlatformOperations.BasicEmailCallToAction(
+internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
+    return BasicEmailCallToAction(
         actionTarget = actionTarget.toString(),
         headline = headline,
         actionText = actionText

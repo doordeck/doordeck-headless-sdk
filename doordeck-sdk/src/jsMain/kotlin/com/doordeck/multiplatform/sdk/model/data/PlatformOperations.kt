@@ -261,8 +261,8 @@ object PlatformOperations {
     }
 }
 
-internal fun CreateApplication.toBasicCreateApplication(): BasicPlatformOperations.BasicCreateApplication {
-    return BasicPlatformOperations.BasicCreateApplication(
+internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplication {
+    return BasicCreateApplication(
         name = name,
         companyName = companyName,
         mailingAddress = mailingAddress,
@@ -275,13 +275,13 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicPlatformOperatio
 }
 
 internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
-    is PlatformOperations.RsaKey -> BasicPlatformOperations.BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is PlatformOperations.EcKey -> BasicPlatformOperations.BasicEcKey(kty, use, kid, alg, d, crv, x, y)
-    is PlatformOperations.Ed25519Key -> BasicPlatformOperations.BasicEd25519Key(kty, use, kid, alg, d, crv, x)
+    is PlatformOperations.RsaKey -> BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is PlatformOperations.EcKey -> BasicEcKey(kty, use, kid, alg, d, crv, x, y)
+    is PlatformOperations.Ed25519Key -> BasicEd25519Key(kty, use, kid, alg, d, crv, x)
 }
 
-internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicPlatformOperations.BasicEmailPreferences {
-    return BasicPlatformOperations.BasicEmailPreferences(
+internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicEmailPreferences {
+    return BasicEmailPreferences(
         senderEmail = senderEmail,
         senderName = senderName,
         primaryColour = primaryColour,
@@ -291,8 +291,8 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
     )
 }
 
-internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicPlatformOperations.BasicEmailCallToAction {
-    return BasicPlatformOperations.BasicEmailCallToAction(
+internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
+    return BasicEmailCallToAction(
         actionTarget = actionTarget,
         headline = headline,
         actionText = actionText

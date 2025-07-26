@@ -299,8 +299,8 @@ object LockOperations {
     sealed interface Operation
 }
 
-internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicLockOperations.BasicTimeRequirement> = map { requirement ->
-    BasicLockOperations.BasicTimeRequirement(
+internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
+    BasicTimeRequirement(
         start = requirement.start,
         end = requirement.end,
         timezone = requirement.timezone,
@@ -308,8 +308,8 @@ internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List
     )
 }
 
-internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): BasicLockOperations.BasicLocationRequirement {
-    return BasicLockOperations.BasicLocationRequirement(
+internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): BasicLocationRequirement {
+    return BasicLocationRequirement(
         latitude = latitude,
         longitude = longitude,
         enabled = enabled,
@@ -318,8 +318,8 @@ internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): Ba
     )
 }
 
-internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicLockOperations.BasicUnlockBetween {
-    return BasicLockOperations.BasicUnlockBetween(
+internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBetween {
+    return BasicUnlockBetween(
         start = start,
         end = end,
         timezone = timezone,
@@ -328,22 +328,22 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicLockOpera
     )
 }
 
-internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicLockOperations.BasicUnlockOperation {
-    return BasicLockOperations.BasicUnlockOperation(
+internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicUnlockOperation {
+    return BasicUnlockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        directAccessEndpoints = directAccessEndpoints?.map { it.toString() }
+        directAccessEndpoints = directAccessEndpoints
     )
 }
 
-internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): BasicLockOperations.BasicShareLockOperation {
-    return BasicLockOperations.BasicShareLockOperation(
+internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): BasicShareLockOperation {
+    return BasicShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
         shareLock = shareLock.toBasicShareLock()
     )
 }
 
-internal fun LockOperations.ShareLock.toBasicShareLock(): BasicLockOperations.BasicShareLock {
-    return BasicLockOperations.BasicShareLock(
+internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
+    return BasicShareLock(
         targetUserId = targetUserId,
         targetUserRole = targetUserRole,
         targetUserPublicKey = targetUserPublicKey,
@@ -352,36 +352,36 @@ internal fun LockOperations.ShareLock.toBasicShareLock(): BasicLockOperations.Ba
     )
 }
 
-internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperation(): BasicLockOperations.BasicBatchShareLockOperation {
-    return BasicLockOperations.BasicBatchShareLockOperation(
+internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperation(): BasicBatchShareLockOperation {
+    return BasicBatchShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
         users = users.map { it.toBasicShareLock() }
     )
 }
 
-internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicLockOperations.BasicRevokeAccessToLockOperation {
-    return BasicLockOperations.BasicRevokeAccessToLockOperation(
+internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation {
+    return BasicRevokeAccessToLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
         users = users
     )
 }
 
-internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicLockOperations.BasicUpdateSecureSettingUnlockDuration {
-    return BasicLockOperations.BasicUpdateSecureSettingUnlockDuration(
+internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
+    return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
         unlockDuration = unlockDuration
     )
 }
 
-internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween(): BasicLockOperations.BasicUpdateSecureSettingUnlockBetween {
-    return BasicLockOperations.BasicUpdateSecureSettingUnlockBetween(
+internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween(): BasicUpdateSecureSettingUnlockBetween {
+    return BasicUpdateSecureSettingUnlockBetween(
         baseOperation = baseOperation.toBasicBaseOperation(),
         unlockBetween = unlockBetween?.toBasicUnlockBetween()
     )
 }
 
-internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicLockOperations.BasicBaseOperation {
-    return BasicLockOperations.BasicBaseOperation(
+internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOperation {
+    return BasicBaseOperation(
         userId = userId,
         userCertificateChain = userCertificateChain,
         userPrivateKey = userPrivateKey,

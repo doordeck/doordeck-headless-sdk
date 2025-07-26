@@ -2,7 +2,9 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatformOperations
+import com.doordeck.multiplatform.sdk.model.data.BasicAuthKey
+import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddAuthIssuerRequest
@@ -50,7 +52,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun createApplicationRequest(application: BasicPlatformOperations.BasicCreateApplication) {
+    suspend fun createApplicationRequest(application: BasicCreateApplication) {
         CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
@@ -180,7 +182,7 @@ internal object PlatformClient {
     @DoordeckOnly
     suspend fun updateApplicationEmailPreferencesRequest(
         applicationId: String,
-        emailPreferences: BasicPlatformOperations.BasicEmailPreferences
+        emailPreferences: BasicEmailPreferences
     ) {
         updateApplication(
             applicationId = applicationId,
@@ -271,7 +273,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addAuthKeyRequest(applicationId: String, key: BasicPlatformOperations.BasicAuthKey) {
+    suspend fun addAuthKeyRequest(applicationId: String, key: BasicAuthKey) {
         CloudHttpClient.client.post(Paths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())

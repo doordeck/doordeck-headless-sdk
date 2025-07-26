@@ -8,7 +8,15 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
-import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
+import com.doordeck.multiplatform.sdk.model.data.BasicBaseOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicBatchShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicLocationRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicTimeRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicUnlockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -230,7 +238,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
      */
-    suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<BasicLockOperations.BasicTimeRequirement>) {
+    suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<BasicTimeRequirement>) {
         updateLockProperties(
             lockId = lockId,
             request = UpdateLockSettingRequest(
@@ -261,7 +269,7 @@ internal object LockOperationsClient {
      */
     suspend fun updateLockSettingLocationRestrictionsRequest(
         lockId: String,
-        location: BasicLockOperations.BasicLocationRequirement?
+        location: BasicLocationRequirement?
     ) {
         updateLockProperties(
             lockId = lockId,
@@ -458,7 +466,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
      */
-    suspend fun unlockRequest(unlockOperation: BasicLockOperations.BasicUnlockOperation) {
+    suspend fun unlockRequest(unlockOperation: BasicUnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
         val baseOperationRequest = unlockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest, unlockOperation.directAccessEndpoints)
@@ -472,7 +480,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
      */
-    suspend fun shareLockRequest(shareLockOperation: BasicLockOperations.BasicShareLockOperation) {
+    suspend fun shareLockRequest(shareLockOperation: BasicShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
             user = shareLockOperation.shareLock.targetUserId,
             publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
@@ -493,7 +501,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
      */
-    suspend fun batchShareLockRequest(batchShareLockOperation: BasicLockOperations.BasicBatchShareLockOperation) {
+    suspend fun batchShareLockRequest(batchShareLockOperation: BasicBatchShareLockOperation) {
         /** Verify whether the operation device currently supports the batch sharing operation **/
         val isSupported =
             CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
@@ -506,7 +514,7 @@ internal object LockOperationsClient {
             val failedOperations = batchShareLockOperation.users.mapNotNull { shareLock ->
                 try {
                     shareLockRequest(
-                        shareLockOperation = BasicLockOperations.BasicShareLockOperation(
+                        shareLockOperation = BasicShareLockOperation(
                             baseOperation = batchShareLockOperation.baseOperation.copy(jti = Uuid.random().toString()),
                             shareLock = shareLock
                         )
@@ -546,7 +554,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
      */
-    suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: BasicLockOperations.BasicRevokeAccessToLockOperation) {
+    suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: BasicRevokeAccessToLockOperation) {
         val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
         val baseOperationRequest = revokeAccessToLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
@@ -560,7 +568,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: BasicLockOperations.BasicUpdateSecureSettingUnlockDuration) {
+    suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: BasicUpdateSecureSettingUnlockDuration) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
         )
@@ -576,7 +584,7 @@ internal object LockOperationsClient {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
      */
-    suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: BasicLockOperations.BasicUpdateSecureSettingUnlockBetween) {
+    suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: BasicUpdateSecureSettingUnlockBetween) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
@@ -661,7 +669,7 @@ internal object LockOperationsClient {
      * @throws MissingContextFieldException if any required field (userId, userCertificateChain,
      *         or userPrivateKey) is missing from both the input and the [ContextManagerImpl].
      */
-    private fun BasicLockOperations.BasicBaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
+    private fun BasicBaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
             ?: Context.getUserId()
             ?: throw MissingContextFieldException("User ID is missing")
