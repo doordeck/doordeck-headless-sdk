@@ -11,9 +11,23 @@ import com.doordeck.multiplatform.sdk.model.common.GrantType
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatformOperations
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatformOperations.BasicEmailCallToAction
+import com.doordeck.multiplatform.sdk.model.data.BasicBaseOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicBatchShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.BasicEcKey
+import com.doordeck.multiplatform.sdk.model.data.BasicEd25519Key
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailCallToAction
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
+import com.doordeck.multiplatform.sdk.model.data.BasicLocationRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicRsaKey
+import com.doordeck.multiplatform.sdk.model.data.BasicShareLock
+import com.doordeck.multiplatform.sdk.model.data.BasicShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicTimeRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.BasicUnlockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.AuditIssuerResponse
@@ -414,14 +428,14 @@ internal fun randomTileLocksResponse(): TileLocksResponse = TileLocksResponse(
 /**
  * Lock operation data
  */
-internal fun randomTimeRequirement(): BasicLockOperations.BasicTimeRequirement = BasicLockOperations.BasicTimeRequirement(
+internal fun randomTimeRequirement(): BasicTimeRequirement = BasicTimeRequirement(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
     days = DayOfWeek.entries.shuffled().take(3)
 )
 
-internal fun randomLocationRequirement(): BasicLockOperations.BasicLocationRequirement = BasicLockOperations.BasicLocationRequirement(
+internal fun randomLocationRequirement(): BasicLocationRequirement = BasicLocationRequirement(
     latitude = randomDouble(),
     longitude = randomDouble(),
     enabled = randomBoolean(),
@@ -429,7 +443,7 @@ internal fun randomLocationRequirement(): BasicLockOperations.BasicLocationRequi
     accuracy = randomInt()
 )
 
-internal fun randomUnlockBetween(): BasicLockOperations.BasicUnlockBetween = BasicLockOperations.BasicUnlockBetween(
+internal fun randomUnlockBetween(): BasicUnlockBetween = BasicUnlockBetween(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
@@ -437,37 +451,37 @@ internal fun randomUnlockBetween(): BasicLockOperations.BasicUnlockBetween = Bas
     exceptions = randomNullable { (1..3).map { randomString() } }
 )
 
-internal fun randomUnlockOperation(): BasicLockOperations.BasicUnlockOperation = BasicLockOperations.BasicUnlockOperation(
+internal fun randomUnlockOperation(): BasicUnlockOperation = BasicUnlockOperation(
     baseOperation = randomBaseOperation(),
     directAccessEndpoints = randomNullable { (1..3).map { randomString() } }
 )
 
-internal fun randomShareLockOperation(): BasicLockOperations.BasicShareLockOperation = BasicLockOperations.BasicShareLockOperation(
+internal fun randomShareLockOperation(): BasicShareLockOperation = BasicShareLockOperation(
     baseOperation = randomBaseOperation(),
     shareLock = randomShareLock()
 )
 
-internal fun randomBatchShareLockOperation(): BasicLockOperations.BasicBatchShareLockOperation = BasicLockOperations.BasicBatchShareLockOperation(
+internal fun randomBatchShareLockOperation(): BasicBatchShareLockOperation = BasicBatchShareLockOperation(
     baseOperation = randomBaseOperation(),
     users = (1..3).map { randomShareLock() }
 )
 
-internal fun randomRevokeAccessToLockOperation(): BasicLockOperations.BasicRevokeAccessToLockOperation = BasicLockOperations.BasicRevokeAccessToLockOperation(
+internal fun randomRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation = BasicRevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
     users = (1..3).map { randomString() }
 )
 
-internal fun randomUpdateSecureSettingUnlockDuration(): BasicLockOperations.BasicUpdateSecureSettingUnlockDuration = BasicLockOperations.BasicUpdateSecureSettingUnlockDuration(
+internal fun randomUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration = BasicUpdateSecureSettingUnlockDuration(
     baseOperation = randomBaseOperation(),
     unlockDuration = randomInt()
 )
 
-internal fun randomUpdateSecureSettingUnlockBetween(): BasicLockOperations.BasicUpdateSecureSettingUnlockBetween = BasicLockOperations.BasicUpdateSecureSettingUnlockBetween(
+internal fun randomUpdateSecureSettingUnlockBetween(): BasicUpdateSecureSettingUnlockBetween = BasicUpdateSecureSettingUnlockBetween(
     baseOperation = randomBaseOperation(),
     unlockBetween = randomNullable { randomUnlockBetween() }
 )
 
-internal fun randomShareLock(): BasicLockOperations.BasicShareLock = BasicLockOperations.BasicShareLock(
+internal fun randomShareLock(): BasicShareLock = BasicShareLock(
     targetUserId = randomString(),
     targetUserRole = UserRole.entries.random(),
     targetUserPublicKey = randomByteArray(),
@@ -475,7 +489,7 @@ internal fun randomShareLock(): BasicLockOperations.BasicShareLock = BasicLockOp
     end = randomNullable { randomLong() }
 )
 
-internal fun randomBaseOperation(): BasicLockOperations.BasicBaseOperation = BasicLockOperations.BasicBaseOperation(
+internal fun randomBaseOperation(): BasicBaseOperation = BasicBaseOperation(
     userId = randomNullable { randomString() },
     userCertificateChain = randomNullable { (1..3).map { randomString() } },
     userPrivateKey = randomNullable { randomByteArray() },
@@ -489,7 +503,7 @@ internal fun randomBaseOperation(): BasicLockOperations.BasicBaseOperation = Bas
 /**
  * Platform data
  */
-internal fun randomCreateApplication(): BasicPlatformOperations.BasicCreateApplication = BasicPlatformOperations.BasicCreateApplication(
+internal fun randomCreateApplication(): BasicCreateApplication = BasicCreateApplication(
     name = randomString(),
     companyName = randomString(),
     mailingAddress = randomString(),
@@ -500,7 +514,7 @@ internal fun randomCreateApplication(): BasicPlatformOperations.BasicCreateAppli
     logoUrl = randomNullable { randomString() }
 )
 
-internal fun randomEmailPreferences(): BasicPlatformOperations.BasicEmailPreferences = BasicPlatformOperations.BasicEmailPreferences(
+internal fun randomEmailPreferences(): BasicEmailPreferences = BasicEmailPreferences(
     senderEmail = randomNullable { randomString() },
     senderName = randomNullable { randomString() },
     primaryColour = randomNullable { randomString() },
@@ -515,7 +529,7 @@ internal fun randomEmailCallToAction(): BasicEmailCallToAction = BasicEmailCallT
     actionText = randomString()
 )
 
-internal fun randomRsaKey(): BasicPlatformOperations.BasicRsaKey = BasicPlatformOperations.BasicRsaKey(
+internal fun randomRsaKey(): BasicRsaKey = BasicRsaKey(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),
@@ -530,7 +544,7 @@ internal fun randomRsaKey(): BasicPlatformOperations.BasicRsaKey = BasicPlatform
     n = randomString()
 )
 
-internal fun randomEcKey(): BasicPlatformOperations.BasicEcKey = BasicPlatformOperations.BasicEcKey(
+internal fun randomEcKey(): BasicEcKey = BasicEcKey(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),
@@ -541,7 +555,7 @@ internal fun randomEcKey(): BasicPlatformOperations.BasicEcKey = BasicPlatformOp
     y = randomString()
 )
 
-internal fun randomEd25519Key(): BasicPlatformOperations.BasicEd25519Key = BasicPlatformOperations.BasicEd25519Key(
+internal fun randomEd25519Key(): BasicEd25519Key = BasicEd25519Key(
     kty = randomString(),
     use = randomString(),
     kid = randomString(),

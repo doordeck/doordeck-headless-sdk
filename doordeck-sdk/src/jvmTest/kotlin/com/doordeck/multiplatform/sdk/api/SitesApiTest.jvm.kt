@@ -5,6 +5,9 @@ import com.doordeck.multiplatform.sdk.LOCKS_FOR_SITE_RESPONSE
 import com.doordeck.multiplatform.sdk.MockTest
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
 import com.doordeck.multiplatform.sdk.USER_FOR_SITE_RESPONSE
+import com.doordeck.multiplatform.sdk.model.data.toLock
+import com.doordeck.multiplatform.sdk.model.data.toSite
+import com.doordeck.multiplatform.sdk.model.data.toUserForSite
 import com.doordeck.multiplatform.sdk.util.toUUID
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
@@ -16,36 +19,36 @@ class SitesApiTest : MockTest() {
     @Test
     fun shouldListSites() = runTest {
         val response = SitesApi.listSites()
-        assertEquals(LIST_SITES_RESPONSE, response)
+        assertEquals(LIST_SITES_RESPONSE.toSite(), response)
     }
 
     @Test
     fun shouldListSitesAsync() = runTest {
         val response = SitesApi.listSitesAsync().await()
-        assertEquals(LIST_SITES_RESPONSE, response)
+        assertEquals(LIST_SITES_RESPONSE.toSite(), response)
     }
 
     @Test
     fun shouldGetLocksForSite() = runTest {
         val response = SitesApi.getLocksForSite(DEFAULT_SITE_ID.toUUID())
-        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
+        assertEquals(LOCKS_FOR_SITE_RESPONSE.toLock(), response)
     }
 
     @Test
     fun shouldGetLocksForSiteAsync() = runTest {
         val response = SitesApi.getLocksForSiteAsync(DEFAULT_SITE_ID.toUUID()).await()
-        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
+        assertEquals(LOCKS_FOR_SITE_RESPONSE.toLock(), response)
     }
 
     @Test
     fun shouldGetUsersForSite() = runTest {
         val response = SitesApi.getUsersForSite(DEFAULT_SITE_ID.toUUID())
-        assertEquals(USER_FOR_SITE_RESPONSE, response)
+        assertEquals(USER_FOR_SITE_RESPONSE.toUserForSite(), response)
     }
 
     @Test
     fun shouldGetUsersForSiteAsync() = runTest {
         val response = SitesApi.getUsersForSiteAsync(DEFAULT_SITE_ID.toUUID()).await()
-        assertEquals(USER_FOR_SITE_RESPONSE, response)
+        assertEquals(USER_FOR_SITE_RESPONSE.toUserForSite(), response)
     }
 }
