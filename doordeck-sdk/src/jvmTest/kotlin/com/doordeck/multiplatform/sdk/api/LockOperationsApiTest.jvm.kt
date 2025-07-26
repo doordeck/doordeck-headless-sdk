@@ -36,7 +36,7 @@ import kotlin.test.assertEquals
 import kotlin.time.toJavaInstant
 
 class LockOperationsApiTest : MockTest() {
-/*
+
     @Test
     fun shouldGetSingleLock() = runTest {
         val response = LockOperationsApi.getSingleLock(DEFAULT_LOCK_ID.toUUID())
@@ -527,5 +527,5 @@ class LockOperationsApiTest : MockTest() {
     fun shouldGetShareableLocksAsync() = runTest {
         val response = LockOperationsApi.getShareableLocksAsync().await()
         assertEquals(SHAREABLE_LOCKS_RESPONSE.toShareableLock(), response)
-    }*/
+    }
 }
