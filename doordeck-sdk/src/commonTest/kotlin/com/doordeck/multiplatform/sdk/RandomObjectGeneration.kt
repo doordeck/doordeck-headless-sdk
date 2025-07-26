@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_UPLOAD_URL
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
@@ -72,6 +73,7 @@ import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlin.random.Random
 import kotlin.uuid.Uuid
 
@@ -87,12 +89,12 @@ internal fun randomUserDetailsResponse(): UserDetailsResponse = UserDetailsRespo
     email = randomString(),
     displayName = randomNullable { randomString() },
     emailVerified = randomBoolean(),
-    publicKey = randomString()
+    publicKey = randomPublicKey()
 )
 
 internal fun randomRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
-    certificateChain = emptyList(),
-    userId = randomString()
+    certificateChain = listOf(randomPublicKey()),
+    userId = randomUuid()
 )
 
 internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
@@ -141,7 +143,7 @@ internal fun randomFusionController(): Fusion.LockController = Fusion.DemoContro
  * Lock operation responses
  */
 internal fun randomLockResponse(): LockResponse = LockResponse(
-    id = randomString(),
+    id = randomUuid(),
     name = randomString(),
     colour = randomNullable { randomString() },
     start = randomNullable { randomString() },
@@ -507,11 +509,11 @@ internal fun randomCreateApplication(): BasicCreateApplication = BasicCreateAppl
     name = randomString(),
     companyName = randomString(),
     mailingAddress = randomString(),
-    privacyPolicy = randomNullable { randomString() },
-    supportContact = randomNullable { randomString() },
-    appLink = randomNullable { randomString() },
+    privacyPolicy = randomNullable { randomUrl() },
+    supportContact = randomNullable { randomUrl() },
+    appLink = randomNullable { randomUrl() },
     emailPreferences = randomNullable { randomEmailPreferences() },
-    logoUrl = randomNullable { randomString() }
+    logoUrl = randomNullable { randomUrl() }
 )
 
 internal fun randomEmailPreferences(): BasicEmailPreferences = BasicEmailPreferences(
@@ -524,7 +526,7 @@ internal fun randomEmailPreferences(): BasicEmailPreferences = BasicEmailPrefere
 )
 
 internal fun randomEmailCallToAction(): BasicEmailCallToAction = BasicEmailCallToAction(
-    actionTarget = randomString(),
+    actionTarget = randomUrl(),
     headline = randomString(),
     actionText = randomString()
 )
@@ -580,10 +582,15 @@ fun randomSdkConfig(): SdkConfig = SdkConfig(
 /**
  * Test utils
  */
+
+internal fun randomUrl(): String = "https://${randomString()}.com"
+internal fun randomUuid(): String = Uuid.random().toString()
+internal fun randomPublicKey(): String = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64()
+
 internal fun randomInt(min: Int = 0, max: Int = Int.MAX_VALUE) = Random.nextInt(min, max)
 internal fun randomDouble(from: Double = 0.0, to: Double = 100.0): Double = Random.nextDouble(from, to)
 internal fun randomBoolean(): Boolean = Random.nextBoolean()
 internal fun randomLong(from: Long = 0, to: Long = 100): Long = Random.nextLong(from, to)
-internal inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
-internal fun randomString(): String = Uuid.random().toString()
+internal fun randomString(): String = Uuid.random().toString() // TODO
 internal fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))
+internal inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
