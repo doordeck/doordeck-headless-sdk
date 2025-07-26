@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.requests.EnableDoorRequest
@@ -21,7 +20,7 @@ import io.ktor.client.request.setBody
 
 /**
  * Internal implementation of the fusion API client.
- * Handles all network requests related to fusion.
+ * Handles all  requests related to fusion.
  */
 internal object FusionClient {
     /**

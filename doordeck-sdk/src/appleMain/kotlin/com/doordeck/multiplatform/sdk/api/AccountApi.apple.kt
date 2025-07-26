@@ -3,14 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKey
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSecondaryAuthentication
+import com.doordeck.multiplatform.sdk.model.data.Token
+import com.doordeck.multiplatform.sdk.model.data.UserDetails
+import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKey
+import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKeyWithSecondaryAuthentication
+import com.doordeck.multiplatform.sdk.model.data.toToken
+import com.doordeck.multiplatform.sdk.model.data.toUserDetails
 
 /**
  * Platform-specific implementations of account-related API calls.
@@ -21,9 +21,9 @@ actual object AccountApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
+    suspend fun refreshToken(refreshToken: String? = null): Token {
         return AccountClient.refreshTokenRequest(refreshToken)
-            .toTokenResponse()
+            .toToken()
     }
 
     /**
@@ -38,27 +38,27 @@ actual object AccountApi {
      * @see AccountClient.registerEphemeralKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKey {
         return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
+            .toRegisterEphemeralKey()
     }
 
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthentication {
         return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
-            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
+            .toRegisterEphemeralKeyWithSecondaryAuthentication()
     }
 
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
     @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKey {
         return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
+            .toRegisterEphemeralKey()
     }
 
     /**
@@ -83,9 +83,9 @@ actual object AccountApi {
      * @see AccountClient.getUserDetailsRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserDetails(): UserDetailsResponse {
+    suspend fun getUserDetails(): UserDetails {
         return AccountClient.getUserDetailsRequest()
-            .toUserDetailsResponse()
+            .toUserDetails()
     }
 
     /**

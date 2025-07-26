@@ -161,7 +161,7 @@ data class ApplicationOwnerData(
     val userId: String
 )
 
-internal fun CreateApplicationData.toCreateApplication() = BasicPlatform.BasicCreateApplication(
+internal fun CreateApplicationData.toCreateApplication() = BasicPlatformOperations.BasicCreateApplication(
     name = name,
     companyName = companyName,
     mailingAddress = mailingAddress,
@@ -172,7 +172,7 @@ internal fun CreateApplicationData.toCreateApplication() = BasicPlatform.BasicCr
     logoUrl = logoUrl
 )
 
-internal fun EmailPreferencesData.toEmailPreferences() = BasicPlatform.BasicEmailPreferences(
+internal fun EmailPreferencesData.toEmailPreferences() = BasicPlatformOperations.BasicEmailPreferences(
     senderEmail = senderEmail,
     senderName = senderName,
     primaryColour = primaryColour,
@@ -181,14 +181,14 @@ internal fun EmailPreferencesData.toEmailPreferences() = BasicPlatform.BasicEmai
     callToAction = callToAction?.toEmailCallToAction()
 )
 
-internal fun EmailCallToActionData.toEmailCallToAction() = BasicPlatform.BasicEmailCallToAction(
+internal fun EmailCallToActionData.toEmailCallToAction() = BasicPlatformOperations.BasicEmailCallToAction(
     actionTarget = actionTarget,
     headline = headline,
     actionText = actionText
 )
 
 internal fun AuthKeyData.toAuthKey() = when(this) {
-    is RsaKeyData -> BasicPlatform.BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is EcKeyData -> BasicPlatform.BasicEcKey(kty, use, kid, alg, d, crv, x, y)
-    is Ed25519KeyData -> BasicPlatform.BasicEd25519Key(kty, use, kid, alg, d, crv, x)
+    is RsaKeyData -> BasicPlatformOperations.BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is EcKeyData -> BasicPlatformOperations.BasicEcKey(kty, use, kid, alg, d, crv, x, y)
+    is Ed25519KeyData -> BasicPlatformOperations.BasicEd25519Key(kty, use, kid, alg, d, crv, x)
 }

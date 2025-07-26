@@ -4,13 +4,13 @@ import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class NetworkTokenResponse(
+internal data class TokenResponse(
     val authToken: String,
     val refreshToken: String
 )
 
 @Serializable
-internal data class NetworkUserDetailsResponse(
+internal data class UserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
@@ -18,12 +18,12 @@ internal data class NetworkUserDetailsResponse(
 )
 
 @Serializable
-internal data class NetworkRegisterEphemeralKeyResponse(
+internal data class RegisterEphemeralKeyResponse(
     val certificateChain: List<String>,
     val userId: String
 )
 
 @Serializable
-internal data class NetworkRegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+internal data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     val method: TwoFactorMethod
 )

@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.model.responses.NetworkEcKeyResponseNetwork
 import com.doordeck.multiplatform.sdk.model.responses.NetworkEd25519KeyResponseNetwork
 import com.doordeck.multiplatform.sdk.model.responses.NetworkRsaKeyResponseNetwork
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatformOperations
 import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -24,7 +24,7 @@ class PlatformClientTest : IntegrationTest() {
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val newApplication = BasicPlatform.BasicCreateApplication(
+        val newApplication = BasicPlatformOperations.BasicCreateApplication(
             name = "Test Application $platformType ${Uuid.random()}",
             companyName = Uuid.random().toString(),
             mailingAddress = "test@doordeck.com",
@@ -107,13 +107,13 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationAppLink, application.appLink)
 
         // Given - shouldUpdateApplicationEmailPreferences
-        val updatedApplicationEmailPreferences = BasicPlatform.BasicEmailPreferences(
+        val updatedApplicationEmailPreferences = BasicPlatformOperations.BasicEmailPreferences(
             senderEmail = "test@test.com",
             senderName = "test",
             primaryColour = "#000000",
             secondaryColour = "#000000",
             onlySendEssentialEmails = true,
-            callToAction = BasicPlatform.BasicEmailCallToAction(
+            callToAction = BasicPlatformOperations.BasicEmailCallToAction(
                 actionTarget = "test",
                 headline = "test",
                 actionText = "test"
@@ -189,7 +189,7 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { application.corsDomains.any { it.equals(removedApplicationCorsDomain, true) } }
 
         // Given - shouldAddEd25519AuthKey
-        val ed25519Key = BasicPlatform.BasicEd25519Key(
+        val ed25519Key = BasicPlatformOperations.BasicEd25519Key(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "EdDSA",
@@ -214,7 +214,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(ed25519Key.x, actualEd25519Key.x)
 
         // Given - shouldAddRsaAuthKey
-        val rsaKey = BasicPlatform.BasicRsaKey(
+        val rsaKey = BasicPlatformOperations.BasicRsaKey(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "RS256",
@@ -244,7 +244,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(rsaKey.n, actualRsaKey.n)
 
         // Given - shouldAddEcAuthKey
-        val ecKey = BasicPlatform.BasicEcKey(
+        val ecKey = BasicPlatformOperations.BasicEcKey(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "ES256",

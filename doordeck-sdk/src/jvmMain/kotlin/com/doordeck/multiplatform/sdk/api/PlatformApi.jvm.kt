@@ -2,16 +2,16 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
-import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerDetails
+import com.doordeck.multiplatform.sdk.model.data.Application
+import com.doordeck.multiplatform.sdk.model.data.GetLogoUploadUrl
+import com.doordeck.multiplatform.sdk.model.data.toApplicationOwnerDetails
+import com.doordeck.multiplatform.sdk.model.data.toApplication
+import com.doordeck.multiplatform.sdk.model.data.toGetLogoUploadUrl
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import com.nimbusds.jose.jwk.JWK
 import java.net.URI
@@ -26,7 +26,7 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    suspend fun createApplication(application: Platform.CreateApplication) {
+    suspend fun createApplication(application: PlatformOperations.CreateApplication) {
         return PlatformClient.createApplicationRequest(application.toBasicCreateApplication())
     }
 
@@ -34,7 +34,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.createApplication] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun createApplicationAsync(application: Platform.CreateApplication): CompletableFuture<Unit> {
+    fun createApplicationAsync(application: PlatformOperations.CreateApplication): CompletableFuture<Unit> {
         return completableFuture { createApplication(application) }
     }
 
@@ -42,16 +42,16 @@ actual object PlatformApi {
      * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
-    suspend fun listApplications(): List<ApplicationResponse> {
+    suspend fun listApplications(): List<Application> {
         return PlatformClient.listApplicationsRequest()
-            .toApplicationResponse()
+            .toApplication()
     }
 
     /**
      * Async variant of [PlatformApi.listApplications] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun listApplicationsAsync(): CompletableFuture<List<ApplicationResponse>> {
+    fun listApplicationsAsync(): CompletableFuture<List<Application>> {
         return completableFuture { listApplications() }
     }
 
@@ -59,16 +59,16 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
-    suspend fun getApplication(applicationId: UUID): ApplicationResponse {
+    suspend fun getApplication(applicationId: UUID): Application {
         return PlatformClient.getApplicationRequest(applicationId.toString())
-            .toApplicationResponse()
+            .toApplication()
     }
 
     /**
      * Async variant of [PlatformApi.getApplication] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getApplicationAsync(applicationId: UUID): CompletableFuture<ApplicationResponse> {
+    fun getApplicationAsync(applicationId: UUID): CompletableFuture<Application> {
         return completableFuture { getApplication(applicationId) }
     }
 
@@ -172,7 +172,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationEmailPreferences(applicationId: UUID, emailPreferences: Platform.EmailPreferences) {
+    suspend fun updateApplicationEmailPreferences(applicationId: UUID, emailPreferences: PlatformOperations.EmailPreferences) {
         return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId.toString(), emailPreferences.toBasicEmailPreferences())
     }
 
@@ -180,7 +180,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.updateApplicationEmailPreferences] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferencesAsync(applicationId: UUID, emailPreferences: Platform.EmailPreferences): CompletableFuture<Unit> {
+    fun updateApplicationEmailPreferencesAsync(applicationId: UUID, emailPreferences: PlatformOperations.EmailPreferences): CompletableFuture<Unit> {
         return completableFuture { updateApplicationEmailPreferences(applicationId, emailPreferences) }
     }
 
@@ -220,16 +220,16 @@ actual object PlatformApi {
      * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
-    suspend fun getLogoUploadUrl(applicationId: UUID, contentType: String): GetLogoUploadUrlResponse {
+    suspend fun getLogoUploadUrl(applicationId: UUID, contentType: String): GetLogoUploadUrl {
         return PlatformClient.getLogoUploadUrlRequest(applicationId.toString(), contentType)
-            .toGetLogoUploadUrlResponse()
+            .toGetLogoUploadUrl()
     }
 
     /**
      * Async variant of [PlatformApi.getLogoUploadUrl] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getLogoUploadUrlAsync(applicationId: UUID, contentType: String): CompletableFuture<GetLogoUploadUrlResponse> {
+    fun getLogoUploadUrlAsync(applicationId: UUID, contentType: String): CompletableFuture<GetLogoUploadUrl> {
         return completableFuture { getLogoUploadUrl(applicationId, contentType) }
     }
 
@@ -349,16 +349,16 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetails(applicationId: UUID): List<ApplicationOwnerDetailsResponse> {
+    suspend fun getApplicationOwnersDetails(applicationId: UUID): List<ApplicationOwnerDetails> {
         return PlatformClient.getApplicationOwnersDetailsRequest(applicationId.toString())
-            .toApplicationOwnerDetailsResponse()
+            .toApplicationOwnerDetails()
     }
 
     /**
      * Async variant of [PlatformApi.getApplicationOwnersDetails] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetailsAsync(applicationId: UUID): CompletableFuture<List<ApplicationOwnerDetailsResponse>> {
+    fun getApplicationOwnersDetailsAsync(applicationId: UUID): CompletableFuture<List<ApplicationOwnerDetails>> {
         return completableFuture { getApplicationOwnersDetails(applicationId) }
     }
 }

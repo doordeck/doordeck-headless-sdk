@@ -7,8 +7,8 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
-import com.doordeck.multiplatform.sdk.model.responses.NetworkAssistedLoginResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkAssistedRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
+import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
@@ -44,7 +44,7 @@ internal object HelperClient {
      *      (`AssistedLoginResponse.requiresVerification` is true),
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
-    suspend fun assistedLoginRequest(email: String, password: String): NetworkAssistedLoginResponse {
+    suspend fun assistedLoginRequest(email: String, password: String): AssistedLoginResponse {
         val currentKeyPair = Context.getKeyPair()
         val currentKeyPairVerified = Context.isKeyPairVerified()
         val requiresKeyRegister =
@@ -70,7 +70,7 @@ internal object HelperClient {
             // No key pair registration required; verification is not needed
             null
         }
-        return NetworkAssistedLoginResponse(
+        return AssistedLoginResponse(
             requiresVerification = registerKeyResult?.requiresVerification ?: false,
             requiresRetry = registerKeyResult?.requiresRetry ?: false
         )
@@ -87,7 +87,7 @@ internal object HelperClient {
     suspend fun assistedRegisterEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): NetworkAssistedRegisterEphemeralKeyResponse {
+    ): AssistedRegisterEphemeralKeyResponse {
         // Define which key should be registered
         val publicKey = publicKey
             ?: Context.getPublicKey()
@@ -98,14 +98,14 @@ internal object HelperClient {
         return try {
             // Attempt to register the provided or default public key
             AccountClient.registerEphemeralKeyRequest(publicKey = publicKey, privateKey = privateKey)
-            NetworkAssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = false)
+            AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = false)
         } catch (_: LockedException) {
             // Retry registration using secondary authentication if the first attempt fails
             try {
                 AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey)
-                NetworkAssistedRegisterEphemeralKeyResponse(requiresVerification = true, requiresRetry = false)
+                AssistedRegisterEphemeralKeyResponse(requiresVerification = true, requiresRetry = false)
             } catch (_: TooManyRequestsException) {
-                NetworkAssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = true)
+                AssistedRegisterEphemeralKeyResponse(requiresVerification = false, requiresRetry = true)
             }
         }
     }

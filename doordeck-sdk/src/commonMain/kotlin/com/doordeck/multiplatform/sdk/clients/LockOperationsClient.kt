@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.data.BasicLockOperations
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
@@ -38,13 +37,13 @@ import com.doordeck.multiplatform.sdk.model.requests.UpdateLockSettingTimeUsageR
 import com.doordeck.multiplatform.sdk.model.requests.UpdateLockSettingUsageRequirementRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateSecureSettingsOperationRequest
 import com.doordeck.multiplatform.sdk.model.requests.UserPublicKeyRequest
-import com.doordeck.multiplatform.sdk.model.responses.NetworkAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkLockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkUserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -58,19 +57,19 @@ import kotlin.uuid.Uuid
 
 /**
  * Internal implementation of the lock operations API client.
- * Handles all network requests related to lock management and operations.
+ * Handles all  requests related to lock management and operations.
  */
 internal object LockOperationsClient {
     /**
      * Retrieves a single lock by its ID.
      *
      * @param lockId The unique identifier of the lock.
-     * @return [NetworkLockResponse].
+     * @return [LockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
      */
-    suspend fun getSingleLockRequest(lockId: String): NetworkLockResponse {
+    suspend fun getSingleLockRequest(lockId: String): LockResponse {
         return CloudHttpClient.client.get(Paths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
@@ -82,12 +81,12 @@ internal object LockOperationsClient {
      * @param lockId The lock's unique identifier.
      * @param start Start of the date range (epoch timestamp).
      * @param end End of date range (epoch timestamp).
-     * @return List of [NetworkAuditResponse].
+     * @return List of [AuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
      */
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<NetworkAuditResponse> {
+    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -101,12 +100,12 @@ internal object LockOperationsClient {
      * @param userId The user's unique identifier.
      * @param start Start of the date range (epoch timestamp).
      * @param end End of date range (epoch timestamp).
-     * @return List of [NetworkAuditResponse].
+     * @return List of [AuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
      */
-    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<NetworkAuditResponse> {
+    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<AuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -118,12 +117,12 @@ internal object LockOperationsClient {
      * Retrieves all users associated with a particular lock.
      *
      * @param lockId The lock's unique identifier.
-     * @return List of [NetworkUserLockResponse].
+     * @return List of [UserLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
      */
-    suspend fun getUsersForLockRequest(lockId: String): List<NetworkUserLockResponse> {
+    suspend fun getUsersForLockRequest(lockId: String): List<UserLockResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForLockPath(lockId)).body()
     }
 
@@ -132,12 +131,12 @@ internal object LockOperationsClient {
      * The list will contain only the locks where the current user is an administrator.
      *
      * @param userId The user's unique identifier.
-     * @return [NetworkLockUserResponse].
+     * @return [LockUserResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
      */
-    suspend fun getLocksForUserRequest(userId: String): NetworkLockUserResponse {
+    suspend fun getLocksForUserRequest(userId: String): LockUserResponse {
         return CloudHttpClient.client.get(Paths.getLocksForUserPath(userId)).body()
     }
 
@@ -303,13 +302,13 @@ internal object LockOperationsClient {
      *
      * @param userEmail The user's email address.
      * @param visitor Defaults to `false`, set to `true` to direct the visitor to a purely web based experience.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): NetworkUserPublicKeyResponse {
+    suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): UserPublicKeyResponse {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
             parameter(Params.VISITOR, visitor)
@@ -320,60 +319,60 @@ internal object LockOperationsClient {
      * Retrieves a user's public key using their email address.
      *
      * @param email The user's email address.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    suspend fun getUserPublicKeyByEmailRequest(email: String): NetworkUserPublicKeyResponse =
+    suspend fun getUserPublicKeyByEmailRequest(email: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(email = email))
 
     /**
      * Retrieves a user's public key using their telephone number.
      *
      * @param telephone The user's telephone number.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): NetworkUserPublicKeyResponse =
+    suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(telephone = telephone))
 
     /**
      * Retrieves a user's public key using their local key.
      *
      * @param localKey The user's local key.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): NetworkUserPublicKeyResponse =
+    suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(localKey = localKey))
 
     /**
      * Retrieves a user's public key using their third-party application's identifier for a user.
      *
      * @param foreignKey The user's third-party application's identifier.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): NetworkUserPublicKeyResponse =
+    suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(foreignKey = foreignKey))
 
     /**
      * Retrieves a user's public key using their encrypted OpenID token of user.
      *
      * @param identity The user's encrypted OpenID token of user.
-     * @return [NetworkUserPublicKeyResponse].
+     * @return [UserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
      */
-    suspend fun getUserPublicKeyByIdentityRequest(identity: String): NetworkUserPublicKeyResponse =
+    suspend fun getUserPublicKeyByIdentityRequest(identity: String): UserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
     /**
@@ -382,7 +381,7 @@ internal object LockOperationsClient {
      * @param request The specific [UserPublicKeyRequest] request to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    private suspend fun getUserPublicKey(request: UserPublicKeyRequest): NetworkUserPublicKeyResponse {
+    private suspend fun getUserPublicKey(request: UserPublicKeyRequest): UserPublicKeyResponse {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders()
             setBody(request)
@@ -393,58 +392,58 @@ internal object LockOperationsClient {
      * Retrieves public keys for up to 25 users by their email addresses.
      *
      * @param emails List of user email addresses (max 25 entries).
-     * @return List of [NetworkBatchUserPublicKeyResponse].
+     * @return List of [BatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<NetworkBatchUserPublicKeyResponse> =
+    suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<BatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(email = emails))
 
     /**
      * Retrieves public keys for up to 25 users by their telephone numbers.
      *
      * @param telephones List of user email addresses (max 25 entries).
-     * @return List of [NetworkBatchUserPublicKeyResponse].
+     * @return List of [BatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<NetworkBatchUserPublicKeyResponse> =
+    suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<BatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(telephone = telephones))
 
     /**
      * Retrieves public keys for up to 25 users by their local keys.
      *
      * @param localKeys List of user local keys (max 25 entries).
-     * @return List of [NetworkBatchUserPublicKeyResponse].
+     * @return List of [BatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<NetworkBatchUserPublicKeyResponse> =
+    suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<BatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(localKey = localKeys))
 
     /**
      * Retrieves public keys for up to 25 users by their third-party application's identifier for a user.
      *
      * @param foreignKeys List of user third-party application's identifiers (max 25 entries).
-     * @return List of [NetworkBatchUserPublicKeyResponse].
+     * @return List of [BatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
      */
-    suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<NetworkBatchUserPublicKeyResponse> =
+    suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
 
     /**
      * Handles the batch public key request of existing users.
      *
      * @param request The specific [BatchUserPublicKeyRequest] request to be handled.
-     * @return List of [NetworkBatchUserPublicKeyResponse].
+     * @return List of [BatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<NetworkBatchUserPublicKeyResponse> {
+    private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BatchUserPublicKeyResponse> {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(request)
@@ -633,23 +632,23 @@ internal object LockOperationsClient {
     /**
      * Retrieves all pinned locks for the current user.
      *
-     * @return List of [NetworkLockResponse].
+     * @return List of [LockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
      */
-    suspend fun getPinnedLocksRequest(): List<NetworkLockResponse> {
+    suspend fun getPinnedLocksRequest(): List<LockResponse> {
         return CloudHttpClient.client.get(Paths.getPinnedLocksPath()).body()
     }
 
     /**
      * Retrieves all locks where the current user has administrator privileges.
-     * @return List of [NetworkShareableLockResponse].
+     * @return List of [ShareableLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
      */
-    suspend fun getShareableLocksRequest(): List<NetworkShareableLockResponse> {
+    suspend fun getShareableLocksRequest(): List<ShareableLockResponse> {
         return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
     }
 

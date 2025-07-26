@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.toTileLocksResponse
+import com.doordeck.multiplatform.sdk.model.data.TileLocks
+import com.doordeck.multiplatform.sdk.model.data.toTileLocks
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -14,15 +14,15 @@ actual object TilesApi {
     /**
      * @see TilesClient.getLocksBelongingToTileRequest
      */
-    suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
+    suspend fun getLocksBelongingToTile(tileId: String): TileLocks {
         return TilesClient.getLocksBelongingToTileRequest(tileId)
-            .toTileLocksResponse()
+            .toTileLocks()
     }
 
     /**
      * Async variant of [TilesApi.getLocksBelongingToTile] returning [CompletableFuture].
      */
-    fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocksResponse> {
+    fun getLocksBelongingToTileAsync(tileId: String): CompletableFuture<TileLocks> {
         return completableFuture { getLocksBelongingToTile(tileId) }
     }
 

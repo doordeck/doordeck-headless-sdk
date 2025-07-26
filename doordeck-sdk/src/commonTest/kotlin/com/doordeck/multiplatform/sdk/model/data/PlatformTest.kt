@@ -18,7 +18,7 @@ class PlatformTest {
         val createApplication = randomCreateApplication()
 
         // When
-        val result = BasicPlatform.BasicCreateApplication.Builder()
+        val result = BasicPlatformOperations.BasicCreateApplication.Builder()
             .setName(createApplication.name)
             .setCompanyName(createApplication.companyName)
             .setMailingAddress(createApplication.mailingAddress)
@@ -39,7 +39,7 @@ class PlatformTest {
         val emailPreferences = randomEmailPreferences()
 
         // When
-        val result = BasicPlatform.BasicEmailPreferences.Builder()
+        val result = BasicPlatformOperations.BasicEmailPreferences.Builder()
             .setSenderEmail(emailPreferences.senderEmail)
             .setSenderName(emailPreferences.senderName)
             .setPrimaryColour(emailPreferences.primaryColour)
@@ -58,7 +58,7 @@ class PlatformTest {
         val emailCallToAction = randomEmailCallToAction()
 
         // When
-        val result = BasicPlatform.BasicEmailCallToAction.Builder()
+        val result = BasicPlatformOperations.BasicEmailCallToAction.Builder()
             .setActionTarget(emailCallToAction.actionTarget)
             .setHeadline(emailCallToAction.headline)
             .setActionText(emailCallToAction.actionText)
@@ -74,7 +74,7 @@ class PlatformTest {
         val rsaKey = randomRsaKey()
 
         // When
-        val result = BasicPlatform.BasicRsaKey.Builder()
+        val result = BasicPlatformOperations.BasicRsaKey.Builder()
             .setKty(rsaKey.kty)
             .setUse(rsaKey.use)
             .setKid(rsaKey.kid)
@@ -99,7 +99,7 @@ class PlatformTest {
         val ecKey = randomEcKey()
 
         // When
-        val result = BasicPlatform.BasicEcKey.Builder()
+        val result = BasicPlatformOperations.BasicEcKey.Builder()
             .setKty(ecKey.kty)
             .setUse(ecKey.use)
             .setKid(ecKey.kid)
@@ -120,7 +120,7 @@ class PlatformTest {
         val ed25519Key = randomEd25519Key()
 
         // When
-        val result = BasicPlatform.BasicEd25519Key.Builder()
+        val result = BasicPlatformOperations.BasicEd25519Key.Builder()
             .setKty(ed25519Key.kty)
             .setUse(ed25519Key.use)
             .setKid(ed25519Key.kid)

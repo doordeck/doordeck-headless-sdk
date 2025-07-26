@@ -1,11 +1,13 @@
-package com.doordeck.multiplatform.sdk.model.responses
+package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toUUID
 import java.util.UUID
 import kotlin.time.Instant
 
-data class SiteResponse(
+data class Site(
     val id: UUID,
     val name: String,
     val colour: String,
@@ -17,17 +19,17 @@ data class SiteResponse(
     val updated: Instant
 )
 
-typealias SiteLocksResponse = LockResponse
+typealias SiteLocks = Lock
 
-data class UserForSiteResponse(
+data class UserForSite(
     val userId: UUID,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean
 )
 
-internal fun List<NetworkSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
-    SiteResponse(
+internal fun List<SiteResponse>.toSite(): List<Site> = map { site ->
+    Site(
         id = site.id.toUUID(),
         name = site.name,
         colour = site.colour,
@@ -40,8 +42,8 @@ internal fun List<NetworkSiteResponse>.toSiteResponse(): List<SiteResponse> = ma
     )
 }
 
-internal fun List<NetworkUserForSiteResponse>.toUserForSiteResponse(): List<UserForSiteResponse> = map { user ->
-    UserForSiteResponse(
+internal fun List<UserForSiteResponse>.toUserForSite(): List<UserForSite> = map { user ->
+    UserForSite(
         userId = user.userId.toUUID(),
         email = user.email,
         displayName = user.displayName,

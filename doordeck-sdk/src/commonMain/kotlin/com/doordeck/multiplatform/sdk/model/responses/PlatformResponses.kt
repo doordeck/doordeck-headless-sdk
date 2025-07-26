@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-internal data class NetworkApplicationResponse(
+internal data class ApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
@@ -20,15 +20,15 @@ internal data class NetworkApplicationResponse(
     val supportContact: String? = null,
     val appLink: String? = null,
     val slug: String? = null,
-    val emailPreferences: NetworkEmailPreferencesResponse,
-    val authKeys: Map<String, NetworkAuthKeyResponse>,
-    val oauth: NetworkOauthResponse? = null,
+    val emailPreferences: EmailPreferencesResponse,
+    val authKeys: Map<String, AuthKeyResponse>,
+    val oauth: OauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
 
 @Serializable
 @JsonClassDiscriminator("kty")
-internal sealed interface NetworkAuthKeyResponse {
+internal sealed interface AuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
@@ -44,7 +44,7 @@ internal sealed interface NetworkAuthKeyResponse {
 
 @Serializable
 @SerialName("RSA")
-internal data class NetworkRsaKeyResponseNetwork(
+internal data class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -60,11 +60,11 @@ internal data class NetworkRsaKeyResponseNetwork(
     override val iat: Int? = null,
     val e: String,
     val n: String
-): NetworkAuthKeyResponse
+): AuthKeyResponse
 
 @Serializable
 @SerialName("EC")
-internal data class NetworkEcKeyResponseNetwork(
+internal data class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -81,11 +81,11 @@ internal data class NetworkEcKeyResponseNetwork(
     val crv: String,
     val x: String,
     val y: String
-): NetworkAuthKeyResponse
+): AuthKeyResponse
 
 @Serializable
 @SerialName("OKP")
-internal data class NetworkEd25519KeyResponseNetwork(
+internal data class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -102,34 +102,34 @@ internal data class NetworkEd25519KeyResponseNetwork(
     val d: String? = null,
     val crv: String,
     val x: String
-): NetworkAuthKeyResponse
+): AuthKeyResponse
 
 @Serializable
-internal data class NetworkEmailPreferencesResponse(
+internal data class EmailPreferencesResponse(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String,
     val secondaryColour: String,
     val onlySendEssentialEmails: Boolean? = null,
-    val callToAction: NetworkEmailCallToActionResponse? = null,
+    val callToAction: EmailCallToActionResponse? = null,
 )
 
 @Serializable
-internal data class NetworkEmailCallToActionResponse(
+internal data class EmailCallToActionResponse(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @Serializable
-internal data class NetworkOauthResponse(
+internal data class OauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
     val grantType: GrantType
 )
 
 @Serializable
-internal data class NetworkApplicationOwnerDetailsResponse(
+internal data class ApplicationOwnerDetailsResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
@@ -138,6 +138,6 @@ internal data class NetworkApplicationOwnerDetailsResponse(
 )
 
 @Serializable
-internal data class NetworkGetLogoUploadUrlResponse(
+internal data class GetLogoUploadUrlResponse(
     val uploadUrl: String
 )

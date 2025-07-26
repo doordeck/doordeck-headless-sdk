@@ -1,183 +1,135 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.data.Platform.CreateApplication
-import com.nimbusds.jose.jwk.ECKey
+import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.AuthKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.EmailCallToActionResponse
+import com.doordeck.multiplatform.sdk.model.responses.EmailPreferencesResponse
+import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.OauthResponse
+import com.doordeck.multiplatform.sdk.util.toInstant
+import com.doordeck.multiplatform.sdk.util.toJson
+import com.doordeck.multiplatform.sdk.util.toUUID
+import com.doordeck.multiplatform.sdk.util.toUri
+import com.doordeck.multiplatform.sdk.util.toUrl
 import com.nimbusds.jose.jwk.JWK
-import com.nimbusds.jose.jwk.OctetKeyPair
-import com.nimbusds.jose.jwk.RSAKey
 import java.net.URI
+import java.net.URL
+import java.util.UUID
+import kotlin.time.Instant
 
-object Platform {
+data class Application(
+    val applicationId: UUID,
+    val name: String,
+    val lastUpdated: Instant? = null,
+    val owners: List<UUID>? = null,
+    val corsDomains: List<URI>? = null,
+    val authDomains: List<URI>? = null,
+    val logoUrl: URI? = null,
+    val privacyPolicy: URI? = null,
+    val mailingAddress: String? = null,
+    val companyName: String? = null,
+    val supportContact: URI? = null,
+    val appLink: URI? = null,
+    val slug: String? = null,
+    val emailPreferences: EmailPreferences,
+    val authKeys: Map<String, JWK>,
+    val oauth: Oauth? = null,
+    val isDoordeckApplication: Boolean? = null
+)
 
-    data class CreateApplication @JvmOverloads constructor(
-        val name: String,
-        val companyName: String,
-        val mailingAddress: String,
-        val privacyPolicy: URI? = null,
-        val supportContact: URI? = null,
-        val appLink: URI? = null,
-        val emailPreferences: EmailPreferences? = null,
-        val logoUrl: URI? = null
-    ) {
-        class Builder {
-            private var name: String? = null
-            private var companyName: String? = null
-            private var mailingAddress: String? = null
-            private var privacyPolicy: URI? = null
-            private var supportContact: URI? = null
-            private var appLink: URI? = null
-            private var emailPreferences: EmailPreferences? = null
-            private var logoUrl: URI? = null
+// TODO Uhm..!
+internal fun AuthKeyResponse.toAuthKey(): JWK = JWK.parse(toJson())
 
-            fun setName(name: String) = apply { this.name = name }
-            fun setCompanyName(companyName: String) = apply { this.companyName = companyName }
-            fun setMailingAddress(mailingAddress: String) = apply { this.mailingAddress = mailingAddress }
-            fun setPrivacyPolicy(privacyPolicy: URI?) = apply { this.privacyPolicy = privacyPolicy }
-            fun setSupportContact(supportContact: URI?) = apply { this.supportContact = supportContact }
-            fun setAppLink(appLink: URI?) = apply { this.appLink = appLink }
-            fun setEmailPreferences(emailPreferences: EmailPreferences?) = apply { this.emailPreferences = emailPreferences }
-            fun setLogoUrl(logoUrl: URI?) = apply { this.logoUrl = logoUrl }
+data class EmailPreferences(
+    val senderEmail: String? = null,
+    val senderName: String? = null,
+    val primaryColour: String,
+    val secondaryColour: String,
+    val onlySendEssentialEmails: Boolean? = null,
+    val callToAction: EmailCallToAction? = null,
+)
 
-            fun build(): CreateApplication {
-                return CreateApplication(
-                    name = requireNotNull(name),
-                    companyName = requireNotNull(companyName),
-                    mailingAddress = requireNotNull(mailingAddress),
-                    privacyPolicy = privacyPolicy,
-                    supportContact = supportContact,
-                    appLink = appLink,
-                    emailPreferences = emailPreferences,
-                    logoUrl = logoUrl
-                )
-            }
-        }
-    }
+data class EmailCallToAction(
+    val actionTarget: URI,
+    val headline: String,
+    val actionText: String
+)
 
-    data class EmailPreferences @JvmOverloads constructor(
-        val senderEmail: String? = null,
-        val senderName: String? = null,
-        val primaryColour: String? = null,
-        val secondaryColour: String? = null,
-        val onlySendEssentialEmails: Boolean? = null,
-        val callToAction: EmailCallToAction? = null
-    ) {
-        class Builder {
-            private var senderEmail: String? = null
-            private var senderName: String? = null
-            private var primaryColour: String? = null
-            private var secondaryColour: String? = null
-            private var onlySendEssentialEmails: Boolean? = null
-            private var callToAction: EmailCallToAction? = null
+data class Oauth(
+    val authorizationEndpoint: URI,
+    val clientId: String,
+    val grantType: GrantType
+)
 
-            fun setSenderEmail(senderEmail: String?) = apply { this.senderEmail = senderEmail }
-            fun setSenderName(senderName: String?) = apply { this.senderName = senderName }
-            fun setPrimaryColour(primaryColour: String?) = apply { this.primaryColour = primaryColour }
-            fun setSecondaryColour(secondaryColour: String?) = apply { this.secondaryColour = secondaryColour }
-            fun setOnlySendEssentialEmails(onlySendEssentialEmails: Boolean?) = apply { this.onlySendEssentialEmails = onlySendEssentialEmails }
-            fun setCallToAction(callToAction: EmailCallToAction?) = apply { this.callToAction = callToAction }
+data class ApplicationOwnerDetails(
+    val userId: UUID,
+    val email: String,
+    val displayName: String? = null,
+    val orphan: Boolean,
+    val foreign: Boolean
+)
 
-            fun build(): EmailPreferences {
-                return EmailPreferences(
-                    senderEmail = senderEmail,
-                    senderName = senderName,
-                    primaryColour = primaryColour,
-                    secondaryColour = secondaryColour,
-                    onlySendEssentialEmails = onlySendEssentialEmails,
-                    callToAction = callToAction
-                )
-            }
-        }
-    }
+data class GetLogoUploadUrl(
+    val uploadUrl: URL
+)
 
-    data class EmailCallToAction(
-        val actionTarget: URI,
-        val headline: String,
-        val actionText: String
-    ) {
-        class Builder {
-            private var actionTarget: URI? = null
-            private var headline: String? = null
-            private var actionText: String? = null
-
-            fun setActionTarget(actionTarget: URI) = apply { this.actionTarget = actionTarget }
-            fun setHeadline(headline: String) = apply { this.headline = headline }
-            fun setActionText(actionText: String) = apply { this.actionText = actionText }
-
-            fun build(): EmailCallToAction {
-                return EmailCallToAction(
-                    actionTarget = requireNotNull(actionTarget),
-                    headline = requireNotNull(headline),
-                    actionText = requireNotNull(actionText),
-                )
-            }
-        }
-    }
+internal fun List<ApplicationResponse>.toApplication(): List<Application> = map {
+    it.toApplication()
 }
 
-internal fun CreateApplication.toBasicCreateApplication(): BasicPlatform.BasicCreateApplication {
-    return BasicPlatform.BasicCreateApplication(
-        name = name,
-        companyName = companyName,
-        mailingAddress = mailingAddress,
-        privacyPolicy = privacyPolicy?.toString(),
-        supportContact = supportContact?.toString(),
-        appLink = appLink?.toString(),
-        emailPreferences = emailPreferences?.toBasicEmailPreferences(),
-        logoUrl = logoUrl?.toString()
+internal fun ApplicationResponse.toApplication(): Application = Application(
+    applicationId = applicationId.toUUID(),
+    name = name,
+    lastUpdated = lastUpdated?.toInstant(),
+    owners = owners?.map { it.toUUID() },
+    corsDomains = corsDomains?.map { it.toUri() },
+    authDomains = authDomains?.map { it.toUri() },
+    logoUrl = logoUrl?.toUri(),
+    privacyPolicy = privacyPolicy?.toUri(),
+    mailingAddress = mailingAddress,
+    companyName = companyName,
+    supportContact = supportContact?.toUri(),
+    appLink = appLink?.toUri(),
+    slug = slug,
+    emailPreferences = emailPreferences.toEmailPreferences(),
+    authKeys = authKeys.map { it.key to it.value.toAuthKey() }.toMap(),
+    oauth = oauth?.toOauth(),
+    isDoordeckApplication = isDoordeckApplication
+)
+
+internal fun EmailPreferencesResponse.toEmailPreferences(): EmailPreferences = EmailPreferences(
+    senderEmail = senderEmail,
+    senderName = senderName,
+    primaryColour = primaryColour,
+    secondaryColour = secondaryColour,
+    onlySendEssentialEmails = onlySendEssentialEmails,
+    callToAction = callToAction?.toEmailCallToAction(),
+)
+
+internal fun EmailCallToActionResponse.toEmailCallToAction(): EmailCallToAction = EmailCallToAction(
+    actionTarget = actionTarget.toUri(),
+    headline = headline,
+    actionText = actionText
+)
+
+internal fun OauthResponse.toOauth(): Oauth = Oauth(
+    authorizationEndpoint = authorizationEndpoint.toUri(),
+    clientId = clientId,
+    grantType = grantType
+)
+
+internal fun List<ApplicationOwnerDetailsResponse>.toApplicationOwnerDetails(): List<ApplicationOwnerDetails> = map { owner ->
+    ApplicationOwnerDetails(
+        userId = owner.userId.toUUID(),
+        email = owner.email,
+        displayName = owner.displayName,
+        orphan = owner.orphan,
+        foreign = owner.foreign
     )
 }
 
-internal fun JWK.toBasicAuthKey(): BasicPlatform.BasicAuthKey {
-    return when(this) {
-        is ECKey -> BasicPlatform.BasicEcKey(
-            use = keyUse.value,
-            kid = keyID,
-            alg = algorithm.name,
-            d = d.toString(),
-            crv = curve.name,
-            x = x.toString(),
-            y = y.toString()
-        )
-        is RSAKey -> BasicPlatform.BasicRsaKey(
-            use = keyUse.value,
-            kid = keyID,
-            alg = algorithm.name,
-            p = firstPrimeFactor.toString(),
-            q = secondPrimeFactor.toString(),
-            d = privateExponent.toString(),
-            e = publicExponent.toString(),
-            qi = firstCRTCoefficient.toString(),
-            dp = firstFactorCRTExponent.toString(),
-            dq = secondFactorCRTExponent.toString(),
-            n = modulus.toString()
-        )
-        is OctetKeyPair -> BasicPlatform.BasicEd25519Key(
-            use = keyUse.value,
-            kid = keyID,
-            alg = algorithm.name,
-            d = d.toString(),
-            crv = curve.name,
-            x = x.toString()
-        )
-        else -> error("")
-    }
-}
-
-internal fun Platform.EmailPreferences.toBasicEmailPreferences(): BasicPlatform.BasicEmailPreferences {
-    return BasicPlatform.BasicEmailPreferences(
-        senderEmail = senderEmail,
-        senderName = senderName,
-        primaryColour = primaryColour,
-        secondaryColour = secondaryColour,
-        onlySendEssentialEmails = onlySendEssentialEmails,
-        callToAction = callToAction?.toBasicEmailCallToAction()
-    )
-}
-
-internal fun Platform.EmailCallToAction.toBasicEmailCallToAction(): BasicPlatform.BasicEmailCallToAction {
-    return BasicPlatform.BasicEmailCallToAction(
-        actionTarget = actionTarget.toString(),
-        headline = headline,
-        actionText = actionText
-    )
-}
+internal fun GetLogoUploadUrlResponse.toGetLogoUploadUrl(): GetLogoUploadUrl = GetLogoUploadUrl(
+    uploadUrl = uploadUrl.toUrl()
+)

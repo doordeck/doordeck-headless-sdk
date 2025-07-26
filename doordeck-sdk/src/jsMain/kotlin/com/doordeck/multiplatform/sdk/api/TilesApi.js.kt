@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.toTileLocksResponse
+import com.doordeck.multiplatform.sdk.model.data.TileLocks
+import com.doordeck.multiplatform.sdk.model.data.toTileLocks
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -15,8 +15,8 @@ actual object TilesApi {
     /**
      * @see TilesClient.getLocksBelongingToTileRequest
      */
-    fun getLocksBelongingToTile(tileId: String): Promise<TileLocksResponse> {
-        return promise { TilesClient.getLocksBelongingToTileRequest(tileId).toTileLocksResponse() }
+    fun getLocksBelongingToTile(tileId: String): Promise<TileLocks> {
+        return promise { TilesClient.getLocksBelongingToTileRequest(tileId).toTileLocks() }
     }
 
     /**

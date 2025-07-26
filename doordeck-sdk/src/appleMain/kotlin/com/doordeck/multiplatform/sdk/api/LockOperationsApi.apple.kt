@@ -2,7 +2,15 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
+import com.doordeck.multiplatform.sdk.model.data.Audit
+import com.doordeck.multiplatform.sdk.model.data.BatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.Lock
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.LockUser
+import com.doordeck.multiplatform.sdk.model.data.ShareableLock
+import com.doordeck.multiplatform.sdk.model.data.UserLock
+import com.doordeck.multiplatform.sdk.model.data.UserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.toAudit
 import com.doordeck.multiplatform.sdk.model.data.toBasicBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicLocationRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicRevokeAccessToLockOperation
@@ -11,20 +19,12 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.data.toBatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.toLock
+import com.doordeck.multiplatform.sdk.model.data.toLockUser
+import com.doordeck.multiplatform.sdk.model.data.toShareableLock
+import com.doordeck.multiplatform.sdk.model.data.toUserLock
+import com.doordeck.multiplatform.sdk.model.data.toUserPublicKey
 
 /**
  * Platform-specific implementations of lock-related API calls.
@@ -34,45 +34,45 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getSingleLockRequest
      */
     @Throws(Exception::class)
-    suspend fun getSingleLock(lockId: String): LockResponse {
+    suspend fun getSingleLock(lockId: String): Lock {
         return LockOperationsClient.getSingleLockRequest(lockId)
-            .toLockResponse()
+            .toLock()
     }
 
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
     @Throws(Exception::class)
-    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
+    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<Audit> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
-            .toAuditResponse()
+            .toAudit()
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
     @Throws(Exception::class)
-    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
+    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<Audit> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
-            .toAuditResponse()
+            .toAudit()
     }
 
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
     @Throws(Exception::class)
-    suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
+    suspend fun getUsersForLock(lockId: String): List<UserLock> {
         return LockOperationsClient.getUsersForLockRequest(lockId)
-            .toUserLockResponse()
+            .toUserLock()
     }
 
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
     @Throws(Exception::class)
-    suspend fun getLocksForUser(userId: String): LockUserResponse {
+    suspend fun getLocksForUser(userId: String): LockUser {
         return LockOperationsClient.getLocksForUserRequest(userId)
-            .toLockUserResponse()
+            .toLockUser()
     }
 
     /**
@@ -144,90 +144,90 @@ actual object LockOperationsApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
+    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
+    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKey {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
-            .toUserPublicKeyResponse()
+            .toUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKey> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
-            .toBatchUserPublicKeyResponse()
+            .toBatchUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKey> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
-            .toBatchUserPublicKeyResponse()
+            .toBatchUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKey> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
-            .toBatchUserPublicKeyResponse()
+            .toBatchUserPublicKey()
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
+    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKey> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
-            .toBatchUserPublicKeyResponse()
+            .toBatchUserPublicKey()
     }
 
     /**
@@ -282,18 +282,18 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getPinnedLocksRequest
      */
     @Throws(Exception::class)
-    suspend fun getPinnedLocks(): List<LockResponse> {
+    suspend fun getPinnedLocks(): List<Lock> {
         return LockOperationsClient.getPinnedLocksRequest()
-            .toLockResponse()
+            .toLock()
     }
 
     /**
      * @see LockOperationsClient.getShareableLocksRequest
      */
     @Throws(Exception::class)
-    suspend fun getShareableLocks(): List<ShareableLockResponse> {
+    suspend fun getShareableLocks(): List<ShareableLock> {
         return LockOperationsClient.getShareableLocksRequest()
-            .toShareableLockResponse()
+            .toShareableLock()
     }
 }
 

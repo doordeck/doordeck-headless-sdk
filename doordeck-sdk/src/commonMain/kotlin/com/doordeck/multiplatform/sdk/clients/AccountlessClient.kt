@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -10,7 +9,7 @@ import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.model.requests.PasswordResetRequest
 import com.doordeck.multiplatform.sdk.model.requests.PasswordResetVerifyRequest
 import com.doordeck.multiplatform.sdk.model.requests.RegisterRequest
-import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
@@ -21,7 +20,7 @@ import io.ktor.client.request.setBody
 
 /**
  * Internal implementation of the accountless API client.
- * Handles all network requests related to user.
+ * Handles all  requests related to user.
  */
 internal object AccountlessClient {
     /**
@@ -30,16 +29,16 @@ internal object AccountlessClient {
      *
      * @param email The user's email.
      * @param password The user's password.
-     * @return [NetworkTokenResponse].
+     * @return [TokenResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
      */
-    suspend fun loginRequest(email: String, password: String): NetworkTokenResponse {
+    suspend fun loginRequest(email: String, password: String): TokenResponse {
         return CloudHttpClient.client.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
-        }.body<NetworkTokenResponse>().also {
+        }.body<TokenResponse>().also {
             Context.also { context ->
                 context.setUserEmail(email)
                 context.setCloudAuthToken(it.authToken)
@@ -57,7 +56,7 @@ internal object AccountlessClient {
      * @param displayName The user's display name.
      * @param force If true, discards any pending invitation and forces creation of a new account.
      * @param publicKey The user's public key or null.
-     * @return [NetworkTokenResponse].
+     * @return [TokenResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
@@ -68,7 +67,7 @@ internal object AccountlessClient {
         displayName: String?,
         force: Boolean,
         publicKey: ByteArray?
-    ): NetworkTokenResponse {
+    ): TokenResponse {
         return CloudHttpClient.client.post(Paths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(
@@ -80,7 +79,7 @@ internal object AccountlessClient {
                 )
             )
             parameter(Params.FORCE, force)
-        }.body<NetworkTokenResponse>().also {
+        }.body<TokenResponse>().also {
             Context.also { context ->
                 context.setUserEmail(email)
                 context.setCloudAuthToken(it.authToken)

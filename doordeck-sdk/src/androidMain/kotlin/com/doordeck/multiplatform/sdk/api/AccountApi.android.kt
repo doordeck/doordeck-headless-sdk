@@ -3,14 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKey
+import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSecondaryAuthentication
+import com.doordeck.multiplatform.sdk.model.data.Token
+import com.doordeck.multiplatform.sdk.model.data.UserDetails
+import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKey
+import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKeyWithSecondaryAuthentication
+import com.doordeck.multiplatform.sdk.model.data.toToken
+import com.doordeck.multiplatform.sdk.model.data.toUserDetails
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -22,16 +22,16 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
-    suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
+    suspend fun refreshToken(refreshToken: String? = null): Token {
         return AccountClient.refreshTokenRequest(refreshToken)
-            .toTokenResponse()
+            .toToken()
     }
 
     /**
      * Async variant of [AccountApi.refreshToken] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun refreshTokenAsync(refreshToken: String? = null): CompletableFuture<TokenResponse> {
+    fun refreshTokenAsync(refreshToken: String? = null): CompletableFuture<Token> {
         return completableFuture { refreshToken(refreshToken) }
     }
 
@@ -52,15 +52,15 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
+    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKey {
         return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
+            .toRegisterEphemeralKey()
     }
 
     /**
      * Async variant of [AccountApi.registerEphemeralKey] returning [CompletableFuture].
      */
-    fun registerEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKeyResponse> {
+    fun registerEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKey> {
         return completableFuture { registerEphemeralKey(publicKey, privateKey) }
     }
 
@@ -70,9 +70,9 @@ actual object AccountApi {
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
-    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
+    ): RegisterEphemeralKeyWithSecondaryAuthentication {
         return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
-            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
+            .toRegisterEphemeralKeyWithSecondaryAuthentication()
     }
 
     /**
@@ -81,7 +81,7 @@ actual object AccountApi {
     fun registerEphemeralKeyWithSecondaryAuthenticationAsync(
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
-    ): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
+    ): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthentication> {
         return completableFuture { registerEphemeralKeyWithSecondaryAuthentication(publicKey, method) }
     }
 
@@ -92,9 +92,9 @@ actual object AccountApi {
         code: String,
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): RegisterEphemeralKeyResponse {
+    ): RegisterEphemeralKey {
         return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
+            .toRegisterEphemeralKey()
     }
 
     /**
@@ -104,7 +104,7 @@ actual object AccountApi {
         code: String,
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): CompletableFuture<RegisterEphemeralKeyResponse> {
+    ): CompletableFuture<RegisterEphemeralKey> {
         return completableFuture { verifyEphemeralKeyRegistration(code, publicKey, privateKey) }
     }
 
@@ -143,15 +143,15 @@ actual object AccountApi {
     /**
      * @see AccountClient.getUserDetailsRequest
      */
-    suspend fun getUserDetails(): UserDetailsResponse {
+    suspend fun getUserDetails(): UserDetails {
         return AccountClient.getUserDetailsRequest()
-            .toUserDetailsResponse()
+            .toUserDetails()
     }
 
     /**
      * Async variant of [AccountApi.getUserDetails] returning [CompletableFuture].
      */
-    fun getUserDetailsAsync(): CompletableFuture<UserDetailsResponse> {
+    fun getUserDetailsAsync(): CompletableFuture<UserDetails> {
         return completableFuture { getUserDetails() }
     }
 

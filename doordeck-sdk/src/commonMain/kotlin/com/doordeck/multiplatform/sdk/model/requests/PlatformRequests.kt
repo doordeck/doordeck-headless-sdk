@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.requests
 
-import com.doordeck.multiplatform.sdk.model.data.BasicPlatform
+import com.doordeck.multiplatform.sdk.model.data.BasicPlatformOperations
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -157,7 +157,7 @@ internal data class AddEd25519KeyRequest(
     val x: String
 ): AddAuthKeyRequest
 
-internal fun BasicPlatform.BasicCreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
+internal fun BasicPlatformOperations.BasicCreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
     name = name,
     companyName = companyName,
     mailingAddress = mailingAddress,
@@ -183,8 +183,8 @@ internal fun BasicPlatform.BasicCreateApplication.toCreateApplicationRequest(): 
     logoUrl = logoUrl
 )
 
-internal fun BasicPlatform.BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
-    is BasicPlatform.BasicRsaKey -> AddRsaKeyRequest(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is BasicPlatform.BasicEcKey -> AddEcKeyRequest(kty, use, kid, alg, d, crv, x, y)
-    is BasicPlatform.BasicEd25519Key -> AddEd25519KeyRequest(kty, use, kid, alg, d, crv, x)
+internal fun BasicPlatformOperations.BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
+    is BasicPlatformOperations.BasicRsaKey -> AddRsaKeyRequest(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is BasicPlatformOperations.BasicEcKey -> AddEcKeyRequest(kty, use, kid, alg, d, crv, x, y)
+    is BasicPlatformOperations.BasicEd25519Key -> AddEd25519KeyRequest(kty, use, kid, alg, d, crv, x)
 }

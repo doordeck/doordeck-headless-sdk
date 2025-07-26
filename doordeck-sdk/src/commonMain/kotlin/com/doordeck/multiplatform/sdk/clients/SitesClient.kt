@@ -3,26 +3,26 @@ package com.doordeck.multiplatform.sdk.clients
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.Paths
-import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkSiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.NetworkUserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 
 /**
  * Internal implementation of the sites API client.
- * Handles all network requests related to sites.
+ * Handles all  requests related to sites.
  */
 internal object SitesClient {
     /**
      * Retrieves all sites accessible to the current user.
      *
-     * @return List of [NetworkSiteResponse].
+     * @return List of [SiteResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
      */
-    suspend fun listSitesRequest(): List<NetworkSiteResponse> {
+    suspend fun listSitesRequest(): List<SiteResponse> {
         return CloudHttpClient.client.get(Paths.getListSites()).body()
     }
 
@@ -30,12 +30,12 @@ internal object SitesClient {
      * Retrieves all user-accessible locks in the specified site.
      *
      * @param siteId The site's unique identifier.
-     * @return List of [NetworkSiteLocksResponse].
+     * @return List of [SiteLocksResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
      */
-    suspend fun getLocksForSiteRequest(siteId: String): List<NetworkSiteLocksResponse> {
+    suspend fun getLocksForSiteRequest(siteId: String): List<SiteLocksResponse> {
         return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId)).body()
     }
 
@@ -44,12 +44,12 @@ internal object SitesClient {
      * where the current user has administrator privileges.
      *
      * @param siteId The site's unique identifier.
-     * @return List of [NetworkUserForSiteResponse].
+     * @return List of [UserForSiteResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
      */
-    suspend fun getUsersForSiteRequest(siteId: String): List<NetworkUserForSiteResponse> {
+    suspend fun getUsersForSiteRequest(siteId: String): List<UserForSiteResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId)).body()
     }
 }

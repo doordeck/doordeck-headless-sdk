@@ -1,17 +1,17 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import kotlin.jvm.JvmOverloads
+import com.doordeck.multiplatform.sdk.model.data.PlatformOperations.CreateApplication
 
-internal object BasicPlatform {
+object PlatformOperations {
 
-    data class BasicCreateApplication @JvmOverloads constructor(
+    data class CreateApplication(
         val name: String,
         val companyName: String,
         val mailingAddress: String,
         val privacyPolicy: String? = null,
         val supportContact: String? = null,
         val appLink: String? = null,
-        val emailPreferences: BasicEmailPreferences? = null,
+        val emailPreferences: EmailPreferences? = null,
         val logoUrl: String? = null
     ) {
         class Builder {
@@ -21,7 +21,7 @@ internal object BasicPlatform {
             private var privacyPolicy: String? = null
             private var supportContact: String? = null
             private var appLink: String? = null
-            private var emailPreferences: BasicEmailPreferences? = null
+            private var emailPreferences: EmailPreferences? = null
             private var logoUrl: String? = null
 
             fun setName(name: String) = apply { this.name = name }
@@ -30,11 +30,11 @@ internal object BasicPlatform {
             fun setPrivacyPolicy(privacyPolicy: String?) = apply { this.privacyPolicy = privacyPolicy }
             fun setSupportContact(supportContact: String?) = apply { this.supportContact = supportContact }
             fun setAppLink(appLink: String?) = apply { this.appLink = appLink }
-            fun setEmailPreferences(emailPreferences: BasicEmailPreferences?) = apply { this.emailPreferences = emailPreferences }
+            fun setEmailPreferences(emailPreferences: EmailPreferences?) = apply { this.emailPreferences = emailPreferences }
             fun setLogoUrl(logoUrl: String?) = apply { this.logoUrl = logoUrl }
 
-            fun build(): BasicCreateApplication {
-                return BasicCreateApplication(
+            fun build(): CreateApplication {
+                return CreateApplication(
                     name = requireNotNull(name),
                     companyName = requireNotNull(companyName),
                     mailingAddress = requireNotNull(mailingAddress),
@@ -48,13 +48,13 @@ internal object BasicPlatform {
         }
     }
 
-    data class BasicEmailPreferences @JvmOverloads constructor(
+    data class EmailPreferences(
         val senderEmail: String? = null,
         val senderName: String? = null,
         val primaryColour: String? = null,
         val secondaryColour: String? = null,
         val onlySendEssentialEmails: Boolean? = null,
-        val callToAction: BasicEmailCallToAction? = null
+        val callToAction: EmailCallToAction? = null
     ) {
         class Builder {
             private var senderEmail: String? = null
@@ -62,17 +62,17 @@ internal object BasicPlatform {
             private var primaryColour: String? = null
             private var secondaryColour: String? = null
             private var onlySendEssentialEmails: Boolean? = null
-            private var callToAction: BasicEmailCallToAction? = null
+            private var callToAction: EmailCallToAction? = null
 
             fun setSenderEmail(senderEmail: String?) = apply { this.senderEmail = senderEmail }
             fun setSenderName(senderName: String?) = apply { this.senderName = senderName }
             fun setPrimaryColour(primaryColour: String?) = apply { this.primaryColour = primaryColour }
             fun setSecondaryColour(secondaryColour: String?) = apply { this.secondaryColour = secondaryColour }
             fun setOnlySendEssentialEmails(onlySendEssentialEmails: Boolean?) = apply { this.onlySendEssentialEmails = onlySendEssentialEmails }
-            fun setCallToAction(callToAction: BasicEmailCallToAction?) = apply { this.callToAction = callToAction }
+            fun setCallToAction(callToAction: EmailCallToAction?) = apply { this.callToAction = callToAction }
 
-            fun build(): BasicEmailPreferences {
-                return BasicEmailPreferences(
+            fun build(): EmailPreferences {
+                return EmailPreferences(
                     senderEmail = senderEmail,
                     senderName = senderName,
                     primaryColour = primaryColour,
@@ -84,7 +84,7 @@ internal object BasicPlatform {
         }
     }
 
-    data class BasicEmailCallToAction(
+    data class EmailCallToAction(
         val actionTarget: String,
         val headline: String,
         val actionText: String
@@ -98,8 +98,8 @@ internal object BasicPlatform {
             fun setHeadline(headline: String) = apply { this.headline = headline }
             fun setActionText(actionText: String) = apply { this.actionText = actionText }
 
-            fun build(): BasicEmailCallToAction {
-                return BasicEmailCallToAction(
+            fun build(): EmailCallToAction {
+                return EmailCallToAction(
                     actionTarget = requireNotNull(actionTarget),
                     headline = requireNotNull(headline),
                     actionText = requireNotNull(actionText),
@@ -108,14 +108,14 @@ internal object BasicPlatform {
         }
     }
 
-    sealed interface BasicAuthKey {
+    sealed interface AuthKey {
         val kid: String
         val kty: String
         val use: String
         val alg: String?
     }
 
-    data class BasicRsaKey(
+    data class RsaKey(
         override val kty: String = "RSA",
         override val use: String,
         override val kid: String,
@@ -128,7 +128,7 @@ internal object BasicPlatform {
         val dp: String,
         val dq: String,
         val n: String
-    ): BasicAuthKey {
+    ): AuthKey {
         class Builder {
             private var kty: String = "RSA"
             private var use: String? = null
@@ -156,8 +156,8 @@ internal object BasicPlatform {
             fun setDq(dq: String) = apply { this.dq = dq }
             fun setN(n: String) = apply { this.n = n }
 
-            fun build(): BasicRsaKey {
-                return BasicRsaKey(
+            fun build(): RsaKey {
+                return RsaKey(
                     kty = kty,
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
@@ -175,7 +175,7 @@ internal object BasicPlatform {
         }
     }
 
-    data class BasicEcKey(
+    data class EcKey(
         override val kty: String = "EC",
         override val use: String,
         override val kid: String,
@@ -184,7 +184,7 @@ internal object BasicPlatform {
         val crv: String,
         val x: String,
         val y: String
-    ): BasicAuthKey {
+    ): AuthKey {
         class Builder {
             private var kty: String = "EC"
             private var use: String? = null
@@ -204,8 +204,8 @@ internal object BasicPlatform {
             fun setX(x: String) = apply { this.x = x }
             fun setY(y: String) = apply { this.y = y }
 
-            fun build(): BasicEcKey {
-                return BasicEcKey(
+            fun build(): EcKey {
+                return EcKey(
                     kty = kty,
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
@@ -219,7 +219,7 @@ internal object BasicPlatform {
         }
     }
 
-    data class BasicEd25519Key(
+    data class Ed25519Key(
         override val kty: String = "OKP",
         override val use: String,
         override val kid: String,
@@ -227,7 +227,7 @@ internal object BasicPlatform {
         val d: String,
         val crv: String,
         val x: String
-    ): BasicAuthKey {
+    ): AuthKey {
         class Builder {
             private var kty: String = "OKP"
             private var use: String? = null
@@ -245,8 +245,8 @@ internal object BasicPlatform {
             fun setCrv(crv: String) = apply { this.crv = crv }
             fun setX(x: String) = apply { this.x = x }
 
-            fun build(): BasicEd25519Key {
-                return BasicEd25519Key(
+            fun build(): Ed25519Key {
+                return Ed25519Key(
                     kty = kty,
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
@@ -258,4 +258,42 @@ internal object BasicPlatform {
             }
         }
     }
+}
+
+internal fun CreateApplication.toBasicCreateApplication(): BasicPlatformOperations.BasicCreateApplication {
+    return BasicPlatformOperations.BasicCreateApplication(
+        name = name,
+        companyName = companyName,
+        mailingAddress = mailingAddress,
+        privacyPolicy = privacyPolicy,
+        supportContact = supportContact,
+        appLink = appLink,
+        emailPreferences = emailPreferences?.toBasicEmailPreferences(),
+        logoUrl = logoUrl
+    )
+}
+
+internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
+    is PlatformOperations.RsaKey -> BasicPlatformOperations.BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is PlatformOperations.EcKey -> BasicPlatformOperations.BasicEcKey(kty, use, kid, alg, d, crv, x, y)
+    is PlatformOperations.Ed25519Key -> BasicPlatformOperations.BasicEd25519Key(kty, use, kid, alg, d, crv, x)
+}
+
+internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicPlatformOperations.BasicEmailPreferences {
+    return BasicPlatformOperations.BasicEmailPreferences(
+        senderEmail = senderEmail,
+        senderName = senderName,
+        primaryColour = primaryColour,
+        secondaryColour = secondaryColour,
+        onlySendEssentialEmails = onlySendEssentialEmails,
+        callToAction = callToAction?.toBasicEmailCallToAction()
+    )
+}
+
+internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicPlatformOperations.BasicEmailCallToAction {
+    return BasicPlatformOperations.BasicEmailCallToAction(
+        actionTarget = actionTarget,
+        headline = headline,
+        actionText = actionText
+    )
 }

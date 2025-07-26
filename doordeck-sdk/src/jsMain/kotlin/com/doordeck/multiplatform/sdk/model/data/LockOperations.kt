@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.model.data
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.datetime.Clock
-import kotlin.js.JsExport
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 

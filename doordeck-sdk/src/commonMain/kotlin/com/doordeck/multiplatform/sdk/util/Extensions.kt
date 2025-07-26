@@ -24,7 +24,7 @@ import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.NetworkTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -70,14 +70,14 @@ private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 /**
  * Converts an API version to its corresponding header value.
- * 
+ *
  * @return The formatted header value for the API version.
  */
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
 /**
  * Adds common request headers to an HTTP request.
- * 
+ *
  * @param signedRequest Whether this is a signed request (affects content type).
  * @param contentType The content type to use, defaults based on signedRequest parameter.
  * @param apiVersion Optional API version to include in Accept header.
@@ -120,7 +120,7 @@ internal fun HttpClientConfig<*>.installAuth() {
         bearer {
             refreshTokens {
                 Context.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: NetworkTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
+                    val refreshTokens: TokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
                             path(Paths.getRefreshTokenPath())
                         }

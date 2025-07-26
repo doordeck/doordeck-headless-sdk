@@ -8,26 +8,26 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class NetworkLockResponse(
+internal data class LockResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
     val start: String? = null,
     val end: String? = null,
     val role: UserRole,
-    val settings: NetworkLockSettingsResponse,
-    val state: NetworkLockStateResponse,
+    val settings: LockSettingsResponse,
+    val state: LockStateResponse,
     val favourite: Boolean,
     val unlockTime: Double? = null
 )
 
 @Serializable
-internal data class NetworkLockSettingsResponse(
+internal data class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: List<String>,
     val defaultName: String,
-    val usageRequirements: NetworkUsageRequirementsResponse? = null,
-    val unlockBetweenWindow: NetworkUnlockBetweenSettingResponse? = null,
+    val usageRequirements: UsageRequirementsResponse? = null,
+    val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: List<String>,
     val hidden: Boolean,
     val directAccessEndpoints: List<String> = emptyList(),
@@ -35,13 +35,13 @@ internal data class NetworkLockSettingsResponse(
 )
 
 @Serializable
-internal data class NetworkUsageRequirementsResponse(
-    val time: List<NetworkTimeRequirementResponse>? = null,
-    val location: NetworkLocationRequirementResponse? = null
+internal data class UsageRequirementsResponse(
+    val time: List<TimeRequirementResponse>? = null,
+    val location: LocationRequirementResponse? = null
 )
 
 @Serializable
-internal data class NetworkTimeRequirementResponse(
+internal data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
@@ -49,7 +49,7 @@ internal data class NetworkTimeRequirementResponse(
 )
 
 @Serializable
-internal data class NetworkLocationRequirementResponse(
+internal data class LocationRequirementResponse(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean,
@@ -58,7 +58,7 @@ internal data class NetworkLocationRequirementResponse(
 )
 
 @Serializable
-internal data class NetworkUnlockBetweenSettingResponse(
+internal data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
@@ -67,19 +67,19 @@ internal data class NetworkUnlockBetweenSettingResponse(
 )
 
 @Serializable
-internal data class NetworkLockStateResponse(
+internal data class LockStateResponse(
     val locked: Boolean,
     val connected: Boolean
 )
 
 @Serializable
-internal data class NetworkUserPublicKeyResponse(
+internal data class UserPublicKeyResponse(
     val id: String,
     val publicKey: String
 )
 
 @Serializable
-internal data class NetworkBatchUserPublicKeyResponse(
+internal data class BatchUserPublicKeyResponse(
     val id: String,
     val email: String? = null,
     val foreignKey: String? = null,
@@ -88,13 +88,13 @@ internal data class NetworkBatchUserPublicKeyResponse(
 )
 
 @Serializable
-internal data class NetworkShareableLockResponse(
+internal data class ShareableLockResponse(
     val id: String,
     val name: String
 )
 
 @Serializable
-internal data class NetworkUserLockResponse(
+internal data class UserLockResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -107,7 +107,7 @@ internal data class NetworkUserLockResponse(
 )
 
 @Serializable
-internal data class NetworkLockUserResponse(
+internal data class LockUserResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -116,11 +116,11 @@ internal data class NetworkLockUserResponse(
     val foreign: Boolean,
     val start: Double? = null,
     val end: Double? = null,
-    val devices: List<NetworkLockUserDetailsResponse>
+    val devices: List<LockUserDetailsResponse>
 )
 
 @Serializable
-internal data class NetworkLockUserDetailsResponse(
+internal data class LockUserDetailsResponse(
     val deviceId: String,
     val role: UserRole,
     val start: Double? = null,
@@ -128,25 +128,25 @@ internal data class NetworkLockUserDetailsResponse(
 )
 
 @Serializable
-internal data class NetworkAuditResponse(
+internal data class AuditResponse(
     val deviceId: String,
     val timestamp: String,
     val type: AuditEvent,
-    val issuer: NetworkAuditIssuerResponse,
-    val subject: NetworkAuditSubjectResponse? = null,
+    val issuer: AuditIssuerResponse,
+    val subject: AuditSubjectResponse? = null,
     val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
 @Serializable
-internal data class NetworkAuditIssuerResponse(
+internal data class AuditIssuerResponse(
     val userId: String,
     val email: String? = null,
     val ip: String? = null
 )
 
 @Serializable
-internal data class NetworkAuditSubjectResponse(
+internal data class AuditSubjectResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null

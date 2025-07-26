@@ -2,7 +2,15 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
+import com.doordeck.multiplatform.sdk.model.data.Audit
+import com.doordeck.multiplatform.sdk.model.data.BatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.Lock
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.LockUser
+import com.doordeck.multiplatform.sdk.model.data.ShareableLock
+import com.doordeck.multiplatform.sdk.model.data.UserLock
+import com.doordeck.multiplatform.sdk.model.data.UserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.toAudit
 import com.doordeck.multiplatform.sdk.model.data.toBasicBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicLocationRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicRevokeAccessToLockOperation
@@ -11,20 +19,18 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
+import com.doordeck.multiplatform.sdk.model.data.toBatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.data.toLock
+import com.doordeck.multiplatform.sdk.model.data.toLockUser
+import com.doordeck.multiplatform.sdk.model.data.toShareableLock
+import com.doordeck.multiplatform.sdk.model.data.toUserLock
+import com.doordeck.multiplatform.sdk.model.data.toUserPublicKey
 import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.LockResponse
 import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -36,36 +42,36 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
-    fun getSingleLock(lockId: String): Promise<LockResponse> {
-        return promise { LockOperationsClient.getSingleLockRequest(lockId).toLockResponse() }
+    fun getSingleLock(lockId: String): Promise<Lock> {
+        return promise { LockOperationsClient.getSingleLockRequest(lockId).toLock() }
     }
 
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<AuditResponse>> {
-        return promise { LockOperationsClient.getLockAuditTrailRequest(lockId, start.toLong(), end.toLong()).toAuditResponse() }
+    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<List<Audit>> {
+        return promise { LockOperationsClient.getLockAuditTrailRequest(lockId, start.toLong(), end.toLong()).toAudit() }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<AuditResponse>> {
-        return promise { LockOperationsClient.getAuditForUserRequest(userId, start.toLong(), end.toLong()).toAuditResponse() }
+    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<List<Audit>> {
+        return promise { LockOperationsClient.getAuditForUserRequest(userId, start.toLong(), end.toLong()).toAudit() }
     }
 
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
-    fun getUsersForLock(lockId: String): Promise<List<UserLockResponse>> {
-        return promise { LockOperationsClient.getUsersForLockRequest(lockId).toUserLockResponse() }
+    fun getUsersForLock(lockId: String): Promise<List<UserLock>> {
+        return promise { LockOperationsClient.getUsersForLockRequest(lockId).toUserLock() }
     }
 
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
-    fun getLocksForUser(userId: String): Promise<LockUserResponse> {
-        return promise { LockOperationsClient.getLocksForUserRequest(userId).toLockUserResponse() }
+    fun getLocksForUser(userId: String): Promise<LockUser> {
+        return promise { LockOperationsClient.getLocksForUserRequest(userId).toLockUser() }
     }
 
     /**
@@ -128,71 +134,71 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
-    fun getUserPublicKey(userEmail: String, visitor: Boolean = false): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor).toUserPublicKeyResponse() }
+    fun getUserPublicKey(userEmail: String, visitor: Boolean = false): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
-    fun getUserPublicKeyByEmail(email: String): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyByEmailRequest(email).toUserPublicKeyResponse() }
+    fun getUserPublicKeyByEmail(email: String): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyByEmailRequest(email).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
-    fun getUserPublicKeyByTelephone(telephone: String): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone).toUserPublicKeyResponse() }
+    fun getUserPublicKeyByTelephone(telephone: String): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
-    fun getUserPublicKeyByLocalKey(localKey: String): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey).toUserPublicKeyResponse() }
+    fun getUserPublicKeyByLocalKey(localKey: String): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
-    fun getUserPublicKeyByForeignKey(foreignKey: String): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey).toUserPublicKeyResponse() }
+    fun getUserPublicKeyByForeignKey(foreignKey: String): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
-    fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKeyResponse> {
-        return promise { LockOperationsClient.getUserPublicKeyByIdentityRequest(identity).toUserPublicKeyResponse() }
+    fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKey> {
+        return promise { LockOperationsClient.getUserPublicKeyByIdentityRequest(identity).toUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
-    fun getUserPublicKeyByEmails(emails: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
-        return promise { LockOperationsClient.getUserPublicKeyByEmailsRequest(emails).toBatchUserPublicKeyResponse() }
+    fun getUserPublicKeyByEmails(emails: List<String>): Promise<List<BatchUserPublicKey>> {
+        return promise { LockOperationsClient.getUserPublicKeyByEmailsRequest(emails).toBatchUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
-    fun getUserPublicKeyByTelephones(telephones: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
-        return promise { LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones).toBatchUserPublicKeyResponse() }
+    fun getUserPublicKeyByTelephones(telephones: List<String>): Promise<List<BatchUserPublicKey>> {
+        return promise { LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones).toBatchUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
-    fun getUserPublicKeyByLocalKeys(localKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
-        return promise { LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys).toBatchUserPublicKeyResponse() }
+    fun getUserPublicKeyByLocalKeys(localKeys: List<String>): Promise<List<BatchUserPublicKey>> {
+        return promise { LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys).toBatchUserPublicKey() }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
-    fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): Promise<List<BatchUserPublicKeyResponse>> {
-        return promise { LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys).toBatchUserPublicKeyResponse() }
+    fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): Promise<List<BatchUserPublicKey>> {
+        return promise { LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys).toBatchUserPublicKey() }
     }
 
     /**
@@ -240,15 +246,15 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getPinnedLocksRequest
      */
-    fun getPinnedLocks(): Promise<List<LockResponse>> {
-        return promise { LockOperationsClient.getPinnedLocksRequest().toLockResponse() }
+    fun getPinnedLocks(): Promise<List<Lock>> {
+        return promise { LockOperationsClient.getPinnedLocksRequest().toLock() }
     }
 
     /**
      * @see LockOperationsClient.getShareableLocksRequest
      */
-    fun getShareableLocks(): Promise<List<ShareableLockResponse>> {
-        return promise { LockOperationsClient.getShareableLocksRequest().toShareableLockResponse() }
+    fun getShareableLocks(): Promise<List<ShareableLock>> {
+        return promise { LockOperationsClient.getShareableLocksRequest().toShareableLock() }
     }
 }
 

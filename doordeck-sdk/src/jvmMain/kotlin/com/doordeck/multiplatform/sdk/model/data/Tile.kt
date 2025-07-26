@@ -1,15 +1,16 @@
-package com.doordeck.multiplatform.sdk.model.responses
+package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
 import com.doordeck.multiplatform.sdk.util.toUUID
 import java.util.UUID
 
-data class TileLocksResponse(
+data class TileLocks(
     val siteId: UUID,
     val tileId: UUID,
     val deviceIds: List<UUID>
 )
 
-internal fun NetworkTileLocksResponse.toTileLocksResponse(): TileLocksResponse = TileLocksResponse(
+internal fun TileLocksResponse.toTileLocks(): TileLocks = TileLocks(
     siteId = siteId.toUUID(),
     tileId = tileId.toUUID(),
     deviceIds = deviceIds.map { it.toUUID() }
