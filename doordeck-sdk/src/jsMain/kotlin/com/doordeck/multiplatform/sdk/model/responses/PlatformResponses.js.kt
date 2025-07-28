@@ -1,19 +1,9 @@
-package com.doordeck.multiplatform.sdk.model.data
+package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
-import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuthKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicEcKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicEd25519KeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicEmailCallToActionResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicEmailPreferencesResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicOauthResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
 
 @JsExport
-data class Application(
+data class ApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
@@ -27,14 +17,14 @@ data class Application(
     val supportContact: String? = null,
     val appLink: String? = null,
     val slug: String? = null,
-    val emailPreferences: EmailPreferences,
-    val authKeys: Map<String, AuthKey>,
-    val oauth: Oauth? = null,
+    val emailPreferences: EmailPreferencesResponse,
+    val authKeys: Map<String, AuthKeyResponse>,
+    val oauth: OauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
 
 @JsExport
-sealed interface AuthKey {
+sealed interface AuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
@@ -49,7 +39,7 @@ sealed interface AuthKey {
 }
 
 @JsExport
-data class RsaKey(
+data class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -63,10 +53,10 @@ data class RsaKey(
     override val iat: Int? = null,
     val e: String,
     val n: String
-): AuthKey
+): AuthKeyResponse
 
 @JsExport
-data class EcKey(
+data class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -81,10 +71,10 @@ data class EcKey(
     val crv: String,
     val x: String,
     val y: String
-): AuthKey
+): AuthKeyResponse
 
 @JsExport
-data class Ed25519Key(
+data class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -99,34 +89,34 @@ data class Ed25519Key(
     val d: String? = null,
     val crv: String,
     val x: String
-): AuthKey
+): AuthKeyResponse
 
 @JsExport
-data class EmailPreferences(
+data class EmailPreferencesResponse(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String,
     val secondaryColour: String,
     val onlySendEssentialEmails: Boolean? = null,
-    val callToAction: EmailCallToAction? = null,
+    val callToAction: EmailCallToActionResponse? = null,
 )
 
 @JsExport
-data class EmailCallToAction(
+data class EmailCallToActionResponse(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @JsExport
-data class Oauth(
+data class OauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
     val grantType: GrantType
 )
 
 @JsExport
-data class ApplicationOwnerDetails(
+data class ApplicationOwnerDetailsResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
@@ -135,15 +125,15 @@ data class ApplicationOwnerDetails(
 )
 
 @JsExport
-data class GetLogoUploadUrl(
+data class GetLogoUploadUrlResponse(
     val uploadUrl: String
 )
 
-internal fun List<BasicApplicationResponse>.toApplication(): List<Application> = map {
-    it.toApplication()
+internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
+    it.toApplicationResponse()
 }
 
-internal fun BasicApplicationResponse.toApplication(): Application = Application(
+internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
     applicationId = applicationId,
     name = name,
     lastUpdated = lastUpdated,
@@ -157,41 +147,41 @@ internal fun BasicApplicationResponse.toApplication(): Application = Application
     supportContact = supportContact,
     appLink = appLink,
     slug = slug,
-    emailPreferences = emailPreferences.toEmailPreferences(),
-    authKeys = authKeys.map { it.key to it.value.toAuthKey() }.toMap(),
-    oauth = oauth?.toOauth(),
+    emailPreferences = emailPreferences.toEmailPreferencesResponse(),
+    authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toMap(),
+    oauth = oauth?.toOauthResponse(),
     isDoordeckApplication = isDoordeckApplication
 )
 
-internal fun BasicAuthKeyResponse.toAuthKey() = when(this) {
-    is BasicRsaKeyResponse -> RsaKey(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, e, n)
-    is BasicEcKeyResponse -> EcKey(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, crv, x, y)
-    is BasicEd25519KeyResponse -> Ed25519Key(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, d, crv, x)
+internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
+    is BasicRsaKeyResponse -> RsaKeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, e, n)
+    is BasicEcKeyResponse -> EcKeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, crv, x, y)
+    is BasicEd25519KeyResponse -> Ed25519KeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, d, crv, x)
 }
 
-internal fun BasicEmailPreferencesResponse.toEmailPreferences(): EmailPreferences = EmailPreferences(
+internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
     senderEmail = senderEmail,
     senderName = senderName,
     primaryColour = primaryColour,
     secondaryColour = secondaryColour,
     onlySendEssentialEmails = onlySendEssentialEmails,
-    callToAction = callToAction?.toEmailCallToAction(),
+    callToAction = callToAction?.toEmailCallToActionResponse(),
 )
 
-internal fun BasicEmailCallToActionResponse.toEmailCallToAction(): EmailCallToAction = EmailCallToAction(
+internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
     actionTarget = actionTarget,
     headline = headline,
     actionText = actionText
 )
 
-internal fun BasicOauthResponse.toOauth(): Oauth = Oauth(
+internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
     authorizationEndpoint = authorizationEndpoint,
     clientId = clientId,
     grantType = grantType
 )
 
-internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetails(): List<ApplicationOwnerDetails> = map { owner ->
-    ApplicationOwnerDetails(
+internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
+    ApplicationOwnerDetailsResponse(
         userId = owner.userId,
         email = owner.email,
         displayName = owner.displayName,
@@ -200,6 +190,6 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
     )
 }
 
-internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrl(): GetLogoUploadUrl = GetLogoUploadUrl(
+internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
     uploadUrl = uploadUrl
 )

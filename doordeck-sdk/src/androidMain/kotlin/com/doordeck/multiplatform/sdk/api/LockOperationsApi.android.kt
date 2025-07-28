@@ -11,20 +11,20 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
-import com.doordeck.multiplatform.sdk.model.data.Audit
-import com.doordeck.multiplatform.sdk.model.data.BatchUserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.Lock
-import com.doordeck.multiplatform.sdk.model.data.LockUser
-import com.doordeck.multiplatform.sdk.model.data.ShareableLock
-import com.doordeck.multiplatform.sdk.model.data.UserLock
-import com.doordeck.multiplatform.sdk.model.data.UserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.toAudit
-import com.doordeck.multiplatform.sdk.model.data.toBatchUserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.toLock
-import com.doordeck.multiplatform.sdk.model.data.toLockUser
-import com.doordeck.multiplatform.sdk.model.data.toShareableLock
-import com.doordeck.multiplatform.sdk.model.data.toUserLock
-import com.doordeck.multiplatform.sdk.model.data.toUserPublicKey
+import com.doordeck.multiplatform.sdk.model.responses.Audit
+import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.responses.LockResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockUser
+import com.doordeck.multiplatform.sdk.model.responses.ShareableLock
+import com.doordeck.multiplatform.sdk.model.responses.UserLock
+import com.doordeck.multiplatform.sdk.model.responses.UserPublicKey
+import com.doordeck.multiplatform.sdk.model.responses.toAudit
+import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKey
+import com.doordeck.multiplatform.sdk.model.responses.toLock
+import com.doordeck.multiplatform.sdk.model.responses.toLockUser
+import com.doordeck.multiplatform.sdk.model.responses.toShareableLock
+import com.doordeck.multiplatform.sdk.model.responses.toUserLock
+import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKey
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -35,7 +35,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
-    suspend fun getSingleLock(lockId: String): Lock {
+    suspend fun getSingleLock(lockId: String): LockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId)
             .toLock()
     }
@@ -43,7 +43,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getSingleLock] returning [CompletableFuture].
      */
-    fun getSingleLockAsync(lockId: String): CompletableFuture<Lock> {
+    fun getSingleLockAsync(lockId: String): CompletableFuture<LockResponse> {
         return completableFuture { getSingleLock(lockId) }
     }
 
@@ -466,7 +466,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getPinnedLocksRequest
      */
-    suspend fun getPinnedLocks(): List<Lock> {
+    suspend fun getPinnedLocks(): List<LockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
             .toLock()
     }
@@ -474,7 +474,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getPinnedLocks] returning [CompletableFuture].
      */
-    fun getPinnedLocksAsync(): CompletableFuture<List<Lock>> {
+    fun getPinnedLocksAsync(): CompletableFuture<List<LockResponse>> {
         return completableFuture { getPinnedLocks() }
     }
 

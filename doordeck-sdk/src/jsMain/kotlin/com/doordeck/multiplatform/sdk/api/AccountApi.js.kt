@@ -3,14 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKey
-import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSecondaryAuthentication
-import com.doordeck.multiplatform.sdk.model.data.Token
-import com.doordeck.multiplatform.sdk.model.data.UserDetails
-import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKey
-import com.doordeck.multiplatform.sdk.model.data.toRegisterEphemeralKeyWithSecondaryAuthentication
-import com.doordeck.multiplatform.sdk.model.data.toToken
-import com.doordeck.multiplatform.sdk.model.data.toUserDetails
+import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -23,8 +23,8 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
-    fun refreshToken(refreshToken: String? = null): Promise<Token> {
-        return promise { AccountClient.refreshTokenRequest(refreshToken).toToken() }
+    fun refreshToken(refreshToken: String? = null): Promise<TokenResponse> {
+        return promise { AccountClient.refreshTokenRequest(refreshToken).toTokenResponse() }
     }
 
     /**
@@ -37,22 +37,22 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKey> {
-        return promise { AccountClient.registerEphemeralKeyRequest(publicKey, privateKey).toRegisterEphemeralKey() }
+    fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
+        return promise { AccountClient.registerEphemeralKeyRequest(publicKey, privateKey).toRegisterEphemeralKeyResponse() }
     }
 
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
-    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthentication> {
-        return promise { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method).toRegisterEphemeralKeyWithSecondaryAuthentication() }
+    fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
+        return promise { AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method).toRegisterEphemeralKeyWithSecondaryAuthenticationResponse() }
     }
 
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
-    fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKey> {
-        return promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey).toRegisterEphemeralKey() }
+    fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<RegisterEphemeralKeyResponse> {
+        return promise { AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey).toRegisterEphemeralKeyResponse() }
     }
 
     /**
@@ -74,8 +74,8 @@ actual object AccountApi {
     /**
      * @see AccountClient.getUserDetailsRequest
      */
-    fun getUserDetails(): Promise<UserDetails> {
-        return promise { AccountClient.getUserDetailsRequest().toUserDetails() }
+    fun getUserDetails(): Promise<UserDetailsResponse> {
+        return promise { AccountClient.getUserDetailsRequest().toUserDetailsResponse() }
     }
 
     /**

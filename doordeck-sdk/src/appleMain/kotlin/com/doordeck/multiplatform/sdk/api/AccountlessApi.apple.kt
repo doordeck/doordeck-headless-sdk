@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.model.data.Token
-import com.doordeck.multiplatform.sdk.model.data.toToken
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 
 /**
  * Platform-specific implementations of accountless-related API calls.
@@ -12,18 +12,18 @@ actual object AccountlessApi {
      * @see AccountlessClient.loginRequest
      */
     @Throws(Exception::class)
-    suspend fun login(email: String, password: String): Token {
+    suspend fun login(email: String, password: String): TokenResponse {
         return AccountlessClient.loginRequest(email, password)
-            .toToken()
+            .toTokenResponse()
     }
 
     /**
      * @see AccountlessClient.registrationRequest
      */
     @Throws(Exception::class)
-    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): Token {
+    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
         return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
-            .toToken()
+            .toTokenResponse()
     }
 
     /**

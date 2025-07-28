@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.model.data.Token
-import com.doordeck.multiplatform.sdk.model.data.toToken
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -13,30 +13,30 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.loginRequest
      */
-    suspend fun login(email: String, password: String): Token {
+    suspend fun login(email: String, password: String): TokenResponse {
         return AccountlessClient.loginRequest(email, password)
-            .toToken()
+            .toTokenResponse()
     }
 
     /**
      * Async variant of [AccountlessApi.login] returning [CompletableFuture].
      */
-    fun loginAsync(email: String, password: String): CompletableFuture<Token> {
+    fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
         return completableFuture { login(email, password) }
     }
 
     /**
      * @see AccountlessClient.registrationRequest
      */
-    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): Token {
+    suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
         return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
-            .toToken()
+            .toTokenResponse()
     }
 
     /**
      * Async variant of [AccountlessApi.registration] returning [CompletableFuture].
      */
-    fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): CompletableFuture<Token> {
+    fun registrationAsync(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): CompletableFuture<TokenResponse> {
         return completableFuture { registration(email, password, displayName, force, publicKey) }
     }
 

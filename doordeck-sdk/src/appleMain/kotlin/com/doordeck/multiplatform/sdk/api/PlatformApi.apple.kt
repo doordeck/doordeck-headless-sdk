@@ -2,16 +2,16 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Application
-import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerDetails
-import com.doordeck.multiplatform.sdk.model.data.GetLogoUploadUrl
 import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
-import com.doordeck.multiplatform.sdk.model.data.toApplication
-import com.doordeck.multiplatform.sdk.model.data.toApplicationOwnerDetails
-import com.doordeck.multiplatform.sdk.model.data.toGetLogoUploadUrl
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 
 /**
  * Platform-specific implementations of platform-related API calls.
@@ -31,9 +31,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun listApplications(): List<Application> {
+    suspend fun listApplications(): List<ApplicationResponse> {
         return PlatformClient.listApplicationsRequest()
-            .toApplication()
+            .toApplicationResponse()
     }
 
     /**
@@ -41,9 +41,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplication(applicationId: String): Application {
+    suspend fun getApplication(applicationId: String): ApplicationResponse {
         return PlatformClient.getApplicationRequest(applicationId)
-            .toApplication()
+            .toApplicationResponse()
     }
 
     /**
@@ -132,9 +132,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrl {
+    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
         return PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
-            .toGetLogoUploadUrl()
+            .toGetLogoUploadUrlResponse()
     }
 
     /**
@@ -205,9 +205,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetails> {
+    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
         return PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
-            .toApplicationOwnerDetails()
+            .toApplicationOwnerDetailsResponse()
     }
 }
 

@@ -1,65 +1,49 @@
-package com.doordeck.multiplatform.sdk.model.data
+package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditIssuerResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditSubjectResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLocationRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockSettingsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicTimeRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUnlockBetweenSettingResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUsageRequirementsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserPublicKeyResponse
 
-data class Lock(
+data class LockResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
     val start: String? = null,
     val end: String? = null,
     val role: UserRole,
-    val settings: LockSettings,
-    val state: LockState,
+    val settings: LockSettingsResponse,
+    val state: LockStateResponse,
     val favourite: Boolean,
     val unlockTime: Double? = null
 )
 
-data class LockSettings(
+data class LockSettingsResponse(
     val unlockTime: Double,
     val permittedAddresses: List<String>,
     val defaultName: String,
-    val usageRequirements: UsageRequirements? = null,
-    val unlockBetweenWindow: UnlockBetweenSetting? = null,
+    val usageRequirements: UsageRequirementsResponse? = null,
+    val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
     val tiles: List<String>,
     val hidden: Boolean,
     val directAccessEndpoints: List<String> = emptyList(),
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
-data class UsageRequirements(
-    val time: List<TimeRequirement>? = null,
-    val location: LocationRequirement? = null
+data class UsageRequirementsResponse(
+    val time: List<TimeRequirementResponse>? = null,
+    val location: LocationRequirementResponse? = null
 )
 
-data class TimeRequirement(
+data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
     val days: List<DayOfWeek>
 )
 
-data class LocationRequirement(
+data class LocationRequirementResponse(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean,
@@ -67,7 +51,7 @@ data class LocationRequirement(
     val accuracy: Int
 )
 
-data class UnlockBetweenSetting(
+data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
@@ -75,17 +59,17 @@ data class UnlockBetweenSetting(
     val exceptions: List<String>? = null
 )
 
-data class LockState(
+data class LockStateResponse(
     val locked: Boolean,
     val connected: Boolean
 )
 
-data class UserPublicKey(
+data class UserPublicKeyResponse(
     val id: String,
     val publicKey: String
 )
 
-data class BatchUserPublicKey(
+data class BatchUserPublicKeyResponse(
     val id: String,
     val email: String? = null,
     val foreignKey: String? = null,
@@ -93,12 +77,12 @@ data class BatchUserPublicKey(
     val publicKey: String
 )
 
-data class ShareableLock(
+data class ShareableLockResponse(
     val id: String,
     val name: String
 )
 
-data class UserLock(
+data class UserLockResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -110,7 +94,7 @@ data class UserLock(
     val end: Double? = null
 )
 
-data class LockUser(
+data class LockUserResponse(
     val userId: String,
     val email: String,
     val publicKey: String,
@@ -119,80 +103,80 @@ data class LockUser(
     val foreign: Boolean,
     val start: Double? = null,
     val end: Double? = null,
-    val devices: List<LockUserDetails>
+    val devices: List<LockUserDetailsResponse>
 )
 
-data class LockUserDetails(
+data class LockUserDetailsResponse(
     val deviceId: String,
     val role: UserRole,
     val start: Double? = null,
     val end: Double? = null
 )
 
-data class Audit(
+data class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
     val type: AuditEvent,
-    val issuer: AuditIssuer,
-    val subject: AuditSubject? = null,
+    val issuer: AuditIssuerResponse,
+    val subject: AuditSubjectResponse? = null,
     val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
-data class AuditIssuer(
+data class AuditIssuerResponse(
     val userId: String,
     val email: String? = null,
     val ip: String? = null
 )
 
-data class AuditSubject(
+data class AuditSubjectResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null
 )
 
-internal fun List<BasicLockResponse>.toLock(): List<Lock> = map { lock ->
-    lock.toLock()
+internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map { lock ->
+    lock.toLockResponse()
 }
 
-internal fun BasicLockResponse.toLock(): Lock = Lock(
+internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     id = id,
     name = name,
     colour = colour,
     start = start,
     end = end,
     role = role,
-    settings = settings.toLockSettings(),
-    state = state.toLockState(),
+    settings = settings.toLockSettingsResponse(),
+    state = state.toLockStateResponse(),
     favourite = favourite,
     unlockTime = unlockTime
 )
 
-internal fun BasicLockSettingsResponse.toLockSettings(): LockSettings = LockSettings(
+internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
     unlockTime = unlockTime,
     permittedAddresses = permittedAddresses,
     defaultName = defaultName,
-    usageRequirements = usageRequirements?.toUsageRequirements(),
-    unlockBetweenWindow = unlockBetweenWindow?.toUnlockBetweenSetting(),
+    usageRequirements = usageRequirements?.toUsageRequirementsResponse(),
+    unlockBetweenWindow = unlockBetweenWindow?.toUnlockBetweenSettingResponse(),
     tiles = tiles,
     hidden = hidden,
     directAccessEndpoints = directAccessEndpoints,
     capabilities = capabilities
 )
 
-internal fun BasicUsageRequirementsResponse.toUsageRequirements(): UsageRequirements = UsageRequirements(
-    time = time?.map { it.toTimeRequirement() },
-    location = location?.toLocationRequirement()
+internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
+    time = time?.map { it.toTimeRequirementResponse() },
+    location = location?.toLocationRequirementResponse()
 )
 
-internal fun BasicTimeRequirementResponse.toTimeRequirement(): TimeRequirement = TimeRequirement(
+internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
     start = start,
     end = end,
     timezone = timezone,
     days = days
 )
 
-internal fun BasicLocationRequirementResponse.toLocationRequirement(): LocationRequirement = LocationRequirement(
+internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
     latitude = latitude,
     longitude = longitude,
     enabled = enabled,
@@ -200,7 +184,7 @@ internal fun BasicLocationRequirementResponse.toLocationRequirement(): LocationR
     accuracy = accuracy
 )
 
-internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSetting(): UnlockBetweenSetting = UnlockBetweenSetting(
+internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
     start = start,
     end = end,
     timezone = timezone,
@@ -208,18 +192,18 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSetting(): UnlockB
     exceptions = exceptions
 )
 
-internal fun BasicLockStateResponse.toLockState(): LockState = LockState(
+internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
     locked = locked,
     connected = connected,
 )
 
-internal fun BasicUserPublicKeyResponse.toUserPublicKey(): UserPublicKey = UserPublicKey(
+internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
     id = id,
     publicKey = publicKey
 )
 
-internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKey(): List<BatchUserPublicKey> = map { user ->
-    BatchUserPublicKey(
+internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
+    BatchUserPublicKeyResponse(
         id = user.id,
         email = user.email,
         foreignKey = user.foreignKey,
@@ -228,15 +212,15 @@ internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKey(): List<
     )
 }
 
-internal fun List<BasicShareableLockResponse>.toShareableLock(): List<ShareableLock> = map { lock ->
-    ShareableLock(
+internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<ShareableLockResponse> = map { lock ->
+    ShareableLockResponse(
         id = lock.id,
         name = lock.name
     )
 }
 
-internal fun List<BasicUserLockResponse>.toUserLock(): List<UserLock> = map { user ->
-    UserLock(
+internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResponse> = map { user ->
+    UserLockResponse(
         userId = user.userId,
         email = user.email,
         publicKey = user.publicKey,
@@ -249,7 +233,7 @@ internal fun List<BasicUserLockResponse>.toUserLock(): List<UserLock> = map { us
     )
 }
 
-internal fun BasicLockUserResponse.toLockUser(): LockUser = LockUser(
+internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = LockUserResponse(
     userId = userId,
     email = email,
     publicKey = publicKey,
@@ -258,35 +242,35 @@ internal fun BasicLockUserResponse.toLockUser(): LockUser = LockUser(
     foreign = foreign,
     start = start,
     end = end,
-    devices = devices.map { it.toLockUserDetails() }
+    devices = devices.map { it.toLockUserDetailsResponse() }
 )
 
-internal fun BasicLockUserDetailsResponse.toLockUserDetails(): LockUserDetails = LockUserDetails(
+internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
     deviceId = deviceId,
     role = role,
     start = start,
     end = end
 )
 
-internal fun List<BasicAuditResponse>.toAudit(): List<Audit> = map { audit ->
-    Audit(
+internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
+    AuditResponse(
         deviceId = audit.deviceId,
         timestamp = audit.timestamp.toDouble(),
         type = audit.type,
-        issuer = audit.issuer.toAuditIssuer(),
-        subject = audit.subject?.toAuditSubject(),
+        issuer = audit.issuer.toAuditIssuerResponse(),
+        subject = audit.subject?.toAuditSubjectResponse(),
         rejectionReason = audit.rejectionReason,
         rejected = audit.rejected
     )
 }
 
-internal fun BasicAuditIssuerResponse.toAuditIssuer(): AuditIssuer = AuditIssuer(
+internal fun BasicAuditIssuerResponse.toAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerResponse(
     userId = userId,
     email = email,
     ip = ip
 )
 
-internal fun BasicAuditSubjectResponse.toAuditSubject(): AuditSubject = AuditSubject(
+internal fun BasicAuditSubjectResponse.toAuditSubjectResponse(): AuditSubjectResponse = AuditSubjectResponse(
     userId = userId,
     email = email,
     displayName = displayName,

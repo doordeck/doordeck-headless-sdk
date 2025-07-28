@@ -1,29 +1,12 @@
-package com.doordeck.multiplatform.sdk.model.data
+package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditIssuerResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditSubjectResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLocationRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockSettingsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicTimeRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUnlockBetweenSettingResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUsageRequirementsResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserPublicKeyResponse
 
-@JsExport
-data class Lock(
+data class LockResponse(
     val id: String,
     val name: String,
     val colour: String? = null,
@@ -36,7 +19,6 @@ data class Lock(
     val unlockTime: Double? = null
 )
 
-@JsExport
 data class LockSettings(
     val unlockTime: Double,
     val permittedAddresses: List<String>,
@@ -49,13 +31,11 @@ data class LockSettings(
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
-@JsExport
 data class UsageRequirements(
     val time: List<TimeRequirement>? = null,
     val location: LocationRequirement? = null
 )
 
-@JsExport
 data class TimeRequirement(
     val start: String,
     val end: String,
@@ -63,7 +43,6 @@ data class TimeRequirement(
     val days: List<DayOfWeek>
 )
 
-@JsExport
 data class LocationRequirement(
     val latitude: Double,
     val longitude: Double,
@@ -72,7 +51,6 @@ data class LocationRequirement(
     val accuracy: Int
 )
 
-@JsExport
 data class UnlockBetweenSetting(
     val start: String,
     val end: String,
@@ -81,19 +59,16 @@ data class UnlockBetweenSetting(
     val exceptions: List<String>? = null
 )
 
-@JsExport
 data class LockState(
     val locked: Boolean,
     val connected: Boolean
 )
 
-@JsExport
 data class UserPublicKey(
     val id: String,
     val publicKey: String
 )
 
-@JsExport
 data class BatchUserPublicKey(
     val id: String,
     val email: String? = null,
@@ -102,13 +77,11 @@ data class BatchUserPublicKey(
     val publicKey: String
 )
 
-@JsExport
 data class ShareableLock(
     val id: String,
     val name: String
 )
 
-@JsExport
 data class UserLock(
     val userId: String,
     val email: String,
@@ -121,7 +94,6 @@ data class UserLock(
     val end: Double? = null
 )
 
-@JsExport
 data class LockUser(
     val userId: String,
     val email: String,
@@ -134,7 +106,6 @@ data class LockUser(
     val devices: List<LockUserDetails>
 )
 
-@JsExport
 data class LockUserDetails(
     val deviceId: String,
     val role: UserRole,
@@ -142,7 +113,6 @@ data class LockUserDetails(
     val end: Double? = null
 )
 
-@JsExport
 data class Audit(
     val deviceId: String,
     val timestamp: Double,
@@ -153,25 +123,23 @@ data class Audit(
     val rejected: Boolean
 )
 
-@JsExport
 data class AuditIssuer(
     val userId: String,
     val email: String? = null,
     val ip: String? = null
 )
 
-@JsExport
 data class AuditSubject(
     val userId: String,
     val email: String,
     val displayName: String? = null
 )
 
-internal fun List<BasicLockResponse>.toLock(): List<Lock> = map { lock ->
+internal fun List<BasicLockResponse>.toLock(): List<LockResponse> = map { lock ->
     lock.toLock()
 }
 
-internal fun BasicLockResponse.toLock(): Lock = Lock(
+internal fun BasicLockResponse.toLock(): LockResponse = LockResponse(
     id = id,
     name = name,
     colour = colour,

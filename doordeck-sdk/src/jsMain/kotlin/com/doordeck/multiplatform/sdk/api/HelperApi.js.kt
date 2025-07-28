@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.HelperClient
-import com.doordeck.multiplatform.sdk.model.data.AssistedLogin
-import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKey
-import com.doordeck.multiplatform.sdk.model.data.toAssistedLogin
-import com.doordeck.multiplatform.sdk.model.data.toAssistedRegisterEphemeralKey
+import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
+import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -23,15 +23,15 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedLoginRequest
      */
-    fun assistedLogin(email: String, password: String): Promise<AssistedLogin> {
-        return promise { HelperClient.assistedLoginRequest(email, password).toAssistedLogin() }
+    fun assistedLogin(email: String, password: String): Promise<AssistedLoginResponse> {
+        return promise { HelperClient.assistedLoginRequest(email, password).toAssistedLoginResponse() }
     }
 
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<AssistedRegisterEphemeralKey> {
-        return promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey).toAssistedRegisterEphemeralKey() }
+    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<AssistedRegisterEphemeralKeyResponse> {
+        return promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey).toAssistedRegisterEphemeralKeyResponse() }
     }
 
     /**

@@ -1,9 +1,6 @@
-package com.doordeck.multiplatform.sdk.model.data
+package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.responses.BasicSiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserForSiteResponse
-
-data class Site(
+data class SiteResponse(
     val id: String,
     val name: String,
     val colour: String,
@@ -15,17 +12,17 @@ data class Site(
     val updated: String
 )
 
-typealias SiteLocks = Lock
+typealias SiteLocksResponse = LockResponse
 
-data class UserForSite(
+data class UserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean
 )
 
-internal fun List<BasicSiteResponse>.toSite(): List<Site> = map { site ->
-    Site(
+internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
+    SiteResponse(
         id = site.id,
         name = site.name,
         colour = site.colour,
@@ -38,8 +35,8 @@ internal fun List<BasicSiteResponse>.toSite(): List<Site> = map { site ->
     )
 }
 
-internal fun List<BasicUserForSiteResponse>.toUserForSite(): List<UserForSite> = map { user ->
-    UserForSite(
+internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserForSiteResponse> = map { user ->
+    UserForSiteResponse(
         userId = user.userId,
         email = user.email,
         displayName = user.displayName,

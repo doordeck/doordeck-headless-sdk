@@ -2,16 +2,16 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Application
-import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerDetails
-import com.doordeck.multiplatform.sdk.model.data.GetLogoUploadUrl
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
-import com.doordeck.multiplatform.sdk.model.data.toApplication
-import com.doordeck.multiplatform.sdk.model.data.toApplicationOwnerDetails
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
-import com.doordeck.multiplatform.sdk.model.data.toGetLogoUploadUrl
+import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -32,16 +32,16 @@ actual object PlatformApi {
      * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
-    fun listApplications(): Promise<List<Application>> {
-        return promise { PlatformClient.listApplicationsRequest().toApplication() }
+    fun listApplications(): Promise<List<ApplicationResponse>> {
+        return promise { PlatformClient.listApplicationsRequest().toApplicationResponse() }
     }
 
     /**
      * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
-    fun getApplication(applicationId: String): Promise<Application> {
-        return promise { PlatformClient.getApplicationRequest(applicationId).toApplication() }
+    fun getApplication(applicationId: String): Promise<ApplicationResponse> {
+        return promise { PlatformClient.getApplicationRequest(applicationId).toApplicationResponse() }
     }
 
     /**
@@ -120,8 +120,8 @@ actual object PlatformApi {
      * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
-    fun getLogoUploadUrl(applicationId: String, contentType: String): Promise<GetLogoUploadUrl> {
-        return promise { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType).toGetLogoUploadUrl() }
+    fun getLogoUploadUrl(applicationId: String, contentType: String): Promise<GetLogoUploadUrlResponse> {
+        return promise { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType).toGetLogoUploadUrlResponse() }
     }
 
     /**
@@ -184,8 +184,8 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetails>> {
-        return promise { PlatformClient.getApplicationOwnersDetailsRequest(applicationId).toApplicationOwnerDetails() }
+    fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>> {
+        return promise { PlatformClient.getApplicationOwnersDetailsRequest(applicationId).toApplicationOwnerDetailsResponse() }
     }
 }
 
