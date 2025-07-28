@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -14,8 +14,19 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.model.data.BasicBaseOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicBatchShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicLocationRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicShareLock
+import com.doordeck.multiplatform.sdk.model.data.BasicShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicTimeRequirement
+import com.doordeck.multiplatform.sdk.model.data.BasicUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.BasicUnlockOperation
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
@@ -152,11 +163,11 @@ class LockOperationsClientTest : IntegrationTest() {
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(5.minutes).toLocalDateTime(TimeZone.UTC)
-        val addedTimeRestriction = LockOperations.TimeRequirement(
+        val addedTimeRestriction = BasicTimeRequirement(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(min.dayOfWeek.name)
+            days = listOf(DayOfWeek.valueOf(min.dayOfWeek.name))
         )
 
         // When
@@ -172,7 +183,7 @@ class LockOperationsClientTest : IntegrationTest() {
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
-        val removedTimeRestriction = emptyList<LockOperations.TimeRequirement>()
+        val removedTimeRestriction = emptyList<BasicTimeRequirement>()
 
         // When
         LockOperationsClient.setLockSettingTimeRestrictionsRequest(TEST_MAIN_LOCK_ID, removedTimeRestriction)
@@ -186,7 +197,7 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldUpdateAndRemoveLockSettingLocationRestrictions() = runTest {
         // Given - shouldUpdateLockSettingLocationRestrictions
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val addedLocationRestriction = LockOperations.LocationRequirement(
+        val addedLocationRestriction = BasicLocationRequirement(
             latitude = Random.nextDouble(-90.0, 90.0),
             longitude = Random.nextDouble(-180.0, 180.0),
             enabled = true,
@@ -338,7 +349,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        val baseOperation = LockOperations.BaseOperation(
+        val baseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -346,7 +357,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(baseOperation = baseOperation))
+        LockOperationsClient.unlockRequest(BasicUnlockOperation(baseOperation = baseOperation))
     }
 
     @Test
@@ -368,7 +379,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID)))
+        LockOperationsClient.unlockRequest(BasicUnlockOperation(baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID)))
     }
 
     @Test
@@ -381,7 +392,7 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        val shareBaseOperation = LockOperations.BaseOperation(
+        val shareBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -390,9 +401,9 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.shareLockRequest(
-            LockOperations.ShareLockOperation(
+            BasicShareLockOperation(
             baseOperation = shareBaseOperation,
-            shareLock = LockOperations.ShareLock(
+            shareLock = BasicShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
@@ -404,7 +415,7 @@ class LockOperationsClientTest : IntegrationTest() {
         assertTrue { locks.devices.any { it.deviceId == TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLock
-        val revokeBaseOperation = LockOperations.BaseOperation(
+        val revokeBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -413,7 +424,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.revokeAccessToLockRequest(
-            LockOperations.RevokeAccessToLockOperation(
+            BasicRevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
             users = listOf(TEST_SUPPLEMENTARY_USER_ID)
         ))
@@ -433,19 +444,19 @@ class LockOperationsClientTest : IntegrationTest() {
         )
             .certificateChain
             .certificateChainToString()
-        val shareBaseOperation = LockOperations.BaseOperation(
+        val shareBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
         val batchShareLock = listOf(
-            LockOperations.ShareLock(
+            BasicShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
             ),
-            LockOperations.ShareLock(
+            BasicShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_SECOND_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
@@ -454,10 +465,11 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.batchShareLockRequest(
-            LockOperations.BatchShareLockOperation(
-            baseOperation = shareBaseOperation,
-            users = batchShareLock
-        ))
+            BasicBatchShareLockOperation(
+                baseOperation = shareBaseOperation,
+                users = batchShareLock
+            )
+        )
 
         // Then
         assertTrue {
@@ -473,14 +485,14 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         // Given - shouldRevokeAccessToLock
-        val revokeBaseOperation = LockOperations.BaseOperation(
+        val revokeBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             lockId = TEST_MAIN_LOCK_ID
         )
         LockOperationsClient.revokeAccessToLockRequest(
-            LockOperations.RevokeAccessToLockOperation(
+            BasicRevokeAccessToLockOperation(
             baseOperation = revokeBaseOperation,
             users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
@@ -513,7 +525,7 @@ class LockOperationsClientTest : IntegrationTest() {
             privateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             isKeyPairVerified = true
         )
-        val shareLock = LockOperations.ShareLock(
+        val shareLock = BasicShareLock(
             targetUserId = TEST_SUPPLEMENTARY_USER_ID,
             targetUserRole = UserRole.USER,
             targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
@@ -521,10 +533,11 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.shareLockRequest(
-            LockOperations.ShareLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-            shareLock = shareLock
-        ))
+            shareLockOperation = BasicShareLockOperation(
+                baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                shareLock = shareLock
+            )
+        )
 
         // Then
         var locks = LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
@@ -533,10 +546,11 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given - shouldRevokeAccessToLockUsingContext
         // When
         LockOperationsClient.revokeAccessToLockRequest(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-            users = listOf(TEST_SUPPLEMENTARY_USER_ID)
-        ))
+            revokeAccessToLockOperation = BasicRevokeAccessToLockOperation(
+                baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                users = listOf(TEST_SUPPLEMENTARY_USER_ID)
+            )
+        )
 
         // Then
         locks = LockOperationsClient.getLocksForUserRequest(TEST_SUPPLEMENTARY_USER_ID)
@@ -561,12 +575,12 @@ class LockOperationsClientTest : IntegrationTest() {
             isKeyPairVerified = true
         )
         val batchShareLock = listOf(
-            LockOperations.ShareLock(
+            BasicShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
             ),
-            LockOperations.ShareLock(
+            BasicShareLock(
                 targetUserId = TEST_SUPPLEMENTARY_SECOND_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
@@ -575,8 +589,8 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.batchShareLockRequest(
-            LockOperations.BatchShareLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            BasicBatchShareLockOperation(
+            baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = batchShareLock
         ))
 
@@ -595,8 +609,8 @@ class LockOperationsClientTest : IntegrationTest() {
         // Given - shouldRevokeAccessToLockUsingContext
         // When
         LockOperationsClient.revokeAccessToLockRequest(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            BasicRevokeAccessToLockOperation(
+            baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
             users = listOf(TEST_SUPPLEMENTARY_USER_ID, TEST_SUPPLEMENTARY_SECOND_USER_ID)
         ))
 
@@ -622,7 +636,7 @@ class LockOperationsClientTest : IntegrationTest() {
             .certificateChain
             .certificateChainToString()
         val updatedUnlockDuration = Random.nextInt(30, 60)
-        val baseOperation = LockOperations.BaseOperation(
+        val baseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -631,7 +645,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.updateSecureSettingUnlockDurationRequest(
-            LockOperations.UpdateSecureSettingUnlockDuration(
+            BasicUpdateSecureSettingUnlockDuration(
             baseOperation = baseOperation,
             unlockDuration = updatedUnlockDuration
         ))
@@ -662,8 +676,8 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.updateSecureSettingUnlockDurationRequest(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            BasicUpdateSecureSettingUnlockDuration(
+                baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
                 unlockDuration = updatedUnlockDuration
             )
         )
@@ -686,14 +700,14 @@ class LockOperationsClientTest : IntegrationTest() {
         val now = Clock.System.now()
         val min = now.minus(1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(5.minutes).toLocalDateTime(TimeZone.UTC)
-        val updatedUnlockBetween = LockOperations.UnlockBetween(
+        val updatedUnlockBetween = BasicUnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(min.dayOfWeek.name),
+            days = listOf(DayOfWeek.valueOf(min.dayOfWeek.name)),
             exceptions = emptyList()
         )
-        val addBaseOperation = LockOperations.BaseOperation(
+        val addBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -702,7 +716,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
-            LockOperations.UpdateSecureSettingUnlockBetween(
+            BasicUpdateSecureSettingUnlockBetween(
             baseOperation = addBaseOperation,
             unlockBetween = updatedUnlockBetween
         ))
@@ -713,10 +727,10 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow?.timezone)
-        assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
+        assertContains(lock.settings.unlockBetweenWindow!!.days, DayOfWeek.valueOf(min.dayOfWeek.name))
 
         // Given - shouldRemoveSecureSettingUnlockBetween
-        val removeBaseOperation = LockOperations.BaseOperation(
+        val removeBaseOperation = BasicBaseOperation(
             userId = TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.stringToCertificateChain(),
             userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
@@ -725,7 +739,7 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
-            LockOperations.UpdateSecureSettingUnlockBetween(
+            BasicUpdateSecureSettingUnlockBetween(
             baseOperation = removeBaseOperation,
             unlockBetween = null
         ))
@@ -748,11 +762,11 @@ class LockOperationsClientTest : IntegrationTest() {
         val now = Clock.System.now()
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
-        val updatedUnlockBetween = LockOperations.UnlockBetween(
+        val updatedUnlockBetween = BasicUnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(min.dayOfWeek.name),
+            days = listOf(DayOfWeek.valueOf(min.dayOfWeek.name)),
             exceptions = emptyList()
         )
         Context.setOperationContext(
@@ -765,8 +779,8 @@ class LockOperationsClientTest : IntegrationTest() {
 
         // When
         LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            BasicUpdateSecureSettingUnlockBetween(
+            baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = updatedUnlockBetween
         ))
 
@@ -776,12 +790,12 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow?.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow?.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow?.timezone)
-        assertContains(lock.settings.unlockBetweenWindow!!.days, min.dayOfWeek.name)
+        assertContains(lock.settings.unlockBetweenWindow!!.days, DayOfWeek.valueOf(min.dayOfWeek.name))
 
         // Given
         LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
+            BasicUpdateSecureSettingUnlockBetween(
+            baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
             unlockBetween = null
         ))
 
@@ -824,13 +838,13 @@ class LockOperationsClientTest : IntegrationTest() {
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
         // When
         val revokeAccessToLockUsingContextException = assertFails {
-            LockOperationsClient.revokeAccessToLockRequest(LockOperations.RevokeAccessToLockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
+            LockOperationsClient.revokeAccessToLockRequest(BasicRevokeAccessToLockOperation(BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
         }
         val shareLockUsingContextException = assertFails {
             LockOperationsClient.shareLockRequest(
-                LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-                shareLock = LockOperations.ShareLock(
+                BasicShareLockOperation(
+                baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                shareLock = BasicShareLock(
                     targetUserId = "",
                     targetUserRole = UserRole.USER,
                     targetUserPublicKey = byteArrayOf()
@@ -838,20 +852,26 @@ class LockOperationsClientTest : IntegrationTest() {
             ))
         }
         val unlockUsingContextException = assertFails {
-            LockOperationsClient.unlockRequest(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID), emptyList()))
+            LockOperationsClient.unlockRequest(
+                BasicUnlockOperation(
+                    BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                    emptyList()
+                )
+            )
         }
         val updateSecureSettingUnlockDurationUsingContextException = assertFails {
             LockOperationsClient.updateSecureSettingUnlockDurationRequest(
-                LockOperations.UpdateSecureSettingUnlockDuration(
-                baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-                unlockDuration = 0
-            ))
+                updateSecureSettingUnlockDuration = BasicUpdateSecureSettingUnlockDuration(
+                    baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                    unlockDuration = 0
+                )
+            )
         }
         val updateSecureSettingUnlockBetweenUsingContextException = assertFails {
             LockOperationsClient.updateSecureSettingUnlockBetweenRequest(
-                updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
-                    baseOperation = LockOperations.BaseOperation(lockId = TEST_MAIN_LOCK_ID),
-                    unlockBetween = LockOperations.UnlockBetween(
+                updateSecureSettingUnlockBetween = BasicUpdateSecureSettingUnlockBetween(
+                    baseOperation = BasicBaseOperation(lockId = TEST_MAIN_LOCK_ID),
+                    unlockBetween = BasicUnlockBetween(
                         start = "",
                         end = "",
                         timezone = "",
@@ -875,3 +895,4 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }
+ */

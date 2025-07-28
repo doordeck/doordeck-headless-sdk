@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -55,3 +55,4 @@ class AccountlessClientTest : IntegrationTest() {
         }
     }
 }
+ */

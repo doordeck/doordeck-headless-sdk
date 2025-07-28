@@ -7,10 +7,22 @@ import io.ktor.client.engine.okhttp.OkHttpConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.byUnicodePattern
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
+import java.net.InetAddress
+import java.net.URI
+import java.net.URL
+import java.time.ZoneId
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
@@ -25,7 +37,34 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     }
 }
 
-internal fun String.toUUID(): UUID = UUID.fromString(this)
+private val TIME_FORMAT = LocalTime.Format { byUnicodePattern("HH:mm") }
+private val DATE_FORMAT = LocalDate.Format { byUnicodePattern("yyyy-MM-dd") }
+
+internal fun String.toLocalTime(format: DateTimeFormat<LocalTime> = TIME_FORMAT): LocalTime = LocalTime.parse(this, format)
+internal fun LocalTime.toLocalTimeString(format: DateTimeFormat<LocalTime> = TIME_FORMAT): String = format.format(this)
+
+internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> = DATE_FORMAT): LocalDate = LocalDate.parse(this, format)
+internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> = DATE_FORMAT): String = format.format(this)
+
+internal fun Double.secondsToDuration(): Duration = toDuration(DurationUnit.SECONDS)
+internal fun Duration.durationToSeconds(): Int = toInt(DurationUnit.SECONDS)
+
+internal fun String.toUri(): URI = URI.create(this)
+internal fun String.toUrl(): URL = toUri().toURL()
+
+internal fun String.toZoneId(): ZoneId = ZoneId.of(this)
+internal fun String.toUuid(): UUID = UUID.fromString(this)
+
+internal fun String.toInstant(): Instant {
+    val split = split(".")
+    return Instant.fromEpochSeconds(
+        epochSeconds = split.first().toLong(),
+        nanosecondAdjustment = split.lastOrNull()?.toLong() ?: 0
+    )
+}
+internal fun Double.toInstant(): Instant = Instant.fromEpochSeconds(toLong())
+
+internal fun String.toInetAddress(): InetAddress = InetAddress.ofLiteral(this)
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.

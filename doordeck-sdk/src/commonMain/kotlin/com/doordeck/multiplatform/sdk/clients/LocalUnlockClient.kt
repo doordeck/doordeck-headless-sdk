@@ -12,7 +12,7 @@ import kotlinx.coroutines.selects.select
 
 /**
  * Internal implementation of the local unlock API client.
- * Handles all network requests related to local unlock.
+ * Handles all  requests related to local unlock.
  */
 internal object LocalUnlockClient {
 

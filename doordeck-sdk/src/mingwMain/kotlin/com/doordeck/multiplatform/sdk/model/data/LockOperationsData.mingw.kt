@@ -2,16 +2,6 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.data.LockOperations.BaseOperation
-import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
-import com.doordeck.multiplatform.sdk.model.data.LockOperations.UnlockBetween
-import com.doordeck.multiplatform.sdk.model.values.toCertificateValue
-import com.doordeck.multiplatform.sdk.model.values.toCertificateValueString
-import com.doordeck.multiplatform.sdk.model.values.toIdValue
-import com.doordeck.multiplatform.sdk.model.values.toInstantValue
-import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValue
-import com.doordeck.multiplatform.sdk.model.values.toPrivateKeyValueString
-import com.doordeck.multiplatform.sdk.model.values.toPublicKeyValue
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
@@ -231,14 +221,14 @@ data class UpdateSecureSettingUnlockBetweenData(
 
 internal fun List<TimeRequirementData>.toTimeRequirementList() = map { it.toTimeRequirement() }
 
-internal fun TimeRequirementData.toTimeRequirement() = LockOperations.TimeRequirement(
+internal fun TimeRequirementData.toTimeRequirement() = BasicTimeRequirement(
     start = start,
     end = end,
     timezone = timezone,
     days = days.map { DayOfWeek.valueOf(it) }
 )
 
-internal fun LocationRequirementData.toLocationRequirement() = LockOperations.LocationRequirement(
+internal fun LocationRequirementData.toLocationRequirement() = BasicLocationRequirement(
     latitude = latitude,
     longitude = longitude,
     enabled = enabled,
@@ -246,51 +236,51 @@ internal fun LocationRequirementData.toLocationRequirement() = LockOperations.Lo
     accuracy = accuracy
 )
 
-internal fun UnlockOperationData.toUnlockOperation() = LockOperations.UnlockOperation(
+internal fun UnlockOperationData.toUnlockOperation() = BasicUnlockOperation(
     baseOperation = baseOperation.toBaseOperation(),
     directAccessEndpoints = directAccessEndpoints
 )
 
-internal fun BaseOperationData.toBaseOperation() = BaseOperation(
-    userId = userId?.toIdValue(),
-    userCertificateChain = userCertificateChain?.map { it.toCertificateValue() },
-    userPrivateKey = userPrivateKey?.toPrivateKeyValue(),
-    lockId = lockId.toIdValue(),
-    notBefore = notBefore.toInstantValue(),
-    issuedAt = issuedAt.toInstantValue(),
-    expiresAt = expiresAt.toInstantValue(),
-    jti = jti.toIdValue()
+internal fun BaseOperationData.toBaseOperation() = BasicBaseOperation(
+    userId = userId,
+    userCertificateChain = userCertificateChain,
+    userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
+    lockId = lockId,
+    notBefore = notBefore,
+    issuedAt = issuedAt,
+    expiresAt = expiresAt,
+    jti = jti
 )
 
-internal fun ShareLockData.toShareLock() = ShareLock(
-    targetUserId = targetUserId.toIdValue(),
+internal fun ShareLockData.toShareLock() = BasicShareLock(
+    targetUserId = targetUserId,
     targetUserRole = targetUserRole,
-    targetUserPublicKey = targetUserPublicKey.toPublicKeyValue(),
+    targetUserPublicKey = targetUserPublicKey.decodeBase64ToByteArray(),
     start = start,
     end = end
 )
 
-internal fun ShareLockOperationData.toShareLockOperation() = LockOperations.ShareLockOperation(
+internal fun ShareLockOperationData.toShareLockOperation() = BasicShareLockOperation(
     baseOperation = baseOperation.toBaseOperation(),
     shareLock = shareLock.toShareLock()
 )
 
-internal fun BatchShareLockOperationData.toBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
+internal fun BatchShareLockOperationData.toBatchShareLockOperation() = BasicBatchShareLockOperation(
     baseOperation = baseOperation.toBaseOperation(),
     users = users.map { it.toShareLock() }
 )
 
-internal fun RevokeAccessToLockOperationData.toRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
+internal fun RevokeAccessToLockOperationData.toRevokeAccessToLockOperation() = BasicRevokeAccessToLockOperation(
     baseOperation = baseOperation.toBaseOperation(),
     users = users
 )
 
-internal fun UpdateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration() = LockOperations.UpdateSecureSettingUnlockDuration(
+internal fun UpdateSecureSettingUnlockDurationData.toUpdateSecureSettingUnlockDuration() = BasicUpdateSecureSettingUnlockDuration(
     baseOperation = baseOperation.toBaseOperation(),
     unlockDuration = unlockDuration
 )
 
-internal fun UnlockBetweenData.toUnlockBetween() = UnlockBetween(
+internal fun UnlockBetweenData.toUnlockBetween() = BasicUnlockBetween(
     start = start,
     end = end,
     timezone = timezone,
@@ -298,7 +288,7 @@ internal fun UnlockBetweenData.toUnlockBetween() = UnlockBetween(
     exceptions = exceptions
 )
 
-internal fun UpdateSecureSettingUnlockBetweenData.toUpdateSecureSettingUnlockBetween() = LockOperations.UpdateSecureSettingUnlockBetween(
+internal fun UpdateSecureSettingUnlockBetweenData.toUpdateSecureSettingUnlockBetween() = BasicUpdateSecureSettingUnlockBetween(
     baseOperation = baseOperation.toBaseOperation(),
     unlockBetween = unlockBetween?.toUnlockBetween()
 )

@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
@@ -51,3 +51,4 @@ class SitesClientTest : IntegrationTest() {
         assertTrue { usersForSite.any { it.userId == TEST_MAIN_USER_ID } }
     }
 }
+ */

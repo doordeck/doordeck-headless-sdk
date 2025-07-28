@@ -1,523 +1,893 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.AUDIT_RESPONSE
-import com.doordeck.multiplatform.sdk.BATCH_USER_PUBLIC_KEY_RESPONSE
-import com.doordeck.multiplatform.sdk.LOCK_RESPONSE
-import com.doordeck.multiplatform.sdk.LOCK_USER_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
-import com.doordeck.multiplatform.sdk.PINNED_LOCKS_RESPONSE
-import com.doordeck.multiplatform.sdk.SHAREABLE_LOCKS_RESPONSE
-import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_LOCK_ID
-import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_EMAIL
-import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_USER_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.USER_LOCK_RESPONSE
-import com.doordeck.multiplatform.sdk.USER_PUBLIC_KEY_RESPONSE
-import com.doordeck.multiplatform.sdk.cache.CapabilityCache
-import com.doordeck.multiplatform.sdk.model.data.LockOperations
-import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
-import com.doordeck.multiplatform.sdk.model.common.CapabilityType
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.toUUID
-import kotlinx.coroutines.future.await
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.randomDouble
+import com.doordeck.multiplatform.sdk.randomUuid
+import com.doordeck.multiplatform.sdk.util.secondsToDuration
+import com.doordeck.multiplatform.sdk.util.toInetAddress
+import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import java.net.InetAddress
+import kotlin.random.Random
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.time.Clock
-import kotlin.time.toJavaInstant
+import kotlin.test.assertFails
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
+import kotlin.uuid.Uuid
 
-class LockOperationsApiTest : MockTest() {
+class LockOperationsApiTest : IntegrationTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        val response = LockOperationsApi.getSingleLock(DEFAULT_LOCK_ID.toUUID())
-        assertEquals(LOCK_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetSingleLockAsync() = runTest {
-        val response = LockOperationsApi.getSingleLockAsync(DEFAULT_LOCK_ID.toUUID()).await()
-        assertEquals(LOCK_RESPONSE, response)
-    }
+        // When
+        val response = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
 
-    @Test
-    fun shouldGetLockAuditTrail() = runTest {
-        val response = LockOperationsApi.getLockAuditTrail(DEFAULT_LOCK_ID.toUUID(), Clock.System.now(), Clock.System.now())
-        assertEquals(AUDIT_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetLockAuditTrailAsync() = runTest {
-        val response = LockOperationsApi.getLockAuditTrailAsync(DEFAULT_LOCK_ID.toUUID(), Clock.System.now().toJavaInstant(), Clock.System.now().toJavaInstant()).await()
-        assertEquals(AUDIT_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetAuditForUser() = runTest {
-        val response = LockOperationsApi.getAuditForUser(DEFAULT_USER_ID.toUUID(), Clock.System.now(), Clock.System.now())
-        assertEquals(AUDIT_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetAuditForUserAsync() = runTest {
-        val response = LockOperationsApi.getAuditForUserAsync(DEFAULT_USER_ID.toUUID(), Clock.System.now().toJavaInstant(), Clock.System.now().toJavaInstant()).await()
-        assertEquals(AUDIT_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUsersForLock() = runTest {
-        val response = LockOperationsApi.getUsersForLock(DEFAULT_LOCK_ID.toUUID())
-        assertEquals(USER_LOCK_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUsersForLockAsync() = runTest {
-        val response = LockOperationsApi.getUsersForLockAsync(DEFAULT_LOCK_ID.toUUID()).await()
-        assertEquals(USER_LOCK_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetLocksForUser() = runTest {
-        val response = LockOperationsApi.getLocksForUser(DEFAULT_USER_ID.toUUID())
-        assertEquals(LOCK_USER_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetLocksForUserAsync() = runTest {
-        val response = LockOperationsApi.getLocksForUserAsync(DEFAULT_USER_ID.toUUID()).await()
-        assertEquals(LOCK_USER_RESPONSE, response)
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_LOCK_ID, response.id)
     }
 
     @Test
     fun shouldUpdateLockName() = runTest {
-        LockOperationsApi.updateLockName(DEFAULT_LOCK_ID.toUUID(), "")
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedLockName = "Doordeck Fusion Test Site - ${Uuid.random()}"
 
-    @Test
-    fun shouldUpdateLockNameAsync() = runTest {
-        LockOperationsApi.updateLockNameAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
+        // When
+        LockOperationsApi.updateLockName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName)
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedLockName, lock.name)
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
-        LockOperationsApi.updateLockFavourite(DEFAULT_LOCK_ID.toUUID(), false)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedFavourite = true
 
-    @Test
-    fun shouldUpdateLockFavouriteAsync() = runTest {
-        LockOperationsApi.updateLockFavouriteAsync(DEFAULT_LOCK_ID.toUUID(), false).await()
+        // When
+        LockOperationsApi.updateLockFavourite(PLATFORM_TEST_MAIN_LOCK_ID, updatedFavourite)
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedFavourite, lock.favourite)
     }
 
     @Test
     fun shouldUpdateLockColour() = runTest {
-        LockOperationsApi.updateLockColour(DEFAULT_LOCK_ID.toUUID(), "")
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
 
-    @Test
-    fun shouldUpdateLockColourAsync() = runTest {
-        LockOperationsApi.updateLockColourAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
+        // When
+        LockOperationsApi.updateLockColour(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockColour)
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedLockColour, lock.colour)
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
-        LockOperationsApi.updateLockSettingDefaultName(DEFAULT_LOCK_ID.toUUID(), "")
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+
+        // When
+        LockOperationsApi.updateLockSettingDefaultName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName)
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedLockDefaultName, lock.settings.defaultName)
     }
 
     @Test
-    fun shouldUpdateLockSettingDefaultNameAsync() = runTest {
-        LockOperationsApi.updateLockSettingDefaultNameAsync(DEFAULT_LOCK_ID.toUUID(), "").await()
-    }
+    fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
+        // Given - shouldSetLockSettingPermittedAddresses
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val addedLockPermittedAddresses = listOf("95.19.38.42".toInetAddress())
 
-    @Test
-    fun shouldSetLockSettingPermittedAddresses() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddresses(DEFAULT_LOCK_ID.toUUID(), listOf("1.1.1.1"))
-    }
+        // When
+        LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, addedLockPermittedAddresses)
 
-    @Test
-    fun shouldSetLockSettingPermittedAddressesAsync() = runTest {
-        LockOperationsApi.setLockSettingPermittedAddressesAsync(DEFAULT_LOCK_ID.toUUID(), listOf("1.1.1.1")).await()
+        // Then
+        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
+        assertContains(addedLockPermittedAddresses, lock.settings.permittedAddresses.first())
+
+        // Given - shouldRemoveLockSettingPermittedAddresses
+        val removedLockPermittedAddresses = listOf<InetAddress>()
+
+        // When
+        LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, removedLockPermittedAddresses)
+
+        // Then
+        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertTrue { lock.settings.permittedAddresses.isEmpty() }
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
-        LockOperationsApi.updateLockSettingHidden(DEFAULT_LOCK_ID.toUUID(), true)
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedHidden = false
+
+        // When
+        LockOperationsApi.updateLockSettingHidden(PLATFORM_TEST_MAIN_LOCK_ID, updatedHidden)
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedHidden, lock.settings.hidden)
     }
 
     @Test
-    fun shouldUpdateLockSettingHiddenAsync() = runTest {
-        LockOperationsApi.updateLockSettingHiddenAsync(DEFAULT_LOCK_ID.toUUID(), true).await()
+    fun shouldSetAndRemoveLockSettingTimeRestrictions() = runTest {
+        // Given - shouldSetLockSettingTimeRestrictions
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val now = Clock.System.now()
+        val addedTimeRestriction = LockOperations.TimeRequirement(
+            start = now.toLocalDateTime(TimeZone.UTC).time,
+            end = (now + 1.minutes).toLocalDateTime(TimeZone.UTC).time,
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = listOf(DayOfWeek.entries.random())
+        )
+
+        // When
+        LockOperationsApi.setLockSettingTimeRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, listOf(addedTimeRestriction))
+
+        // Then
+        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
+        assertNotNull(actualTime)
+        assertEquals(addedTimeRestriction.start, actualTime.start)
+        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
+        assertContains(actualTime.days, addedTimeRestriction.days.first())
+
+        // Given - shouldRemoveLockSettingTimeRestrictions
+        val removedTimeRestriction = emptyList<LockOperations.TimeRequirement>()
+
+        // When
+        LockOperationsApi.setLockSettingTimeRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, removedTimeRestriction)
+
+        // Then
+        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNull(lock.settings.usageRequirements?.time)
     }
 
     @Test
-    fun shouldSetLockSettingTimeRestrictions() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictions(DEFAULT_LOCK_ID.toUUID(), emptyList())
-    }
+    fun shouldUpdateAndRemoveLockSettingLocationRestrictions() = runTest {
+        // Given - shouldUpdateLockSettingLocationRestrictions
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val addedLocationRestriction = LockOperations.LocationRequirement(
+            latitude = Random.nextDouble(-90.0, 90.0),
+            longitude = Random.nextDouble(-180.0, 180.0),
+            enabled = true,
+            radius = Random.nextInt(1, 100),
+            accuracy = Random.nextInt(1, 100)
+        )
 
-    @Test
-    fun shouldSetLockSettingTimeRestrictionsAsync() = runTest {
-        LockOperationsApi.setLockSettingTimeRestrictionsAsync(DEFAULT_LOCK_ID.toUUID(), emptyList()).await()
-    }
+        // When
+        LockOperationsApi.updateLockSettingLocationRestrictions(
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID,
+            location = addedLocationRestriction
+        )
 
-    @Test
-    fun shouldUpdateLockSettingLocationRestrictions() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictions(DEFAULT_LOCK_ID.toUUID(), null)
-    }
+        // Then
+        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNotNull(lock.settings.usageRequirements?.location)
+        assertEquals(addedLocationRestriction.latitude, lock.settings.usageRequirements.location.latitude)
+        assertEquals(addedLocationRestriction.longitude, lock.settings.usageRequirements.location.longitude)
+        assertEquals(addedLocationRestriction.enabled, lock.settings.usageRequirements.location.enabled)
+        assertEquals(addedLocationRestriction.radius, lock.settings.usageRequirements.location.radius)
+        assertEquals(addedLocationRestriction.accuracy, lock.settings.usageRequirements.location.accuracy)
 
-    @Test
-    fun shouldUpdateLockSettingLocationRestrictionsAsync() = runTest {
-        LockOperationsApi.updateLockSettingLocationRestrictionsAsync(DEFAULT_LOCK_ID.toUUID(), null).await()
+        // Given - shouldRemoveLockSettingLocationRestrictions
+        val removedLocationRestriction = null
+
+        // When
+        LockOperationsApi.updateLockSettingLocationRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, removedLocationRestriction)
+
+        // Then
+        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(removedLocationRestriction, lock.settings.usageRequirements?.location)
     }
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKey(DEFAULT_USER_EMAIL)
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetUserPublicKeyAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyAsync(DEFAULT_USER_EMAIL).await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
+        // When
+        val result = LockOperationsApi.getUserPublicKey(TEST_MAIN_USER_EMAIL, true)
+
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmail("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetUserPublicKeyByEmailAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmailAsync("").await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // When
+        val result = LockOperationsApi.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
 
-    @Test
-    fun shouldGetUserPublicKeyByTelephone() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephone("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByTelephoneAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephoneAsync("").await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKey("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+        // When
+        val result = LockOperationsApi.getUserPublicKeyByLocalKey(TEST_MAIN_USER_ID)
+
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
-    @Test
-    fun shouldGetUserPublicKeyByLocalKeyAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeyAsync("").await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByForeignKey() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKey("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByForeignKeyAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeyAsync("").await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByIdentity() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByIdentity("")
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByIdentityAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByIdentityAsync("").await()
-        assertEquals(USER_PUBLIC_KEY_RESPONSE, response)
-    }
-    
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmails(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetUserPublicKeyByEmailsAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByEmailsAsync(listOf("", "")).await()
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // When
+        val result = LockOperationsApi.getUserPublicKeyByEmails(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL))
 
-    @Test
-    fun shouldGetUserPublicKeyByTelephones() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephones(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldGetUserPublicKeyByTelephonesAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByTelephonesAsync(listOf("", "")).await()
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
+        // Then
+        assertTrue { result.isNotEmpty() }
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeys(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+        // When
+        val result = LockOperationsApi.getUserPublicKeyByLocalKeys(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID))
+
+        // Then
+        assertTrue { result.isNotEmpty() }
     }
 
     @Test
-    fun shouldGetUserPublicKeyByLocalKeysAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByLocalKeysAsync(listOf("", "")).await()
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
+    fun shouldGetUsersForLock() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+        // When
+        val usersForLock = LockOperationsApi.getUsersForLock(PLATFORM_TEST_MAIN_LOCK_ID)
+
+        // Then
+        assertTrue { usersForLock.isNotEmpty() }
+        assertTrue { usersForLock.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
     }
 
     @Test
-    fun shouldGetUserPublicKeyByForeignKeys() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeys(listOf("", ""))
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+    fun shouldGetLockForUser() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetUserPublicKeyByForeignKeysAsync() = runTest {
-        val response = LockOperationsApi.getUserPublicKeyByForeignKeysAsync(listOf("", "")).await()
-        assertEquals(BATCH_USER_PUBLIC_KEY_RESPONSE, response)
-    }
+        // When
+        val locksForUser = LockOperationsApi.getLocksForUser(PLATFORM_TEST_MAIN_USER_ID)
 
-    @Test
-    fun shouldUnlockUsingContext() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID)))
-    }
-
-    @Test
-    fun shouldUnlockUsingContextAsync() = runTest {
-        LockOperationsApi.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID))).await()
-    }
-
-    @Test
-    fun shouldUnlock() = runTest {
-        LockOperationsApi.unlock(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID)))
-    }
-
-    @Test
-    fun shouldUnlockAsync() = runTest {
-        LockOperationsApi.unlockAsync(LockOperations.UnlockOperation(LockOperations.BaseOperation("userId", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID))).await()
-    }
-
-    @Test
-    fun shouldShareLockUsingContext() = runTest {
-        LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-            ))
-    }
-
-    @Test
-    fun shouldShareLockUsingContextAsync() = runTest {
-        LockOperationsApi.shareLockAsync(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-            )).await()
-    }
-
-    @Test
-    fun shouldBatchShareLockUsingContext() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            )
-        )
-    }
-
-    @Test
-    fun shouldBatchShareLockUsingContextAsync() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLockAsync(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            )
-        ).await()
-    }
-
-    @Test
-    fun shouldShareLock() = runTest {
-        LockOperationsApi.shareLock(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-        ))
-    }
-
-    @Test
-    fun shouldShareLockAsync() = runTest {
-        LockOperationsApi.shareLockAsync(
-            LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                shareLock = LockOperations.ShareLock("", UserRole.USER, byteArrayOf())
-            )).await()
-    }
-
-    @Test
-    fun shouldBatchShareLock() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            )
-        )
-    }
-
-    @Test
-    fun shouldBatchShareLockAsync() = runTest {
-        CapabilityCache.put(DEFAULT_LOCK_ID, mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED))
-        LockOperationsApi.batchShareLockAsync(
-            LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-                users = listOf(LockOperations.ShareLock("", UserRole.USER, byteArrayOf()))
-            )
-        ).await()
-    }
-
-    @Test
-    fun shouldRevokeAccessToLockUsingContext() = runTest {
-        LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            users = emptyList()
-        ))
-    }
-
-    @Test
-    fun shouldRevokeAccessToLockUsingContextAsync() = runTest {
-        LockOperationsApi.revokeAccessToLockAsync(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            users = emptyList()
-        )).await()
-    }
-
-    @Test
-    fun shouldRevokeAccessToLock() = runTest {
-        LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            users = emptyList()
-        ))
-    }
-
-    @Test
-    fun shouldRevokeAccessToLockAsync() = runTest {
-        LockOperationsApi.revokeAccessToLockAsync(
-            LockOperations.RevokeAccessToLockOperation(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            users = emptyList()
-        )).await()
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        ))
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockDurationUsingContextAsync() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDurationAsync(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        )).await()
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockDuration() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        ))
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockDurationAsync(
-            LockOperations.UpdateSecureSettingUnlockDuration(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockDuration = 0
-        )).await()
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetweenUsingContext() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            unlockBetween = null
-        ))
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetweenUsingContextAsync() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetweenAsync(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation(lockId = DEFAULT_LOCK_ID),
-            unlockBetween = null
-        )).await()
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetween() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockBetween = null
-        ))
-    }
-
-    @Test
-    fun shouldUpdateSecureSettingUnlockBetweenAsync() = runTest {
-        LockOperationsApi.updateSecureSettingUnlockBetweenAsync(
-            LockOperations.UpdateSecureSettingUnlockBetween(
-            baseOperation = LockOperations.BaseOperation("", emptyList(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(), DEFAULT_LOCK_ID),
-            unlockBetween = null
-        )).await()
+        // Then
+        assertTrue { locksForUser.devices.isNotEmpty() }
+        assertTrue { locksForUser.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldGetPinnedLocks() = runTest {
-        val response = LockOperationsApi.getPinnedLocks()
-        assertEquals(PINNED_LOCKS_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetPinnedLocksAsync() = runTest {
-        val response = LockOperationsApi.getPinnedLocksAsync().await()
-        assertEquals(PINNED_LOCKS_RESPONSE, response)
+        // When
+        val pinnedLocks = LockOperationsApi.getPinnedLocks()
+
+        // Then
+        assertTrue { pinnedLocks.isNotEmpty() }
     }
 
     @Test
     fun shouldGetShareableLocks() = runTest {
-        val response = LockOperationsApi.getShareableLocks()
-        assertEquals(SHAREABLE_LOCKS_RESPONSE, response)
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+        // When
+        val shareableLocks = LockOperationsApi.getShareableLocks()
+
+        // Then
+        assertTrue { shareableLocks.isNotEmpty() }
+        assertTrue { shareableLocks.any { it.id == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
-    fun shouldGetShareableLocksAsync() = runTest {
-        val response = LockOperationsApi.getShareableLocksAsync().await()
-        assertEquals(SHAREABLE_LOCKS_RESPONSE, response)
+    fun shouldUnlock() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val baseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.unlock(LockOperations.UnlockOperation(baseOperation = baseOperation))
+    }
+
+    @Test
+    fun shouldUnlockUsingContext() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        ContextManager.setOperationContext(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            isKeyPairVerified = true
+        )
+
+        // When
+        LockOperationsApi.unlock(
+            unlockOperation = LockOperations.UnlockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID)
+            )
+        )
+    }
+
+    @Test
+    fun shouldShareAndRevokeLock() = runTest {
+        // Given - shouldShareLock
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val shareBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.shareLock(
+            shareLockOperation = LockOperations.ShareLockOperation(
+                baseOperation = shareBaseOperation,
+                shareLock = LockOperations.ShareLock(
+                    targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                    targetUserRole = UserRole.USER,
+                    targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                )
+            ))
+
+        // Then
+        var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+
+        // Given - shouldRevokeAccessToLock
+        val revokeBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.revokeAccessToLock(
+            LockOperations.RevokeAccessToLockOperation(
+                baseOperation = revokeBaseOperation,
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+            ))
+
+        // Then
+        locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertFalse { locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+    }
+
+    @Test
+    fun shouldBatchShareAndRevokeLock() = runTest {
+        // Given - shouldShareLockUsingContext
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val shareBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+        val batchShareLock = listOf(
+            LockOperations.ShareLock(
+                targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+            ),
+            LockOperations.ShareLock(
+                targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
+            )
+        )
+
+        // When
+        LockOperationsApi.batchShareLock(
+            LockOperations.BatchShareLockOperation(
+                baseOperation = shareBaseOperation,
+                users = batchShareLock
+            )
+        )
+
+        // Then
+        assertTrue {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
+        }
+        assertTrue {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
+        }
+
+        // When
+        // Given - shouldRevokeAccessToLock
+        val revokeBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+        LockOperationsApi.revokeAccessToLock(
+            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+                baseOperation = revokeBaseOperation,
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+            )
+        )
+
+        // Then
+        assertFalse {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+        }
+        assertFalse {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+        }
+    }
+
+    @Test
+    fun shouldShareAndRevokeLockUsingContext() = runTest {
+        // Given - shouldShareLockUsingContext
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        ContextManager.setOperationContext(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            isKeyPairVerified = true
+        )
+        val shareLock = LockOperations.ShareLock(
+            targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+            targetUserRole = UserRole.USER,
+            targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+        )
+
+        // When
+        LockOperationsApi.shareLock(
+            shareLockOperation = LockOperations.ShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                shareLock = shareLock
+            )
+        )
+
+        // Then
+        var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+
+        // Given - shouldRevokeAccessToLockUsingContext
+        // When
+        LockOperationsApi.revokeAccessToLock(
+            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+            )
+        )
+
+        // Then
+        locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertFalse {
+            locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+        }
+    }
+
+    @Test
+    fun shouldBatchShareAndRevokeLockUsingContext() = runTest {
+        // Given - shouldShareLockUsingContext
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        ContextManager.setOperationContext(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            isKeyPairVerified = true
+        )
+        val batchShareLock = listOf(
+            LockOperations.ShareLock(
+                targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+            ),
+            LockOperations.ShareLock(
+                targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
+                targetUserRole = UserRole.USER,
+                targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
+            )
+        )
+
+        // When
+        LockOperationsApi.batchShareLock(
+            batchShareLockOperation = LockOperations.BatchShareLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                users = batchShareLock
+            )
+        )
+
+        // Then
+        assertTrue {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
+        }
+        assertTrue {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
+        }
+
+        // Given - shouldRevokeAccessToLockUsingContext
+        // When
+        LockOperationsApi.revokeAccessToLock(
+            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+            )
+        )
+
+        // Then
+        assertFalse {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+        }
+        assertFalse {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+        }
+    }
+
+    @Test
+    fun shouldUpdateSecureSettingUnlockDuration() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val updatedUnlockDuration = randomDouble(1.0, 10.0).secondsToDuration()
+        val baseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockDuration(
+            updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
+                baseOperation = baseOperation,
+                unlockDuration = updatedUnlockDuration
+            )
+        )
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
+    }
+
+    @Test
+    fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val updatedUnlockDuration = Duration.parse("1s")
+        ContextManager.setOperationContext(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            isKeyPairVerified = true
+        )
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockDuration(
+            updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                unlockDuration = updatedUnlockDuration
+            )
+        )
+
+        // Then
+        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
+    }
+
+    @Test
+    fun shouldUpdateAndRemoveSecureSettingUnlockBetween() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val now = Clock.System.now()
+        val updatedUnlockBetween = LockOperations.UnlockBetween(
+            start = now.toLocalDateTime(TimeZone.UTC).time,
+            end = (now + 5.minutes).toLocalDateTime(TimeZone.UTC).time,
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = listOf(DayOfWeek.entries.random()),
+            exceptions = emptyList()
+        )
+        val addBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                baseOperation = addBaseOperation,
+                unlockBetween = updatedUnlockBetween
+            )
+        )
+
+        // Then
+        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNotNull(lock.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+
+        // Given - shouldRemoveSecureSettingUnlockBetween
+        val removeBaseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                baseOperation = removeBaseOperation,
+                unlockBetween = null
+            )
+        )
+
+        // Then
+        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNull(lock.settings.unlockBetweenWindow)
+    }
+
+    @Test
+    fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContext() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val now = Clock.System.now()
+        val min = now.minus(5.minutes)
+        val max = now.plus(10.minutes)
+        val updatedUnlockBetween = LockOperations.UnlockBetween(
+            start = min.toLocalDateTime(TimeZone.UTC).time,
+            end = max.toLocalDateTime(TimeZone.UTC).time,
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = listOf(DayOfWeek.entries.random()),
+            exceptions = emptyList()
+        )
+        ContextManager.setOperationContext(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            isKeyPairVerified = true
+        )
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                unlockBetween = updatedUnlockBetween
+            )
+        )
+
+        // Then
+        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNotNull(lock.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+
+        // Given
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                unlockBetween = null
+            )
+        )
+
+        // Then
+        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
+        assertNull(lock.settings.unlockBetweenWindow)
+    }
+
+    @Test
+    fun shouldGetLockAuditTrail() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val now = Clock.System.now()
+        val start = now.minus(14.days)
+        val end = now
+
+        // When
+        val lockAuditTrail = LockOperationsApi.getLockAuditTrail(PLATFORM_TEST_MAIN_LOCK_ID, start, end)
+
+        // Then
+        assertTrue { lockAuditTrail.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldGetAuditForUser() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val now = Clock.System.now()
+        val start = now.minus(14.days)
+        val end = now
+
+        // When
+        val auditForUser = LockOperationsApi.getAuditForUser(PLATFORM_TEST_MAIN_USER_ID, start, end)
+
+        // Then
+        assertTrue { auditForUser.isNotEmpty() }
+    }
+
+    @Test
+    fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
+        // When
+        val revokeAccessToLockUsingContextException = assertFails {
+            LockOperationsApi.revokeAccessToLock(
+                revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
+                    baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    users = emptyList()
+                )
+            )
+        }
+        val shareLockUsingContextException = assertFails {
+            LockOperationsApi.shareLock(
+                shareLockOperation = LockOperations.ShareLockOperation(
+                    baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    shareLock = LockOperations.ShareLock(
+                        targetUserId = randomUuid(),
+                        targetUserRole = UserRole.USER,
+                        targetUserPublicKey = CryptoManager.generateKeyPair().public
+                    )
+                )
+            )
+        }
+        val unlockUsingContextException = assertFails {
+            LockOperationsApi.unlock(
+                unlockOperation = LockOperations.UnlockOperation(
+                    baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    directAccessEndpoints = emptyList()
+                )
+            )
+        }
+        val updateSecureSettingUnlockDurationUsingContextException = assertFails {
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
+                    baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockDuration = Duration.ZERO
+                )
+            )
+        }
+        val updateSecureSettingUnlockBetweenUsingContextException = assertFails {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
+                    baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockBetween = LockOperations.UnlockBetween(
+                        start = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
+                        end = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
+                        timezone = TimeZone.UTC.id.toZoneId(),
+                        days = emptyList(),
+                        exceptions = emptyList()
+                    )
+                )
+            )
+        }
+
+        // Then
+        assertTrue { revokeAccessToLockUsingContextException is MissingContextFieldException }
+        assertEquals("User ID is missing", revokeAccessToLockUsingContextException.message)
+        assertTrue { shareLockUsingContextException is MissingContextFieldException }
+        assertEquals("User ID is missing", shareLockUsingContextException.message)
+        assertTrue { unlockUsingContextException is MissingContextFieldException }
+        assertEquals("User ID is missing", unlockUsingContextException.message)
+        assertTrue { updateSecureSettingUnlockDurationUsingContextException is MissingContextFieldException }
+        assertEquals("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.message)
+        assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
+        assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }

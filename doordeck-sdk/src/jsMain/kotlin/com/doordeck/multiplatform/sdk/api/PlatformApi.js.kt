@@ -2,10 +2,16 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
-import com.doordeck.multiplatform.sdk.model.data.Platform
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
+import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
+import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
@@ -18,8 +24,8 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    fun createApplication(application: Platform.CreateApplication): Promise<dynamic> {
-        return promise { PlatformClient.createApplicationRequest(application) }
+    fun createApplication(application: PlatformOperations.CreateApplication): Promise<dynamic> {
+        return promise { PlatformClient.createApplicationRequest(application.toBasicCreateApplication()) }
     }
 
     /**
@@ -27,7 +33,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     fun listApplications(): Promise<List<ApplicationResponse>> {
-        return promise { PlatformClient.listApplicationsRequest() }
+        return promise { PlatformClient.listApplicationsRequest().toApplicationResponse() }
     }
 
     /**
@@ -35,7 +41,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     fun getApplication(applicationId: String): Promise<ApplicationResponse> {
-        return promise { PlatformClient.getApplicationRequest(applicationId) }
+        return promise { PlatformClient.getApplicationRequest(applicationId).toApplicationResponse() }
     }
 
     /**
@@ -90,8 +96,8 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: Platform.EmailPreferences): Promise<dynamic> {
-        return promise { PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences) }
+    fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: PlatformOperations.EmailPreferences): Promise<dynamic> {
+        return promise { PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences.toBasicEmailPreferences()) }
     }
 
     /**
@@ -115,15 +121,15 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     fun getLogoUploadUrl(applicationId: String, contentType: String): Promise<GetLogoUploadUrlResponse> {
-        return promise { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType) }
+        return promise { PlatformClient.getLogoUploadUrlRequest(applicationId, contentType).toGetLogoUploadUrlResponse() }
     }
 
     /**
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    fun addAuthKey(applicationId: String, key: Platform.AuthKey): Promise<dynamic> {
-        return promise { PlatformClient.addAuthKeyRequest(applicationId, key) }
+    fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey): Promise<dynamic> {
+        return promise { PlatformClient.addAuthKeyRequest(applicationId, key.toBasicAuthKey()) }
     }
 
     /**
@@ -179,7 +185,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>> {
-        return promise { PlatformClient.getApplicationOwnersDetailsRequest(applicationId) }
+        return promise { PlatformClient.getApplicationOwnersDetailsRequest(applicationId).toApplicationOwnerDetailsResponse() }
     }
 }
 

@@ -1,43 +1,29 @@
-@file:UseSerializers(IdValueSerializer::class, PublicKeyValueSerializer::class, CertificateValueSerializer::class)
-
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.values.CertificateValue
-import com.doordeck.multiplatform.sdk.model.values.CertificateValueSerializer
-import com.doordeck.multiplatform.sdk.model.values.IdValue
-import com.doordeck.multiplatform.sdk.model.values.IdValueSerializer
-import com.doordeck.multiplatform.sdk.model.values.PublicKeyValue
-import com.doordeck.multiplatform.sdk.model.values.PublicKeyValueSerializer
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.UseSerializers
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
-data class TokenResponse(
+internal data class BasicTokenResponse(
     val authToken: String,
     val refreshToken: String
 )
 
-@JsExport
 @Serializable
-data class UserDetailsResponse(
+internal data class BasicUserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
-    val publicKey: PublicKeyValue
+    val publicKey: String
 )
 
-@JsExport
 @Serializable
-data class RegisterEphemeralKeyResponse(
-    val certificateChain: List<CertificateValue>,
-    val userId: IdValue
+internal data class BasicRegisterEphemeralKeyResponse(
+    val certificateChain: List<String>,
+    val userId: String
 )
 
-@JsExport
 @Serializable
-data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+internal data class BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     val method: TwoFactorMethod
 )

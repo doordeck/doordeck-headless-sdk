@@ -2,8 +2,9 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicAuthKey
+import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddAuthIssuerRequest
@@ -25,9 +26,9 @@ import com.doordeck.multiplatform.sdk.model.requests.UpdateApplicationRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateApplicationSupportContactRequest
 import com.doordeck.multiplatform.sdk.model.requests.toAddAuthKeyRequest
 import com.doordeck.multiplatform.sdk.model.requests.toCreateApplicationRequest
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -37,7 +38,7 @@ import io.ktor.client.request.setBody
 
 /**
  * Internal implementation of the platform API client.
- * Handles all network requests related to platform.
+ * Handles all  requests related to platform.
  */
 internal object PlatformClient {
 
@@ -51,7 +52,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun createApplicationRequest(application: Platform.CreateApplication) {
+    suspend fun createApplicationRequest(application: BasicCreateApplication) {
         CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
@@ -61,13 +62,13 @@ internal object PlatformClient {
     /**
      * Lists all application's owned by the current user.
      *
-     * @return List of [ApplicationResponse].
+     * @return List of [BasicApplicationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun listApplicationsRequest(): List<ApplicationResponse> {
+    suspend fun listApplicationsRequest(): List<BasicApplicationResponse> {
         return CloudHttpClient.client.get(Paths.getListApplicationsPath()).body()
     }
 
@@ -75,13 +76,13 @@ internal object PlatformClient {
      * Retrieves the application by its application ID.
      *
      * @param applicationId The application's unique identifier.
-     * @return [ApplicationResponse].
+     * @return [BasicApplicationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationRequest(applicationId: String): ApplicationResponse {
+    suspend fun getApplicationRequest(applicationId: String): BasicApplicationResponse {
         return CloudHttpClient.client.get(Paths.getApplicationPath(applicationId)).body()
     }
 
@@ -181,7 +182,7 @@ internal object PlatformClient {
     @DoordeckOnly
     suspend fun updateApplicationEmailPreferencesRequest(
         applicationId: String,
-        emailPreferences: Platform.EmailPreferences
+        emailPreferences: BasicEmailPreferences
     ) {
         updateApplication(
             applicationId = applicationId,
@@ -255,7 +256,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+    suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): BasicGetLogoUploadUrlResponse {
         return CloudHttpClient.client.post(Paths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
             setBody(GetLogoUploadUrlRequest(contentType))
@@ -272,7 +273,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun addAuthKeyRequest(applicationId: String, key: Platform.AuthKey) {
+    suspend fun addAuthKeyRequest(applicationId: String, key: BasicAuthKey) {
         CloudHttpClient.client.post(Paths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())
@@ -388,13 +389,13 @@ internal object PlatformClient {
      * Retrieves the details of all owners of an application, the requesting user should be the application owner.
      *
      * @param applicationId The application's unique identifier.
-     * @return List of [ApplicationOwnerDetailsResponse].
+     * @return List of [BasicApplicationOwnerDetailsResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<ApplicationOwnerDetailsResponse> {
+    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
     }
 }

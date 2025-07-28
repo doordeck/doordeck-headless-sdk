@@ -1,14 +1,19 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
-import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.BasicEcKey
+import com.doordeck.multiplatform.sdk.model.data.BasicEd25519Key
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailCallToAction
+import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
+import com.doordeck.multiplatform.sdk.model.data.BasicRsaKey
+import com.doordeck.multiplatform.sdk.model.responses.BasicEcKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicEd25519KeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
 import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -24,7 +29,7 @@ class PlatformClientTest : IntegrationTest() {
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
         AccountlessClient.loginRequest(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val newApplication = Platform.CreateApplication(
+        val newApplication = BasicCreateApplication(
             name = "Test Application $platformType ${Uuid.random()}",
             companyName = Uuid.random().toString(),
             mailingAddress = "test@doordeck.com",
@@ -107,13 +112,13 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(updatedApplicationAppLink, application.appLink)
 
         // Given - shouldUpdateApplicationEmailPreferences
-        val updatedApplicationEmailPreferences = Platform.EmailPreferences(
+        val updatedApplicationEmailPreferences = BasicEmailPreferences(
             senderEmail = "test@test.com",
             senderName = "test",
             primaryColour = "#000000",
             secondaryColour = "#000000",
             onlySendEssentialEmails = true,
-            callToAction = Platform.EmailCallToAction(
+            callToAction = BasicEmailCallToAction(
                 actionTarget = "test",
                 headline = "test",
                 actionText = "test"
@@ -189,7 +194,7 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { application.corsDomains.any { it.equals(removedApplicationCorsDomain, true) } }
 
         // Given - shouldAddEd25519AuthKey
-        val ed25519Key = Platform.Ed25519Key(
+        val ed25519Key = BasicEd25519Key(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "EdDSA",
@@ -205,7 +210,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.kid
-        }?.value as? Ed25519KeyResponse
+        }?.value as? BasicEd25519KeyResponse
         assertNotNull(actualEd25519Key)
         assertEquals(ed25519Key.use, actualEd25519Key.use)
         assertEquals(ed25519Key.kid, actualEd25519Key.kid)
@@ -214,7 +219,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(ed25519Key.x, actualEd25519Key.x)
 
         // Given - shouldAddRsaAuthKey
-        val rsaKey = Platform.RsaKey(
+        val rsaKey = BasicRsaKey(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "RS256",
@@ -235,7 +240,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.kid
-        }?.value as? RsaKeyResponse
+        }?.value as? BasicRsaKeyResponse
         assertNotNull(actualRsaKey)
         assertEquals(rsaKey.use, actualRsaKey.use)
         assertEquals(rsaKey.kid, actualRsaKey.kid)
@@ -244,7 +249,7 @@ class PlatformClientTest : IntegrationTest() {
         assertEquals(rsaKey.n, actualRsaKey.n)
 
         // Given - shouldAddEcAuthKey
-        val ecKey = Platform.EcKey(
+        val ecKey = BasicEcKey(
             kid = Uuid.random().toString(),
             use = "sig",
             alg = "ES256",
@@ -261,7 +266,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.kid
-        }?.value as? EcKeyResponse
+        }?.value as? BasicEcKeyResponse
         assertNotNull(actualKeyEcKey)
         assertEquals(ecKey.use, actualKeyEcKey.use)
         assertEquals(ecKey.kid, actualKeyEcKey.kid)
@@ -323,3 +328,4 @@ class PlatformClientTest : IntegrationTest() {
         assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }
+ */

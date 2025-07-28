@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.toUUID
+import com.doordeck.multiplatform.sdk.util.toUuid
 import java.security.KeyPair
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -64,7 +64,7 @@ actual object ContextManager {
     }
 
     fun getUserId(): UUID? {
-        return Context.getUserId()?.toUUID()
+        return Context.getUserId()?.toUuid()
     }
 
     fun setUserEmail(email: String) {
