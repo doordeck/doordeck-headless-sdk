@@ -188,7 +188,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
     suspend fun setLockSettingPermittedAddresses(lockId: UUID, permittedAddresses: List<InetAddress>) {
-        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId.toString(), permittedAddresses.map { it.toString() })
+        return LockOperationsClient.setLockSettingPermittedAddressesRequest(lockId.toString(), permittedAddresses.map { it.hostAddress })
     }
 
     /**
