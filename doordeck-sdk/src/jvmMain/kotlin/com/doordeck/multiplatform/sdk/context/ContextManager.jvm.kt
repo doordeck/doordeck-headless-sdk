@@ -114,8 +114,8 @@ actual object ContextManager {
         Context.setOperationContext(
             userId = userId.toString(),
             certificateChain = certificateChain.map { it.encoded.encodeByteArrayToBase64() },
-            publicKey = privateKey.encoded,
-            privateKey = publicKey.encoded,
+            publicKey = publicKey.encoded,
+            privateKey = privateKey.encoded,
             isKeyPairVerified = isKeyPairVerified
         )
     }

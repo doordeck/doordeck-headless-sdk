@@ -101,7 +101,13 @@ actual object ContextManager {
 
     fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
                             privateKey: ByteArray, isKeyPairVerified: Boolean) {
-        Context.setOperationContext(userId, certificateChain, privateKey, publicKey, isKeyPairVerified)
+        Context.setOperationContext(
+            userId = userId,
+            certificateChain = certificateChain,
+            publicKey = publicKey,
+            privateKey = privateKey,
+            isKeyPairVerified = isKeyPairVerified
+        )
     }
 
     fun getContextState(): ContextState {
