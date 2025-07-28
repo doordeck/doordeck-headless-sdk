@@ -1,12 +1,11 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toRsaPublicKey
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toUuid
@@ -213,7 +212,7 @@ internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = L
 
 internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
     id = id.toUuid(),
-    publicKey = publicKey.decodeBase64ToByteArray().toPublicKey()
+    publicKey = publicKey.toRsaPublicKey()
 )
 
 internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
@@ -222,7 +221,7 @@ internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(
         email = user.email,
         foreignKey = user.foreignKey,
         phone = user.phone,
-        publicKey = user.publicKey.decodeBase64ToByteArray().toPublicKey(),
+        publicKey = user.publicKey.toRsaPublicKey(),
     )
 }
 
@@ -237,7 +236,7 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResp
     UserLockResponse(
         userId = user.userId.toUuid(),
         email = user.email,
-        publicKey = user.publicKey.decodeBase64ToByteArray().toPublicKey(),
+        publicKey = user.publicKey.toRsaPublicKey(),
         displayName = user.displayName,
         orphan = user.orphan,
         foreign = user.foreign,
@@ -250,7 +249,7 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResp
 internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = LockUserResponse(
     userId = userId.toUuid(),
     email = email,
-    publicKey = publicKey.decodeBase64ToByteArray().toPublicKey(),
+    publicKey = publicKey.toRsaPublicKey(),
     displayName = displayName,
     orphan = orphan,
     foreign = foreign,

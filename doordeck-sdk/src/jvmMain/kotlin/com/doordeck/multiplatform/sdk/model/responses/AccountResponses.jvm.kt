@@ -1,9 +1,8 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toCertificate
-import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toRsaPublicKey
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.toUuid
 import java.security.PublicKey
 import java.security.cert.X509Certificate
@@ -39,7 +38,7 @@ internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsRespon
     email = email,
     displayName = displayName,
     emailVerified = emailVerified,
-    publicKey = publicKey.decodeBase64ToByteArray().toPublicKey()
+    publicKey = publicKey.toRsaPublicKey()
 )
 
 internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
