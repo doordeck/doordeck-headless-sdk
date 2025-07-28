@@ -64,7 +64,7 @@ internal fun String.toInstant(): Instant {
 }
 internal fun Double.toInstant(): Instant = Instant.fromEpochSeconds(toLong())
 
-internal fun String.toInetAddress(): InetAddress = InetAddress.ofLiteral(this)
+internal fun String.toInetAddress(): InetAddress = InetAddress.getByName(this)
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.

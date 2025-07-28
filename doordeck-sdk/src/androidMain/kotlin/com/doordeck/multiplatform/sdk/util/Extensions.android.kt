@@ -25,7 +25,7 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     }
 }
 
-internal fun String.toUUID(): UUID = UUID.fromString(this)
+internal fun String.toUuid(): UUID = UUID.fromString(this)
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.
