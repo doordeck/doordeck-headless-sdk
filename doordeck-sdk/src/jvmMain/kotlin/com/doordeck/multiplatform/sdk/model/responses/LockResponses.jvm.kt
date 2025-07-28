@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toUuid
 import com.doordeck.multiplatform.sdk.util.toZoneId
-import com.doordeck.multiplatform.sdk.util.toDuration
+import com.doordeck.multiplatform.sdk.util.secondsToDuration
 import com.doordeck.multiplatform.sdk.util.toLocalDate
 import com.doordeck.multiplatform.sdk.util.toLocalTime
 import com.doordeck.multiplatform.sdk.util.toUri
@@ -168,11 +168,11 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
     favourite = favourite,
-    unlockTime = unlockTime?.toDuration()
+    unlockTime = unlockTime?.secondsToDuration()
 )
 
 internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
-    unlockTime = unlockTime.toDuration(),
+    unlockTime = unlockTime.secondsToDuration(),
     permittedAddresses = permittedAddresses.map { it.toInetAddress() },
     defaultName = defaultName,
     usageRequirements = usageRequirements?.toUsageRequirementsResponse(),

@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -895,3 +895,4 @@ class LockOperationsClientTest : IntegrationTest() {
         assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }
+ */

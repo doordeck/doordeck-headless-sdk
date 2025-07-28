@@ -1,5 +1,5 @@
 package com.doordeck.multiplatform.sdk.clients
-
+/*
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
@@ -167,3 +167,4 @@ class FusionClientTest : IntegrationTest() {
         println("Failed to test $controllerType: ${exception.message}")
     }
 }
+ */

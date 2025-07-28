@@ -43,11 +43,11 @@ private val DATE_FORMAT = LocalDate.Format { byUnicodePattern("yyyy-MM-dd") }
 internal fun String.toLocalTime(format: DateTimeFormat<LocalTime> = TIME_FORMAT): LocalTime = LocalTime.parse(this, format)
 internal fun LocalTime.toLocalTimeString(format: DateTimeFormat<LocalTime> = TIME_FORMAT): String = format.format(this)
 
-internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> =  DATE_FORMAT): LocalDate = LocalDate.parse(this, format)
-internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> =  DATE_FORMAT): String = format.format(this)
+internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> = DATE_FORMAT): LocalDate = LocalDate.parse(this, format)
+internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> = DATE_FORMAT): String = format.format(this)
 
-internal fun Double.toDuration(): Duration = toDuration(DurationUnit.SECONDS)
-internal fun Duration.toSeconds(): Int = toInt(DurationUnit.SECONDS)
+internal fun Double.secondsToDuration(): Duration = toDuration(DurationUnit.SECONDS)
+internal fun Duration.durationToSeconds(): Int = toInt(DurationUnit.SECONDS)
 
 internal fun String.toUri(): URI = URI.create(this)
 internal fun String.toUrl(): URL = toUri().toURL()

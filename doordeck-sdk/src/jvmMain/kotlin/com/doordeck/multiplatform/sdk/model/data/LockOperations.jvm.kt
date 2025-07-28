@@ -5,7 +5,7 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toLocalDateString
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
-import com.doordeck.multiplatform.sdk.util.toSeconds
+import com.doordeck.multiplatform.sdk.util.durationToSeconds
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -382,7 +382,7 @@ internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLoc
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        unlockDuration = unlockDuration.toSeconds()
+        unlockDuration = unlockDuration.durationToSeconds()
     )
 }
 
