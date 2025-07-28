@@ -20,9 +20,8 @@ import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
-import com.doordeck.multiplatform.sdk.randomDouble
+import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuid
-import com.doordeck.multiplatform.sdk.util.secondsToDuration
 import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.test.runTest
@@ -628,7 +627,7 @@ class LockOperationsApiTest : IntegrationTest() {
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
         ).certificateChain
-        val updatedUnlockDuration = randomDouble(1.0, 10.0).secondsToDuration()
+        val updatedUnlockDuration = Duration.parse("${randomInt(1, 10)}s")
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,

@@ -46,7 +46,7 @@ internal fun LocalTime.toLocalTimeString(format: DateTimeFormat<LocalTime> = TIM
 internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> = DATE_FORMAT): LocalDate = LocalDate.parse(this, format)
 internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> = DATE_FORMAT): String = format.format(this)
 
-internal fun Double.secondsToDuration(): Duration = toDuration(DurationUnit.SECONDS)
+internal fun Int.secondsToDuration(): Duration = toDuration(DurationUnit.SECONDS)
 internal fun Duration.durationToSeconds(): Int = toInt(DurationUnit.SECONDS)
 
 internal fun String.toUri(): URI = URI.create(this)

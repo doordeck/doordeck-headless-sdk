@@ -163,11 +163,11 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
     favourite = favourite,
-    unlockTime = unlockTime?.secondsToDuration()
+    unlockTime = unlockTime?.toInt()?.secondsToDuration()
 )
 
 internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
-    unlockTime = unlockTime.secondsToDuration(),
+    unlockTime = unlockTime.toInt().secondsToDuration(),
     permittedAddresses = permittedAddresses.map { it.toInetAddress() },
     defaultName = defaultName,
     usageRequirements = usageRequirements?.toUsageRequirementsResponse(),
