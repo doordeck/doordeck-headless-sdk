@@ -131,24 +131,18 @@ data class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
     val type: AuditEvent,
-    val issuer: AuditIssuerResponse,
-    val subject: AuditSubjectResponse? = null,
+    val issuer: AuditUserResponse,
+    val subject: AuditUserResponse? = null,
     val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
 @JsExport
-data class AuditIssuerResponse(
+data class AuditUserResponse(
     val userId: String,
     val email: String? = null,
+    val displayName: String? = null,
     val ip: String? = null
-)
-
-@JsExport
-data class AuditSubjectResponse(
-    val userId: String,
-    val email: String,
-    val displayName: String? = null
 )
 
 internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map { lock ->
@@ -273,21 +267,16 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = m
         deviceId = audit.deviceId,
         timestamp = audit.timestamp.toDouble(),
         type = audit.type,
-        issuer = audit.issuer.toAuditIssuerResponse(),
-        subject = audit.subject?.toAuditSubjectResponse(),
+        issuer = audit.issuer.toAuditUserResponse(),
+        subject = audit.subject?.toAuditUserResponse(),
         rejectionReason = audit.rejectionReason,
         rejected = audit.rejected
     )
 }
 
-internal fun BasicAuditIssuerResponse.toAuditIssuerResponse(): AuditIssuerResponse = AuditIssuerResponse(
-    userId = userId,
-    email = email,
-    ip = ip
-)
-
-internal fun BasicAuditSubjectResponse.toAuditSubjectResponse(): AuditSubjectResponse = AuditSubjectResponse(
+internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(
     userId = userId,
     email = email,
     displayName = displayName,
+    ip = ip
 )

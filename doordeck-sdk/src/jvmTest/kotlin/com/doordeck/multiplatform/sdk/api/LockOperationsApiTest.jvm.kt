@@ -459,7 +459,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // When
         LockOperationsApi.batchShareLock(
-            LockOperations.BatchShareLockOperation(
+            batchShareLockOperation = LockOperations.BatchShareLockOperation(
                 baseOperation = shareBaseOperation,
                 users = batchShareLock
             )

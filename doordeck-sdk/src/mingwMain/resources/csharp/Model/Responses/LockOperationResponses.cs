@@ -125,21 +125,15 @@ public class AuditResponse
     public string DeviceId { get; set; } = string.Empty;
     public double Timestamp { get; set; }
     public AuditEvent Type { get; set; }
-    public AuditIssuerResponse Issuer { get; set; } = new AuditIssuerResponse();
-    public AuditSubjectResponse? Subject { get; set; } = null;
+    public AuditUserResponse Issuer { get; set; } = new AuditUserResponse();
+    public AuditUserResponse? Subject { get; set; } = null;
     public bool Rejected { get; set; }
 }
 
-public class AuditIssuerResponse
+public class AuditUserResponse
 {
     public string UserId { get; set; } = string.Empty;
     public string? Email { get; set; } = null;
-    public string? Ip { get; set; } = null;
-}
-
-public class AuditSubjectResponse
-{
-    public string UserId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
     public string? DisplayName { get; set; } = null;
+    public string? Ip { get; set; } = null;
 }

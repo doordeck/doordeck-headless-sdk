@@ -132,22 +132,16 @@ internal data class BasicAuditResponse(
     val deviceId: String,
     val timestamp: String,
     val type: AuditEvent,
-    val issuer: BasicAuditIssuerResponse,
-    val subject: BasicAuditSubjectResponse? = null,
+    val issuer: BasicAuditUserResponse,
+    val subject: BasicAuditUserResponse? = null,
     val rejectionReason: String? = null,
     val rejected: Boolean
 )
 
 @Serializable
-internal data class BasicAuditIssuerResponse(
+internal data class BasicAuditUserResponse(
     val userId: String,
     val email: String? = null,
+    val displayName: String? = null,
     val ip: String? = null
-)
-
-@Serializable
-internal data class BasicAuditSubjectResponse(
-    val userId: String,
-    val email: String,
-    val displayName: String? = null
 )

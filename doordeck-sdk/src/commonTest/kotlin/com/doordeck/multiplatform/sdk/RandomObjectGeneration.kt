@@ -31,9 +31,8 @@ import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockB
 import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditIssuerResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicAuditSubjectResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicAuditUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAuthKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.ControllerResponse
@@ -254,21 +253,16 @@ internal fun randomAuditResponse(): BasicAuditResponse = BasicAuditResponse(
     deviceId = randomUuidString(),
     timestamp = randomString(),
     type = AuditEvent.entries.random(),
-    issuer = randomAuditIssuerResponse(),
-    subject = randomNullable { randomAuditSubjectResponse() },
+    issuer = randomAuditUserResponse(),
+    subject = randomNullable { randomAuditUserResponse() },
     rejectionReason = randomNullable { randomString() },
     rejected = randomBoolean()
 )
 
-internal fun randomAuditSubjectResponse(): BasicAuditSubjectResponse = BasicAuditSubjectResponse(
+internal fun randomAuditUserResponse(): BasicAuditUserResponse = BasicAuditUserResponse(
     userId = randomUuidString(),
     email = randomEmail(),
-    displayName = randomNullable { randomString() }
-)
-
-internal fun randomAuditIssuerResponse(): BasicAuditIssuerResponse = BasicAuditIssuerResponse(
-    userId = randomUuidString(),
-    email = randomNullable { randomEmail() },
+    displayName = randomNullable { randomString() },
     ip = randomNullable { randomIp() }
 )
 
