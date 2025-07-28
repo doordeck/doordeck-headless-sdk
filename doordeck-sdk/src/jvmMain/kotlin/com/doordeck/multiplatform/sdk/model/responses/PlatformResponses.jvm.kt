@@ -32,7 +32,6 @@ data class ApplicationResponse(
     val isDoordeckApplication: Boolean? = null
 )
 
-// TODO Uhm..!
 internal fun BasicAuthKeyResponse.toAuthKey(): JWK = JWK.parse(toJson())
 
 data class EmailPreferencesResponse(
