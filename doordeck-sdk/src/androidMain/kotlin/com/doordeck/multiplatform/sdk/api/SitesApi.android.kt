@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.clients.SitesClient
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.toLock
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
@@ -34,7 +34,7 @@ actual object SitesApi {
      */
     suspend fun getLocksForSite(siteId: String): List<SiteLocksResponse> {
         return SitesClient.getLocksForSiteRequest(siteId)
-            .toLock()
+            .toLockResponse()
     }
 
     /**
