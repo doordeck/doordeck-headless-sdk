@@ -11,9 +11,9 @@ import com.doordeck.multiplatform.sdk.model.data.BasicEd25519Key
 import com.doordeck.multiplatform.sdk.model.data.BasicEmailCallToAction
 import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.data.BasicRsaKey
-import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicEcKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicEd25519KeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
 import com.doordeck.multiplatform.sdk.platformType
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -210,7 +210,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.kid
-        }?.value as? Ed25519KeyResponse
+        }?.value as? BasicEd25519KeyResponse
         assertNotNull(actualEd25519Key)
         assertEquals(ed25519Key.use, actualEd25519Key.use)
         assertEquals(ed25519Key.kid, actualEd25519Key.kid)
@@ -240,7 +240,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.kid
-        }?.value as? RsaKeyResponse
+        }?.value as? BasicRsaKeyResponse
         assertNotNull(actualRsaKey)
         assertEquals(rsaKey.use, actualRsaKey.use)
         assertEquals(rsaKey.kid, actualRsaKey.kid)
@@ -266,7 +266,7 @@ class PlatformClientTest : IntegrationTest() {
         application = PlatformClient.getApplicationRequest(application.applicationId)
         val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.kid
-        }?.value as? EcKeyResponse
+        }?.value as? BasicEcKeyResponse
         assertNotNull(actualKeyEcKey)
         assertEquals(ecKey.use, actualKeyEcKey.use)
         assertEquals(ecKey.kid, actualKeyEcKey.kid)

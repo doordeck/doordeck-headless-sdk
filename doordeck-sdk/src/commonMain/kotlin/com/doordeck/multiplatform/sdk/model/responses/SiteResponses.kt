@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.model.responses
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class SiteResponse(
+internal data class BasicSiteResponse(
     val id: String,
     val name: String,
     val colour: String,
@@ -15,10 +15,10 @@ internal data class SiteResponse(
     val updated: String
 )
 
-internal typealias SiteLocksResponse = LockResponse
+internal typealias BasicSiteLocksResponse = BasicLockResponse
 
 @Serializable
-internal data class UserForSiteResponse(
+internal data class BasicUserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,

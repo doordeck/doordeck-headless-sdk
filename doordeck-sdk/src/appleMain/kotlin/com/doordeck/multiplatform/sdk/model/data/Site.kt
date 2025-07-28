@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserForSiteResponse
 
 data class Site(
     val id: String,
@@ -24,7 +24,7 @@ data class UserForSite(
     val orphan: Boolean
 )
 
-internal fun List<SiteResponse>.toSite(): List<Site> = map { site ->
+internal fun List<BasicSiteResponse>.toSite(): List<Site> = map { site ->
     Site(
         id = site.id,
         name = site.name,
@@ -38,7 +38,7 @@ internal fun List<SiteResponse>.toSite(): List<Site> = map { site ->
     )
 }
 
-internal fun List<UserForSiteResponse>.toUserForSite(): List<UserForSite> = map { user ->
+internal fun List<BasicUserForSiteResponse>.toUserForSite(): List<UserForSite> = map { user ->
     UserForSite(
         userId = user.userId,
         email = user.email,

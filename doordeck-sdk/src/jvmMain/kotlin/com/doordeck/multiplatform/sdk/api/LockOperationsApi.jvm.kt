@@ -11,23 +11,23 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
-import com.doordeck.multiplatform.sdk.model.data.Audit
-import com.doordeck.multiplatform.sdk.model.data.BatchUserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.Lock
-import com.doordeck.multiplatform.sdk.model.data.LockUser
-import com.doordeck.multiplatform.sdk.model.data.ShareableLock
-import com.doordeck.multiplatform.sdk.model.data.UserLock
-import com.doordeck.multiplatform.sdk.model.data.UserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.toAudit
-import com.doordeck.multiplatform.sdk.model.data.toBatchUserPublicKey
-import com.doordeck.multiplatform.sdk.model.data.toLock
-import com.doordeck.multiplatform.sdk.model.data.toLockUser
-import com.doordeck.multiplatform.sdk.model.data.toShareableLock
-import com.doordeck.multiplatform.sdk.model.data.toUserLock
-import com.doordeck.multiplatform.sdk.model.data.toUserPublicKey
+import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import kotlinx.datetime.Instant
 import java.net.InetAddress
-import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
@@ -38,33 +38,33 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
-    suspend fun getSingleLock(lockId: UUID): Lock {
+    suspend fun getSingleLock(lockId: UUID): LockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId.toString())
-            .toLock()
+            .toLockResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getSingleLock] returning [CompletableFuture].
      */
-    fun getSingleLockAsync(lockId: UUID): CompletableFuture<Lock> {
+    fun getSingleLockAsync(lockId: UUID): CompletableFuture<LockResponse> {
         return completableFuture { getSingleLock(lockId) }
     }
 
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    suspend fun getLockAuditTrail(lockId: UUID, start: Instant, end: Instant): List<Audit> {
+    suspend fun getLockAuditTrail(lockId: UUID, start: Instant, end: Instant): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(
             lockId = lockId.toString(),
-            start = start.epochSecond,
-            end = end.epochSecond
-        ).toAudit()
+            start = start.epochSeconds,
+            end = end.epochSeconds
+        ).toAuditResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: UUID, start: Instant, end: Instant): CompletableFuture<List<Audit>> {
+    fun getLockAuditTrailAsync(lockId: UUID, start: Instant, end: Instant): CompletableFuture<List<AuditResponse>> {
         return completableFuture {
             getLockAuditTrail(
                 lockId = lockId,
@@ -77,18 +77,18 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<Audit> {
+    suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(
             userId = userId.toString(),
-            start = start.epochSecond,
-            end = end.epochSecond
-        ).toAudit()
+            start = start.epochSeconds,
+            end = end.epochSeconds
+        ).toAuditResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: UUID, start: Instant, end: Instant): CompletableFuture<List<Audit>> {
+    fun getAuditForUserAsync(userId: UUID, start: Instant, end: Instant): CompletableFuture<List<AuditResponse>> {
         return completableFuture {
             getAuditForUser(
                 userId = userId,
@@ -101,30 +101,30 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
-    suspend fun getUsersForLock(lockId: UUID): List<UserLock> {
+    suspend fun getUsersForLock(lockId: UUID): List<UserLockResponse> {
         return LockOperationsClient.getUsersForLockRequest(lockId.toString())
-            .toUserLock()
+            .toUserLockResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUsersForLock] returning [CompletableFuture].
      */
-    fun getUsersForLockAsync(lockId: UUID): CompletableFuture<List<UserLock>> {
+    fun getUsersForLockAsync(lockId: UUID): CompletableFuture<List<UserLockResponse>> {
         return completableFuture { getUsersForLock(lockId) }
     }
 
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
-    suspend fun getLocksForUser(userId: UUID): LockUser {
+    suspend fun getLocksForUser(userId: UUID): LockUserResponse {
         return LockOperationsClient.getLocksForUserRequest(userId.toString())
-            .toLockUser()
+            .toLockUserResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getLocksForUser] returning [CompletableFuture].
      */
-    fun getLocksForUserAsync(userId: UUID): CompletableFuture<LockUser> {
+    fun getLocksForUserAsync(userId: UUID): CompletableFuture<LockUserResponse> {
         return completableFuture { getLocksForUser(userId) }
     }
 
@@ -244,151 +244,151 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
-    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKey {
+    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKey] returning [CompletableFuture].
      */
     @DoordeckOnly
-    suspend fun getUserPublicKeyAsync(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKey> {
+    suspend fun getUserPublicKeyAsync(userEmail: String, visitor: Boolean = false): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKey(userEmail, visitor) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
-    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKey {
+    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByEmail] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByEmailAsync(email: String): CompletableFuture<UserPublicKey> {
+    fun getUserPublicKeyByEmailAsync(email: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByEmail(email) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
-    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKey {
+    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByTelephone] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByTelephoneAsync(telephone: String): CompletableFuture<UserPublicKey> {
+    fun getUserPublicKeyByTelephoneAsync(telephone: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByTelephone(telephone) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
-    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKey {
+    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByLocalKey] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByLocalKeyAsync(localKey: String): CompletableFuture<UserPublicKey> {
+    fun getUserPublicKeyByLocalKeyAsync(localKey: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByLocalKey(localKey) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
-    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKey {
+    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByForeignKey] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByForeignKeyAsync(foreignKey: String): CompletableFuture<UserPublicKey> {
+    fun getUserPublicKeyByForeignKeyAsync(foreignKey: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByForeignKey(foreignKey) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
-    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKey {
+    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
-            .toUserPublicKey()
+            .toUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByIdentity] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKey> {
+    fun getUserPublicKeyByIdentityAsync(identity: String): CompletableFuture<UserPublicKeyResponse> {
         return completableFuture { getUserPublicKeyByIdentity(identity) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
-    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKey> {
+    suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
-            .toBatchUserPublicKey()
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByEmails] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByEmailsAsync(emails: List<String>): CompletableFuture<List<BatchUserPublicKey>> {
+    fun getUserPublicKeyByEmailsAsync(emails: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByEmails(emails) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
-    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKey> {
+    suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
-            .toBatchUserPublicKey()
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByTelephones] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByTelephonesAsync(telephones: List<String>): CompletableFuture<List<BatchUserPublicKey>> {
+    fun getUserPublicKeyByTelephonesAsync(telephones: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByTelephones(telephones) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
-    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKey> {
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
-            .toBatchUserPublicKey()
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByLocalKeys] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByLocalKeysAsync(localKeys: List<String>): CompletableFuture<List<BatchUserPublicKey>> {
+    fun getUserPublicKeyByLocalKeysAsync(localKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByLocalKeys(localKeys) }
     }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
-    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKey> {
+    suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
-            .toBatchUserPublicKey()
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getUserPublicKeyByForeignKeys] returning [CompletableFuture].
      */
-    fun getUserPublicKeyByForeignKeysAsync(foreignKeys: List<String>): CompletableFuture<List<BatchUserPublicKey>> {
+    fun getUserPublicKeyByForeignKeysAsync(foreignKeys: List<String>): CompletableFuture<List<BatchUserPublicKeyResponse>> {
         return completableFuture { getUserPublicKeyByForeignKeys(foreignKeys) }
     }
 
@@ -487,30 +487,30 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getPinnedLocksRequest
      */
-    suspend fun getPinnedLocks(): List<Lock> {
+    suspend fun getPinnedLocks(): List<LockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
-            .toLock()
+            .toLockResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getPinnedLocks] returning [CompletableFuture].
      */
-    fun getPinnedLocksAsync(): CompletableFuture<List<Lock>> {
+    fun getPinnedLocksAsync(): CompletableFuture<List<LockResponse>> {
         return completableFuture { getPinnedLocks() }
     }
 
     /**
      * @see LockOperationsClient.getShareableLocksRequest
      */
-    suspend fun getShareableLocks(): List<ShareableLock> {
+    suspend fun getShareableLocks(): List<ShareableLockResponse> {
         return LockOperationsClient.getShareableLocksRequest()
-            .toShareableLock()
+            .toShareableLockResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getShareableLocks] returning [CompletableFuture].
      */
-    fun getShareableLocksAsync(): CompletableFuture<List<ShareableLock>> {
+    fun getShareableLocksAsync(): CompletableFuture<List<ShareableLockResponse>> {
         return completableFuture { getShareableLocks() }
     }
 }

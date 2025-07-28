@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
-import com.doordeck.multiplatform.sdk.model.data.Token
-import com.doordeck.multiplatform.sdk.model.data.toToken
+import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.security.PublicKey
 import java.util.UUID
@@ -19,11 +19,11 @@ actual object AccountlessApi {
     suspend fun login(
         email: String,
         password: String
-    ): Token {
+    ): TokenResponse {
         return AccountlessClient.loginRequest(
             email = email,
             password = password
-        ).toToken()
+        ).toTokenResponse()
     }
 
     /**
@@ -32,7 +32,7 @@ actual object AccountlessApi {
     fun loginAsync(
         email: String,
         password: String
-    ): CompletableFuture<Token> {
+    ): CompletableFuture<TokenResponse> {
         return completableFuture {
             login(
                 email = email,
@@ -50,14 +50,14 @@ actual object AccountlessApi {
         displayName: String? = null,
         force: Boolean = false,
         publicKey: PublicKey? = null
-    ): Token {
+    ): TokenResponse {
         return AccountlessClient.registrationRequest(
             email = email,
             password = password,
             displayName = displayName,
             force = force,
             publicKey = publicKey?.encoded
-        ).toToken()
+        ).toTokenResponse()
     }
 
     /**
@@ -69,7 +69,7 @@ actual object AccountlessApi {
         displayName: String? = null,
         force: Boolean = false,
         publicKey: PublicKey? = null
-    ): CompletableFuture<Token> {
+    ): CompletableFuture<TokenResponse> {
         return completableFuture {
             registration(
                 email = email,

@@ -5,22 +5,22 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.responses.AuditIssuerResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.AuditSubjectResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LocationRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockSettingsResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.TimeRequirementResponse
-import com.doordeck.multiplatform.sdk.model.responses.UnlockBetweenSettingResponse
-import com.doordeck.multiplatform.sdk.model.responses.UsageRequirementsResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicAuditIssuerResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicAuditSubjectResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLocationRequirementResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockSettingsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockStateResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTimeRequirementResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUnlockBetweenSettingResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUsageRequirementsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserPublicKeyResponse
 
 @JsExport
 data class Lock(
@@ -167,11 +167,11 @@ data class AuditSubject(
     val displayName: String? = null
 )
 
-internal fun List<LockResponse>.toLock(): List<Lock> = map { lock ->
+internal fun List<BasicLockResponse>.toLock(): List<Lock> = map { lock ->
     lock.toLock()
 }
 
-internal fun LockResponse.toLock(): Lock = Lock(
+internal fun BasicLockResponse.toLock(): Lock = Lock(
     id = id,
     name = name,
     colour = colour,
@@ -184,7 +184,7 @@ internal fun LockResponse.toLock(): Lock = Lock(
     unlockTime = unlockTime
 )
 
-internal fun LockSettingsResponse.toLockSettings(): LockSettings = LockSettings(
+internal fun BasicLockSettingsResponse.toLockSettings(): LockSettings = LockSettings(
     unlockTime = unlockTime,
     permittedAddresses = permittedAddresses,
     defaultName = defaultName,
@@ -196,19 +196,19 @@ internal fun LockSettingsResponse.toLockSettings(): LockSettings = LockSettings(
     capabilities = capabilities
 )
 
-internal fun UsageRequirementsResponse.toUsageRequirements(): UsageRequirements = UsageRequirements(
+internal fun BasicUsageRequirementsResponse.toUsageRequirements(): UsageRequirements = UsageRequirements(
     time = time?.map { it.toTimeRequirement() },
     location = location?.toLocationRequirement()
 )
 
-internal fun TimeRequirementResponse.toTimeRequirement(): TimeRequirement = TimeRequirement(
+internal fun BasicTimeRequirementResponse.toTimeRequirement(): TimeRequirement = TimeRequirement(
     start = start,
     end = end,
     timezone = timezone,
     days = days
 )
 
-internal fun LocationRequirementResponse.toLocationRequirement(): LocationRequirement = LocationRequirement(
+internal fun BasicLocationRequirementResponse.toLocationRequirement(): LocationRequirement = LocationRequirement(
     latitude = latitude,
     longitude = longitude,
     enabled = enabled,
@@ -216,7 +216,7 @@ internal fun LocationRequirementResponse.toLocationRequirement(): LocationRequir
     accuracy = accuracy
 )
 
-internal fun UnlockBetweenSettingResponse.toUnlockBetweenSetting(): UnlockBetweenSetting = UnlockBetweenSetting(
+internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSetting(): UnlockBetweenSetting = UnlockBetweenSetting(
     start = start,
     end = end,
     timezone = timezone,
@@ -224,17 +224,17 @@ internal fun UnlockBetweenSettingResponse.toUnlockBetweenSetting(): UnlockBetwee
     exceptions = exceptions
 )
 
-internal fun LockStateResponse.toLockState(): LockState = LockState(
+internal fun BasicLockStateResponse.toLockState(): LockState = LockState(
     locked = locked,
     connected = connected,
 )
 
-internal fun UserPublicKeyResponse.toUserPublicKey(): UserPublicKey = UserPublicKey(
+internal fun BasicUserPublicKeyResponse.toUserPublicKey(): UserPublicKey = UserPublicKey(
     id = id,
     publicKey = publicKey
 )
 
-internal fun List<BatchUserPublicKeyResponse>.toBatchUserPublicKey(): List<BatchUserPublicKey> = map { user ->
+internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKey(): List<BatchUserPublicKey> = map { user ->
     BatchUserPublicKey(
         id = user.id,
         email = user.email,
@@ -244,14 +244,14 @@ internal fun List<BatchUserPublicKeyResponse>.toBatchUserPublicKey(): List<Batch
     )
 }
 
-internal fun List<ShareableLockResponse>.toShareableLock(): List<ShareableLock> = map { lock ->
+internal fun List<BasicShareableLockResponse>.toShareableLock(): List<ShareableLock> = map { lock ->
     ShareableLock(
         id = lock.id,
         name = lock.name
     )
 }
 
-internal fun List<UserLockResponse>.toUserLock(): List<UserLock> = map { user ->
+internal fun List<BasicUserLockResponse>.toUserLock(): List<UserLock> = map { user ->
     UserLock(
         userId = user.userId,
         email = user.email,
@@ -265,7 +265,7 @@ internal fun List<UserLockResponse>.toUserLock(): List<UserLock> = map { user ->
     )
 }
 
-internal fun LockUserResponse.toLockUser(): LockUser = LockUser(
+internal fun BasicLockUserResponse.toLockUser(): LockUser = LockUser(
     userId = userId,
     email = email,
     publicKey = publicKey,
@@ -277,14 +277,14 @@ internal fun LockUserResponse.toLockUser(): LockUser = LockUser(
     devices = devices.map { it.toLockUserDetails() }
 )
 
-internal fun LockUserDetailsResponse.toLockUserDetails(): LockUserDetails = LockUserDetails(
+internal fun BasicLockUserDetailsResponse.toLockUserDetails(): LockUserDetails = LockUserDetails(
     deviceId = deviceId,
     role = role,
     start = start,
     end = end
 )
 
-internal fun List<AuditResponse>.toAudit(): List<Audit> = map { audit ->
+internal fun List<BasicAuditResponse>.toAudit(): List<Audit> = map { audit ->
     Audit(
         deviceId = audit.deviceId,
         timestamp = audit.timestamp.toDouble(),
@@ -296,13 +296,13 @@ internal fun List<AuditResponse>.toAudit(): List<Audit> = map { audit ->
     )
 }
 
-internal fun AuditIssuerResponse.toAuditIssuer(): AuditIssuer = AuditIssuer(
+internal fun BasicAuditIssuerResponse.toAuditIssuer(): AuditIssuer = AuditIssuer(
     userId = userId,
     email = email,
     ip = ip
 )
 
-internal fun AuditSubjectResponse.toAuditSubject(): AuditSubject = AuditSubject(
+internal fun BasicAuditSubjectResponse.toAuditSubject(): AuditSubject = AuditSubject(
     userId = userId,
     email = email,
     displayName = displayName,

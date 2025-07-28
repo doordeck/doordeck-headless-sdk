@@ -272,7 +272,7 @@ object LockOperations {
         val lockId: UUID,
         val notBefore: Instant = Clock.System.now(),
         val issuedAt: Instant = Clock.System.now(),
-        val expiresAt: Instant = (Clock.System.now() + 1.minutes),
+        val expiresAt: Instant = Clock.System.now().plus(1.minutes),
         val jti: UUID = UUID.randomUUID()
     ) {
         class Builder {
@@ -282,7 +282,7 @@ object LockOperations {
             private var lockId: UUID? = null
             private var notBefore: Instant = Clock.System.now()
             private var issuedAt: Instant = Clock.System.now()
-            private var expiresAt: Instant = (Clock.System.now() + 1.minutes)
+            private var expiresAt: Instant = Clock.System.now().plus(1.minutes)
             private var jti: UUID = UUID.randomUUID()
 
             fun setUserId(userId: UUID?): Builder = apply { this.userId = userId }

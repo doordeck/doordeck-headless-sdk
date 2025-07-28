@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTileLocksResponse
 
 @JsExport
 data class TileLocks(
@@ -9,7 +9,7 @@ data class TileLocks(
     val deviceIds: List<String>
 )
 
-internal fun TileLocksResponse.toTileLocks(): TileLocks = TileLocks(
+internal fun BasicTileLocksResponse.toTileLocks(): TileLocks = TileLocks(
     siteId = siteId,
     tileId = tileId,
     deviceIds = deviceIds

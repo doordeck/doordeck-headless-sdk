@@ -7,9 +7,6 @@ import com.doordeck.multiplatform.sdk.model.data.UserForSite
 import com.doordeck.multiplatform.sdk.model.data.toLock
 import com.doordeck.multiplatform.sdk.model.data.toSite
 import com.doordeck.multiplatform.sdk.model.data.toUserForSite
-import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
-import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 
 /**
  * Platform-specific implementations of sites-related API calls.

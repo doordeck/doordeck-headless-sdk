@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 
 @JsExport
 data class Token(
@@ -31,23 +31,23 @@ data class RegisterEphemeralKeyWithSecondaryAuthentication(
     val method: TwoFactorMethod
 )
 
-internal fun TokenResponse.toToken(): Token = Token(
+internal fun BasicTokenResponse.toToken(): Token = Token(
     authToken = authToken,
     refreshToken = refreshToken
 )
 
-internal fun UserDetailsResponse.toUserDetails(): UserDetails = UserDetails(
+internal fun BasicUserDetailsResponse.toUserDetails(): UserDetails = UserDetails(
     email = email,
     displayName = displayName,
     emailVerified = emailVerified,
     publicKey = publicKey
 )
 
-internal fun RegisterEphemeralKeyResponse.toRegisterEphemeralKey(): RegisterEphemeralKey = RegisterEphemeralKey(
+internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKey(): RegisterEphemeralKey = RegisterEphemeralKey(
     certificateChain = certificateChain,
     userId = userId
 )
 
-internal fun RegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthentication(): RegisterEphemeralKeyWithSecondaryAuthentication = RegisterEphemeralKeyWithSecondaryAuthentication(
+internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthentication(): RegisterEphemeralKeyWithSecondaryAuthentication = RegisterEphemeralKeyWithSecondaryAuthentication(
     method = method
 )

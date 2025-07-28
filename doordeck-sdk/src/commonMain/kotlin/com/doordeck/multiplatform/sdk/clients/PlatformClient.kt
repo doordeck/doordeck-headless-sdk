@@ -26,9 +26,9 @@ import com.doordeck.multiplatform.sdk.model.requests.UpdateApplicationRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateApplicationSupportContactRequest
 import com.doordeck.multiplatform.sdk.model.requests.toAddAuthKeyRequest
 import com.doordeck.multiplatform.sdk.model.requests.toCreateApplicationRequest
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
-import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
-import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -62,13 +62,13 @@ internal object PlatformClient {
     /**
      * Lists all application's owned by the current user.
      *
-     * @return List of [ApplicationResponse].
+     * @return List of [BasicApplicationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun listApplicationsRequest(): List<ApplicationResponse> {
+    suspend fun listApplicationsRequest(): List<BasicApplicationResponse> {
         return CloudHttpClient.client.get(Paths.getListApplicationsPath()).body()
     }
 
@@ -76,13 +76,13 @@ internal object PlatformClient {
      * Retrieves the application by its application ID.
      *
      * @param applicationId The application's unique identifier.
-     * @return [ApplicationResponse].
+     * @return [BasicApplicationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationRequest(applicationId: String): ApplicationResponse {
+    suspend fun getApplicationRequest(applicationId: String): BasicApplicationResponse {
         return CloudHttpClient.client.get(Paths.getApplicationPath(applicationId)).body()
     }
 
@@ -256,7 +256,7 @@ internal object PlatformClient {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
+    suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): BasicGetLogoUploadUrlResponse {
         return CloudHttpClient.client.post(Paths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
             setBody(GetLogoUploadUrlRequest(contentType))
@@ -389,13 +389,13 @@ internal object PlatformClient {
      * Retrieves the details of all owners of an application, the requesting user should be the application owner.
      *
      * @param applicationId The application's unique identifier.
-     * @return List of [ApplicationOwnerDetailsResponse].
+     * @return List of [BasicApplicationOwnerDetailsResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<ApplicationOwnerDetailsResponse> {
+    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
     }
 }

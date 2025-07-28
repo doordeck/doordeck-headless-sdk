@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @Serializable
-internal data class ApplicationResponse(
+internal data class BasicApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
@@ -20,15 +20,15 @@ internal data class ApplicationResponse(
     val supportContact: String? = null,
     val appLink: String? = null,
     val slug: String? = null,
-    val emailPreferences: EmailPreferencesResponse,
-    val authKeys: Map<String, AuthKeyResponse>,
-    val oauth: OauthResponse? = null,
+    val emailPreferences: BasicEmailPreferencesResponse,
+    val authKeys: Map<String, BasicAuthKeyResponse>,
+    val oauth: BasicOauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
 
 @Serializable
 @JsonClassDiscriminator("kty")
-internal sealed interface AuthKeyResponse {
+internal sealed interface BasicAuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
@@ -44,7 +44,7 @@ internal sealed interface AuthKeyResponse {
 
 @Serializable
 @SerialName("RSA")
-internal data class RsaKeyResponse(
+internal data class BasicRsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -60,11 +60,11 @@ internal data class RsaKeyResponse(
     override val iat: Int? = null,
     val e: String,
     val n: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
 @Serializable
 @SerialName("EC")
-internal data class EcKeyResponse(
+internal data class BasicEcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -81,11 +81,11 @@ internal data class EcKeyResponse(
     val crv: String,
     val x: String,
     val y: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
 @Serializable
 @SerialName("OKP")
-internal data class Ed25519KeyResponse(
+internal data class BasicEd25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -102,34 +102,34 @@ internal data class Ed25519KeyResponse(
     val d: String? = null,
     val crv: String,
     val x: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
 @Serializable
-internal data class EmailPreferencesResponse(
+internal data class BasicEmailPreferencesResponse(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String,
     val secondaryColour: String,
     val onlySendEssentialEmails: Boolean? = null,
-    val callToAction: EmailCallToActionResponse? = null,
+    val callToAction: BasicEmailCallToActionResponse? = null,
 )
 
 @Serializable
-internal data class EmailCallToActionResponse(
+internal data class BasicEmailCallToActionResponse(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
 @Serializable
-internal data class OauthResponse(
+internal data class BasicOauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
     val grantType: GrantType
 )
 
 @Serializable
-internal data class ApplicationOwnerDetailsResponse(
+internal data class BasicApplicationOwnerDetailsResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
@@ -138,6 +138,6 @@ internal data class ApplicationOwnerDetailsResponse(
 )
 
 @Serializable
-internal data class GetLogoUploadUrlResponse(
+internal data class BasicGetLogoUploadUrlResponse(
     val uploadUrl: String
 )

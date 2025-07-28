@@ -7,8 +7,8 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
 internal data class BasicTimeRequirement(
-    val start: String, // HH:mm
-    val end: String, // HH:mm
+    val start: String,
+    val end: String,
     val timezone: String,
     val days: List<DayOfWeek>
 )
@@ -22,8 +22,8 @@ internal data class BasicLocationRequirement(
 )
 
 internal data class BasicUnlockBetween(
-    val start: String, // HH:mm
-    val end: String, // HH:mm
+    val start: String,
+    val end: String,
     val timezone: String,
     val days: List<DayOfWeek>,
     val exceptions: List<String>? = null

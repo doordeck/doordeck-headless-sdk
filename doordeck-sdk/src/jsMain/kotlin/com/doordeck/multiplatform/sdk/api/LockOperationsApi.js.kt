@@ -25,12 +25,6 @@ import com.doordeck.multiplatform.sdk.model.data.toLockUser
 import com.doordeck.multiplatform.sdk.model.data.toShareableLock
 import com.doordeck.multiplatform.sdk.model.data.toUserLock
 import com.doordeck.multiplatform.sdk.model.data.toUserPublicKey
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
 
