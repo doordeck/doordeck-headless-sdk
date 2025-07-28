@@ -23,6 +23,8 @@ import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.util.toInetAddress
+import com.doordeck.multiplatform.sdk.util.toLocalTime
+import com.doordeck.multiplatform.sdk.util.toLocalTimeString
 import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -171,8 +173,8 @@ class LockOperationsApiTest : IntegrationTest() {
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
         assertNotNull(actualTime)
-        assertEquals(addedTimeRestriction.start, actualTime.start)
-        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.start.toLocalTimeString().toLocalTime(), actualTime.start)
+        assertEquals(addedTimeRestriction.end.toLocalTimeString().toLocalTime(), actualTime.end)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
@@ -712,8 +714,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -775,8 +777,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
