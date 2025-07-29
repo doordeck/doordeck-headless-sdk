@@ -2,15 +2,15 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
-import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.requests.EnableDoorRequest
 import com.doordeck.multiplatform.sdk.model.requests.FusionLoginRequest
 import com.doordeck.multiplatform.sdk.model.requests.IntegrationConfigurationRequest
-import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicDoorStateResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -31,11 +31,11 @@ internal object FusionClient {
      * @return [FusionLoginResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun loginRequest(email: String, password: String): FusionLoginResponse {
+    suspend fun loginRequest(email: String, password: String): BasicFusionLoginResponse {
         return FusionHttpClient.client.post(FusionPaths.getLoginPath()) {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
-        }.body<FusionLoginResponse>().also {
+        }.body<BasicFusionLoginResponse>().also {
             Context.setFusionAuthToken(it.authToken)
         }
     }
@@ -46,7 +46,7 @@ internal object FusionClient {
      * @return [IntegrationTypeResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun getIntegrationTypeRequest(): IntegrationTypeResponse {
+    suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
         return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath()).body()
     }
 
@@ -56,7 +56,7 @@ internal object FusionClient {
      * @return List of [IntegrationConfigurationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun getIntegrationConfigurationRequest(type: String): List<IntegrationConfigurationResponse> {
+    suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
         return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
             setBody(IntegrationConfigurationRequest(type))
@@ -70,7 +70,7 @@ internal object FusionClient {
      * @param controller The controller to be enabled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun enableDoorRequest(name: String, siteId: String, controller: Fusion.LockController) {
+    suspend fun enableDoorRequest(name: String, siteId: String, controller: BasicLockController) {
         FusionHttpClient.client.post(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId, controller))
@@ -92,7 +92,7 @@ internal object FusionClient {
      * @return [DoorStateResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun getDoorStatusRequest(deviceId: String): DoorStateResponse {
+    suspend fun getDoorStatusRequest(deviceId: String): BasicDoorStateResponse {
         return FusionHttpClient.client.get(FusionPaths.getDoorStatusPath(deviceId)).body()
     }
 

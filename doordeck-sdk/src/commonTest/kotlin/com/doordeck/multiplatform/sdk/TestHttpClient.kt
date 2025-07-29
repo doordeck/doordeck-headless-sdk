@@ -15,11 +15,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetai
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
@@ -61,8 +57,8 @@ private val TEST_ENGINE = MockEngine { request ->
                 Paths.getLocksForSitePath(DEFAULT_SITE_ID) -> respondContent(LOCKS_FOR_SITE_RESPONSE)
                 Paths.getUsersForSitePath(DEFAULT_SITE_ID) -> respondContent(USER_FOR_SITE_RESPONSE)
                 Paths.getUserDetailsPath() -> respondContent(USER_DETAILS_RESPONSE)
-                FusionPaths.getConfigurationTypePath() -> respondContent(INTEGRATION_TYPE_RESPONSE)
-                FusionPaths.getDoorStatusPath(DEFAULT_DEVICE_ID) -> respondContent(DOOR_STATE_RESPONSE)
+                //FusionPaths.getConfigurationTypePath() -> respondContent(INTEGRATION_TYPE_RESPONSE)
+                //FusionPaths.getDoorStatusPath(DEFAULT_DEVICE_ID) -> respondContent(DOOR_STATE_RESPONSE)
                 Paths.getListApplicationsPath() -> respondContent(APPLICATION_LIST_RESPONSE)
                 Paths.getApplicationPath(DEFAULT_APPLICATION_ID) -> respondContent(APPLICATION_RESPONSE)
                 Paths.getApplicationOwnersDetailsPath(DEFAULT_APPLICATION_ID) -> respondContent(APPLICATION_OWNER_DETAILS_RESPONSE)
@@ -102,8 +98,8 @@ private val TEST_ENGINE = MockEngine { request ->
                 Paths.getVerifyEphemeralKeyRegistrationPath() -> respondContent(REGISTER_EPHEMERAL_KEY_RESPONSE)
                 Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath() -> respondContent(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE)
                 Paths.getLogoUploadUrlPath(DEFAULT_APPLICATION_ID) -> respondContent(LOGO_UPLOAD_URL_RESPONSE)
-                FusionPaths.getLoginPath() -> respondContent(FUSION_LOGIN_RESPONSE)
-                FusionPaths.getIntegrationConfiguration() -> respondContent(INTEGRATION_CONFIGURATION_RESPONSE)
+               // FusionPaths.getLoginPath() -> respondContent(FUSION_LOGIN_RESPONSE)
+                //FusionPaths.getIntegrationConfiguration() -> respondContent(INTEGRATION_CONFIGURATION_RESPONSE)
                 Paths.getUserPublicKeyPath() -> if (request.isVersion(ApiVersion.VERSION_2)) {
                     respondContent(BATCH_USER_PUBLIC_KEY_RESPONSE)
                 } else {
@@ -163,10 +159,10 @@ internal val REGISTER_EPHEMERAL_KEY_RESPONSE: BasicRegisterEphemeralKeyResponse 
 internal val REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE: BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse = randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
 internal val USER_DETAILS_RESPONSE: BasicUserDetailsResponse = randomUserDetailsResponse()
 internal val LOGO_UPLOAD_URL_RESPONSE: BasicGetLogoUploadUrlResponse = randomGetLogoUploadUrlResponse()
-internal val FUSION_LOGIN_RESPONSE: FusionLoginResponse = randomFusionLoginResponse()
-internal val INTEGRATION_TYPE_RESPONSE: IntegrationTypeResponse = randomIntegrationTypeResponse()
-internal val INTEGRATION_CONFIGURATION_RESPONSE: List<IntegrationConfigurationResponse> = (1..3).map { randomIntegrationConfigurationResponse() }
-internal val DOOR_STATE_RESPONSE: DoorStateResponse = randomDoorStateResponse()
+//internal val FUSION_LOGIN_RESPONSE: FusionLoginResponse = randomFusionLoginResponse()
+//internal val INTEGRATION_TYPE_RESPONSE: IntegrationTypeResponse = randomIntegrationTypeResponse()
+//internal val INTEGRATION_CONFIGURATION_RESPONSE: List<IntegrationConfigurationResponse> = (1..3).map { randomIntegrationConfigurationResponse() }
+//internal val DOOR_STATE_RESPONSE: DoorStateResponse = randomDoorStateResponse()
 internal val APPLICATION_RESPONSE: BasicApplicationResponse = randomApplicationResponse()
 internal val APPLICATION_LIST_RESPONSE = (1..3).map { randomApplicationResponse() }
 internal val APPLICATION_OWNER_DETAILS_RESPONSE: List<BasicApplicationOwnerDetailsResponse> = (1..3).map { randomApplicationOwnerDetailsResponse() }

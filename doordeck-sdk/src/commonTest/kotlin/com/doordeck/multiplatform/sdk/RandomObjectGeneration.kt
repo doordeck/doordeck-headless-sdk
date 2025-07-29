@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk
 import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_UPLOAD_URL
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
@@ -35,17 +34,11 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicAuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAuditUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAuthKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicBatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.ControllerResponse
-import com.doordeck.multiplatform.sdk.model.responses.DiscoveredDeviceResponse
-import com.doordeck.multiplatform.sdk.model.responses.DoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEd25519KeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEmailCallToActionResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEmailPreferencesResponse
-import com.doordeck.multiplatform.sdk.model.responses.FusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationConfigurationResponse
-import com.doordeck.multiplatform.sdk.model.responses.IntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLocationRequirementResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockSettingsResponse
@@ -56,8 +49,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicOauthResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.ServiceStateResponse
-import com.doordeck.multiplatform.sdk.model.responses.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicSiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicSiteResponse
@@ -103,7 +94,7 @@ internal fun randomRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): Ba
 /**
  * Fusion responses
  */
-internal fun randomFusionLoginResponse(): FusionLoginResponse = FusionLoginResponse(
+/*internal fun randomFusionLoginResponse(): FusionLoginResponse = FusionLoginResponse(
     authToken = randomString()
 )
 
@@ -137,7 +128,7 @@ internal fun randomDiscoveredDeviceResponse(): DiscoveredDeviceResponse = Discov
 )
 
 internal fun randomFusionController(): Fusion.LockController = Fusion.DemoController()
-
+*/
 /**
  * Lock operation responses
  */
