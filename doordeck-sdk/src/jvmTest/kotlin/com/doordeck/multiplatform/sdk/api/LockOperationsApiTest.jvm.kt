@@ -20,6 +20,7 @@ import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.util.toInetAddress
@@ -31,7 +32,6 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.net.InetAddress
-import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -91,7 +91,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldUpdateLockColour() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockColour = "#${Random.nextInt(111111, 999999)}"
+        val updatedLockColour = "#${randomInt(111111, 999999)}"
 
         // When
         LockOperationsApi.updateLockColour(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockColour)
@@ -194,11 +194,11 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldUpdateLockSettingLocationRestrictions
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val addedLocationRestriction = LockOperations.LocationRequirement(
-            latitude = Random.nextDouble(-90.0, 90.0),
-            longitude = Random.nextDouble(-180.0, 180.0),
+            latitude = randomDouble(-90.0, 90.0),
+            longitude = randomDouble(-180.0, 180.0),
             enabled = true,
-            radius = Random.nextInt(1, 100),
-            accuracy = Random.nextInt(1, 100)
+            radius = randomInt(1, 100),
+            accuracy = randomInt(1, 100)
         )
 
         // When

@@ -25,8 +25,10 @@ actual object FusionApi {
      */
     @DoordeckOnly
     suspend fun login(email: String, password: String): FusionLoginResponse {
-        return FusionClient.loginRequest(email, password)
-            .toFusionLoginResponse()
+        return FusionClient.loginRequest(
+            email = email,
+            password = password
+        ).toFusionLoginResponse()
     }
 
     /**
@@ -34,7 +36,12 @@ actual object FusionApi {
      */
     @DoordeckOnly
     fun loginAsync(email: String, password: String): CompletableFuture<FusionLoginResponse> {
-        return completableFuture { login(email, password) }
+        return completableFuture {
+            login(
+                email = email,
+                password = password
+            )
+        }
     }
 
     /**
@@ -76,15 +83,29 @@ actual object FusionApi {
      */
     @DoordeckOnly
     suspend fun enableDoor(name: String, siteId: UUID, controller: FusionOperations.LockController) {
-        return FusionClient.enableDoorRequest(name, siteId.toString(), controller.toBasicLockController())
+        return FusionClient.enableDoorRequest(
+            name = name,
+            siteId = siteId.toString(),
+            controller = controller.toBasicLockController()
+        )
     }
 
     /**
      * Async variant of [FusionApi.enableDoor] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun enableDoorAsync(name: String, siteId: UUID, controller: FusionOperations.LockController): CompletableFuture<Unit> {
-        return completableFuture { enableDoor(name, siteId, controller) }
+    fun enableDoorAsync(
+        name: String,
+        siteId: UUID,
+        controller: FusionOperations.LockController
+    ): CompletableFuture<Unit> {
+        return completableFuture {
+            enableDoor(
+                name = name,
+                siteId = siteId,
+                controller = controller
+            )
+        }
     }
 
     /**

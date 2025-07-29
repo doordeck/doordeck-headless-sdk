@@ -18,11 +18,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(
-        applicationId: UUID,
-        contentType: String,
-        image: ByteArray
-    ) {
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: ByteArray) {
         return HelperClient.uploadPlatformLogoRequest(
             applicationId = applicationId.toString(),
             contentType = contentType,
@@ -33,11 +29,7 @@ actual object HelperApi {
     /**
      * Async variant of [HelperApi.uploadPlatformLogo] returning [CompletableFuture].
      */
-    fun uploadPlatformLogoAsync(
-        applicationId: UUID,
-        contentType: String,
-        image: ByteArray
-    ): CompletableFuture<Unit> {
+    fun uploadPlatformLogoAsync(applicationId: UUID, contentType: String, image: ByteArray): CompletableFuture<Unit> {
         return completableFuture {
             uploadPlatformLogo(
                 applicationId = applicationId,
@@ -50,10 +42,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedLoginRequest
      */
-    suspend fun assistedLogin(
-        email: String,
-        password: String
-    ): AssistedLoginResponse {
+    suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse {
         return HelperClient.assistedLoginRequest(
             email = email,
             password = password
@@ -63,10 +52,7 @@ actual object HelperApi {
     /**
      * Async variant of [HelperApi.assistedLogin] returning [CompletableFuture].
      */
-    fun assistedLoginAsync(
-        email: String,
-        password: String
-    ): CompletableFuture<AssistedLoginResponse> {
+    fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse> {
         return completableFuture {
             assistedLogin(
                 email = email,
@@ -106,12 +92,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    suspend fun assistedRegister(
-        email: String,
-        password: String,
-        displayName: String? = null,
-        force: Boolean = false
-    ) {
+    suspend fun assistedRegister(email: String, password: String, displayName: String? = null, force: Boolean = false) {
         return HelperClient.assistedRegisterRequest(
             email = email,
             password = password,

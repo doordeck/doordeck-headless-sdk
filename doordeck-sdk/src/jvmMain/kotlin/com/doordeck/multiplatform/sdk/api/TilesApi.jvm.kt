@@ -31,11 +31,7 @@ actual object TilesApi {
      * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(
-        tileId: UUID,
-        siteId: UUID,
-        lockIds: List<UUID>
-    ) {
+    suspend fun associateMultipleLocks(tileId: UUID, siteId: UUID, lockIds: List<UUID>) {
         return TilesClient.associateMultipleLocksRequest(
             tileId = tileId.toString(),
             siteId = siteId.toString(),
@@ -47,11 +43,7 @@ actual object TilesApi {
      * Async variant of [TilesApi.associateMultipleLocks] returning [CompletableFuture].
      */
     @SiteAdmin
-    fun associateMultipleLocksAsync(
-        tileId: UUID,
-        siteId: UUID,
-        lockIds: List<UUID>
-    ): CompletableFuture<Unit> {
+    fun associateMultipleLocksAsync(tileId: UUID, siteId: UUID, lockIds: List<UUID>): CompletableFuture<Unit> {
         return completableFuture {
             associateMultipleLocks(
                 tileId = tileId,

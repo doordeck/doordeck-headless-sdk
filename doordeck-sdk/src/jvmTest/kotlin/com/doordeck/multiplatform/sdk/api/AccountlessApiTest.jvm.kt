@@ -26,6 +26,7 @@ class AccountlessApiTest : IntegrationTest() {
         assertTrue { response.refreshToken.isNotEmpty() }
         assertEquals(response.authToken, ContextManager.getCloudAuthToken())
         assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
+        assertEquals(TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
     }
 
     @Test
@@ -42,6 +43,7 @@ class AccountlessApiTest : IntegrationTest() {
         assertTrue { response.refreshToken.isNotEmpty() }
         assertEquals(response.authToken, ContextManager.getCloudAuthToken())
         assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
+        assertEquals(newUserEmail, ContextManager.getUserEmail())
 
         // Given - shouldDelete
         // When
@@ -50,6 +52,11 @@ class AccountlessApiTest : IntegrationTest() {
         // Then
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
+        assertNull(ContextManager.getFusionAuthToken())
+        assertNull(ContextManager.getUserId())
+        assertNull(ContextManager.getUserEmail())
+        assertNull(ContextManager.getCertificateChain())
+        assertNull(ContextManager.getKeyPair())
         assertFails {
             AccountlessApi.login(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }

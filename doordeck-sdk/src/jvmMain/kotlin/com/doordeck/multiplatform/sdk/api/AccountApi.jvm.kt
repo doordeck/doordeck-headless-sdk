@@ -160,10 +160,7 @@ actual object AccountApi {
      * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
-    suspend fun changePassword(
-        oldPassword: String,
-        newPassword: String
-    ) {
+    suspend fun changePassword(oldPassword: String, newPassword: String) {
         return AccountClient.changePasswordRequest(
             oldPassword = oldPassword,
             newPassword = newPassword
@@ -174,10 +171,7 @@ actual object AccountApi {
      * Async variant of [AccountApi.changePassword] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun changePasswordAsync(
-        oldPassword: String,
-        newPassword: String
-    ): CompletableFuture<Unit> {
+    fun changePasswordAsync(oldPassword: String, newPassword: String): CompletableFuture<Unit> {
         return completableFuture {
             changePassword(
                 oldPassword = oldPassword,

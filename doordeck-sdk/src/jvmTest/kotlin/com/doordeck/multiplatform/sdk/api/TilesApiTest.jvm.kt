@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertTrue
 
@@ -24,6 +25,8 @@ class TilesApiTest : IntegrationTest() {
         val locks = TilesApi.getLocksBelongingToTile(PLATFORM_TEST_MAIN_TILE_ID)
 
         // Then
+        assertEquals(PLATFORM_TEST_MAIN_SITE_ID, locks.siteId)
+        assertEquals(PLATFORM_TEST_MAIN_TILE_ID, locks.tileId)
         assertTrue { locks.deviceIds.contains(PLATFORM_TEST_MAIN_LOCK_ID) }
     }
 

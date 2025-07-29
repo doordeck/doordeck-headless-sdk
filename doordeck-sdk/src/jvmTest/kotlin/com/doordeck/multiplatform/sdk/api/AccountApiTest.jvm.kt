@@ -57,7 +57,7 @@ class AccountApiTest : IntegrationTest() {
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
-        assertEquals(result.userId, ContextManager.getUserId())
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
         assertEquals(result.certificateChain, ContextManager.getCertificateChain())
         assertEquals(publicKey, ContextManager.getKeyPair()?.public)
         assertEquals(privateKey, ContextManager.getKeyPair()?.private)
@@ -104,5 +104,9 @@ class AccountApiTest : IntegrationTest() {
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
         assertNull(ContextManager.getFusionAuthToken())
+        assertNull(ContextManager.getUserId())
+        assertNull(ContextManager.getUserEmail())
+        assertNull(ContextManager.getCertificateChain())
+        assertNull(ContextManager.getKeyPair())
     }
 }

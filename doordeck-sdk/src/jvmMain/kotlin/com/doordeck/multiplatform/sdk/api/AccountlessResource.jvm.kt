@@ -16,10 +16,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.loginRequest
      */
-    suspend fun login(
-        email: String,
-        password: String
-    ): TokenResponse {
+    suspend fun login(email: String, password: String): TokenResponse {
         return AccountlessClient.loginRequest(
             email = email,
             password = password
@@ -29,10 +26,7 @@ actual object AccountlessApi {
     /**
      * Async variant of [AccountlessApi.login] returning [CompletableFuture].
      */
-    fun loginAsync(
-        email: String,
-        password: String
-    ): CompletableFuture<TokenResponse> {
+    fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
         return completableFuture {
             login(
                 email = email,
@@ -112,11 +106,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordResetVerify(
-        userId: UUID,
-        token: String,
-        password: String
-    ) {
+    suspend fun passwordResetVerify(userId: UUID, token: String, password: String) {
         return AccountlessClient.passwordResetVerifyRequest(
             userId = userId.toString(),
             token = token,
@@ -127,11 +117,7 @@ actual object AccountlessApi {
     /**
      * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
      */
-    fun passwordResetVerifyAsync(
-        userId: UUID,
-        token: String,
-        password: String
-    ): CompletableFuture<Unit> {
+    fun passwordResetVerifyAsync(userId: UUID, token: String, password: String): CompletableFuture<Unit> {
         return completableFuture {
             passwordResetVerify(
                 userId = userId,
