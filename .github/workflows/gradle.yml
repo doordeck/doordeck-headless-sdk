@@ -27,9 +27,9 @@ jobs:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
-#          - name: Android
-#            test: testReleaseUnitTest
-#            os: ubuntu-latest
+          - name: Android
+            test: testReleaseUnitTest
+            os: ubuntu-latest
 #          - name: JS
 #            test: kotlinUpgradeYarnLock jsTest
 #            os: ubuntu-latest

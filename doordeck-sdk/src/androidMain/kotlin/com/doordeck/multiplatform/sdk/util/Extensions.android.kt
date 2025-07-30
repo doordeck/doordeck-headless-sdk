@@ -9,7 +9,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
-import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
@@ -24,8 +23,6 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
         }
     }
 }
-
-internal fun String.toUuid(): UUID = UUID.fromString(this)
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.

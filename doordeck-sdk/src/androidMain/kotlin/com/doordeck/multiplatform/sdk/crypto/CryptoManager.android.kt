@@ -35,12 +35,16 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateRawKeyPair(): Crypto.KeyPair {
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
         val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
         return Crypto.KeyPair(
             private = key.private.encoded,
             public = key.public.encoded
         )
+    }
+
+    fun generateKeyPair(): Crypto.KeyPair {
+        return generateRawKeyPair()
     }
 
     internal fun ByteArray.toPublicKey(): PublicKey {
