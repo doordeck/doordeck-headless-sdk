@@ -32,12 +32,16 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateRawKeyPair(): Crypto.KeyPair {
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
         val keyPair = Signature.keypair()
         return Crypto.KeyPair(
             private = keyPair.secretKey.toByteArray(),
             public = keyPair.publicKey.toByteArray()
         )
+    }
+
+    fun generateKeyPair(): Crypto.KeyPair {
+        return generateRawKeyPair()
     }
 
     /**
