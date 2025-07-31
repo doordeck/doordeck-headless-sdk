@@ -114,7 +114,7 @@ public class OauthResponse
 {
     public string AuthorizationEndpoint { get; set; } = string.Empty;
     public string ClientId { get; set; } = string.Empty;
-    public string GrantType { get; set; } = string.Empty;
+    public GrantType GrantType { get; set; }
 }
 
 public class ApplicationOwnerDetailsResponse

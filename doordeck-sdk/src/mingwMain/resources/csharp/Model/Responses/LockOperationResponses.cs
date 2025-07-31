@@ -38,7 +38,7 @@ public class TimeRequirementResponse
     public string Start { get; set; } = string.Empty;
     public string End { get; set; } = string.Empty;
     public string Timezone { get; set; } = string.Empty;
-    public List<string> Days { get; set; } = [];
+    public List<DayOfWeek> Days { get; set; } = [];
 }
 
 public class LocationRequirementResponse
@@ -55,7 +55,7 @@ public class UnlockBetweenSettingResponse
     public string Start { get; set; } = string.Empty;
     public string End { get; set; } = string.Empty;
     public string Timezone { get; set; } = string.Empty;
-    public List<string> Days { get; set; } = [];
+    public List<DayOfWeek> Days { get; set; } = [];
     public List<string>? Exceptions { get; set; } = null;
 }
 
