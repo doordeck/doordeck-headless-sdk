@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -31,14 +32,14 @@ import io.ktor.client.request.setBody
  */
 internal object AccountClient {
     /**
-     * Requests a new access token using a refresh token and stores both the access and refresh tokens in [ContextManagerImpl].
+     * Requests a new access token using a refresh token and stores both the access and refresh tokens in [Context].
      *
-     * @param refreshToken The refresh token to use for the request. If null, uses the refresh token from [ContextManagerImpl].
+     * @param refreshToken The refresh token to use for the request. If null, uses the refresh token from [Context].
      * @return [BasicTokenResponse].
-     * @throws MissingContextFieldException if no refresh token is available (when [refreshToken] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no refresh token is available (when [refreshToken] is null and [Context] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/refres-token">API Doc</a>
      */
     @DoordeckOnly
     suspend fun refreshTokenRequest(refreshToken: String? = null): BasicTokenResponse {
@@ -56,11 +57,11 @@ internal object AccountClient {
     }
 
     /**
-     * Logs out the current user and resets the [ContextManagerImpl].
+     * Logs out the current user and resets the [Context].
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/logout">API Doc</a>
      */
     suspend fun logoutRequest() {
         CloudHttpClient.client.post(Paths.getLogoutPath()) {
@@ -70,18 +71,18 @@ internal object AccountClient {
     }
 
     /**
-     * Registers an ephemeral key and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
-     * Also marks the key pair as verified in [ContextManagerImpl].
+     * Registers an ephemeral key and stores the user's ID and the certificate chain from the response in [Context].
+     * Also marks the key pair as verified in [Context].
      *
-     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @param publicKey The public key to use for the request. If null, uses the public key from [Context].
      * @param privateKey The private key to be stored alongside the provided public key.
-     *  This private key is not used in the request. It is only persisted in the [ContextManagerImpl].
-     *  This value should only be provided if the private key isn't already stored in the [ContextManagerImpl].
+     *  This private key is not used in the request. It is only persisted in the [Context].
+     *  This value should only be provided if the private key isn't already stored in the [Context].
      * @return [BasicRegisterEphemeralKeyResponse].
-     * @throws MissingContextFieldException if no public/private keys are available (when [publicKey] or [privateKey] are null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public/private keys are available (when [publicKey] or [privateKey] are null and [Context] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key">API Doc</a>
      */
     suspend fun registerEphemeralKeyRequest(
         publicKey: ByteArray? = null,
@@ -109,13 +110,13 @@ internal object AccountClient {
     /**
      * Registers an ephemeral key with secondary authentication
      *
-     * @param publicKey The public key to use for the request. If null, uses the public key from [ContextManagerImpl].
+     * @param publicKey The public key to use for the request. If null, uses the public key from [Context].
      * @param method The preferred two factor method. If null the server will decide the best method.
      * @return [BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse].
-     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [ContextManagerImpl] has none).
+     * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [Context] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
         publicKey: ByteArray? = null,
@@ -136,18 +137,18 @@ internal object AccountClient {
     }
 
     /**
-     * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [ContextManagerImpl].
-     * Also marks the key pair as verified in [ContextManagerImpl].
+     * Verifies the ephemeral key registration and stores the user's ID and the certificate chain from the response in [Context].
+     * Also marks the key pair as verified in [Context].
      *
      * @param code The two-factor code.
      * @param publicKey The public key to be stored alongside the provided private key.
-     *  This public key is not used in the request. It is only persisted in the [ContextManagerImpl].
-     *  This value should only be provided if the public key isn't already stored in the [ContextManagerImpl].
-     * @param privateKey The private key to use for the request. If null, uses the private key from [ContextManagerImpl].
-     * @throws MissingContextFieldException if no private key is available (when [privateKey] is null and [ContextManagerImpl] has none).
+     *  This public key is not used in the request. It is only persisted in the [Context].
+     *  This value should only be provided if the public key isn't already stored in the [Context].
+     * @param privateKey The private key to use for the request. If null, uses the private key from [Context].
+     * @throws MissingContextFieldException if no private key is available (when [privateKey] is null and [Context] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-ephemeral-key-registration">API Doc</a>
      */
     suspend fun verifyEphemeralKeyRegistrationRequest(
         code: String,
@@ -179,7 +180,7 @@ internal object AccountClient {
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/reverify-email">API Doc</a>
      */
     @DoordeckOnly
     suspend fun reverifyEmailRequest() {
@@ -193,7 +194,7 @@ internal object AccountClient {
      * @param newPassword The new password.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/change-password">API Doc</a>
      */
     @DoordeckOnly
     suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
@@ -214,7 +215,7 @@ internal object AccountClient {
      * @return [BasicUserDetailsResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/get-user-details">API Doc</a>
      */
     suspend fun getUserDetailsRequest(): BasicUserDetailsResponse {
         return CloudHttpClient.client.get(Paths.getUserDetailsPath()).body()
@@ -226,7 +227,7 @@ internal object AccountClient {
      * @param displayName The new display name.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/update-user-details">API Doc</a>
      */
     suspend fun updateUserDetailsRequest(displayName: String) {
         CloudHttpClient.client.post(Paths.getUpdateUserDetailsPath()) {
@@ -236,11 +237,11 @@ internal object AccountClient {
     }
 
     /**
-     * Deletes the current user's account and resets the [ContextManagerImpl].
+     * Deletes the current user's account and resets the [Context].
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/delete-account">API Doc</a>
      */
     suspend fun deleteAccountRequest() {
         CloudHttpClient.client.delete(Paths.getDeleteAccountPath())

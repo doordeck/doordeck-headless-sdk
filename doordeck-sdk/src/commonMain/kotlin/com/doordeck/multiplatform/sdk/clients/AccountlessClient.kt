@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Params
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -24,15 +25,15 @@ import io.ktor.client.request.setBody
  */
 internal object AccountlessClient {
     /**
-     * Performs user login and stores both the access and refresh tokens in [ContextManagerImpl].
-     * Also stores the user's email in [ContextManagerImpl].
+     * Performs user login and stores both the access and refresh tokens in [Context].
+     * Also stores the user's email in [Context].
      *
      * @param email The user's email.
      * @param password The user's password.
      * @return [BasicTokenResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#login-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/login-v2">API Doc</a>
      */
     suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
         return CloudHttpClient.client.post(Paths.getLoginPath()) {
@@ -48,8 +49,8 @@ internal object AccountlessClient {
     }
 
     /**
-     * Performs user registration and stores both the access and refresh tokens in [ContextManagerImpl].
-     * Also stores the user's email in [ContextManagerImpl].
+     * Performs user registration and stores both the access and refresh tokens in [Context].
+     * Also stores the user's email in [Context].
      *
      * @param email The user's email address.
      * @param password The user's password.
@@ -59,7 +60,7 @@ internal object AccountlessClient {
      * @return [BasicTokenResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#registration-v3">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/registration">API Doc</a>
      */
     suspend fun registrationRequest(
         email: String,
@@ -94,7 +95,7 @@ internal object AccountlessClient {
      * @param code The code sent to the user's email.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#verify-email">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-email">API Doc</a>
      */
     suspend fun verifyEmailRequest(code: String) {
         return CloudHttpClient.client.put(Paths.getVerifyEmailPath()) {
@@ -108,7 +109,6 @@ internal object AccountlessClient {
      *
      * @param email The user's email address.
      * @throws SdkException if an unexpected error occurs while processing the request.
-     *
      */
     suspend fun passwordResetRequest(email: String) {
         return CloudHttpClient.client.post(Paths.getPasswordResetPath()) {

@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.data.BasicBaseOperation
 import com.doordeck.multiplatform.sdk.model.data.BasicBatchShareLockOperation
@@ -75,7 +76,7 @@ internal object LockOperationsClient {
      * @return [BasicLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-single-lock">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-a-single-lock">API Doc</a>
      */
     suspend fun getSingleLockRequest(lockId: String): BasicLockResponse {
         return CloudHttpClient.client.get(Paths.getSingleLockPath(lockId)) {
@@ -92,7 +93,7 @@ internal object LockOperationsClient {
      * @return List of [BasicAuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-lock-audit-trail-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-lock-audit-trail-v2">API Doc</a>
      */
     suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
@@ -111,7 +112,7 @@ internal object LockOperationsClient {
      * @return List of [BasicAuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-audit-for-a-user">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-audit-for-a-user">API Doc</a>
      */
     suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
@@ -128,7 +129,7 @@ internal object LockOperationsClient {
      * @return List of [BasicUserLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-lock">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-users-for-a-lock">API Doc</a>
      */
     suspend fun getUsersForLockRequest(lockId: String): List<BasicUserLockResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForLockPath(lockId)).body()
@@ -142,7 +143,7 @@ internal object LockOperationsClient {
      * @return [BasicLockUserResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-a-user">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-locks-for-a-user">API Doc</a>
      */
     suspend fun getLocksForUserRequest(userId: String): BasicLockUserResponse {
         return CloudHttpClient.client.get(Paths.getLocksForUserPath(userId)).body()
@@ -155,7 +156,7 @@ internal object LockOperationsClient {
      * @param name The new alias for the lock (use `null` to remove the existing alias).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockNameRequest(lockId: String, name: String?) {
         updateLockProperties(lockId, UpdateLockNameRequest(name))
@@ -168,7 +169,7 @@ internal object LockOperationsClient {
      * @param favourite `true` to mark the lock as a favorite, `false` or `null` to remove the favorite status.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockFavouriteRequest(lockId: String, favourite: Boolean?) {
         updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
@@ -181,7 +182,7 @@ internal object LockOperationsClient {
      * @param colour Hex representation of the colour (e.g., "#FF5733"), use `null` to remove the colour.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockColourRequest(lockId: String, colour: String?) {
         updateLockProperties(lockId, UpdateLockColourRequest(colour))
@@ -194,7 +195,7 @@ internal object LockOperationsClient {
      * @param name The new lock's name, use `null` to remove the default name.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockSettingDefaultNameRequest(lockId: String, name: String?) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
@@ -207,7 +208,7 @@ internal object LockOperationsClient {
      * @param permittedAddresses The full list of allowed public IP addresses (replaces any existing list).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: List<String>) {
         updateLockProperties(
@@ -223,7 +224,7 @@ internal object LockOperationsClient {
      * @param hidden `true` to hide from favorites, `false` to make it visible.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockSettingHiddenRequest(lockId: String, hidden: Boolean) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
@@ -236,7 +237,7 @@ internal object LockOperationsClient {
      * @param times List of allowed time windows (replaces existing restrictions).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<BasicTimeRequirement>) {
         updateLockProperties(
@@ -265,7 +266,7 @@ internal object LockOperationsClient {
      * @param location The geofence configuration (use `null` to remove existing restrictions).
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     suspend fun updateLockSettingLocationRestrictionsRequest(
         lockId: String,
@@ -313,7 +314,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-a-doordeck-user-s-public-key">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-a-doordeck-user-public-key">API Doc</a>
      */
     @DoordeckOnly
     suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): BasicUserPublicKeyResponse {
@@ -330,7 +331,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByEmailRequest(email: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(email = email))
@@ -342,7 +343,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(telephone = telephone))
@@ -354,7 +355,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(localKey = localKey))
@@ -366,7 +367,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(foreignKey = foreignKey))
@@ -378,7 +379,7 @@ internal object LockOperationsClient {
      * @return [BasicUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v1">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     suspend fun getUserPublicKeyByIdentityRequest(identity: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
@@ -403,7 +404,7 @@ internal object LockOperationsClient {
      * @return List of [BasicBatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(email = emails))
@@ -415,7 +416,7 @@ internal object LockOperationsClient {
      * @return List of [BasicBatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(telephone = telephones))
@@ -427,7 +428,7 @@ internal object LockOperationsClient {
      * @return List of [BasicBatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(localKey = localKeys))
@@ -439,7 +440,7 @@ internal object LockOperationsClient {
      * @return List of [BasicBatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#lookup-user-public-key-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
@@ -461,10 +462,10 @@ internal object LockOperationsClient {
     /**
      * Unlocks a device.
      *
-     * @param unlockOperation The specific [BasicLockOperations.BasicUnlockOperation] to be handled.
+     * @param unlockOperation The specific [BasicUnlockOperation] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#unlock">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/unlock/">API Doc</a>
      */
     suspend fun unlockRequest(unlockOperation: BasicUnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
@@ -475,10 +476,10 @@ internal object LockOperationsClient {
     /**
      * Shares access to a device with another user.
      *
-     * @param shareLockOperation The specific [BasicLockOperations.BasicShareLockOperation] to be handled.
+     * @param shareLockOperation The specific [BasicShareLockOperation] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#share-a-lock">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/share-a-lock-v1">API Doc</a>
      */
     suspend fun shareLockRequest(shareLockOperation: BasicShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
@@ -496,10 +497,10 @@ internal object LockOperationsClient {
      * Shares device access with multiple users in a single batch operation.
      * Falls back to sequential sharing if batch operations aren't supported by the lock.
      *
-     * @param batchShareLockOperation The specific [BasicLockOperations.BasicBatchShareLockOperation] to be handled.
+     * @param batchShareLockOperation The specific [BasicBatchShareLockOperation] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#batch-share-a-lock-v2">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/batch-share-a-lock-v2">API Doc</a>
      */
     suspend fun batchShareLockRequest(batchShareLockOperation: BasicBatchShareLockOperation) {
         /** Verify whether the operation device currently supports the batch sharing operation **/
@@ -549,10 +550,10 @@ internal object LockOperationsClient {
     /**
      * Revokes a user's access permissions to a specific lock.
      *
-     * @param revokeAccessToLockOperation The specific [BasicLockOperations.BasicRevokeAccessToLockOperation] to be handled.
+     * @param revokeAccessToLockOperation The specific [BasicRevokeAccessToLockOperation] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#revoke-access-to-a-lock">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/revoke-access-to-a-lock">API Doc</a>
      */
     suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: BasicRevokeAccessToLockOperation) {
         val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
@@ -563,10 +564,10 @@ internal object LockOperationsClient {
     /**
      * Updates the unlock duration setting (how long lock stays unlocked).
      *
-     * @param updateSecureSettingUnlockDuration The specific [BasicLockOperations.BasicUpdateSecureSettingUnlockDuration] to be handled.
+     * @param updateSecureSettingUnlockDuration The specific [BasicUpdateSecureSettingUnlockDuration] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: BasicUpdateSecureSettingUnlockDuration) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
@@ -579,10 +580,10 @@ internal object LockOperationsClient {
     /**
      * Updates the unlock between definition.
      *
-     * @param updateSecureSettingUnlockBetween The specific [BasicLockOperations.BasicUpdateSecureSettingUnlockBetween] to be handled.
+     * @param updateSecureSettingUnlockBetween The specific [BasicUpdateSecureSettingUnlockBetween] to be handled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#update-secure-settings">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-secure-settings">API Doc</a>
      */
     suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: BasicUpdateSecureSettingUnlockBetween) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
@@ -643,7 +644,7 @@ internal object LockOperationsClient {
      * @return List of [BasicLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-pinned-locks">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-pinned-locks">API Doc</a>
      */
     suspend fun getPinnedLocksRequest(): List<BasicLockResponse> {
         return CloudHttpClient.client.get(Paths.getPinnedLocksPath()).body()
@@ -654,20 +655,20 @@ internal object LockOperationsClient {
      * @return List of [BasicShareableLockResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-shareable-locks">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-shareable-locks">API Doc</a>
      */
     suspend fun getShareableLocksRequest(): List<BasicShareableLockResponse> {
         return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
     }
 
     /**
-     * Converts a [BasicLockOperations.BasicBaseOperation] to a [BaseOperationRequest].
+     * Converts a [BasicBaseOperation] to a [BaseOperationRequest].
      * Validates that required fields (userId, userCertificateChain, userPrivateKey) are available
-     * either in the input or the [ContextManagerImpl].
+     * either in the input or the [Context].
      *
      * @return [BaseOperationRequest].
      * @throws MissingContextFieldException if any required field (userId, userCertificateChain,
-     *         or userPrivateKey) is missing from both the input and the [ContextManagerImpl].
+     *         or userPrivateKey) is missing from both the input and the [Context].
      */
     private fun BasicBaseOperation.toBaseOperationRequestUsingContext(): BaseOperationRequest {
         val userId = userId
@@ -684,9 +685,9 @@ internal object LockOperationsClient {
             userCertificateChain = userCertificateChain,
             userPrivateKey = userPrivateKey,
             lockId = lockId,
-            notBefore = notBefore.toLong(),
-            issuedAt = issuedAt.toLong(),
-            expiresAt = expiresAt.toLong(),
+            notBefore = notBefore,
+            issuedAt = issuedAt,
+            expiresAt = expiresAt,
             jti = jti
         )
     }

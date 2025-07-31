@@ -25,7 +25,7 @@ internal object TilesClient {
      * @return [BasicTileLocksResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/get-lock-belonging-to-tile-v3">API Doc</a>
      */
     suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
         return CloudHttpClient.client.get(Paths.getLocksBelongingToTilePath(tileId)) {
@@ -41,7 +41,7 @@ internal object TilesClient {
      * @param lockIds The list of device unique identifiers.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#associate-multiple-locks-devices-to-a-single-tile">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/associate-multiple-locks-to-a-single-tile">API Doc</a>
      */
     @SiteAdmin
     suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {

@@ -20,7 +20,7 @@ internal object SitesClient {
      * @return List of [BasicSiteResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#sites">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/list-sites">API Doc</a>
      */
     suspend fun listSitesRequest(): List<BasicSiteResponse> {
         return CloudHttpClient.client.get(Paths.getListSites()).body()
@@ -33,7 +33,7 @@ internal object SitesClient {
      * @return List of [BasicSiteLocksResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-locks-for-site">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-locks-for-site">API Doc</a>
      */
     suspend fun getLocksForSiteRequest(siteId: String): List<BasicSiteLocksResponse> {
         return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId)).body()
@@ -47,7 +47,7 @@ internal object SitesClient {
      * @return List of [BasicUserForSiteResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
-     * @see <a href="https://developer.doordeck.com/docs/#get-users-for-a-site">API Doc</a>
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-users-for-a-site">API Doc</a>
      */
     suspend fun getUsersForSiteRequest(siteId: String): List<BasicUserForSiteResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId)).body()

@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.FusionHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.requests.EnableDoorRequest
@@ -24,11 +25,11 @@ import io.ktor.client.request.setBody
  */
 internal object FusionClient {
     /**
-     * Performs user login and stores the fusion access token in [ContextManagerImpl].
+     * Performs user login and stores the fusion access token in [Context].
      *
      * @param email The user's email address.
      * @param password The user's password.
-     * @return [FusionLoginResponse].
+     * @return [BasicFusionLoginResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun loginRequest(email: String, password: String): BasicFusionLoginResponse {
@@ -43,7 +44,7 @@ internal object FusionClient {
     /**
      * Retrieves the current integration type configuration.
      *
-     * @return [IntegrationTypeResponse].
+     * @return [BasicIntegrationTypeResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
@@ -53,7 +54,7 @@ internal object FusionClient {
     /**
      * Retrieves the integrations matching the integration type.
      * @param type The integration type e.g., demo.
-     * @return List of [IntegrationConfigurationResponse].
+     * @return List of [BasicIntegrationConfigurationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
@@ -89,7 +90,7 @@ internal object FusionClient {
     /**
      * Retrieves the device status for the given ID.
      * @param deviceId The device's unique identifier.
-     * @return [DoorStateResponse].
+     * @return [BasicDoorStateResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     suspend fun getDoorStatusRequest(deviceId: String): BasicDoorStateResponse {
