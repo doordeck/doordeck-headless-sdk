@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-data class OperationContextData(
+internal data class OperationContextData(
     val userId: String,
     val userCertificateChain: String,
     val userPublicKey: String,

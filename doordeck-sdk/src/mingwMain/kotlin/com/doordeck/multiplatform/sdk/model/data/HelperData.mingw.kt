@@ -3,26 +3,26 @@ package com.doordeck.multiplatform.sdk.model.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UploadPlatformLogoData(
+internal data class UploadPlatformLogoData(
     val applicationId: String,
     val contentType: String,
     val image: String
 )
 
 @Serializable
-data class AssistedLoginData(
+internal data class AssistedLoginData(
     val email: String,
     val password: String
 )
 
 @Serializable
-data class AssistedRegisterEphemeralKeyData(
+internal data class AssistedRegisterEphemeralKeyData(
     val publicKey: String,
     val privateKey: String
 )
 
 @Serializable
-data class AssistedRegisterData(
+internal data class AssistedRegisterData(
     val email: String,
     val password: String,
     val displayName: String? = null,

@@ -9,78 +9,78 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
 @Serializable
-data class GetSingleLockData(
+internal data class GetSingleLockData(
    val lockId: String
 )
 
 @Serializable
-data class GetLockAuditTrailData(
+internal data class GetLockAuditTrailData(
     val lockId: String,
     val start: Long,
     val end: Long
 )
 
 @Serializable
-data class GetAuditForUserData(
+internal data class GetAuditForUserData(
     val userId: String,
     val start: Long,
     val end: Long
 )
 
 @Serializable
-data class GetUsersForLockData(
+internal data class GetUsersForLockData(
     val lockId: String
 )
 
 @Serializable
-data class GetLocksForUserData(
+internal data class GetLocksForUserData(
     val userId: String,
 )
 
 @Serializable
-data class UpdateLockNameData(
+internal data class UpdateLockNameData(
     val lockId: String,
     val name: String? = null
 )
 
 @Serializable
-data class UpdateLockFavouriteData(
+internal data class UpdateLockFavouriteData(
     val lockId: String,
     val favourite: Boolean? = null
 )
 
 @Serializable
-data class UpdateLockColourData(
+internal data class UpdateLockColourData(
     val lockId: String,
     val colour: String? = null
 )
 
 @Serializable
-data class UpdateLockSettingDefaultNameData(
+internal data class UpdateLockSettingDefaultNameData(
     val lockId: String,
     val name: String? = null
 )
 
 @Serializable
-data class SetLockSettingPermittedAddressesData(
+internal data class SetLockSettingPermittedAddressesData(
     val lockId: String,
     val permittedAddresses: List<String>
 )
 
 @Serializable
-data class UpdateLockSettingHiddenData(
+internal data class UpdateLockSettingHiddenData(
     val lockId: String,
     val hidden: Boolean
 )
 
 @Serializable
-data class SetLockSettingTimeRestrictionsData(
+internal data class SetLockSettingTimeRestrictionsData(
     val lockId: String,
     val times: List<TimeRequirementData>
 )
 
 @Serializable
-data class TimeRequirementData(
+internal data class TimeRequirementData(
     val start: String,
     val end: String,
     val timezone: String,
@@ -88,13 +88,13 @@ data class TimeRequirementData(
 )
 
 @Serializable
-data class UpdateLockSettingLocationRestrictionsData(
+internal data class UpdateLockSettingLocationRestrictionsData(
     val lockId: String,
     val location: LocationRequirementData? = null
 )
 
 @Serializable
-data class LocationRequirementData(
+internal data class LocationRequirementData(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean,
@@ -103,64 +103,64 @@ data class LocationRequirementData(
 )
 
 @Serializable
-data class GetUserPublicKeyData(
+internal data class GetUserPublicKeyData(
     val userEmail: String,
     val visitor: Boolean = false
 )
 
 @Serializable
-data class GetUserPublicKeyByEmailData(
+internal data class GetUserPublicKeyByEmailData(
     val email: String
 )
 
 @Serializable
-data class GetUserPublicKeyByTelephoneData(
+internal data class GetUserPublicKeyByTelephoneData(
     val telephone: String
 )
 
 @Serializable
-data class GetUserPublicKeyByLocalKeyData(
+internal data class GetUserPublicKeyByLocalKeyData(
     val localKey: String
 )
 
 @Serializable
-data class GetUserPublicKeyByForeignKeyData(
+internal data class GetUserPublicKeyByForeignKeyData(
     val foreignKey: String
 )
 
 @Serializable
-data class GetUserPublicKeyByIdentityData(
+internal data class GetUserPublicKeyByIdentityData(
     val identity: String
 )
 
 @Serializable
-data class GetUserPublicKeyByEmailsData(
+internal data class GetUserPublicKeyByEmailsData(
     val emails: List<String>
 )
 
 @Serializable
-data class GetUserPublicKeyByTelephonesData(
+internal data class GetUserPublicKeyByTelephonesData(
     val telephones: List<String>
 )
 
 @Serializable
-data class GetUserPublicKeyByLocalKeysData(
+internal data class GetUserPublicKeyByLocalKeysData(
     val localKeys: List<String>
 )
 
 @Serializable
-data class GetUserPublicKeyByForeignKeysData(
+internal data class GetUserPublicKeyByForeignKeysData(
     val foreignKeys: List<String>
 )
 
 @Serializable
-data class UnlockOperationData(
+internal data class UnlockOperationData(
     val baseOperation: BaseOperationData,
     val directAccessEndpoints: List<String>? = null
 )
 
 @Serializable
-data class BaseOperationData(
+internal data class BaseOperationData(
     val userId: String? = null,
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: String? = null,
@@ -172,7 +172,7 @@ data class BaseOperationData(
 )
 
 @Serializable
-data class ShareLockData(
+internal data class ShareLockData(
     val targetUserId: String,
     val targetUserRole: UserRole,
     val targetUserPublicKey: String,
@@ -181,31 +181,31 @@ data class ShareLockData(
 )
 
 @Serializable
-data class ShareLockOperationData(
+internal data class ShareLockOperationData(
     val baseOperation: BaseOperationData,
     val shareLock: ShareLockData
 )
 
 @Serializable
-data class BatchShareLockOperationData(
+internal data class BatchShareLockOperationData(
     val baseOperation: BaseOperationData,
     val users: List<ShareLockData>
 )
 
 @Serializable
-data class RevokeAccessToLockOperationData(
+internal data class RevokeAccessToLockOperationData(
     val baseOperation: BaseOperationData,
     val users: List<String>
 )
 
 @Serializable
-data class UpdateSecureSettingUnlockDurationData(
+internal data class UpdateSecureSettingUnlockDurationData(
     val baseOperation: BaseOperationData,
     val unlockDuration: Int
 )
 
 @Serializable
-data class UnlockBetweenData(
+internal data class UnlockBetweenData(
     val start: String,
     val end: String,
     val timezone: String,
@@ -214,7 +214,7 @@ data class UnlockBetweenData(
 )
 
 @Serializable
-data class UpdateSecureSettingUnlockBetweenData(
+internal data class UpdateSecureSettingUnlockBetweenData(
     val baseOperation: BaseOperationData,
     val unlockBetween: UnlockBetweenData? = null
 )

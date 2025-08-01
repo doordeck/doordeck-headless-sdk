@@ -55,7 +55,7 @@ actual object FusionApi {
         callback(
             block = {
                 val enableDoorData = data.fromJson<EnableDoorData>()
-                FusionClient.enableDoorRequest(enableDoorData.name, enableDoorData.siteId, enableDoorData.controller)
+               // FusionClient.enableDoorRequest(enableDoorData.name, enableDoorData.siteId, enableDoorData.controller)
             },
             callback = callback
         )

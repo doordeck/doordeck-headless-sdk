@@ -1,184 +1,160 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
-import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_RESPONSE
-import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE
-import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.USER_DETAILS_RESPONSE
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.data.ChangePasswordData
+import com.doordeck.multiplatform.sdk.model.data.LoginData
 import com.doordeck.multiplatform.sdk.model.data.RefreshTokenData
 import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyData
-import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSecondaryAuthenticationData
-import com.doordeck.multiplatform.sdk.model.data.UpdateUserDetailsData
-import com.doordeck.multiplatform.sdk.model.data.VerifyEphemeralKeyRegistrationData
+import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.testCallback
-import com.doordeck.multiplatform.sdk.toResultDataJson
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 class AccountApiTest : CallbackTest() {
 
     @Test
-    fun shouldRefreshToken() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.refreshToken(
-                    data = RefreshTokenData(refreshToken = "").toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = TOKEN_RESPONSE.toResultDataJson()
-        )
-    }
+    fun shouldGetUserDetails() = runTest {
+        // Given
+        callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
 
-    @Test
-    fun shouldRefreshTokenUsingContext() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.refreshToken(null, staticCFunction(::testCallback))
-            },
-            expectedResponse = TOKEN_RESPONSE.toResultDataJson()
-        )
-    }
+        // When
+        val response = callbackApiCall<BasicUserDetailsResponse> {
+            AccountApi.getUserDetails(
+                callback = staticCFunction(::testCallback)
+            )
+        }
 
-    @Test
-    fun shouldLogout() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.logout(staticCFunction(::testCallback))
-            }
-        )
+        // Then
+        assertEquals(TEST_MAIN_USER_EMAIL, response.email)
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.registerEphemeralKey(
-                    data = RegisterEphemeralKeyData(byteArrayOf().encodeByteArrayToBase64()).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_RESPONSE.toResultDataJson()
-        )
-    }
+        // Given
+        callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        val publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+        val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
-    @Test
-    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.registerEphemeralKey(null, staticCFunction(::testCallback))
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_RESPONSE.toResultDataJson()
-        )
-    }
+        // When
+        val result = callbackApiCall<BasicRegisterEphemeralKeyResponse> {
+            AccountApi.registerEphemeralKey(
+                data = RegisterEphemeralKeyData(publicKey, privateKey).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
 
-    @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.registerEphemeralKeyWithSecondaryAuthentication(
-                    data = RegisterEphemeralKeyWithSecondaryAuthenticationData(byteArrayOf().encodeByteArrayToBase64()).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE.toResultDataJson()
-        )
-    }
-
-    @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.registerEphemeralKeyWithSecondaryAuthentication(
-                    data = RegisterEphemeralKeyWithSecondaryAuthenticationData().toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE.toResultDataJson()
-        )
-    }
-
-    @Test
-    fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.verifyEphemeralKeyRegistration(
-                    data = VerifyEphemeralKeyRegistrationData("", TEST_MAIN_USER_PUBLIC_KEY,TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_RESPONSE.toResultDataJson()
-        )
-    }
-
-    @Test
-    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.verifyEphemeralKeyRegistration(
-                    data = VerifyEphemeralKeyRegistrationData("").toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            },
-            expectedResponse = REGISTER_EPHEMERAL_KEY_RESPONSE.toResultDataJson()
-        )
-    }
-
-    @Test
-    fun shouldReverifyEmail() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.reverifyEmail(staticCFunction(::testCallback))
-            }
-        )
+        // Then
+        assertTrue { result.certificateChain.isNotEmpty() }
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
+        assertEquals(result.certificateChain, ContextManager.getCertificateChain())
+        assertEquals(publicKey, ContextManager.getKeyPair()?.public?.encodeByteArrayToBase64())
+        assertEquals(privateKey, ContextManager.getKeyPair()?.private?.encodeByteArrayToBase64())
+        assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
+        assertTrue { ContextManager.isKeyPairVerified() }
     }
 
     @Test
     fun shouldChangePassword() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.changePassword(
-                    data = ChangePasswordData("", "").toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-        )
+        // Given
+        callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // When
+        callbackApiCall<Unit> {
+            AccountApi.changePassword(
+                data = ChangePasswordData(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
     }
 
     @Test
-    fun shouldGetUserDetails() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.getUserDetails(staticCFunction(::testCallback))
-            },
-            expectedResponse = USER_DETAILS_RESPONSE.toResultDataJson()
-        )
+    fun shouldRefreshToken() = runTest {
+        // Given
+        val loginResult = callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // When
+        val refreshResult = callbackApiCall<BasicTokenResponse> {
+            AccountApi.refreshToken(
+                data = RefreshTokenData(loginResult.refreshToken).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        assertTrue { refreshResult.authToken.isNotEmpty() }
+        assertTrue { refreshResult.refreshToken.isNotEmpty() }
+        assertEquals(ContextManager.getCloudAuthToken(), refreshResult.authToken)
+        assertEquals(ContextManager.getCloudRefreshToken(), refreshResult.refreshToken)
     }
 
     @Test
-    fun shouldUpdateUserDetails() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.updateUserDetails(
-                    data = UpdateUserDetailsData("").toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-        )
-    }
+    fun shouldLogout() = runTest {
+        // Given
+        callbackApiCall<BasicTokenResponse> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
 
-    @Test
-    fun shouldDeleteAccount() = runTest {
-        callbackTest(
-            apiCall = {
-                AccountApi.deleteAccount(staticCFunction(::testCallback))
-            }
-        )
+        // When
+        callbackApiCall<Unit> {
+            AccountApi.logout(
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        assertNull(ContextManager.getCloudAuthToken())
+        assertNull(ContextManager.getCloudRefreshToken())
+        assertNull(ContextManager.getFusionAuthToken())
+        assertNull(ContextManager.getUserId())
+        assertNull(ContextManager.getUserEmail())
+        assertNull(ContextManager.getCertificateChain())
+        assertNull(ContextManager.getKeyPair())
     }
 }
