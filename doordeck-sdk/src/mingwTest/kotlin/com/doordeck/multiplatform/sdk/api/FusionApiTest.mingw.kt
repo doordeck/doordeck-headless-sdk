@@ -28,9 +28,9 @@ import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicDoorStateResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -140,7 +140,7 @@ class FusionApiTest : CallbackTest() {
         ContextManager.setFusionHost(testController.key)
 
         // When
-        val loginResponse = callbackApiCall<ResultData<BasicTokenResponse>> {
+        val loginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
             FusionApi.login(
                 data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = staticCFunction(::testCallback)
