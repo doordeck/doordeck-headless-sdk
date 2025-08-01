@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
@@ -31,12 +32,6 @@ open class CallbackTest : IntegrationTest() {
             apiCall()
             delay(1.seconds)
         }
-        val result = capturedCallback.fromJson<ResultData<T>>()
-        assertNotNull(result.success)
-        if (T::class == Unit::class) {
-            return Unit as T
-        }
-        assertNotNull(result.success.result)
-        return result.success.result as T
+        return capturedCallback.fromJson<T>()
     }
 }
