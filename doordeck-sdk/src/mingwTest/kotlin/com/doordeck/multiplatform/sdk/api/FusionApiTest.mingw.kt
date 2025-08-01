@@ -151,6 +151,7 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(loginResponse.success)
         assertNotNull(loginResponse.success.result)
         assertTrue { loginResponse.success.result.authToken.isNotEmpty() }
+        println("Logged")
 
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${Uuid.random()}"
@@ -172,6 +173,7 @@ class FusionApiTest : CallbackTest() {
         }
         assertNotNull(integrationsResponse.success)
         assertNotNull(integrationsResponse.success.result)
+        println("Integrations")
 
         val actualDoor = integrationsResponse.success.result.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor?.doordeck)
@@ -189,6 +191,7 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(integrationTypeResponse.success.result)
         assertNotNull(integrationTypeResponse.success.result.status)
         assertEquals(testController.value.type, integrationTypeResponse.success.result.status)
+        println("Integrations by type")
 
         // Given - shouldStartDoor
         // When
@@ -209,6 +212,7 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(doorStateResponse.success)
         assertNotNull(doorStateResponse.success.result)
         assertEquals(ServiceStateType.RUNNING, doorStateResponse.success.result.state)
+        println("State")
 
         // Given - shouldStopDoor
         // When
@@ -228,6 +232,7 @@ class FusionApiTest : CallbackTest() {
         }
         assertNotNull(doorStateResponse.success)
         assertNotNull(doorStateResponse.success.result)
+        println("Deleted")
         //assertEquals(ServiceStateType.STOPPED, doorState.state)
 
         // Given - shouldDeleteDoor

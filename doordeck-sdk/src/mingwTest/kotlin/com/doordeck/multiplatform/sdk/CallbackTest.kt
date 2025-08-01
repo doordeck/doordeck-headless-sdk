@@ -7,6 +7,7 @@ import kotlinx.cinterop.toKString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import kotlin.test.BeforeTest
 import kotlin.time.Duration.Companion.seconds
 
@@ -27,7 +28,11 @@ open class CallbackTest : IntegrationTest() {
     internal inline fun <reified T> callbackApiCall(noinline apiCall: suspend () -> Unit): T {
         runBlocking {
             apiCall()
-            delay(1.seconds)
+            withTimeout(10.seconds) {
+                while (capturedCallback.isEmpty()) {
+                    delay(1.seconds)
+                }
+            }
         }
         return capturedCallback.fromJson<T>()
     }
