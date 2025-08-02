@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.model.data.Fusion
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.serialization.Serializable
 
@@ -26,21 +26,21 @@ internal object TestConstants {
     const val TEST_SUPPLEMENTARY_TILE_ID = "8bdc10ea-7443-4561-9716-eeac5aaf68f4"
     const val TEST_MAIN_LOCK_ID = "eb868970-e882-11ef-bced-bf10e8a8d751"
     const val TEST_MAIN_SITE_ID = "97b26c60-e882-11ef-b506-e76037f764f5"
-    val FUSION_INTEGRATIONS: Map<String, TestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyMap()
+    val FUSION_INTEGRATIONS: Map<String, BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyMap()
 
     @Serializable
-    data class TestController(
+    data class BasicTestController(
         val type: String,
-        val controller: Fusion.LockController
+        val controller: BasicLockController
     )
 
     // Default values used on the Mock http client
-    const val DEFAULT_TILE_ID = "TILE_ID"
-    const val DEFAULT_SITE_ID = "SITE_ID"
-    const val DEFAULT_APPLICATION_ID = "APPLICATION_ID"
-    const val DEFAULT_DEVICE_ID = "DEVICE_ID"
-    const val DEFAULT_LOCK_ID = "LOCK_ID"
-    const val DEFAULT_USER_ID = "USER_ID"
+    const val DEFAULT_TILE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_SITE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_APPLICATION_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_DEVICE_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_LOCK_ID = "00000000-0000-0000-0000-000000000000"
+    const val DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000000"
     const val DEFAULT_USER_EMAIL = "USER_EMAIL"
     const val DEFAULT_UPLOAD_URL_PATH = "/upload"
     const val DEFAULT_UPLOAD_URL = "https://example.com$DEFAULT_UPLOAD_URL_PATH"

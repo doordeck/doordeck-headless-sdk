@@ -1,61 +1,48 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
+import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
+internal typealias BasicLockControllerResponse = BasicLockController
+
 @Serializable
-data class FusionLoginResponse(
+internal data class BasicFusionLoginResponse(
     val authToken: String
 )
 
-@JsExport
 @Serializable
-data class IntegrationTypeResponse(
+internal data class BasicIntegrationTypeResponse(
     val status: String? = null
 )
 
-@JsExport
 @Serializable
-data class DoorStateResponse(
+internal data class BasicDoorStateResponse(
     val state: ServiceStateType
 )
 
-@JsExport
 @Serializable
-data class IntegrationConfigurationResponse(
-    val doordeck: ControllerResponse? = null,
-    val service: ServiceStateResponse? = null,
-    val integration: DiscoveredDeviceResponse? = null
+internal data class BasicIntegrationConfigurationResponse(
+    val doordeck: BasicControllerResponse? = null,
+    val service: BasicServiceStateResponse? = null,
+    val integration: BasicDiscoveredDeviceResponse? = null
 )
 
-@JsExport
 @Serializable
-data class ControllerResponse(
+internal data class BasicControllerResponse(
     val id: String,
     val name: String? = null,
     val role: UserRole? = null
 )
 
-@JsExport
 @Serializable
-data class ServiceStateResponse(
+internal data class BasicServiceStateResponse(
     val state: ServiceStateType
 )
 
-@JsExport
 @Serializable
-data class DiscoveredDeviceResponse(
-    val key: Fusion.LockController,
+internal data class BasicDiscoveredDeviceResponse(
+    val key: BasicLockControllerResponse,
     val metadata: Map<String, String>
 )
-
-@JsExport
-@Serializable
-enum class ServiceStateType {
-    RUNNING,
-    STOPPED,
-    UNDEFINED
-}

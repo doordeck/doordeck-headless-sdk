@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.requests
 
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -28,9 +29,9 @@ internal data class BaseOperationRequest(
     val userCertificateChain: List<String>,
     val userPrivateKey: ByteArray,
     val lockId: String,
-    val notBefore: Int,
-    val issuedAt: Int,
-    val expiresAt: Int,
+    val notBefore: Long,
+    val issuedAt: Long,
+    val expiresAt: Long,
     val jti: String
 )
 
@@ -74,12 +75,12 @@ internal data class UnlockBetweenSettingRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
-    val days: List<String>,
+    val days: List<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 
 @Serializable
-sealed interface OperationRequest
+internal sealed interface OperationRequest
 
 @Serializable
 internal data class UserPublicKeyRequest(
@@ -99,7 +100,7 @@ internal data class BatchUserPublicKeyRequest(
 )
 
 @Serializable
-sealed interface UpdateLockPropertiesRequest
+internal sealed interface UpdateLockPropertiesRequest
 
 @Serializable
 internal data class UpdateLockNameRequest(
@@ -122,7 +123,7 @@ internal data class UpdateLockSettingRequest(
 ): UpdateLockPropertiesRequest
 
 @Serializable
-sealed interface LockSettingsRequest
+internal sealed interface LockSettingsRequest
 
 @Serializable
 internal data class LockSettingsDefaultNameRequest(
@@ -140,7 +141,7 @@ internal data class LockSettingsHiddenRequest(
 ): LockSettingsRequest
 
 @Serializable
-sealed interface UsageRequirementRequest
+internal sealed interface UsageRequirementRequest
 
 @Serializable
 internal data class UpdateLockSettingUsageRequirementRequest(
@@ -162,7 +163,7 @@ internal data class TimeRequirementRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
-    val days: List<String>
+    val days: List<DayOfWeek>
 )
 
 @Serializable

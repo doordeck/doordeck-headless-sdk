@@ -4,35 +4,36 @@ import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RefreshTokenData(
+internal data class RefreshTokenData(
     val refreshToken: String
 )
 
 @Serializable
-data class RegisterEphemeralKeyData(
-    val publicKey: String
+internal data class RegisterEphemeralKeyData(
+    val publicKey: String,
+    val privateKey: String
 )
 
 @Serializable
-data class RegisterEphemeralKeyWithSecondaryAuthenticationData(
+internal data class RegisterEphemeralKeyWithSecondaryAuthenticationData(
     val publicKey: String? = null,
     val method: TwoFactorMethod? = null
 )
 
 @Serializable
-data class VerifyEphemeralKeyRegistrationData(
+internal data class VerifyEphemeralKeyRegistrationData(
     val code: String,
     val publicKey: String? = null,
     val privateKey: String? = null
 )
 
 @Serializable
-data class ChangePasswordData(
+internal data class ChangePasswordData(
     val oldPassword: String,
     val newPassword: String
 )
 
 @Serializable
-data class UpdateUserDetailsData(
+internal data class UpdateUserDetailsData(
     val displayName: String
 )

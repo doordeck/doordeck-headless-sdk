@@ -1,6 +1,10 @@
 package com.doordeck.multiplatform.sdk.model.requests
 
-import com.doordeck.multiplatform.sdk.model.data.Platform
+import com.doordeck.multiplatform.sdk.model.data.BasicAuthKey
+import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
+import com.doordeck.multiplatform.sdk.model.data.BasicEcKey
+import com.doordeck.multiplatform.sdk.model.data.BasicEd25519Key
+import com.doordeck.multiplatform.sdk.model.data.BasicRsaKey
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,7 +20,7 @@ internal data class CreateApplicationRequest(
 )
 
 @Serializable
-sealed interface UpdateApplicationRequest
+internal sealed interface UpdateApplicationRequest
 
 @Serializable
 internal data class UpdateApplicationNameRequest(
@@ -111,7 +115,7 @@ internal data class GetLogoUploadUrlRequest(
 )
 
 @Serializable
-sealed interface AddAuthKeyRequest {
+internal sealed interface AddAuthKeyRequest {
     val kid: String
     val kty: String
     val use: String
@@ -157,7 +161,7 @@ internal data class AddEd25519KeyRequest(
     val x: String
 ): AddAuthKeyRequest
 
-internal fun Platform.CreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
+internal fun BasicCreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
     name = name,
     companyName = companyName,
     mailingAddress = mailingAddress,
@@ -183,8 +187,8 @@ internal fun Platform.CreateApplication.toCreateApplicationRequest(): CreateAppl
     logoUrl = logoUrl
 )
 
-internal fun Platform.AuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
-    is Platform.RsaKey -> AddRsaKeyRequest(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is Platform.EcKey -> AddEcKeyRequest(kty, use, kid, alg, d, crv, x, y)
-    is Platform.Ed25519Key -> AddEd25519KeyRequest(kty, use, kid, alg, d, crv, x)
+internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
+    is BasicRsaKey -> AddRsaKeyRequest(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
+    is BasicEcKey -> AddEcKeyRequest(kty, use, kid, alg, d, crv, x, y)
+    is BasicEd25519Key -> AddEd25519KeyRequest(kty, use, kid, alg, d, crv, x)
 }

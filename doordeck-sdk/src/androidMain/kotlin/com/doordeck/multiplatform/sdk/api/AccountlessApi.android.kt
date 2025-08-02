@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -14,6 +15,7 @@ actual object AccountlessApi {
      */
     suspend fun login(email: String, password: String): TokenResponse {
         return AccountlessClient.loginRequest(email, password)
+            .toTokenResponse()
     }
 
     /**
@@ -28,6 +30,7 @@ actual object AccountlessApi {
      */
     suspend fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): TokenResponse {
         return AccountlessClient.registrationRequest(email, password, displayName, force, publicKey)
+            .toTokenResponse()
     }
 
     /**

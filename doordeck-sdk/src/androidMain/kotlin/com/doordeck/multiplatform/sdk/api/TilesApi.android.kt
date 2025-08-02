@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.responses.TileLocksResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTileLocksResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -15,6 +16,7 @@ actual object TilesApi {
      */
     suspend fun getLocksBelongingToTile(tileId: String): TileLocksResponse {
         return TilesClient.getLocksBelongingToTileRequest(tileId)
+            .toTileLocksResponse()
     }
 
     /**

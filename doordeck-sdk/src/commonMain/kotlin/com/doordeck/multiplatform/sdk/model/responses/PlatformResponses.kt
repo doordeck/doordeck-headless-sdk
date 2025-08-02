@@ -1,13 +1,12 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
+import com.doordeck.multiplatform.sdk.model.common.GrantType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonClassDiscriminator
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
-data class ApplicationResponse(
+internal data class BasicApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
@@ -21,16 +20,15 @@ data class ApplicationResponse(
     val supportContact: String? = null,
     val appLink: String? = null,
     val slug: String? = null,
-    val emailPreferences: EmailPreferencesResponse,
-    val authKeys: Map<String, AuthKeyResponse>,
-    val oauth: OauthResponse? = null,
+    val emailPreferences: BasicEmailPreferencesResponse,
+    val authKeys: Map<String, BasicAuthKeyResponse>,
+    val oauth: BasicOauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
 
-@JsExport
 @Serializable
 @JsonClassDiscriminator("kty")
-sealed interface AuthKeyResponse {
+internal sealed interface BasicAuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
@@ -44,10 +42,9 @@ sealed interface AuthKeyResponse {
     val iat: Int?
 }
 
-@JsExport
 @Serializable
 @SerialName("RSA")
-data class RsaKeyResponse(
+internal data class BasicRsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -63,12 +60,11 @@ data class RsaKeyResponse(
     override val iat: Int? = null,
     val e: String,
     val n: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
-@JsExport
 @Serializable
 @SerialName("EC")
-data class EcKeyResponse(
+internal data class BasicEcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -85,12 +81,11 @@ data class EcKeyResponse(
     val crv: String,
     val x: String,
     val y: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
-@JsExport
 @Serializable
 @SerialName("OKP")
-data class Ed25519KeyResponse(
+internal data class BasicEd25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
@@ -107,38 +102,34 @@ data class Ed25519KeyResponse(
     val d: String? = null,
     val crv: String,
     val x: String
-): AuthKeyResponse
+): BasicAuthKeyResponse
 
-@JsExport
 @Serializable
-data class EmailPreferencesResponse(
+internal data class BasicEmailPreferencesResponse(
     val senderEmail: String? = null,
     val senderName: String? = null,
     val primaryColour: String,
     val secondaryColour: String,
     val onlySendEssentialEmails: Boolean? = null,
-    val callToAction: EmailCallToActionResponse? = null,
+    val callToAction: BasicEmailCallToActionResponse? = null,
 )
 
-@JsExport
 @Serializable
-data class EmailCallToActionResponse(
+internal data class BasicEmailCallToActionResponse(
     val actionTarget: String,
     val headline: String,
     val actionText: String
 )
 
-@JsExport
 @Serializable
-data class OauthResponse(
+internal data class BasicOauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
-    val grantType: String
+    val grantType: GrantType
 )
 
-@JsExport
 @Serializable
-data class ApplicationOwnerDetailsResponse(
+internal data class BasicApplicationOwnerDetailsResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
@@ -146,8 +137,7 @@ data class ApplicationOwnerDetailsResponse(
     val foreign: Boolean
 )
 
-@JsExport
 @Serializable
-data class GetLogoUploadUrlResponse(
+internal data class BasicGetLogoUploadUrlResponse(
     val uploadUrl: String
 )

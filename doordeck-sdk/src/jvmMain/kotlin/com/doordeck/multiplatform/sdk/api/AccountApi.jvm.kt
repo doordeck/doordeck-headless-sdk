@@ -7,19 +7,27 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyRespon
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthentication
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.util.concurrent.CompletableFuture
 
 /**
  * Platform-specific implementations of account-related API calls.
  */
 actual object AccountApi {
+
     /**
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
         return AccountClient.refreshTokenRequest(refreshToken)
+            .toTokenResponse()
     }
 
     /**
@@ -47,35 +55,57 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
+    suspend fun registerEphemeralKey(
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
+    ): RegisterEphemeralKeyResponse {
+        return AccountClient.registerEphemeralKeyRequest(
+            publicKey = publicKey?.encoded,
+            privateKey = privateKey?.encoded
+        ).toRegisterEphemeralKeyResponse()
     }
 
     /**
      * Async variant of [AccountApi.registerEphemeralKey] returning [CompletableFuture].
      */
-    fun registerEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return completableFuture { registerEphemeralKey(publicKey, privateKey) }
+    fun registerEphemeralKeyAsync(
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
+    ): CompletableFuture<RegisterEphemeralKeyResponse> {
+        return completableFuture {
+            registerEphemeralKey(
+                publicKey = publicKey,
+                privateKey = privateKey
+            )
+        }
     }
 
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
-        publicKey: ByteArray? = null,
+        publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
     ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(
+            publicKey = publicKey?.encoded,
+            method = method
+        ).toRegisterEphemeralKeyWithSecondaryAuthentication()
     }
 
     /**
      * Async variant of [AccountApi.registerEphemeralKeyWithSecondaryAuthentication] returning [CompletableFuture].
      */
     fun registerEphemeralKeyWithSecondaryAuthenticationAsync(
-        publicKey: ByteArray? = null,
+        publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
     ): CompletableFuture<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> {
-        return completableFuture { registerEphemeralKeyWithSecondaryAuthentication(publicKey, method) }
+        return completableFuture {
+            registerEphemeralKeyWithSecondaryAuthentication(
+                publicKey = publicKey,
+                method = method
+            )
+        }
     }
 
     /**
@@ -83,10 +113,14 @@ actual object AccountApi {
      */
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
-        publicKey: ByteArray? = null,
-        privateKey: ByteArray? = null
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
     ): RegisterEphemeralKeyResponse {
-        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
+        return AccountClient.verifyEphemeralKeyRegistrationRequest(
+            code = code,
+            publicKey = publicKey?.encoded,
+            privateKey = privateKey?.encoded
+        ).toRegisterEphemeralKeyResponse()
     }
 
     /**
@@ -94,10 +128,16 @@ actual object AccountApi {
      */
     fun verifyEphemeralKeyRegistrationAsync(
         code: String,
-        publicKey: ByteArray? = null,
-        privateKey: ByteArray? = null
+        publicKey: PublicKey? = null,
+        privateKey: PrivateKey? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> {
-        return completableFuture { verifyEphemeralKeyRegistration(code, publicKey, privateKey) }
+        return completableFuture {
+            verifyEphemeralKeyRegistration(
+                code = code,
+                publicKey = publicKey,
+                privateKey = privateKey
+            )
+        }
     }
 
     /**
@@ -121,7 +161,10 @@ actual object AccountApi {
      */
     @DoordeckOnly
     suspend fun changePassword(oldPassword: String, newPassword: String) {
-        return AccountClient.changePasswordRequest(oldPassword, newPassword)
+        return AccountClient.changePasswordRequest(
+            oldPassword = oldPassword,
+            newPassword = newPassword
+        )
     }
 
     /**
@@ -129,7 +172,12 @@ actual object AccountApi {
      */
     @DoordeckOnly
     fun changePasswordAsync(oldPassword: String, newPassword: String): CompletableFuture<Unit> {
-        return completableFuture { changePassword(oldPassword, newPassword) }
+        return completableFuture {
+            changePassword(
+                oldPassword = oldPassword,
+                newPassword = newPassword
+            )
+        }
     }
 
     /**
@@ -137,6 +185,7 @@ actual object AccountApi {
      */
     suspend fun getUserDetails(): UserDetailsResponse {
         return AccountClient.getUserDetailsRequest()
+            .toUserDetailsResponse()
     }
 
     /**
