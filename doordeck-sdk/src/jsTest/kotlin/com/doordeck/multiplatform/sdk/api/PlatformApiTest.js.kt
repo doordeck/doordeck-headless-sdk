@@ -289,15 +289,6 @@ class PlatformApiTest : IntegrationTest() {
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertTrue { applicationOwnerDetails.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
 
-        // Given - shouldAddApplicationOwner
-        // When
-        PlatformApi.addApplicationOwner(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
-
-        // Then
-        applicationOwnerDetails = PlatformApi.getApplicationOwnersDetails(application.applicationId).await()
-        assertTrue { applicationOwnerDetails.isNotEmpty() }
-        assertTrue { applicationOwnerDetails.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
-
         // Given - shouldRemoveApplicationOwner
         // When
         PlatformApi.removeApplicationOwner(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
