@@ -38,6 +38,7 @@ import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import kotlinx.cinterop.staticCFunction
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
@@ -51,71 +52,97 @@ class FusionApiTest : CallbackTest() {
 
     @Test
     fun shouldTestAlpeta() = runTest {
-        runFusionTest(BasicAlpetaController::class)
+        runBlocking {
+            runFusionTest(BasicAlpetaController::class)
+        }
     }
 
     @Test
     fun shouldTestAmag() = runTest {
-        runFusionTest(BasicAmagController::class)
+        runBlocking {
+            runFusionTest(BasicAmagController::class)
+        }
     }
 
     @Test
     fun shouldTestAxis() = runTest {
-        runFusionTest(BasicAxisController::class)
+        runBlocking {
+            runFusionTest(BasicAxisController::class)
+        }
     }
 
     @Test
     fun shouldTestCcure() = runTest {
-        runFusionTest(BasicCCureController::class)
+        runBlocking {
+            runFusionTest(BasicCCureController::class)
+        }
     }
 
     @Test
     fun shouldTestDemo() = runTest {
-        runFusionTest(BasicDemoController::class)
+        runBlocking {
+            runFusionTest(BasicDemoController::class)
+        }
     }
 
     @Ignore
     @Test
     fun shouldTestGenetec() = runTest {
-        runFusionTest(BasicGenetecController::class)
+        runBlocking {
+            runFusionTest(BasicGenetecController::class)
+        }
     }
 
     @Ignore
     @Test
     fun shouldTestLenel() = runTest {
-        runFusionTest(BasicLenelController::class)
+        runBlocking {
+            runFusionTest(BasicLenelController::class)
+        }
     }
 
     @Test
     fun shouldTestNet2() = runTest {
-        runFusionTest(BasicPaxtonNet2Controller::class)
+        runBlocking {
+            runFusionTest(BasicPaxtonNet2Controller::class)
+        }
     }
 
     @Ignore
     @Test
     fun shouldTestPaxton10() = runTest {
-        runFusionTest(BasicPaxton10Controller::class)
+        runBlocking {
+            runFusionTest(BasicPaxton10Controller::class)
+        }
     }
 
     @Test
     fun shouldTestIntegra() = runTest {
-        runFusionTest(BasicIntegraV2Controller::class)
+        runBlocking {
+            runFusionTest(BasicIntegraV2Controller::class)
+        }
     }
 
     @Test
     fun shouldTestExgarde() = runTest {
-        runFusionTest(BasicTdsiExgardeController::class)
+        runBlocking {
+            runFusionTest(BasicTdsiExgardeController::class)
+        }
     }
 
     @Test
     fun shouldTestGardis() = runTest {
-        runFusionTest(BasicTdsiGardisController::class)
+        runBlocking {
+            runFusionTest(BasicTdsiGardisController::class)
+        }
     }
 
     @Ignore
     @Test
     fun shouldTestZkteco() = runTest {
-        runFusionTest(BasicZktecoController::class)
+        runBlocking {
+            runFusionTest(BasicZktecoController::class)
+        }
     }
 
     private suspend fun runFusionTest(controllerType: KClass<out BasicLockController>) = try {
@@ -151,7 +178,6 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(loginResponse.success)
         assertNotNull(loginResponse.success.result)
         assertTrue { loginResponse.success.result.authToken.isNotEmpty() }
-        println("Logged")
 
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${Uuid.random()}"
@@ -173,7 +199,6 @@ class FusionApiTest : CallbackTest() {
         }
         assertNotNull(integrationsResponse.success)
         assertNotNull(integrationsResponse.success.result)
-        println("Integrations")
 
         val actualDoor = integrationsResponse.success.result.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor?.doordeck)
@@ -191,7 +216,6 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(integrationTypeResponse.success.result)
         assertNotNull(integrationTypeResponse.success.result.status)
         assertEquals(testController.value.type, integrationTypeResponse.success.result.status)
-        println("Integrations by type")
 
         // Given - shouldStartDoor
         // When
@@ -212,7 +236,6 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(doorStateResponse.success)
         assertNotNull(doorStateResponse.success.result)
         assertEquals(ServiceStateType.RUNNING, doorStateResponse.success.result.state)
-        println("State")
 
         // Given - shouldStopDoor
         // When
@@ -232,7 +255,6 @@ class FusionApiTest : CallbackTest() {
         }
         assertNotNull(doorStateResponse.success)
         assertNotNull(doorStateResponse.success.result)
-        println("Deleted")
         //assertEquals(ServiceStateType.STOPPED, doorState.state)
 
         // Given - shouldDeleteDoor
