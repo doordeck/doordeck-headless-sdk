@@ -989,7 +989,7 @@ class LockOperationsApiTest : CallbackTest() {
         }
     }
 
-    /*@Test
+    @Test
     fun shouldShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
         callbackApiCall<ResultData<BasicTokenResponse>> {
@@ -1010,41 +1010,61 @@ class LockOperationsApiTest : CallbackTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             isKeyPairVerified = true
         )
-        val shareLock = LockOperations.ShareLock(
+        val shareLock = ShareLockData(
             targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
             targetUserRole = UserRole.USER,
             targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
         )
 
         // When
-        LockOperationsApi.shareLock(
-            shareLockOperation = LockOperations.ShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                shareLock = shareLock
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.shareLock(
+                data = ShareLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    shareLock = shareLock
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
-        assertTrue { locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+        var locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(locksResponse.success)
+        assertNotNull(locksResponse.success.result)
+        assertTrue { locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLockUsingContext
         // When
-        LockOperationsApi.revokeAccessToLock(
-            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(locksResponse.success)
+        assertNotNull(locksResponse.success.result)
         assertFalse {
-            locks.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+            locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
         }
     }
 
@@ -1069,17 +1089,17 @@ class LockOperationsApiTest : CallbackTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             isKeyPairVerified = true
         )
         val batchShareLock = listOf(
-            LockOperations.ShareLock(
+            ShareLockData(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
             ),
-            LockOperations.ShareLock(
+            ShareLockData(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
                 targetUserRole = UserRole.USER,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
@@ -1087,42 +1107,82 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.batchShareLock(
-            batchShareLockOperation = LockOperations.BatchShareLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                users = batchShareLock
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.batchShareLock(
+                data = BatchShareLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    users = batchShareLock
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
         assertTrue {
-            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
+            val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                LockOperationsApi.getLocksForUser(
+                    data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(response.success)
+            assertNotNull(response.success.result)
+            response.success.result.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
         assertTrue {
-            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
+            val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                LockOperationsApi.getLocksForUser(
+                    data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(response.success)
+            assertNotNull(response.success.result)
+            response.success.result.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
 
         // Given - shouldRevokeAccessToLockUsingContext
         // When
-        LockOperationsApi.revokeAccessToLock(
-            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
         assertFalse {
-            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).devices.any {
-                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+            val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                LockOperationsApi.getLocksForUser(
+                    data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(response.success)
+            assertNotNull(response.success.result)
+            response.success.result.devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
         }
         assertFalse {
-            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).devices.any {
-                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+            val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                LockOperationsApi.getLocksForUser(
+                    data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(response.success)
+            assertNotNull(response.success.result)
+            response.success.result.devices.any {
+                it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
+            }
         }
     }
 
@@ -1145,7 +1205,7 @@ class LockOperationsApiTest : CallbackTest() {
         assertNotNull(registerKeyResponse.success.result)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
         val updatedUnlockDuration = randomInt(1, 10)
-        val baseOperation = LockOperations.BaseOperation(
+        val baseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
             userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
@@ -1153,19 +1213,31 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
-                baseOperation = baseOperation,
-                unlockDuration = updatedUnlockDuration
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                data = UpdateSecureSettingUnlockDurationData(
+                    baseOperation = baseOperation,
+                    unlockDuration = updatedUnlockDuration
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        val response = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        assertNotNull(response.success)
+        assertNotNull(response.success.result)
+        assertEquals(updatedUnlockDuration.toDouble(), response.success.result.settings.unlockTime)
     }
 
-    @Test
+    /*@Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
@@ -1187,8 +1259,8 @@ class LockOperationsApiTest : CallbackTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             isKeyPairVerified = true
         )
 
@@ -1226,14 +1298,14 @@ class LockOperationsApiTest : CallbackTest() {
         val now = Clock.System.now()
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
-        val updatedUnlockBetween = LockOperations.UnlockBetween(
+        val updatedUnlockBetween = UnlockBetweenData(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
             days = listOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
-        val addBaseOperation = LockOperations.BaseOperation(
+        val addBaseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
             userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
@@ -1298,7 +1370,7 @@ class LockOperationsApiTest : CallbackTest() {
         val now = Clock.System.now()
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
-        val updatedUnlockBetween = LockOperations.UnlockBetween(
+        val updatedUnlockBetween = UnlockBetweenData(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
@@ -1308,8 +1380,8 @@ class LockOperationsApiTest : CallbackTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
+            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
             isKeyPairVerified = true
         )
 
