@@ -84,7 +84,7 @@ internal data class TimeRequirementData(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<String>
+    val days: List<DayOfWeek>
 )
 
 @Serializable
@@ -225,7 +225,7 @@ internal fun TimeRequirementData.toTimeRequirement() = BasicTimeRequirement(
     start = start,
     end = end,
     timezone = timezone,
-    days = days.map { DayOfWeek.valueOf(it) }
+    days = days
 )
 
 internal fun LocationRequirementData.toLocationRequirement() = BasicLocationRequirement(
