@@ -402,7 +402,8 @@ class LockOperationsApiTest : IntegrationTest() {
                     targetUserRole = UserRole.USER,
                     targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
                 )
-            ))
+            )
+        ).await()
 
         // Then
         var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
@@ -418,10 +419,11 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // When
         LockOperationsApi.revokeAccessToLock(
-            LockOperations.RevokeAccessToLockOperation(
+            revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                 baseOperation = revokeBaseOperation,
                 users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
-            )).await()
+            )
+        ).await()
 
         // Then
         locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
