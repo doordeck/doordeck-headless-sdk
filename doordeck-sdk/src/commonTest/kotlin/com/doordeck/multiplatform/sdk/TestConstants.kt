@@ -33,15 +33,4 @@ internal object TestConstants {
         val type: String,
         val controller: BasicLockController
     )
-
-    // Default values used on the Mock http client
-    const val DEFAULT_TILE_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_SITE_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_APPLICATION_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_DEVICE_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_LOCK_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000000"
-    const val DEFAULT_USER_EMAIL = "USER_EMAIL"
-    const val DEFAULT_UPLOAD_URL_PATH = "/upload"
-    const val DEFAULT_UPLOAD_URL = "https://example.com$DEFAULT_UPLOAD_URL_PATH"
 }

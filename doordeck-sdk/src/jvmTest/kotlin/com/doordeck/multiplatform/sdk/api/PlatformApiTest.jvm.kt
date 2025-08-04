@@ -7,7 +7,10 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.nimbusds.jose.Algorithm
 import com.nimbusds.jose.jwk.Curve
@@ -23,7 +26,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class PlatformApiTest : IntegrationTest() {
     
@@ -32,9 +34,9 @@ class PlatformApiTest : IntegrationTest() {
         // Given - shouldCreateApplication
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
-            name = "Test Application $platformType ${Uuid.random()}",
-            companyName = Uuid.random().toString(),
-            mailingAddress = "test@doordeck.com",
+            name = "Test Application $platformType ${randomUuidString()}",
+            companyName = randomString(),
+            mailingAddress = randomEmail(),
             privacyPolicy = randomUri(),
             supportContact = randomUri()
         )
@@ -54,7 +56,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application $platformType ${Uuid.random()}"
+        val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
 
         // When
         PlatformApi.updateApplicationName(application.applicationId, updatedApplicationName)
@@ -64,7 +66,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationName, application.name)
 
         // Given - shouldUpdateApplicationCompanyName
-        val updatedApplicationCompanyName = Uuid.random().toString()
+        val updatedApplicationCompanyName = randomString()
 
         // When
         PlatformApi.updateApplicationCompanyName(application.applicationId, updatedApplicationCompanyName)
@@ -74,7 +76,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationCompanyName, application.companyName)
 
         // Given - shouldUpdateApplicationMailingAddress
-        val updatedApplicationMailingAddress = "test2@doordeck.com"
+        val updatedApplicationMailingAddress = randomEmail()
 
         // When
         PlatformApi.updateApplicationMailingAddress(application.applicationId, updatedApplicationMailingAddress)
@@ -115,7 +117,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldUpdateApplicationEmailPreferences
         val updatedApplicationEmailPreferences = PlatformOperations.EmailPreferences(
-            senderEmail = "test@test.com",
+            senderEmail = randomEmail(),
             senderName = "test",
             primaryColour = "#000000",
             secondaryColour = "#000000",
@@ -197,7 +199,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldAddEd25519AuthKey
         val ed25519Key = OctetKeyPair(Curve.Ed25519, Base64URL("vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"), Base64URL("NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4"),
-            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("EdDSA"), Uuid.random().toString(),
+            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("EdDSA"), randomUuidString(),
             null, null, null, null, null, null, null, null, null
         )
 
@@ -227,7 +229,7 @@ class PlatformApiTest : IntegrationTest() {
             Base64URL("S84PTvcIgCJ2Ag6nckaqeTHrRCWlbiLAHa9juTBjoFc2B_4FUXkkA0aHM9hkbd1wIOHEVGgiCJpDalK5dmGWs6Tkm85QqY4N-jCSx0i9nlpJkwjNIvFbg7HDpBMoNJ3tGuDJPq-L2l5ONh4MgiYitpx49AxYB_U0htkz3ObwpgE"),
             Base64URL("vWorZMpENBF1nSW-WjCPI-vbvOypfaVGd-Kf7HkNb1LLIx3m4UsoiWFBagqjqO9EdF5vNDxqr6PQYSjDyICm8kDf9j1o88-KK6JgIdZlWLjPq2CN2KUDiMz5aas4gKkFuJmSvDxOQhRurXA_tvsPiqt7Ad8bk_yGKmSuPDAng4w"),
             null, null,
-            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("RS256"), Uuid.random().toString(),
+            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("RS256"), randomUuidString(),
             null, null, null, null, null, null, null, null, null,
         )
 
@@ -255,7 +257,7 @@ class PlatformApiTest : IntegrationTest() {
             KeyUse.SIGNATURE,
             emptySet<KeyOperation>(),
             Algorithm.parse("ES256"),
-            Uuid.random().toString(),
+            randomUuidString(),
             null, null, null,null, null, null, null, null, null
         )
 

@@ -2,6 +2,9 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
+import com.doordeck.multiplatform.sdk.randomPrivateKey
+import com.doordeck.multiplatform.sdk.randomPublicKey
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
@@ -11,17 +14,16 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
-import kotlin.uuid.Uuid
 
 class ContextManagerTest : IntegrationTest() {
 
     @Test
     fun shouldStoreJsonOperationContext() = runTest {
         // Given
-        val userId = Uuid.random().toString()
-        val certificateChain = (1..3).map { Uuid.random().toString() }
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val userId = randomUuidString()
+        val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
+        val publicKey = randomPublicKey()
+        val privateKey = randomPrivateKey()
         val operationContextData = OperationContextData(
             userId = userId,
             userCertificateChain = certificateChain.certificateChainToString(),

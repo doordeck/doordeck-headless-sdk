@@ -62,7 +62,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicUserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
-import com.doordeck.multiplatform.sdk.randomUuid
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -82,7 +82,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
 
 class LockOperationsApiTest : CallbackTest() {
 
@@ -122,7 +121,7 @@ class LockOperationsApiTest : CallbackTest() {
                     callback = staticCFunction(::testCallback)
                 )
             }
-            val updatedLockName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+            val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
             // When
             callbackApiCall<ResultData<Unit>> {
@@ -221,7 +220,7 @@ class LockOperationsApiTest : CallbackTest() {
                     callback = staticCFunction(::testCallback)
                 )
             }
-            val updatedLockDefaultName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+            val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
             // When
             callbackApiCall<ResultData<Unit>> {
@@ -1537,7 +1536,7 @@ class LockOperationsApiTest : CallbackTest() {
                     data = ShareLockOperationData(
                         baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                         shareLock = ShareLockData(
-                            targetUserId = randomUuid(),
+                            targetUserId = randomUuidString(),
                             targetUserRole = UserRole.USER,
                             targetUserPublicKey = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64()
                         )

@@ -5,9 +5,15 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomPrivateKey
+import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
+import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -15,7 +21,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class ContextTest : IntegrationTest() {
 
@@ -23,15 +28,15 @@ class ContextTest : IntegrationTest() {
     fun shouldStoreAndLoadContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = "https://${Uuid.random()}.com"
-        val cloudAuthToken = Uuid.random().toString()
-        val cloudRefreshToken = Uuid.random().toString()
-        val fusionAuthToken = Uuid.random().toString()
-        val userId = Uuid.random().toString()
-        val email = "${Uuid.random()}@doordeck.com"
-        val certificateChain = (1..3).map { Uuid.random().toString() }
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val fusionHost = randomUrlString()
+        val cloudAuthToken = randomString()
+        val cloudRefreshToken = randomString()
+        val fusionAuthToken = randomString()
+        val userId = randomUuidString()
+        val email = randomEmail()
+        val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
+        val publicKey = randomPublicKey()
+        val privateKey = randomPrivateKey()
         val keyPairVerified = publicKey
         val settings = DefaultSecureStorage(MemorySettings())
         Context.apply {
@@ -73,15 +78,15 @@ class ContextTest : IntegrationTest() {
     fun shouldClearContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = "https://${Uuid.random()}.com"
-        val cloudAuthToken = Uuid.random().toString()
-        val cloudRefreshToken = Uuid.random().toString()
-        val fusionAuthToken = Uuid.random().toString()
-        val userId = Uuid.random().toString()
-        val email = "${Uuid.random()}@doordeck.com"
-        val certificateChain = (1..3).map { Uuid.random().toString() }
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val fusionHost = randomUrlString()
+        val cloudAuthToken = randomString()
+        val cloudRefreshToken = randomString()
+        val fusionAuthToken = randomString()
+        val userId = randomUuidString()
+        val email = randomEmail()
+        val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
+        val publicKey = randomPublicKey()
+        val privateKey = randomPrivateKey()
         val keyPairVerified = publicKey
         Context.apply {
             setApiEnvironment(apiEnvironment)
@@ -118,10 +123,10 @@ class ContextTest : IntegrationTest() {
     @Test
     fun shouldStoreOperationContext() = runTest {
         // Given
-        val userId = Uuid.random().toString()
-        val certificateChain = (1..3).map { Uuid.random().toString() }
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val userId = randomUuidString()
+        val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
+        val publicKey = randomPublicKey()
+        val privateKey = randomPrivateKey()
         val settings = DefaultSecureStorage(MemorySettings())
         Context.setSecureStorageImpl(settings)
         Context.setOperationContext(userId, certificateChain, publicKey, privateKey, true)
@@ -179,8 +184,8 @@ class ContextTest : IntegrationTest() {
     @Test
     fun shouldCheckKeyPairValidityWithInvalidKeys() = runTest {
         // Given
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val publicKey = randomString().encodeToByteArray()
+        val privateKey = randomString().encodeToByteArray()
         Context.setKeyPair(publicKey, privateKey)
 
         // When
@@ -274,7 +279,7 @@ class ContextTest : IntegrationTest() {
         Context.setCloudAuthToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiIsImtpZCI6IjQwMzhmODE5MmZmMTZiMGQ4N2E3OWYyZjFlOTYyZWIwIn0.eyJleHAiOiIyNTUzNzczMjYxIn0.0O36vfj7QasI-PkE3qEqg4Vm1lF4vGxmmJzso7zLp23qmljOuBd6NaknPG9ZxxIo5WEbaJrgN8zAuRxtA8sYzA")
         Context.setKeyPair(keyPair.public, keyPair.private)
         Context.setKeyPairVerified(keyPair.public)
-        Context.setCertificateChain(listOf(Uuid.random().toString()))
+        Context.setCertificateChain(listOf(randomString()))
 
         // When
         val result = Context.getContextState()

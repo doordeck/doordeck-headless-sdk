@@ -22,7 +22,7 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
-import com.doordeck.multiplatform.sdk.randomUuid
+import com.doordeck.multiplatform.sdk.randomUuidString
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
@@ -38,7 +38,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
 
 class LockOperationsApiTest : IntegrationTest() {
 
@@ -58,7 +57,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldUpdateLockName() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName).await()
@@ -100,7 +99,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockSettingDefaultName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName).await()
@@ -842,7 +841,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 shareLockOperation = LockOperations.ShareLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
-                        targetUserId = randomUuid(),
+                        targetUserId = randomUuidString(),
                         targetUserRole = UserRole.USER,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )

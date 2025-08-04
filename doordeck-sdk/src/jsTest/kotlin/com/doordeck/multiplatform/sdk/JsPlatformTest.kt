@@ -9,7 +9,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class JsPlatformTest {
     @Test
@@ -35,8 +34,8 @@ class JsPlatformTest {
         // Given
         val sdkConfig = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)
-            .setCloudAuthToken(Uuid.random().toString())
-            .setCloudRefreshToken(Uuid.random().toString())
+            .setCloudAuthToken(randomString())
+            .setCloudRefreshToken(randomString())
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 

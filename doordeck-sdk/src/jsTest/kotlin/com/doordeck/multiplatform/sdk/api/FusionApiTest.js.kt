@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -21,7 +22,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class FusionApiTest : IntegrationTest() {
 
@@ -122,7 +122,7 @@ class FusionApiTest : IntegrationTest() {
         assertTrue { login.authToken.isNotEmpty() }
 
         // Given - shouldEnableDoor
-        val name = "Test Fusion Door $platformType ${Uuid.random()}"
+        val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
         // When
         FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller).await()

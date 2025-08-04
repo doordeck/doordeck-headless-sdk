@@ -23,6 +23,7 @@ import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuid
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toLocalTime
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
@@ -43,7 +44,6 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
 
 class LockOperationsApiTest : IntegrationTest() {
 
@@ -63,7 +63,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldUpdateLockName() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName)
@@ -105,7 +105,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${Uuid.random()}"
+        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockSettingDefaultName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName)

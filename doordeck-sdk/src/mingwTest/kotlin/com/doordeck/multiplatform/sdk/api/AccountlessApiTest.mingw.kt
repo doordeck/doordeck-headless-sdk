@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.model.data.RegistrationData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -23,7 +24,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class AccountlessApiTest : CallbackTest() {
 
@@ -53,7 +53,7 @@ class AccountlessApiTest : CallbackTest() {
     fun shouldRegisterAndDelete() = runTest {
         runBlocking {
             // Given - shouldRegister
-            val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${Uuid.random()}@")
+            val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
             val keyPair = CryptoManager.generateRawKeyPair()
 
             // When

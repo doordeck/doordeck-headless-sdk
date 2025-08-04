@@ -32,6 +32,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.plugins.timeout
@@ -46,7 +47,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class FusionApiTest : CallbackTest() {
 
@@ -180,7 +180,7 @@ class FusionApiTest : CallbackTest() {
         assertTrue { loginResponse.success.result.authToken.isNotEmpty() }
 
         // Given - shouldEnableDoor
-        val name = "Test Fusion Door $platformType ${Uuid.random()}"
+        val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
         // When
         callbackApiCall<ResultData<Unit>> {

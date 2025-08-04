@@ -21,6 +21,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomString
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -58,7 +59,6 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class ExtensionsTest {
 
@@ -108,7 +108,7 @@ class ExtensionsTest {
     fun shouldSetTokenAuthHeader() = runTest {
         // Given
         val httpRequestBuilder = HttpRequestBuilder()
-        val token = Uuid.random().toString()
+        val token = randomString()
 
         // When
         httpRequestBuilder.apply {

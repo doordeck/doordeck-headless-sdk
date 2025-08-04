@@ -10,14 +10,16 @@ import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.platformType
-import com.doordeck.multiplatform.sdk.randomUri
+import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomString
+import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUuidString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class PlatformApiTest : IntegrationTest() {
     
@@ -26,11 +28,11 @@ class PlatformApiTest : IntegrationTest() {
         // Given - shouldCreateApplication
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
-            name = "Test Application $platformType ${Uuid.random()}",
-            companyName = Uuid.random().toString(),
-            mailingAddress = "test@doordeck.com",
-            privacyPolicy = randomUri(),
-            supportContact = randomUri()
+            name = "Test Application $platformType ${randomUuidString()}",
+            companyName = randomString(),
+            mailingAddress = randomEmail(),
+            privacyPolicy = randomUrlString(),
+            supportContact = randomUrlString()
         )
 
         // When
@@ -48,7 +50,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application $platformType ${Uuid.random()}"
+        val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
 
         // When
         PlatformApi.updateApplicationName(application.applicationId, updatedApplicationName)
@@ -58,7 +60,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationName, application.name)
 
         // Given - shouldUpdateApplicationCompanyName
-        val updatedApplicationCompanyName = Uuid.random().toString()
+        val updatedApplicationCompanyName = randomString()
 
         // When
         PlatformApi.updateApplicationCompanyName(application.applicationId, updatedApplicationCompanyName)
@@ -68,7 +70,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationCompanyName, application.companyName)
 
         // Given - shouldUpdateApplicationMailingAddress
-        val updatedApplicationMailingAddress = "test2@doordeck.com"
+        val updatedApplicationMailingAddress = randomEmail()
 
         // When
         PlatformApi.updateApplicationMailingAddress(application.applicationId, updatedApplicationMailingAddress)
@@ -78,7 +80,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
 
         // Given - shouldUpdateApplicationPrivacyPolicy
-        val updatedApplicationPrivacyPolicy = randomUri()
+        val updatedApplicationPrivacyPolicy = randomUrlString()
 
         // When
         PlatformApi.updateApplicationPrivacyPolicy(application.applicationId, updatedApplicationPrivacyPolicy)
@@ -88,7 +90,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
 
         // Given - shouldUpdateApplicationSupportContact
-        val updatedApplicationSupportContact = randomUri()
+        val updatedApplicationSupportContact = randomUrlString()
 
         // When
         PlatformApi.updateApplicationSupportContact(application.applicationId, updatedApplicationSupportContact)
@@ -98,7 +100,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationSupportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationAppLink
-        val updatedApplicationAppLink = randomUri()
+        val updatedApplicationAppLink = randomUrlString()
 
         // When
         PlatformApi.updateApplicationAppLink(application.applicationId, updatedApplicationAppLink)
@@ -109,13 +111,13 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldUpdateApplicationEmailPreferences
         val updatedApplicationEmailPreferences = PlatformOperations.EmailPreferences(
-            senderEmail = "test@test.com",
+            senderEmail = randomEmail(),
             senderName = "test",
             primaryColour = "#000000",
             secondaryColour = "#000000",
             onlySendEssentialEmails = true,
             callToAction = PlatformOperations.EmailCallToAction(
-                actionTarget = randomUri(),
+                actionTarget = randomUrlString(),
                 headline = "test",
                 actionText = "test"
             )
@@ -146,7 +148,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addApplicationAuthIssuer = randomUri()
+        val addApplicationAuthIssuer = randomUrlString()
 
         // When
         PlatformApi.addAuthIssuer(application.applicationId, addApplicationAuthIssuer)
@@ -168,7 +170,7 @@ class PlatformApiTest : IntegrationTest() {
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldAddCorsDomain
-        val addedApplicationCorsDomain = randomUri()
+        val addedApplicationCorsDomain = randomUrlString()
 
         // When
         PlatformApi.addCorsDomain(application.applicationId, addedApplicationCorsDomain)
@@ -191,7 +193,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldAddEd25519AuthKey
         val ed25519Key = PlatformOperations.Ed25519Key(
-            kid = Uuid.random().toString(),
+            kid = randomUuidString(),
             use = "sig",
             alg = "EdDSA",
             d = "NUTwZGmCu7zQ5tNRXqBGBnZCTYqDci3GMlLCg8qw0J4",
@@ -216,7 +218,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldAddRsaAuthKey
         val rsaKey = PlatformOperations.RsaKey(
-            kid = Uuid.random().toString(),
+            kid = randomUuidString(),
             use = "sig",
             alg = "RS256",
             p = "_86RLMHT_HrvYGzRLA8K2gEzUh3UADy5xMatYY7nh6KLBWY2USMn5nD93adcT0u6FKE6cEBjNRhWpq_11ai4UuJmLI88Cpf3HoN-eVBqpf0aULsLMNPJK88MWNRvLR5_54-NrAqZOUDLGi32te-CWd4Uq4ly6D_MS_p7G1z7zdk",
@@ -246,7 +248,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldAddEcAuthKey
         val ecKey = PlatformOperations.EcKey(
-            kid = Uuid.random().toString(),
+            kid = randomUuidString(),
             use = "sig",
             alg = "ES256",
             d = "6BCNLf3Qdkle4DRLzqocD_58yIQLkaCT-EiWVThFf1s",
