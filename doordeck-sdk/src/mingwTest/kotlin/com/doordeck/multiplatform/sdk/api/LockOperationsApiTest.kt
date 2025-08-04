@@ -20,8 +20,6 @@ import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.BaseOperationData
-import com.doordeck.multiplatform.sdk.model.data.BasicLocationRequirement
-import com.doordeck.multiplatform.sdk.model.data.BasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.BatchShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.GetAuditForUserData
 import com.doordeck.multiplatform.sdk.model.data.GetLockAuditTrailData
@@ -1230,14 +1228,12 @@ class LockOperationsApiTest : CallbackTest() {
                 callback = staticCFunction(::testCallback)
             )
         }
-
-        // Then
         assertNotNull(response.success)
         assertNotNull(response.success.result)
         assertEquals(updatedUnlockDuration.toDouble(), response.success.result.settings.unlockTime)
     }
 
-    /*@Test
+    @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
@@ -1265,16 +1261,26 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.updateSecureSettingUnlockDuration(
-            updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                unlockDuration = updatedUnlockDuration
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                data = UpdateSecureSettingUnlockDurationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockDuration = updatedUnlockDuration
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        val response = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(response.success)
+        assertNotNull(response.success.result)
+        assertEquals(updatedUnlockDuration.toDouble(), response.success.result.settings.unlockTime)
     }
 
     @Test
@@ -1313,23 +1319,33 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
-                baseOperation = addBaseOperation,
-                unlockBetween = updatedUnlockBetween
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = addBaseOperation,
+                    unlockBetween = updatedUnlockBetween
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
-        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+        var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(lockResponse.success)
+        assertNotNull(lockResponse.success.result)
+        assertNotNull(lockResponse.success.result.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lockResponse.success.result.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
 
         // Given - shouldRemoveSecureSettingUnlockBetween
-        val removeBaseOperation = LockOperations.BaseOperation(
+        val removeBaseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
             userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
@@ -1337,16 +1353,26 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
-                baseOperation = removeBaseOperation,
-                unlockBetween = null
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = removeBaseOperation,
+                    unlockBetween = null
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNull(lock.settings.unlockBetweenWindow)
+        lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(lockResponse.success)
+        assertNotNull(lockResponse.success.result)
+        assertNull(lockResponse.success.result.settings.unlockBetweenWindow)
     }
 
     @Test
@@ -1386,33 +1412,53 @@ class LockOperationsApiTest : CallbackTest() {
         )
 
         // When
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                unlockBetween = updatedUnlockBetween
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockBetween = updatedUnlockBetween
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
-        assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+        var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(lockResponse.success)
+        assertNotNull(lockResponse.success.result)
+        assertNotNull(lockResponse.success.result.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lockResponse.success.result.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
 
         // Given
-        LockOperationsApi.updateSecureSettingUnlockBetween(
-            updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
-                baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                unlockBetween = null
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockBetween = null
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
             )
-        )
+        }
 
         // Then
-        lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNull(lock.settings.unlockBetweenWindow)
-    }*/
+        lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(lockResponse.success)
+        assertNotNull(lockResponse.success.result)
+        assertNull(lockResponse.success.result.settings.unlockBetweenWindow)
+    }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
