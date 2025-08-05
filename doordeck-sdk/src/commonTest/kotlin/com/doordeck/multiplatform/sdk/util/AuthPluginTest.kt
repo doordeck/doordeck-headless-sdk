@@ -5,10 +5,15 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
+import com.doordeck.multiplatform.sdk.randomBoolean
+import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomNullable
+import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomTokenResponse
-import com.doordeck.multiplatform.sdk.randomUserDetailsResponse
 import com.doordeck.multiplatform.sdk.respondContent
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
@@ -30,8 +35,16 @@ class AuthPluginTest : IntegrationTest() {
     @Test
     fun shouldAutomaticallyRefreshTokens() = runTest {
         // Given
-        val tokenResponse = randomTokenResponse()
-        val userDetails = randomUserDetailsResponse()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomString(),
+            refreshToken = randomString(),
+        )
+        val userDetails = BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomNullable { randomString() },
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        )
         val currentAuthToken = randomString()
         val currentRefreshToken = randomString()
         Context.setCloudAuthToken(currentAuthToken)

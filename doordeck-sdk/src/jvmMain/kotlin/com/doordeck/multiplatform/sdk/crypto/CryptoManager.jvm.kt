@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPublicKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
@@ -38,29 +42,25 @@ actual object CryptoManager {
         )
     }
 
-    fun generateKeyPair(): KeyPair {
-        return KeyPairGenerator.getInstance(EDDSA_ALGORITHM).generateKeyPair()
-    }
+    fun generateKeyPair(): KeyPair = KeyPairGenerator
+        .getInstance(EDDSA_ALGORITHM)
+        .generateKeyPair()
 
-    internal fun String.toRsaPublicKey(): PublicKey {
-        return KeyFactory.getInstance(RSA_ALGORITHM)
-            .generatePublic(X509EncodedKeySpec(decodeBase64ToByteArray()))
-    }
+    internal fun String.toRsaPublicKey(): PublicKey = KeyFactory
+        .getInstance(RSA_ALGORITHM)
+        .generatePublic(X509EncodedKeySpec(decodeBase64ToByteArray()))
 
-    internal fun ByteArray.toPublicKey(): PublicKey {
-        return KeyFactory.getInstance(EDDSA_ALGORITHM)
-            .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
-    }
+    internal fun ByteArray.toPublicKey(): PublicKey = KeyFactory
+        .getInstance(EDDSA_ALGORITHM)
+        .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
 
-    internal fun ByteArray.toPrivateKey(): PrivateKey {
-        return KeyFactory.getInstance(EDDSA_ALGORITHM)
-            .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
-    }
+    internal fun ByteArray.toPrivateKey(): PrivateKey = KeyFactory
+        .getInstance(EDDSA_ALGORITHM)
+        .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
 
-    internal fun String.toCertificate(): X509Certificate {
-        return CertificateFactory.getInstance(CERTIFICATE_TYPE)
-            .generateCertificate(decodeBase64ToByteArray().inputStream()) as X509Certificate
-    }
+    internal fun String.toCertificate(): X509Certificate = CertificateFactory
+        .getInstance(CERTIFICATE_TYPE)
+        .generateCertificate(decodeBase64ToByteArray().inputStream()) as X509Certificate
 
     /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]
@@ -88,6 +88,7 @@ actual object CryptoManager {
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
+
         JAVA_PKCS8_PUBLIC_KEY_SIZE,
         BOUNCY_CASTLE_PUBLIC_KEY_SIZE -> this
         else -> throw SdkException("Unknown public key size: $size")
@@ -96,10 +97,13 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.toPlatformPrivateKey]
      */
-    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when(size) {
+    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE,
         SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
-        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE)
+
+        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER +
+                sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE)
+
         JAVA_PKCS8_PRIVATE_KEY_SIZE -> this
         else -> throw SdkException("Unknown private key size: $size")
     }

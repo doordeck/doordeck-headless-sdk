@@ -40,19 +40,34 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
 private val TIME_FORMAT = LocalTime.Format { byUnicodePattern("HH:mm") }
 private val DATE_FORMAT = LocalDate.Format { byUnicodePattern("yyyy-MM-dd") }
 
-internal fun String.toLocalTime(format: DateTimeFormat<LocalTime> = TIME_FORMAT): LocalTime = LocalTime.parse(this, format)
-internal fun LocalTime.toLocalTimeString(format: DateTimeFormat<LocalTime> = TIME_FORMAT): String = format.format(this)
+internal fun String.toLocalTime(format: DateTimeFormat<LocalTime> = TIME_FORMAT): LocalTime = LocalTime
+    .parse(
+        input = this,
+        format = format
+    )
 
-internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> = DATE_FORMAT): LocalDate = LocalDate.parse(this, format)
-internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> = DATE_FORMAT): String = format.format(this)
+internal fun LocalTime.toLocalTimeString(format: DateTimeFormat<LocalTime> = TIME_FORMAT): String = format
+    .format(this)
+
+internal fun String.toLocalDate(format: DateTimeFormat<LocalDate> = DATE_FORMAT): LocalDate = LocalDate
+    .parse(
+        input = this,
+        format = format
+    )
+
+internal fun LocalDate.toLocalDateString(format: DateTimeFormat<LocalDate> = DATE_FORMAT): String = format
+    .format(this)
 
 internal fun Int.secondsToDuration(): Duration = toDuration(DurationUnit.SECONDS)
+
 internal fun Duration.durationToSeconds(): Int = toInt(DurationUnit.SECONDS)
 
 internal fun String.toUri(): URI = URI.create(this)
+
 internal fun String.toUrl(): URL = toUri().toURL()
 
 internal fun String.toZoneId(): ZoneId = ZoneId.of(this)
+
 internal fun String.toUuid(): UUID = UUID.fromString(this)
 
 internal fun String.toInstant(): Instant {
@@ -62,6 +77,7 @@ internal fun String.toInstant(): Instant {
         nanosecondAdjustment = split.lastOrNull()?.toLong() ?: 0
     )
 }
+
 internal fun Double.toInstant(): Instant = Instant.fromEpochSeconds(toLong())
 
 internal fun String.toInetAddress(): InetAddress = InetAddress.getByName(this)

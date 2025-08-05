@@ -15,42 +15,42 @@ actual object TilesApi {
     /**
      * @see TilesClient.getLocksBelongingToTileRequest
      */
-    suspend fun getLocksBelongingToTile(tileId: UUID): TileLocksResponse {
-        return TilesClient.getLocksBelongingToTileRequest(tileId.toString())
-            .toTileLocksResponse()
-    }
+    suspend fun getLocksBelongingToTile(tileId: UUID): TileLocksResponse = TilesClient
+        .getLocksBelongingToTileRequest(tileId.toString())
+        .toTileLocksResponse()
 
     /**
      * Async variant of [TilesApi.getLocksBelongingToTile] returning [CompletableFuture].
      */
-    fun getLocksBelongingToTileAsync(tileId: UUID): CompletableFuture<TileLocksResponse> {
-        return completableFuture { getLocksBelongingToTile(tileId) }
+    fun getLocksBelongingToTileAsync(tileId: UUID): CompletableFuture<TileLocksResponse> = completableFuture {
+        getLocksBelongingToTile(tileId)
     }
 
     /**
      * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(tileId: UUID, siteId: UUID, lockIds: List<UUID>) {
-        return TilesClient.associateMultipleLocksRequest(
+    suspend fun associateMultipleLocks(tileId: UUID, siteId: UUID, lockIds: List<UUID>) = TilesClient
+        .associateMultipleLocksRequest(
             tileId = tileId.toString(),
             siteId = siteId.toString(),
             lockIds = lockIds.map { it.toString() }
         )
-    }
 
     /**
      * Async variant of [TilesApi.associateMultipleLocks] returning [CompletableFuture].
      */
     @SiteAdmin
-    fun associateMultipleLocksAsync(tileId: UUID, siteId: UUID, lockIds: List<UUID>): CompletableFuture<Unit> {
-        return completableFuture {
-            associateMultipleLocks(
-                tileId = tileId,
-                siteId = siteId,
-                lockIds = lockIds
-            )
-        }
+    fun associateMultipleLocksAsync(
+        tileId: UUID,
+        siteId: UUID,
+        lockIds: List<UUID>
+    ): CompletableFuture<Unit> = completableFuture {
+        associateMultipleLocks(
+            tileId = tileId,
+            siteId = siteId,
+            lockIds = lockIds
+        )
     }
 }
 

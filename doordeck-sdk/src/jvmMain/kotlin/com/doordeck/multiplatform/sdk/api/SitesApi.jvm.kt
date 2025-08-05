@@ -18,46 +18,43 @@ actual object SitesApi {
     /**
      * @see SitesClient.listSitesRequest
      */
-    suspend fun listSites(): List<SiteResponse> {
-        return SitesClient.listSitesRequest()
-            .toSiteResponse()
-    }
+    suspend fun listSites(): List<SiteResponse> = SitesClient
+        .listSitesRequest()
+        .toSiteResponse()
 
     /**
      * Async variant of [SitesApi.listSites] returning [CompletableFuture].
      */
-    fun listSitesAsync(): CompletableFuture<List<SiteResponse>> {
-        return completableFuture { listSites() }
+    fun listSitesAsync(): CompletableFuture<List<SiteResponse>> = completableFuture {
+        listSites()
     }
 
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
-    suspend fun getLocksForSite(siteId: UUID): List<SiteLocksResponse> {
-        return SitesClient.getLocksForSiteRequest(siteId.toString())
-            .toLockResponse()
-    }
+    suspend fun getLocksForSite(siteId: UUID): List<SiteLocksResponse> = SitesClient
+        .getLocksForSiteRequest(siteId.toString())
+        .toLockResponse()
 
     /**
      * Async variant of [SitesApi.getLocksForSite] returning [CompletableFuture].
      */
-    fun getLocksForSiteAsync(siteId: UUID): CompletableFuture<List<SiteLocksResponse>> {
-        return completableFuture { getLocksForSite(siteId) }
+    fun getLocksForSiteAsync(siteId: UUID): CompletableFuture<List<SiteLocksResponse>> = completableFuture {
+        getLocksForSite(siteId)
     }
 
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
-    suspend fun getUsersForSite(siteId: UUID): List<UserForSiteResponse> {
-        return SitesClient.getUsersForSiteRequest(siteId.toString())
-            .toUserForSiteResponse()
-    }
+    suspend fun getUsersForSite(siteId: UUID): List<UserForSiteResponse> = SitesClient
+        .getUsersForSiteRequest(siteId.toString())
+        .toUserForSiteResponse()
 
     /**
      * Async variant of [SitesApi.getUsersForSite] returning [CompletableFuture].
      */
-    fun getUsersForSiteAsync(siteId: UUID): CompletableFuture<List<UserForSiteResponse>> {
-        return completableFuture { getUsersForSite(siteId) }
+    fun getUsersForSiteAsync(siteId: UUID): CompletableFuture<List<UserForSiteResponse>> = completableFuture {
+        getUsersForSite(siteId)
     }
 }
 

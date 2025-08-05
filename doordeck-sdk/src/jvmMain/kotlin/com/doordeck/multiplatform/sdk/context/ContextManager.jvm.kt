@@ -15,118 +15,82 @@ import java.util.UUID
 
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        Context.setApiEnvironment(apiEnvironment)
-    }
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = Context.setApiEnvironment(apiEnvironment)
 
-    fun getApiEnvironment(): ApiEnvironment {
-        return Context.getApiEnvironment()
-    }
+    fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
 
-    fun setCloudAuthToken(token: String) {
-        Context.setCloudAuthToken(token)
-    }
+    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
 
-    fun getCloudAuthToken(): String? {
-        return Context.getCloudAuthToken()
-    }
+    fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return Context.isCloudAuthTokenInvalidOrExpired()
-    }
+    fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
 
-    fun setCloudRefreshToken(token: String) {
-        Context.setCloudRefreshToken(token)
-    }
+    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
 
-    fun getCloudRefreshToken(): String? {
-        return Context.getCloudRefreshToken()
-    }
+    fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: String) {
-        Context.setFusionHost(host)
-    }
+    fun setFusionHost(host: String) = Context.setFusionHost(host)
 
-    fun getFusionHost(): String {
-        return Context.getFusionHost()
-    }
+    fun getFusionHost(): String = Context.getFusionHost()
 
-    fun setFusionAuthToken(token: String) {
-        Context.setFusionAuthToken(token)
-    }
+    fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 
-    fun getFusionAuthToken(): String? {
-        return Context.getFusionAuthToken()
-    }
+    fun getFusionAuthToken(): String? = Context.getFusionAuthToken()
 
-    fun setUserId(userId: UUID) {
-        Context.setUserId(userId.toString())
-    }
+    fun setUserId(userId: UUID) = Context.setUserId(userId.toString())
 
-    fun getUserId(): UUID? {
-        return Context.getUserId()?.toUuid()
-    }
+    fun getUserId(): UUID? = Context.getUserId()?.toUuid()
 
-    fun setUserEmail(email: String) {
-        Context.setUserEmail(email)
-    }
+    fun setUserEmail(email: String) = Context.setUserEmail(email)
 
-    fun getUserEmail(): String? {
-        return Context.getUserEmail()
-    }
+    fun getUserEmail(): String? = Context.getUserEmail()
 
-    fun setCertificateChain(certificateChain: List<X509Certificate>) {
-        Context.setCertificateChain(certificateChain.map { it.encoded.encodeByteArrayToBase64() })
-    }
-
-    fun getCertificateChain(): List<X509Certificate>? {
-        return Context.getCertificateChain()?.map { it.toCertificate() }
-    }
-
-    fun isCertificateChainInvalidOrExpired(): Boolean {
-        return Context.isCertificateChainInvalidOrExpired()
-    }
-
-    fun setKeyPair(publicKey: PublicKey, privateKey: PrivateKey) {
-        Context.setKeyPair(publicKey.encoded, privateKey.encoded)
-    }
-
-    fun getKeyPair(): KeyPair? {
-        return Context.getKeyPair()?.let {
-            KeyPair(it.public.toPublicKey(), it.private.toPrivateKey())
+    fun setCertificateChain(certificateChain: List<X509Certificate>) = Context.setCertificateChain(
+        certificateChain = certificateChain.map {
+            it.encoded.encodeByteArrayToBase64()
         }
+    )
+
+    fun getCertificateChain(): List<X509Certificate>? = Context.getCertificateChain()?.map {
+        it.toCertificate()
     }
 
-    fun setKeyPairVerified(publicKey: PublicKey?) {
-        Context.setKeyPairVerified(publicKey?.encoded)
+    fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
+
+    fun setKeyPair(publicKey: PublicKey, privateKey: PrivateKey) = Context.setKeyPair(
+        publicKey = publicKey.encoded,
+        privateKey = privateKey.encoded
+    )
+
+    fun getKeyPair(): KeyPair? = Context.getKeyPair()?.let {
+        KeyPair(it.public.toPublicKey(), it.private.toPrivateKey())
     }
 
-    fun isKeyPairVerified(): Boolean {
-        return Context.isKeyPairVerified()
-    }
+    fun setKeyPairVerified(publicKey: PublicKey?) = Context.setKeyPairVerified(publicKey?.encoded)
 
-    fun isKeyPairValid(): Boolean {
-        return Context.isKeyPairValid()
-    }
+    fun isKeyPairVerified(): Boolean = Context.isKeyPairVerified()
 
-    fun setOperationContext(userId: UUID, certificateChain: List<X509Certificate>, publicKey: PublicKey,
-                            privateKey: PrivateKey, isKeyPairVerified: Boolean) {
-        Context.setOperationContext(
-            userId = userId.toString(),
-            certificateChain = certificateChain.map { it.encoded.encodeByteArrayToBase64() },
-            publicKey = publicKey.encoded,
-            privateKey = privateKey.encoded,
-            isKeyPairVerified = isKeyPairVerified
-        )
-    }
+    fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
 
-    fun getContextState(): ContextState {
-        return Context.getContextState()
-    }
+    fun setOperationContext(
+        userId: UUID,
+        certificateChain: List<X509Certificate>,
+        publicKey: PublicKey,
+        privateKey: PrivateKey,
+        isKeyPairVerified: Boolean
+    ) = Context.setOperationContext(
+        userId = userId.toString(),
+        certificateChain = certificateChain.map {
+            it.encoded.encodeByteArrayToBase64()
+        },
+        publicKey = publicKey.encoded,
+        privateKey = privateKey.encoded,
+        isKeyPairVerified = isKeyPairVerified
+    )
 
-    fun clearContext() {
-        Context.clearContext()
-    }
+    fun getContextState(): ContextState = Context.getContextState()
+
+    fun clearContext() = Context.clearContext()
 }
 
 actual fun contextManager(): ContextManager = ContextManager

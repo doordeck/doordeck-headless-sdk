@@ -1,36 +1,8 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
-import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
-import com.doordeck.multiplatform.sdk.storage.MemorySettings
-import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlin.random.Random
 import kotlin.uuid.Uuid
-
-internal fun randomTokenResponse(): BasicTokenResponse = BasicTokenResponse(
-    authToken = randomString(),
-    refreshToken = randomString(),
-)
-
-internal fun randomUserDetailsResponse(): BasicUserDetailsResponse = BasicUserDetailsResponse(
-    email = randomEmail(),
-    displayName = randomNullable { randomString() },
-    emailVerified = randomBoolean(),
-    publicKey = randomPublicKey().encodeByteArrayToBase64()
-)
-
-fun randomSdkConfig(): SdkConfig = SdkConfig(
-    apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
-    cloudAuthToken = randomNullable { randomString() },
-    cloudRefreshToken = randomNullable { randomString() },
-    fusionHost = randomNullable { randomUrlString() },
-    secureStorage = DefaultSecureStorage(MemorySettings()),
-    debugLogging = randomNullable { randomBoolean() }
-)
 
 /**
  * Test utils
@@ -63,6 +35,7 @@ internal fun randomString(
         append(charPool.random())
     }
 }
+
 internal fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))
 
 internal inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null

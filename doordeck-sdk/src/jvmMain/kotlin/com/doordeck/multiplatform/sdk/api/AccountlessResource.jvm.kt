@@ -12,27 +12,24 @@ import java.util.concurrent.CompletableFuture
  * Platform-specific implementations of accountless-related API calls.
  */
 actual object AccountlessApi {
-
     /**
      * @see AccountlessClient.loginRequest
      */
-    suspend fun login(email: String, password: String): TokenResponse {
-        return AccountlessClient.loginRequest(
+    suspend fun login(email: String, password: String): TokenResponse = AccountlessClient
+        .loginRequest(
             email = email,
             password = password
-        ).toTokenResponse()
-    }
+        )
+        .toTokenResponse()
 
     /**
      * Async variant of [AccountlessApi.login] returning [CompletableFuture].
      */
-    fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> {
-        return completableFuture {
-            login(
-                email = email,
-                password = password
-            )
-        }
+    fun loginAsync(email: String, password: String): CompletableFuture<TokenResponse> = completableFuture {
+        login(
+            email = email,
+            password = password
+        )
     }
 
     /**
@@ -44,15 +41,15 @@ actual object AccountlessApi {
         displayName: String? = null,
         force: Boolean = false,
         publicKey: PublicKey? = null
-    ): TokenResponse {
-        return AccountlessClient.registrationRequest(
+    ): TokenResponse = AccountlessClient
+        .registrationRequest(
             email = email,
             password = password,
             displayName = displayName,
             force = force,
             publicKey = publicKey?.encoded
-        ).toTokenResponse()
-    }
+        )
+        .toTokenResponse()
 
     /**
      * Async variant of [AccountlessApi.registration] returning [CompletableFuture].
@@ -63,69 +60,61 @@ actual object AccountlessApi {
         displayName: String? = null,
         force: Boolean = false,
         publicKey: PublicKey? = null
-    ): CompletableFuture<TokenResponse> {
-        return completableFuture {
-            registration(
-                email = email,
-                password = password,
-                displayName = displayName,
-                force = force,
-                publicKey = publicKey
-            )
-        }
+    ): CompletableFuture<TokenResponse> = completableFuture {
+        registration(
+            email = email,
+            password = password,
+            displayName = displayName,
+            force = force,
+            publicKey = publicKey
+        )
     }
 
     /**
      * @see AccountlessClient.verifyEmailRequest
      */
-    suspend fun verifyEmail(code: String) {
-        return AccountlessClient.verifyEmailRequest(code)
-    }
+    suspend fun verifyEmail(code: String) = AccountlessClient.verifyEmailRequest(code)
 
     /**
      * Async variant of [AccountlessApi.verifyEmail] returning [CompletableFuture].
      */
-    fun verifyEmailAsync(code: String): CompletableFuture<Unit> {
-        return completableFuture { verifyEmail(code) }
+    fun verifyEmailAsync(code: String): CompletableFuture<Unit> = completableFuture {
+        verifyEmail(code)
     }
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordReset(email: String) {
-        return AccountlessClient.passwordResetRequest(email)
-    }
+    suspend fun passwordReset(email: String) = AccountlessClient.passwordResetRequest(email)
 
     /**
      * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
      */
-    fun passwordResetAsync(email: String): CompletableFuture<Unit> {
-        return completableFuture { passwordReset(email) }
+    fun passwordResetAsync(email: String): CompletableFuture<Unit> = completableFuture {
+        passwordReset(email)
     }
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordResetVerify(userId: UUID, token: String, password: String) {
-        return AccountlessClient.passwordResetVerifyRequest(
+    suspend fun passwordResetVerify(userId: UUID, token: String, password: String) = AccountlessClient
+        .passwordResetVerifyRequest(
             userId = userId.toString(),
             token = token,
             password = password
         )
-    }
 
     /**
      * Async variant of [AccountlessApi.passwordReset] returning [CompletableFuture].
      */
-    fun passwordResetVerifyAsync(userId: UUID, token: String, password: String): CompletableFuture<Unit> {
-        return completableFuture {
+    fun passwordResetVerifyAsync(userId: UUID, token: String, password: String): CompletableFuture<Unit> =
+        completableFuture {
             passwordResetVerify(
                 userId = userId,
                 token = token,
                 password = password
             )
         }
-    }
 }
 
 /**
