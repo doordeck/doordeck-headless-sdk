@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations.CreateApplication
 import com.nimbusds.jose.jwk.ECKey
 import com.nimbusds.jose.jwk.JWK
@@ -159,7 +160,7 @@ internal fun JWK.toBasicAuthKey(): BasicAuthKey {
             crv = curve.name,
             x = x.toString()
         )
-        else -> error("")
+        else -> throw SdkException("Unknown key type")
     }
 }
 

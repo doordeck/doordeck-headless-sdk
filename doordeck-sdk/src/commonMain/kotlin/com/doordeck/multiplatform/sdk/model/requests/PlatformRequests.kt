@@ -188,7 +188,37 @@ internal fun BasicCreateApplication.toCreateApplicationRequest(): CreateApplicat
 )
 
 internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
-    is BasicRsaKey -> AddRsaKeyRequest(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is BasicEcKey -> AddEcKeyRequest(kty, use, kid, alg, d, crv, x, y)
-    is BasicEd25519Key -> AddEd25519KeyRequest(kty, use, kid, alg, d, crv, x)
+    is BasicRsaKey -> AddRsaKeyRequest(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        p = p,
+        q = q,
+        d = d,
+        e = e,
+        qi = qi,
+        dp = dp,
+        dq = dq,
+        n = n
+    )
+    is BasicEcKey -> AddEcKeyRequest(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x,
+        y = y
+    )
+    is BasicEd25519Key -> AddEd25519KeyRequest(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x
+    )
 }

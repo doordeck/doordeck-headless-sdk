@@ -274,10 +274,40 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplicatio
     )
 }
 
-internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
-    is PlatformOperations.RsaKey -> BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is PlatformOperations.EcKey -> BasicEcKey(kty, use, kid, alg, d, crv, x, y)
-    is PlatformOperations.Ed25519Key -> BasicEd25519Key(kty, use, kid, alg, d, crv, x)
+internal fun PlatformOperations.AuthKey.toBasicAuthKey() = when(this) {
+    is PlatformOperations.RsaKey -> BasicRsaKey(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        p = p,
+        q = q,
+        d = d,
+        e = e,
+        qi = qi,
+        dp = dp,
+        dq = dq,
+        n = n
+    )
+    is PlatformOperations.EcKey -> BasicEcKey(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x,
+        y = y
+    )
+    is PlatformOperations.Ed25519Key -> BasicEd25519Key(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x
+    )
 }
 
 internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicEmailPreferences {

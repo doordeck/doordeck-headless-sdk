@@ -188,7 +188,37 @@ internal fun EmailCallToActionData.toEmailCallToAction() = BasicEmailCallToActio
 )
 
 internal fun AuthKeyData.toAuthKey() = when(this) {
-    is RsaKeyData -> BasicRsaKey(kty, use, kid, alg, p, q, d, e, qi, dp, dq, n)
-    is EcKeyData -> BasicEcKey(kty, use, kid, alg, d, crv, x, y)
-    is Ed25519KeyData -> BasicEd25519Key(kty, use, kid, alg, d, crv, x)
+    is RsaKeyData -> BasicRsaKey(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        p = p,
+        q = q,
+        d = d,
+        e = e,
+        qi = qi,
+        dp = dp,
+        dq = dq,
+        n = n
+    )
+    is EcKeyData -> BasicEcKey(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x,
+        y = y
+    )
+    is Ed25519KeyData -> BasicEd25519Key(
+        kty = kty,
+        use = use,
+        kid = kid,
+        alg = alg,
+        d = d,
+        crv = crv,
+        x = x
+    )
 }

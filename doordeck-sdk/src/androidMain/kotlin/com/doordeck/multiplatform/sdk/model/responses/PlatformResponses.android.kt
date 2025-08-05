@@ -144,9 +144,53 @@ internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationRespon
 )
 
 internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
-    is BasicRsaKeyResponse -> RsaKeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, e, n)
-    is BasicEcKeyResponse -> EcKeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, crv, x, y)
-    is BasicEd25519KeyResponse -> Ed25519KeyResponse(use, kid, alg, ops, x5u, x5t, x5t256, x5c, exp, nbf, iat, d, crv, x)
+    is BasicRsaKeyResponse -> RsaKeyResponse(
+        use = use,
+        kid = kid,
+        alg = alg,
+        ops = ops,
+        x5u = x5u,
+        x5t = x5t,
+        x5t256 = x5t256,
+        x5c = x5c,
+        exp = exp,
+        nbf = nbf,
+        iat = iat,
+        e = e,
+        n = n
+    )
+    is BasicEcKeyResponse -> EcKeyResponse(
+        use = use,
+        kid = kid,
+        alg = alg,
+        ops = ops,
+        x5u = x5u,
+        x5t = x5t,
+        x5t256 = x5t256,
+        x5c = x5c,
+        exp = exp,
+        nbf = nbf,
+        iat = iat,
+        crv = crv,
+        x = x,
+        y = y
+    )
+    is BasicEd25519KeyResponse -> Ed25519KeyResponse(
+        use = use,
+        kid = kid,
+        alg = alg,
+        ops = ops,
+        x5u = x5u,
+        x5t = x5t,
+        x5t256 = x5t256,
+        x5c = x5c,
+        exp = exp,
+        nbf = nbf,
+        iat = iat,
+        d = d,
+        crv = crv,
+        x = x
+    )
 }
 
 internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
