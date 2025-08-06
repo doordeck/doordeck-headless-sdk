@@ -63,7 +63,7 @@ object FusionOperations {
     ) : LockController
 
     data class DemoController(
-        val port: Int = 8080
+        val port: UShort = 8080u
     ) : LockController
     
     data class GallagherController(

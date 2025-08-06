@@ -61,7 +61,7 @@ internal data class BasicCCureController(
 @Serializable
 @SerialName("demo")
 internal data class BasicDemoController(
-    val port: Int = 8080
+    val port: UShort = 8080u
 ) : BasicLockController
 
 @Serializable

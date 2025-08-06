@@ -220,7 +220,7 @@ internal fun CCureController.toBasicCCureController(): BasicCCureController = Ba
 )
 
 internal fun DemoController.toBasicDemoController(): BasicDemoController = BasicDemoController(
-    port = port
+    port = port.toUShort()
 )
 
 internal fun GallagherController.toBasicGallagherController(): BasicGallagherController = BasicGallagherController(

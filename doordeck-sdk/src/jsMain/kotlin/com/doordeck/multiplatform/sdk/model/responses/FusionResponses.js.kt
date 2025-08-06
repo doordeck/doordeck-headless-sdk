@@ -180,7 +180,7 @@ internal fun BasicCCureController.toCCureController(): CCureController = CCureCo
 )
 
 internal fun BasicDemoController.toDemoController(): DemoController = DemoController(
-    port = port
+    port = port.toInt()
 )
 
 internal fun BasicGallagherController.toGallagherController(): GallagherController = GallagherController(
