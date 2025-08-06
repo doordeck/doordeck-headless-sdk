@@ -61,7 +61,6 @@ public class UnlockBetweenSettingResponse
 
 public class LockStateResponse
 {
-    public bool Locked { get; set; }
     public bool Connected { get; set; }
 }
 

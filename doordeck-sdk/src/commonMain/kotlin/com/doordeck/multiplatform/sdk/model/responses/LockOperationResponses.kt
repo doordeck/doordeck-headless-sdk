@@ -68,7 +68,6 @@ internal data class BasicUnlockBetweenSettingResponse(
 
 @Serializable
 internal data class BasicLockStateResponse(
-    val locked: Boolean,
     val connected: Boolean
 )
 

@@ -60,7 +60,6 @@ data class UnlockBetweenSettingResponse(
 )
 
 data class LockStateResponse(
-    val locked: Boolean,
     val connected: Boolean
 )
 
@@ -188,8 +187,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
 )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
-    locked = locked,
-    connected = connected,
+    connected = connected
 )
 
 internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
