@@ -46,13 +46,7 @@ internal data class UpdateLockNameData(
 @Serializable
 internal data class UpdateLockFavouriteData(
     val lockId: String,
-    val favourite: Boolean? = null
-)
-
-@Serializable
-internal data class UpdateLockColourData(
-    val lockId: String,
-    val colour: String? = null
+    val favourite: Boolean
 )
 
 @Serializable

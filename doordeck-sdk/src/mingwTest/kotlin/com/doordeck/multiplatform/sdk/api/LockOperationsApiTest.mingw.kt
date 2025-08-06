@@ -43,7 +43,6 @@ import com.doordeck.multiplatform.sdk.model.data.ShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.TimeRequirementData
 import com.doordeck.multiplatform.sdk.model.data.UnlockBetweenData
 import com.doordeck.multiplatform.sdk.model.data.UnlockOperationData
-import com.doordeck.multiplatform.sdk.model.data.UpdateLockColourData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockFavouriteData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockSettingDefaultNameData
@@ -174,39 +173,6 @@ class LockOperationsApiTest : CallbackTest() {
             assertNotNull(lockResponse.success)
             assertNotNull(lockResponse.success.result)
             assertEquals(updatedFavourite, lockResponse.success.result.favourite)
-        }
-    }
-
-    @Test
-    fun shouldUpdateLockColour() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val updatedLockColour = "#${randomInt(111111, 999999)}"
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockColour(
-                    data = UpdateLockColourData(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockColour).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(updatedLockColour, lockResponse.success.result.colour)
         }
     }
 

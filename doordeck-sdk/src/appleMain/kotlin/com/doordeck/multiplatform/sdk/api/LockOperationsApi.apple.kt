@@ -87,16 +87,8 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
     @Throws(Exception::class)
-    suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
+    suspend fun updateLockFavourite(lockId: String, favourite: Boolean) {
         return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
-    }
-
-    /**
-     * @see LockOperationsClient.updateLockColourRequest
-     */
-    @Throws(Exception::class)
-    suspend fun updateLockColour(lockId: String, colour: String? = null) {
-        return LockOperationsClient.updateLockColourRequest(lockId, colour)
     }
 
     /**

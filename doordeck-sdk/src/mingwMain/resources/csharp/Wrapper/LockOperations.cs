@@ -26,11 +26,8 @@ public class LockOperations(
     public unsafe Task<object> UpdateLockName(string lockId, string? name = null) =>
         Process<object>(lockOperationsApi.updateLockName_, null, new { lockId, name });
 
-    public unsafe Task<object> UpdateLockFavourite(string lockId, bool? favourite = null) =>
+    public unsafe Task<object> UpdateLockFavourite(string lockId, bool favourite) =>
         Process<object>(lockOperationsApi.updateLockFavourite_, null, new { lockId, favourite });
-
-    public unsafe Task<object> UpdateLockColour(string lockId, string? colour = null) =>
-        Process<object>(lockOperationsApi.updateLockColour_, null, new { lockId, colour });
 
     public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string? name = null) =>
         Process<object>(lockOperationsApi.updateLockSettingDefaultName_, null, new { lockId, name });

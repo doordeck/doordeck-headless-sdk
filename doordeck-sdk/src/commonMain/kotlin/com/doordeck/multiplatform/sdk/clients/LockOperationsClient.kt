@@ -36,7 +36,6 @@ import com.doordeck.multiplatform.sdk.model.requests.RevokeAccessToALockOperatio
 import com.doordeck.multiplatform.sdk.model.requests.ShareLockOperationRequest
 import com.doordeck.multiplatform.sdk.model.requests.TimeRequirementRequest
 import com.doordeck.multiplatform.sdk.model.requests.UnlockBetweenSettingRequest
-import com.doordeck.multiplatform.sdk.model.requests.UpdateLockColourRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateLockFavouriteRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateLockNameRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateLockPropertiesRequest
@@ -166,26 +165,13 @@ internal object LockOperationsClient {
      * Updates the lock's favorite flag for the current user.
      *
      * @param lockId The lock's unique identifier.
-     * @param favourite `true` to mark the lock as a favorite, `false` or `null` to remove the favorite status.
+     * @param favourite `true` to mark the lock as a favorite, `false` to remove the favorite status.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
-    suspend fun updateLockFavouriteRequest(lockId: String, favourite: Boolean?) {
+    suspend fun updateLockFavouriteRequest(lockId: String, favourite: Boolean) {
         updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
-    }
-
-    /**
-     * Updates the lock's display colour.
-     *
-     * @param lockId The lock's unique identifier.
-     * @param colour Hex representation of the colour (e.g., "#FF5733"), use `null` to remove the colour.
-     * @throws SdkException if an unexpected error occurs while processing the request.
-     *
-     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
-     */
-    suspend fun updateLockColourRequest(lockId: String, colour: String?) {
-        updateLockProperties(lockId, UpdateLockColourRequest(colour))
     }
 
     /**

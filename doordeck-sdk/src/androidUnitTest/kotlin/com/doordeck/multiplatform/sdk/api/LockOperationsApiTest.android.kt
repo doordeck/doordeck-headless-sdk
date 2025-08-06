@@ -81,20 +81,6 @@ class LockOperationsApiTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldUpdateLockColour() = runTest {
-        // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockColour = "#${randomInt(111111, 999999)}"
-
-        // When
-        LockOperationsApi.updateLockColour(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockColour)
-
-        // Then
-        val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedLockColour, lock.colour)
-    }
-
-    @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)

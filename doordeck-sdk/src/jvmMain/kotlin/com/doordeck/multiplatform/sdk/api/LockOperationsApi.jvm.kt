@@ -155,7 +155,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    suspend fun updateLockFavourite(lockId: UUID, favourite: Boolean? = null) = LockOperationsClient
+    suspend fun updateLockFavourite(lockId: UUID, favourite: Boolean) = LockOperationsClient
         .updateLockFavouriteRequest(
             lockId = lockId.toString(),
             favourite = favourite
@@ -164,32 +164,10 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.updateLockFavourite] returning [CompletableFuture].
      */
-    fun updateLockFavouriteAsync(
-        lockId: UUID,
-        favourite: Boolean? = null
-    ): CompletableFuture<Unit> = completableFuture {
+    fun updateLockFavouriteAsync(lockId: UUID, favourite: Boolean): CompletableFuture<Unit> = completableFuture {
         updateLockFavourite(
             lockId = lockId,
             favourite = favourite
-        )
-    }
-
-    /**
-     * @see LockOperationsClient.updateLockColourRequest
-     */
-    suspend fun updateLockColour(lockId: UUID, colour: String? = null) = LockOperationsClient
-        .updateLockColourRequest(
-            lockId = lockId.toString(),
-            colour = colour
-        )
-
-    /**
-     * Async variant of [LockOperationsApi.updateLockColour] returning [CompletableFuture].
-     */
-    fun updateLockColourAsync(lockId: UUID, colour: String? = null): CompletableFuture<Unit> = completableFuture {
-        updateLockColour(
-            lockId = lockId,
-            colour = colour
         )
     }
 

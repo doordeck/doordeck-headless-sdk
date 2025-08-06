@@ -124,29 +124,15 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
+    suspend fun updateLockFavourite(lockId: String, favourite: Boolean) {
         return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockFavourite] returning [CompletableFuture].
      */
-    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit> {
+    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean): CompletableFuture<Unit> {
         return completableFuture { updateLockFavourite(lockId, favourite) }
-    }
-
-    /**
-     * @see LockOperationsClient.updateLockColourRequest
-     */
-    suspend fun updateLockColour(lockId: String, colour: String? = null) {
-        return LockOperationsClient.updateLockColourRequest(lockId, colour)
-    }
-
-    /**
-     * Async variant of [LockOperationsApi.updateLockColour] returning [CompletableFuture].
-     */
-    fun updateLockColourAsync(lockId: String, colour: String? = null): CompletableFuture<Unit> {
-        return completableFuture { updateLockColour(lockId, colour) }
     }
 
     /**

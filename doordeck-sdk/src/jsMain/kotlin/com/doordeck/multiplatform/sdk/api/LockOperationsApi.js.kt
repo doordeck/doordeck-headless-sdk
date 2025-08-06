@@ -78,15 +78,8 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    fun updateLockFavourite(lockId: String, favourite: Boolean? = null): Promise<dynamic> {
+    fun updateLockFavourite(lockId: String, favourite: Boolean): Promise<dynamic> {
         return promise { LockOperationsClient.updateLockFavouriteRequest(lockId, favourite) }
-    }
-
-    /**
-     * @see LockOperationsClient.updateLockColourRequest
-     */
-    fun updateLockColour(lockId: String, colour: String? = null): Promise<dynamic> {
-        return promise { LockOperationsClient.updateLockColourRequest(lockId, colour) }
     }
 
     /**

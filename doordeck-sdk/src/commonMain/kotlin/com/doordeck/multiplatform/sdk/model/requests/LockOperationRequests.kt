@@ -109,12 +109,7 @@ internal data class UpdateLockNameRequest(
 
 @Serializable
 internal data class UpdateLockFavouriteRequest(
-    val favourite: Boolean?
-): UpdateLockPropertiesRequest
-
-@Serializable
-internal data class UpdateLockColourRequest(
-    val colour: String?
+    val favourite: Boolean
 ): UpdateLockPropertiesRequest
 
 @Serializable
