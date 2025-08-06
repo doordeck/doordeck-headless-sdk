@@ -69,7 +69,7 @@ class CCureController(LockController):
 @dataclass
 class DemoController(LockController):
     type: str = field(init=False)
-    port: unsigned short = 8080
+    port: int = 8080
 
     def __post_init__(self):
         self.type = "demo"
