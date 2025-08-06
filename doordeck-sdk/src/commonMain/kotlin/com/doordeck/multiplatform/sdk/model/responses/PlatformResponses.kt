@@ -99,7 +99,6 @@ internal data class BasicEd25519KeyResponse(
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
-    val d: String? = null,
     val crv: String,
     val x: String
 ): BasicAuthKeyResponse

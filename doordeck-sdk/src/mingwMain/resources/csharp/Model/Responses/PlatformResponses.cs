@@ -88,7 +88,6 @@ public class Ed25519KeyResponse : AuthKeyResponse
     public int? Exp { get; set; } = null;
     public int? Nbf { get; set; } = null;
     public int? Iat { get; set; } = null;
-    public string? D { get; set; } = null;
     public string Crv { get; set; } = string.Empty;
     public string X { get; set; } = string.Empty;
 }

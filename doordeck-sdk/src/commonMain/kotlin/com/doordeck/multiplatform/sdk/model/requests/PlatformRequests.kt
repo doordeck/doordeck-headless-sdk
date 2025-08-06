@@ -128,13 +128,7 @@ internal data class AddRsaKeyRequest(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val p: String,
-    val q: String,
-    val d: String,
     val e: String,
-    val qi: String,
-    val dp: String,
-    val dq: String,
     val n: String
 ): AddAuthKeyRequest
 
@@ -144,7 +138,6 @@ internal data class AddEcKeyRequest(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val d: String,
     val crv: String,
     val x: String,
     val y: String
@@ -156,7 +149,6 @@ internal data class AddEd25519KeyRequest(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val d: String,
     val crv: String,
     val x: String
 ): AddAuthKeyRequest
@@ -193,13 +185,7 @@ internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) 
         use = use,
         kid = kid,
         alg = alg,
-        p = p,
-        q = q,
-        d = d,
         e = e,
-        qi = qi,
-        dp = dp,
-        dq = dq,
         n = n
     )
     is BasicEcKey -> AddEcKeyRequest(
@@ -207,7 +193,6 @@ internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) 
         use = use,
         kid = kid,
         alg = alg,
-        d = d,
         crv = crv,
         x = x,
         y = y
@@ -217,7 +202,6 @@ internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) 
         use = use,
         kid = kid,
         alg = alg,
-        d = d,
         crv = crv,
         x = x
     )

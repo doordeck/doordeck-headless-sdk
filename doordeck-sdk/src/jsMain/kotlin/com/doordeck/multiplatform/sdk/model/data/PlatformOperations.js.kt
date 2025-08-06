@@ -121,13 +121,7 @@ object PlatformOperations {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        val p: String,
-        val q: String,
-        val d: String,
         val e: String,
-        val qi: String,
-        val dp: String,
-        val dq: String,
         val n: String
     ): AuthKey {
         class Builder {
@@ -135,26 +129,14 @@ object PlatformOperations {
             private var use: String? = null
             private var kid: String? = null
             private var alg: String? = null
-            private var p: String? = null
-            private var q: String? = null
-            private var d: String? = null
             private var e: String? = null
-            private var qi: String? = null
-            private var dp: String? = null
-            private var dq: String? = null
             private var n: String? = null
 
             fun setKty(kty: String) = apply { this.kty = kty }
             fun setUse(use: String) = apply { this.use = use }
             fun setKid(kid: String) = apply { this.kid = kid }
             fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setP(p: String) = apply { this.p = p }
-            fun setQ(q: String) = apply { this.q = q }
-            fun setD(d: String) = apply { this.d = d }
             fun setE(e: String) = apply { this.e = e }
-            fun setQi(qi: String) = apply { this.qi = qi }
-            fun setDp(dp: String) = apply { this.dp = dp }
-            fun setDq(dq: String) = apply { this.dq = dq }
             fun setN(n: String) = apply { this.n = n }
 
             fun build(): RsaKey {
@@ -163,13 +145,7 @@ object PlatformOperations {
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
                     alg = alg,
-                    p = requireNotNull(p),
-                    q = requireNotNull(q),
-                    d = requireNotNull(d),
                     e = requireNotNull(e),
-                    qi = requireNotNull(qi),
-                    dp = requireNotNull(dp),
-                    dq = requireNotNull(dq),
                     n = requireNotNull(n)
                 )
             }
@@ -181,7 +157,6 @@ object PlatformOperations {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        val d: String,
         val crv: String,
         val x: String,
         val y: String
@@ -191,7 +166,6 @@ object PlatformOperations {
             private var use: String? = null
             private var kid: String? = null
             private var alg: String? = null
-            private var d: String? = null
             private var crv: String? = null
             private var x: String? = null
             private var y: String? = null
@@ -200,7 +174,6 @@ object PlatformOperations {
             fun setUse(use: String) = apply { this.use = use }
             fun setKid(kid: String) = apply { this.kid = kid }
             fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setD(d: String) = apply { this.d = d }
             fun setCrv(crv: String) = apply { this.crv = crv }
             fun setX(x: String) = apply { this.x = x }
             fun setY(y: String) = apply { this.y = y }
@@ -211,7 +184,6 @@ object PlatformOperations {
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
                     alg = alg,
-                    d = requireNotNull(d),
                     crv = requireNotNull(crv),
                     x = requireNotNull(x),
                     y = requireNotNull(y)
@@ -225,7 +197,6 @@ object PlatformOperations {
         override val use: String,
         override val kid: String,
         override val alg: String? = null,
-        val d: String,
         val crv: String,
         val x: String
     ): AuthKey {
@@ -234,7 +205,6 @@ object PlatformOperations {
             private var use: String? = null
             private var kid: String? = null
             private var alg: String? = null
-            private var d: String? = null
             private var crv: String? = null
             private var x: String? = null
 
@@ -242,7 +212,6 @@ object PlatformOperations {
             fun setUse(use: String) = apply { this.use = use }
             fun setKid(kid: String) = apply { this.kid = kid }
             fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setD(d: String) = apply { this.d = d }
             fun setCrv(crv: String) = apply { this.crv = crv }
             fun setX(x: String) = apply { this.x = x }
 
@@ -252,7 +221,6 @@ object PlatformOperations {
                     use = requireNotNull(use),
                     kid = requireNotNull(kid),
                     alg = alg,
-                    d = requireNotNull(d),
                     crv = requireNotNull(crv),
                     x = requireNotNull(x)
                 )
@@ -280,13 +248,7 @@ internal fun PlatformOperations.AuthKey.toBasicAuthKey() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        p = p,
-        q = q,
-        d = d,
         e = e,
-        qi = qi,
-        dp = dp,
-        dq = dq,
         n = n
     )
     is PlatformOperations.EcKey -> BasicEcKey(
@@ -294,7 +256,6 @@ internal fun PlatformOperations.AuthKey.toBasicAuthKey() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        d = d,
         crv = crv,
         x = x,
         y = y
@@ -304,7 +265,6 @@ internal fun PlatformOperations.AuthKey.toBasicAuthKey() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        d = d,
         crv = crv,
         x = x
     )

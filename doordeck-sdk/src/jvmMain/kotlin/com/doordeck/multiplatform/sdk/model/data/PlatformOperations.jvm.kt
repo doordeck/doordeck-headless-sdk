@@ -134,7 +134,6 @@ internal fun JWK.toBasicAuthKey(): BasicAuthKey {
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
-            d = d.toString(),
             crv = curve.name,
             x = x.toString(),
             y = y.toString()
@@ -143,20 +142,13 @@ internal fun JWK.toBasicAuthKey(): BasicAuthKey {
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
-            p = firstPrimeFactor.toString(),
-            q = secondPrimeFactor.toString(),
-            d = privateExponent.toString(),
             e = publicExponent.toString(),
-            qi = firstCRTCoefficient.toString(),
-            dp = firstFactorCRTExponent.toString(),
-            dq = secondFactorCRTExponent.toString(),
             n = modulus.toString()
         )
         is OctetKeyPair -> BasicEd25519Key(
             use = keyUse.value,
             kid = keyID,
             alg = algorithm.name,
-            d = d.toString(),
             crv = curve.name,
             x = x.toString()
         )

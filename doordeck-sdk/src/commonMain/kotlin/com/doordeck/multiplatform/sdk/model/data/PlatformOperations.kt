@@ -38,13 +38,7 @@ internal data class BasicRsaKey(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val p: String,
-    val q: String,
-    val d: String,
     val e: String,
-    val qi: String,
-    val dp: String,
-    val dq: String,
     val n: String
 ): BasicAuthKey
 
@@ -53,7 +47,6 @@ internal data class BasicEcKey(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val d: String,
     val crv: String,
     val x: String,
     val y: String
@@ -64,7 +57,6 @@ internal data class BasicEd25519Key(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    val d: String,
     val crv: String,
     val x: String
 ): BasicAuthKey

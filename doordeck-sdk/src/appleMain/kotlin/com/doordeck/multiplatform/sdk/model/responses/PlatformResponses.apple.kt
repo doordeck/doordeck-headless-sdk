@@ -81,7 +81,6 @@ data class Ed25519KeyResponse(
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
-    val d: String? = null,
     val crv: String,
     val x: String
 ): AuthKeyResponse
@@ -187,7 +186,6 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         exp = exp,
         nbf = nbf,
         iat = iat,
-        d = d,
         crv = crv,
         x = x
     )
