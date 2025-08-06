@@ -4,22 +4,22 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toRsaPublicKey
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.secondsToDuration
 import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toInstant
-import com.doordeck.multiplatform.sdk.util.toUuid
-import com.doordeck.multiplatform.sdk.util.toZoneId
-import com.doordeck.multiplatform.sdk.util.secondsToDuration
 import com.doordeck.multiplatform.sdk.util.toLocalDate
 import com.doordeck.multiplatform.sdk.util.toLocalTime
 import com.doordeck.multiplatform.sdk.util.toUri
+import com.doordeck.multiplatform.sdk.util.toUuid
+import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import java.net.InetAddress
 import java.net.URI
 import java.security.PublicKey
+import java.time.DayOfWeek
 import java.time.ZoneId
 import java.util.UUID
 import kotlin.time.Duration
@@ -186,7 +186,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start.toLocalTime(),
     end = end.toLocalTime(),
     timezone = timezone.toZoneId(),
-    days = days
+    days = days.map { DayOfWeek.valueOf(it.name) }
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -201,7 +201,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start.toLocalTime(),
     end = end.toLocalTime(),
     timezone = timezone.toZoneId(),
-    days = days,
+    days = days.map { DayOfWeek.valueOf(it.name) },
     exceptions = exceptions?.map { it.toLocalDate() }
 )
 

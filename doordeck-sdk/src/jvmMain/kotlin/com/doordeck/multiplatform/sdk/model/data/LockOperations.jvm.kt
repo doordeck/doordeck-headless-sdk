@@ -1,11 +1,10 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.durationToSeconds
 import com.doordeck.multiplatform.sdk.util.toLocalDateString
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
-import com.doordeck.multiplatform.sdk.util.durationToSeconds
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -14,10 +13,12 @@ import java.net.URI
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.cert.X509Certificate
+import java.time.DayOfWeek
 import java.time.ZoneId
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek as KDayOfWeek
 
 object LockOperations {
 
@@ -317,7 +318,7 @@ internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List
         start = requirement.start.toLocalTimeString(),
         end = requirement.end.toLocalTimeString(),
         timezone = requirement.timezone.id,
-        days = requirement.days
+        days = requirement.days.map { KDayOfWeek.valueOf(it.name) }
     )
 }
 
@@ -336,7 +337,7 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
         start = start.toLocalTimeString(),
         end = end.toLocalTimeString(),
         timezone = timezone.id,
-        days = days,
+        days = days.map { KDayOfWeek.valueOf(it.name) },
         exceptions = exceptions?.map { it.toLocalDateString() }
     )
 }
