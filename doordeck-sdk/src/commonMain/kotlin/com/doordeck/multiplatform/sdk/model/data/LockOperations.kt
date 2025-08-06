@@ -10,7 +10,7 @@ internal data class BasicTimeRequirement(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>
+    val days: Set<DayOfWeek>
 )
 
 internal data class BasicLocationRequirement(
@@ -25,7 +25,7 @@ internal data class BasicUnlockBetween(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>,
+    val days: Set<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 

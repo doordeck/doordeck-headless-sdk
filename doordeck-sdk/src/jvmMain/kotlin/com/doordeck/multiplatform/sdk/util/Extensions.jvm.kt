@@ -18,6 +18,7 @@ import java.net.InetAddress
 import java.net.URI
 import java.net.URL
 import java.time.ZoneId
+import java.util.EnumSet
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import kotlin.time.Duration
@@ -81,6 +82,9 @@ internal fun String.toInstant(): Instant {
 internal fun Double.toInstant(): Instant = Instant.fromEpochSeconds(toLong())
 
 internal fun String.toInetAddress(): InetAddress = InetAddress.getByName(this)
+
+internal inline fun <reified T : Enum<T>> List<T>.toEnumSet(): EnumSet<T> =
+    if (isNotEmpty()) EnumSet.copyOf(this) else EnumSet.noneOf(T::class.java)
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.

@@ -159,7 +159,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(DayOfWeek.entries.random())
+            days = setOf(DayOfWeek.entries.random())
         )
 
         // When
@@ -693,7 +693,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(DayOfWeek.entries.random()),
+            days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -755,7 +755,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = listOf(DayOfWeek.entries.random()),
+            days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         ContextManager.setOperationContext(
@@ -872,7 +872,7 @@ class LockOperationsApiTest : IntegrationTest() {
                         start = "",
                         end = "",
                         timezone = TimeZone.UTC.id,
-                        days = emptyList(),
+                        days = emptySet(),
                         exceptions = emptyList()
                     )
                 )

@@ -43,7 +43,7 @@ data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>
+    val days: Set<DayOfWeek>
 )
 
 @JsExport
@@ -60,7 +60,7 @@ data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>,
+    val days: Set<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 

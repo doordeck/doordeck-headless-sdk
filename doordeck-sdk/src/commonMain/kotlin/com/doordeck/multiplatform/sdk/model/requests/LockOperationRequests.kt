@@ -75,7 +75,7 @@ internal data class UnlockBetweenSettingRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
-    val days: List<DayOfWeek>,
+    val days: Set<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 
@@ -163,7 +163,7 @@ internal data class TimeRequirementRequest(
     val start: String, // Local time, (HH:mm)
     val end: String, // Local time, (HH:mm)
     val timezone: String,
-    val days: List<DayOfWeek>
+    val days: Set<DayOfWeek>
 )
 
 @Serializable

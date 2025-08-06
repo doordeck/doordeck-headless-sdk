@@ -15,6 +15,7 @@ import java.security.PublicKey
 import java.security.cert.X509Certificate
 import java.time.DayOfWeek
 import java.time.ZoneId
+import java.util.EnumSet
 import java.util.UUID
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -26,18 +27,18 @@ object LockOperations {
         val start: LocalTime,
         val end: LocalTime,
         val timezone: ZoneId,
-        val days: List<DayOfWeek>
+        val days: EnumSet<DayOfWeek>
     ) {
         class Builder {
             private var start: LocalTime? = null
             private var end: LocalTime? = null
             private var timezone: ZoneId? = null
-            private var days: List<DayOfWeek>? = null
+            private var days: EnumSet<DayOfWeek>? = null
 
             fun setStart(start: LocalTime): Builder = apply { this.start = start }
             fun setEnd(end: LocalTime): Builder = apply { this.end = end }
             fun setTimezone(timezone: ZoneId) = apply { this.timezone = timezone }
-            fun setDays(days: List<DayOfWeek>) = apply { this.days = days }
+            fun setDays(days: EnumSet<DayOfWeek>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
@@ -86,20 +87,20 @@ object LockOperations {
         val start: LocalTime,
         val end: LocalTime,
         val timezone: ZoneId,
-        val days: List<DayOfWeek>,
+        val days: EnumSet<DayOfWeek>,
         val exceptions: List<LocalDate>? = null
     ) {
         class Builder {
             private var start: LocalTime? = null
             private var end: LocalTime? = null
             private var timezone: ZoneId? = null
-            private var days: List<DayOfWeek>? = null
+            private var days: EnumSet<DayOfWeek>? = null
             private var exceptions: List<LocalDate>? = null
 
             fun setStart(start: LocalTime): Builder = apply { this.start = start }
             fun setEnd(end: LocalTime): Builder = apply { this.end = end }
             fun setTimezone(timezone: ZoneId): Builder = apply { this.timezone = timezone }
-            fun setDays(days: List<DayOfWeek>): Builder = apply { this.days = days }
+            fun setDays(days: EnumSet<DayOfWeek>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: List<LocalDate>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
@@ -318,7 +319,7 @@ internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List
         start = requirement.start.toLocalTimeString(),
         end = requirement.end.toLocalTimeString(),
         timezone = requirement.timezone.id,
-        days = requirement.days.map { KDayOfWeek.valueOf(it.name) }
+        days = requirement.days.map { KDayOfWeek.valueOf(it.name) }.toSet()
     )
 }
 
@@ -337,7 +338,7 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
         start = start.toLocalTimeString(),
         end = end.toLocalTimeString(),
         timezone = timezone.id,
-        days = days.map { KDayOfWeek.valueOf(it.name) },
+        days = days.map { KDayOfWeek.valueOf(it.name) }.toSet(),
         exceptions = exceptions?.map { it.toLocalDateString() }
     )
 }

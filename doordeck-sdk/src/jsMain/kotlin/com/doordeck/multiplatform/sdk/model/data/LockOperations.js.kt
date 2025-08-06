@@ -13,18 +13,18 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: List<DayOfWeek>
+        val days: Set<DayOfWeek>
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: List<DayOfWeek>? = null
+            private var days: Set<DayOfWeek>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String) = apply { this.timezone = timezone }
-            fun setDays(days: List<DayOfWeek>) = apply { this.days = days }
+            fun setDays(days: Set<DayOfWeek>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
@@ -73,20 +73,20 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: List<DayOfWeek>,
+        val days: Set<DayOfWeek>,
         val exceptions: List<String>? = null
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: List<DayOfWeek>? = null
+            private var days: Set<DayOfWeek>? = null
             private var exceptions: List<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
-            fun setDays(days: List<DayOfWeek>): Builder = apply { this.days = days }
+            fun setDays(days: Set<DayOfWeek>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: List<String>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {

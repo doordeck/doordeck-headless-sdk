@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.secondsToDuration
+import com.doordeck.multiplatform.sdk.util.toEnumSet
 import com.doordeck.multiplatform.sdk.util.toInetAddress
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toLocalDate
@@ -21,6 +22,7 @@ import java.net.URI
 import java.security.PublicKey
 import java.time.DayOfWeek
 import java.time.ZoneId
+import java.util.EnumSet
 import java.util.UUID
 import kotlin.time.Duration
 
@@ -57,7 +59,7 @@ data class TimeRequirementResponse(
     val start: LocalTime,
     val end: LocalTime,
     val timezone: ZoneId,
-    val days: List<DayOfWeek>
+    val days: EnumSet<DayOfWeek>
 )
 
 data class LocationRequirementResponse(
@@ -72,7 +74,7 @@ data class UnlockBetweenSettingResponse(
     val start: LocalTime,
     val end: LocalTime,
     val timezone: ZoneId,
-    val days: List<DayOfWeek>,
+    val days: EnumSet<DayOfWeek>,
     val exceptions: List<LocalDate>? = null
 )
 
@@ -183,7 +185,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start.toLocalTime(),
     end = end.toLocalTime(),
     timezone = timezone.toZoneId(),
-    days = days.map { DayOfWeek.valueOf(it.name) }
+    days = days.map { DayOfWeek.valueOf(it.name) }.toEnumSet()
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -198,7 +200,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start.toLocalTime(),
     end = end.toLocalTime(),
     timezone = timezone.toZoneId(),
-    days = days.map { DayOfWeek.valueOf(it.name) },
+    days = days.map { DayOfWeek.valueOf(it.name) }.toEnumSet(),
     exceptions = exceptions?.map { it.toLocalDate() }
 )
 

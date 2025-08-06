@@ -33,6 +33,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.net.InetAddress
 import java.time.DayOfWeek
+import java.util.EnumSet
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -163,7 +164,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = (now - 1.minutes).toLocalDateTime(TimeZone.UTC).time,
             end = (now + 5.minutes).toLocalDateTime(TimeZone.UTC).time,
             timezone = TimeZone.UTC.id.toZoneId(),
-            days = listOf(DayOfWeek.entries.random())
+            days = EnumSet.of(DayOfWeek.entries.random())
         )
 
         // When
@@ -693,7 +694,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = (now - 1.minutes).toLocalDateTime(TimeZone.UTC).time,
             end = (now + 5.minutes).toLocalDateTime(TimeZone.UTC).time,
             timezone = TimeZone.UTC.id.toZoneId(),
-            days = listOf(DayOfWeek.entries.random()),
+            days = EnumSet.of(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -755,7 +756,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = min.toLocalDateTime(TimeZone.UTC).time,
             end = max.toLocalDateTime(TimeZone.UTC).time,
             timezone = TimeZone.UTC.id.toZoneId(),
-            days = listOf(DayOfWeek.entries.random()),
+            days = EnumSet.of(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         ContextManager.setOperationContext(
@@ -872,7 +873,7 @@ class LockOperationsApiTest : IntegrationTest() {
                         start = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
                         end = Clock.System.now().toLocalDateTime(TimeZone.UTC).time,
                         timezone = TimeZone.UTC.id.toZoneId(),
-                        days = emptyList(),
+                        days = EnumSet.noneOf(DayOfWeek::class.java),
                         exceptions = emptyList()
                     )
                 )

@@ -84,7 +84,7 @@ internal data class TimeRequirementData(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>
+    val days: Set<DayOfWeek>
 )
 
 @Serializable
@@ -209,7 +209,7 @@ internal data class UnlockBetweenData(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: List<DayOfWeek>,
+    val days: Set<DayOfWeek>,
     val exceptions: List<String>? = null
 )
 
