@@ -17,8 +17,7 @@ internal data class BasicLockResponse(
     val role: UserRole,
     val settings: BasicLockSettingsResponse,
     val state: BasicLockStateResponse,
-    val favourite: Boolean,
-    val unlockTime: Double? = null
+    val favourite: Boolean
 )
 
 @Serializable

@@ -11,7 +11,6 @@ public class LockResponse
     public LockSettingsResponse Settings { get; set; } = new LockSettingsResponse();
     public LockStateResponse State { get; set; } = new LockStateResponse();
     public bool Favourite { get; set; }
-    public double? UnlockTime { get; set; } = null;
 }
 
 public class LockSettingsResponse

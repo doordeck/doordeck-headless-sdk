@@ -16,8 +16,7 @@ data class LockResponse(
     val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
-    val favourite: Boolean,
-    val unlockTime: Double? = null
+    val favourite: Boolean
 )
 
 @JsExport
@@ -157,8 +156,7 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     role = role,
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
-    favourite = favourite,
-    unlockTime = unlockTime
+    favourite = favourite
 )
 
 internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
