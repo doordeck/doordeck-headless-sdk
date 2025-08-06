@@ -6,7 +6,7 @@ import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralK
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
-import java.io.File
+import java.io.InputStream
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.util.UUID
@@ -19,7 +19,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: File) = HelperClient
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) = HelperClient
         .uploadPlatformLogoRequest(
             applicationId = applicationId.toString(),
             contentType = contentType,
@@ -32,7 +32,7 @@ actual object HelperApi {
     fun uploadPlatformLogoAsync(
         applicationId: UUID,
         contentType: String,
-        image: File
+        image: InputStream
     ): CompletableFuture<Unit> = completableFuture {
         uploadPlatformLogo(
             applicationId = applicationId,
