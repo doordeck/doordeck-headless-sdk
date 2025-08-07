@@ -32,6 +32,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -167,7 +168,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNull(lock.settings.usageRequirements?.time)
+        assertNotEquals(0, lock.settings.usageRequirements?.time?.size)
     }
 
     @Test

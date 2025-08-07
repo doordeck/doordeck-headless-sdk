@@ -362,7 +362,7 @@ class LockOperationsApiTest : CallbackTest() {
             }
             assertNotNull(lockResponse.success)
             assertNotNull(lockResponse.success.result)
-            assertNull(lockResponse.success.result.settings.usageRequirements?.time)
+            assertEquals(0, lockResponse.success.result.settings.usageRequirements?.time?.size)
         }
     }
 
