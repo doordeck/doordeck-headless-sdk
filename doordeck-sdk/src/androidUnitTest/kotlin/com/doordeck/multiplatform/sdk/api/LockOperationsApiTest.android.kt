@@ -168,7 +168,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertNotEquals(0, lock.settings.usageRequirements?.time?.size)
+        assertEquals(0, lock.settings.usageRequirements?.time?.size)
     }
 
     @Test
