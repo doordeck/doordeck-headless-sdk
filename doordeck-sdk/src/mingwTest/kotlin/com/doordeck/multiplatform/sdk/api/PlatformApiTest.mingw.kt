@@ -47,6 +47,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -313,7 +314,7 @@ class PlatformApiTest : CallbackTest() {
             }
             assertNotNull(applicationResponse.success)
             assertNotNull(applicationResponse.success.result)
-            assertNotNull(applicationResponse.success.result.authDomains)
+            assertNotEquals(0, applicationResponse.success.result.authDomains.size)
             assertTrue { applicationResponse.success.result.authDomains.any { it == addApplicationAuthIssuer } }
 
             // Given - shouldDeleteAuthIssuer
@@ -336,7 +337,7 @@ class PlatformApiTest : CallbackTest() {
             }
             assertNotNull(applicationResponse.success)
             assertNotNull(applicationResponse.success.result)
-            assertNotNull(applicationResponse.success.result.authDomains)
+            assertEquals(0, applicationResponse.success.result.authDomains.size)
             assertFalse { applicationResponse.success.result.authDomains.any { it == removedApplicationAuthIssuer } }
 
             // Given - shouldAddCorsDomain
@@ -359,7 +360,7 @@ class PlatformApiTest : CallbackTest() {
             }
             assertNotNull(applicationResponse.success)
             assertNotNull(applicationResponse.success.result)
-            assertNotNull(applicationResponse.success.result.corsDomains)
+            assertNotEquals(0, applicationResponse.success.result.corsDomains.size)
             assertTrue { applicationResponse.success.result.corsDomains.any { it == addedApplicationCorsDomain } }
 
             // Given - shouldDeleteCorsDomain
@@ -382,7 +383,7 @@ class PlatformApiTest : CallbackTest() {
             }
             assertNotNull(applicationResponse.success)
             assertNotNull(applicationResponse.success.result)
-            assertNotNull(applicationResponse.success.result.corsDomains)
+            assertEquals(0, applicationResponse.success.result.corsDomains.size)
             assertFalse { applicationResponse.success.result.corsDomains.any { it == removedApplicationCorsDomain } }
 
             // Given - shouldAddEd25519AuthKey

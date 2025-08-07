@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
@@ -155,7 +156,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId)
-        assertNotNull(application.authDomains)
+        assertNotEquals(0, application.authDomains.size)
         assertTrue { application.authDomains.any { it == addApplicationAuthIssuer } }
 
         // Given - shouldDeleteAuthIssuer
@@ -166,7 +167,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId)
-        assertNotNull(application.authDomains)
+        assertEquals(0, application.authDomains.size)
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldAddCorsDomain
@@ -177,7 +178,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId)
-        assertNotNull(application.corsDomains)
+        assertNotEquals(0, application.corsDomains.size)
         assertTrue { application.corsDomains.any { it == addedApplicationCorsDomain } }
 
         // Given - shouldDeleteCorsDomain
@@ -188,7 +189,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId)
-        assertNotNull(application.corsDomains)
+        assertEquals(0, application.corsDomains.size)
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
         // Given - shouldAddEd25519AuthKey

@@ -31,7 +31,7 @@ data class LockSettingsResponse(
 )
 
 data class UsageRequirementsResponse(
-    val time: List<TimeRequirementResponse>? = null,
+    val time: List<TimeRequirementResponse> = emptyList(),
     val location: LocationRequirementResponse? = null
 )
 
@@ -55,7 +55,7 @@ data class UnlockBetweenSettingResponse(
     val end: String,
     val timezone: String,
     val days: Set<DayOfWeek>,
-    val exceptions: List<String>? = null
+    val exceptions: List<String> = emptyList()
 )
 
 data class LockStateResponse(
@@ -157,7 +157,7 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
 )
 
 internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
-    time = time?.map { it.toTimeRequirementResponse() },
+    time = time.map { it.toTimeRequirementResponse() },
     location = location?.toLocationRequirementResponse()
 )
 

@@ -35,7 +35,7 @@ internal data class BasicLockSettingsResponse(
 
 @Serializable
 internal data class BasicUsageRequirementsResponse(
-    val time: List<BasicTimeRequirementResponse>? = null,
+    val time: List<BasicTimeRequirementResponse> = emptyList(),
     val location: BasicLocationRequirementResponse? = null
 )
 
@@ -62,7 +62,7 @@ internal data class BasicUnlockBetweenSettingResponse(
     val end: String,
     val timezone: String,
     val days: Set<DayOfWeek>,
-    val exceptions: List<String>? = null
+    val exceptions: List<String> = emptyList()
 )
 
 @Serializable
