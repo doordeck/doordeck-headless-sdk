@@ -2,11 +2,12 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 
 internal object DoordeckFactory {
 
-    fun initialize(sdkConfig: SdkConfig): Doordeck {
+    suspend fun initialize(sdkConfig: SdkConfig): Doordeck {
         // Add the provided values into the context
         ContextManagerImpl.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)
@@ -16,6 +17,7 @@ internal object DoordeckFactory {
             sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
             sdkConfig.fusionHost?.let { context.setFusionHost(it) }
         }
+        CryptoManager.initialize()
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
     }

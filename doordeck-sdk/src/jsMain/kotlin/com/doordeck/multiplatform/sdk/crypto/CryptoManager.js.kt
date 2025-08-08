@@ -21,12 +21,10 @@ import kotlin.js.Date
 @JsExport
 actual object CryptoManager {
 
-    init {
-        if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initializeWithCallback {
-                SdkLogger.d("Successfully initialized Libsodium")
-            }
-        }
+    @JsExport.Ignore
+    internal actual suspend fun initialize() {
+        LibsodiumInitializer.initialize()
+        SdkLogger.d("Successfully initialized Libsodium")
     }
 
     /**

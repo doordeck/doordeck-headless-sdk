@@ -23,6 +23,8 @@ actual object CryptoManager {
     private const val ALGORITHM = "Ed25519"
     private const val CERTIFICATE_TYPE = "X.509"
 
+    internal actual suspend fun initialize() { /** Nothing **/ }
+
     /**
      * @see [CryptoManager.generateKeyPair]
      */
