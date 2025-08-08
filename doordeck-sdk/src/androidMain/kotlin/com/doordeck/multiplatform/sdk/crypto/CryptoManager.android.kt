@@ -27,7 +27,7 @@ actual object CryptoManager {
     private const val ALGORITHM = "Ed25519"
     private const val CERTIFICATE_TYPE = "X.509"
 
-    init {
+    internal actual suspend fun initialize() {
         Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
         Security.addProvider(BouncyCastleProvider())
     }

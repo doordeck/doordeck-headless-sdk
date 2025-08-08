@@ -18,11 +18,9 @@ import kotlinx.serialization.json.JsonPrimitive
  */
 actual object CryptoManager {
 
-    init {
-        if (!LibsodiumInitializer.isInitialized()) {
-            LibsodiumInitializer.initializeWithCallback {
-                SdkLogger.d("Successfully initialized Libsodium")
-            }
+    internal actual suspend fun initialize() {
+        LibsodiumInitializer.initializeWithCallback {
+            SdkLogger.d("Successfully initialized Libsodium")
         }
     }
 

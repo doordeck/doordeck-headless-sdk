@@ -78,6 +78,9 @@ internal val PUBLIC_KEY_ASN1_HEADER = byteArrayOf(
 )
 
 expect object CryptoManager {
+
+    internal suspend fun initialize()
+
     /**
      * Generates a new Ed25519 key pair.
      *

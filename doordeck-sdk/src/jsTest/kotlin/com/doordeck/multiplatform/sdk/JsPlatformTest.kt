@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import io.ktor.client.engine.js.JsClientEngineConfig
+import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -40,7 +41,7 @@ class JsPlatformTest {
             .build()
 
         // When
-        val sdk = KDoordeckFactory.initialize(sdkConfig)
+        val sdk = KDoordeckFactory.initialize(sdkConfig).await()
 
         // Then
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())

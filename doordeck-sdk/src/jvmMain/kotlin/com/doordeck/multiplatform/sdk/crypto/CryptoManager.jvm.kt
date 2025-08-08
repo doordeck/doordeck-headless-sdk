@@ -31,6 +31,8 @@ actual object CryptoManager {
     private const val RSA_ALGORITHM = "RSA"
     private const val CERTIFICATE_TYPE = "X.509"
 
+    internal actual suspend fun initialize() { /** Nothing **/ }
+
     /**
      * @see [CryptoManager.generateRawKeyPair]
      */

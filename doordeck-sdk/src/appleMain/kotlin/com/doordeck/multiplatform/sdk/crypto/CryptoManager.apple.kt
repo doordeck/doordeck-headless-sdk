@@ -19,6 +19,8 @@ import platform.posix.memcpy
  */
 actual object CryptoManager {
 
+    internal actual suspend fun initialize() { /** Nothing **/ }
+
     /**
      * @see [CryptoManager.generateRawKeyPair]
      */
