@@ -1,37 +1,64 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MockTest
-import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUuidString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-class AccountlessApiTest : MockTest() {
+class AccountlessApiTest : IntegrationTest() {
 
     @Test
     fun shouldLogin() = runTest {
-        val response = AccountlessApi.login("", "")
-        assertEquals(TOKEN_RESPONSE, response)
+        // When
+        val response = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+        // When
+        assertTrue { response.authToken.isNotEmpty() }
+        assertTrue { response.refreshToken.isNotEmpty() }
+        assertEquals(response.authToken, ContextManager.getCloudAuthToken())
+        assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
+        assertEquals(TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
     }
 
     @Test
-    fun shouldRegister() = runTest {
-        val response = AccountlessApi.registration("", "", "", false)
-        assertEquals(TOKEN_RESPONSE, response)
-    }
+    fun shouldRegisterAndDelete() = runTest {
+        // Given - shouldRegister
+        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
+        val keyPair = CryptoManager.generateKeyPair()
 
-    @Test
-    fun shouldVerifyEmail() = runTest {
-        AccountlessApi.verifyEmail("")
-    }
+        // When
+        val response = AccountlessApi.registration(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false, keyPair.public)
 
-    @Test
-    fun shouldResetPassword() = runTest {
-        AccountlessApi.passwordReset("")
-    }
+        // When
+        assertTrue { response.authToken.isNotEmpty() }
+        assertTrue { response.refreshToken.isNotEmpty() }
+        assertEquals(response.authToken, ContextManager.getCloudAuthToken())
+        assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
+        assertEquals(newUserEmail, ContextManager.getUserEmail())
 
-    @Test
-    fun shouldVerifyResetPassword() = runTest {
-        AccountlessApi.passwordResetVerify("", "", "")
+        // Given - shouldDelete
+        // When
+        AccountApi.deleteAccount()
+
+        // Then
+        assertNull(ContextManager.getCloudAuthToken())
+        assertNull(ContextManager.getCloudRefreshToken())
+        assertNull(ContextManager.getFusionAuthToken())
+        assertNull(ContextManager.getUserId())
+        assertNull(ContextManager.getUserEmail())
+        assertNull(ContextManager.getCertificateChain())
+        assertNull(ContextManager.getKeyPair())
+        assertFails {
+            AccountlessApi.login(newUserEmail, TEST_MAIN_USER_PASSWORD)
+        }
     }
 }

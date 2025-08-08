@@ -1,11 +1,11 @@
 ﻿namespace Doordeck.Headless.Sdk.Model;
 
-public class TimeRequirement(string start, string end, string timezone, List<string> days)
+public class TimeRequirement(string start, string end, string timezone, List<DayOfWeek> days)
 {
     public string Start { get; set; } = start;
     public string End { get; set; } = end;
     public string Timezone { get; set; } = timezone;
-    public List<string> Days { get; set; } = days;
+    public List<DayOfWeek> Days { get; set; } = days;
 }
 
 public class LocationRequirement(
@@ -103,13 +103,13 @@ public class UnlockBetween(
     string start,
     string end,
     string timezone,
-    List<string> days,
+    List<DayOfWeek> days,
     List<string>? exceptions = null)
 {
     public string Start { get; set; } = start;
     public string End { get; set; } = end;
     public string Timezone { get; set; } = timezone;
-    public List<string> Days { get; set; } = days;
+    public List<DayOfWeek> Days { get; set; } = days;
     public List<string>? Exceptions { get; set; } = exceptions;
 }
 

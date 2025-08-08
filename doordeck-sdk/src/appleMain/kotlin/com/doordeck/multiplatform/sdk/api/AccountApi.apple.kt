@@ -7,6 +7,10 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyRespon
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
 
 /**
  * Platform-specific implementations of account-related API calls.
@@ -19,6 +23,7 @@ actual object AccountApi {
     @Throws(Exception::class)
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
         return AccountClient.refreshTokenRequest(refreshToken)
+            .toTokenResponse()
     }
 
     /**
@@ -35,6 +40,7 @@ actual object AccountApi {
     @Throws(Exception::class)
     suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
+            .toRegisterEphemeralKeyResponse()
     }
 
     /**
@@ -43,6 +49,7 @@ actual object AccountApi {
     @Throws(Exception::class)
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
     }
 
     /**
@@ -51,6 +58,7 @@ actual object AccountApi {
     @Throws(Exception::class)
     suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
+            .toRegisterEphemeralKeyResponse()
     }
 
     /**
@@ -77,6 +85,7 @@ actual object AccountApi {
     @Throws(Exception::class)
     suspend fun getUserDetails(): UserDetailsResponse {
         return AccountClient.getUserDetailsRequest()
+            .toUserDetailsResponse()
     }
 
     /**

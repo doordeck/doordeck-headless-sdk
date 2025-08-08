@@ -1,11 +1,9 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
-data class SiteResponse(
+internal data class BasicSiteResponse(
     val id: String,
     val name: String,
     val colour: String,
@@ -17,11 +15,10 @@ data class SiteResponse(
     val updated: String
 )
 
-typealias SiteLocksResponse = LockResponse
+internal typealias BasicSiteLocksResponse = BasicLockResponse
 
-@JsExport
 @Serializable
-data class UserForSiteResponse(
+internal data class BasicUserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,

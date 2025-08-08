@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.cache
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
+import com.doordeck.multiplatform.sdk.randomUuidString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -11,7 +12,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class CapabilityCacheTest {
 
@@ -80,7 +80,7 @@ class CapabilityCacheTest {
         val capabilities = emptyMap<CapabilityType, CapabilityStatus>()
 
         // When
-        CapabilityCache.put(Uuid.random().toString(), capabilities)
+        CapabilityCache.put(randomUuidString(), capabilities)
 
         // Then
         assertNull(CapabilityCache.isSupported(TEST_MAIN_LOCK_ID, CapabilityType.BATCH_SHARING_25))

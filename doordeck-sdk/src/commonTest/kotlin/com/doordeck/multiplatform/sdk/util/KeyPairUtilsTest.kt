@@ -1,18 +1,18 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.randomString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class KeyPairUtilsTest {
 
     @Test
     fun shouldCheckValidKeyPair() = runTest {
         // Given
-        val keyPair = CryptoManager.generateKeyPair()
+        val keyPair = CryptoManager.generateRawKeyPair()
 
         // When
         val result = KeyPairUtils.isKeyPairValid(keyPair.public, keyPair.private)
@@ -24,8 +24,8 @@ class KeyPairUtilsTest {
     @Test
     fun shouldCheckInvalidKeys() = runTest {
         // Given
-        val publicKey = Uuid.random().toString().encodeToByteArray()
-        val privateKey = Uuid.random().toString().encodeToByteArray()
+        val publicKey = randomString().encodeToByteArray()
+        val privateKey = randomString().encodeToByteArray()
 
         // When
         val result = KeyPairUtils.isKeyPairValid(publicKey, privateKey)
@@ -37,8 +37,8 @@ class KeyPairUtilsTest {
     @Test
     fun shouldCheckInvalidKeyPair() = runTest {
         // Given
-        val publicKey = CryptoManager.generateKeyPair().public
-        val privateKey = CryptoManager.generateKeyPair().private
+        val publicKey = CryptoManager.generateRawKeyPair().public
+        val privateKey = CryptoManager.generateRawKeyPair().private
 
         // When
         val result = KeyPairUtils.isKeyPairValid(publicKey, privateKey)

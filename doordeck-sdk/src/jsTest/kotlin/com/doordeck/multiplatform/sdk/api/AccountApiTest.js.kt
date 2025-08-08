@@ -1,96 +1,114 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.MockTest
-import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_RESPONSE
-import com.doordeck.multiplatform.sdk.REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE
-import com.doordeck.multiplatform.sdk.TOKEN_RESPONSE
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.USER_DETAILS_RESPONSE
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-class AccountApiTest : MockTest() {
+class AccountApiTest : IntegrationTest() {
 
     @Test
-    fun shouldRefreshToken() = runTest {
-        val response = AccountApi.refreshToken("").await()
-        assertEquals(TOKEN_RESPONSE, response)
+    fun shouldGetUserDetails() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+
+        // When
+        val response = AccountApi.getUserDetails().await()
+
+        // Then
+        assertEquals(TEST_MAIN_USER_EMAIL, response.email)
     }
 
+    @Ignore
     @Test
-    fun shouldRefreshTokenUsingContext() = runTest {
-        val response = AccountApi.refreshToken().await()
-        assertEquals(TOKEN_RESPONSE, response)
-    }
+    fun shouldUpdateUserDetails() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val updatedUserDisplayName = "Training"
 
-    @Test
-    fun shouldLogout() = runTest {
-        AccountApi.logout().await()
+        // When
+        AccountApi.updateUserDetails(updatedUserDisplayName).await()
+
+        // Then
+        val result = AccountApi.getUserDetails().await()
+        assertEquals(updatedUserDisplayName, result.displayName)
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
-        val response = AccountApi.registerEphemeralKey(byteArrayOf(), byteArrayOf()).await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+        val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
-    @Test
-    fun shouldRegisterEphemeralKeyUsingContext() = runTest {
-        val response = AccountApi.registerEphemeralKey().await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
-    }
+        // When
+        val result = AccountApi.registerEphemeralKey(publicKey, privateKey).await()
 
-    @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthentication() = runTest {
-        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthentication(byteArrayOf()).await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldRegisterEphemeralKeyWithSecondaryAuthenticationUsingContext() = runTest {
-        val response = AccountApi.registerEphemeralKeyWithSecondaryAuthentication().await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_WITH_SECONDARY_AUTHENTICATION_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldVerifyEphemeralKeyRegistration() = runTest {
-        val response = AccountApi.verifyEphemeralKeyRegistration("", TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(), TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()).await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldVerifyEphemeralKeyRegistrationUsingContext() = runTest {
-        val response = AccountApi.verifyEphemeralKeyRegistration("").await()
-        assertEquals(REGISTER_EPHEMERAL_KEY_RESPONSE, response)
-    }
-
-    @Test
-    fun shouldReverifyEmail() = runTest {
-        AccountApi.reverifyEmail().await()
+        // Then
+        assertTrue { result.certificateChain.isNotEmpty() }
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
+        assertEquals(result.certificateChain, ContextManager.getCertificateChain())
+        assertContentEquals(publicKey, ContextManager.getKeyPair()?.public)
+        assertContentEquals(privateKey, ContextManager.getKeyPair()?.private)
+        assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
+        assertTrue { ContextManager.isKeyPairVerified() }
     }
 
     @Test
     fun shouldChangePassword() = runTest {
-        AccountApi.changePassword("", "").await()
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+
+        // When
+        AccountApi.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD).await()
+
+        // Then
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
     }
 
     @Test
-    fun shouldGetUserDetails() = runTest {
-        val response = AccountApi.getUserDetails().await()
-        assertEquals(USER_DETAILS_RESPONSE, response)
+    fun shouldRefreshToken() = runTest {
+        // Given
+        val login = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+
+        // When
+        val response = AccountApi.refreshToken(login.refreshToken).await()
+
+        // Then
+        assertTrue { response.authToken.isNotEmpty() }
+        assertTrue { response.refreshToken.isNotEmpty() }
+        assertEquals(ContextManager.getCloudAuthToken(), response.authToken)
+        assertEquals(ContextManager.getCloudRefreshToken(), response.refreshToken)
     }
 
     @Test
-    fun shouldUpdateUserDetails() = runTest {
-        AccountApi.updateUserDetails("").await()
-    }
+    fun shouldLogout() = runTest {
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
-    @Test
-    fun shouldDeleteAccount() = runTest {
-        AccountApi.deleteAccount().await()
+        // When
+        AccountApi.logout().await()
+
+        // Then
+        assertNull(ContextManager.getCloudAuthToken())
+        assertNull(ContextManager.getCloudRefreshToken())
+        assertNull(ContextManager.getFusionAuthToken())
+        assertNull(ContextManager.getUserId())
+        assertNull(ContextManager.getUserEmail())
+        assertNull(ContextManager.getCertificateChain())
+        assertNull(ContextManager.getKeyPair())
     }
 }

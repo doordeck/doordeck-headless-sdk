@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.ProjectVersion
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -24,7 +24,7 @@ import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -70,14 +70,14 @@ private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 /**
  * Converts an API version to its corresponding header value.
- * 
+ *
  * @return The formatted header value for the API version.
  */
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
 /**
  * Adds common request headers to an HTTP request.
- * 
+ *
  * @param signedRequest Whether this is a signed request (affects content type).
  * @param contentType The content type to use, defaults based on signedRequest parameter.
  * @param apiVersion Optional API version to include in Accept header.
@@ -119,8 +119,8 @@ internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
             refreshTokens {
-                ContextManagerImpl.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: TokenResponse = client.post(ContextManagerImpl.getApiEnvironment().cloudHost) {
+                Context.getCloudRefreshToken()?.let { currentRefreshToken ->
+                    val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
                             path(Paths.getRefreshTokenPath())
                         }
@@ -130,7 +130,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                         }
                         markAsRefreshTokenRequest()
                     }.body()
-                    ContextManagerImpl.also { context ->
+                    Context.also { context ->
                         context.setCloudAuthToken(refreshTokens.authToken)
                         context.setCloudRefreshToken(refreshTokens.refreshToken)
                     }

@@ -11,10 +11,10 @@ public class LockOperations(
     public unsafe Task<LockResponse> GetSingleLock(string lockId) =>
         Process<LockResponse>(lockOperationsApi.getSingleLock_, null, new { lockId });
 
-    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, int start, int end) =>
+    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, long start, long end) =>
         Process<List<AuditResponse>>(lockOperationsApi.getLockAuditTrail_, null, new { lockId, start, end });
 
-    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, int start, int end) =>
+    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, long start, long end) =>
         Process<List<AuditResponse>>(lockOperationsApi.getAuditForUser_, null, new { userId, start, end });
 
     public unsafe Task<List<UserLockResponse>> GetUsersForLock(string lockId) =>
@@ -26,13 +26,10 @@ public class LockOperations(
     public unsafe Task<object> UpdateLockName(string lockId, string? name = null) =>
         Process<object>(lockOperationsApi.updateLockName_, null, new { lockId, name });
 
-    public unsafe Task<object> UpdateLockFavourite(string lockId, bool? favourite = null) =>
+    public unsafe Task<object> UpdateLockFavourite(string lockId, bool favourite) =>
         Process<object>(lockOperationsApi.updateLockFavourite_, null, new { lockId, favourite });
 
-    public unsafe Task<object> UpdateLockColour(string lockId, string? colour = null) =>
-        Process<object>(lockOperationsApi.updateLockColour_, null, new { lockId, colour });
-
-    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string? name = null) =>
+    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string name) =>
         Process<object>(lockOperationsApi.updateLockSettingDefaultName_, null, new { lockId, name });
 
     public unsafe Task<object> SetLockSettingPermittedAddresses(string lockId, List<string> permittedAddresses) =>

@@ -1,50 +1,53 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.LIST_SITES_RESPONSE
-import com.doordeck.multiplatform.sdk.LOCKS_FOR_SITE_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
-import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_SITE_ID
-import com.doordeck.multiplatform.sdk.USER_FOR_SITE_RESPONSE
-import kotlinx.coroutines.future.await
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
-class SitesApiTest : MockTest() {
+class SitesApiTest : IntegrationTest() {
 
     @Test
     fun shouldListSites() = runTest {
-        val response = SitesApi.listSites()
-        assertEquals(LIST_SITES_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldListSitesAsync() = runTest {
-        val response = SitesApi.listSitesAsync().await()
-        assertEquals(LIST_SITES_RESPONSE, response)
+        // When
+        val sites = SitesApi.listSites()
+
+        // Then
+        assertTrue { sites.isNotEmpty() }
+        assertTrue { sites.any { it.id == PLATFORM_TEST_MAIN_SITE_ID } }
     }
 
     @Test
     fun shouldGetLocksForSite() = runTest {
-        val response = SitesApi.getLocksForSite(DEFAULT_SITE_ID)
-        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetLocksForSiteAsync() = runTest {
-        val response = SitesApi.getLocksForSiteAsync(DEFAULT_SITE_ID).await()
-        assertEquals(LOCKS_FOR_SITE_RESPONSE, response)
+        // When
+        val locksForSite = SitesApi.getLocksForSite(PLATFORM_TEST_MAIN_SITE_ID)
+
+        // Then
+        assertTrue { locksForSite.isNotEmpty() }
+        assertTrue { locksForSite.any { it.id == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldGetUsersForSite() = runTest {
-        val response = SitesApi.getUsersForSite(DEFAULT_SITE_ID)
-        assertEquals(USER_FOR_SITE_RESPONSE, response)
-    }
+        // Given
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldGetUsersForSiteAsync() = runTest {
-        val response = SitesApi.getUsersForSiteAsync(DEFAULT_SITE_ID).await()
-        assertEquals(USER_FOR_SITE_RESPONSE, response)
+        // When
+        val usersForSite = SitesApi.getUsersForSite(PLATFORM_TEST_MAIN_SITE_ID)
+
+        // Then
+        assertTrue { usersForSite.isNotEmpty() }
+        assertTrue { usersForSite.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
     }
 }

@@ -1,6 +1,12 @@
 package com.doordeck.multiplatform.sdk.config
 
-import com.doordeck.multiplatform.sdk.randomSdkConfig
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.randomBoolean
+import com.doordeck.multiplatform.sdk.randomNullable
+import com.doordeck.multiplatform.sdk.randomString
+import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
+import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -10,7 +16,14 @@ class SdkConfigTest {
     @Test
     fun shouldBuildSdkConfig () = runTest {
         // Given
-        val sdkConfig = randomSdkConfig()
+        val sdkConfig = SdkConfig(
+            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            cloudAuthToken = randomNullable { randomString() },
+            cloudRefreshToken = randomNullable { randomString() },
+            fusionHost = randomNullable { randomUrlString() },
+            secureStorage = DefaultSecureStorage(MemorySettings()),
+            debugLogging = randomNullable { randomBoolean() }
+        )
 
         // When
         val result = SdkConfig.Builder()

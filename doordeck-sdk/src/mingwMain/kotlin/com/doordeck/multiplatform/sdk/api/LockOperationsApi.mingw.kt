@@ -22,7 +22,6 @@ import com.doordeck.multiplatform.sdk.model.data.SetLockSettingPermittedAddresse
 import com.doordeck.multiplatform.sdk.model.data.SetLockSettingTimeRestrictionsData
 import com.doordeck.multiplatform.sdk.model.data.ShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.UnlockOperationData
-import com.doordeck.multiplatform.sdk.model.data.UpdateLockColourData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockFavouriteData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockNameData
 import com.doordeck.multiplatform.sdk.model.data.UpdateLockSettingDefaultNameData
@@ -152,22 +151,6 @@ actual object LockOperationsApi {
             block = {
                 val updateLockFavouriteData = data.fromJson<UpdateLockFavouriteData>()
                 LockOperationsClient.updateLockFavouriteRequest(updateLockFavouriteData.lockId, updateLockFavouriteData.favourite)
-            },
-            callback = callback
-        )
-    }
-
-    /**
-     * Update lock properties - Colour
-     *
-     * @see <a href="https://developer.doordeck.com/docs/#update-lock-properties">API Doc</a>
-     */
-    @CName("updateLockColour")
-    fun updateLockColour(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateLockColourData = data.fromJson<UpdateLockColourData>()
-                LockOperationsClient.updateLockColourRequest(updateLockColourData.lockId, updateLockColourData.colour)
             },
             callback = callback
         )

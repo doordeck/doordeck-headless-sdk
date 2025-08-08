@@ -3,6 +3,14 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
+import com.doordeck.multiplatform.sdk.model.data.toBasicBatchShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicLocationRequirement
+import com.doordeck.multiplatform.sdk.model.data.toBasicRevokeAccessToLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicShareLockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
+import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
+import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
+import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.LockResponse
@@ -10,6 +18,13 @@ import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -22,6 +37,7 @@ actual object LockOperationsApi {
      */
     suspend fun getSingleLock(lockId: String): LockResponse {
         return LockOperationsClient.getSingleLockRequest(lockId)
+            .toLockResponse()
     }
 
     /**
@@ -34,28 +50,30 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    suspend fun getLockAuditTrail(lockId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getLockAuditTrail(lockId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getLockAuditTrailRequest(lockId, start, end)
+            .toAuditResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
-    fun getLockAuditTrailAsync(lockId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getLockAuditTrailAsync(lockId: String, start: Long, end: Long): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getLockAuditTrail(lockId, start, end) }
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: String, start: Int, end: Int): List<AuditResponse> {
+    suspend fun getAuditForUser(userId: String, start: Long, end: Long): List<AuditResponse> {
         return LockOperationsClient.getAuditForUserRequest(userId, start, end)
+            .toAuditResponse()
     }
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
-    fun getAuditForUserAsync(userId: String, start: Int, end: Int): CompletableFuture<List<AuditResponse>> {
+    fun getAuditForUserAsync(userId: String, start: Long, end: Long): CompletableFuture<List<AuditResponse>> {
         return completableFuture { getAuditForUser(userId, start, end) }
     }
 
@@ -64,6 +82,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUsersForLock(lockId: String): List<UserLockResponse> {
         return LockOperationsClient.getUsersForLockRequest(lockId)
+            .toUserLockResponse()
     }
 
     /**
@@ -78,6 +97,7 @@ actual object LockOperationsApi {
      */
     suspend fun getLocksForUser(userId: String): LockUserResponse {
         return LockOperationsClient.getLocksForUserRequest(userId)
+            .toLockUserResponse()
     }
 
     /**
@@ -104,42 +124,28 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    suspend fun updateLockFavourite(lockId: String, favourite: Boolean? = null) {
+    suspend fun updateLockFavourite(lockId: String, favourite: Boolean) {
         return LockOperationsClient.updateLockFavouriteRequest(lockId, favourite)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockFavourite] returning [CompletableFuture].
      */
-    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean? = null): CompletableFuture<Unit> {
+    fun updateLockFavouriteAsync(lockId: String, favourite: Boolean): CompletableFuture<Unit> {
         return completableFuture { updateLockFavourite(lockId, favourite) }
-    }
-
-    /**
-     * @see LockOperationsClient.updateLockColourRequest
-     */
-    suspend fun updateLockColour(lockId: String, colour: String? = null) {
-        return LockOperationsClient.updateLockColourRequest(lockId, colour)
-    }
-
-    /**
-     * Async variant of [LockOperationsApi.updateLockColour] returning [CompletableFuture].
-     */
-    fun updateLockColourAsync(lockId: String, colour: String? = null): CompletableFuture<Unit> {
-        return completableFuture { updateLockColour(lockId, colour) }
     }
 
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
+    suspend fun updateLockSettingDefaultName(lockId: String, name: String) {
         return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
     }
 
     /**
      * Async variant of [LockOperationsApi.updateLockSettingDefaultName] returning [CompletableFuture].
      */
-    fun updateLockSettingDefaultNameAsync(lockId: String, name: String? = null): CompletableFuture<Unit> {
+    fun updateLockSettingDefaultNameAsync(lockId: String, name: String): CompletableFuture<Unit> {
         return completableFuture { updateLockSettingDefaultName(lockId, name) }
     }
 
@@ -175,7 +181,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
     suspend fun setLockSettingTimeRestrictions(lockId: String, times: List<LockOperations.TimeRequirement>) {
-        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times)
+        return LockOperationsClient.setLockSettingTimeRestrictionsRequest(lockId, times.toBasicTimeRequirement())
     }
 
     /**
@@ -189,7 +195,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
     suspend fun updateLockSettingLocationRestrictions(lockId: String, location: LockOperations.LocationRequirement? = null) {
-        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location)
+        return LockOperationsClient.updateLockSettingLocationRestrictionsRequest(lockId, location?.toBasicLocationRequirement())
     }
 
     /**
@@ -205,6 +211,7 @@ actual object LockOperationsApi {
     @DoordeckOnly
     suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyRequest(userEmail, visitor)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -220,6 +227,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByEmailRequest(email)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -234,6 +242,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -248,6 +257,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -262,6 +272,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -276,6 +287,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse {
         return LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
+            .toUserPublicKeyResponse()
     }
 
     /**
@@ -290,6 +302,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByEmailsRequest(emails)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -304,6 +317,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByTelephones(telephones: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -318,6 +332,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByLocalKeys(localKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -332,6 +347,7 @@ actual object LockOperationsApi {
      */
     suspend fun getUserPublicKeyByForeignKeys(foreignKeys: List<String>): List<BatchUserPublicKeyResponse> {
         return LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys)
+            .toBatchUserPublicKeyResponse()
     }
 
     /**
@@ -345,7 +361,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.unlockRequest
      */
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) {
-        return LockOperationsClient.unlockRequest(unlockOperation)
+        return LockOperationsClient.unlockRequest(unlockOperation.toBasicUnlockOperation())
     }
 
     /**
@@ -359,7 +375,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.shareLockRequest
      */
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) {
-        return LockOperationsClient.shareLockRequest(shareLockOperation)
+        return LockOperationsClient.shareLockRequest(shareLockOperation.toBasicShareLockOperation())
     }
 
     /**
@@ -373,7 +389,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.batchShareLockRequest
      */
     suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) {
-        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
+        return LockOperationsClient.batchShareLockRequest(batchShareLockOperation.toBasicBatchShareLockOperation())
     }
 
     /**
@@ -387,7 +403,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.revokeAccessToLockRequest
      */
     suspend fun revokeAccessToLock(revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation) {
-        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation)
+        return LockOperationsClient.revokeAccessToLockRequest(revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation())
     }
 
     /**
@@ -401,7 +417,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
     suspend fun updateSecureSettingUnlockDuration(updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration) {
-        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration)
+        return LockOperationsClient.updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration())
     }
 
     /**
@@ -419,7 +435,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
     suspend fun updateSecureSettingUnlockBetween(updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween) {
-        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween)
+        return LockOperationsClient.updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween())
     }
 
     /**
@@ -438,6 +454,7 @@ actual object LockOperationsApi {
      */
     suspend fun getPinnedLocks(): List<LockResponse> {
         return LockOperationsClient.getPinnedLocksRequest()
+            .toLockResponse()
     }
 
     /**
@@ -452,6 +469,7 @@ actual object LockOperationsApi {
      */
     suspend fun getShareableLocks(): List<ShareableLockResponse> {
         return LockOperationsClient.getShareableLocksRequest()
+            .toShareableLockResponse()
     }
 
     /**

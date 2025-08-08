@@ -73,7 +73,7 @@ public class CCureController : LockController
 
 public class DemoController : LockController
 {
-    public int Port { get; set; } = 8080;
+    public ushort Port { get; set; } = 8080;
 }
 
 public class GallagherController : LockController

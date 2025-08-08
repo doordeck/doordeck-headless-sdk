@@ -1,18 +1,15 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
-data class AssistedLoginResponse(
+internal data class BasicAssistedLoginResponse(
     val requiresVerification: Boolean,
     val requiresRetry: Boolean
 )
 
-@JsExport
 @Serializable
-data class AssistedRegisterEphemeralKeyResponse(
+internal data class BasicAssistedRegisterEphemeralKeyResponse(
     val requiresVerification: Boolean,
     val requiresRetry: Boolean
 )

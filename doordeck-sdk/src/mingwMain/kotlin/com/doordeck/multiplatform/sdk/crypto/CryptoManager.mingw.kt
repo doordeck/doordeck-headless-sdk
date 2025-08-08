@@ -9,6 +9,8 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Platform-specific implementation of [CryptoManager].
@@ -23,9 +25,9 @@ actual object CryptoManager {
     }
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
+    actual fun generateRawKeyPair(): Crypto.KeyPair {
         val keyPair = Signature.keypair()
         return Crypto.KeyPair(
             private = keyPair.secretKey.toByteArray(),
@@ -40,10 +42,12 @@ actual object CryptoManager {
      */
     @CName("generateEncodedKeyPair")
     fun generateEncodedKeyPair(): String {
-        val keyPair = generateKeyPair()
-        return Crypto.EncodedKeyPair(
-            private = keyPair.private.encodeByteArrayToBase64(),
-            public = keyPair.public.encodeByteArrayToBase64()
+        val keyPair = generateRawKeyPair()
+        return JsonObject(
+            content = mapOf(
+                "private" to JsonPrimitive(keyPair.private.encodeByteArrayToBase64()),
+                "public" to JsonPrimitive(keyPair.public.encodeByteArrayToBase64())
+            )
         ).toJson()
     }
 

@@ -171,7 +171,9 @@ kotlin {
             languageSettings.apply {
                 optIn("kotlin.io.encoding.ExperimentalEncodingApi")
                 optIn("kotlin.js.ExperimentalJsExport")
+                optIn("kotlin.time.ExperimentalTime")
                 optIn("kotlin.ExperimentalUnsignedTypes")
+                optIn("kotlinx.datetime.format.FormatStringsInDatetimeFormats")
                 optIn("kotlinx.coroutines.DelicateCoroutinesApi")
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
                 optIn("kotlin.uuid.ExperimentalUuidApi")
@@ -223,6 +225,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.nimbus.jose.jwt)
             }
         }
 

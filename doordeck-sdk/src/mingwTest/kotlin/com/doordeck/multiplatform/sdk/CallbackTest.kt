@@ -1,16 +1,17 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import kotlin.test.BeforeTest
-import kotlin.test.assertEquals
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
-private var capturedCallback: String? = null
+private var capturedCallback: String = ""
 
 internal fun testCallback(data: CPointer<ByteVar>): CPointer<ByteVar> {
     val received = data.toKString()
@@ -18,20 +19,23 @@ internal fun testCallback(data: CPointer<ByteVar>): CPointer<ByteVar> {
     return data
 }
 
-open class CallbackTest : MockTest() {
+open class CallbackTest : IntegrationTest() {
     @BeforeTest
     fun resetCallback() = runTest {
-        capturedCallback = null
+        capturedCallback = ""
     }
 
-    fun callbackTest(apiCall: suspend () -> Unit, expectedResponse: String = UNIT_RESULT_DATA) {
-        runBlocking {
-            // When
+    internal inline fun <reified T> callbackApiCall(noinline apiCall: suspend () -> Unit): T {
+        return runBlocking {
             apiCall()
-            delay(5.milliseconds)
-
-            // Then
-            assertEquals(expectedResponse, capturedCallback)
+            withTimeout(60.seconds) {
+                while (capturedCallback.isEmpty()) {
+                    delay(1.seconds)
+                }
+            }
+            return@runBlocking capturedCallback.fromJson<T>().also {
+                capturedCallback = ""
+            }
         }
     }
 }

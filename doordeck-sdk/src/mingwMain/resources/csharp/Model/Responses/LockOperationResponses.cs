@@ -11,7 +11,6 @@ public class LockResponse
     public LockSettingsResponse Settings { get; set; } = new LockSettingsResponse();
     public LockStateResponse State { get; set; } = new LockStateResponse();
     public bool Favourite { get; set; }
-    public double? UnlockTime { get; set; } = null;
 }
 
 public class LockSettingsResponse
@@ -38,7 +37,7 @@ public class TimeRequirementResponse
     public string Start { get; set; } = string.Empty;
     public string End { get; set; } = string.Empty;
     public string Timezone { get; set; } = string.Empty;
-    public List<string> Days { get; set; } = [];
+    public List<DayOfWeek> Days { get; set; } = [];
 }
 
 public class LocationRequirementResponse
@@ -55,13 +54,12 @@ public class UnlockBetweenSettingResponse
     public string Start { get; set; } = string.Empty;
     public string End { get; set; } = string.Empty;
     public string Timezone { get; set; } = string.Empty;
-    public List<string> Days { get; set; } = [];
+    public List<DayOfWeek> Days { get; set; } = [];
     public List<string>? Exceptions { get; set; } = null;
 }
 
 public class LockStateResponse
 {
-    public bool Locked { get; set; }
     public bool Connected { get; set; }
 }
 
@@ -125,21 +123,15 @@ public class AuditResponse
     public string DeviceId { get; set; } = string.Empty;
     public double Timestamp { get; set; }
     public AuditEvent Type { get; set; }
-    public AuditIssuerResponse Issuer { get; set; } = new AuditIssuerResponse();
-    public AuditSubjectResponse? Subject { get; set; } = null;
+    public AuditUserResponse Issuer { get; set; } = new AuditUserResponse();
+    public AuditUserResponse? Subject { get; set; } = null;
     public bool Rejected { get; set; }
 }
 
-public class AuditIssuerResponse
+public class AuditUserResponse
 {
     public string UserId { get; set; } = string.Empty;
     public string? Email { get; set; } = null;
-    public string? Ip { get; set; } = null;
-}
-
-public class AuditSubjectResponse
-{
-    public string UserId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
     public string? DisplayName { get; set; } = null;
+    public string? Ip { get; set; } = null;
 }

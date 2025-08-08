@@ -7,6 +7,10 @@ import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyRespon
 import com.doordeck.multiplatform.sdk.model.responses.RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserDetailsResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.util.concurrent.CompletableFuture
 
@@ -20,6 +24,7 @@ actual object AccountApi {
     @DoordeckOnly
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
         return AccountClient.refreshTokenRequest(refreshToken)
+            .toTokenResponse()
     }
 
     /**
@@ -49,6 +54,7 @@ actual object AccountApi {
      */
     suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
         return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
+            .toRegisterEphemeralKeyResponse()
     }
 
     /**
@@ -66,6 +72,7 @@ actual object AccountApi {
         method: TwoFactorMethod? = null
     ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
         return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
+            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
     }
 
     /**
@@ -87,6 +94,7 @@ actual object AccountApi {
         privateKey: ByteArray? = null
     ): RegisterEphemeralKeyResponse {
         return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
+            .toRegisterEphemeralKeyResponse()
     }
 
     /**
@@ -137,6 +145,7 @@ actual object AccountApi {
      */
     suspend fun getUserDetails(): UserDetailsResponse {
         return AccountClient.getUserDetailsRequest()
+            .toUserDetailsResponse()
     }
 
     /**

@@ -86,7 +86,7 @@ expect object CryptoManager {
      *
      * @return A [Crypto.KeyPair] containing the encoded private and public keys
      */
-    fun generateKeyPair(): Crypto.KeyPair
+    internal fun generateRawKeyPair(): Crypto.KeyPair
 
     /**
      * Checks if a certificate is invalid (e.g., null, malformed) or expired.
