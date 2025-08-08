@@ -52,7 +52,7 @@ internal data class UpdateLockFavouriteData(
 @Serializable
 internal data class UpdateLockSettingDefaultNameData(
     val lockId: String,
-    val name: String? = null
+    val name: String
 )
 
 @Serializable
