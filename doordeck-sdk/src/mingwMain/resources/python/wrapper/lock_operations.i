@@ -67,7 +67,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_setting_default_name(self, lockId: str, name: typing.Optional[str] = None):
+    async def update_lock_setting_default_name(self, lockId: str, name: str):
         data = {
             "lockId": lockId,
             "name": name

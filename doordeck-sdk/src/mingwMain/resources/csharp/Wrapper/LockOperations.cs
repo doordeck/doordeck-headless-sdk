@@ -29,7 +29,7 @@ public class LockOperations(
     public unsafe Task<object> UpdateLockFavourite(string lockId, bool favourite) =>
         Process<object>(lockOperationsApi.updateLockFavourite_, null, new { lockId, favourite });
 
-    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string? name = null) =>
+    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string name) =>
         Process<object>(lockOperationsApi.updateLockSettingDefaultName_, null, new { lockId, name });
 
     public unsafe Task<object> SetLockSettingPermittedAddresses(string lockId, List<string> permittedAddresses) =>
