@@ -95,7 +95,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
     @Throws(Exception::class)
-    suspend fun updateLockSettingDefaultName(lockId: String, name: String? = null) {
+    suspend fun updateLockSettingDefaultName(lockId: String, name: String) {
         return LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name)
     }
 

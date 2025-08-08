@@ -122,7 +122,7 @@ internal sealed interface LockSettingsRequest
 
 @Serializable
 internal data class LockSettingsDefaultNameRequest(
-    val defaultName: String?
+    val defaultName: String
 ): LockSettingsRequest
 
 @Serializable

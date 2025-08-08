@@ -85,7 +85,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    fun updateLockSettingDefaultName(lockId: String, name: String? = null): Promise<dynamic> {
+    fun updateLockSettingDefaultName(lockId: String, name: String): Promise<dynamic> {
         return promise { LockOperationsClient.updateLockSettingDefaultNameRequest(lockId, name) }
     }
 

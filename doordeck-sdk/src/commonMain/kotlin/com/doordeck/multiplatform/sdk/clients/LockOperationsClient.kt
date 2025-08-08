@@ -178,12 +178,12 @@ internal object LockOperationsClient {
      * Updates the lock's default name (visible to all users without a custom alias).
      *
      * @param lockId The lock's unique identifier.
-     * @param name The new lock's name, use `null` to remove the default name.
+     * @param name The new lock's default name.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
-    suspend fun updateLockSettingDefaultNameRequest(lockId: String, name: String?) {
+    suspend fun updateLockSettingDefaultNameRequest(lockId: String, name: String) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
     }
 

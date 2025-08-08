@@ -174,7 +174,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    suspend fun updateLockSettingDefaultName(lockId: UUID, name: String? = null) = LockOperationsClient
+    suspend fun updateLockSettingDefaultName(lockId: UUID, name: String) = LockOperationsClient
         .updateLockSettingDefaultNameRequest(
             lockId = lockId.toString(),
             name = name
@@ -183,10 +183,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.updateLockSettingDefaultName] returning [CompletableFuture].
      */
-    fun updateLockSettingDefaultNameAsync(
-        lockId: UUID,
-        name: String? = null
-    ): CompletableFuture<Unit> = completableFuture {
+    fun updateLockSettingDefaultNameAsync(lockId: UUID, name: String): CompletableFuture<Unit> = completableFuture {
         updateLockSettingDefaultName(
             lockId = lockId,
             name = name
