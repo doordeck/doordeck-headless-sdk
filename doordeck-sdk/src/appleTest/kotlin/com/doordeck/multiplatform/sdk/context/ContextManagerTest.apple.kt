@@ -8,18 +8,12 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_JWT
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.OperationContextData
 import com.doordeck.multiplatform.sdk.randomEmail
-import com.doordeck.multiplatform.sdk.randomPrivateKey
-import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
-import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
-import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -120,34 +114,25 @@ class ContextManagerTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldStoreJsonOperationContext() = runTest {
+    fun shouldStoreOperationContext() = runTest {
         // Given
         val userId = randomUuidString()
-        val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
-        val publicKey = randomPublicKey()
-        val privateKey = randomPrivateKey()
-        val operationContextData = OperationContextData(
-            userId = userId,
-            userCertificateChain = certificateChain.certificateChainToString(),
-            userPublicKey = publicKey.encodeByteArrayToBase64(),
-            userPrivateKey = privateKey.encodeByteArrayToBase64()
-        )
+        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val keyPair = CryptoManager.generateRawKeyPair()
         val settings = DefaultSecureStorage(MemorySettings())
         Context.setSecureStorageImpl(settings)
-        ContextManager.setOperationContextJson(operationContextData.toJson())
+        ContextManager.setOperationContext(userId, certificateChain, keyPair.public, keyPair.private, true)
 
         // When
         Context.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
-        Context.reset()
+        ContextManager.clearContext()
         Context.setSecureStorageImpl(settings) // Re-add the original storage
 
         // Then
-        assertEquals(userId, Context.getUserId())
-        assertContentEquals(certificateChain, Context.getCertificateChain())
-        assertContentEquals(publicKey, Context.getPublicKey())
-        assertContentEquals(privateKey, Context.getPrivateKey())
-        assertContentEquals(publicKey, Context.getKeyPair()?.public)
-        assertContentEquals(privateKey, Context.getKeyPair()?.private)
+        assertEquals(userId, ContextManager.getUserId())
+        assertContentEquals(certificateChain, ContextManager.getCertificateChain())
+        assertEquals(keyPair.public, ContextManager.getKeyPair()?.public)
+        assertEquals(keyPair.private, ContextManager.getKeyPair()?.private)
     }
 
     @Test
