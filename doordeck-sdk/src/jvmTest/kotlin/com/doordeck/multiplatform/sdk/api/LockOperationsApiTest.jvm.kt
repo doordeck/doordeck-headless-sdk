@@ -32,6 +32,7 @@ import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import java.net.InetAddress
+import java.security.KeyPair
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalTime
@@ -331,8 +332,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -350,8 +353,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -374,8 +379,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLock
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val shareBaseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -424,8 +431,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val shareBaseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -497,8 +506,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -546,8 +557,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -614,8 +627,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val updatedUnlockDuration = Duration.ofSeconds(randomLong(1, 10))
         val baseOperation = LockOperations.BaseOperation(
@@ -643,8 +658,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val updatedUnlockDuration = Duration.ofSeconds(1)
         ContextManager.setOperationContext(
@@ -673,8 +690,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val now = now()
         val updatedUnlockBetween = LockOperations.UnlockBetween(
@@ -733,8 +752,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val now = now()
         val min = now.minus(5, ChronoUnit.MINUTES)
