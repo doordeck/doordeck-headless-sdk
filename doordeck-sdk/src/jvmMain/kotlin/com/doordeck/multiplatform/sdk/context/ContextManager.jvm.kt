@@ -30,7 +30,7 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: URI) = Context.setFusionHost(host.host)
+    fun setFusionHost(host: URI) = Context.setFusionHost(host.toString())
 
     fun getFusionHost(): URI = Context.getFusionHost().toUri()
 
