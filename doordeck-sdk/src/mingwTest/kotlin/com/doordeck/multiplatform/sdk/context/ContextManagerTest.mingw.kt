@@ -68,8 +68,8 @@ class ContextManagerTest : IntegrationTest() {
         assertEquals(userId, ContextManager.getUserId())
         assertEquals(email, ContextManager.getUserEmail())
         assertContentEquals(certificateChain, ContextManager.getCertificateChain())
-        assertEquals(keyPair.public, ContextManager.getKeyPair()?.public)
-        assertEquals(keyPair.private, ContextManager.getKeyPair()?.private)
+        assertContentEquals(keyPair.public, ContextManager.getKeyPair()?.public)
+        assertContentEquals(keyPair.private, ContextManager.getKeyPair()?.private)
         assertTrue { ContextManager.isKeyPairVerified() }
         assertEquals(cloudAuthToken, ContextManager.getCloudAuthToken())
         assertEquals(cloudRefreshToken, ContextManager.getCloudRefreshToken())
