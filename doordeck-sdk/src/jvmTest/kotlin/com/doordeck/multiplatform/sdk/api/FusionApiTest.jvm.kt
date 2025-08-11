@@ -94,13 +94,12 @@ class FusionApiTest : IntegrationTest() {
     }
 
     private suspend fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = try {
-        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
-        if (testController == null) {
-            error("Controller of type ${controllerType.simpleName} not found, skipping test...")
-        }
+        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
+            controllerType.isInstance(it.value.controller)
+        } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key){
+            TEST_HTTP_CLIENT.get(testController.key.host){
                 timeout {
                     connectTimeoutMillis = 10_000
                     socketTimeoutMillis = 30_000

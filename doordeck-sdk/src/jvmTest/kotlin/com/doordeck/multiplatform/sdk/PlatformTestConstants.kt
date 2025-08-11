@@ -18,12 +18,15 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toRsaPublicKey
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.responses.toLockControllerResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUuid
 import kotlinx.serialization.Serializable
 
 internal object PlatformTestConstants {
 
-    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY by lazy {
+        TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey()
+    }
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey()
     val PLATFORM_TEST_MAIN_USER_ID = TEST_MAIN_USER_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID.toUuid()
@@ -34,7 +37,12 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.toRsaPublicKey()
-    val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map { it.key to TestController(it.value.type, it.value.controller.toLockControllerResponse()) }.toMap()
+    val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
+        it.key.toUri() to TestController(
+            type = it.value.type,
+            controller = it.value.controller.toLockControllerResponse()
+        )
+    }.toMap()
 
     @Serializable
     data class TestController(
