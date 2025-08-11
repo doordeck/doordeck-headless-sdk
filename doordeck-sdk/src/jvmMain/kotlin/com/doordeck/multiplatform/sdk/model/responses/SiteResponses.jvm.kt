@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toUuid
-import kotlinx.datetime.Instant
+import java.time.Instant
 import java.util.UUID
 
 data class SiteResponse(

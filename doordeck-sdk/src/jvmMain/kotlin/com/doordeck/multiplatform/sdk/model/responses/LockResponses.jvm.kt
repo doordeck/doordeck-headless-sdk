@@ -14,17 +14,17 @@ import com.doordeck.multiplatform.sdk.util.toLocalTime
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUuid
 import com.doordeck.multiplatform.sdk.util.toZoneId
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
 import java.net.InetAddress
 import java.net.URI
 import java.security.PublicKey
 import java.time.DayOfWeek
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.util.EnumSet
 import java.util.UUID
-import kotlin.time.Duration
 
 data class LockResponse(
     val id: UUID,

@@ -26,8 +26,8 @@ import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
-import kotlinx.datetime.Instant
 import java.net.InetAddress
+import java.time.Instant
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
@@ -59,8 +59,8 @@ actual object LockOperationsApi {
     ): List<AuditResponse> = LockOperationsClient
         .getLockAuditTrailRequest(
             lockId = lockId.toString(),
-            start = start.epochSeconds,
-            end = end.epochSeconds
+            start = start.epochSecond,
+            end = end.epochSecond
         )
         .toAuditResponse()
 
@@ -85,8 +85,8 @@ actual object LockOperationsApi {
     suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<AuditResponse> = LockOperationsClient
         .getAuditForUserRequest(
             userId = userId.toString(),
-            start = start.epochSeconds,
-            end = end.epochSeconds
+            start = start.epochSecond,
+            end = end.epochSecond
         )
         .toAuditResponse()
 

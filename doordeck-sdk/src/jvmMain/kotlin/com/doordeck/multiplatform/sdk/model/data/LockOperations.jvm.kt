@@ -2,23 +2,22 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.durationToSeconds
+import com.doordeck.multiplatform.sdk.util.now
 import com.doordeck.multiplatform.sdk.util.toLocalDateString
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalTime
 import java.net.URI
 import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.cert.X509Certificate
 import java.time.DayOfWeek
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.EnumSet
 import java.util.UUID
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.minutes
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek as KDayOfWeek
 
 object LockOperations {
@@ -272,9 +271,9 @@ object LockOperations {
         val userCertificateChain: List<X509Certificate>? = null,
         val userPrivateKey: PrivateKey? = null,
         val lockId: UUID,
-        val notBefore: Instant = Clock.System.now(),
-        val issuedAt: Instant = Clock.System.now(),
-        val expiresAt: Instant = Clock.System.now().plus(1.minutes),
+        val notBefore: Instant = now(),
+        val issuedAt: Instant = now(),
+        val expiresAt: Instant = now().plus(1, ChronoUnit.MINUTES),
         val jti: UUID = UUID.randomUUID()
     ) {
         class Builder {
@@ -282,9 +281,9 @@ object LockOperations {
             private var userCertificateChain: List<X509Certificate>? = null
             private var userPrivateKey: PrivateKey? = null
             private var lockId: UUID? = null
-            private var notBefore: Instant = Clock.System.now()
-            private var issuedAt: Instant = Clock.System.now()
-            private var expiresAt: Instant = Clock.System.now().plus(1.minutes)
+            private var notBefore: Instant = now()
+            private var issuedAt: Instant = now()
+            private var expiresAt: Instant = now().plus(1, ChronoUnit.MINUTES)
             private var jti: UUID = UUID.randomUUID()
 
             fun setUserId(userId: UUID?): Builder = apply { this.userId = userId }
@@ -362,8 +361,8 @@ internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
         targetUserId = targetUserId.toString(),
         targetUserRole = targetUserRole,
         targetUserPublicKey = targetUserPublicKey.encoded,
-        start = start?.epochSeconds,
-        end = end?.epochSeconds
+        start = start?.epochSecond,
+        end = end?.epochSecond
     )
 }
 
@@ -384,7 +383,7 @@ internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLoc
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        unlockDuration = unlockDuration.durationToSeconds()
+        unlockDuration = unlockDuration.toSeconds().toInt()
     )
 }
 
@@ -401,9 +400,9 @@ internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOpera
         userCertificateChain = userCertificateChain?.map { it.encoded.encodeByteArrayToBase64() },
         userPrivateKey = userPrivateKey?.encoded,
         lockId = lockId.toString(),
-        notBefore = notBefore.epochSeconds,
-        issuedAt = issuedAt.epochSeconds,
-        expiresAt = expiresAt.epochSeconds,
+        notBefore = notBefore.epochSecond,
+        issuedAt = issuedAt.epochSecond,
+        expiresAt = expiresAt.epochSecond,
         jti = jti.toString()
     )
 }

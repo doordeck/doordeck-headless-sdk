@@ -7,9 +7,9 @@ import com.doordeck.multiplatform.sdk.util.toUuid
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUrl
 import com.nimbusds.jose.jwk.JWK
-import kotlinx.datetime.Instant
 import java.net.URI
 import java.net.URL
+import java.time.Instant
 import java.util.UUID
 
 data class ApplicationResponse(
