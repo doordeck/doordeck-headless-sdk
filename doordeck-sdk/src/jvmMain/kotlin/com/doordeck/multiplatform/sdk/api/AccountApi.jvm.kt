@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWith
 import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
-import java.security.PrivateKey
+import java.security.KeyPair
 import java.security.PublicKey
 import java.util.concurrent.CompletableFuture
 
@@ -51,13 +51,10 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    suspend fun registerEphemeralKey(
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
-    ): RegisterEphemeralKeyResponse = AccountClient
+    suspend fun registerEphemeralKey(keyPair: KeyPair? = null): RegisterEphemeralKeyResponse = AccountClient
         .registerEphemeralKeyRequest(
-            publicKey = publicKey?.encoded,
-            privateKey = privateKey?.encoded
+            publicKey = keyPair?.public?.encoded,
+            privateKey = keyPair?.private?.encoded
         )
         .toRegisterEphemeralKeyResponse()
 
@@ -65,13 +62,9 @@ actual object AccountApi {
      * Async variant of [AccountApi.registerEphemeralKey] returning [CompletableFuture].
      */
     fun registerEphemeralKeyAsync(
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
+        keyPair: KeyPair? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> = completableFuture {
-        registerEphemeralKey(
-            publicKey = publicKey,
-            privateKey = privateKey
-        )
+        registerEphemeralKey(keyPair)
     }
 
     /**
@@ -105,13 +98,12 @@ actual object AccountApi {
      */
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
+        keyPair: KeyPair? = null
     ): RegisterEphemeralKeyResponse = AccountClient
         .verifyEphemeralKeyRegistrationRequest(
             code = code,
-            publicKey = publicKey?.encoded,
-            privateKey = privateKey?.encoded
+            publicKey = keyPair?.public?.encoded,
+            privateKey = keyPair?.private?.encoded
         )
         .toRegisterEphemeralKeyResponse()
 
@@ -120,13 +112,11 @@ actual object AccountApi {
      */
     fun verifyEphemeralKeyRegistrationAsync(
         code: String,
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
+        keyPair: KeyPair? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> = completableFuture {
         verifyEphemeralKeyRegistration(
             code = code,
-            publicKey = publicKey,
-            privateKey = privateKey
+            keyPair = keyPair
         )
     }
 

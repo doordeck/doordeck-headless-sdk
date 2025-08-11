@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import kotlinx.coroutines.test.runTest
+import java.security.KeyPair
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -52,7 +53,7 @@ class AccountApiTest : IntegrationTest() {
         val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
         // When
-        val result = AccountApi.registerEphemeralKey(publicKey, privateKey)
+        val result = AccountApi.registerEphemeralKey(KeyPair(publicKey, privateKey))
 
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }

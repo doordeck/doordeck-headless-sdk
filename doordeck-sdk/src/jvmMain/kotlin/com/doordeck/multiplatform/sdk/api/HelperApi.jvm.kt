@@ -7,8 +7,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.io.InputStream
-import java.security.PrivateKey
-import java.security.PublicKey
+import java.security.KeyPair
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
@@ -68,12 +67,11 @@ actual object HelperApi {
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
     suspend fun assistedRegisterEphemeralKey(
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
+        keyPair: KeyPair? = null
     ): AssistedRegisterEphemeralKeyResponse = HelperClient
         .assistedRegisterEphemeralKeyRequest(
-            publicKey = publicKey?.encoded,
-            privateKey = privateKey?.encoded
+            publicKey = keyPair?.public?.encoded,
+            privateKey = keyPair?.private?.encoded
         )
         .toAssistedRegisterEphemeralKeyResponse()
 
@@ -81,13 +79,9 @@ actual object HelperApi {
      * Async variant of [HelperApi.assistedRegisterEphemeralKey] returning [CompletableFuture].
      */
     fun assistedRegisterEphemeralKeyAsync(
-        publicKey: PublicKey? = null,
-        privateKey: PrivateKey? = null
+        keyPair: KeyPair? = null
     ): CompletableFuture<AssistedRegisterEphemeralKeyResponse> = completableFuture {
-        assistedRegisterEphemeralKey(
-            publicKey = publicKey,
-            privateKey = privateKey
-        )
+        assistedRegisterEphemeralKey(keyPair)
     }
 
     /**
