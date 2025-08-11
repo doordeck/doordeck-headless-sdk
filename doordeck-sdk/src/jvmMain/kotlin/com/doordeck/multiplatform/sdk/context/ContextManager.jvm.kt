@@ -6,9 +6,10 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUuid
+import java.net.URI
 import java.security.KeyPair
-import java.security.PrivateKey
 import java.security.PublicKey
 import java.security.cert.X509Certificate
 import java.util.UUID
@@ -29,9 +30,9 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: String) = Context.setFusionHost(host)
+    fun setFusionHost(host: URI) = Context.setFusionHost(host.host)
 
-    fun getFusionHost(): String = Context.getFusionHost()
+    fun getFusionHost(): URI = Context.getFusionHost().toUri()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 
@@ -57,9 +58,9 @@ actual object ContextManager {
 
     fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
 
-    fun setKeyPair(publicKey: PublicKey, privateKey: PrivateKey) = Context.setKeyPair(
-        publicKey = publicKey.encoded,
-        privateKey = privateKey.encoded
+    fun setKeyPair(keyPair: KeyPair) = Context.setKeyPair(
+        publicKey = keyPair.public.encoded,
+        privateKey = keyPair.private.encoded
     )
 
     fun getKeyPair(): KeyPair? = Context.getKeyPair()?.let {
@@ -75,16 +76,15 @@ actual object ContextManager {
     fun setOperationContext(
         userId: UUID,
         certificateChain: List<X509Certificate>,
-        publicKey: PublicKey,
-        privateKey: PrivateKey,
+        keyPair: KeyPair,
         isKeyPairVerified: Boolean
     ) = Context.setOperationContext(
         userId = userId.toString(),
         certificateChain = certificateChain.map {
             it.encoded.encodeByteArrayToBase64()
         },
-        publicKey = publicKey.encoded,
-        privateKey = privateKey.encoded,
+        publicKey = keyPair.public.encoded,
+        privateKey = keyPair.private.encoded,
         isKeyPairVerified = isKeyPairVerified
     )
 

@@ -44,37 +44,32 @@ actual object CryptoManager {
         )
     }
 
-    fun generateKeyPair(): KeyPair = KeyPairGenerator
-        .getInstance(EDDSA_ALGORITHM)
+    fun generateKeyPair(): KeyPair = KeyPairGenerator.getInstance(EDDSA_ALGORITHM)
         .generateKeyPair()
 
     internal fun String.toRsaPublicKey(): PublicKey = try {
-        KeyFactory
-            .getInstance(RSA_ALGORITHM)
+        KeyFactory.getInstance(RSA_ALGORITHM)
             .generatePublic(X509EncodedKeySpec(decodeBase64ToByteArray()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $RSA_ALGORITHM public key", exception)
     }
 
     internal fun ByteArray.toPublicKey(): PublicKey = try {
-        KeyFactory
-            .getInstance(EDDSA_ALGORITHM)
+        KeyFactory.getInstance(EDDSA_ALGORITHM)
             .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $EDDSA_ALGORITHM public key", exception)
     }
 
     internal fun ByteArray.toPrivateKey(): PrivateKey = try {
-        KeyFactory
-            .getInstance(EDDSA_ALGORITHM)
+        KeyFactory.getInstance(EDDSA_ALGORITHM)
             .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $EDDSA_ALGORITHM private key", exception)
     }
 
     internal fun String.toCertificate(): X509Certificate = try {
-        CertificateFactory
-            .getInstance(CERTIFICATE_TYPE)
+        CertificateFactory.getInstance(CERTIFICATE_TYPE)
             .generateCertificate(decodeBase64ToByteArray().inputStream()) as X509Certificate
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $CERTIFICATE_TYPE certificate", exception)

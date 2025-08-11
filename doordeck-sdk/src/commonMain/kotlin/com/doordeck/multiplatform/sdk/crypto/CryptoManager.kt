@@ -79,6 +79,9 @@ internal val PUBLIC_KEY_ASN1_HEADER = byteArrayOf(
 
 expect object CryptoManager {
 
+    /**
+     * Initializes the necessary platform-specific dependencies (if any) to handle the crypto operations.
+     */
     internal suspend fun initialize()
 
     /**

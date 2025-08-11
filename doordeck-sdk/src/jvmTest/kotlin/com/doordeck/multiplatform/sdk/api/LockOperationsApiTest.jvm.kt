@@ -361,8 +361,10 @@ class LockOperationsApiTest : IntegrationTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
@@ -514,8 +516,10 @@ class LockOperationsApiTest : IntegrationTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
         val shareLock = LockOperations.ShareLock(
@@ -565,8 +569,10 @@ class LockOperationsApiTest : IntegrationTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
         val batchShareLock = listOf(
@@ -667,8 +673,10 @@ class LockOperationsApiTest : IntegrationTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
@@ -770,8 +778,10 @@ class LockOperationsApiTest : IntegrationTest() {
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
