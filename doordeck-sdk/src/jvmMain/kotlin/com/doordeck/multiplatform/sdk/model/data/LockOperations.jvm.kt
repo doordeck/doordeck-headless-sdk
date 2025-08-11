@@ -5,6 +5,10 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.now
 import com.doordeck.multiplatform.sdk.util.toLocalDateString
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
+import com.doordeck.multiplatform.sdk.util.validateAccuracy
+import com.doordeck.multiplatform.sdk.util.validateLatitude
+import com.doordeck.multiplatform.sdk.util.validateLongitude
+import com.doordeck.multiplatform.sdk.util.validateRadius
 import java.net.URI
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -57,6 +61,13 @@ object LockOperations {
         val radius: Int = 100,
         val accuracy: Int = 200
     ) {
+        init {
+            latitude.validateLatitude()
+            longitude.validateLongitude()
+            radius.validateRadius()
+            accuracy.validateAccuracy()
+        }
+
         class Builder {
             private var latitude: Double? = null
             private var longitude: Double? = null

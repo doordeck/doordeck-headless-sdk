@@ -2,6 +2,10 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.validateAccuracy
+import com.doordeck.multiplatform.sdk.util.validateLatitude
+import com.doordeck.multiplatform.sdk.util.validateLongitude
+import com.doordeck.multiplatform.sdk.util.validateRadius
 import kotlinx.datetime.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
@@ -44,6 +48,13 @@ object LockOperations {
         val radius: Int = 100,
         val accuracy: Int = 200
     ) {
+        init {
+            latitude.validateLatitude()
+            longitude.validateLongitude()
+            radius.validateRadius()
+            accuracy.validateAccuracy()
+        }
+
         class Builder {
             private var latitude: Double? = null
             private var longitude: Double? = null

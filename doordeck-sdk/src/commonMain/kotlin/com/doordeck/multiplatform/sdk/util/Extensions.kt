@@ -309,3 +309,47 @@ internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this
  * @return Masked string
  */
 internal fun String.mask(): String = "${take(3)}***"
+
+/**
+ * Validates that the latitude value is within valid range (-90 to 90 degrees).
+ *
+ * @throws SdkException if the latitude is outside the valid range
+ */
+internal fun Double.validateLatitude() {
+    if (this < -90 || this > 90) {
+        throw SdkException("Latitude must be between -90 and 90 degrees")
+    }
+}
+
+/**
+ * Validates that the longitude value is within valid range (-180 to 180 degrees).
+ *
+ * @throws SdkException if the longitude is outside the valid range
+ */
+internal fun Double.validateLongitude() {
+    if (this < -180 || this > 180) {
+        throw SdkException("Longitude must be between -180 and 180 degrees")
+    }
+}
+
+/**
+ * Validates that the radius value is within valid range (1 to 1000 meters).
+ *
+ * @throws SdkException if the radius is outside the valid range
+ */
+internal fun Int.validateRadius() {
+    if (this < 1 || this > 1000) {
+        throw SdkException("Radius must be between 1m and 1km")
+    }
+}
+
+/**
+ * Validates that the accuracy value is within valid range (1 to 1000 meters).
+ *
+ * @throws SdkException if the accuracy is outside the valid range
+ */
+internal fun Int.validateAccuracy() {
+    if (this < 1 || this > 1000) {
+        throw SdkException("Accuracy must be between 1m and 1km")
+    }
+}
