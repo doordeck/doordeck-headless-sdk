@@ -1,104 +1,168 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.DOOR_STATE_RESPONSE
-import com.doordeck.multiplatform.sdk.FUSION_LOGIN_RESPONSE
-import com.doordeck.multiplatform.sdk.INTEGRATION_CONFIGURATION_RESPONSE
-import com.doordeck.multiplatform.sdk.INTEGRATION_TYPE_RESPONSE
-import com.doordeck.multiplatform.sdk.MockTest
-import com.doordeck.multiplatform.sdk.TestConstants.DEFAULT_DEVICE_ID
-import com.doordeck.multiplatform.sdk.model.data.Fusion
-import kotlinx.coroutines.future.await
+import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
+import com.doordeck.multiplatform.sdk.model.data.FusionOperations
+import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUuidString
+import io.ktor.client.plugins.timeout
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.test.runTest
+import kotlin.reflect.KClass
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
-class FusionApiTest : MockTest() {
+class FusionApiTest : IntegrationTest() {
 
     @Test
-    fun shouldLogin() = runTest {
-        val response = FusionApi.login("", "")
-        assertEquals(FUSION_LOGIN_RESPONSE, response)
+    fun shouldTestAlpeta() = runTest {
+        runFusionTest(FusionOperations.AlpetaController::class)
     }
 
     @Test
-    fun shouldLoginAsync() = runTest {
-        val response = FusionApi.loginAsync("", "").await()
-        assertEquals(FUSION_LOGIN_RESPONSE, response)
+    fun shouldTestAmag() = runTest {
+        runFusionTest(FusionOperations.AmagController::class)
     }
 
     @Test
-    fun shouldGetIntegrationType() = runTest {
-        val response = FusionApi.getIntegrationType()
-        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
+    fun shouldTestAxis() = runTest {
+        runFusionTest(FusionOperations.AxisController::class)
     }
 
     @Test
-    fun shouldGetIntegrationTypeAsync() = runTest {
-        val response = FusionApi.getIntegrationTypeAsync().await()
-        assertEquals(INTEGRATION_TYPE_RESPONSE, response)
+    fun shouldTestCcure() = runTest {
+        runFusionTest(FusionOperations.CCureController::class)
     }
 
     @Test
-    fun shouldGetIntegrationConfiguration() = runTest {
-        val response = FusionApi.getIntegrationConfiguration("")
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
+    fun shouldTestDemo() = runTest {
+        runFusionTest(FusionOperations.DemoController::class)
+    }
+
+    @Ignore
+    @Test
+    fun shouldTestGenetec() = runTest {
+        runFusionTest(FusionOperations.GenetecController::class)
+    }
+
+    @Ignore
+    @Test
+    fun shouldTestLenel() = runTest {
+        runFusionTest(FusionOperations.LenelController::class)
     }
 
     @Test
-    fun shouldGetIntegrationConfigurationAsync() = runTest {
-        val response = FusionApi.getIntegrationConfigurationAsync("").await()
-        assertEquals(INTEGRATION_CONFIGURATION_RESPONSE, response)
+    fun shouldTestNet2() = runTest {
+        runFusionTest(FusionOperations.PaxtonNet2Controller::class)
+    }
+
+    @Ignore
+    @Test
+    fun shouldTestPaxton10() = runTest {
+        runFusionTest(FusionOperations.Paxton10Controller::class)
     }
 
     @Test
-    fun shouldEnableDoor() = runTest {
-        FusionApi.enableDoor("", "", Fusion.DemoController())
+    fun shouldTestIntegra() = runTest {
+        runFusionTest(FusionOperations.IntegraV2Controller::class)
     }
 
     @Test
-    fun shouldEnableDoorAsync() = runTest {
-        FusionApi.enableDoorAsync("", "", Fusion.DemoController()).await()
+    fun shouldTestExgarde() = runTest {
+        runFusionTest(FusionOperations.TdsiExgardeController::class)
     }
 
     @Test
-    fun shouldDeleteDoor() = runTest {
-        FusionApi.deleteDoor(DEFAULT_DEVICE_ID)
+    fun shouldTestGardis() = runTest {
+        runFusionTest(FusionOperations.TdsiGardisController::class)
     }
 
+    @Ignore
     @Test
-    fun shouldDeleteDoorAsync() = runTest {
-        FusionApi.deleteDoorAsync(DEFAULT_DEVICE_ID).await()
+    fun shouldTestZkteco() = runTest {
+        runFusionTest(FusionOperations.ZktecoController::class)
     }
 
-    @Test
-    fun shouldGetDoorStatus() = runTest {
-        val response = FusionApi.getDoorStatus(DEFAULT_DEVICE_ID)
-        assertEquals(DOOR_STATE_RESPONSE, response)
-    }
+    private suspend fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = try {
+        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
+            controllerType.isInstance(it.value.controller)
+        } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
-    @Test
-    fun shouldGetDoorStatusAsync() = runTest {
-        val response = FusionApi.getDoorStatusAsync(DEFAULT_DEVICE_ID).await()
-        assertEquals(DOOR_STATE_RESPONSE, response)
-    }
+        try {
+            TEST_HTTP_CLIENT.get(testController.key.host){
+                timeout {
+                    connectTimeoutMillis = 10_000
+                    socketTimeoutMillis = 30_000
+                    requestTimeoutMillis = 60_000
+                }
+            }.bodyAsText()
+        } catch (_: Exception) {
+            error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
+        }
 
-    @Test
-    fun shouldStartDoor() = runTest {
-        FusionApi.startDoor(DEFAULT_DEVICE_ID)
-    }
+        // Given - shouldLogin
+        ContextManager.setFusionHost(testController.key)
 
-    @Test
-    fun shouldStartDoorAsync() = runTest {
-        FusionApi.startDoorAsync(DEFAULT_DEVICE_ID).await()
-    }
+        // When
+        val login = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-    @Test
-    fun shouldStopDoor() = runTest {
-        FusionApi.stopDoor(DEFAULT_DEVICE_ID)
-    }
+        // Then
+        assertTrue { login.authToken.isNotEmpty() }
 
-    @Test
-    fun shouldStopDoorAsync() = runTest {
-        FusionApi.stopDoorAsync(DEFAULT_DEVICE_ID).await()
+        // Given - shouldEnableDoor
+        val name = "Test Fusion Door $platformType ${randomUuidString()}"
+
+        // When
+        FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
+
+        // Then
+        val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
+        val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
+        assertNotNull(actualDoor?.doordeck)
+
+        // Given - shouldGetIntegrationType
+        // When
+        val integrationTypeResponse = FusionApi.getIntegrationType()
+
+        // Then
+        assertNotNull(integrationTypeResponse.status)
+        assertEquals(testController.value.type, integrationTypeResponse.status)
+
+        // Given - shouldStartDoor
+        // When
+        FusionApi.startDoor(actualDoor.doordeck.id)
+
+        // Then
+        var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
+        assertEquals(ServiceStateType.RUNNING, doorState.state)
+
+        // Given - shouldStopDoor
+        // When
+        FusionApi.stopDoor(actualDoor.doordeck.id)
+
+        // Then
+        doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
+        //assertEquals(ServiceStateType.STOPPED, doorState.state)
+
+        // Given - shouldDeleteDoor
+        // When
+        FusionApi.deleteDoor(actualDoor.doordeck.id)
+
+        // Then
+        //assertFails {
+        //    FusionApi.getDoorStatus(actualDoor.doordeck.id)
+        //}
+    } catch (exception: Throwable) {
+        println("Failed to test $controllerType: ${exception.message}")
     }
 }

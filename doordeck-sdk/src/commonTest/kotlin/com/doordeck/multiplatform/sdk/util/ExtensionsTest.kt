@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -21,6 +21,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomString
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -58,7 +59,6 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.uuid.Uuid
 
 class ExtensionsTest {
 
@@ -108,7 +108,7 @@ class ExtensionsTest {
     fun shouldSetTokenAuthHeader() = runTest {
         // Given
         val httpRequestBuilder = HttpRequestBuilder()
-        val token = Uuid.random().toString()
+        val token = randomString()
 
         // When
         httpRequestBuilder.apply {
@@ -186,7 +186,7 @@ class ExtensionsTest {
         val httpClient = HttpClient().also {
             it.addAuthInterceptor(
                 requiresAuth = Paths::requiresAuth,
-                getAuthToken = ContextManagerImpl::getCloudAuthToken
+                getAuthToken = Context::getCloudAuthToken
             )
         }
 

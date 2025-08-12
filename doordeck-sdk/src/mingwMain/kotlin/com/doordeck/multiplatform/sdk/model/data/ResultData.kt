@@ -3,18 +3,18 @@ package com.doordeck.multiplatform.sdk.model.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResultData<T>(
+internal data class ResultData<T>(
     val success: SuccessResultData<T>? = null,
     val failure: FailedResultData? = null
 )
 
 @Serializable
-data class SuccessResultData<T>(
+internal data class SuccessResultData<T>(
     val result: T? = null
 )
 
 @Serializable
-data class FailedResultData(
+internal data class FailedResultData(
     val exceptionType: String,
     val exceptionMessage: String
 )

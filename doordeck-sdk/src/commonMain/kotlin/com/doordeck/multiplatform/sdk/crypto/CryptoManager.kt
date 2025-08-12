@@ -79,6 +79,9 @@ internal val PUBLIC_KEY_ASN1_HEADER = byteArrayOf(
 
 expect object CryptoManager {
 
+    /**
+     * Initializes the necessary platform-specific dependencies (if any) to handle the crypto operations.
+     */
     internal suspend fun initialize()
 
     /**
@@ -86,7 +89,7 @@ expect object CryptoManager {
      *
      * @return A [Crypto.KeyPair] containing the encoded private and public keys
      */
-    fun generateKeyPair(): Crypto.KeyPair
+    internal fun generateRawKeyPair(): Crypto.KeyPair
 
     /**
      * Checks if a certificate is invalid (e.g., null, malformed) or expired.

@@ -70,26 +70,14 @@ public class RsaKey : IAuthKey
     public string Use { get; set; }
     public string Kid { get; set; }
     public string? Alg { get; set; } = null;
-    public string P { get; set; }
-    public string Q { get; set; }
-    public string D { get; set; }
     public string E { get; set; }
-    public string Qi { get; set; }
-    public string Dp { get; set; }
-    public string Dq { get; set; }
     public string N { get; set; }
 
-    public RsaKey(string use, string kid, string p, string q, string d, string e, string qi, string dp, string dq, string n, string? alg = null)
+    public RsaKey(string use, string kid, string e, string n, string? alg = null)
     {
         Use = use;
         Kid = kid;
-        P = p;
-        Q = q;
-        D = d;
         E = e;
-        Qi = qi;
-        Dp = dp;
-        Dq = dq;
         N = n;
         Alg = alg;
     }
@@ -101,16 +89,14 @@ public class EcKey : IAuthKey
     public string Use { get; set; }
     public string Kid { get; set; }
     public string? Alg { get; set; } = null;
-    public string D { get; set; }
     public string Crv { get; set; }
     public string X { get; set; }
     public string Y { get; set; }
 
-    public EcKey(string use, string kid, string d, string crv, string x, string y, string? alg = null)
+    public EcKey(string use, string kid, string crv, string x, string y, string? alg = null)
     {
         Use = use;
         Kid = kid;
-        D = d;
         Crv = crv;
         X = x;
         Y = y;
@@ -124,15 +110,13 @@ public class Ed25519Key : IAuthKey
     public string Use { get; set; }
     public string Kid { get; set; }
     public string? Alg { get; set; } = null;
-    public string D { get; set; }
     public string Crv { get; set; }
     public string X { get; set; }
 
-    public Ed25519Key(string use, string kid, string d, string crv, string x, string? alg = null)
+    public Ed25519Key(string use, string kid, string crv, string x, string? alg = null)
     {
         Use = use;
         Kid = kid;
-        D = d;
         Crv = crv;
         X = x;
         Alg = alg;

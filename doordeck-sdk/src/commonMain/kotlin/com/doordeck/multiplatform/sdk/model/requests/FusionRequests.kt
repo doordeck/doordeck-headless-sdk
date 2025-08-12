@@ -1,7 +1,9 @@
 package com.doordeck.multiplatform.sdk.model.requests
 
-import com.doordeck.multiplatform.sdk.model.data.Fusion
+import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import kotlinx.serialization.Serializable
+
+internal typealias LockControllerRequest = BasicLockController
 
 @Serializable
 internal data class FusionLoginRequest(
@@ -18,5 +20,5 @@ internal data class IntegrationConfigurationRequest(
 internal data class EnableDoorRequest(
     val name: String,
     val siteId: String,
-    val key: Fusion.LockController
+    val key: LockControllerRequest
 )

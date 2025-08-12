@@ -1,13 +1,20 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPublicKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import io.ktor.util.decodeBase64Bytes
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
 import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
+import java.security.KeyPair
 import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
 import java.security.Signature
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
@@ -20,20 +27,52 @@ import java.security.spec.X509EncodedKeySpec
  */
 actual object CryptoManager {
 
-    private const val ALGORITHM = "Ed25519"
+    private const val EDDSA_ALGORITHM = "Ed25519"
+    private const val RSA_ALGORITHM = "RSA"
     private const val CERTIFICATE_TYPE = "X.509"
 
     internal actual suspend fun initialize() { /** Nothing **/ }
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
-        val key = KeyPairGenerator.getInstance(ALGORITHM).generateKeyPair()
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
+        val key = generateKeyPair()
         return Crypto.KeyPair(
             private = key.private.encoded,
             public = key.public.encoded
         )
+    }
+
+    fun generateKeyPair(): KeyPair = KeyPairGenerator.getInstance(EDDSA_ALGORITHM)
+        .generateKeyPair()
+
+    internal fun String.toRsaPublicKey(): PublicKey = try {
+        KeyFactory.getInstance(RSA_ALGORITHM)
+            .generatePublic(X509EncodedKeySpec(decodeBase64ToByteArray()))
+    } catch (exception: Exception) {
+        throw SdkException("Failed to generate $RSA_ALGORITHM public key", exception)
+    }
+
+    internal fun ByteArray.toPublicKey(): PublicKey = try {
+        KeyFactory.getInstance(EDDSA_ALGORITHM)
+            .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
+    } catch (exception: Exception) {
+        throw SdkException("Failed to generate $EDDSA_ALGORITHM public key", exception)
+    }
+
+    internal fun ByteArray.toPrivateKey(): PrivateKey = try {
+        KeyFactory.getInstance(EDDSA_ALGORITHM)
+            .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
+    } catch (exception: Exception) {
+        throw SdkException("Failed to generate $EDDSA_ALGORITHM private key", exception)
+    }
+
+    internal fun String.toCertificate(): X509Certificate = try {
+        CertificateFactory.getInstance(CERTIFICATE_TYPE)
+            .generateCertificate(decodeBase64ToByteArray().inputStream()) as X509Certificate
+    } catch (exception: Exception) {
+        throw SdkException("Failed to generate $CERTIFICATE_TYPE certificate", exception)
     }
 
     /**
@@ -41,8 +80,7 @@ actual object CryptoManager {
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
         return try {
-            val certificateFactory = CertificateFactory.getInstance(CERTIFICATE_TYPE)
-            val certificate = certificateFactory.generateCertificate(base64Certificate.decodeBase64Bytes().inputStream()) as X509Certificate
+            val certificate = base64Certificate.toCertificate()
             val notAfterInstant = certificate.notAfter?.toInstant()?.toKotlinInstant()
             if (notAfterInstant == null) {
                 SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
@@ -71,10 +109,11 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.toPlatformPrivateKey]
      */
-    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when(size) {
+    internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE,
         SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
-        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE)
+        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER +
+                sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE)
         JAVA_PKCS8_PRIVATE_KEY_SIZE -> this
         else -> throw SdkException("Unknown private key size: $size")
     }
@@ -83,9 +122,8 @@ actual object CryptoManager {
      * @see [CryptoManager.signWithPrivateKey]
      */
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
-        Signature.getInstance(ALGORITHM).apply {
-            initSign(KeyFactory.getInstance(ALGORITHM)
-                .generatePrivate(PKCS8EncodedKeySpec(privateKey.toPlatformPrivateKey())))
+        Signature.getInstance(EDDSA_ALGORITHM).apply {
+            initSign(privateKey.toPlatformPrivateKey().toPrivateKey())
             update(toByteArray())
         }.sign()
     } catch (exception: Exception) {
@@ -96,8 +134,8 @@ actual object CryptoManager {
      * @see [CryptoManager.verifySignature]
      */
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
-        val signature = Signature.getInstance(ALGORITHM)
-        signature.initVerify(KeyFactory.getInstance(ALGORITHM).generatePublic(X509EncodedKeySpec(publicKey.toPlatformPublicKey())))
+        val signature = Signature.getInstance(EDDSA_ALGORITHM)
+        signature.initVerify(publicKey.toPlatformPublicKey().toPublicKey())
         signature.update(message.toByteArray())
         signature.verify(this)
     } catch (exception: Exception) {

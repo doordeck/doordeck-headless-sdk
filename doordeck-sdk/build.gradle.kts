@@ -223,6 +223,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.nimbus.jose.jwt)
             }
         }
 

@@ -57,7 +57,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_favourite(self, lockId: str, favourite: typing.Optional[bool] = None):
+    async def update_lock_favourite(self, lockId: str, favourite: bool):
         data = {
             "lockId": lockId,
             "favourite": favourite
@@ -67,17 +67,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def update_lock_colour(self, lockId: str, colour: typing.Optional[str] = None):
-        data = {
-            "lockId": lockId,
-            "colour": colour
-        }
-        return await execute_async(
-            _doordeck_headless_sdk.updateLockColour,
-            [self.resource, json.dumps(data)]
-        )
-
-    async def update_lock_setting_default_name(self, lockId: str, name: typing.Optional[str] = None):
+    async def update_lock_setting_default_name(self, lockId: str, name: str):
         data = {
             "lockId": lockId,
             "name": name

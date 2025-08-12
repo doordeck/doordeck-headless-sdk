@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.ProjectVersion
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -24,7 +24,7 @@ import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.TokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -70,14 +70,14 @@ private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
 
 /**
  * Converts an API version to its corresponding header value.
- * 
+ *
  * @return The formatted header value for the API version.
  */
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
 /**
  * Adds common request headers to an HTTP request.
- * 
+ *
  * @param signedRequest Whether this is a signed request (affects content type).
  * @param contentType The content type to use, defaults based on signedRequest parameter.
  * @param apiVersion Optional API version to include in Accept header.
@@ -119,8 +119,8 @@ internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
             refreshTokens {
-                ContextManagerImpl.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: TokenResponse = client.post(ContextManagerImpl.getApiEnvironment().cloudHost) {
+                Context.getCloudRefreshToken()?.let { currentRefreshToken ->
+                    val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
                             path(Paths.getRefreshTokenPath())
                         }
@@ -130,7 +130,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                         }
                         markAsRefreshTokenRequest()
                     }.body()
-                    ContextManagerImpl.also { context ->
+                    Context.also { context ->
                         context.setCloudAuthToken(refreshTokens.authToken)
                         context.setCloudRefreshToken(refreshTokens.refreshToken)
                     }
@@ -309,3 +309,47 @@ internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this
  * @return Masked string
  */
 internal fun String.mask(): String = "${take(3)}***"
+
+/**
+ * Validates that the latitude value is within valid range (-90 to 90 degrees).
+ *
+ * @throws SdkException if the latitude is outside the valid range
+ */
+internal fun Double.validateLatitude() {
+    if (this < -90 || this > 90) {
+        throw SdkException("Latitude must be between -90 and 90 degrees")
+    }
+}
+
+/**
+ * Validates that the longitude value is within valid range (-180 to 180 degrees).
+ *
+ * @throws SdkException if the longitude is outside the valid range
+ */
+internal fun Double.validateLongitude() {
+    if (this < -180 || this > 180) {
+        throw SdkException("Longitude must be between -180 and 180 degrees")
+    }
+}
+
+/**
+ * Validates that the radius value is within valid range (1 to 1000 meters).
+ *
+ * @throws SdkException if the radius is outside the valid range
+ */
+internal fun Int.validateRadius() {
+    if (this < 1 || this > 1000) {
+        throw SdkException("Radius must be between 1m and 1km")
+    }
+}
+
+/**
+ * Validates that the accuracy value is within valid range (1 to 1000 meters).
+ *
+ * @throws SdkException if the accuracy is outside the valid range
+ */
+internal fun Int.validateAccuracy() {
+    if (this < 1 || this > 1000) {
+        throw SdkException("Accuracy must be between 1m and 1km")
+    }
+}

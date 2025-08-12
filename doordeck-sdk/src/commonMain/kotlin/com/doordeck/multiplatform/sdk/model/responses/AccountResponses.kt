@@ -2,33 +2,28 @@ package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
 import kotlinx.serialization.Serializable
-import kotlin.js.JsExport
 
-@JsExport
 @Serializable
-data class TokenResponse(
+internal data class BasicTokenResponse(
     val authToken: String,
     val refreshToken: String
 )
 
-@JsExport
 @Serializable
-data class UserDetailsResponse(
+internal data class BasicUserDetailsResponse(
     val email: String,
     val displayName: String? = null,
     val emailVerified: Boolean,
     val publicKey: String
 )
 
-@JsExport
 @Serializable
-data class RegisterEphemeralKeyResponse(
+internal data class BasicRegisterEphemeralKeyResponse(
     val certificateChain: List<String>,
     val userId: String
 )
 
-@JsExport
 @Serializable
-data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+internal data class BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     val method: TwoFactorMethod
 )

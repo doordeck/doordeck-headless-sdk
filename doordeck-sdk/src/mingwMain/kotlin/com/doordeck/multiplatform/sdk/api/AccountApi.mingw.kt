@@ -58,7 +58,10 @@ actual object AccountApi {
         callback(
             block = {
                 val registerEphemeralKeyData = data?.fromJson<RegisterEphemeralKeyData>()
-                AccountClient.registerEphemeralKeyRequest(registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray())
+                AccountClient.registerEphemeralKeyRequest(
+                    publicKey = registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray(),
+                    privateKey = registerEphemeralKeyData?.privateKey?.decodeBase64ToByteArray(),
+                )
             },
             callback = callback
         )

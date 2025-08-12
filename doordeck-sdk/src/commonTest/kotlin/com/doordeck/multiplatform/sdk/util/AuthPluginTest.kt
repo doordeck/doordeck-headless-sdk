@@ -3,12 +3,17 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.clients.AccountClient
-import com.doordeck.multiplatform.sdk.context.ContextManagerImpl
+import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
+import com.doordeck.multiplatform.sdk.randomBoolean
+import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomNullable
+import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomTokenResponse
-import com.doordeck.multiplatform.sdk.randomUserDetailsResponse
 import com.doordeck.multiplatform.sdk.respondContent
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
@@ -30,12 +35,20 @@ class AuthPluginTest : IntegrationTest() {
     @Test
     fun shouldAutomaticallyRefreshTokens() = runTest {
         // Given
-        val tokenResponse = randomTokenResponse()
-        val userDetails = randomUserDetailsResponse()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomString(),
+            refreshToken = randomString(),
+        )
+        val userDetails = BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomNullable { randomString() },
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        )
         val currentAuthToken = randomString()
         val currentRefreshToken = randomString()
-        ContextManagerImpl.setCloudAuthToken(currentAuthToken)
-        ContextManagerImpl.setCloudRefreshToken(currentRefreshToken)
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
 
         val mockEngine = MockEngine.config {
             addHandler {
@@ -60,8 +73,8 @@ class AuthPluginTest : IntegrationTest() {
         val response = AccountClient.getUserDetailsRequest()
 
         // Then
-        assertEquals(tokenResponse.authToken, ContextManagerImpl.getCloudAuthToken())
-        assertEquals(tokenResponse.refreshToken, ContextManagerImpl.getCloudRefreshToken())
+        assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+        assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
         assertEquals(userDetails, response)
     }
 
@@ -73,8 +86,8 @@ class AuthPluginTest : IntegrationTest() {
         // Given
         val currentAuthToken = randomString()
         val currentRefreshToken = randomString()
-        ContextManagerImpl.setCloudAuthToken(currentAuthToken)
-        ContextManagerImpl.setCloudRefreshToken(currentRefreshToken)
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
 
         val mockEngine = MockEngine.config {
             addHandler {
@@ -99,8 +112,8 @@ class AuthPluginTest : IntegrationTest() {
 
         // Then
         assertTrue { exception is UnauthorizedException }
-        assertEquals(currentAuthToken, ContextManagerImpl.getCloudAuthToken())
-        assertEquals(currentRefreshToken, ContextManagerImpl.getCloudRefreshToken())
+        assertEquals(currentAuthToken, Context.getCloudAuthToken())
+        assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
     }
 
     /**
@@ -130,7 +143,7 @@ class AuthPluginTest : IntegrationTest() {
 
         // Then
         assertTrue { exception is UnauthorizedException }
-        assertNull(ContextManagerImpl.getCloudAuthToken())
-        assertNull(ContextManagerImpl.getCloudRefreshToken())
+        assertNull(Context.getCloudAuthToken())
+        assertNull(Context.getCloudRefreshToken())
     }
 }

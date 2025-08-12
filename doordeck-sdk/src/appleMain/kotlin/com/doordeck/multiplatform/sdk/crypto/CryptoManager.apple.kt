@@ -22,9 +22,9 @@ actual object CryptoManager {
     internal actual suspend fun initialize() { /** Nothing **/ }
 
     /**
-     * @see [CryptoManager.generateKeyPair]
+     * @see [CryptoManager.generateRawKeyPair]
      */
-    actual fun generateKeyPair(): Crypto.KeyPair {
+    internal actual fun generateRawKeyPair(): Crypto.KeyPair {
         val key = KCryptoKit.generateKeyPair()
         val privateKeyData = key["privateKey"] as NSData
         val publicKeyData = key["publicKey"] as NSData
@@ -32,6 +32,10 @@ actual object CryptoManager {
             private = privateKeyData.toByteArray(),
             public = publicKeyData.toByteArray()
         )
+    }
+
+    fun generateKeyPair(): Crypto.KeyPair {
+        return generateRawKeyPair()
     }
 
     /**
