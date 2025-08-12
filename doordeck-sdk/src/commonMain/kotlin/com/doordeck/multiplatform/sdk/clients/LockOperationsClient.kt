@@ -459,8 +459,7 @@ internal object LockOperationsClient {
      * @return List of [BasicBatchUserPublicKeyResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    private @JvmSynthetic
-    suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BasicBatchUserPublicKeyResponse> {
+    private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BasicBatchUserPublicKeyResponse> {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(request)
