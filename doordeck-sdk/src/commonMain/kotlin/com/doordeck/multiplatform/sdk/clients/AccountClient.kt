@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
@@ -25,6 +24,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the account API client.
@@ -41,7 +41,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/refres-token">API Doc</a>
      */
-    @DoordeckOnly
+    @JvmSynthetic
     suspend fun refreshTokenRequest(refreshToken: String? = null): BasicTokenResponse {
         val token = refreshToken
             ?: Context.getCloudRefreshToken()
@@ -63,6 +63,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/logout">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun logoutRequest() {
         CloudHttpClient.client.post(Paths.getLogoutPath()) {
             addRequestHeaders()
@@ -84,6 +85,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun registerEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
@@ -118,6 +120,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
@@ -150,6 +153,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-ephemeral-key-registration">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun verifyEphemeralKeyRegistrationRequest(
         code: String,
         publicKey: ByteArray? = null,
@@ -182,7 +186,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/reverify-email">API Doc</a>
      */
-    @DoordeckOnly
+    @JvmSynthetic
     suspend fun reverifyEmailRequest() {
         CloudHttpClient.client.post(Paths.getReverifyEmailPath())
     }
@@ -196,7 +200,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/change-password">API Doc</a>
      */
-    @DoordeckOnly
+    @JvmSynthetic
     suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
         CloudHttpClient.client.post(Paths.getChangePasswordPath()) {
             addRequestHeaders()
@@ -217,6 +221,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/get-user-details">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun getUserDetailsRequest(): BasicUserDetailsResponse {
         return CloudHttpClient.client.get(Paths.getUserDetailsPath()).body()
     }
@@ -229,6 +234,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/update-user-details">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun updateUserDetailsRequest(displayName: String) {
         CloudHttpClient.client.post(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
@@ -243,6 +249,7 @@ internal object AccountClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/delete-account">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun deleteAccountRequest() {
         CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
         Context.reset()

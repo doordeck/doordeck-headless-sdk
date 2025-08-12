@@ -9,6 +9,7 @@ data class TileLocksResponse(
     val deviceIds: List<UUID>
 )
 
+@JvmSynthetic
 internal fun BasicTileLocksResponse.toTileLocksResponse(): TileLocksResponse = TileLocksResponse(
     siteId = siteId.toUuid(),
     tileId = tileId.toUuid(),

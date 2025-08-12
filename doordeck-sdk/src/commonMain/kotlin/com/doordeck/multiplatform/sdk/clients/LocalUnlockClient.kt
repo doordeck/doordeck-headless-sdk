@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the local unlock API client.
@@ -24,6 +25,7 @@ internal object LocalUnlockClient {
      * @param directAccessEndpoints The list of local IP addresses to which unlock requests should be sent.
      * @param request The unlock request as base64.
      */
+    @JvmSynthetic
     fun unlock(directAccessEndpoints: List<String>, request: String) {
         // Launch the request at the direct access endpoints
         val requests = directAccessEndpoints.map {

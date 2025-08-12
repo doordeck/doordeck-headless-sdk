@@ -12,9 +12,11 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedRegisterEphem
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 internal object HelperClient {
 
+    @JvmSynthetic
     suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
         // Generate a new presigned URL
         val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
@@ -44,6 +46,7 @@ internal object HelperClient {
      *      (`AssistedLoginResponse.requiresVerification` is true),
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
+    @JvmSynthetic
     suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
         val currentKeyPair = Context.getKeyPair()
         val currentKeyPairVerified = Context.isKeyPairVerified()
@@ -84,6 +87,7 @@ internal object HelperClient {
      *  (`AssistedRegisterEphemeralKeyResponse.requiresVerification` is true),
      *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
+    @JvmSynthetic
     suspend fun assistedRegisterEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
@@ -116,6 +120,7 @@ internal object HelperClient {
      *  * Registers a new account using the provided details, including the key pair.
      *  * Adds the key pair to the context manager.
      */
+    @JvmSynthetic
     suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Generate a new cryptographic key pair
         val keyPair = CryptoManager.generateRawKeyPair()

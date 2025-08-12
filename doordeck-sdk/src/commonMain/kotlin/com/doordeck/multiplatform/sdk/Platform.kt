@@ -15,6 +15,7 @@ import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
 import kotlinx.serialization.json.Json
+import kotlin.jvm.JvmSynthetic
 
 enum class PlatformType {
     JVM,
@@ -28,12 +29,14 @@ enum class PlatformType {
     JS_NODE
 }
 
+@JvmSynthetic
 internal val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
     isLenient = true
 }
 
+@JvmSynthetic
 internal fun createCloudHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
@@ -57,6 +60,7 @@ internal fun createCloudHttpClient(): HttpClient {
     }
 }
 
+@JvmSynthetic
 internal fun createFusionHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
@@ -76,6 +80,7 @@ internal fun createFusionHttpClient(): HttpClient {
     }
 }
 
+@JvmSynthetic
 internal fun createHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
@@ -94,7 +99,8 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
     /**
      * Internal function used in testing to override the default HTTP client.
      */
-    internal fun overrideClient(httpClient: HttpClient) {
+    @JvmSynthetic
+    fun overrideClient(httpClient: HttpClient) {
         _client = httpClient
     }
 }

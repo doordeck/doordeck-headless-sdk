@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.cache
 
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
+import kotlin.jvm.JvmSynthetic
 
 /**
  * A cache to store and retrieve device capabilities.
@@ -23,7 +24,8 @@ internal object CapabilityCache {
      * @param type The type of capability to check.
      * @return `true` if the specified capability is supported, `false` otherwise.
      */
-    internal fun isSupported(id: String, type: CapabilityType) = cache[id]?.let {
+    @JvmSynthetic
+    fun isSupported(id: String, type: CapabilityType) = cache[id]?.let {
         it[type] == CapabilityStatus.SUPPORTED
     }
 
@@ -33,7 +35,8 @@ internal object CapabilityCache {
      * @param id The unique identifier of the device.
      * @param capabilities A map of capability types to their statuses.
      */
-    internal fun put(id: String, capabilities: Map<CapabilityType, CapabilityStatus>) {
+    @JvmSynthetic
+    fun put(id: String, capabilities: Map<CapabilityType, CapabilityStatus>) {
         cache[id] = capabilities
     }
 
@@ -43,12 +46,14 @@ internal object CapabilityCache {
      * @param id The unique identifier of the device.
      * @return A map of capability types to their statuses, or `null` if the device is not in the cache.
      */
-    internal fun get(id: String): Map<CapabilityType, CapabilityStatus>? = cache[id]
+    @JvmSynthetic
+    fun get(id: String): Map<CapabilityType, CapabilityStatus>? = cache[id]
 
     /**
      * Clears all entries in the capability cache.
      */
-    internal fun reset() {
+    @JvmSynthetic
+    fun reset() {
         cache.clear()
     }
 }

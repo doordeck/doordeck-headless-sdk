@@ -324,6 +324,7 @@ object LockOperations {
     sealed interface Operation
 }
 
+@JvmSynthetic
 internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
     BasicTimeRequirement(
         start = requirement.start.toLocalTimeString(),
@@ -333,6 +334,7 @@ internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): BasicLocationRequirement {
     return BasicLocationRequirement(
         latitude = latitude,
@@ -343,6 +345,7 @@ internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): Ba
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBetween {
     return BasicUnlockBetween(
         start = start.toLocalTimeString(),
@@ -353,6 +356,7 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicUnlockOperation {
     return BasicUnlockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -360,6 +364,7 @@ internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicUnloc
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): BasicShareLockOperation {
     return BasicShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -367,6 +372,7 @@ internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): Basi
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     return BasicShareLock(
         targetUserId = targetUserId.toString(),
@@ -377,6 +383,7 @@ internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperation(): BasicBatchShareLockOperation {
     return BasicBatchShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -384,6 +391,7 @@ internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperati
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation {
     return BasicRevokeAccessToLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -391,6 +399,7 @@ internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLoc
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -398,6 +407,7 @@ internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecur
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween(): BasicUpdateSecureSettingUnlockBetween {
     return BasicUpdateSecureSettingUnlockBetween(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -405,6 +415,7 @@ internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecure
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOperation {
     return BasicBaseOperation(
         userId = userId?.toString(),

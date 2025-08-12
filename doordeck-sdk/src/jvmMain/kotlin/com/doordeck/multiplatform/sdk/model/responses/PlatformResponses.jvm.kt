@@ -32,6 +32,7 @@ data class ApplicationResponse(
     val isDoordeckApplication: Boolean? = null
 )
 
+@JvmSynthetic
 internal fun BasicAuthKeyResponse.toAuthKey(): JWK = JWK.parse(toJson())
 
 data class EmailPreferencesResponse(
@@ -67,10 +68,12 @@ data class GetLogoUploadUrlResponse(
     val uploadUrl: URL
 )
 
+@JvmSynthetic
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
     it.toApplicationResponse()
 }
 
+@JvmSynthetic
 internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
     applicationId = applicationId.toUuid(),
     name = name,
@@ -91,6 +94,7 @@ internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationRespon
     isDoordeckApplication = isDoordeckApplication
 )
 
+@JvmSynthetic
 internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
     senderEmail = senderEmail,
     senderName = senderName,
@@ -100,18 +104,21 @@ internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPr
     callToAction = callToAction?.toEmailCallToActionResponse(),
 )
 
+@JvmSynthetic
 internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
     actionTarget = actionTarget.toUri(),
     headline = headline,
     actionText = actionText
 )
 
+@JvmSynthetic
 internal fun BasicOauthResponse.toOauthResponse(): OauthResponseResponse = OauthResponseResponse(
     authorizationEndpoint = authorizationEndpoint.toUri(),
     clientId = clientId,
     grantType = grantType
 )
 
+@JvmSynthetic
 internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
     ApplicationOwnerDetailsResponse(
         userId = owner.userId.toUuid(),
@@ -122,6 +129,7 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
     )
 }
 
+@JvmSynthetic
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
     uploadUrl = uploadUrl.toUrl()
 )

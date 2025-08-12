@@ -57,6 +57,7 @@ import io.ktor.http.encodedPath
 import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Default content type for regular API requests.
@@ -73,6 +74,7 @@ private const val DEFAULT_SIGNED_REQUEST_CONTENT_TYPE = "application/jwt"
  *
  * @return The formatted header value for the API version.
  */
+@JvmSynthetic
 internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-v${version}+json"
 
 /**
@@ -83,6 +85,7 @@ internal fun ApiVersion.toHeaderValue(): String = "application/vnd.doordeck.api-
  * @param apiVersion Optional API version to include in Accept header.
  * @param token Optional authentication token to include in Authorization header.
  */
+@JvmSynthetic
 internal fun HttpRequestBuilder.addRequestHeaders(
     signedRequest: Boolean = false,
     contentType: String? = if (signedRequest) DEFAULT_SIGNED_REQUEST_CONTENT_TYPE else DEFAULT_REQUEST_CONTENT_TYPE,
@@ -105,6 +108,7 @@ internal fun HttpRequestBuilder.addRequestHeaders(
 /**
  * Installs content negotiation for JSON serialization/deserialization.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installContentNegotiation() {
     install(ContentNegotiation) {
         json(JSON)
@@ -115,6 +119,7 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
  * Installs authentication handling with automatic token refresh.
  * Attempts to request a new auth token whenever any API call returns an unauthorized response.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         bearer {
@@ -146,6 +151,7 @@ internal fun HttpClientConfig<*>.installAuth() {
  * 
  * @param determineHost Function that returns the host URL to use for requests.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installDefaultRequest(
     determineHost: () -> String
 ) {
@@ -158,6 +164,7 @@ internal fun HttpClientConfig<*>.installDefaultRequest(
  * Installs a User-Agent header for the HTTP client.
  * This is skipped for JavaScript (Browser) platform.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installUserAgent() {
     if (platformType != PlatformType.JS_BROWSER) {
         install(UserAgent) {
@@ -170,6 +177,7 @@ internal fun HttpClientConfig<*>.installUserAgent() {
  * Installs timeout configuration for the HTTP client.
  * Sets a socket timeout of 60 seconds.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installTimeout() {
     install(HttpTimeout) {
         socketTimeoutMillis = 60_000
@@ -180,6 +188,7 @@ internal fun HttpClientConfig<*>.installTimeout() {
  * Installs logging for HTTP requests and responses.
  * Logs are sent to the SDK logger at INFO level.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installLogging() {
     install(Logging) {
         logger = object : Logger {
@@ -196,6 +205,7 @@ internal fun HttpClientConfig<*>.installLogging() {
  * This validator ensures that failed API responses are mapped to appropriate exceptions
  * for better error handling.
  */
+@JvmSynthetic
 internal fun HttpClientConfig<*>.installResponseValidator() {
     expectSuccess = true
     HttpResponseValidator {
@@ -247,6 +257,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
  * @param requiresAuth Function that determines if a path requires authentication.
  * @param getAuthToken Function that provides the authentication token.
  */
+@JvmSynthetic
 internal fun HttpClient.addAuthInterceptor(
     requiresAuth: (String) -> Boolean,
     getAuthToken: () -> String?
@@ -268,6 +279,7 @@ internal fun HttpClient.addAuthInterceptor(
  * This interceptor catches exceptions during an API call and wraps them
  * in an [SdkException] where appropriate.
  */
+@JvmSynthetic
 internal fun HttpClient.addExceptionInterceptor() {
     plugin(HttpSend).intercept { request ->
         try {
@@ -293,6 +305,7 @@ internal expect fun HttpClientConfig<*>.installCertificatePinner()
  *
  * @return JSON string representation of the object
  */
+@JvmSynthetic
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
 
 /**
@@ -300,6 +313,7 @@ internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
  *
  * @return Object of type T parsed from the JSON string
  */
+@JvmSynthetic
 internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this)
 
 /**
@@ -308,6 +322,7 @@ internal inline fun <reified T>String.fromJson(): T = JSON.decodeFromString(this
  *
  * @return Masked string
  */
+@JvmSynthetic
 internal fun String.mask(): String = "${take(3)}***"
 
 /**
@@ -315,6 +330,7 @@ internal fun String.mask(): String = "${take(3)}***"
  *
  * @throws SdkException if the latitude is outside the valid range
  */
+@JvmSynthetic
 internal fun Double.validateLatitude() {
     if (this < -90 || this > 90) {
         throw SdkException("Latitude must be between -90 and 90 degrees")
@@ -326,6 +342,7 @@ internal fun Double.validateLatitude() {
  *
  * @throws SdkException if the longitude is outside the valid range
  */
+@JvmSynthetic
 internal fun Double.validateLongitude() {
     if (this < -180 || this > 180) {
         throw SdkException("Longitude must be between -180 and 180 degrees")
@@ -337,6 +354,7 @@ internal fun Double.validateLongitude() {
  *
  * @throws SdkException if the radius is outside the valid range
  */
+@JvmSynthetic
 internal fun Int.validateRadius() {
     if (this < 1 || this > 1000) {
         throw SdkException("Radius must be between 1m and 1km")
@@ -348,6 +366,7 @@ internal fun Int.validateRadius() {
  *
  * @throws SdkException if the accuracy is outside the valid range
  */
+@JvmSynthetic
 internal fun Int.validateAccuracy() {
     if (this < 1 || this > 1000) {
         throw SdkException("Accuracy must be between 1m and 1km")

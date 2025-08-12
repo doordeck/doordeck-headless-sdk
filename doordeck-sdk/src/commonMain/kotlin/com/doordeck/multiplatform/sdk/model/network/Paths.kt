@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.network
 
+import kotlin.jvm.JvmSynthetic
+
 /**
  * Contains all API endpoint paths for the Doordeck cloud service.
  */
@@ -7,72 +9,73 @@ internal object Paths {
     /**
      * Account
      */
-    fun getLoginPath() = "/auth/token"
-    fun getRegistrationPath() = "/auth/register"
-    fun getRefreshTokenPath() = "/auth/token/refresh"
-    fun getLogoutPath() = "/auth/token/destroy"
-    fun getRegisterEphemeralKeyPath() = "/auth/certificate"
-    fun getRegisterEphemeralKeyWithSecondaryAuthenticationPath() = "/auth/certificate/verify"
-    fun getVerifyEphemeralKeyRegistrationPath() = "/auth/certificate/check"
-    fun getVerifyEmailPath() = "/account/email/verify"
-    fun getReverifyEmailPath() = "/account/email/reverify"
-    fun getChangePasswordPath() = "/account/password"
-    fun getUserDetailsPath() = "/account"
-    fun getUpdateUserDetailsPath() = "/account"
-    fun getDeleteAccountPath() = "/account"
-    fun getPasswordResetPath() = "/account/password/reset/initialize"
-    fun getPasswordResetVerifyPath() = "/account/password/reset/verify"
+    @JvmSynthetic fun getLoginPath() = "/auth/token"
+    @JvmSynthetic fun getRegistrationPath() = "/auth/register"
+    @JvmSynthetic fun getRefreshTokenPath() = "/auth/token/refresh"
+    @JvmSynthetic fun getLogoutPath() = "/auth/token/destroy"
+    @JvmSynthetic fun getRegisterEphemeralKeyPath() = "/auth/certificate"
+    @JvmSynthetic fun getRegisterEphemeralKeyWithSecondaryAuthenticationPath() = "/auth/certificate/verify"
+    @JvmSynthetic fun getVerifyEphemeralKeyRegistrationPath() = "/auth/certificate/check"
+    @JvmSynthetic fun getVerifyEmailPath() = "/account/email/verify"
+    @JvmSynthetic fun getReverifyEmailPath() = "/account/email/reverify"
+    @JvmSynthetic fun getChangePasswordPath() = "/account/password"
+    @JvmSynthetic fun getUserDetailsPath() = "/account"
+    @JvmSynthetic fun getUpdateUserDetailsPath() = "/account"
+    @JvmSynthetic fun getDeleteAccountPath() = "/account"
+    @JvmSynthetic fun getPasswordResetPath() = "/account/password/reset/initialize"
+    @JvmSynthetic fun getPasswordResetVerifyPath() = "/account/password/reset/verify"
 
     /**
      * Sites
      */
-    fun getListSites() = "/site"
-    fun getLocksForSitePath(siteId: String) = "/site/$siteId/device"
-    fun getUsersForSitePath(siteId: String) = "/site/$siteId/user"
+    @JvmSynthetic fun getListSites() = "/site"
+    @JvmSynthetic fun getLocksForSitePath(siteId: String) = "/site/$siteId/device"
+    @JvmSynthetic fun getUsersForSitePath(siteId: String) = "/site/$siteId/user"
 
     /**
      * Tiles
      */
-    fun getLocksBelongingToTilePath(tileId: String) = "/tile/$tileId"
-    fun getAssociateMultipleLocksToASingleTilePath(tileId: String) = "/tile/$tileId"
+    @JvmSynthetic fun getLocksBelongingToTilePath(tileId: String) = "/tile/$tileId"
+    @JvmSynthetic fun getAssociateMultipleLocksToASingleTilePath(tileId: String) = "/tile/$tileId"
 
     /**
      * Lock operations
      */
-    fun getSingleLockPath(lockId: String) = "/device/$lockId"
-    fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
-    fun getAuditForUserPath(userId: String) = "/user/$userId/log"
-    fun getUsersForLockPath(lockId: String) = "/device/$lockId/users"
-    fun getLocksForUserPath(userId: String) = "/user/$userId"
-    fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"
-    fun getUserPublicKeyPath(email: String) = "/share/invite/$email"
-    fun getUserPublicKeyPath() = "/directory/query"
-    fun getOperationPath(lockId: String) = "/device/$lockId/execute"
-    fun getPinnedLocksPath() = "/device/favourite"
-    fun getShareableLocksPath() = "/device/shareable"
+    @JvmSynthetic fun getSingleLockPath(lockId: String) = "/device/$lockId"
+    @JvmSynthetic fun getLockAuditTrailPath(lockId: String) = "/device/$lockId/log"
+    @JvmSynthetic fun getAuditForUserPath(userId: String) = "/user/$userId/log"
+    @JvmSynthetic fun getUsersForLockPath(lockId: String) = "/device/$lockId/users"
+    @JvmSynthetic fun getLocksForUserPath(userId: String) = "/user/$userId"
+    @JvmSynthetic fun getUpdateLockPropertiesPath(lockId: String) = "/device/$lockId"
+    @JvmSynthetic fun getUserPublicKeyPath(email: String) = "/share/invite/$email"
+    @JvmSynthetic fun getUserPublicKeyPath() = "/directory/query"
+    @JvmSynthetic fun getOperationPath(lockId: String) = "/device/$lockId/execute"
+    @JvmSynthetic fun getPinnedLocksPath() = "/device/favourite"
+    @JvmSynthetic fun getShareableLocksPath() = "/device/shareable"
 
     /**
      * Platform
      */
-    fun getCreateApplicationPath() = "/platform/application"
-    fun getListApplicationsPath() = "/platform/application"
-    fun getApplicationPath(applicationId: String) = "/platform/application/$applicationId"
-    fun getUpdateApplicationPath(applicationId: String) = "/platform/application/$applicationId"
-    fun getDeleteApplicationPath(applicationId: String) = "/platform/application/$applicationId"
-    fun getLogoUploadUrlPath(applicationId: String) = "/platform/application/$applicationId/logo"
-    fun getAddAuthKeyPath(applicationId: String) = "/platform/application/$applicationId/auth/key"
-    fun getAddAuthIssuerPath(applicationId: String) = "/platform/application/$applicationId/auth/issuer"
-    fun getDeleteAuthIssuerPath(applicationId: String) = "/platform/application/$applicationId/auth/issuer"
-    fun getAddCorsDomainPath(applicationId: String) = "/platform/application/$applicationId/cors"
-    fun getRemoveCorsDomainPath(applicationId: String) = "/platform/application/$applicationId/cors"
-    fun getAddApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
-    fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
-    fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
+    @JvmSynthetic fun getCreateApplicationPath() = "/platform/application"
+    @JvmSynthetic fun getListApplicationsPath() = "/platform/application"
+    @JvmSynthetic fun getApplicationPath(applicationId: String) = "/platform/application/$applicationId"
+    @JvmSynthetic fun getUpdateApplicationPath(applicationId: String) = "/platform/application/$applicationId"
+    @JvmSynthetic fun getDeleteApplicationPath(applicationId: String) = "/platform/application/$applicationId"
+    @JvmSynthetic fun getLogoUploadUrlPath(applicationId: String) = "/platform/application/$applicationId/logo"
+    @JvmSynthetic fun getAddAuthKeyPath(applicationId: String) = "/platform/application/$applicationId/auth/key"
+    @JvmSynthetic fun getAddAuthIssuerPath(applicationId: String) = "/platform/application/$applicationId/auth/issuer"
+    @JvmSynthetic fun getDeleteAuthIssuerPath(applicationId: String) = "/platform/application/$applicationId/auth/issuer"
+    @JvmSynthetic fun getAddCorsDomainPath(applicationId: String) = "/platform/application/$applicationId/cors"
+    @JvmSynthetic fun getRemoveCorsDomainPath(applicationId: String) = "/platform/application/$applicationId/cors"
+    @JvmSynthetic fun getAddApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
+    @JvmSynthetic fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
+    @JvmSynthetic fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
 
     /**
      * Determines if a given API path requires authentication.
      */
-    internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
+    @JvmSynthetic
+    fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
             path != getVerifyEmailPath()
 }
 
@@ -83,17 +86,18 @@ internal object FusionPaths {
     /**
      * Fusion
      */
-    fun getLoginPath() = "/api/auth/token"
-    fun getConfigurationTypePath() = "/api/configuration/type"
-    fun getIntegrationConfiguration() = "/api/configuration"
-    fun getEnableDoorPath() = "/api/configuration/enable"
-    fun getDeleteDoorPath(deviceId: String) = "/api/configuration/$deviceId"
-    fun getDoorStatusPath(deviceId: String) = "/api/controller/state/$deviceId"
-    fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
-    fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"
+    @JvmSynthetic fun getLoginPath() = "/api/auth/token"
+    @JvmSynthetic fun getConfigurationTypePath() = "/api/configuration/type"
+    @JvmSynthetic fun getIntegrationConfiguration() = "/api/configuration"
+    @JvmSynthetic fun getEnableDoorPath() = "/api/configuration/enable"
+    @JvmSynthetic fun getDeleteDoorPath(deviceId: String) = "/api/configuration/$deviceId"
+    @JvmSynthetic fun getDoorStatusPath(deviceId: String) = "/api/controller/state/$deviceId"
+    @JvmSynthetic fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
+    @JvmSynthetic fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"
 
     /**
      * Determines if a given API path requires authentication.
      */
-    internal fun requiresAuth(path: String) = path != getLoginPath()
+    @JvmSynthetic
+    fun requiresAuth(path: String) = path != getLoginPath()
 }

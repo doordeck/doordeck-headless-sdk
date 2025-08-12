@@ -12,12 +12,14 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
+import kotlin.jvm.JvmSynthetic
 
 internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
-    internal fun setDebugLogging(enabled: Boolean) {
+    @JvmSynthetic
+    fun setDebugLogging(enabled: Boolean) {
         SdkLogger.enableDebugLogging(enabled)
     }
 
@@ -26,6 +28,7 @@ internal object Context {
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
+    @JvmSynthetic
     fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
         secureStorage.setApiEnvironment(apiEnvironment)
     }
@@ -33,6 +36,7 @@ internal object Context {
     /**
      * Retrieves the current API environment.
      */
+    @JvmSynthetic
     fun getApiEnvironment(): ApiEnvironment {
         return secureStorage.getApiEnvironment()
             ?: ApiEnvironment.PROD
@@ -43,6 +47,7 @@ internal object Context {
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
+    @JvmSynthetic
     fun setCloudAuthToken(token: String) {
         secureStorage.addCloudAuthToken(token)
     }
@@ -50,6 +55,7 @@ internal object Context {
     /**
      * Retrieves the cloud authentication token.
      */
+    @JvmSynthetic
     fun getCloudAuthToken(): String? {
         return secureStorage.getCloudAuthToken()
     }
@@ -58,6 +64,7 @@ internal object Context {
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or expired.
      * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS] days).
      */
+    @JvmSynthetic
     fun isCloudAuthTokenInvalidOrExpired(): Boolean {
         return getCloudAuthToken()?.isJwtTokenInvalidOrExpired() ?: true
     }
@@ -67,6 +74,7 @@ internal object Context {
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
+    @JvmSynthetic
     fun setCloudRefreshToken(token: String) {
         secureStorage.addCloudRefreshToken(token)
     }
@@ -74,6 +82,7 @@ internal object Context {
     /**
      * Retrieves the cloud refresh token.
      */
+    @JvmSynthetic
     fun getCloudRefreshToken(): String? {
         return secureStorage.getCloudRefreshToken()
     }
@@ -83,6 +92,7 @@ internal object Context {
      *
      * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
      */
+    @JvmSynthetic
     fun setFusionHost(host: String) {
         secureStorage.setFusionHost(host)
     }
@@ -90,6 +100,7 @@ internal object Context {
     /**
      * Retrieves the fusion host.
      */
+    @JvmSynthetic
     fun getFusionHost(): String {
         return secureStorage.getFusionHost()
             ?: DEFAULT_FUSION_HOST
@@ -98,6 +109,7 @@ internal object Context {
     /**
      * Sets the Fusion authentication token, the provided value will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setFusionAuthToken(token: String) {
         secureStorage.addFusionAuthToken(token)
     }
@@ -105,6 +117,7 @@ internal object Context {
     /**
      * Retrieves the Fusion authentication token.
      */
+    @JvmSynthetic
     fun getFusionAuthToken(): String? {
         return secureStorage.getFusionAuthToken()
     }
@@ -112,6 +125,7 @@ internal object Context {
     /**
      * Sets the user ID associated with the context, the provided value will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setUserId(userId: String) {
         secureStorage.addUserId(userId)
     }
@@ -119,6 +133,7 @@ internal object Context {
     /**
      * Retrieves the user identifier.
      */
+    @JvmSynthetic
     fun getUserId(): String? {
         return secureStorage.getUserId()
     }
@@ -126,6 +141,7 @@ internal object Context {
     /**
      * Sets the user email associated with the context, the provided value will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setUserEmail(email: String) {
         secureStorage.addUserEmail(email)
     }
@@ -133,6 +149,7 @@ internal object Context {
     /**
      * Retrieves the user email.
      */
+    @JvmSynthetic
     fun getUserEmail(): String? {
         return secureStorage.getUserEmail()
     }
@@ -140,6 +157,7 @@ internal object Context {
     /**
      * Sets the certificate chain for the context, the provided value will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setCertificateChain(certificateChain: List<String>) {
         secureStorage.addCertificateChain(certificateChain)
     }
@@ -147,6 +165,7 @@ internal object Context {
     /**
      * Retrieves the certificate chain.
      */
+    @JvmSynthetic
     fun getCertificateChain(): List<String>? {
         return secureStorage.getCertificateChain()
     }
@@ -155,6 +174,7 @@ internal object Context {
      * Checks whether the certificate chain is invalid (e.g., null, malformed) or expired.
      * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS] days).
      */
+    @JvmSynthetic
     fun isCertificateChainInvalidOrExpired(): Boolean {
         return getCertificateChain()?.firstOrNull()?.let {
             CryptoManager.isCertificateInvalidOrExpired(it)
@@ -164,6 +184,7 @@ internal object Context {
     /**
      * Sets the key pair for the context, the provided values will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
         secureStorage.addPublicKey(publicKey)
         secureStorage.addPrivateKey(privateKey)
@@ -172,6 +193,7 @@ internal object Context {
     /**
      * Retrieves the key pair.
      */
+    @JvmSynthetic
     fun getKeyPair(): Crypto.KeyPair? {
         val actualUserPublicKey = getPublicKey()
         val actualUserPrivateKey = getPrivateKey()
@@ -183,6 +205,7 @@ internal object Context {
     /**
      * Sets the public key that has been verified via two-factor authentication. The provided value will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setKeyPairVerified(publicKey: ByteArray?) {
         secureStorage.setKeyPairVerified(publicKey)
     }
@@ -190,6 +213,7 @@ internal object Context {
     /**
      * Retrieves the key pair verification status.
      */
+    @JvmSynthetic
     fun isKeyPairVerified(): Boolean {
         val verified = secureStorage.getKeyPairVerified()
         val publicKey = secureStorage.getPublicKey()
@@ -199,17 +223,20 @@ internal object Context {
         return verified.contentEquals(publicKey)
     }
 
-    internal fun getPublicKey(): ByteArray? {
+    @JvmSynthetic
+    fun getPublicKey(): ByteArray? {
         return secureStorage.getPublicKey()
     }
 
-    internal fun getPrivateKey(): ByteArray? {
+    @JvmSynthetic
+    fun getPrivateKey(): ByteArray? {
         return secureStorage.getPrivateKey()
     }
 
     /**
      * Checks whether the current key pair is not null and valid by signing a small piece of text and verifying it.
      */
+    @JvmSynthetic
     fun isKeyPairValid(): Boolean {
         val publicKey = getPublicKey()
         val privateKey = getPrivateKey()
@@ -219,7 +246,8 @@ internal object Context {
         return KeyPairUtils.isKeyPairValid(publicKey, privateKey)
     }
 
-    internal fun reset() {
+    @JvmSynthetic
+    fun reset() {
         CapabilityCache.reset()
         clearContext()
     }
@@ -227,6 +255,7 @@ internal object Context {
     /**
      * Sets all necessary fields to perform secure operations, the provided values will be automatically stored in secure storage.
      */
+    @JvmSynthetic
     fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
                                      privateKey: ByteArray, isKeyPairVerified: Boolean) {
         setUserId(userId)
@@ -238,6 +267,7 @@ internal object Context {
     /**
      * Checks the context and returns a [ContextState] representing its state.
      */
+    @JvmSynthetic
     fun getContextState(): ContextState {
         if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
@@ -246,13 +276,15 @@ internal object Context {
         return ContextState.READY
     }
 
-    internal fun setSecureStorageImpl(secureStorage: SecureStorage) {
+    @JvmSynthetic
+    fun setSecureStorageImpl(secureStorage: SecureStorage) {
         this.secureStorage = secureStorage
     }
 
     /**
      * Clears all the values stored in secure storage.
      */
+    @JvmSynthetic
     fun clearContext() {
         secureStorage.clear()
     }

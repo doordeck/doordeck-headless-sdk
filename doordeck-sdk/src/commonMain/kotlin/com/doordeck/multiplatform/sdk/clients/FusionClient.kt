@@ -18,6 +18,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the fusion API client.
@@ -32,6 +33,7 @@ internal object FusionClient {
      * @return [BasicFusionLoginResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun loginRequest(email: String, password: String): BasicFusionLoginResponse {
         return FusionHttpClient.client.post(FusionPaths.getLoginPath()) {
             addRequestHeaders()
@@ -47,6 +49,7 @@ internal object FusionClient {
      * @return [BasicIntegrationTypeResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
         return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath()).body()
     }
@@ -57,6 +60,7 @@ internal object FusionClient {
      * @return List of [BasicIntegrationConfigurationResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
         return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
@@ -71,6 +75,7 @@ internal object FusionClient {
      * @param controller The controller to be enabled.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun enableDoorRequest(name: String, siteId: String, controller: BasicLockController) {
         FusionHttpClient.client.post(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
@@ -83,6 +88,7 @@ internal object FusionClient {
      * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun deleteDoorRequest(deviceId: String) {
         FusionHttpClient.client.delete(FusionPaths.getDeleteDoorPath(deviceId))
     }
@@ -93,6 +99,7 @@ internal object FusionClient {
      * @return [BasicDoorStateResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun getDoorStatusRequest(deviceId: String): BasicDoorStateResponse {
         return FusionHttpClient.client.get(FusionPaths.getDoorStatusPath(deviceId)).body()
     }
@@ -102,6 +109,7 @@ internal object FusionClient {
      * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun startDoorRequest(deviceId: String) {
         FusionHttpClient.client.get(FusionPaths.startDoorPathPath(deviceId))
     }
@@ -111,6 +119,7 @@ internal object FusionClient {
      * @param deviceId The device's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
+    @JvmSynthetic
     suspend fun stopDoorRequest(deviceId: String) {
         FusionHttpClient.client.get(FusionPaths.stopDoorPathPath(deviceId))
     }

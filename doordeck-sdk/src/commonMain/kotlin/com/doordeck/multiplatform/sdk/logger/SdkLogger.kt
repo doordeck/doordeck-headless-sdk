@@ -5,6 +5,7 @@ import co.touchlab.kermit.NoTagFormatter
 import co.touchlab.kermit.Severity
 import co.touchlab.kermit.mutableLoggerConfigInit
 import co.touchlab.kermit.platformLogWriter
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal global logger implementation.
@@ -20,6 +21,7 @@ internal object SdkLogger : Logger(
      *
      * @param enabled true to enable debug logging, false to disable it
      */
+    @JvmSynthetic
     fun enableDebugLogging(enabled: Boolean) {
         mutableConfig.minSeverity = if (enabled) Severity.Debug else Severity.Assert
     }

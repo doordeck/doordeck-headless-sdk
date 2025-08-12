@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.model.data.BasicEcKey
 import com.doordeck.multiplatform.sdk.model.data.BasicEd25519Key
 import com.doordeck.multiplatform.sdk.model.data.BasicRsaKey
 import kotlinx.serialization.Serializable
+import kotlin.jvm.JvmSynthetic
 
 @Serializable
 internal data class CreateApplicationRequest(
@@ -153,6 +154,7 @@ internal data class AddEd25519KeyRequest(
     val x: String
 ): AddAuthKeyRequest
 
+@JvmSynthetic
 internal fun BasicCreateApplication.toCreateApplicationRequest(): CreateApplicationRequest = CreateApplicationRequest(
     name = name,
     companyName = companyName,
@@ -179,6 +181,7 @@ internal fun BasicCreateApplication.toCreateApplicationRequest(): CreateApplicat
     logoUrl = logoUrl
 )
 
+@JvmSynthetic
 internal fun BasicAuthKey.toAddAuthKeyRequest(): AddAuthKeyRequest = when(this) {
     is BasicRsaKey -> AddRsaKeyRequest(
         kty = kty,

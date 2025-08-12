@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserForSiteResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the sites API client.
@@ -22,6 +23,7 @@ internal object SitesClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/list-sites">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun listSitesRequest(): List<BasicSiteResponse> {
         return CloudHttpClient.client.get(Paths.getListSites()).body()
     }
@@ -35,6 +37,7 @@ internal object SitesClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-locks-for-site">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun getLocksForSiteRequest(siteId: String): List<BasicSiteLocksResponse> {
         return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId)).body()
     }
@@ -49,6 +52,7 @@ internal object SitesClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-users-for-a-site">API Doc</a>
      */
+    @JvmSynthetic
     suspend fun getUsersForSiteRequest(siteId: String): List<BasicUserForSiteResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId)).body()
     }

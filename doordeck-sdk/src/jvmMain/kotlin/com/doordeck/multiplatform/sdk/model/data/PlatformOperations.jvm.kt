@@ -115,6 +115,7 @@ object PlatformOperations {
     }
 }
 
+@JvmSynthetic
 internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplication {
     return BasicCreateApplication(
         name = name,
@@ -128,6 +129,7 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplicatio
     )
 }
 
+@JvmSynthetic
 internal fun JWK.toBasicAuthKey(): BasicAuthKey {
     return when(this) {
         is ECKey -> BasicEcKey(
@@ -156,6 +158,7 @@ internal fun JWK.toBasicAuthKey(): BasicAuthKey {
     }
 }
 
+@JvmSynthetic
 internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicEmailPreferences {
     return BasicEmailPreferences(
         senderEmail = senderEmail,
@@ -167,6 +170,7 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
     )
 }
 
+@JvmSynthetic
 internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
     return BasicEmailCallToAction(
         actionTarget = actionTarget.toString(),
