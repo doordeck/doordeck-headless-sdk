@@ -10,26 +10,26 @@ internal object Constants {
      * Base URL for Doordeck's content delivery network.
      */
     @JvmSynthetic
-    const val CDN_URL = "https://cdn.doordeck.com"
+    internal const val CDN_URL = "https://cdn.doordeck.com"
 
     /**
      * Domain pattern for certificate pinning, matching all Doordeck subdomains.
      */
     @JvmSynthetic
-    const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "**.doordeck.com"
+    internal const val CERTIFICATE_PINNER_DOMAIN_PATTERN = "**.doordeck.com"
 
     /**
      * Default host URL for Fusion APIs.
      */
     @JvmSynthetic
-    const val DEFAULT_FUSION_HOST = "http://localhost:27700"
+    internal const val DEFAULT_FUSION_HOST = "http://localhost:27700"
 
     /**
      * List of trusted root certificate SHA-256 pins for secure connections.
      * Includes Amazon Root CAs 1-4 and Starfield Services Root CA.
      */
     @get:JvmSynthetic
-    val TRUSTED_CERTIFICATES = listOf(
+    internal val TRUSTED_CERTIFICATES = listOf(
          "sha256/++MBgDH5WGvL9Bcn5Be30cRcL0f5O+NyoXuWtQdX1aI=", // CN=Amazon Root CA 1,O=Amazon,C=US
          "sha256/f0KW/FtqTjs108NpYj42SrGvOB2PpxIVM8nWxjPqJGE=", // CN=Amazon Root CA 2,O=Amazon,C=US
          "sha256/NqvDJlas/GRcYbcWE8S/IceH9cq77kg0jVhZeAPXq8k=", // CN=Amazon Root CA 3,O=Amazon,C=US

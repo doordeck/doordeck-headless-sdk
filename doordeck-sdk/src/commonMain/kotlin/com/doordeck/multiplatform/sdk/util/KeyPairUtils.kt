@@ -11,7 +11,7 @@ internal object KeyPairUtils {
      * Checks whether the provided key pair is valid by signing a small piece of text and verifying it.
      */
     @JvmSynthetic
-    fun isKeyPairValid(publicKey: ByteArray, privateKey: ByteArray): Boolean {
+    internal fun isKeyPairValid(publicKey: ByteArray, privateKey: ByteArray): Boolean {
         val text = Uuid.random().toString()
         val signature = try {
             text.signWithPrivateKey(privateKey)

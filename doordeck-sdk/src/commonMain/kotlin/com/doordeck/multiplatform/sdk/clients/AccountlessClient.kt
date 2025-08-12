@@ -37,7 +37,7 @@ internal object AccountlessClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/login-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
+    internal suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
         return CloudHttpClient.client.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
@@ -65,7 +65,7 @@ internal object AccountlessClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/registration">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun registrationRequest(
+    internal suspend fun registrationRequest(
         email: String,
         password: String,
         displayName: String?,
@@ -101,7 +101,7 @@ internal object AccountlessClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-email">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun verifyEmailRequest(code: String) {
+    internal suspend fun verifyEmailRequest(code: String) {
         return CloudHttpClient.client.put(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(Params.CODE, code)
@@ -115,7 +115,7 @@ internal object AccountlessClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun passwordResetRequest(email: String) {
+    internal suspend fun passwordResetRequest(email: String) {
         return CloudHttpClient.client.post(Paths.getPasswordResetPath()) {
             addRequestHeaders()
             setBody(PasswordResetRequest(email))
@@ -131,7 +131,7 @@ internal object AccountlessClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
+    internal suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
         return CloudHttpClient.client.post(Paths.getPasswordResetVerifyPath()) {
             addRequestHeaders()
             setBody(PasswordResetVerifyRequest(userId, token, password))

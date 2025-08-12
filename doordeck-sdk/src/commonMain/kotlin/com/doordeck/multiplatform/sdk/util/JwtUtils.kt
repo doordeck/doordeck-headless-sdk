@@ -29,7 +29,7 @@ internal object JwtUtils {
     }
 
     @JvmSynthetic
-    fun String.isJwtTokenInvalidOrExpired(): Boolean {
+    internal fun String.isJwtTokenInvalidOrExpired(): Boolean {
         val expiration = getClaims(this)[TOKEN_EXPIRE_AT_FIELD]?.let {
             Instant.fromEpochSeconds(it.toLong())
         }

@@ -34,7 +34,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun loginRequest(email: String, password: String): BasicFusionLoginResponse {
+    internal suspend fun loginRequest(email: String, password: String): BasicFusionLoginResponse {
         return FusionHttpClient.client.post(FusionPaths.getLoginPath()) {
             addRequestHeaders()
             setBody(FusionLoginRequest(email, password))
@@ -50,7 +50,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
+    internal suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
         return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath()).body()
     }
 
@@ -61,7 +61,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
+    internal suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
         return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
             setBody(IntegrationConfigurationRequest(type))
@@ -76,7 +76,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun enableDoorRequest(name: String, siteId: String, controller: BasicLockController) {
+    internal suspend fun enableDoorRequest(name: String, siteId: String, controller: BasicLockController) {
         FusionHttpClient.client.post(FusionPaths.getEnableDoorPath()) {
             addRequestHeaders()
             setBody(EnableDoorRequest(name, siteId, controller))
@@ -89,7 +89,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun deleteDoorRequest(deviceId: String) {
+    internal suspend fun deleteDoorRequest(deviceId: String) {
         FusionHttpClient.client.delete(FusionPaths.getDeleteDoorPath(deviceId))
     }
 
@@ -100,7 +100,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun getDoorStatusRequest(deviceId: String): BasicDoorStateResponse {
+    internal suspend fun getDoorStatusRequest(deviceId: String): BasicDoorStateResponse {
         return FusionHttpClient.client.get(FusionPaths.getDoorStatusPath(deviceId)).body()
     }
 
@@ -110,7 +110,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun startDoorRequest(deviceId: String) {
+    internal suspend fun startDoorRequest(deviceId: String) {
         FusionHttpClient.client.get(FusionPaths.startDoorPathPath(deviceId))
     }
 
@@ -120,7 +120,7 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    suspend fun stopDoorRequest(deviceId: String) {
+    internal suspend fun stopDoorRequest(deviceId: String) {
         FusionHttpClient.client.get(FusionPaths.stopDoorPathPath(deviceId))
     }
 }

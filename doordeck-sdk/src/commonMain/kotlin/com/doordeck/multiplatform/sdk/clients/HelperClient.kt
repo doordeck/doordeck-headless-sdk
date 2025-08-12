@@ -17,7 +17,7 @@ import kotlin.jvm.JvmSynthetic
 internal object HelperClient {
 
     @JvmSynthetic
-    suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
+    internal suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
         // Generate a new presigned URL
         val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
         // Upload the image into the presigned URL
@@ -47,7 +47,7 @@ internal object HelperClient {
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     @JvmSynthetic
-    suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
+    internal suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
         val currentKeyPair = Context.getKeyPair()
         val currentKeyPairVerified = Context.isKeyPairVerified()
         val requiresKeyRegister =
@@ -88,7 +88,7 @@ internal object HelperClient {
      *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     @JvmSynthetic
-    suspend fun assistedRegisterEphemeralKeyRequest(
+    internal suspend fun assistedRegisterEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): BasicAssistedRegisterEphemeralKeyResponse {
@@ -121,7 +121,7 @@ internal object HelperClient {
      *  * Adds the key pair to the context manager.
      */
     @JvmSynthetic
-    suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
+    internal suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Generate a new cryptographic key pair
         val keyPair = CryptoManager.generateRawKeyPair()
 

@@ -28,7 +28,7 @@ internal object TilesClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/get-lock-belonging-to-tile-v3">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
+    internal suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
         return CloudHttpClient.client.get(Paths.getLocksBelongingToTilePath(tileId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
@@ -45,7 +45,7 @@ internal object TilesClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/associate-multiple-locks-to-a-single-tile">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
+    internal suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
         CloudHttpClient.client.put(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))

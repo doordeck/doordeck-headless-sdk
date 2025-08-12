@@ -24,7 +24,7 @@ internal object SitesClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/list-sites">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun listSitesRequest(): List<BasicSiteResponse> {
+    internal suspend fun listSitesRequest(): List<BasicSiteResponse> {
         return CloudHttpClient.client.get(Paths.getListSites()).body()
     }
 
@@ -38,7 +38,7 @@ internal object SitesClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-locks-for-site">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getLocksForSiteRequest(siteId: String): List<BasicSiteLocksResponse> {
+    internal suspend fun getLocksForSiteRequest(siteId: String): List<BasicSiteLocksResponse> {
         return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId)).body()
     }
 
@@ -53,7 +53,7 @@ internal object SitesClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/sites/get-users-for-a-site">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUsersForSiteRequest(siteId: String): List<BasicUserForSiteResponse> {
+    internal suspend fun getUsersForSiteRequest(siteId: String): List<BasicUserForSiteResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId)).body()
     }
 }

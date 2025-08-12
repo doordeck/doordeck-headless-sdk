@@ -42,7 +42,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/refres-token">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun refreshTokenRequest(refreshToken: String? = null): BasicTokenResponse {
+    internal suspend fun refreshTokenRequest(refreshToken: String? = null): BasicTokenResponse {
         val token = refreshToken
             ?: Context.getCloudRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
@@ -64,7 +64,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/logout">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun logoutRequest() {
+    internal suspend fun logoutRequest() {
         CloudHttpClient.client.post(Paths.getLogoutPath()) {
             addRequestHeaders()
         }
@@ -86,7 +86,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun registerEphemeralKeyRequest(
+    internal suspend fun registerEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): BasicRegisterEphemeralKeyResponse {
@@ -121,7 +121,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
+    internal suspend fun registerEphemeralKeyWithSecondaryAuthenticationRequest(
         publicKey: ByteArray? = null,
         method: TwoFactorMethod? = null
     ): BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse {
@@ -154,7 +154,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-ephemeral-key-registration">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun verifyEphemeralKeyRegistrationRequest(
+    internal suspend fun verifyEphemeralKeyRegistrationRequest(
         code: String,
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
@@ -187,7 +187,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/reverify-email">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun reverifyEmailRequest() {
+    internal suspend fun reverifyEmailRequest() {
         CloudHttpClient.client.post(Paths.getReverifyEmailPath())
     }
 
@@ -201,7 +201,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/change-password">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
+    internal suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
         CloudHttpClient.client.post(Paths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(
@@ -222,7 +222,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/get-user-details">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserDetailsRequest(): BasicUserDetailsResponse {
+    internal suspend fun getUserDetailsRequest(): BasicUserDetailsResponse {
         return CloudHttpClient.client.get(Paths.getUserDetailsPath()).body()
     }
 
@@ -235,7 +235,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/update-user-details">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateUserDetailsRequest(displayName: String) {
+    internal suspend fun updateUserDetailsRequest(displayName: String) {
         CloudHttpClient.client.post(Paths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
@@ -250,7 +250,7 @@ internal object AccountClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/delete-account">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun deleteAccountRequest() {
+    internal suspend fun deleteAccountRequest() {
         CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
         Context.reset()
     }

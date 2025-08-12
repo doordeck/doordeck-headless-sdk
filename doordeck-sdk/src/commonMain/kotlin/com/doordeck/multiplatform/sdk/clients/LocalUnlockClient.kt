@@ -26,7 +26,7 @@ internal object LocalUnlockClient {
      * @param request The unlock request as base64.
      */
     @JvmSynthetic
-    fun unlock(directAccessEndpoints: List<String>, request: String) {
+    internal fun unlock(directAccessEndpoints: List<String>, request: String) {
         // Launch the request at the direct access endpoints
         val requests = directAccessEndpoints.map {
             coroutineScope.async {

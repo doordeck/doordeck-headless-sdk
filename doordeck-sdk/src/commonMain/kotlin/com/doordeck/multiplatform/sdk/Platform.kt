@@ -94,14 +94,14 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
     private var _client: HttpClient = clientProvider()
 
     @get:JvmSynthetic
-    val client: HttpClient
+    internal val client: HttpClient
         get() = _client
 
     /**
      * Internal function used in testing to override the default HTTP client.
      */
     @JvmSynthetic
-    fun overrideClient(httpClient: HttpClient) {
+    internal fun overrideClient(httpClient: HttpClient) {
         _client = httpClient
     }
 }

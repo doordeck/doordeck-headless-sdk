@@ -9,7 +9,7 @@ import kotlin.jvm.JvmSynthetic
 internal object DoordeckFactory {
 
     @JvmSynthetic
-    suspend fun initialize(sdkConfig: SdkConfig): Doordeck {
+    internal suspend fun initialize(sdkConfig: SdkConfig): Doordeck {
         // Add the provided values into the context
         Context.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)

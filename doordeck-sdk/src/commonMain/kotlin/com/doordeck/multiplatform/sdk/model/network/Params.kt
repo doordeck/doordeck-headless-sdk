@@ -7,10 +7,10 @@ import kotlin.jvm.JvmSynthetic
  */
 internal object Params {
 
-    @JvmSynthetic const val CODE = "code"
-    @JvmSynthetic const val METHOD = "method"
-    @JvmSynthetic const val START = "start"
-    @JvmSynthetic const val END = "end"
-    @JvmSynthetic const val VISITOR = "visitor"
-    @JvmSynthetic const val FORCE = "force"
+    @JvmSynthetic internal const val CODE = "code"
+    @JvmSynthetic internal const val METHOD = "method"
+    @JvmSynthetic internal const val START = "start"
+    @JvmSynthetic internal const val END = "end"
+    @JvmSynthetic internal const val VISITOR = "visitor"
+    @JvmSynthetic internal const val FORCE = "force"
 }

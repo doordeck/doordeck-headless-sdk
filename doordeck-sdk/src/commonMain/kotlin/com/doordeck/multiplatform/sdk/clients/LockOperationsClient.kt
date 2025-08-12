@@ -78,7 +78,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-a-single-lock">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getSingleLockRequest(lockId: String): BasicLockResponse {
+    internal suspend fun getSingleLockRequest(lockId: String): BasicLockResponse {
         return CloudHttpClient.client.get(Paths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
@@ -96,7 +96,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-lock-audit-trail-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<BasicAuditResponse> {
+    internal suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -116,7 +116,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-audit-for-a-user">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<BasicAuditResponse> {
+    internal suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -134,7 +134,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-users-for-a-lock">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUsersForLockRequest(lockId: String): List<BasicUserLockResponse> {
+    internal suspend fun getUsersForLockRequest(lockId: String): List<BasicUserLockResponse> {
         return CloudHttpClient.client.get(Paths.getUsersForLockPath(lockId)).body()
     }
 
@@ -149,7 +149,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-locks-for-a-user">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getLocksForUserRequest(userId: String): BasicLockUserResponse {
+    internal suspend fun getLocksForUserRequest(userId: String): BasicLockUserResponse {
         return CloudHttpClient.client.get(Paths.getLocksForUserPath(userId)).body()
     }
 
@@ -163,7 +163,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateLockNameRequest(lockId: String, name: String?) {
+    internal suspend fun updateLockNameRequest(lockId: String, name: String?) {
         updateLockProperties(lockId, UpdateLockNameRequest(name))
     }
 
@@ -177,7 +177,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateLockFavouriteRequest(lockId: String, favourite: Boolean) {
+    internal suspend fun updateLockFavouriteRequest(lockId: String, favourite: Boolean) {
         updateLockProperties(lockId, UpdateLockFavouriteRequest(favourite))
     }
 
@@ -191,7 +191,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateLockSettingDefaultNameRequest(lockId: String, name: String) {
+    internal suspend fun updateLockSettingDefaultNameRequest(lockId: String, name: String) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsDefaultNameRequest(name)))
     }
 
@@ -205,7 +205,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: List<String>) {
+    internal suspend fun setLockSettingPermittedAddressesRequest(lockId: String, permittedAddresses: List<String>) {
         updateLockProperties(
             lockId = lockId,
             request = UpdateLockSettingRequest(LockSettingsPermittedAddressesRequest(permittedAddresses))
@@ -222,7 +222,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateLockSettingHiddenRequest(lockId: String, hidden: Boolean) {
+    internal suspend fun updateLockSettingHiddenRequest(lockId: String, hidden: Boolean) {
         updateLockProperties(lockId, UpdateLockSettingRequest(LockSettingsHiddenRequest(hidden)))
     }
 
@@ -236,7 +236,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<BasicTimeRequirement>) {
+    internal suspend fun setLockSettingTimeRestrictionsRequest(lockId: String, times: List<BasicTimeRequirement>) {
         updateLockProperties(
             lockId = lockId,
             request = UpdateLockSettingRequest(
@@ -266,7 +266,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-lock-properties">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateLockSettingLocationRestrictionsRequest(
+    internal suspend fun updateLockSettingLocationRestrictionsRequest(
         lockId: String,
         location: BasicLocationRequirement?
     ) {
@@ -315,7 +315,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-a-doordeck-user-public-key">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): BasicUserPublicKeyResponse {
+    internal suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): BasicUserPublicKeyResponse {
         return CloudHttpClient.client.post(Paths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
             parameter(Params.VISITOR, visitor)
@@ -332,7 +332,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByEmailRequest(email: String): BasicUserPublicKeyResponse =
+    internal suspend fun getUserPublicKeyByEmailRequest(email: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(email = email))
 
     /**
@@ -345,7 +345,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): BasicUserPublicKeyResponse =
+    internal suspend fun getUserPublicKeyByTelephoneRequest(telephone: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(telephone = telephone))
 
     /**
@@ -358,7 +358,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): BasicUserPublicKeyResponse =
+    internal suspend fun getUserPublicKeyByLocalKeyRequest(localKey: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(localKey = localKey))
 
     /**
@@ -371,7 +371,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): BasicUserPublicKeyResponse =
+    internal suspend fun getUserPublicKeyByForeignKeyRequest(foreignKey: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(foreignKey = foreignKey))
 
     /**
@@ -384,7 +384,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByIdentityRequest(identity: String): BasicUserPublicKeyResponse =
+    internal suspend fun getUserPublicKeyByIdentityRequest(identity: String): BasicUserPublicKeyResponse =
         getUserPublicKey(UserPublicKeyRequest(identity = identity))
 
     /**
@@ -410,7 +410,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<BasicBatchUserPublicKeyResponse> =
+    internal suspend fun getUserPublicKeyByEmailsRequest(emails: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(email = emails))
 
     /**
@@ -423,7 +423,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<BasicBatchUserPublicKeyResponse> =
+    internal suspend fun getUserPublicKeyByTelephonesRequest(telephones: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(telephone = telephones))
 
     /**
@@ -436,7 +436,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
+    internal suspend fun getUserPublicKeyByLocalKeysRequest(localKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(localKey = localKeys))
 
     /**
@@ -449,7 +449,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/lookup-user-public-key-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
+    internal suspend fun getUserPublicKeyByForeignKeysRequest(foreignKeys: List<String>): List<BasicBatchUserPublicKeyResponse> =
         batchGetUserPublicKey(BatchUserPublicKeyRequest(foreignKey = foreignKeys))
 
     /**
@@ -475,7 +475,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/unlock/">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun unlockRequest(unlockOperation: BasicUnlockOperation) {
+    internal suspend fun unlockRequest(unlockOperation: BasicUnlockOperation) {
         val operationRequest = LockOperationRequest(locked = false)
         val baseOperationRequest = unlockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest, unlockOperation.directAccessEndpoints)
@@ -490,7 +490,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/share-a-lock-v1">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun shareLockRequest(shareLockOperation: BasicShareLockOperation) {
+    internal suspend fun shareLockRequest(shareLockOperation: BasicShareLockOperation) {
         val operationRequest = ShareLockOperationRequest(
             user = shareLockOperation.shareLock.targetUserId,
             publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
@@ -512,7 +512,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/batch-share-a-lock-v2">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun batchShareLockRequest(batchShareLockOperation: BasicBatchShareLockOperation) {
+    internal suspend fun batchShareLockRequest(batchShareLockOperation: BasicBatchShareLockOperation) {
         /** Verify whether the operation device currently supports the batch sharing operation **/
         val isSupported =
             CapabilityCache.isSupported(batchShareLockOperation.baseOperation.lockId, CapabilityType.BATCH_SHARING_25)
@@ -566,7 +566,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/revoke-access-to-a-lock">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: BasicRevokeAccessToLockOperation) {
+    internal suspend fun revokeAccessToLockRequest(revokeAccessToLockOperation: BasicRevokeAccessToLockOperation) {
         val operationRequest = RevokeAccessToALockOperationRequest(users = revokeAccessToLockOperation.users)
         val baseOperationRequest = revokeAccessToLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
@@ -581,7 +581,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-secure-settings">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: BasicUpdateSecureSettingUnlockDuration) {
+    internal suspend fun updateSecureSettingUnlockDurationRequest(updateSecureSettingUnlockDuration: BasicUpdateSecureSettingUnlockDuration) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockDuration = updateSecureSettingUnlockDuration.unlockDuration
         )
@@ -598,7 +598,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/update-secure-settings">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: BasicUpdateSecureSettingUnlockBetween) {
+    internal suspend fun updateSecureSettingUnlockBetweenRequest(updateSecureSettingUnlockBetween: BasicUpdateSecureSettingUnlockBetween) {
         val operationRequest = UpdateSecureSettingsOperationRequest(
             unlockBetween = updateSecureSettingUnlockBetween.unlockBetween?.let {
                 UnlockBetweenSettingRequest(
@@ -660,7 +660,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-pinned-locks">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getPinnedLocksRequest(): List<BasicLockResponse> {
+    internal suspend fun getPinnedLocksRequest(): List<BasicLockResponse> {
         return CloudHttpClient.client.get(Paths.getPinnedLocksPath()).body()
     }
 
@@ -672,7 +672,7 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-shareable-locks">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getShareableLocksRequest(): List<BasicShareableLockResponse> {
+    internal suspend fun getShareableLocksRequest(): List<BasicShareableLockResponse> {
         return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
     }
 

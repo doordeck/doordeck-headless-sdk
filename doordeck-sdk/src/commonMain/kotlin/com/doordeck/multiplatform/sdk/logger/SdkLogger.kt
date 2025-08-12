@@ -22,7 +22,7 @@ internal object SdkLogger : Logger(
      * @param enabled true to enable debug logging, false to disable it
      */
     @JvmSynthetic
-    fun enableDebugLogging(enabled: Boolean) {
+    internal fun enableDebugLogging(enabled: Boolean) {
         mutableConfig.minSeverity = if (enabled) Severity.Debug else Severity.Assert
     }
 }

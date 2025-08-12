@@ -25,7 +25,7 @@ internal object CapabilityCache {
      * @return `true` if the specified capability is supported, `false` otherwise.
      */
     @JvmSynthetic
-    fun isSupported(id: String, type: CapabilityType) = cache[id]?.let {
+    internal fun isSupported(id: String, type: CapabilityType) = cache[id]?.let {
         it[type] == CapabilityStatus.SUPPORTED
     }
 
@@ -36,7 +36,7 @@ internal object CapabilityCache {
      * @param capabilities A map of capability types to their statuses.
      */
     @JvmSynthetic
-    fun put(id: String, capabilities: Map<CapabilityType, CapabilityStatus>) {
+    internal fun put(id: String, capabilities: Map<CapabilityType, CapabilityStatus>) {
         cache[id] = capabilities
     }
 
@@ -47,13 +47,13 @@ internal object CapabilityCache {
      * @return A map of capability types to their statuses, or `null` if the device is not in the cache.
      */
     @JvmSynthetic
-    fun get(id: String): Map<CapabilityType, CapabilityStatus>? = cache[id]
+    internal fun get(id: String): Map<CapabilityType, CapabilityStatus>? = cache[id]
 
     /**
      * Clears all entries in the capability cache.
      */
     @JvmSynthetic
-    fun reset() {
+    internal fun reset() {
         cache.clear()
     }
 }

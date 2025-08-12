@@ -53,7 +53,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/create-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun createApplicationRequest(application: BasicCreateApplication) {
+    internal suspend fun createApplicationRequest(application: BasicCreateApplication) {
         CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
@@ -69,7 +69,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/list-applications">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun listApplicationsRequest(): List<BasicApplicationResponse> {
+    internal suspend fun listApplicationsRequest(): List<BasicApplicationResponse> {
         return CloudHttpClient.client.get(Paths.getListApplicationsPath()).body()
     }
 
@@ -83,7 +83,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/get-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getApplicationRequest(applicationId: String): BasicApplicationResponse {
+    internal suspend fun getApplicationRequest(applicationId: String): BasicApplicationResponse {
         return CloudHttpClient.client.get(Paths.getApplicationPath(applicationId)).body()
     }
 
@@ -97,7 +97,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationNameRequest(applicationId: String, name: String) {
+    internal suspend fun updateApplicationNameRequest(applicationId: String, name: String) {
         updateApplication(applicationId, UpdateApplicationNameRequest(name))
     }
 
@@ -111,7 +111,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationCompanyNameRequest(applicationId: String, companyName: String) {
+    internal suspend fun updateApplicationCompanyNameRequest(applicationId: String, companyName: String) {
         updateApplication(applicationId, UpdateApplicationCompanyNameRequest(companyName))
     }
 
@@ -125,7 +125,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationMailingAddressRequest(applicationId: String, mailingAddress: String) {
+    internal suspend fun updateApplicationMailingAddressRequest(applicationId: String, mailingAddress: String) {
         updateApplication(applicationId, UpdateApplicationMailingAddressRequest(mailingAddress))
     }
 
@@ -139,7 +139,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationPrivacyPolicyRequest(applicationId: String, privacyPolicy: String) {
+    internal suspend fun updateApplicationPrivacyPolicyRequest(applicationId: String, privacyPolicy: String) {
         updateApplication(applicationId, UpdateApplicationPrivacyPolicyRequest(privacyPolicy))
     }
 
@@ -153,7 +153,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationSupportContactRequest(applicationId: String, supportContact: String) {
+    internal suspend fun updateApplicationSupportContactRequest(applicationId: String, supportContact: String) {
         updateApplication(applicationId, UpdateApplicationSupportContactRequest(supportContact))
     }
 
@@ -167,7 +167,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationAppLinkRequest(applicationId: String, appLink: String) {
+    internal suspend fun updateApplicationAppLinkRequest(applicationId: String, appLink: String) {
         updateApplication(applicationId, UpdateApplicationAppLinkRequest(appLink))
     }
 
@@ -181,7 +181,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationEmailPreferencesRequest(
+    internal suspend fun updateApplicationEmailPreferencesRequest(
         applicationId: String,
         emailPreferences: BasicEmailPreferences
     ) {
@@ -216,7 +216,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/update-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun updateApplicationLogoUrlRequest(applicationId: String, logoUrl: String) {
+    internal suspend fun updateApplicationLogoUrlRequest(applicationId: String, logoUrl: String) {
         updateApplication(applicationId, UpdateApplicationLogoUrlRequest(logoUrl))
     }
 
@@ -243,7 +243,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/delete-application">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun deleteApplicationRequest(applicationId: String) {
+    internal suspend fun deleteApplicationRequest(applicationId: String) {
         CloudHttpClient.client.delete(Paths.getDeleteApplicationPath(applicationId))
     }
 
@@ -257,7 +257,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/get-logo-upload-url">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): BasicGetLogoUploadUrlResponse {
+    internal suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): BasicGetLogoUploadUrlResponse {
         return CloudHttpClient.client.post(Paths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
             setBody(GetLogoUploadUrlRequest(contentType))
@@ -274,7 +274,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/add-auth-key">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun addAuthKeyRequest(applicationId: String, key: BasicAuthKey) {
+    internal suspend fun addAuthKeyRequest(applicationId: String, key: BasicAuthKey) {
         CloudHttpClient.client.post(Paths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())
@@ -294,7 +294,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/add-auth-issuer">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun addAuthIssuerRequest(applicationId: String, url: String) {
+    internal suspend fun addAuthIssuerRequest(applicationId: String, url: String) {
         CloudHttpClient.client.post(Paths.getAddAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddAuthIssuerRequest(url))
@@ -311,7 +311,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/delete-auth-issuer">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun deleteAuthIssuerRequest(applicationId: String, url: String) {
+    internal suspend fun deleteAuthIssuerRequest(applicationId: String, url: String) {
         CloudHttpClient.client.delete(Paths.getDeleteAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(DeleteAuthIssuerRequest(url))
@@ -328,7 +328,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/add-cors-domain">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun addCorsDomainRequest(applicationId: String, url: String) {
+    internal suspend fun addCorsDomainRequest(applicationId: String, url: String) {
         CloudHttpClient.client.post(Paths.getAddCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(AddCorsDomainRequest(url))
@@ -345,7 +345,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/remove-cors-domain">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun removeCorsDomainRequest(applicationId: String, url: String) {
+    internal suspend fun removeCorsDomainRequest(applicationId: String, url: String) {
         CloudHttpClient.client.delete(Paths.getRemoveCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveCorsDomainRequest(url))
@@ -362,7 +362,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/add-application-owner">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun addApplicationOwnerRequest(applicationId: String, userId: String) {
+    internal suspend fun addApplicationOwnerRequest(applicationId: String, userId: String) {
         CloudHttpClient.client.post(Paths.getAddApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddApplicationOwnerRequest(userId))
@@ -379,7 +379,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/remove-application-owner">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun removeApplicationOwnerRequest(applicationId: String, userId: String) {
+    internal suspend fun removeApplicationOwnerRequest(applicationId: String, userId: String) {
         CloudHttpClient.client.delete(Paths.getRemoveApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveApplicationOwnerRequest(userId))
@@ -396,7 +396,7 @@ internal object PlatformClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/get-application-owners-details">API Doc</a>
      */
     @JvmSynthetic
-    suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
+    internal suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
     }
 }
