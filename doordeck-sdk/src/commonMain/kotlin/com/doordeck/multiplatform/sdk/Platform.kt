@@ -29,7 +29,7 @@ enum class PlatformType {
     JS_NODE
 }
 
-@JvmSynthetic
+@get:JvmSynthetic
 internal val JSON = Json {
     encodeDefaults = true
     ignoreUnknownKeys = true
@@ -93,6 +93,7 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
 
     private var _client: HttpClient = clientProvider()
 
+    @get:JvmSynthetic
     val client: HttpClient
         get() = _client
 
