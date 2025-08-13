@@ -6,6 +6,9 @@ import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralK
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import java.io.InputStream
+import java.security.KeyPair
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -15,59 +18,102 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) {
-        return HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image)
-    }
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) = HelperClient
+        .uploadPlatformLogoRequest(
+            applicationId = applicationId.toString(),
+            contentType = contentType,
+            image = image.readBytes()
+        )
 
     /**
      * Async variant of [HelperApi.uploadPlatformLogo] returning [CompletableFuture].
      */
-    fun uploadPlatformLogoAsync(applicationId: String, contentType: String, image: ByteArray): CompletableFuture<Unit> {
-        return completableFuture { uploadPlatformLogo(applicationId, contentType, image) }
+    fun uploadPlatformLogoAsync(
+        applicationId: UUID,
+        contentType: String,
+        image: InputStream
+    ): CompletableFuture<Unit> = completableFuture {
+        uploadPlatformLogo(
+            applicationId = applicationId,
+            contentType = contentType,
+            image = image
+        )
     }
 
     /**
      * @see HelperClient.assistedLoginRequest
      */
-    suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse {
-        return HelperClient.assistedLoginRequest(email, password)
-            .toAssistedLoginResponse()
-    }
+    suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse = HelperClient
+        .assistedLoginRequest(
+            email = email,
+            password = password
+        )
+        .toAssistedLoginResponse()
 
     /**
      * Async variant of [HelperApi.assistedLogin] returning [CompletableFuture].
      */
-    fun assistedLoginAsync(email: String, password: String): CompletableFuture<AssistedLoginResponse> {
-        return completableFuture { assistedLogin(email, password) }
+    fun assistedLoginAsync(
+        email: String,
+        password: String
+    ): CompletableFuture<AssistedLoginResponse> = completableFuture {
+        assistedLogin(
+            email = email,
+            password = password
+        )
     }
 
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    suspend fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): AssistedRegisterEphemeralKeyResponse {
-        return HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey)
-            .toAssistedRegisterEphemeralKeyResponse()
-    }
+    suspend fun assistedRegisterEphemeralKey(
+        keyPair: KeyPair? = null
+    ): AssistedRegisterEphemeralKeyResponse = HelperClient
+        .assistedRegisterEphemeralKeyRequest(
+            publicKey = keyPair?.public?.encoded,
+            privateKey = keyPair?.private?.encoded
+        )
+        .toAssistedRegisterEphemeralKeyResponse()
 
     /**
      * Async variant of [HelperApi.assistedRegisterEphemeralKey] returning [CompletableFuture].
      */
-    fun assistedRegisterEphemeralKeyAsync(publicKey: ByteArray? = null, privateKey: ByteArray? = null): CompletableFuture<AssistedRegisterEphemeralKeyResponse> {
-        return completableFuture { assistedRegisterEphemeralKey(publicKey, privateKey) }
+    fun assistedRegisterEphemeralKeyAsync(
+        keyPair: KeyPair? = null
+    ): CompletableFuture<AssistedRegisterEphemeralKeyResponse> = completableFuture {
+        assistedRegisterEphemeralKey(keyPair)
     }
 
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    suspend fun assistedRegister(email: String, password: String, displayName: String? = null, force: Boolean = false) {
-        return HelperClient.assistedRegisterRequest(email, password, displayName, force)
-    }
+    suspend fun assistedRegister(
+        email: String,
+        password: String,
+        displayName: String? = null,
+        force: Boolean = false
+    ) = HelperClient.assistedRegisterRequest(
+        email = email,
+        password = password,
+        displayName = displayName,
+        force = force
+    )
 
     /**
      * Async variant of [HelperApi.assistedRegister] returning [CompletableFuture].
      */
-    fun assistedRegisterAsync(email: String, password: String, displayName: String? = null, force: Boolean = false): CompletableFuture<Unit> {
-        return completableFuture { assistedRegister(email, password, displayName, force) }
+    fun assistedRegisterAsync(
+        email: String,
+        password: String,
+        displayName: String? = null,
+        force: Boolean = false
+    ): CompletableFuture<Unit> = completableFuture {
+        assistedRegister(
+            email = email,
+            password = password,
+            displayName = displayName,
+            force = force
+        )
     }
 }
 

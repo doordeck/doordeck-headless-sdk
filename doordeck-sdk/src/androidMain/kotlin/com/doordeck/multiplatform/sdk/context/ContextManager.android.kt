@@ -1,121 +1,96 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toCertificate
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPrivateKey
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.toUri
+import com.doordeck.multiplatform.sdk.util.toUuid
+import java.net.URI
+import java.security.KeyPair
+import java.security.PublicKey
+import java.security.cert.X509Certificate
+import java.util.UUID
 
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        Context.setApiEnvironment(apiEnvironment)
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = Context.setApiEnvironment(apiEnvironment)
+
+    fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
+
+    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
+
+    fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
+
+    fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
+
+    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
+
+    fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
+
+    fun setFusionHost(host: URI) = Context.setFusionHost(host.toString())
+
+    fun getFusionHost(): URI = Context.getFusionHost().toUri()
+
+    fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
+
+    fun getFusionAuthToken(): String? = Context.getFusionAuthToken()
+
+    fun setUserId(userId: UUID) = Context.setUserId(userId.toString())
+
+    fun getUserId(): UUID? = Context.getUserId()?.toUuid()
+
+    fun setUserEmail(email: String) = Context.setUserEmail(email)
+
+    fun getUserEmail(): String? = Context.getUserEmail()
+
+    fun setCertificateChain(certificateChain: List<X509Certificate>) = Context.setCertificateChain(
+        certificateChain = certificateChain.map {
+            it.encoded.encodeByteArrayToBase64()
+        }
+    )
+
+    fun getCertificateChain(): List<X509Certificate>? = Context.getCertificateChain()?.map {
+        it.toCertificate()
     }
 
-    fun getApiEnvironment(): ApiEnvironment {
-        return Context.getApiEnvironment()
+    fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
+
+    fun setKeyPair(keyPair: KeyPair) = Context.setKeyPair(
+        publicKey = keyPair.public.encoded,
+        privateKey = keyPair.private.encoded
+    )
+
+    fun getKeyPair(): KeyPair? = Context.getKeyPair()?.let {
+        KeyPair(it.public.toPublicKey(), it.private.toPrivateKey())
     }
 
-    fun setCloudAuthToken(token: String) {
-        Context.setCloudAuthToken(token)
-    }
+    fun setKeyPairVerified(publicKey: PublicKey?) = Context.setKeyPairVerified(publicKey?.encoded)
 
-    fun getCloudAuthToken(): String? {
-        return Context.getCloudAuthToken()
-    }
+    fun isKeyPairVerified(): Boolean = Context.isKeyPairVerified()
 
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return Context.isCloudAuthTokenInvalidOrExpired()
-    }
+    fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
 
-    fun setCloudRefreshToken(token: String) {
-        Context.setCloudRefreshToken(token)
-    }
+    fun setOperationContext(
+        userId: UUID,
+        certificateChain: List<X509Certificate>,
+        keyPair: KeyPair,
+        isKeyPairVerified: Boolean
+    ) = Context.setOperationContext(
+        userId = userId.toString(),
+        certificateChain = certificateChain.map {
+            it.encoded.encodeByteArrayToBase64()
+        },
+        publicKey = keyPair.public.encoded,
+        privateKey = keyPair.private.encoded,
+        isKeyPairVerified = isKeyPairVerified
+    )
 
-    fun getCloudRefreshToken(): String? {
-        return Context.getCloudRefreshToken()
-    }
+    fun getContextState(): ContextState = Context.getContextState()
 
-    fun setFusionHost(host: String) {
-        Context.setFusionHost(host)
-    }
-
-    fun getFusionHost(): String {
-        return Context.getFusionHost()
-    }
-
-    fun setFusionAuthToken(token: String) {
-        Context.setFusionAuthToken(token)
-    }
-
-    fun getFusionAuthToken(): String? {
-        return Context.getFusionAuthToken()
-    }
-
-    fun setUserId(userId: String) {
-        Context.setUserId(userId)
-    }
-
-    fun getUserId(): String? {
-        return Context.getUserId()
-    }
-
-    fun setUserEmail(email: String) {
-        Context.setUserEmail(email)
-    }
-
-    fun getUserEmail(): String? {
-        return Context.getUserEmail()
-    }
-
-    fun setCertificateChain(certificateChain: List<String>) {
-        Context.setCertificateChain(certificateChain)
-    }
-
-    fun getCertificateChain(): List<String>? {
-        return Context.getCertificateChain()
-    }
-
-    fun isCertificateChainInvalidOrExpired(): Boolean {
-        return Context.isCertificateChainInvalidOrExpired()
-    }
-
-    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
-        Context.setKeyPair(publicKey, privateKey)
-    }
-
-    fun getKeyPair(): Crypto.KeyPair? {
-        return Context.getKeyPair()
-    }
-
-    fun setKeyPairVerified(publicKey: ByteArray?) {
-        Context.setKeyPairVerified(publicKey)
-    }
-
-    fun isKeyPairVerified(): Boolean {
-        return Context.isKeyPairVerified()
-    }
-
-    fun isKeyPairValid(): Boolean {
-        return Context.isKeyPairValid()
-    }
-
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
-                            privateKey: ByteArray, isKeyPairVerified: Boolean) {
-        Context.setOperationContext(
-            userId = userId,
-            certificateChain = certificateChain,
-            publicKey = publicKey,
-            privateKey = privateKey,
-            isKeyPairVerified = isKeyPairVerified
-        )
-    }
-
-    fun getContextState(): ContextState {
-        return Context.getContextState()
-    }
-
-    fun clearContext() {
-        Context.clearContext()
-    }
+    fun clearContext() = Context.clearContext()
 }
 
 actual fun contextManager(): ContextManager = ContextManager
