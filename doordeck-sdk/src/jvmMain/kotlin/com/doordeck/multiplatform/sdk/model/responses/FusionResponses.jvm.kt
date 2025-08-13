@@ -80,18 +80,22 @@ data class DiscoveredDeviceResponse(
     val metadata: Map<String, String>
 )
 
+@JvmSynthetic
 internal fun BasicFusionLoginResponse.toFusionLoginResponse(): FusionLoginResponse = FusionLoginResponse(
     authToken = authToken,
 )
 
+@JvmSynthetic
 internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): IntegrationTypeResponse = IntegrationTypeResponse(
     status = status,
 )
 
+@JvmSynthetic
 internal fun BasicDoorStateResponse.toDoorStateResponse(): DoorStateResponse = DoorStateResponse(
     state = state
 )
 
+@JvmSynthetic
 internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> = map { configuration ->
     IntegrationConfigurationResponse(
         doordeck = configuration.doordeck?.toControllerResponse(),
@@ -100,21 +104,25 @@ internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurat
     )
 }
 
+@JvmSynthetic
 internal fun BasicControllerResponse.toControllerResponse(): ControllerResponse = ControllerResponse(
     id = id.toUuid(),
     name = name,
     role = role
 )
 
+@JvmSynthetic
 internal fun BasicServiceStateResponse.toServiceStateResponse(): ServiceStateResponse = ServiceStateResponse(
     state = state
 )
 
+@JvmSynthetic
 internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse = DiscoveredDeviceResponse(
     key = key.toLockControllerResponse(),
     metadata = metadata
 )
 
+@JvmSynthetic
 internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when(this) {
     is BasicAlpetaController -> toAlpetaController()
     is BasicAmagController -> toAmagController()
@@ -137,6 +145,7 @@ internal fun BasicLockController.toLockControllerResponse(): LockControllerRespo
     is BasicZktecoController -> toZktecoController()
 }
 
+@JvmSynthetic
 internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController = FusionOperations.AlpetaController(
     username = username,
     password = password,
@@ -144,6 +153,7 @@ internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.Alpeta
     baseUrl = baseUrl?.toUri()
 )
 
+@JvmSynthetic
 internal fun BasicAmagController.toAmagController(): AmagController = AmagController(
     username = username,
     password = password,
@@ -151,11 +161,13 @@ internal fun BasicAmagController.toAmagController(): AmagController = AmagContro
     baseUrl = baseUrl?.toUri()
 )
 
+@JvmSynthetic
 internal fun BasicAssaAbloyController.toAssaAbloyController(): AssaAbloyController = AssaAbloyController(
     baseUrl = baseUrl.toUri(),
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicAvigilonController.toAvigilonController(): AvigilonController = AvigilonController(
     baseUrl = baseUrl.toUri(),
     username = username,
@@ -163,11 +175,13 @@ internal fun BasicAvigilonController.toAvigilonController(): AvigilonController 
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicAxisController.toAxisController(): AxisController = AxisController(
     baseUrl = baseUrl.toUri(),
     doorIdentifier = doorIdentifier
 )
 
+@JvmSynthetic
 internal fun BasicCCureController.toCCureController(): CCureController = CCureController(
     baseUrl = baseUrl?.toUri(),
     username = username,
@@ -176,16 +190,19 @@ internal fun BasicCCureController.toCCureController(): CCureController = CCureCo
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicDemoController.toDemoController(): DemoController = DemoController(
     port = port
 )
 
+@JvmSynthetic
 internal fun BasicGallagherController.toGallagherController(): GallagherController = GallagherController(
     baseUrl = baseUrl?.toUri(),
     apiKey = apiKey,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicGenetecController.toGenetecController(): GenetecController = GenetecController(
     baseUrl = baseUrl.toUri(),
     username = username,
@@ -193,6 +210,7 @@ internal fun BasicGenetecController.toGenetecController(): GenetecController = G
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicLenelController.toLenelController(): LenelController = LenelController(
     baseUrl = baseUrl.toUri(),
     username = username,
@@ -202,11 +220,13 @@ internal fun BasicLenelController.toLenelController(): LenelController = LenelCo
     readerId = readerId
 )
 
+@JvmSynthetic
 internal fun BasicMitrefinchController.toMitrefinchController(): MitrefinchController = MitrefinchController(
     host = host.toInetAddress(),
     output = output
 )
 
+@JvmSynthetic
 internal fun BasicPaxtonNet2Controller.toPaxtonNet2Controller(): PaxtonNet2Controller = PaxtonNet2Controller(
     host = host.toInetAddress(),
     username = username,
@@ -215,6 +235,7 @@ internal fun BasicPaxtonNet2Controller.toPaxtonNet2Controller(): PaxtonNet2Contr
     output = output
 )
 
+@JvmSynthetic
 internal fun BasicPaxton10Controller.toPaxton10Controller(): Paxton10Controller = Paxton10Controller(
     baseUrl = baseUrl.toUri(),
     username = username,
@@ -222,12 +243,14 @@ internal fun BasicPaxton10Controller.toPaxton10Controller(): Paxton10Controller 
     applianceId = applianceId
 )
 
+@JvmSynthetic
 internal fun BasicIntegraV1Controller.toIntegraV1Controller(): IntegraV1Controller = IntegraV1Controller(
     username = username,
     password = password,
     controllerId = controllerId
 )
 
+@JvmSynthetic
 internal fun BasicIntegraV2Controller.toIntegraV2Controller(): IntegraV2Controller = IntegraV2Controller(
     baseUrl = baseUrl.toUri(),
     sessionId = sessionId,
@@ -236,6 +259,7 @@ internal fun BasicIntegraV2Controller.toIntegraV2Controller(): IntegraV2Controll
     pinCode = pinCode
 )
 
+@JvmSynthetic
 internal fun BasicPacController.toPacController(): PacController = PacController(
     dataSource = FusionOperations.DataSource(
         driverClass = dataSource.driverClass,
@@ -247,6 +271,7 @@ internal fun BasicPacController.toPacController(): PacController = PacController
     controllerSerial = controllerSerial
 )
 
+@JvmSynthetic
 internal fun BasicTdsiExgardeController.toTdsiExgardeController(): FusionOperations.TdsiExgardeController =
     FusionOperations.TdsiExgardeController(
         dbUrl = dbUrl,
@@ -255,6 +280,7 @@ internal fun BasicTdsiExgardeController.toTdsiExgardeController(): FusionOperati
         doorId = doorId
     )
 
+@JvmSynthetic
 internal fun BasicTdsiGardisController.toTdsiGardisController(): TdsiGardisController = TdsiGardisController(
     host = host.toInetAddress(),
     username = username,
@@ -262,6 +288,7 @@ internal fun BasicTdsiGardisController.toTdsiGardisController(): TdsiGardisContr
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun BasicZktecoController.toZktecoController(): ZktecoController = ZktecoController(
     clientSecret = clientSecret,
     doorId = doorId,

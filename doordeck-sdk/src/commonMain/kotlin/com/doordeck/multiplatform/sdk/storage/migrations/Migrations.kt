@@ -1,8 +1,11 @@
 package com.doordeck.multiplatform.sdk.storage.migrations
 
+import kotlin.jvm.JvmSynthetic
+
 /**
  * This value should be updated to match the highest version (toVersion) from the migrations.
  */
+@JvmSynthetic
 internal const val CURRENT_STORAGE_VERSION = 2
 
 /**
@@ -14,12 +17,14 @@ internal object Migrations {
         Migrate1To2
     )
 
-    val migrations: List<StorageMigration>
+    @get:JvmSynthetic
+    internal val migrations: List<StorageMigration>
         get() = _migrations
 
     /**
      * Internal function used in testing to override the migration list.
      */
+    @JvmSynthetic
     internal fun overrideMigrations(list: List<StorageMigration>) {
         _migrations = list
     }

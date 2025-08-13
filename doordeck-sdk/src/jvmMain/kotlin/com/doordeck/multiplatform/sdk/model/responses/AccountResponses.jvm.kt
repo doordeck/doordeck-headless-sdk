@@ -29,11 +29,13 @@ data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     val method: TwoFactorMethod
 )
 
+@JvmSynthetic
 internal fun BasicTokenResponse.toTokenResponse(): TokenResponse = TokenResponse(
     authToken = authToken,
     refreshToken = refreshToken
 )
 
+@JvmSynthetic
 internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsResponse = UserDetailsResponse(
     email = email,
     displayName = displayName,
@@ -41,11 +43,13 @@ internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsRespon
     publicKey = publicKey.toRsaPublicKey()
 )
 
+@JvmSynthetic
 internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
     certificateChain = certificateChain.map { it.toCertificate() },
     userId = userId.toUuid()
 )
 
+@JvmSynthetic
 internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthentication(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
     method = method
 )

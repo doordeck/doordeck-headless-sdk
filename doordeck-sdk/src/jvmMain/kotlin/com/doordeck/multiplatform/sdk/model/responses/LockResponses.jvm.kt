@@ -148,10 +148,12 @@ data class AuditUserResponse(
     val ip: InetAddress? = null
 )
 
+@JvmSynthetic
 internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map { lock ->
     lock.toLockResponse()
 }
 
+@JvmSynthetic
 internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     id = id.toUuid(),
     name = name,
@@ -164,6 +166,7 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     favourite = favourite
 )
 
+@JvmSynthetic
 internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
     unlockTime = unlockTime.toInt().secondsToDuration(),
     permittedAddresses = permittedAddresses.map { it.toInetAddress() },
@@ -176,11 +179,13 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
     capabilities = capabilities
 )
 
+@JvmSynthetic
 internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
     time = time.map { it.toTimeRequirementResponse() },
     location = location?.toLocationRequirementResponse()
 )
 
+@JvmSynthetic
 internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
     start = start.toLocalTime(),
     end = end.toLocalTime(),
@@ -188,6 +193,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     days = days.map { DayOfWeek.valueOf(it.name) }.toEnumSet()
 )
 
+@JvmSynthetic
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
     latitude = latitude,
     longitude = longitude,
@@ -196,6 +202,7 @@ internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): L
     accuracy = accuracy
 )
 
+@JvmSynthetic
 internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
     start = start.toLocalTime(),
     end = end.toLocalTime(),
@@ -204,15 +211,18 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     exceptions = exceptions.map { it.toLocalDate() }
 )
 
+@JvmSynthetic
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
     connected = connected
 )
 
+@JvmSynthetic
 internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
     id = id.toUuid(),
     publicKey = publicKey.toRsaPublicKey()
 )
 
+@JvmSynthetic
 internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
     BatchUserPublicKeyResponse(
         id = user.id.toUuid(),
@@ -223,6 +233,7 @@ internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(
     )
 }
 
+@JvmSynthetic
 internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<ShareableLockResponse> = map { lock ->
     ShareableLockResponse(
         id = lock.id.toUuid(),
@@ -230,6 +241,7 @@ internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<Sh
     )
 }
 
+@JvmSynthetic
 internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResponse> = map { user ->
     UserLockResponse(
         userId = user.userId.toUuid(),
@@ -244,6 +256,7 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResp
     )
 }
 
+@JvmSynthetic
 internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = LockUserResponse(
     userId = userId.toUuid(),
     email = email,
@@ -256,6 +269,7 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
     devices = devices.map { it.toLockUserDetailsResponse() }
 )
 
+@JvmSynthetic
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
     deviceId = deviceId.toUuid(),
     role = role,
@@ -263,6 +277,7 @@ internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserD
     end = end?.toInstant()
 )
 
+@JvmSynthetic
 internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
     AuditResponse(
         deviceId = audit.deviceId.toUuid(),
@@ -275,6 +290,7 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = m
     )
 }
 
+@JvmSynthetic
 internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(
     userId = userId.toUuid(),
     email = email,

@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
@@ -12,6 +11,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the tiles API client.
@@ -27,7 +27,8 @@ internal object TilesClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/get-lock-belonging-to-tile-v3">API Doc</a>
      */
-    suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
+    @JvmSynthetic
+    internal suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
         return CloudHttpClient.client.get(Paths.getLocksBelongingToTilePath(tileId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
@@ -43,8 +44,8 @@ internal object TilesClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/tiles/associate-multiple-locks-to-a-single-tile">API Doc</a>
      */
-    @SiteAdmin
-    suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
+    @JvmSynthetic
+    internal suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
         CloudHttpClient.client.put(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))

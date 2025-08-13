@@ -18,6 +18,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Internal implementation of the accountless API client.
@@ -35,7 +36,8 @@ internal object AccountlessClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/login-v2">API Doc</a>
      */
-    suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
+    @JvmSynthetic
+    internal suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
         return CloudHttpClient.client.post(Paths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
@@ -62,7 +64,8 @@ internal object AccountlessClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/registration">API Doc</a>
      */
-    suspend fun registrationRequest(
+    @JvmSynthetic
+    internal suspend fun registrationRequest(
         email: String,
         password: String,
         displayName: String?,
@@ -97,7 +100,8 @@ internal object AccountlessClient {
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/account/verify-email">API Doc</a>
      */
-    suspend fun verifyEmailRequest(code: String) {
+    @JvmSynthetic
+    internal suspend fun verifyEmailRequest(code: String) {
         return CloudHttpClient.client.put(Paths.getVerifyEmailPath()) {
             addRequestHeaders()
             parameter(Params.CODE, code)
@@ -110,7 +114,8 @@ internal object AccountlessClient {
      * @param email The user's email address.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun passwordResetRequest(email: String) {
+    @JvmSynthetic
+    internal suspend fun passwordResetRequest(email: String) {
         return CloudHttpClient.client.post(Paths.getPasswordResetPath()) {
             addRequestHeaders()
             setBody(PasswordResetRequest(email))
@@ -125,7 +130,8 @@ internal object AccountlessClient {
      * @param password The new user's password.
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
-    suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
+    @JvmSynthetic
+    internal suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
         return CloudHttpClient.client.post(Paths.getPasswordResetVerifyPath()) {
             addRequestHeaders()
             setBody(PasswordResetVerifyRequest(userId, token, password))

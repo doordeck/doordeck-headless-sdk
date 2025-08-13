@@ -26,6 +26,7 @@ data class UserForSiteResponse(
     val orphan: Boolean
 )
 
+@JvmSynthetic
 internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
     SiteResponse(
         id = site.id.toUuid(),
@@ -40,6 +41,7 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
     )
 }
 
+@JvmSynthetic
 internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserForSiteResponse> = map { user ->
     UserForSiteResponse(
         userId = user.userId.toUuid(),

@@ -7,8 +7,10 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import kotlin.jvm.JvmSynthetic
 import kotlin.time.Duration.Companion.days
 
+@get:JvmSynthetic
 internal val MIN_TOKEN_LIFETIME_DAYS = 1.days
 
 internal object JwtUtils {
@@ -26,7 +28,8 @@ internal object JwtUtils {
         }
     }
 
-    fun String.isJwtTokenInvalidOrExpired(): Boolean {
+    @JvmSynthetic
+    internal fun String.isJwtTokenInvalidOrExpired(): Boolean {
         val expiration = getClaims(this)[TOKEN_EXPIRE_AT_FIELD]?.let {
             Instant.fromEpochSeconds(it.toLong())
         }

@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.datetime.Clock
+import kotlin.jvm.JvmSynthetic
 
 /**
  * Checks whether the certificate represented by this Base64-encoded string is invalid or expired
@@ -22,6 +23,7 @@ import kotlinx.datetime.Clock
  *  - `true` If any exception occurs during certificate parsing
  *  - `false` If the certificate has more than [MIN_CERTIFICATE_LIFETIME_DAYS] days remaining before expiration
  */
+@JvmSynthetic
 internal fun String.isCertificateInvalidOrExpired(): Boolean {
     return try {
         // Retrieve the 'Not After' element

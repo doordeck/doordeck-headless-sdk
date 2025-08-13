@@ -31,11 +31,13 @@ actual object CryptoManager {
     private const val RSA_ALGORITHM = "RSA"
     private const val CERTIFICATE_TYPE = "X.509"
 
+    @JvmSynthetic
     internal actual suspend fun initialize() { /** Nothing **/ }
 
     /**
      * @see [CryptoManager.generateRawKeyPair]
      */
+    @JvmSynthetic
     internal actual fun generateRawKeyPair(): Crypto.KeyPair {
         val key = generateKeyPair()
         return Crypto.KeyPair(
@@ -46,28 +48,32 @@ actual object CryptoManager {
 
     fun generateKeyPair(): KeyPair = KeyPairGenerator.getInstance(EDDSA_ALGORITHM)
         .generateKeyPair()
-
+    
+    @JvmSynthetic
     internal fun String.toRsaPublicKey(): PublicKey = try {
         KeyFactory.getInstance(RSA_ALGORITHM)
             .generatePublic(X509EncodedKeySpec(decodeBase64ToByteArray()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $RSA_ALGORITHM public key", exception)
     }
-
+    
+    @JvmSynthetic
     internal fun ByteArray.toPublicKey(): PublicKey = try {
         KeyFactory.getInstance(EDDSA_ALGORITHM)
             .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $EDDSA_ALGORITHM public key", exception)
     }
-
+    
+    @JvmSynthetic
     internal fun ByteArray.toPrivateKey(): PrivateKey = try {
         KeyFactory.getInstance(EDDSA_ALGORITHM)
             .generatePrivate(PKCS8EncodedKeySpec(toPlatformPrivateKey()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $EDDSA_ALGORITHM private key", exception)
     }
-
+    
+    @JvmSynthetic
     internal fun String.toCertificate(): X509Certificate = try {
         CertificateFactory.getInstance(CERTIFICATE_TYPE)
             .generateCertificate(decodeBase64ToByteArray().inputStream()) as X509Certificate
@@ -98,6 +104,7 @@ actual object CryptoManager {
      * @see [CryptoManager.toPlatformPublicKey]
      */
     @Suppress("DUPLICATE_LABEL_IN_WHEN", "KotlinConstantConditions")
+    @JvmSynthetic
     internal actual fun ByteArray.toPlatformPublicKey(): ByteArray = when (size) {
         CRYPTO_KIT_PUBLIC_KEY_SIZE,
         SODIUM_PUBLIC_KEY_SIZE -> PUBLIC_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
@@ -109,6 +116,7 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.toPlatformPrivateKey]
      */
+    @JvmSynthetic
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
         CRYPTO_KIT_PRIVATE_KEY_SIZE,
         SODIUM_PRIVATE_KEY_SIZE -> PRIVATE_KEY_ASN1_HEADER + sliceArray(0 until RAW_KEY_SIZE)
@@ -121,6 +129,7 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.signWithPrivateKey]
      */
+    @JvmSynthetic
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
         Signature.getInstance(EDDSA_ALGORITHM).apply {
             initSign(privateKey.toPlatformPrivateKey().toPrivateKey())
@@ -133,6 +142,7 @@ actual object CryptoManager {
     /**
      * @see [CryptoManager.verifySignature]
      */
+    @JvmSynthetic
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
         val signature = Signature.getInstance(EDDSA_ALGORITHM)
         signature.initVerify(publicKey.toPlatformPublicKey().toPublicKey())

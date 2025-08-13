@@ -12,10 +12,12 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedRegisterEphem
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import kotlin.jvm.JvmSynthetic
 
 internal object HelperClient {
 
-    suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
+    @JvmSynthetic
+    internal suspend fun uploadPlatformLogoRequest(applicationId: String, contentType: String, image: ByteArray) {
         // Generate a new presigned URL
         val url = PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
         // Upload the image into the presigned URL
@@ -44,7 +46,8 @@ internal object HelperClient {
      *      (`AssistedLoginResponse.requiresVerification` is true),
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
-    suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
+    @JvmSynthetic
+    internal suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
         val currentKeyPair = Context.getKeyPair()
         val currentKeyPairVerified = Context.isKeyPairVerified()
         val requiresKeyRegister =
@@ -84,7 +87,8 @@ internal object HelperClient {
      *  (`AssistedRegisterEphemeralKeyResponse.requiresVerification` is true),
      *  the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
-    suspend fun assistedRegisterEphemeralKeyRequest(
+    @JvmSynthetic
+    internal suspend fun assistedRegisterEphemeralKeyRequest(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
     ): BasicAssistedRegisterEphemeralKeyResponse {
@@ -116,7 +120,8 @@ internal object HelperClient {
      *  * Registers a new account using the provided details, including the key pair.
      *  * Adds the key pair to the context manager.
      */
-    suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
+    @JvmSynthetic
+    internal suspend fun assistedRegisterRequest(email: String, password: String, displayName: String?, force: Boolean) {
         // Generate a new cryptographic key pair
         val keyPair = CryptoManager.generateRawKeyPair()
 

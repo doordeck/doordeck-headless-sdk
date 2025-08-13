@@ -2,9 +2,6 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
 
 internal data class BasicTimeRequirement(
     val start: String,
@@ -17,8 +14,8 @@ internal data class BasicLocationRequirement(
     val latitude: Double,
     val longitude: Double,
     val enabled: Boolean = false,
-    val radius: Int = 100,
-    val accuracy: Int = 200
+    val radius: Int,
+    val accuracy: Int
 )
 
 internal data class BasicUnlockBetween(
@@ -72,10 +69,10 @@ internal data class BasicBaseOperation(
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: ByteArray? = null,
     val lockId: String,
-    val notBefore: Long = Clock.System.now().epochSeconds,
-    val issuedAt: Long = Clock.System.now().epochSeconds,
-    val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
-    val jti: String = Uuid.random().toString()
+    val notBefore: Long,
+    val issuedAt: Long,
+    val expiresAt: Long,
+    val jti: String
 )
 
 internal sealed interface BasicOperation
