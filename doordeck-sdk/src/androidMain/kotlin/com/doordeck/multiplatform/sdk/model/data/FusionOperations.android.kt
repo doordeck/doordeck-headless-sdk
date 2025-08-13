@@ -259,13 +259,13 @@ internal fun LenelController.toBasicLenelController(): BasicLenelController = Ba
 
 @JvmSynthetic
 internal fun MitrefinchController.toBasicMitrefinchController(): BasicMitrefinchController = BasicMitrefinchController(
-    host = host.hostAddress,
+    host = host.hostAddress ?: "",
     output = output
 )
 
 @JvmSynthetic
 internal fun PaxtonNet2Controller.toBasicPaxtonNet2Controller(): BasicPaxtonNet2Controller = BasicPaxtonNet2Controller(
-    host = host.hostAddress,
+    host = host.hostAddress ?: "",
     username = username,
     password = password,
     address = address,
@@ -318,7 +318,7 @@ internal fun FusionOperations.TdsiExgardeController.toBasicTdsiExgardeController
 
 @JvmSynthetic
 internal fun TdsiGardisController.toBasicTdsiGardisController(): BasicTdsiGardisController = BasicTdsiGardisController(
-    host = host.hostAddress,
+    host = host.hostAddress ?: "",
     username = username,
     password = password,
     doorId = doorId

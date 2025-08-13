@@ -403,7 +403,7 @@ internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLoc
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        unlockDuration = unlockDuration.toSeconds().toInt()
+        unlockDuration = unlockDuration.seconds.toInt() // toSeconds() -> Call requires API level 31 (current min is 26)
     )
 }
 

@@ -199,7 +199,7 @@ actual object LockOperationsApi {
     ) = LockOperationsClient
         .setLockSettingPermittedAddressesRequest(
             lockId = lockId.toString(),
-            permittedAddresses = permittedAddresses.map { it.hostAddress })
+            permittedAddresses = permittedAddresses.mapNotNull { it.hostAddress })
 
     /**
      * Async variant of [LockOperationsApi.setLockSettingPermittedAddresses] returning [CompletableFuture].
