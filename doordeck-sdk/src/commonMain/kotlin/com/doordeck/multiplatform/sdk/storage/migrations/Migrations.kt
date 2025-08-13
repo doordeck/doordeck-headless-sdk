@@ -18,14 +18,14 @@ internal object Migrations {
     )
 
     @get:JvmSynthetic
-    val migrations: List<StorageMigration>
+    internal val migrations: List<StorageMigration>
         get() = _migrations
 
     /**
      * Internal function used in testing to override the migration list.
      */
     @JvmSynthetic
-    fun overrideMigrations(list: List<StorageMigration>) {
+    internal fun overrideMigrations(list: List<StorageMigration>) {
         _migrations = list
     }
 }
