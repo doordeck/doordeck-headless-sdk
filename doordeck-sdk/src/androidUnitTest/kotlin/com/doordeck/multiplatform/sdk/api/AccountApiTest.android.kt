@@ -8,9 +8,9 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import kotlinx.coroutines.test.runTest
+import java.security.KeyPair
 import kotlin.test.Ignore
 import kotlin.test.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
@@ -53,15 +53,15 @@ class AccountApiTest : IntegrationTest() {
         val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
         // When
-        val result = AccountApi.registerEphemeralKey(publicKey, privateKey)
+        val result = AccountApi.registerEphemeralKey(KeyPair(publicKey, privateKey))
 
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
         assertEquals(result.certificateChain, ContextManager.getCertificateChain())
-        assertContentEquals(publicKey, ContextManager.getKeyPair()?.public)
-        assertContentEquals(privateKey, ContextManager.getKeyPair()?.private)
+        assertEquals(publicKey, ContextManager.getKeyPair()?.public)
+        assertEquals(privateKey, ContextManager.getKeyPair()?.private)
         assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
         assertTrue { ContextManager.isKeyPairVerified() }
     }

@@ -17,27 +17,36 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
+import com.doordeck.multiplatform.sdk.randomLong
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.now
+import com.doordeck.multiplatform.sdk.util.toInetAddress
+import com.doordeck.multiplatform.sdk.util.toLocalTime
+import com.doordeck.multiplatform.sdk.util.toLocalTimeString
+import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import java.net.InetAddress
+import java.security.KeyPair
+import java.time.DayOfWeek
+import java.time.Duration
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import java.util.EnumSet
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
-import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.minutes
 
 class LockOperationsApiTest : IntegrationTest() {
 
@@ -99,7 +108,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
         // Given - shouldSetLockSettingPermittedAddresses
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val addedLockPermittedAddresses = listOf("95.19.38.42")
+        val addedLockPermittedAddresses = listOf("95.19.38.42".toInetAddress())
 
         // When
         LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, addedLockPermittedAddresses)
@@ -110,7 +119,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertContains(addedLockPermittedAddresses, lock.settings.permittedAddresses.first())
 
         // Given - shouldRemoveLockSettingPermittedAddresses
-        val removedLockPermittedAddresses = listOf<String>()
+        val removedLockPermittedAddresses = listOf<InetAddress>()
 
         // When
         LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, removedLockPermittedAddresses)
@@ -138,14 +147,12 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldSetAndRemoveLockSettingTimeRestrictions() = runTest {
         // Given - shouldSetLockSettingTimeRestrictions
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val now = Clock.System.now()
-        val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
-        val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
+        val now = now()
         val addedTimeRestriction = LockOperations.TimeRequirement(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random())
+            start = LocalTime.ofInstant(now.minus(1, ChronoUnit.MINUTES), ZoneId.of("UTC")),
+            end = LocalTime.ofInstant(now.plus(5, ChronoUnit.MINUTES), ZoneId.of("UTC")),
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = EnumSet.of(DayOfWeek.entries.random())
         )
 
         // When
@@ -155,8 +162,8 @@ class LockOperationsApiTest : IntegrationTest() {
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
         assertNotNull(actualTime)
-        assertEquals(addedTimeRestriction.start, actualTime.start)
-        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.start.toLocalTimeString().toLocalTime(), actualTime.start)
+        assertEquals(addedTimeRestriction.end.toLocalTimeString().toLocalTime(), actualTime.end)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
@@ -325,8 +332,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -344,14 +353,18 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
@@ -368,8 +381,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLock
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val shareBaseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -418,8 +433,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         val shareBaseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -491,14 +508,18 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
         val shareLock = LockOperations.ShareLock(
@@ -540,14 +561,18 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given - shouldShareLockUsingContext
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
         val batchShareLock = listOf(
@@ -608,10 +633,12 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
-        val updatedUnlockDuration = randomInt(1, 10)
+        val updatedUnlockDuration = Duration.ofSeconds(randomLong(1, 10))
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -629,7 +656,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
     }
 
     @Test
@@ -637,15 +664,19 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
-        val updatedUnlockDuration = 1
+        val updatedUnlockDuration = Duration.ofSeconds(1)
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
@@ -659,7 +690,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
     }
 
     @Test
@@ -667,17 +698,17 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
-        val now = Clock.System.now()
-        val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
-        val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
+        val now = now()
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            start = LocalTime.ofInstant(now.minus(1, ChronoUnit.MINUTES), ZoneId.of("UTC")),
+            end = LocalTime.ofInstant(now.plus(5, ChronoUnit.MINUTES), ZoneId.of("UTC")),
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = EnumSet.of(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -698,8 +729,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -729,24 +760,28 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
         ).certificateChain
-        val now = Clock.System.now()
-        val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
-        val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
+        val now = now()
+        val min = now.minus(5, ChronoUnit.MINUTES)
+        val max = now.plus(10, ChronoUnit.MINUTES)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            start = LocalTime.ofInstant(min, ZoneId.of("UTC")),
+            end = LocalTime.ofInstant(max, ZoneId.of("UTC")),
+            timezone = TimeZone.UTC.id.toZoneId(),
+            days = EnumSet.of(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            keyPair = KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            ),
             isKeyPairVerified = true
         )
 
@@ -761,8 +796,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end.toLocalTimeString().toLocalTime(), lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -783,9 +818,9 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldGetLockAuditTrail() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds
-        val end = now.epochSeconds
+        val now = now()
+        val start = now.minus(14, ChronoUnit.DAYS)
+        val end = now
 
         // When
         val lockAuditTrail = LockOperationsApi.getLockAuditTrail(PLATFORM_TEST_MAIN_LOCK_ID, start, end)
@@ -798,9 +833,9 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldGetAuditForUser() = runTest {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds
-        val end = now.epochSeconds
+        val now = now()
+        val start = now.minus(14, ChronoUnit.DAYS)
+        val end = now
 
         // When
         val auditForUser = LockOperationsApi.getAuditForUser(PLATFORM_TEST_MAIN_USER_ID, start, end)
@@ -825,7 +860,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 shareLockOperation = LockOperations.ShareLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
-                        targetUserId = randomUuidString(),
+                        targetUserId = randomUuid(),
                         targetUserRole = UserRole.USER,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )
@@ -844,7 +879,7 @@ class LockOperationsApiTest : IntegrationTest() {
             LockOperationsApi.updateSecureSettingUnlockDuration(
                 updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                    unlockDuration = 0
+                    unlockDuration = Duration.ZERO
                 )
             )
         }
@@ -853,10 +888,10 @@ class LockOperationsApiTest : IntegrationTest() {
                 updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockBetween = LockOperations.UnlockBetween(
-                        start = "",
-                        end = "",
-                        timezone = TimeZone.UTC.id,
-                        days = emptySet(),
+                        start = LocalTime.ofInstant(now(), ZoneId.of("UTC")),
+                        end = LocalTime.ofInstant(now(), ZoneId.of("UTC")),
+                        timezone = TimeZone.UTC.id.toZoneId(),
+                        days = EnumSet.noneOf(DayOfWeek::class.java),
                         exceptions = emptyList()
                     )
                 )
