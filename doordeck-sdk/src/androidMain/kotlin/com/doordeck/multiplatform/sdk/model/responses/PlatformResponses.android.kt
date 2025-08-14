@@ -3,9 +3,9 @@ package com.doordeck.multiplatform.sdk.model.responses
 import com.doordeck.multiplatform.sdk.model.common.GrantType
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toJson
-import com.doordeck.multiplatform.sdk.util.toUuid
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUrl
+import com.doordeck.multiplatform.sdk.util.toUuid
 import com.nimbusds.jose.jwk.JWK
 import java.net.URI
 import java.net.URL
