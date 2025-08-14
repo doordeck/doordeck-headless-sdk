@@ -66,7 +66,7 @@ data class UnlockBetweenSettingResponse(
 
 @JsExport
 data class LockStateResponse(
-    val connected: Boolean
+    val connected: Boolean? = null
 )
 
 @JsExport

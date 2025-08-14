@@ -59,7 +59,7 @@ data class UnlockBetweenSettingResponse(
 )
 
 data class LockStateResponse(
-    val connected: Boolean
+    val connected: Boolean? = null
 )
 
 data class UserPublicKeyResponse(

@@ -60,7 +60,7 @@ public class UnlockBetweenSettingResponse
 
 public class LockStateResponse
 {
-    public bool Connected { get; set; }
+    public bool? Connected { get; set; } = null;
 }
 
 public class UserPublicKeyResponse
