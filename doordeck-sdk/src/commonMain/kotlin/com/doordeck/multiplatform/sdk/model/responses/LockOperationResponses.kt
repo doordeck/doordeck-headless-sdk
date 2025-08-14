@@ -11,7 +11,6 @@ import kotlinx.serialization.Serializable
 internal data class BasicLockResponse(
     val id: String,
     val name: String,
-    val colour: String? = null,
     val start: String? = null,
     val end: String? = null,
     val role: UserRole,
