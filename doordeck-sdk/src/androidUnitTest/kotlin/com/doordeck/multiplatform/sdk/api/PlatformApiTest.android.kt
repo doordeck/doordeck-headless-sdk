@@ -6,14 +6,20 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
-import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toUri
+import com.nimbusds.jose.Algorithm
+import com.nimbusds.jose.jwk.Curve
+import com.nimbusds.jose.jwk.ECKey
+import com.nimbusds.jose.jwk.KeyOperation
+import com.nimbusds.jose.jwk.KeyUse
+import com.nimbusds.jose.jwk.OctetKeyPair
+import com.nimbusds.jose.jwk.RSAKey
+import com.nimbusds.jose.util.Base64URL
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,7 +29,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiTest : IntegrationTest() {
-    
+
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
@@ -32,8 +38,8 @@ class PlatformApiTest : IntegrationTest() {
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),
             mailingAddress = randomEmail(),
-            privacyPolicy = randomUrlString(),
-            supportContact = randomUrlString()
+            privacyPolicy = randomUri(),
+            supportContact = randomUri()
         )
 
         // When
@@ -81,7 +87,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
 
         // Given - shouldUpdateApplicationPrivacyPolicy
-        val updatedApplicationPrivacyPolicy = randomUrlString()
+        val updatedApplicationPrivacyPolicy = randomUri()
 
         // When
         PlatformApi.updateApplicationPrivacyPolicy(application.applicationId, updatedApplicationPrivacyPolicy)
@@ -91,7 +97,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
 
         // Given - shouldUpdateApplicationSupportContact
-        val updatedApplicationSupportContact = randomUrlString()
+        val updatedApplicationSupportContact = randomUri()
 
         // When
         PlatformApi.updateApplicationSupportContact(application.applicationId, updatedApplicationSupportContact)
@@ -101,7 +107,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationSupportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationAppLink
-        val updatedApplicationAppLink = randomUrlString()
+        val updatedApplicationAppLink = randomUri()
 
         // When
         PlatformApi.updateApplicationAppLink(application.applicationId, updatedApplicationAppLink)
@@ -118,7 +124,7 @@ class PlatformApiTest : IntegrationTest() {
             secondaryColour = "#000000",
             onlySendEssentialEmails = true,
             callToAction = PlatformOperations.EmailCallToAction(
-                actionTarget = randomUrlString(),
+                actionTarget = randomUri(),
                 headline = "test",
                 actionText = "test"
             )
@@ -139,7 +145,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, application.emailPreferences.callToAction?.actionText)
 
         // Given - shouldUpdateApplicationLogoUrl
-        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
+        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test".toUri()
 
         // When
         PlatformApi.updateApplicationLogoUrl(application.applicationId, updatedApplicationLogoUrl)
@@ -149,7 +155,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addApplicationAuthIssuer = randomUrlString()
+        val addApplicationAuthIssuer = randomUri()
 
         // When
         PlatformApi.addAuthIssuer(application.applicationId, addApplicationAuthIssuer)
@@ -171,7 +177,7 @@ class PlatformApiTest : IntegrationTest() {
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldAddCorsDomain
-        val addedApplicationCorsDomain = randomUrlString()
+        val addedApplicationCorsDomain = randomUri()
 
         // When
         PlatformApi.addCorsDomain(application.applicationId, addedApplicationCorsDomain)
@@ -193,12 +199,22 @@ class PlatformApiTest : IntegrationTest() {
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
         // Given - shouldAddEd25519AuthKey
-        val ed25519Key = PlatformOperations.Ed25519Key(
-            kid = randomUuidString(),
-            use = "sig",
-            alg = "EdDSA",
-            crv = "Ed25519",
-            x = "vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"
+        val ed25519Key = OctetKeyPair(
+            Curve.Ed25519,
+            Base64URL("vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"),
+            KeyUse.SIGNATURE,
+            emptySet<KeyOperation>(),
+            Algorithm.parse("EdDSA"),
+            randomUuidString(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         )
 
         // When
@@ -207,22 +223,28 @@ class PlatformApiTest : IntegrationTest() {
         // Then
         application = PlatformApi.getApplication(application.applicationId)
         val actualEd25519Key = application.authKeys.entries.firstOrNull {
-            it.key == ed25519Key.kid
-        }?.value as? Ed25519KeyResponse
+            it.key == ed25519Key.keyID
+        }?.value as? OctetKeyPair
         assertNotNull(actualEd25519Key)
-        assertEquals(ed25519Key.use, actualEd25519Key.use)
-        assertEquals(ed25519Key.kid, actualEd25519Key.kid)
-        assertEquals(ed25519Key.alg, actualEd25519Key.alg)
-        assertEquals(ed25519Key.crv, actualEd25519Key.crv)
+        assertEquals(ed25519Key.keyUse, actualEd25519Key.keyUse)
+        assertEquals(ed25519Key.keyID, actualEd25519Key.keyID)
+        assertEquals(ed25519Key.algorithm, actualEd25519Key.algorithm)
+        assertEquals(ed25519Key.curve, actualEd25519Key.curve)
         assertEquals(ed25519Key.x, actualEd25519Key.x)
 
         // Given - shouldAddRsaAuthKey
-        val rsaKey = PlatformOperations.RsaKey(
-            kid = randomUuidString(),
-            use = "sig",
-            alg = "RS256",
-            e = "AQAB",
-            n = "7PsoesJRZIBUKN3AlhGCJPflQd08U9n9EsdeQS70Dbr8ce-aIpVjNAWxPaNdddYQJBUcj6wy3jKe8Vzu04tCrfafjBR6Db8pZGhTEjRQP6wQKxuo7GbnqUeCgrbT2cE5W-zRJGX4ImSuaoOyNXuDjpmDA4stWqXrMeDZIUqXcFpcOTMfi-cbSZ0A4fgX43bTCef-noprBtBAig-kaz3W7NFcBSkA3faUdlaJ6Bj9DHpqkQYpUR-MuqmAyGUOli0JY0x6QhoVrNGFQ1ejivbvMH3lkuhrJwJlJEt0wD3JoH0Q03XBKcJSBeUl6pzZV0oD2lNrQIrQdsQ1_0yLUEVVWQ"
+        val rsaKey = RSAKey(
+            Base64URL("7PsoesJRZIBUKN3AlhGCJPflQd08U9n9EsdeQS70Dbr8ce-aIpVjNAWxPaNdddYQJBUcj6wy3jKe8Vzu04tCrfafjBR6Db8pZGhTEjRQP6wQKxuo7GbnqUeCgrbT2cE5W-zRJGX4ImSuaoOyNXuDjpmDA4stWqXrMeDZIUqXcFpcOTMfi-cbSZ0A4fgX43bTCef-noprBtBAig-kaz3W7NFcBSkA3faUdlaJ6Bj9DHpqkQYpUR-MuqmAyGUOli0JY0x6QhoVrNGFQ1ejivbvMH3lkuhrJwJlJEt0wD3JoH0Q03XBKcJSBeUl6pzZV0oD2lNrQIrQdsQ1_0yLUEVVWQ"),
+            Base64URL("AQAB"),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null, null,
+            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("RS256"), randomUuidString(),
+            null, null, null, null, null, null, null, null, null,
         )
 
         // When
@@ -231,23 +253,25 @@ class PlatformApiTest : IntegrationTest() {
         // Then
         application = PlatformApi.getApplication(application.applicationId)
         val actualRsaKey = application.authKeys.entries.firstOrNull {
-            it.key == rsaKey.kid
-        }?.value as? RsaKeyResponse
+            it.key == rsaKey.keyID
+        }?.value as? RSAKey
         assertNotNull(actualRsaKey)
-        assertEquals(rsaKey.use, actualRsaKey.use)
-        assertEquals(rsaKey.kid, actualRsaKey.kid)
-        assertEquals(rsaKey.alg, actualRsaKey.alg)
-        assertEquals(rsaKey.e, actualRsaKey.e)
-        assertEquals(rsaKey.n, actualRsaKey.n)
+        assertEquals(rsaKey.keyUse, actualRsaKey.keyUse)
+        assertEquals(rsaKey.keyID, actualRsaKey.keyID)
+        assertEquals(rsaKey.algorithm, actualRsaKey.algorithm)
+        assertEquals(rsaKey.publicExponent, actualRsaKey.publicExponent)
+        assertEquals(rsaKey.modulus, actualRsaKey.modulus)
 
         // Given - shouldAddEcAuthKey
-        val ecKey = PlatformOperations.EcKey(
-            kid = randomUuidString(),
-            use = "sig",
-            alg = "ES256",
-            crv = "secp256k1",
-            x = "L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA",
-            y = "ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"
+        val ecKey = ECKey(
+            Curve.SECP256K1,
+            Base64URL("L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA"),
+            Base64URL("ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"),
+            KeyUse.SIGNATURE,
+            emptySet<KeyOperation>(),
+            Algorithm.parse("ES256"),
+            randomUuidString(),
+            null, null, null, null, null, null, null, null, null
         )
 
         // When
@@ -256,13 +280,13 @@ class PlatformApiTest : IntegrationTest() {
         // Then
         application = PlatformApi.getApplication(application.applicationId)
         val actualKeyEcKey = application.authKeys.entries.firstOrNull {
-            it.key == ecKey.kid
-        }?.value as? EcKeyResponse
+            it.key == ecKey.keyID
+        }?.value as? ECKey
         assertNotNull(actualKeyEcKey)
-        assertEquals(ecKey.use, actualKeyEcKey.use)
-        assertEquals(ecKey.kid, actualKeyEcKey.kid)
-        assertEquals(ecKey.alg, actualKeyEcKey.alg)
-        assertEquals(ecKey.crv, actualKeyEcKey.crv)
+        assertEquals(ecKey.keyUse, actualKeyEcKey.keyUse)
+        assertEquals(ecKey.keyID, actualKeyEcKey.keyID)
+        assertEquals(ecKey.algorithm, actualKeyEcKey.algorithm)
+        assertEquals(ecKey.curve, actualKeyEcKey.curve)
         assertEquals(ecKey.x, actualKeyEcKey.x)
         assertEquals(ecKey.y, actualKeyEcKey.y)
 
@@ -299,7 +323,7 @@ class PlatformApiTest : IntegrationTest() {
         val url = PlatformApi.getLogoUploadUrl(application.applicationId, contentType)
 
         // Then
-        assertTrue { url.uploadUrl.contains("doordeck-upload") }
+        assertTrue { url.uploadUrl.host.contains("doordeck-upload") }
 
         // Given - shouldDeleteApplication
         // When

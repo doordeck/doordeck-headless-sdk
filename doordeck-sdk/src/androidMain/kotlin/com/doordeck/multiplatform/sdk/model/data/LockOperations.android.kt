@@ -1,33 +1,48 @@
 package com.doordeck.multiplatform.sdk.model.data
 
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.now
+import com.doordeck.multiplatform.sdk.util.toLocalDateString
+import com.doordeck.multiplatform.sdk.util.toLocalTimeString
+import com.doordeck.multiplatform.sdk.util.toWholeSeconds
 import com.doordeck.multiplatform.sdk.util.validateAccuracy
 import com.doordeck.multiplatform.sdk.util.validateLatitude
 import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
-import kotlinx.datetime.Clock
-import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
+import java.net.URI
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.security.cert.X509Certificate
+import java.time.DayOfWeek
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.temporal.ChronoUnit
+import java.util.EnumSet
+import java.util.UUID
+import com.doordeck.multiplatform.sdk.model.common.DayOfWeek as KDayOfWeek
 
 object LockOperations {
 
     data class TimeRequirement(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
-        val timezone: String,
-        val days: Set<DayOfWeek>
+        val start: LocalTime,
+        val end: LocalTime,
+        val timezone: ZoneId,
+        val days: EnumSet<DayOfWeek>
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
-            private var timezone: String? = null
-            private var days: Set<DayOfWeek>? = null
+            private var start: LocalTime? = null
+            private var end: LocalTime? = null
+            private var timezone: ZoneId? = null
+            private var days: EnumSet<DayOfWeek>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
-            fun setTimezone(timezone: String) = apply { this.timezone = timezone }
-            fun setDays(days: Set<DayOfWeek>) = apply { this.days = days }
+            fun setStart(start: LocalTime): Builder = apply { this.start = start }
+            fun setEnd(end: LocalTime): Builder = apply { this.end = end }
+            fun setTimezone(timezone: ZoneId) = apply { this.timezone = timezone }
+            fun setDays(days: EnumSet<DayOfWeek>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
@@ -40,7 +55,7 @@ object LockOperations {
         }
     }
 
-    data class LocationRequirement(
+    data class LocationRequirement @JvmOverloads constructor(
         val latitude: Double,
         val longitude: Double,
         val enabled: Boolean = false,
@@ -79,25 +94,25 @@ object LockOperations {
         }
     }
 
-    data class UnlockBetween(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
-        val timezone: String,
-        val days: Set<DayOfWeek>,
-        val exceptions: List<String>? = null
+    data class UnlockBetween @JvmOverloads constructor(
+        val start: LocalTime,
+        val end: LocalTime,
+        val timezone: ZoneId,
+        val days: EnumSet<DayOfWeek>,
+        val exceptions: List<LocalDate>? = null
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
-            private var timezone: String? = null
-            private var days: Set<DayOfWeek>? = null
-            private var exceptions: List<String>? = null
+            private var start: LocalTime? = null
+            private var end: LocalTime? = null
+            private var timezone: ZoneId? = null
+            private var days: EnumSet<DayOfWeek>? = null
+            private var exceptions: List<LocalDate>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
-            fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
-            fun setDays(days: Set<DayOfWeek>): Builder = apply { this.days = days }
-            fun setExceptions(exceptions: List<String>?): Builder = apply { this.exceptions = exceptions }
+            fun setStart(start: LocalTime): Builder = apply { this.start = start }
+            fun setEnd(end: LocalTime): Builder = apply { this.end = end }
+            fun setTimezone(timezone: ZoneId): Builder = apply { this.timezone = timezone }
+            fun setDays(days: EnumSet<DayOfWeek>): Builder = apply { this.days = days }
+            fun setExceptions(exceptions: List<LocalDate>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
                 return UnlockBetween(
@@ -111,16 +126,16 @@ object LockOperations {
         }
     }
 
-    data class UnlockOperation(
+    data class UnlockOperation @JvmOverloads constructor(
         val baseOperation: BaseOperation,
-        val directAccessEndpoints: List<String>? = null
+        val directAccessEndpoints: List<URI>? = null
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var directAccessEndpoints: List<String>? = null
+            private var directAccessEndpoints: List<URI>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setDirectAccessEndpoints(directAccessEndpoints: List<String>?): Builder = apply { this.directAccessEndpoints = directAccessEndpoints }
+            fun setDirectAccessEndpoints(directAccessEndpoints: List<URI>?): Builder = apply { this.directAccessEndpoints = directAccessEndpoints }
 
             fun build(): UnlockOperation {
                 return UnlockOperation(
@@ -151,25 +166,25 @@ object LockOperations {
         }
     }
 
-    data class ShareLock(
-        val targetUserId: String,
+    data class ShareLock @JvmOverloads constructor(
+        val targetUserId: UUID,
         val targetUserRole: UserRole,
-        val targetUserPublicKey: ByteArray,
-        val start: Int? = null,
-        val end: Int? = null
+        val targetUserPublicKey: PublicKey,
+        val start: Instant? = null,
+        val end: Instant? = null
     ) {
         class Builder {
-            private var targetUserId: String? = null
+            private var targetUserId: UUID? = null
             private var targetUserRole: UserRole? = null
-            private var targetUserPublicKey: ByteArray? = null
-            private var start: Int? = null
-            private var end: Int? = null
+            private var targetUserPublicKey: PublicKey? = null
+            private var start: Instant? = null
+            private var end: Instant? = null
 
-            fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
+            fun setTargetUserId(targetUserId: UUID): Builder = apply { this.targetUserId = targetUserId }
             fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
-            fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
-            fun setStart(start: Int?): Builder = apply { this.start = start }
-            fun setEnd(end: Int?): Builder = apply { this.end = end }
+            fun setTargetUserPublicKey(targetUserPublicKey: PublicKey): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
+            fun setStart(start: Instant?): Builder = apply { this.start = start }
+            fun setEnd(end: Instant?): Builder = apply { this.end = end }
 
             fun build(): ShareLock {
                 return ShareLock(
@@ -205,14 +220,14 @@ object LockOperations {
 
     data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
-        val users: List<String>
+        val users: List<UUID>
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var users: List<String>? = null
+            private var users: List<UUID>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUsers(users: List<String>): Builder = apply { this.users = users }
+            fun setUsers(users: List<UUID>): Builder = apply { this.users = users }
 
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
@@ -225,14 +240,14 @@ object LockOperations {
 
     data class UpdateSecureSettingUnlockDuration(
         val baseOperation: BaseOperation,
-        val unlockDuration: Int
+        val unlockDuration: Duration
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var unlockDuration: Int? = null
+            private var unlockDuration: Duration? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUnlockDuration(unlockDuration: Int): Builder = apply { this.unlockDuration = unlockDuration }
+            fun setUnlockDuration(unlockDuration: Duration): Builder = apply { this.unlockDuration = unlockDuration }
 
             fun build(): UpdateSecureSettingUnlockDuration {
                 return UpdateSecureSettingUnlockDuration(
@@ -243,7 +258,7 @@ object LockOperations {
         }
     }
 
-    data class UpdateSecureSettingUnlockBetween(
+    data class UpdateSecureSettingUnlockBetween @JvmOverloads constructor(
         val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
     ): Operation {
@@ -263,34 +278,34 @@ object LockOperations {
         }
     }
 
-    data class BaseOperation(
-        val userId: String? = null,
-        val userCertificateChain: List<String>? = null,
-        val userPrivateKey: ByteArray? = null,
-        val lockId: String,
-        val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-        val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-        val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
-        val jti: String = Uuid.random().toString()
+    data class BaseOperation @JvmOverloads constructor(
+        val userId: UUID? = null,
+        val userCertificateChain: List<X509Certificate>? = null,
+        val userPrivateKey: PrivateKey? = null,
+        val lockId: UUID,
+        val notBefore: Instant = now(),
+        val issuedAt: Instant = now(),
+        val expiresAt: Instant = now().plus(1, ChronoUnit.MINUTES),
+        val jti: UUID = UUID.randomUUID()
     ) {
         class Builder {
-            private var userId: String? = null
-            private var userCertificateChain: List<String>? = null
-            private var userPrivateKey: ByteArray? = null
-            private var lockId: String? = null
-            private var notBefore: Int = Clock.System.now().epochSeconds.toInt()
-            private var issuedAt: Int = Clock.System.now().epochSeconds.toInt()
-            private var expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt()
-            private var jti: String = Uuid.random().toString()
+            private var userId: UUID? = null
+            private var userCertificateChain: List<X509Certificate>? = null
+            private var userPrivateKey: PrivateKey? = null
+            private var lockId: UUID? = null
+            private var notBefore: Instant = now()
+            private var issuedAt: Instant = now()
+            private var expiresAt: Instant = now().plus(1, ChronoUnit.MINUTES)
+            private var jti: UUID = UUID.randomUUID()
 
-            fun setUserId(userId: String?): Builder = apply { this.userId = userId }
-            fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
-            fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
-            fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
-            fun setNotBefore(notBefore: Int): Builder = apply { this.notBefore = notBefore }
-            fun setIssuedAt(issuedAt: Int): Builder = apply { this.issuedAt = issuedAt }
-            fun setExpiresAt(expiresAt: Int): Builder = apply { this.expiresAt = expiresAt }
-            fun setJti(jti: String): Builder = apply { this.jti = jti }
+            fun setUserId(userId: UUID?): Builder = apply { this.userId = userId }
+            fun setUserCertificateChain(userCertificateChain: List<X509Certificate>?): Builder = apply { this.userCertificateChain = userCertificateChain }
+            fun setUserPrivateKey(userPrivateKey: PrivateKey?): Builder = apply { this.userPrivateKey = userPrivateKey }
+            fun setLockId(lockId: UUID): Builder = apply { this.lockId = lockId }
+            fun setNotBefore(notBefore: Instant): Builder = apply { this.notBefore = notBefore }
+            fun setIssuedAt(issuedAt: Instant): Builder = apply { this.issuedAt = issuedAt }
+            fun setExpiresAt(expiresAt: Instant): Builder = apply { this.expiresAt = expiresAt }
+            fun setJti(jti: UUID): Builder = apply { this.jti = jti }
 
             fun build(): BaseOperation {
                 return BaseOperation(
@@ -310,15 +325,17 @@ object LockOperations {
     sealed interface Operation
 }
 
+@JvmSynthetic
 internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
     BasicTimeRequirement(
-        start = requirement.start,
-        end = requirement.end,
-        timezone = requirement.timezone,
-        days = requirement.days
+        start = requirement.start.toLocalTimeString(),
+        end = requirement.end.toLocalTimeString(),
+        timezone = requirement.timezone.id,
+        days = requirement.days.map { KDayOfWeek.valueOf(it.name) }.toSet()
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): BasicLocationRequirement {
     return BasicLocationRequirement(
         latitude = latitude,
@@ -329,23 +346,26 @@ internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): Ba
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBetween {
     return BasicUnlockBetween(
-        start = start,
-        end = end,
-        timezone = timezone,
-        days = days,
-        exceptions = exceptions
+        start = start.toLocalTimeString(),
+        end = end.toLocalTimeString(),
+        timezone = timezone.id,
+        days = days.map { KDayOfWeek.valueOf(it.name) }.toSet(),
+        exceptions = exceptions?.map { it.toLocalDateString() }
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicUnlockOperation {
     return BasicUnlockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        directAccessEndpoints = directAccessEndpoints
+        directAccessEndpoints = directAccessEndpoints?.map { it.toString() }
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): BasicShareLockOperation {
     return BasicShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -353,16 +373,18 @@ internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): Basi
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     return BasicShareLock(
-        targetUserId = targetUserId,
+        targetUserId = targetUserId.toString(),
         targetUserRole = targetUserRole,
-        targetUserPublicKey = targetUserPublicKey,
-        start = start?.toLong(),
-        end = end?.toLong()
+        targetUserPublicKey = targetUserPublicKey.encoded,
+        start = start?.epochSecond,
+        end = end?.epochSecond
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperation(): BasicBatchShareLockOperation {
     return BasicBatchShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -370,20 +392,23 @@ internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperati
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation {
     return BasicRevokeAccessToLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        users = users
+        users = users.map { it.toString() }
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        unlockDuration = unlockDuration
+        unlockDuration = unlockDuration.toWholeSeconds()
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecureSettingUnlockBetween(): BasicUpdateSecureSettingUnlockBetween {
     return BasicUpdateSecureSettingUnlockBetween(
         baseOperation = baseOperation.toBasicBaseOperation(),
@@ -391,15 +416,16 @@ internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecure
     )
 }
 
+@JvmSynthetic
 internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOperation {
     return BasicBaseOperation(
-        userId = userId,
-        userCertificateChain = userCertificateChain,
-        userPrivateKey = userPrivateKey,
-        lockId = lockId,
-        notBefore = notBefore.toLong(),
-        issuedAt = issuedAt.toLong(),
-        expiresAt = expiresAt.toLong(),
-        jti = jti
+        userId = userId?.toString(),
+        userCertificateChain = userCertificateChain?.map { it.encoded.encodeByteArrayToBase64() },
+        userPrivateKey = userPrivateKey?.encoded,
+        lockId = lockId.toString(),
+        notBefore = notBefore.epochSecond,
+        issuedAt = issuedAt.epochSecond,
+        expiresAt = expiresAt.epochSecond,
+        jti = jti.toString()
     )
 }

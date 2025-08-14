@@ -10,11 +10,13 @@ data class AssistedRegisterEphemeralKeyResponse(
     val requiresRetry: Boolean
 )
 
+@JvmSynthetic
 internal fun BasicAssistedLoginResponse.toAssistedLoginResponse(): AssistedLoginResponse = AssistedLoginResponse(
     requiresVerification = requiresVerification,
     requiresRetry = requiresRetry
 )
 
+@JvmSynthetic
 internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemeralKeyResponse(): AssistedRegisterEphemeralKeyResponse = AssistedRegisterEphemeralKeyResponse(
     requiresVerification = requiresVerification,
     requiresRetry = requiresRetry

@@ -1,89 +1,39 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.toInstant
+import com.doordeck.multiplatform.sdk.util.toJson
+import com.doordeck.multiplatform.sdk.util.toUri
+import com.doordeck.multiplatform.sdk.util.toUrl
+import com.doordeck.multiplatform.sdk.util.toUuid
+import com.nimbusds.jose.jwk.JWK
+import java.net.URI
+import java.net.URL
+import java.time.Instant
+import java.util.UUID
 
 data class ApplicationResponse(
-    val applicationId: String,
+    val applicationId: UUID,
     val name: String,
-    val lastUpdated: Double? = null,
-    val owners: List<String> = emptyList(),
-    val corsDomains: List<String> = emptyList(),
-    val authDomains: List<String> = emptyList(),
-    val logoUrl: String? = null,
-    val privacyPolicy: String? = null,
+    val lastUpdated: Instant? = null,
+    val owners: List<UUID> = emptyList(),
+    val corsDomains: List<URI> = emptyList(),
+    val authDomains: List<URI> = emptyList(),
+    val logoUrl: URI? = null,
+    val privacyPolicy: URI? = null,
     val mailingAddress: String? = null,
     val companyName: String? = null,
-    val supportContact: String? = null,
-    val appLink: String? = null,
+    val supportContact: URI? = null,
+    val appLink: URI? = null,
     val slug: String? = null,
     val emailPreferences: EmailPreferencesResponse,
-    val authKeys: Map<String, AuthKeyResponse>,
-    val oauth: OauthResponse? = null,
+    val authKeys: Map<String, JWK>,
+    val oauth: OauthResponseResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
 
-sealed interface AuthKeyResponse {
-    val kid: String
-    val use: String
-    val alg: String?
-    val ops: List<String>?
-    val x5u: String?
-    val x5t: String?
-    val x5t256: String?
-    val x5c: List<String>?
-    val exp: Int?
-    val nbf: Int?
-    val iat: Int?
-}
-
-data class RsaKeyResponse(
-    override val use: String,
-    override val kid: String,
-    override val alg: String? = null,
-    override val ops: List<String>? = null,
-    override val x5u: String? = null,
-    override val x5t: String? = null,
-    override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
-    val e: String,
-    val n: String
-): AuthKeyResponse
-
-data class EcKeyResponse(
-    override val use: String,
-    override val kid: String,
-    override val alg: String? = null,
-    override val ops: List<String>? = null,
-    override val x5u: String? = null,
-    override val x5t: String? = null,
-    override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
-    val crv: String,
-    val x: String,
-    val y: String
-): AuthKeyResponse
-
-data class Ed25519KeyResponse(
-    override val use: String,
-    override val kid: String,
-    override val alg: String? = null,
-    override val ops: List<String>? = null,
-    override val x5u: String? = null,
-    override val x5t: String? = null,
-    override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
-    val crv: String,
-    val x: String
-): AuthKeyResponse
+@JvmSynthetic
+internal fun BasicAuthKeyResponse.toAuthKey(): JWK = JWK.parse(toJson())
 
 data class EmailPreferencesResponse(
     val senderEmail: String? = null,
@@ -95,19 +45,19 @@ data class EmailPreferencesResponse(
 )
 
 data class EmailCallToActionResponse(
-    val actionTarget: String,
+    val actionTarget: URI,
     val headline: String,
     val actionText: String
 )
 
-data class OauthResponse(
-    val authorizationEndpoint: String,
+data class OauthResponseResponse(
+    val authorizationEndpoint: URI,
     val clientId: String,
     val grantType: GrantType
 )
 
 data class ApplicationOwnerDetailsResponse(
-    val userId: String,
+    val userId: UUID,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean,
@@ -115,82 +65,36 @@ data class ApplicationOwnerDetailsResponse(
 )
 
 data class GetLogoUploadUrlResponse(
-    val uploadUrl: String
+    val uploadUrl: URL
 )
 
+@JvmSynthetic
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
     it.toApplicationResponse()
 }
 
+@JvmSynthetic
 internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
-    applicationId = applicationId,
+    applicationId = applicationId.toUuid(),
     name = name,
-    lastUpdated = lastUpdated,
-    owners = owners,
-    corsDomains = corsDomains,
-    authDomains = authDomains,
-    logoUrl = logoUrl,
-    privacyPolicy = privacyPolicy,
+    lastUpdated = lastUpdated?.toInstant(),
+    owners = owners.map { it.toUuid() },
+    corsDomains = corsDomains.map { it.toUri() },
+    authDomains = authDomains.map { it.toUri() },
+    logoUrl = logoUrl?.toUri(),
+    privacyPolicy = privacyPolicy?.toUri(),
     mailingAddress = mailingAddress,
     companyName = companyName,
-    supportContact = supportContact,
-    appLink = appLink,
+    supportContact = supportContact?.toUri(),
+    appLink = appLink?.toUri(),
     slug = slug,
     emailPreferences = emailPreferences.toEmailPreferencesResponse(),
-    authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toMap(),
+    authKeys = authKeys.map { it.key to it.value.toAuthKey() }.toMap(),
     oauth = oauth?.toOauthResponse(),
     isDoordeckApplication = isDoordeckApplication
 )
 
-internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
-    is BasicRsaKeyResponse -> RsaKeyResponse(
-        use = use,
-        kid = kid,
-        alg = alg,
-        ops = ops,
-        x5u = x5u,
-        x5t = x5t,
-        x5t256 = x5t256,
-        x5c = x5c,
-        exp = exp,
-        nbf = nbf,
-        iat = iat,
-        e = e,
-        n = n
-    )
-    is BasicEcKeyResponse -> EcKeyResponse(
-        use = use,
-        kid = kid,
-        alg = alg,
-        ops = ops,
-        x5u = x5u,
-        x5t = x5t,
-        x5t256 = x5t256,
-        x5c = x5c,
-        exp = exp,
-        nbf = nbf,
-        iat = iat,
-        crv = crv,
-        x = x,
-        y = y
-    )
-    is BasicEd25519KeyResponse -> Ed25519KeyResponse(
-        use = use,
-        kid = kid,
-        alg = alg,
-        ops = ops,
-        x5u = x5u,
-        x5t = x5t,
-        x5t256 = x5t256,
-        x5c = x5c,
-        exp = exp,
-        nbf = nbf,
-        iat = iat,
-        crv = crv,
-        x = x
-    )
-}
-
+@JvmSynthetic
 internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
     senderEmail = senderEmail,
     senderName = senderName,
@@ -200,21 +104,24 @@ internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPr
     callToAction = callToAction?.toEmailCallToActionResponse(),
 )
 
+@JvmSynthetic
 internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
-    actionTarget = actionTarget,
+    actionTarget = actionTarget.toUri(),
     headline = headline,
     actionText = actionText
 )
 
-internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
-    authorizationEndpoint = authorizationEndpoint,
+@JvmSynthetic
+internal fun BasicOauthResponse.toOauthResponse(): OauthResponseResponse = OauthResponseResponse(
+    authorizationEndpoint = authorizationEndpoint.toUri(),
     clientId = clientId,
     grantType = grantType
 )
 
+@JvmSynthetic
 internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
     ApplicationOwnerDetailsResponse(
-        userId = owner.userId,
+        userId = owner.userId.toUuid(),
         email = owner.email,
         displayName = owner.displayName,
         orphan = owner.orphan,
@@ -222,6 +129,7 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
     )
 }
 
+@JvmSynthetic
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
-    uploadUrl = uploadUrl
+    uploadUrl = uploadUrl.toUrl()
 )

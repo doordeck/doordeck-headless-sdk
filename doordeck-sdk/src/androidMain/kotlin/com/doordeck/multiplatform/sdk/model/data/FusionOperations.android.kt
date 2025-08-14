@@ -18,44 +18,46 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import java.net.InetAddress
+import java.net.URI
 
 object FusionOperations {
 
     sealed interface LockController
-    
+
     data class AlpetaController(
         val username: String,
         val password: String,
         val doorId: Long,
-        val baseUrl: String? = null
+        val baseUrl: URI? = null
     ) : LockController
-    
+
     data class AmagController(
         val username: String,
         val password: String,
         val doorId: Int,
-        val baseUrl: String? = null
+        val baseUrl: URI? = null
     ) : LockController
-    
+
     data class AssaAbloyController(
-        val baseUrl: String,
+        val baseUrl: URI,
         val doorId: String
     ) : LockController
 
     data class AvigilonController(
-        val baseUrl: String,
+        val baseUrl: URI,
         val username: String,
         val password: String,
         val doorId: String
     ) : LockController
 
     data class AxisController(
-        val baseUrl: String,
+        val baseUrl: URI,
         val doorIdentifier: String
     ) : LockController
-    
+
     data class CCureController(
-        val baseUrl: String? = null,
+        val baseUrl: URI? = null,
         val username: String,
         val password: String,
         val doorType: String,
@@ -65,22 +67,22 @@ object FusionOperations {
     data class DemoController(
         val port: UShort = 8080u
     ) : LockController
-    
+
     data class GallagherController(
-        val baseUrl: String? = null,
+        val baseUrl: URI? = null,
         val apiKey: String,
         val doorId: String
     ) : LockController
-    
+
     data class GenetecController(
-        val baseUrl: String,
+        val baseUrl: URI,
         val username: String,
         val password: String,
         val doorId: String
     ) : LockController
 
     data class LenelController(
-        val baseUrl: String,
+        val baseUrl: URI,
         val username: String,
         val password: String,
         val directoryId: String,
@@ -89,12 +91,12 @@ object FusionOperations {
     ) : LockController
 
     data class MitrefinchController(
-        val host: String,
+        val host: InetAddress,
         val output: Int
     ) : LockController
 
     data class PaxtonNet2Controller(
-        val host: String,
+        val host: InetAddress,
         val username: String? = null,
         val password: String? = null,
         val address: String,
@@ -102,7 +104,7 @@ object FusionOperations {
     ) : LockController
 
     data class Paxton10Controller(
-        val baseUrl: String,
+        val baseUrl: URI,
         val username: String,
         val password: String,
         val applianceId: Int
@@ -113,9 +115,9 @@ object FusionOperations {
         val password: String,
         val controllerId: Int
     ) : LockController
-    
+
     data class IntegraV2Controller(
-        val baseUrl: String,
+        val baseUrl: URI,
         val sessionId: String,
         val controllerId: Int,
         val cardholderId: Int,
@@ -127,36 +129,37 @@ object FusionOperations {
         val outputChannel: Int,
         val controllerSerial: Int
     ) : LockController
-    
+
     data class DataSource(
         val driverClass: String,
         val url: String,
         val user: String,
         val password: String
     )
-    
+
     data class TdsiExgardeController(
         val dbUrl: String? = null,
         val username: String,
         val password: String,
         val doorId: Int
     ) : LockController
-    
+
     data class TdsiGardisController(
-        val host: String,
+        val host: InetAddress,
         val username: String,
         val password: String,
         val doorId: Int
     ) : LockController
-    
+
     data class ZktecoController(
         val clientSecret: String,
         val doorId: String,
-        val baseUrl: String? = null,
+        val baseUrl: URI? = null,
         val entityType: ZktecoEntityType
     ) : LockController
 }
 
+@JvmSynthetic
 internal fun FusionOperations.LockController.toBasicLockController(): BasicLockController = when(this) {
     is FusionOperations.AlpetaController -> toBasicAlpetaController()
     is AmagController -> toBasicAmagController()
@@ -179,64 +182,74 @@ internal fun FusionOperations.LockController.toBasicLockController(): BasicLockC
     is ZktecoController -> toBasicZktecoController()
 }
 
+@JvmSynthetic
 internal fun FusionOperations.AlpetaController.toBasicAlpetaController(): BasicAlpetaController = BasicAlpetaController(
     username = username,
     password = password,
     doorId = doorId,
-    baseUrl = baseUrl
+    baseUrl = baseUrl?.toString()
 )
 
+@JvmSynthetic
 internal fun AmagController.toBasicAmagController(): BasicAmagController = BasicAmagController(
     username = username,
     password = password,
     doorId = doorId,
-    baseUrl = baseUrl
+    baseUrl = baseUrl?.toString()
 )
 
+@JvmSynthetic
 internal fun AssaAbloyController.toBasicAssaAbloyController(): BasicAssaAbloyController = BasicAssaAbloyController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun AvigilonController.toBasicAvigilonController(): BasicAvigilonController = BasicAvigilonController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     username = username,
     password = password,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun AxisController.toBasicAxisController(): BasicAxisController = BasicAxisController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     doorIdentifier = doorIdentifier
 )
 
+@JvmSynthetic
 internal fun CCureController.toBasicCCureController(): BasicCCureController = BasicCCureController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toString(),
     username = username,
     password = password,
     doorType = doorType,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun DemoController.toBasicDemoController(): BasicDemoController = BasicDemoController(
     port = port
 )
 
+@JvmSynthetic
 internal fun GallagherController.toBasicGallagherController(): BasicGallagherController = BasicGallagherController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toString(),
     apiKey = apiKey,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun GenetecController.toBasicGenetecController(): BasicGenetecController = BasicGenetecController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     username = username,
     password = password,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun LenelController.toBasicLenelController(): BasicLenelController = BasicLenelController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     username = username,
     password = password,
     directoryId = directoryId,
@@ -244,40 +257,46 @@ internal fun LenelController.toBasicLenelController(): BasicLenelController = Ba
     readerId = readerId
 )
 
+@JvmSynthetic
 internal fun MitrefinchController.toBasicMitrefinchController(): BasicMitrefinchController = BasicMitrefinchController(
-    host = host,
+    host = host.hostAddress ?: "",
     output = output
 )
 
+@JvmSynthetic
 internal fun PaxtonNet2Controller.toBasicPaxtonNet2Controller(): BasicPaxtonNet2Controller = BasicPaxtonNet2Controller(
-    host = host,
+    host = host.hostAddress ?: "",
     username = username,
     password = password,
     address = address,
     output = output
 )
 
+@JvmSynthetic
 internal fun Paxton10Controller.toBasicPaxton10Controller(): BasicPaxton10Controller = BasicPaxton10Controller(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     username = username,
     password = password,
     applianceId = applianceId
 )
 
+@JvmSynthetic
 internal fun IntegraV1Controller.toBasicIntegraV1Controller(): BasicIntegraV1Controller = BasicIntegraV1Controller(
     username = username,
     password = password,
     controllerId = controllerId
 )
 
+@JvmSynthetic
 internal fun IntegraV2Controller.toBasicIntegraV2Controller(): BasicIntegraV2Controller = BasicIntegraV2Controller(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toString(),
     sessionId = sessionId,
     controllerId = controllerId,
     cardholderId = cardholderId,
     pinCode = pinCode
 )
 
+@JvmSynthetic
 internal fun PacController.toBasicPacController(): BasicPacController = BasicPacController(
     dataSource = BasicDataSource(
         driverClass = dataSource.driverClass,
@@ -289,6 +308,7 @@ internal fun PacController.toBasicPacController(): BasicPacController = BasicPac
     controllerSerial = controllerSerial
 )
 
+@JvmSynthetic
 internal fun FusionOperations.TdsiExgardeController.toBasicTdsiExgardeController(): BasicTdsiExgardeController = BasicTdsiExgardeController(
     dbUrl = dbUrl,
     username = username,
@@ -296,16 +316,18 @@ internal fun FusionOperations.TdsiExgardeController.toBasicTdsiExgardeController
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun TdsiGardisController.toBasicTdsiGardisController(): BasicTdsiGardisController = BasicTdsiGardisController(
-    host = host,
+    host = host.hostAddress ?: "",
     username = username,
     password = password,
     doorId = doorId
 )
 
+@JvmSynthetic
 internal fun ZktecoController.toBasicZktecoController(): BasicZktecoController = BasicZktecoController(
     clientSecret = clientSecret,
     doorId = doorId,
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toString(),
     entityType = entityType
 )

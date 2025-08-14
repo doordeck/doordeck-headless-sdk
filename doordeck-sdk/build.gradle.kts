@@ -211,6 +211,7 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.security.crypto)
                 implementation(libs.bouncy.castle)
+                implementation(libs.nimbus.jose.jwt)
             }
         }
 

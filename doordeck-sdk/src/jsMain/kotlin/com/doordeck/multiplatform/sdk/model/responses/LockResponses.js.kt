@@ -10,7 +10,6 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 data class LockResponse(
     val id: String,
     val name: String,
-    val colour: String? = null,
     val start: String? = null,
     val end: String? = null,
     val role: UserRole,
@@ -66,7 +65,7 @@ data class UnlockBetweenSettingResponse(
 
 @JsExport
 data class LockStateResponse(
-    val connected: Boolean
+    val connected: Boolean? = null
 )
 
 @JsExport
@@ -150,7 +149,6 @@ internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map 
 internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     id = id,
     name = name,
-    colour = colour,
     start = start,
     end = end,
     role = role,

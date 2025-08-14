@@ -38,8 +38,8 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.toRsaPublicKey()
-    val PLATFORM_TEST_VALID_CERTIFICATE by lazy { TEST_VALID_CERTIFICATE.toCertificate() }
-    val PLATFORM_TEST_EXPIRED_CERTIFICATE by lazy { TEST_EXPIRED_CERTIFICATE.toCertificate() }
+    val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE.toCertificate()
+    val PLATFORM_TEST_EXPIRED_CERTIFICATE = TEST_EXPIRED_CERTIFICATE.toCertificate()
     val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
         it.key.toUri() to TestController(
             type = it.value.type,
@@ -48,7 +48,7 @@ internal object PlatformTestConstants {
     }.toMap()
 
     @Serializable
-    data class TestController(
+    internal data class TestController(
         val type: String,
         val controller: FusionOperations.LockController
     )

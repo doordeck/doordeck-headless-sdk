@@ -1,37 +1,43 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations.CreateApplication
+import com.nimbusds.jose.jwk.ECKey
+import com.nimbusds.jose.jwk.JWK
+import com.nimbusds.jose.jwk.OctetKeyPair
+import com.nimbusds.jose.jwk.RSAKey
+import java.net.URI
 
 object PlatformOperations {
 
-    data class CreateApplication(
+    data class CreateApplication @JvmOverloads constructor(
         val name: String,
         val companyName: String,
         val mailingAddress: String,
-        val privacyPolicy: String? = null,
-        val supportContact: String? = null,
-        val appLink: String? = null,
+        val privacyPolicy: URI? = null,
+        val supportContact: URI? = null,
+        val appLink: URI? = null,
         val emailPreferences: EmailPreferences? = null,
-        val logoUrl: String? = null
+        val logoUrl: URI? = null
     ) {
         class Builder {
             private var name: String? = null
             private var companyName: String? = null
             private var mailingAddress: String? = null
-            private var privacyPolicy: String? = null
-            private var supportContact: String? = null
-            private var appLink: String? = null
+            private var privacyPolicy: URI? = null
+            private var supportContact: URI? = null
+            private var appLink: URI? = null
             private var emailPreferences: EmailPreferences? = null
-            private var logoUrl: String? = null
+            private var logoUrl: URI? = null
 
             fun setName(name: String) = apply { this.name = name }
             fun setCompanyName(companyName: String) = apply { this.companyName = companyName }
             fun setMailingAddress(mailingAddress: String) = apply { this.mailingAddress = mailingAddress }
-            fun setPrivacyPolicy(privacyPolicy: String?) = apply { this.privacyPolicy = privacyPolicy }
-            fun setSupportContact(supportContact: String?) = apply { this.supportContact = supportContact }
-            fun setAppLink(appLink: String?) = apply { this.appLink = appLink }
+            fun setPrivacyPolicy(privacyPolicy: URI?) = apply { this.privacyPolicy = privacyPolicy }
+            fun setSupportContact(supportContact: URI?) = apply { this.supportContact = supportContact }
+            fun setAppLink(appLink: URI?) = apply { this.appLink = appLink }
             fun setEmailPreferences(emailPreferences: EmailPreferences?) = apply { this.emailPreferences = emailPreferences }
-            fun setLogoUrl(logoUrl: String?) = apply { this.logoUrl = logoUrl }
+            fun setLogoUrl(logoUrl: URI?) = apply { this.logoUrl = logoUrl }
 
             fun build(): CreateApplication {
                 return CreateApplication(
@@ -48,7 +54,7 @@ object PlatformOperations {
         }
     }
 
-    data class EmailPreferences(
+    data class EmailPreferences @JvmOverloads constructor(
         val senderEmail: String? = null,
         val senderName: String? = null,
         val primaryColour: String? = null,
@@ -85,16 +91,16 @@ object PlatformOperations {
     }
 
     data class EmailCallToAction(
-        val actionTarget: String,
+        val actionTarget: URI,
         val headline: String,
         val actionText: String
     ) {
         class Builder {
-            private var actionTarget: String? = null
+            private var actionTarget: URI? = null
             private var headline: String? = null
             private var actionText: String? = null
 
-            fun setActionTarget(actionTarget: String) = apply { this.actionTarget = actionTarget }
+            fun setActionTarget(actionTarget: URI) = apply { this.actionTarget = actionTarget }
             fun setHeadline(headline: String) = apply { this.headline = headline }
             fun setActionText(actionText: String) = apply { this.actionText = actionText }
 
@@ -107,168 +113,52 @@ object PlatformOperations {
             }
         }
     }
-
-    sealed interface AuthKey {
-        val kid: String
-        val kty: String
-        val use: String
-        val alg: String?
-    }
-
-    data class RsaKey(
-        override val kty: String = "RSA",
-        override val use: String,
-        override val kid: String,
-        override val alg: String? = null,
-        val e: String,
-        val n: String
-    ): AuthKey {
-        class Builder {
-            private var kty: String = "RSA"
-            private var use: String? = null
-            private var kid: String? = null
-            private var alg: String? = null
-            private var e: String? = null
-            private var n: String? = null
-
-            fun setKty(kty: String) = apply { this.kty = kty }
-            fun setUse(use: String) = apply { this.use = use }
-            fun setKid(kid: String) = apply { this.kid = kid }
-            fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setE(e: String) = apply { this.e = e }
-            fun setN(n: String) = apply { this.n = n }
-
-            fun build(): RsaKey {
-                return RsaKey(
-                    kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
-                    alg = alg,
-                    e = requireNotNull(e),
-                    n = requireNotNull(n)
-                )
-            }
-        }
-    }
-
-    data class EcKey(
-        override val kty: String = "EC",
-        override val use: String,
-        override val kid: String,
-        override val alg: String? = null,
-        val crv: String,
-        val x: String,
-        val y: String
-    ): AuthKey {
-        class Builder {
-            private var kty: String = "EC"
-            private var use: String? = null
-            private var kid: String? = null
-            private var alg: String? = null
-            private var crv: String? = null
-            private var x: String? = null
-            private var y: String? = null
-
-            fun setKty(kty: String) = apply { this.kty = kty }
-            fun setUse(use: String) = apply { this.use = use }
-            fun setKid(kid: String) = apply { this.kid = kid }
-            fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setCrv(crv: String) = apply { this.crv = crv }
-            fun setX(x: String) = apply { this.x = x }
-            fun setY(y: String) = apply { this.y = y }
-
-            fun build(): EcKey {
-                return EcKey(
-                    kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
-                    alg = alg,
-                    crv = requireNotNull(crv),
-                    x = requireNotNull(x),
-                    y = requireNotNull(y)
-                )
-            }
-        }
-    }
-
-    data class Ed25519Key(
-        override val kty: String = "OKP",
-        override val use: String,
-        override val kid: String,
-        override val alg: String? = null,
-        val crv: String,
-        val x: String
-    ): AuthKey {
-        class Builder {
-            private var kty: String = "OKP"
-            private var use: String? = null
-            private var kid: String? = null
-            private var alg: String? = null
-            private var crv: String? = null
-            private var x: String? = null
-
-            fun setKty(kty: String) = apply { this.kty = kty }
-            fun setUse(use: String) = apply { this.use = use }
-            fun setKid(kid: String) = apply { this.kid = kid }
-            fun setAlg(alg: String?) = apply { this.alg = alg }
-            fun setCrv(crv: String) = apply { this.crv = crv }
-            fun setX(x: String) = apply { this.x = x }
-
-            fun build(): Ed25519Key {
-                return Ed25519Key(
-                    kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
-                    alg = alg,
-                    crv = requireNotNull(crv),
-                    x = requireNotNull(x)
-                )
-            }
-        }
-    }
 }
 
+@JvmSynthetic
 internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplication {
     return BasicCreateApplication(
         name = name,
         companyName = companyName,
         mailingAddress = mailingAddress,
-        privacyPolicy = privacyPolicy,
-        supportContact = supportContact,
-        appLink = appLink,
+        privacyPolicy = privacyPolicy?.toString(),
+        supportContact = supportContact?.toString(),
+        appLink = appLink?.toString(),
         emailPreferences = emailPreferences?.toBasicEmailPreferences(),
-        logoUrl = logoUrl
+        logoUrl = logoUrl?.toString()
     )
 }
 
-internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
-    is PlatformOperations.RsaKey -> BasicRsaKey(
-        kty = kty,
-        use = use,
-        kid = kid,
-        alg = alg,
-        e = e,
-        n = n
-    )
-    is PlatformOperations.EcKey -> BasicEcKey(
-        kty = kty,
-        use = use,
-        kid = kid,
-        alg = alg,
-        crv = crv,
-        x = x,
-        y = y
-    )
-    is PlatformOperations.Ed25519Key -> BasicEd25519Key(
-        kty = kty,
-        use = use,
-        kid = kid,
-        alg = alg,
-        crv = crv,
-        x = x
-    )
+@JvmSynthetic
+internal fun JWK.toBasicAuthKey(): BasicAuthKey {
+    return when(this) {
+        is ECKey -> BasicEcKey(
+            use = keyUse.value,
+            kid = keyID,
+            alg = algorithm.name,
+            crv = curve.name,
+            x = x.toString(),
+            y = y.toString()
+        )
+        is RSAKey -> BasicRsaKey(
+            use = keyUse.value,
+            kid = keyID,
+            alg = algorithm.name,
+            e = publicExponent.toString(),
+            n = modulus.toString()
+        )
+        is OctetKeyPair -> BasicEd25519Key(
+            use = keyUse.value,
+            kid = keyID,
+            alg = algorithm.name,
+            crv = curve.name,
+            x = x.toString()
+        )
+        else -> throw SdkException("Unknown key type")
+    }
 }
 
+@JvmSynthetic
 internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): BasicEmailPreferences {
     return BasicEmailPreferences(
         senderEmail = senderEmail,
@@ -280,9 +170,10 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
     )
 }
 
+@JvmSynthetic
 internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
     return BasicEmailCallToAction(
-        actionTarget = actionTarget,
+        actionTarget = actionTarget.toString(),
         headline = headline,
         actionText = actionText
     )

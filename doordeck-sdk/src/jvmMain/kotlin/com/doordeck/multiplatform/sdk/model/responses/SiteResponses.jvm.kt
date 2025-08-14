@@ -8,11 +8,9 @@ import java.util.UUID
 data class SiteResponse(
     val id: UUID,
     val name: String,
-    val colour: String,
     val longitude: Double,
     val latitude: Double,
     val radius: Int,
-    val passBackground: String,
     val created: Instant,
     val updated: Instant
 )
@@ -31,11 +29,9 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
     SiteResponse(
         id = site.id.toUuid(),
         name = site.name,
-        colour = site.colour,
         longitude = site.longitude,
         latitude = site.latitude,
         radius = site.radius,
-        passBackground = site.passBackground,
         created = site.created.toInstant(),
         updated = site.updated.toInstant()
     )

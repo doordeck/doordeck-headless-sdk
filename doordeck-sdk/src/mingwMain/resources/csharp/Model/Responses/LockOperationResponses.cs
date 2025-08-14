@@ -4,7 +4,6 @@ public class LockResponse
 {
     public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public string? Colour { get; set; } = null;
     public string? Start { get; set; } = null;
     public string? End { get; set; } = null;
     public UserRole Role { get; set; }
@@ -60,7 +59,7 @@ public class UnlockBetweenSettingResponse
 
 public class LockStateResponse
 {
-    public bool Connected { get; set; }
+    public bool? Connected { get; set; } = null;
 }
 
 public class UserPublicKeyResponse

@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.exceptions.MissingAndroidContextException
 import com.russhwolf.settings.SharedPreferencesSettings
 
+@JvmSynthetic
 internal actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage {
     val context = applicationContext?.get()
         ?: throw MissingAndroidContextException("Android context is missing")
