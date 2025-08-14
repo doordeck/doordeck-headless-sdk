@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.now
 import com.doordeck.multiplatform.sdk.util.toLocalDateString
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
+import com.doordeck.multiplatform.sdk.util.toWholeSeconds
 import com.doordeck.multiplatform.sdk.util.validateAccuracy
 import com.doordeck.multiplatform.sdk.util.validateLatitude
 import com.doordeck.multiplatform.sdk.util.validateLongitude
@@ -403,7 +404,7 @@ internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLoc
 internal fun LockOperations.UpdateSecureSettingUnlockDuration.toBasicUpdateSecureSettingUnlockDuration(): BasicUpdateSecureSettingUnlockDuration {
     return BasicUpdateSecureSettingUnlockDuration(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        unlockDuration = unlockDuration.seconds.toInt() // toSeconds() -> Call requires API level 31 (current min is 26)
+        unlockDuration = unlockDuration.toWholeSeconds()
     )
 }
 

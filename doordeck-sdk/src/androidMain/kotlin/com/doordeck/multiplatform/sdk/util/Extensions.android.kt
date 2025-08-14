@@ -60,6 +60,9 @@ internal fun LocalDate.toLocalDateString(format: DateTimeFormatter = DATE_FORMAT
 internal fun Int.secondsToDuration(): Duration = Duration.ofSeconds(toLong())
 
 @JvmSynthetic
+internal fun Duration.toWholeSeconds(): Int = seconds.toInt()
+
+@JvmSynthetic
 internal fun String.toUri(): URI = URI.create(this)
 
 @JvmSynthetic
