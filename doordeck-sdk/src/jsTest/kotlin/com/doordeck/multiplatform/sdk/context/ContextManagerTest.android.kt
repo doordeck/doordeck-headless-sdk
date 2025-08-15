@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_EXPIRE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_VALID_CERTIFICATE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_JWT
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomEmail
@@ -15,6 +16,7 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlinx.coroutines.test.runTest
+import kotlin.js.collections.toList
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -34,7 +36,7 @@ class ContextManagerTest : IntegrationTest() {
         val fusionAuthToken = randomString()
         val userId = randomUuidString()
         val email = randomEmail()
-        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val certificateChain = jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
         val keyPairVerified = keyPair.public
         val settings = DefaultSecureStorage(MemorySettings())
@@ -61,7 +63,7 @@ class ContextManagerTest : IntegrationTest() {
         assertEquals(apiEnvironment, ContextManager.getApiEnvironment())
         assertEquals(userId, ContextManager.getUserId())
         assertEquals(email, ContextManager.getUserEmail())
-        assertContentEquals(certificateChain, ContextManager.getCertificateChain())
+        assertContentEquals(certificateChain.toList(), ContextManager.getCertificateChain()?.toList())
         assertContentEquals(keyPair.public, ContextManager.getKeyPair()?.public)
         assertContentEquals(keyPair.private, ContextManager.getKeyPair()?.private)
         assertTrue { ContextManager.isKeyPairVerified() }
@@ -81,7 +83,7 @@ class ContextManagerTest : IntegrationTest() {
         val fusionAuthToken = randomString()
         val userId = randomUuidString()
         val email = randomEmail()
-        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val certificateChain = jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
         val keyPairVerified = keyPair.public
         ContextManager.apply {
@@ -117,7 +119,7 @@ class ContextManagerTest : IntegrationTest() {
     fun shouldStoreOperationContext() = runTest {
         // Given
         val userId = randomUuidString()
-        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val certificateChain = jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
         val settings = DefaultSecureStorage(MemorySettings())
         Context.setSecureStorageImpl(settings)
@@ -130,7 +132,7 @@ class ContextManagerTest : IntegrationTest() {
 
         // Then
         assertEquals(userId, ContextManager.getUserId())
-        assertContentEquals(certificateChain, ContextManager.getCertificateChain())
+        assertContentEquals(certificateChain.toList(), ContextManager.getCertificateChain()?.toList())
         assertContentEquals(keyPair.public, ContextManager.getKeyPair()?.public)
         assertContentEquals(keyPair.private, ContextManager.getKeyPair()?.private)
     }
@@ -269,7 +271,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
-        ContextManager.setCertificateChain(listOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
+        ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
 
         // When
         val result = ContextManager.getContextState()
@@ -285,7 +287,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
-        ContextManager.setCertificateChain(listOf(PLATFORM_TEST_VALID_CERTIFICATE))
+        ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE))
 
         // When
         val result = ContextManager.getContextState()
