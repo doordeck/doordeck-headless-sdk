@@ -16,29 +16,56 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<dynamic> {
-        return promise { HelperClient.uploadPlatformLogoRequest(applicationId, contentType, image) }
+    fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<dynamic> = promise {
+        HelperClient.uploadPlatformLogoRequest(
+            applicationId = applicationId,
+            contentType = contentType,
+            image = image
+        )
     }
 
     /**
      * @see HelperClient.assistedLoginRequest
      */
-    fun assistedLogin(email: String, password: String): Promise<AssistedLoginResponse> {
-        return promise { HelperClient.assistedLoginRequest(email, password).toAssistedLoginResponse() }
+    fun assistedLogin(email: String, password: String): Promise<AssistedLoginResponse> = promise {
+        HelperClient
+            .assistedLoginRequest(
+                email = email,
+                password = password
+            )
+            .toAssistedLoginResponse()
     }
 
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    fun assistedRegisterEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): Promise<AssistedRegisterEphemeralKeyResponse> {
-        return promise { HelperClient.assistedRegisterEphemeralKeyRequest(publicKey, privateKey).toAssistedRegisterEphemeralKeyResponse() }
+    fun assistedRegisterEphemeralKey(
+        publicKey: ByteArray? = null,
+        privateKey: ByteArray? = null
+    ): Promise<AssistedRegisterEphemeralKeyResponse> = promise {
+        HelperClient
+            .assistedRegisterEphemeralKeyRequest(
+                publicKey = publicKey,
+                privateKey = privateKey
+            )
+            .toAssistedRegisterEphemeralKeyResponse()
     }
 
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    fun assistedRegister(email: String, password: String, displayName: String? = null, force: Boolean = false): Promise<dynamic> {
-        return promise { HelperClient.assistedRegisterRequest(email, password, displayName, force) }
+    fun assistedRegister(
+        email: String,
+        password: String,
+        displayName: String? = null,
+        force: Boolean = false
+    ): Promise<dynamic> = promise {
+        HelperClient.assistedRegisterRequest(
+            email = email,
+            password = password,
+            displayName = displayName,
+            force = force
+        )
     }
 }
 
