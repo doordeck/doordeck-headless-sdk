@@ -1,15 +1,18 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.emptyJsArray
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
 
 @JsExport
 data class ApplicationResponse(
     val applicationId: String,
     val name: String,
     val lastUpdated: Double? = null,
-    val owners: List<String> = emptyList(),
-    val corsDomains: List<String> = emptyList(),
-    val authDomains: List<String> = emptyList(),
+    val owners: JsArray<String> = emptyJsArray(),
+    val corsDomains: JsArray<String> = emptyJsArray(),
+    val authDomains: JsArray<String> = emptyJsArray(),
     val logoUrl: String? = null,
     val privacyPolicy: String? = null,
     val mailingAddress: String? = null,
@@ -28,11 +31,11 @@ sealed interface AuthKeyResponse {
     val kid: String
     val use: String
     val alg: String?
-    val ops: List<String>?
+    val ops: JsArray<String>?
     val x5u: String?
     val x5t: String?
     val x5t256: String?
-    val x5c: List<String>?
+    val x5c: JsArray<String>?
     val exp: Int?
     val nbf: Int?
     val iat: Int?
@@ -43,11 +46,11 @@ data class RsaKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    override val ops: List<String>? = null,
+    override val ops: JsArray<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
+    override val x5c: JsArray<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
@@ -60,11 +63,11 @@ data class EcKeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    override val ops: List<String>? = null,
+    override val ops: JsArray<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
+    override val x5c: JsArray<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
@@ -78,11 +81,11 @@ data class Ed25519KeyResponse(
     override val use: String,
     override val kid: String,
     override val alg: String? = null,
-    override val ops: List<String>? = null,
+    override val ops: JsArray<String>? = null,
     override val x5u: String? = null,
     override val x5t: String? = null,
     override val x5t256: String? = null,
-    override val x5c: List<String>? = null,
+    override val x5c: JsArray<String>? = null,
     override val exp: Int? = null,
     override val nbf: Int? = null,
     override val iat: Int? = null,
@@ -128,17 +131,17 @@ data class GetLogoUploadUrlResponse(
     val uploadUrl: String
 )
 
-internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
+internal fun List<BasicApplicationResponse>.toApplicationResponse(): JsArray<ApplicationResponse> = map {
     it.toApplicationResponse()
-}
+}.toJsArray()
 
 internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
     applicationId = applicationId,
     name = name,
     lastUpdated = lastUpdated,
-    owners = owners,
-    corsDomains = corsDomains,
-    authDomains = authDomains,
+    owners = owners.toJsArray(),
+    corsDomains = corsDomains.toJsArray(),
+    authDomains = authDomains.toJsArray(),
     logoUrl = logoUrl,
     privacyPolicy = privacyPolicy,
     mailingAddress = mailingAddress,
@@ -157,11 +160,11 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        ops = ops,
+        ops = ops?.toJsArray(),
         x5u = x5u,
         x5t = x5t,
         x5t256 = x5t256,
-        x5c = x5c,
+        x5c = x5c?.toJsArray(),
         exp = exp,
         nbf = nbf,
         iat = iat,
@@ -172,11 +175,11 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        ops = ops,
+        ops = ops?.toJsArray(),
         x5u = x5u,
         x5t = x5t,
         x5t256 = x5t256,
-        x5c = x5c,
+        x5c = x5c?.toJsArray(),
         exp = exp,
         nbf = nbf,
         iat = iat,
@@ -188,11 +191,11 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         use = use,
         kid = kid,
         alg = alg,
-        ops = ops,
+        ops = ops?.toJsArray(),
         x5u = x5u,
         x5t = x5t,
         x5t256 = x5t256,
-        x5c = x5c,
+        x5c = x5c?.toJsArray(),
         exp = exp,
         nbf = nbf,
         iat = iat,
@@ -222,7 +225,7 @@ internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse
     grantType = grantType
 )
 
-internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
+internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): JsArray<ApplicationOwnerDetailsResponse> = map { owner ->
     ApplicationOwnerDetailsResponse(
         userId = owner.userId,
         email = owner.email,
@@ -230,7 +233,7 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
         orphan = owner.orphan,
         foreign = owner.foreign
     )
-}
+}.toJsArray()
 
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
     uploadUrl = uploadUrl

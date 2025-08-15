@@ -14,6 +14,7 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
+import kotlin.js.collections.JsArray
 
 /**
  * Platform-specific implementations of platform-related API calls.
@@ -32,7 +33,7 @@ actual object PlatformApi {
      * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
-    fun listApplications(): Promise<List<ApplicationResponse>> {
+    fun listApplications(): Promise<JsArray<ApplicationResponse>> {
         return promise { PlatformClient.listApplicationsRequest().toApplicationResponse() }
     }
 
@@ -184,7 +185,7 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(applicationId: String): Promise<List<ApplicationOwnerDetailsResponse>> {
+    fun getApplicationOwnersDetails(applicationId: String): Promise<JsArray<ApplicationOwnerDetailsResponse>> {
         return promise { PlatformClient.getApplicationOwnersDetailsRequest(applicationId).toApplicationOwnerDetailsResponse() }
     }
 }

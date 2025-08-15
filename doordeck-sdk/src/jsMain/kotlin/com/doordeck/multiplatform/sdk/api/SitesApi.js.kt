@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
+import kotlin.js.collections.JsArray
 
 /**
  * Platform-specific implementations of sites-related API calls.
@@ -18,22 +19,25 @@ actual object SitesApi {
     /**
      * @see SitesClient.listSitesRequest
      */
-    fun listSites(): Promise<List<SiteResponse>> {
-        return promise { SitesClient.listSitesRequest().toSiteResponse() }
+    fun listSites(): Promise<JsArray<SiteResponse>> = promise {
+        SitesClient.listSitesRequest()
+            .toSiteResponse()
     }
 
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
-    fun getLocksForSite(siteId: String): Promise<List<SiteLocksResponse>> {
-        return promise { SitesClient.getLocksForSiteRequest(siteId).toLockResponse() }
+    fun getLocksForSite(siteId: String): Promise<JsArray<SiteLocksResponse>> = promise {
+        SitesClient.getLocksForSiteRequest(siteId)
+            .toLockResponse()
     }
 
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
-    fun getUsersForSite(siteId: String): Promise<List<UserForSiteResponse>> {
-        return promise { SitesClient.getUsersForSiteRequest(siteId).toUserForSiteResponse() }
+    fun getUsersForSite(siteId: String): Promise<JsArray<UserForSiteResponse>> = promise {
+        SitesClient.getUsersForSiteRequest(siteId)
+            .toUserForSiteResponse()
     }
 }
 

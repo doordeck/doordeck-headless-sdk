@@ -3,6 +3,9 @@ package com.doordeck.multiplatform.sdk.context
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
+import kotlin.js.collections.toList
 
 @JsExport
 actual object ContextManager {
@@ -67,12 +70,12 @@ actual object ContextManager {
         return Context.getUserEmail()
     }
 
-    fun setCertificateChain(certificateChain: List<String>) {
-        Context.setCertificateChain(certificateChain)
+    fun setCertificateChain(certificateChain: JsArray<String>) {
+        Context.setCertificateChain(certificateChain.toList())
     }
 
-    fun getCertificateChain(): List<String>? {
-        return Context.getCertificateChain()
+    fun getCertificateChain(): JsArray<String>? {
+        return Context.getCertificateChain()?.toJsArray()
     }
 
     fun isCertificateChainInvalidOrExpired(): Boolean {
@@ -99,11 +102,11 @@ actual object ContextManager {
         return Context.isKeyPairValid()
     }
 
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
+    fun setOperationContext(userId: String, certificateChain: JsArray<String>, publicKey: ByteArray,
                             privateKey: ByteArray, isKeyPairVerified: Boolean) {
         Context.setOperationContext(
             userId = userId,
-            certificateChain = certificateChain,
+            certificateChain = certificateChain.toList(),
             publicKey = publicKey,
             privateKey = privateKey,
             isKeyPairVerified = isKeyPairVerified

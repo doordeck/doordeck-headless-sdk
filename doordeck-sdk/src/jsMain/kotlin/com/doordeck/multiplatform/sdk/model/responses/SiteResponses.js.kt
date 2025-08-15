@@ -1,5 +1,9 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsReadonlyArray
+
 @JsExport
 data class SiteResponse(
     val id: String,
@@ -21,7 +25,7 @@ data class UserForSiteResponse(
     val orphan: Boolean
 )
 
-internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
+internal fun List<BasicSiteResponse>.toSiteResponse(): JsArray<SiteResponse> = map { site ->
     SiteResponse(
         id = site.id,
         name = site.name,
@@ -31,14 +35,14 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
         created = site.created,
         updated = site.updated
     )
-}
+}.toJsArray()
 
-internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserForSiteResponse> = map { user ->
+internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): JsArray<UserForSiteResponse> = map { user ->
     UserForSiteResponse(
         userId = user.userId,
         email = user.email,
         displayName = user.displayName,
         orphan = user.orphan
     )
-}
+}.toJsArray()
 

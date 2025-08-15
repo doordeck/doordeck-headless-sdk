@@ -14,6 +14,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toIntegrationConfiguration
 import com.doordeck.multiplatform.sdk.model.responses.toIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
+import kotlin.js.collections.JsArray
 
 /**
  * Platform-specific implementations of fusion-related API calls.
@@ -46,7 +47,7 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
-    fun getIntegrationConfiguration(type: String): Promise<List<IntegrationConfigurationResponse>> {
+    fun getIntegrationConfiguration(type: String): Promise<JsArray<IntegrationConfigurationResponse>> {
         return promise {
             FusionClient.getIntegrationConfigurationRequest(type)
                 .toIntegrationConfigurationResponse()
