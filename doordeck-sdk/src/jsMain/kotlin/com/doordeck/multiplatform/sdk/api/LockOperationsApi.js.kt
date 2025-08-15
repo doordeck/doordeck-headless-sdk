@@ -39,8 +39,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getSingleLockRequest
      */
     fun getSingleLock(lockId: String): Promise<LockResponse> = promise {
-        LockOperationsClient
-            .getSingleLockRequest(lockId)
+        LockOperationsClient.getSingleLockRequest(lockId)
             .toLockResponse()
     }
 
@@ -274,8 +273,7 @@ actual object LockOperationsApi {
     fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): Promise<dynamic> = promise {
         LockOperationsClient
             .batchShareLockRequest(
-                batchShareLockOperation
-                    .toBasicBatchShareLockOperation()
+                batchShareLockOperation = batchShareLockOperation.toBasicBatchShareLockOperation()
             )
     }
 
@@ -287,8 +285,7 @@ actual object LockOperationsApi {
     ): Promise<dynamic> = promise {
         LockOperationsClient
             .revokeAccessToLockRequest(
-                revokeAccessToLockOperation
-                    .toBasicRevokeAccessToLockOperation()
+                revokeAccessToLockOperation = revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation()
             )
     }
 
@@ -300,7 +297,7 @@ actual object LockOperationsApi {
     ): Promise<dynamic> = promise {
         LockOperationsClient
             .updateSecureSettingUnlockDurationRequest(
-                updateSecureSettingUnlockDuration
+                updateSecureSettingUnlockDuration = updateSecureSettingUnlockDuration
                     .toBasicUpdateSecureSettingUnlockDuration()
             )
     }
@@ -313,7 +310,7 @@ actual object LockOperationsApi {
     ): Promise<dynamic> = promise {
         LockOperationsClient
             .updateSecureSettingUnlockBetweenRequest(
-                updateSecureSettingUnlockBetween
+                updateSecureSettingUnlockBetween = updateSecureSettingUnlockBetween
                     .toBasicUpdateSecureSettingUnlockBetween()
             )
     }

@@ -105,8 +105,7 @@ actual object AccountApi {
      * @see AccountClient.getUserDetailsRequest
      */
     fun getUserDetails(): Promise<UserDetailsResponse> = promise {
-        AccountClient
-            .getUserDetailsRequest()
+        AccountClient.getUserDetailsRequest()
             .toUserDetailsResponse()
     }
 
