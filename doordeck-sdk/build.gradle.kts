@@ -180,6 +180,7 @@ kotlin {
                 optIn("kotlinx.cinterop.BetaInteropApi")
                 optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
+                optIn("kotlin.time.ExperimentalTime")
             }
         }
 

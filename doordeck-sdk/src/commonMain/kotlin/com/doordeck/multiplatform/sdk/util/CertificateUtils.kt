@@ -6,8 +6,8 @@ import at.asitplus.signum.indispensable.asn1.encoding.parse
 import com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import kotlinx.datetime.Clock
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Clock
 
 /**
  * Checks whether the certificate represented by this Base64-encoded string is invalid or expired
