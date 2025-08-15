@@ -38,9 +38,7 @@ actual object CryptoManager {
         )
     }
 
-    fun generateKeyPair(): Crypto.KeyPair {
-        return generateRawKeyPair()
-    }
+    fun generateKeyPair(): Crypto.KeyPair = generateRawKeyPair()
 
     /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]
@@ -75,12 +73,18 @@ actual object CryptoManager {
      */
     @JsExport.Ignore
     internal actual fun ByteArray.toPlatformPrivateKey(): ByteArray = when (size) {
-        CRYPTO_KIT_PRIVATE_KEY_SIZE -> Signature.seedKeypair(toUByteArray()).secretKey.toByteArray()
+        CRYPTO_KIT_PRIVATE_KEY_SIZE -> toSecretKeyBytes()
         SODIUM_PRIVATE_KEY_SIZE -> this
-        BOUNCY_CASTLE_PRIVATE_KEY_SIZE -> Signature.seedKeypair(sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE).toUByteArray()).secretKey.toByteArray()
-        JAVA_PKCS8_PRIVATE_KEY_SIZE -> Signature.seedKeypair(sliceArray(size - RAW_KEY_SIZE until size).toUByteArray()).secretKey.toByteArray()
+        BOUNCY_CASTLE_PRIVATE_KEY_SIZE ->
+            sliceArray(PRIVATE_KEY_ASN1_HEADER.size until JAVA_PKCS8_PRIVATE_KEY_SIZE).toSecretKeyBytes()
+        JAVA_PKCS8_PRIVATE_KEY_SIZE -> sliceArray(size - RAW_KEY_SIZE until size).toSecretKeyBytes()
         else -> throw SdkException("Unknown private key size: $size")
     }
+
+    private fun ByteArray.toSecretKeyBytes(): ByteArray = Signature
+        .seedKeypair(toUByteArray())
+        .secretKey
+        .toByteArray()
 
     /**
      * @see [CryptoManager.signWithPrivateKey]

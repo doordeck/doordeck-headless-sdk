@@ -4,10 +4,15 @@ import io.ktor.client.HttpClientConfig
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 import kotlin.js.Promise
+import kotlin.js.collections.JsArray
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     // Certificate pinner is not supported on the JS engine
 }
+
+internal inline fun <reified T>emptyJsArray(): JsArray<T> = emptyList<T>().toMutableList().asJsArrayView()
+
+internal inline fun <reified T>List<T>.toJsArray(): JsArray<T> = toMutableList().asJsArrayView()
 
 /**
  * Creates a `Promise` from a suspendable function.

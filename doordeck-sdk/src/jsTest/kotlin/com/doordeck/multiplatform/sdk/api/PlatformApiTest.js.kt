@@ -5,6 +5,8 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_U
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.any
+import com.doordeck.multiplatform.sdk.isNotEmpty
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.model.responses.EcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.Ed25519KeyResponse
@@ -14,8 +16,10 @@ import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.size
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
+import kotlin.js.collections.toList
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -41,7 +45,7 @@ class PlatformApiTest : IntegrationTest() {
         PlatformApi.createApplication(newApplication).await()
 
         // Then
-        var application = PlatformApi.listApplications().await().firstOrNull {
+        var application = PlatformApi.listApplications().await().toList().firstOrNull {
             it.name.equals(newApplication.name, true)
         }
         assertNotNull(application)
@@ -157,7 +161,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId).await()
-        assertNotEquals(0, application.authDomains.size)
+        assertNotEquals(0, application.authDomains.size())
         assertTrue { application.authDomains.any { it == addApplicationAuthIssuer } }
 
         // Given - shouldDeleteAuthIssuer
@@ -168,7 +172,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId).await()
-        assertEquals(0, application.authDomains.size)
+        assertEquals(0, application.authDomains.size())
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldAddCorsDomain
@@ -179,7 +183,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId).await()
-        assertNotEquals(0, application.corsDomains.size)
+        assertNotEquals(0, application.corsDomains.size())
         assertTrue { application.corsDomains.any { it == addedApplicationCorsDomain } }
 
         // Given - shouldDeleteCorsDomain
@@ -190,7 +194,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Then
         application = PlatformApi.getApplication(application.applicationId).await()
-        assertEquals(0, application.corsDomains.size)
+        assertEquals(0, application.corsDomains.size())
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
         // Given - shouldAddEd25519AuthKey

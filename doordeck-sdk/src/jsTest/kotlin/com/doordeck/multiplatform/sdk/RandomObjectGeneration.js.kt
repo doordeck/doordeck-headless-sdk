@@ -7,10 +7,11 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
+import com.doordeck.multiplatform.sdk.util.toJsArray
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userId = randomNullable { randomUuidString() },
-    userCertificateChain = randomNullable { listOf(PLATFORM_TEST_VALID_CERTIFICATE) },
+    userCertificateChain = randomNullable { jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE) },
     userPrivateKey = randomNullable { CryptoManager.generateKeyPair().private },
     lockId = randomUuidString(),
     notBefore = randomInt(),
@@ -39,12 +40,12 @@ internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
     end = randomString(),
     timezone = randomString(),
     days = DayOfWeek.entries.shuffled().take(3).toSet(),
-    exceptions = (1..3).map { randomString() }
+    exceptions = (1..3).map { randomString() }.toJsArray()
 )
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
-    users = (1..3).map { randomUuidString() }
+    users = (1..3).map { randomUuidString() }.toJsArray()
 )
 
 internal fun randomShareLock() = ShareLock(
@@ -57,12 +58,12 @@ internal fun randomShareLock() = ShareLock(
 
 internal fun randomBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
     baseOperation = randomBaseOperation(),
-    users = (1..3).map { randomShareLock() }
+    users = (1..3).map { randomShareLock() }.toJsArray()
 )
 
 internal fun randomUnlockOperation() = LockOperations.UnlockOperation(
     baseOperation = randomBaseOperation(),
-    directAccessEndpoints = (1..3).map { randomUrlString() }
+    directAccessEndpoints = (1..3).map { randomUrlString() }.toJsArray()
 )
 
 internal fun randomShareLockOperation() = LockOperations.ShareLockOperation(

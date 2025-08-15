@@ -181,6 +181,7 @@ kotlin {
                 optIn("kotlinx.cinterop.UnsafeNumber")
                 optIn("kotlin.experimental.ExperimentalNativeApi")
                 optIn("kotlin.time.ExperimentalTime")
+                optIn("kotlin.js.ExperimentalJsCollectionsApi")
             }
         }
 

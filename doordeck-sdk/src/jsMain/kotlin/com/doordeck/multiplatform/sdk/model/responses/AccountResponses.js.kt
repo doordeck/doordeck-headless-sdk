@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
 
 @JsExport
 data class TokenResponse(
@@ -18,7 +20,7 @@ data class UserDetailsResponse(
 
 @JsExport
 data class RegisterEphemeralKeyResponse(
-    val certificateChain: List<String>,
+    val certificateChain: JsArray<String>,
     val userId: String
 )
 
@@ -40,7 +42,7 @@ internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsRespon
 )
 
 internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
-    certificateChain = certificateChain,
+    certificateChain = certificateChain.toJsArray(),
     userId = userId
 )
 

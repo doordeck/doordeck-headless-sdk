@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.util.validateLatitude
 import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
 import kotlin.time.Clock
+import kotlin.js.collections.JsArray
+import kotlin.js.collections.toList
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
@@ -85,20 +87,20 @@ object LockOperations {
         val end: String, // HH:mm
         val timezone: String,
         val days: Set<DayOfWeek>,
-        val exceptions: List<String>? = null
+        val exceptions: JsArray<String>? = null
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
             private var days: Set<DayOfWeek>? = null
-            private var exceptions: List<String>? = null
+            private var exceptions: JsArray<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
             fun setDays(days: Set<DayOfWeek>): Builder = apply { this.days = days }
-            fun setExceptions(exceptions: List<String>?): Builder = apply { this.exceptions = exceptions }
+            fun setExceptions(exceptions: JsArray<String>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
                 return UnlockBetween(
@@ -114,14 +116,14 @@ object LockOperations {
 
     data class UnlockOperation(
         val baseOperation: BaseOperation,
-        val directAccessEndpoints: List<String>? = null
+        val directAccessEndpoints: JsArray<String>? = null
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var directAccessEndpoints: List<String>? = null
+            private var directAccessEndpoints: JsArray<String>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setDirectAccessEndpoints(directAccessEndpoints: List<String>?): Builder = apply { this.directAccessEndpoints = directAccessEndpoints }
+            fun setDirectAccessEndpoints(directAccessEndpoints: JsArray<String>?): Builder = apply { this.directAccessEndpoints = directAccessEndpoints }
 
             fun build(): UnlockOperation {
                 return UnlockOperation(
@@ -186,14 +188,14 @@ object LockOperations {
 
     data class BatchShareLockOperation(
         val baseOperation: BaseOperation,
-        val users: List<ShareLock>
+        val users: JsArray<ShareLock>
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var users: List<ShareLock>? = null
+            private var users: JsArray<ShareLock>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUsers(users: List<ShareLock>): Builder = apply { this.users = users }
+            fun setUsers(users: JsArray<ShareLock>): Builder = apply { this.users = users }
 
             fun build(): BatchShareLockOperation {
                 return BatchShareLockOperation(
@@ -206,14 +208,14 @@ object LockOperations {
 
     data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
-        val users: List<String>
+        val users: JsArray<String>
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var users: List<String>? = null
+            private var users: JsArray<String>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUsers(users: List<String>): Builder = apply { this.users = users }
+            fun setUsers(users: JsArray<String>): Builder = apply { this.users = users }
 
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
@@ -266,7 +268,7 @@ object LockOperations {
 
     data class BaseOperation(
         val userId: String? = null,
-        val userCertificateChain: List<String>? = null,
+        val userCertificateChain: JsArray<String>? = null,
         val userPrivateKey: ByteArray? = null,
         val lockId: String,
         val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
@@ -276,7 +278,7 @@ object LockOperations {
     ) {
         class Builder {
             private var userId: String? = null
-            private var userCertificateChain: List<String>? = null
+            private var userCertificateChain: JsArray<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: String? = null
             private var notBefore: Int = Clock.System.now().epochSeconds.toInt()
@@ -285,7 +287,7 @@ object LockOperations {
             private var jti: String = Uuid.random().toString()
 
             fun setUserId(userId: String?): Builder = apply { this.userId = userId }
-            fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
+            fun setUserCertificateChain(userCertificateChain: JsArray<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
             fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
             fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
             fun setNotBefore(notBefore: Int): Builder = apply { this.notBefore = notBefore }
@@ -311,7 +313,7 @@ object LockOperations {
     sealed interface Operation
 }
 
-internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
+internal fun JsArray<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = toList().map { requirement ->
     BasicTimeRequirement(
         start = requirement.start,
         end = requirement.end,
@@ -336,14 +338,14 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
         end = end,
         timezone = timezone,
         days = days,
-        exceptions = exceptions
+        exceptions = exceptions?.toList()
     )
 }
 
 internal fun LockOperations.UnlockOperation.toBasicUnlockOperation(): BasicUnlockOperation {
     return BasicUnlockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        directAccessEndpoints = directAccessEndpoints
+        directAccessEndpoints = directAccessEndpoints?.toList()
     )
 }
 
@@ -367,14 +369,14 @@ internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
 internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperation(): BasicBatchShareLockOperation {
     return BasicBatchShareLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        users = users.map { it.toBasicShareLock() }
+        users = users.toList().map { it.toBasicShareLock() }
     )
 }
 
 internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation {
     return BasicRevokeAccessToLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        users = users
+        users = users.toList()
     )
 }
 
@@ -395,7 +397,7 @@ internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecure
 internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOperation {
     return BasicBaseOperation(
         userId = userId,
-        userCertificateChain = userCertificateChain,
+        userCertificateChain = userCertificateChain?.toList(),
         userPrivateKey = userPrivateKey,
         lockId = lockId,
         notBefore = notBefore.toLong(),

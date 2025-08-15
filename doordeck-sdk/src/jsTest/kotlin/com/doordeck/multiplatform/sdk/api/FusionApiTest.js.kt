@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.firstOrNull
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
@@ -95,10 +96,9 @@ class FusionApiTest : IntegrationTest() {
     }
 
     private suspend fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = try {
-        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
-        if (testController == null) {
-            error("Controller of type ${controllerType.simpleName} not found, skipping test...")
-        }
+        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
+            controllerType.isInstance(it.value.controller)
+        } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
             TEST_HTTP_CLIENT.get(testController.key){
