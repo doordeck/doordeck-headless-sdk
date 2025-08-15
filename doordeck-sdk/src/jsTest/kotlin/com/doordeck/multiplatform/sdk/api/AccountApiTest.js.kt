@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.isNotEmpty
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
+import kotlin.js.collections.toList
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -61,7 +62,7 @@ class AccountApiTest : IntegrationTest() {
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
-        assertEquals(result.certificateChain, ContextManager.getCertificateChain())
+        assertContentEquals(result.certificateChain.toList(), ContextManager.getCertificateChain()?.toList())
         assertContentEquals(publicKey, ContextManager.getKeyPair()?.public)
         assertContentEquals(privateKey, ContextManager.getKeyPair()?.private)
         assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
