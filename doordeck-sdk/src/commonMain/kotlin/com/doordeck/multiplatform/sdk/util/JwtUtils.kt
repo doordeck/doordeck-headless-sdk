@@ -3,12 +3,12 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import io.ktor.util.decodeBase64String
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 
 @get:JvmSynthetic
 internal val MIN_TOKEN_LIFETIME_DAYS = 1.days

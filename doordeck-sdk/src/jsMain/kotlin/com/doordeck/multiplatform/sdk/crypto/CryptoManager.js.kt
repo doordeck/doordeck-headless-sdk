@@ -10,9 +10,9 @@ import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.util.decodeBase64Bytes
 import io.ktor.util.toJsArray
 import io.ktor.utils.io.core.toByteArray
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
 import kotlin.js.Date
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 /**
  * Platform-specific implementation of [CryptoManager].

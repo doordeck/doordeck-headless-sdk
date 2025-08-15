@@ -8,8 +8,6 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import kotlinx.datetime.Clock
-import kotlinx.datetime.toKotlinInstant
 import java.security.KeyFactory
 import java.security.KeyPair
 import java.security.KeyPairGenerator
@@ -20,6 +18,8 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
+import kotlin.time.Clock
+import kotlin.time.toKotlinInstant
 
 /**
  * Platform-specific implementation of [CryptoManager].
