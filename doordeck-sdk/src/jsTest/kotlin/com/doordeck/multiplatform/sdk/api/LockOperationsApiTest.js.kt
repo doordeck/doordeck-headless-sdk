@@ -14,19 +14,28 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
+import com.doordeck.multiplatform.sdk.first
+import com.doordeck.multiplatform.sdk.firstOrNull
+import com.doordeck.multiplatform.sdk.isEmpty
+import com.doordeck.multiplatform.sdk.isNotEmpty
+import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.size
+import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlin.js.collections.toList
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -99,7 +108,7 @@ class LockOperationsApiTest : IntegrationTest() {
     fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
         // Given - shouldSetLockSettingPermittedAddresses
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val addedLockPermittedAddresses = listOf("95.19.38.42")
+        val addedLockPermittedAddresses = jsArrayOf("95.19.38.42")
 
         // When
         LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, addedLockPermittedAddresses).await()
@@ -107,10 +116,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID).await()
         assertTrue { lock.settings.permittedAddresses.isNotEmpty() }
-        assertContains(addedLockPermittedAddresses, lock.settings.permittedAddresses.first())
+        assertContains(addedLockPermittedAddresses.toList(), lock.settings.permittedAddresses.first())
 
         // Given - shouldRemoveLockSettingPermittedAddresses
-        val removedLockPermittedAddresses = listOf<String>()
+        val removedLockPermittedAddresses = emptyJsArray<String>()
 
         // When
         LockOperationsApi.setLockSettingPermittedAddresses(PLATFORM_TEST_MAIN_LOCK_ID, removedLockPermittedAddresses).await()
@@ -149,7 +158,7 @@ class LockOperationsApiTest : IntegrationTest() {
         )
 
         // When
-        LockOperationsApi.setLockSettingTimeRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, listOf(addedTimeRestriction)).await()
+        LockOperationsApi.setLockSettingTimeRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, jsArrayOf(addedTimeRestriction)).await()
 
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID).await()
@@ -161,14 +170,14 @@ class LockOperationsApiTest : IntegrationTest() {
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
-        val removedTimeRestriction = emptyList<LockOperations.TimeRequirement>()
+        val removedTimeRestriction = emptyJsArray<LockOperations.TimeRequirement>()
 
         // When
         LockOperationsApi.setLockSettingTimeRestrictions(PLATFORM_TEST_MAIN_LOCK_ID, removedTimeRestriction).await()
 
         // Then
         lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID).await()
-        assertEquals(0, lock.settings.usageRequirements?.time?.size)
+        assertEquals(0, lock.settings.usageRequirements?.time?.size())
     }
 
     @Test
@@ -251,7 +260,7 @@ class LockOperationsApiTest : IntegrationTest() {
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByEmails(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL)).await()
+        val result = LockOperationsApi.getUserPublicKeyByEmails(jsArrayOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL)).await()
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -263,7 +272,7 @@ class LockOperationsApiTest : IntegrationTest() {
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByLocalKeys(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).await()
+        val result = LockOperationsApi.getUserPublicKeyByLocalKeys(jsArrayOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).await()
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -406,7 +415,7 @@ class LockOperationsApiTest : IntegrationTest() {
         LockOperationsApi.revokeAccessToLock(
             revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                 baseOperation = revokeBaseOperation,
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                users = jsArrayOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
             )
         ).await()
 
@@ -429,7 +438,7 @@ class LockOperationsApiTest : IntegrationTest() {
             userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
             lockId = PLATFORM_TEST_MAIN_LOCK_ID
         )
-        val batchShareLock = listOf(
+        val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
@@ -452,7 +461,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         assertTrue {
-            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await().devices.any {
+            LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await().devices.toList().any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -473,7 +482,7 @@ class LockOperationsApiTest : IntegrationTest() {
         LockOperationsApi.revokeAccessToLock(
             revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                 baseOperation = revokeBaseOperation,
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+                users = jsArrayOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
             )
         ).await()
 
@@ -526,7 +535,7 @@ class LockOperationsApiTest : IntegrationTest() {
         LockOperationsApi.revokeAccessToLock(
             revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                users = jsArrayOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
             )
         ).await()
 
@@ -552,7 +561,7 @@ class LockOperationsApiTest : IntegrationTest() {
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
             isKeyPairVerified = true
         )
-        val batchShareLock = listOf(
+        val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
                 targetUserRole = UserRole.USER,
@@ -590,7 +599,7 @@ class LockOperationsApiTest : IntegrationTest() {
         LockOperationsApi.revokeAccessToLock(
             revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                 baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
+                users = jsArrayOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
             )
         ).await()
 
@@ -680,7 +689,7 @@ class LockOperationsApiTest : IntegrationTest() {
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
             days = setOf(DayOfWeek.entries.random()),
-            exceptions = emptyList()
+            exceptions = emptyJsArray()
         )
         val addBaseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -742,7 +751,7 @@ class LockOperationsApiTest : IntegrationTest() {
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
             days = setOf(DayOfWeek.entries.random()),
-            exceptions = emptyList()
+            exceptions = emptyJsArray()
         )
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -818,7 +827,7 @@ class LockOperationsApiTest : IntegrationTest() {
             LockOperationsApi.revokeAccessToLock(
                 revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                    users = emptyList()
+                    users = emptyJsArray()
                 )
             ).await()
         }
@@ -838,7 +847,7 @@ class LockOperationsApiTest : IntegrationTest() {
             LockOperationsApi.unlock(
                 unlockOperation = LockOperations.UnlockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                    directAccessEndpoints = emptyList()
+                    directAccessEndpoints = emptyJsArray()
                 )
             ).await()
         }
@@ -859,7 +868,7 @@ class LockOperationsApiTest : IntegrationTest() {
                         end = "",
                         timezone = TimeZone.UTC.id,
                         days = emptySet(),
-                        exceptions = emptyList()
+                        exceptions = emptyJsArray()
                     )
                 )
             ).await()

@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 
 internal object PlatformTestConstants {
 
-    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY by lazy { TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray() }
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_MAIN_USER_ID = TEST_MAIN_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID
@@ -34,10 +34,15 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE
     val PLATFORM_TEST_EXPIRED_CERTIFICATE = TEST_EXPIRED_CERTIFICATE
-    val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map { it.key to TestController(it.value.type, it.value.controller.toLockControllerResponse()) }.toMap()
+    val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
+        it.key to TestController(
+            type = it.value.type,
+            controller = it.value.controller.toLockControllerResponse()
+        )
+    }.toMap()
 
     @Serializable
-    data class TestController(
+    internal data class TestController(
         val type: String,
         val controller: FusionOperations.LockController
     )

@@ -14,6 +14,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toIntegrationConfiguration
 import com.doordeck.multiplatform.sdk.model.responses.toIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
+import kotlin.js.collections.JsArray
 
 /**
  * Platform-specific implementations of fusion-related API calls.
@@ -24,78 +25,80 @@ actual object FusionApi {
      * @see FusionClient.loginRequest
      */
     @DoordeckOnly
-    fun login(email: String, password: String): Promise<FusionLoginResponse> {
-        return promise {
-            FusionClient.loginRequest(email, password)
-                .toFusionLoginResponse()
-        }
+    fun login(email: String, password: String): Promise<FusionLoginResponse> = promise {
+        FusionClient
+            .loginRequest(
+                email = email,
+                password = password
+            )
+            .toFusionLoginResponse()
     }
 
     /**
      * @see FusionClient.getIntegrationTypeRequest
      */
     @DoordeckOnly
-    fun getIntegrationType(): Promise<IntegrationTypeResponse> {
-        return promise {
-            FusionClient.getIntegrationTypeRequest()
-                .toIntegrationTypeResponse()
-        }
+    fun getIntegrationType(): Promise<IntegrationTypeResponse> = promise {
+        FusionClient.getIntegrationTypeRequest()
+            .toIntegrationTypeResponse()
     }
 
     /**
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
-    fun getIntegrationConfiguration(type: String): Promise<List<IntegrationConfigurationResponse>> {
-        return promise {
-            FusionClient.getIntegrationConfigurationRequest(type)
-                .toIntegrationConfigurationResponse()
-        }
+    fun getIntegrationConfiguration(type: String): Promise<JsArray<IntegrationConfigurationResponse>> = promise {
+        FusionClient.getIntegrationConfigurationRequest(type)
+            .toIntegrationConfigurationResponse()
     }
 
     /**
      * @see FusionClient.enableDoorRequest
      */
     @DoordeckOnly
-    fun enableDoor(name: String, siteId: String, controller: FusionOperations.LockController): Promise<dynamic> {
-        return promise {
-            FusionClient.enableDoorRequest(name, siteId, controller.toBasicLockController())
-        }
+    fun enableDoor(
+        name: String,
+        siteId: String,
+        controller: FusionOperations.LockController
+    ): Promise<dynamic> = promise {
+        FusionClient.enableDoorRequest(
+            name = name,
+            siteId = siteId,
+            controller = controller.toBasicLockController()
+        )
     }
 
     /**
      * @see FusionClient.deleteDoorRequest
      */
     @DoordeckOnly
-    fun deleteDoor(deviceId: String): Promise<dynamic> {
-        return promise { FusionClient.deleteDoorRequest(deviceId) }
+    fun deleteDoor(deviceId: String): Promise<dynamic> = promise {
+        FusionClient.deleteDoorRequest(deviceId)
     }
 
     /**
      * @see FusionClient.getDoorStatusRequest
      */
     @DoordeckOnly
-    fun getDoorStatus(deviceId: String): Promise<DoorStateResponse> {
-        return promise {
-            FusionClient.getDoorStatusRequest(deviceId)
-                .toDoorStateResponse()
-        }
+    fun getDoorStatus(deviceId: String): Promise<DoorStateResponse> = promise {
+        FusionClient.getDoorStatusRequest(deviceId)
+            .toDoorStateResponse()
     }
 
     /**
      * @see FusionClient.startDoorRequest
      */
     @DoordeckOnly
-    fun startDoor(deviceId: String): Promise<dynamic> {
-        return promise { FusionClient.startDoorRequest(deviceId) }
+    fun startDoor(deviceId: String): Promise<dynamic> = promise {
+        FusionClient.startDoorRequest(deviceId)
     }
 
     /**
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
-    fun stopDoor(deviceId: String): Promise<dynamic> {
-        return promise { FusionClient.stopDoorRequest(deviceId) }
+    fun stopDoor(deviceId: String): Promise<dynamic> = promise {
+        FusionClient.stopDoorRequest(deviceId)
     }
 }
 

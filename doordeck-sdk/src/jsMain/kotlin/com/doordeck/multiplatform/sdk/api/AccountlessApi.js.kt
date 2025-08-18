@@ -14,36 +14,59 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.loginRequest
      */
-    fun login(email: String, password: String): Promise<TokenResponse> {
-        return promise { AccountlessClient.loginRequest(email, password).toTokenResponse() }
+    fun login(email: String, password: String): Promise<TokenResponse> = promise {
+        AccountlessClient
+            .loginRequest(
+                email = email,
+                password = password
+            )
+            .toTokenResponse()
     }
 
     /**
      * @see AccountlessClient.registrationRequest
      */
-    fun registration(email: String, password: String, displayName: String? = null, force: Boolean = false, publicKey: ByteArray? = null): Promise<TokenResponse> {
-        return promise { AccountlessClient.registrationRequest(email, password, displayName, force, publicKey).toTokenResponse() }
+    fun registration(
+        email: String,
+        password: String,
+        displayName: String? = null,
+        force: Boolean = false,
+        publicKey: ByteArray? = null
+    ): Promise<TokenResponse> = promise {
+        AccountlessClient
+            .registrationRequest(
+                email = email,
+                password = password,
+                displayName = displayName,
+                force = force,
+                publicKey = publicKey
+            )
+            .toTokenResponse()
     }
 
     /**
      * @see AccountlessClient.verifyEmailRequest
      */
-    fun verifyEmail(code: String): Promise<dynamic> {
-        return promise { AccountlessClient.verifyEmailRequest(code) }
+    fun verifyEmail(code: String): Promise<dynamic> = promise {
+        AccountlessClient.verifyEmailRequest(code)
     }
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    fun passwordReset(email: String): Promise<dynamic> {
-        return promise { AccountlessClient.passwordResetRequest(email) }
+    fun passwordReset(email: String): Promise<dynamic> = promise {
+        AccountlessClient.passwordResetRequest(email)
     }
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    fun passwordResetVerify(userId: String, token: String, password: String): Promise<dynamic> {
-        return promise { AccountlessClient.passwordResetVerifyRequest(userId, token, password) }
+    fun passwordResetVerify(userId: String, token: String, password: String): Promise<dynamic> = promise {
+        AccountlessClient.passwordResetVerifyRequest(
+            userId = userId,
+            token = token,
+            password = password
+        )
     }
 }
 
