@@ -102,7 +102,7 @@ jobs:
 
   csharp-build:
     name: CSharp build
-    runs-on: windows-2025
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
