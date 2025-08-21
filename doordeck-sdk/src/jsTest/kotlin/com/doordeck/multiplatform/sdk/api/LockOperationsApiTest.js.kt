@@ -31,11 +31,14 @@ import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.size
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
+import com.doordeck.multiplatform.sdk.util.emptyJsSet
+import com.doordeck.multiplatform.sdk.util.toJsSet
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.js.collections.toList
+import kotlin.js.collections.toSet
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -154,7 +157,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random())
+            days = setOf(DayOfWeek.entries.random()).toJsSet()
         )
 
         // When
@@ -167,7 +170,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(addedTimeRestriction.start, actualTime.start)
         assertEquals(addedTimeRestriction.end, actualTime.end)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
-        assertContains(actualTime.days, addedTimeRestriction.days.first())
+        assertContains(actualTime.days.toSet(), addedTimeRestriction.days.toSet().first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
         val removedTimeRestriction = emptyJsArray<LockOperations.TimeRequirement>()
@@ -688,7 +691,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            days = setOf(DayOfWeek.entries.random()).toJsSet(),
             exceptions = emptyJsArray()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -750,7 +753,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            days = setOf(DayOfWeek.entries.random()).toJsSet(),
             exceptions = emptyJsArray()
         )
         ContextManager.setOperationContext(
@@ -867,7 +870,7 @@ class LockOperationsApiTest : IntegrationTest() {
                         start = "",
                         end = "",
                         timezone = TimeZone.UTC.id,
-                        days = emptySet(),
+                        days = emptyJsSet(),
                         exceptions = emptyJsArray()
                     )
                 )

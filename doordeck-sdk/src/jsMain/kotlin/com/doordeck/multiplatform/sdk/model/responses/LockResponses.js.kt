@@ -7,7 +7,9 @@ import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsSet
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsSet
 
 @JsExport
 data class LockResponse(
@@ -45,7 +47,7 @@ data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Set<DayOfWeek>
+    val days: JsSet<DayOfWeek>
 )
 
 @JsExport
@@ -62,7 +64,7 @@ data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: Set<DayOfWeek>,
+    val days: JsSet<DayOfWeek>,
     val exceptions: JsArray<String> = emptyJsArray()
 )
 
@@ -181,7 +183,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start,
     end = end,
     timezone = timezone,
-    days = days
+    days = days.toJsSet()
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -196,7 +198,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start,
     end = end,
     timezone = timezone,
-    days = days,
+    days = days.toJsSet(),
     exceptions = exceptions.toJsArray()
 )
 
