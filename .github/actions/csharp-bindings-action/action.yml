@@ -10,7 +10,7 @@ runs:
 
     - name: Setup ClangSharpPInvokeGenerator
       shell: bash
-      run: dotnet tool install --global ClangSharpPInvokeGenerator
+      run: dotnet tool install --global ClangSharpPInvokeGenerator --version 20.1.2.1
 
     - name: Adjust header
       shell: bash
