@@ -24,7 +24,7 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    fun createApplication(application: PlatformOperations.CreateApplication): Promise<dynamic> {
+    fun createApplication(application: PlatformOperations.CreateApplication): Promise<String> {
         return promise { PlatformClient.createApplicationRequest(application.toBasicCreateApplication()) }
     }
 

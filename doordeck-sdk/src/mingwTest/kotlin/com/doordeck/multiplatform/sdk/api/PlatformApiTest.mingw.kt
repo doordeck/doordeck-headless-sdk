@@ -72,7 +72,7 @@ class PlatformApiTest : CallbackTest() {
             )
 
             // When
-            callbackApiCall<ResultData<Unit>> {
+            callbackApiCall<ResultData<String>> {
                 PlatformApi.createApplication(
                     data = newApplication.toJson(),
                     callback = staticCFunction(::testCallback)

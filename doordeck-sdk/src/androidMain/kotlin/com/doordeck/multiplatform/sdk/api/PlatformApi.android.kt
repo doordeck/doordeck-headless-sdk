@@ -13,6 +13,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsR
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import com.doordeck.multiplatform.sdk.util.toUuid
 import com.nimbusds.jose.jwk.JWK
 import java.net.URI
 import java.util.UUID
@@ -26,8 +27,9 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    suspend fun createApplication(application: PlatformOperations.CreateApplication) = PlatformClient
+    suspend fun createApplication(application: PlatformOperations.CreateApplication): UUID = PlatformClient
         .createApplicationRequest(application.toBasicCreateApplication())
+        .toUuid()
 
     /**
      * Async variant of [PlatformApi.createApplication] returning [CompletableFuture].

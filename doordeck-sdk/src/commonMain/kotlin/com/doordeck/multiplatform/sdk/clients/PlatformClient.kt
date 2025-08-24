@@ -35,6 +35,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.Url
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -48,16 +49,19 @@ internal object PlatformClient {
      * and define branding, UI, and authentication elements.
      *
      * @param application Contains new application definition to be created.
+     * @return The application's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/create-application">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun createApplicationRequest(application: BasicCreateApplication) {
-        CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
+    internal suspend fun createApplicationRequest(application: BasicCreateApplication): String {
+        val response = CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
+        val location = response.headers.entries().first { it.key.lowercase() == "location" }.value.first()
+        return Url(location).rawSegments.last()
     }
 
     /**

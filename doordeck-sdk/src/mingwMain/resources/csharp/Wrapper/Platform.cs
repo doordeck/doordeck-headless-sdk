@@ -8,8 +8,8 @@ public class Platform(
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi) : AbstractWrapper
 {
-    public unsafe Task<object> CreateApplication(CreateApplication data) =>
-        Process<object>(platformApi.createApplication_, null, data);
+    public unsafe Task<string> CreateApplication(CreateApplication data) =>
+        Process<string>(null, platformApi.createApplication_, data);
 
     public unsafe Task<List<ApplicationResponse>> ListApplications() =>
         Process<List<ApplicationResponse>>(null, platformApi.listApplications_, null);
