@@ -40,6 +40,8 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
 
 typealias LockControllerResponse = FusionOperations.LockController
 
@@ -95,13 +97,13 @@ internal fun BasicDoorStateResponse.toDoorStateResponse(): DoorStateResponse = D
     state = state
 )
 
-internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> = map { configuration ->
+internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): JsArray<IntegrationConfigurationResponse> = map { configuration ->
     IntegrationConfigurationResponse(
         doordeck = configuration.doordeck?.toControllerResponse(),
         service = configuration.service?.toServiceStateResponse(),
         integration = configuration.integration?.toDiscoveredDeviceResponse()
     )
-}
+}.toJsArray()
 
 internal fun BasicControllerResponse.toControllerResponse(): ControllerResponse = ControllerResponse(
     id = id,

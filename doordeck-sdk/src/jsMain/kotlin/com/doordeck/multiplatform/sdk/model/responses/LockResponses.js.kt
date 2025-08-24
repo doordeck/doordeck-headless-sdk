@@ -5,6 +5,9 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.emptyJsArray
+import com.doordeck.multiplatform.sdk.util.toJsArray
+import kotlin.js.collections.JsArray
 
 @JsExport
 data class LockResponse(
@@ -21,19 +24,19 @@ data class LockResponse(
 @JsExport
 data class LockSettingsResponse(
     val unlockTime: Double,
-    val permittedAddresses: List<String>,
+    val permittedAddresses: JsArray<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
-    val tiles: List<String>,
+    val tiles: JsArray<String>,
     val hidden: Boolean,
-    val directAccessEndpoints: List<String> = emptyList(),
+    val directAccessEndpoints: JsArray<String> = emptyJsArray(),
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
 )
 
 @JsExport
 data class UsageRequirementsResponse(
-    val time: List<TimeRequirementResponse> = emptyList(),
+    val time: JsArray<TimeRequirementResponse> = emptyJsArray(),
     val location: LocationRequirementResponse? = null
 )
 
@@ -60,7 +63,7 @@ data class UnlockBetweenSettingResponse(
     val end: String,
     val timezone: String,
     val days: Set<DayOfWeek>,
-    val exceptions: List<String> = emptyList()
+    val exceptions: JsArray<String> = emptyJsArray()
 )
 
 @JsExport
@@ -112,7 +115,7 @@ data class LockUserResponse(
     val foreign: Boolean,
     val start: Double? = null,
     val end: Double? = null,
-    val devices: List<LockUserDetailsResponse>
+    val devices: JsArray<LockUserDetailsResponse>
 )
 
 @JsExport
@@ -142,9 +145,9 @@ data class AuditUserResponse(
     val ip: String? = null
 )
 
-internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map { lock ->
+internal fun List<BasicLockResponse>.toLockResponse(): JsArray<LockResponse> = map { lock ->
     lock.toLockResponse()
-}
+}.toJsArray()
 
 internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     id = id,
@@ -159,18 +162,18 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
 
 internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsResponse = LockSettingsResponse(
     unlockTime = unlockTime,
-    permittedAddresses = permittedAddresses,
+    permittedAddresses = permittedAddresses.toJsArray(),
     defaultName = defaultName,
     usageRequirements = usageRequirements?.toUsageRequirementsResponse(),
     unlockBetweenWindow = unlockBetweenWindow?.toUnlockBetweenSettingResponse(),
-    tiles = tiles,
+    tiles = tiles.toJsArray(),
     hidden = hidden,
-    directAccessEndpoints = directAccessEndpoints,
+    directAccessEndpoints = directAccessEndpoints.toJsArray(),
     capabilities = capabilities
 )
 
 internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
-    time = time.map { it.toTimeRequirementResponse() },
+    time = time.map { it.toTimeRequirementResponse() }.toJsArray(),
     location = location?.toLocationRequirementResponse()
 )
 
@@ -194,7 +197,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     end = end,
     timezone = timezone,
     days = days,
-    exceptions = exceptions
+    exceptions = exceptions.toJsArray()
 )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
@@ -206,7 +209,7 @@ internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKey
     publicKey = publicKey
 )
 
-internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
+internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): JsArray<BatchUserPublicKeyResponse> = map { user ->
     BatchUserPublicKeyResponse(
         id = user.id,
         email = user.email,
@@ -214,16 +217,16 @@ internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(
         phone = user.phone,
         publicKey = user.publicKey
     )
-}
+}.toJsArray()
 
-internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<ShareableLockResponse> = map { lock ->
+internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): JsArray<ShareableLockResponse> = map { lock ->
     ShareableLockResponse(
         id = lock.id,
         name = lock.name
     )
-}
+}.toJsArray()
 
-internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResponse> = map { user ->
+internal fun List<BasicUserLockResponse>.toUserLockResponse(): JsArray<UserLockResponse> = map { user ->
     UserLockResponse(
         userId = user.userId,
         email = user.email,
@@ -235,7 +238,7 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResp
         start = user.start,
         end = user.end
     )
-}
+}.toJsArray()
 
 internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = LockUserResponse(
     userId = userId,
@@ -246,7 +249,7 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
     foreign = foreign,
     start = start,
     end = end,
-    devices = devices.map { it.toLockUserDetailsResponse() }
+    devices = devices.map { it.toLockUserDetailsResponse() }.toJsArray()
 )
 
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
@@ -256,7 +259,7 @@ internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserD
     end = end
 )
 
-internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
+internal fun List<BasicAuditResponse>.toAuditResponse(): JsArray<AuditResponse> = map { audit ->
     AuditResponse(
         deviceId = audit.deviceId,
         timestamp = audit.timestamp.toDouble(),
@@ -266,7 +269,7 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = m
         rejectionReason = audit.rejectionReason,
         rejected = audit.rejected
     )
-}
+}.toJsArray()
 
 internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(
     userId = userId,
