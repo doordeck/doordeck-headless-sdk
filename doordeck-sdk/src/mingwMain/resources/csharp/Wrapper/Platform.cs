@@ -9,7 +9,7 @@ public class Platform(
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi) : AbstractWrapper
 {
     public unsafe Task<string> CreateApplication(CreateApplication data) =>
-        Process<string>(null, platformApi.createApplication_, data);
+        Process<string>(platformApi.createApplication_, null, data);
 
     public unsafe Task<List<ApplicationResponse>> ListApplications() =>
         Process<List<ApplicationResponse>>(null, platformApi.listApplications_, null);
