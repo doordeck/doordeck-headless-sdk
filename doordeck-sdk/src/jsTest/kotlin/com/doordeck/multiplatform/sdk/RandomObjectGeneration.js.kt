@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsSet
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userId = randomNullable { randomUuidString() },
@@ -24,7 +25,7 @@ internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toSet()
+    days = DayOfWeek.entries.shuffled().take(3).toSet().toJsSet()
 )
 
 internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
@@ -39,7 +40,7 @@ internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toSet(),
+    days = DayOfWeek.entries.shuffled().take(3).toSet().toJsSet(),
     exceptions = (1..3).map { randomString() }.toJsArray()
 )
 
