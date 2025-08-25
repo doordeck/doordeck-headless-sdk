@@ -57,7 +57,7 @@ internal object AccountClient {
     }
 
     /**
-     * Logs out the current user and resets the [Context] regardless of whether the logout process throws an exception.
+     * Logs out the current user and resets the [Context] regardless of whether the logout process throws an exception. For example, when a token isn't valid anymore for any reason and the user tries to log out.
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
