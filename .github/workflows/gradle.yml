@@ -66,7 +66,7 @@ jobs:
           WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
-        run: ./gradlew ${{ matrix.test }} --rerun-tasks --no-build-cache
+        run: ./gradlew ${{ matrix.test }}
 
   python-build:
     name: Python build
