@@ -17,12 +17,14 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.emptyJsSet
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.first
 import com.doordeck.multiplatform.sdk.firstOrNull
 import com.doordeck.multiplatform.sdk.isEmpty
 import com.doordeck.multiplatform.sdk.isNotEmpty
 import com.doordeck.multiplatform.sdk.jsArrayOf
+import com.doordeck.multiplatform.sdk.jsSetOf
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
@@ -36,6 +38,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.js.collections.toList
+import kotlin.js.collections.toSet
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -154,7 +157,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random())
+            days = jsSetOf(DayOfWeek.entries.random())
         )
 
         // When
@@ -167,7 +170,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(addedTimeRestriction.start, actualTime.start)
         assertEquals(addedTimeRestriction.end, actualTime.end)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
-        assertContains(actualTime.days, addedTimeRestriction.days.first())
+        assertContains(actualTime.days.toSet(), addedTimeRestriction.days.first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
         val removedTimeRestriction = emptyJsArray<LockOperations.TimeRequirement>()
@@ -688,7 +691,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            days = jsSetOf(DayOfWeek.entries.random()),
             exceptions = emptyJsArray()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -712,7 +715,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.days.toSet(), lock.settings.unlockBetweenWindow.days.toSet())
 
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = LockOperations.BaseOperation(
@@ -750,7 +753,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = setOf(DayOfWeek.entries.random()),
+            days = jsSetOf(DayOfWeek.entries.random()),
             exceptions = emptyJsArray()
         )
         ContextManager.setOperationContext(
@@ -775,7 +778,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.days.toSet(), lock.settings.unlockBetweenWindow.days.toSet())
 
         // Given
         LockOperationsApi.updateSecureSettingUnlockBetween(
@@ -867,7 +870,7 @@ class LockOperationsApiTest : IntegrationTest() {
                         start = "",
                         end = "",
                         timezone = TimeZone.UTC.id,
-                        days = emptySet(),
+                        days = emptyJsSet(),
                         exceptions = emptyJsArray()
                     )
                 )
