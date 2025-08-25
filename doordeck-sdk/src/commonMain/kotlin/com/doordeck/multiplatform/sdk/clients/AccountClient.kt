@@ -57,7 +57,7 @@ internal object AccountClient {
     }
 
     /**
-     * Logs out the current user and resets the [Context].
+     * Logs out the current user and resets the [Context] regardless of whether the logout process throws an exception.
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -65,10 +65,13 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun logoutRequest() {
-        CloudHttpClient.client.post(Paths.getLogoutPath()) {
-            addRequestHeaders()
+        try {
+            CloudHttpClient.client.post(Paths.getLogoutPath()) {
+                addRequestHeaders()
+            }
+        } finally {
+            Context.reset()
         }
-        Context.reset()
     }
 
     /**
@@ -243,7 +246,8 @@ internal object AccountClient {
     }
 
     /**
-     * Deletes the current user's account and resets the [Context].
+     * Deletes the current user's account and resets the [Context] regardless of whether the delete process
+     * throws an exception.
      *
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
@@ -251,7 +255,10 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun deleteAccountRequest() {
-        CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
-        Context.reset()
+        try {
+            CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
+        } finally {
+            Context.reset()
+        }
     }
 }
