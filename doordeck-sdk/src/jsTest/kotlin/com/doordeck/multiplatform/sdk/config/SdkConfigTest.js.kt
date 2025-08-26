@@ -17,7 +17,7 @@ class SdkConfigTest {
     fun shouldBuildSdkConfig () = runTest {
         // Given
         val sdkConfig = SdkConfig(
-            apiEnvironment = randomNullable { ApiEnvironment.entries.random().name },
+            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUrlString() },

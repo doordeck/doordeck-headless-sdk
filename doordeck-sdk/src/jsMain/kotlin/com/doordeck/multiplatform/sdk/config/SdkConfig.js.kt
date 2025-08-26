@@ -12,7 +12,7 @@ import com.doordeck.multiplatform.sdk.storage.createSecureStorage
  */
 @JsExport
 data class SdkConfig(
-    val apiEnvironment: String? = null,
+    val apiEnvironment: ApiEnvironment? = null,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
     val fusionHost: String?,
@@ -26,7 +26,7 @@ data class SdkConfig(
      * an immutable [SdkConfig] instance.
      */
     class Builder {
-        private var apiEnvironment: String? = null
+        private var apiEnvironment: ApiEnvironment? = null
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
         private var fusionHost: String? = null
@@ -36,7 +36,7 @@ data class SdkConfig(
         /**
          * Sets the API environment for the SDK.
          */
-        fun setApiEnvironment(apiEnvironment: String?): Builder = apply { this.apiEnvironment = apiEnvironment }
+        fun setApiEnvironment(apiEnvironment: ApiEnvironment?): Builder = apply { this.apiEnvironment = apiEnvironment }
 
         /**
          * Sets the cloud authentication token.
@@ -83,7 +83,7 @@ data class SdkConfig(
 }
 
 internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
-    apiEnvironment = apiEnvironment?.let { ApiEnvironment.valueOf(it) },
+    apiEnvironment = apiEnvironment,
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
     fusionHost = fusionHost.toString(),
