@@ -29,7 +29,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
@@ -76,7 +76,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldClearContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
@@ -103,7 +103,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.clearContext()
 
         // Then
-        assertEquals(ApiEnvironment.PROD, ContextManager.getApiEnvironment())
+        assertEquals(ApiEnvironment.PROD.name, ContextManager.getApiEnvironment())
         assertNull(ContextManager.getUserId())
         assertNull(ContextManager.getUserEmail())
         assertNull(ContextManager.getCertificateChain())
@@ -217,7 +217,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldUpdateApiEnvironment() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.STAGING
+        val apiEnvironment = ApiEnvironment.STAGING.name
 
         // When
         ContextManager.setApiEnvironment(apiEnvironment)
@@ -235,7 +235,7 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.getContextState()
 
         // Then
-        assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result)
+        assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED.name, result)
     }
 
     @Test
@@ -247,7 +247,7 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.getContextState()
 
         // Then
-        assertEquals(ContextState.KEY_PAIR_IS_INVALID, result)
+        assertEquals(ContextState.KEY_PAIR_IS_INVALID.name, result)
     }
 
     @Test
@@ -261,7 +261,7 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.getContextState()
 
         // Then
-        assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result)
+        assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED.name, result)
     }
 
     @Test
@@ -277,7 +277,7 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.getContextState()
 
         // Then
-        assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result)
+        assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED.name, result)
     }
 
     @Test
@@ -293,6 +293,6 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.getContextState()
 
         // Then
-        assertEquals(ContextState.READY, result)
+        assertEquals(ContextState.READY.name, result)
     }
 }

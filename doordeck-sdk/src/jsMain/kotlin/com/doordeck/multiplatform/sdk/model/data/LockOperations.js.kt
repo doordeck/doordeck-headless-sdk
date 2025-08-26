@@ -8,7 +8,9 @@ import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
 import kotlin.time.Clock
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsSet
 import kotlin.js.collections.toList
+import kotlin.js.collections.toMutableSet
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
@@ -19,18 +21,18 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: JsArray<DayOfWeek>
+        val days: JsSet<String>
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: JsArray<DayOfWeek>? = null
+            private var days: JsSet<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String) = apply { this.timezone = timezone }
-            fun setDays(days: JsArray<DayOfWeek>) = apply { this.days = days }
+            fun setDays(days: JsSet<String>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
@@ -86,20 +88,20 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: JsArray<DayOfWeek>,
+        val days: JsSet<String>,
         val exceptions: JsArray<String>? = null
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: JsArray<DayOfWeek>? = null
+            private var days: JsSet<String>? = null
             private var exceptions: JsArray<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
-            fun setDays(days: JsArray<DayOfWeek>): Builder = apply { this.days = days }
+            fun setDays(days: JsSet<String>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: JsArray<String>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
@@ -156,20 +158,20 @@ object LockOperations {
 
     data class ShareLock(
         val targetUserId: String,
-        val targetUserRole: UserRole,
+        val targetUserRole: String,
         val targetUserPublicKey: ByteArray,
         val start: Int? = null,
         val end: Int? = null
     ) {
         class Builder {
             private var targetUserId: String? = null
-            private var targetUserRole: UserRole? = null
+            private var targetUserRole: String? = null
             private var targetUserPublicKey: ByteArray? = null
             private var start: Int? = null
             private var end: Int? = null
 
             fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
-            fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
+            fun setTargetUserRole(targetUserRole: String): Builder = apply {this.targetUserRole = targetUserRole }
             fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
             fun setStart(start: Int?): Builder = apply { this.start = start }
             fun setEnd(end: Int?): Builder = apply { this.end = end }
@@ -318,7 +320,7 @@ internal fun JsArray<LockOperations.TimeRequirement>.toBasicTimeRequirement(): L
         start = requirement.start,
         end = requirement.end,
         timezone = requirement.timezone,
-        days = requirement.days.toList().toSet()
+        days = requirement.days.toMutableSet().map { DayOfWeek.valueOf(it) }.toSet()
     )
 }
 
@@ -337,7 +339,7 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
         start = start,
         end = end,
         timezone = timezone,
-        days = days.toList().toSet(),
+        days = days.toMutableSet().map { DayOfWeek.valueOf(it) }.toSet(),
         exceptions = exceptions?.toList()
     )
 }
@@ -359,7 +361,7 @@ internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): Basi
 internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     return BasicShareLock(
         targetUserId = targetUserId,
-        targetUserRole = targetUserRole,
+        targetUserRole = UserRole.valueOf(targetUserRole),
         targetUserPublicKey = targetUserPublicKey,
         start = start?.toLong(),
         end = end?.toLong()

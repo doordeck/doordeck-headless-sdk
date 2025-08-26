@@ -55,12 +55,12 @@ actual object AccountApi {
      */
     fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: ByteArray? = null,
-        method: TwoFactorMethod? = null
+        method: String? = null
     ): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> = promise {
         AccountClient
             .registerEphemeralKeyWithSecondaryAuthenticationRequest(
                 publicKey = publicKey,
-                method = method
+                method = method?.let { TwoFactorMethod.valueOf(it) }
             )
             .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
     }
