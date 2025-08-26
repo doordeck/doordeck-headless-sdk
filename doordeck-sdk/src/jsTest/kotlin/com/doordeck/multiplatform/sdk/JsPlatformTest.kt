@@ -46,6 +46,6 @@ class JsPlatformTest {
         // Then
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
         assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+        assertEquals(sdkConfig.apiEnvironment?.name, sdk.contextManager().getApiEnvironment())
     }
 }

@@ -50,7 +50,7 @@ internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessTo
 
 internal fun randomShareLock() = ShareLock(
     targetUserId = randomUuidString(),
-    targetUserRole = UserRole.entries.random(),
+    targetUserRole = UserRole.entries.random().name,
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
     start = randomNullable { randomInt() },
     end = randomNullable { randomInt() },

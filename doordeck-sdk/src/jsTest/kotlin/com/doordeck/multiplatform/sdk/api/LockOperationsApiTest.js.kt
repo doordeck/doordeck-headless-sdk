@@ -393,7 +393,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 baseOperation = shareBaseOperation,
                 shareLock = LockOperations.ShareLock(
                     targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                    targetUserRole = UserRole.USER,
+                    targetUserRole = UserRole.USER.name,
                     targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
                 )
             )
@@ -441,12 +441,12 @@ class LockOperationsApiTest : IntegrationTest() {
         val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
             ),
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
             )
         )
@@ -514,7 +514,7 @@ class LockOperationsApiTest : IntegrationTest() {
         )
         val shareLock = LockOperations.ShareLock(
             targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-            targetUserRole = UserRole.USER,
+            targetUserRole = UserRole.USER.name,
             targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
         )
 
@@ -564,12 +564,12 @@ class LockOperationsApiTest : IntegrationTest() {
         val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
             ),
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
             )
         )
@@ -837,7 +837,7 @@ class LockOperationsApiTest : IntegrationTest() {
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
                         targetUserId = randomUuidString(),
-                        targetUserRole = UserRole.USER,
+                        targetUserRole = UserRole.USER.name,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )
                 )

@@ -156,20 +156,20 @@ object LockOperations {
 
     data class ShareLock(
         val targetUserId: String,
-        val targetUserRole: UserRole,
+        val targetUserRole: String,
         val targetUserPublicKey: ByteArray,
         val start: Int? = null,
         val end: Int? = null
     ) {
         class Builder {
             private var targetUserId: String? = null
-            private var targetUserRole: UserRole? = null
+            private var targetUserRole: String? = null
             private var targetUserPublicKey: ByteArray? = null
             private var start: Int? = null
             private var end: Int? = null
 
             fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
-            fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
+            fun setTargetUserRole(targetUserRole: String): Builder = apply {this.targetUserRole = targetUserRole }
             fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
             fun setStart(start: Int?): Builder = apply { this.start = start }
             fun setEnd(end: Int?): Builder = apply { this.end = end }
@@ -359,7 +359,7 @@ internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): Basi
 internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     return BasicShareLock(
         targetUserId = targetUserId,
-        targetUserRole = targetUserRole,
+        targetUserRole = UserRole.valueOf(targetUserRole),
         targetUserPublicKey = targetUserPublicKey,
         start = start?.toLong(),
         end = end?.toLong()

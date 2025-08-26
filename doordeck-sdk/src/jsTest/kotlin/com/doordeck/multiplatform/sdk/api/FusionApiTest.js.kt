@@ -146,7 +146,7 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
-        assertEquals(ServiceStateType.RUNNING, doorState.state)
+        assertEquals(ServiceStateType.RUNNING.name, doorState.state)
 
         // Given - shouldStopDoor
         // When
