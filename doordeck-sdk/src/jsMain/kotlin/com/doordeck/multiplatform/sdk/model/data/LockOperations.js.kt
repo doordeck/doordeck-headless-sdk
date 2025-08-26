@@ -8,7 +8,9 @@ import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
 import kotlin.time.Clock
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsSet
 import kotlin.js.collections.toList
+import kotlin.js.collections.toMutableSet
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
 
@@ -19,18 +21,18 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: JsArray<String>
+        val days: JsSet<String>
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: JsArray<String>? = null
+            private var days: JsSet<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String) = apply { this.timezone = timezone }
-            fun setDays(days: JsArray<String>) = apply { this.days = days }
+            fun setDays(days: JsSet<String>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
@@ -86,20 +88,20 @@ object LockOperations {
         val start: String, // HH:mm
         val end: String, // HH:mm
         val timezone: String,
-        val days: JsArray<String>,
+        val days: JsSet<String>,
         val exceptions: JsArray<String>? = null
     ) {
         class Builder {
             private var start: String? = null
             private var end: String? = null
             private var timezone: String? = null
-            private var days: JsArray<String>? = null
+            private var days: JsSet<String>? = null
             private var exceptions: JsArray<String>? = null
 
             fun setStart(start: String): Builder = apply { this.start = start }
             fun setEnd(end: String): Builder = apply { this.end = end }
             fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
-            fun setDays(days: JsArray<String>): Builder = apply { this.days = days }
+            fun setDays(days: JsSet<String>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: JsArray<String>?): Builder = apply { this.exceptions = exceptions }
 
             fun build(): UnlockBetween {
@@ -318,7 +320,7 @@ internal fun JsArray<LockOperations.TimeRequirement>.toBasicTimeRequirement(): L
         start = requirement.start,
         end = requirement.end,
         timezone = requirement.timezone,
-        days = requirement.days.toList().map { DayOfWeek.valueOf(it) }.toSet()
+        days = requirement.days.toMutableSet().map { DayOfWeek.valueOf(it) }.toSet()
     )
 }
 
@@ -337,7 +339,7 @@ internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBet
         start = start,
         end = end,
         timezone = timezone,
-        days = days.toList().map { DayOfWeek.valueOf(it) }.toSet(),
+        days = days.toMutableSet().map { DayOfWeek.valueOf(it) }.toSet(),
         exceptions = exceptions?.toList()
     )
 }

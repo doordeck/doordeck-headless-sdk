@@ -1,8 +1,13 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
+import com.doordeck.multiplatform.sdk.util.emptyJsMap
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsMap
+import com.doordeck.multiplatform.sdk.util.toJsSet
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsMap
+import kotlin.js.collections.JsSet
 
 @JsExport
 data class LockResponse(
@@ -26,7 +31,7 @@ data class LockSettingsResponse(
     val tiles: JsArray<String>,
     val hidden: Boolean,
     val directAccessEndpoints: JsArray<String> = emptyJsArray(),
-    val capabilities: Map<String, String> = emptyMap()
+    val capabilities: JsMap<String, String> = emptyJsMap()
 )
 
 @JsExport
@@ -40,7 +45,7 @@ data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsArray<String>
+    val days: JsSet<String>
 )
 
 @JsExport
@@ -57,7 +62,7 @@ data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsArray<String>,
+    val days: JsSet<String>,
     val exceptions: JsArray<String> = emptyJsArray()
 )
 
@@ -164,7 +169,7 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
     tiles = tiles.toJsArray(),
     hidden = hidden,
     directAccessEndpoints = directAccessEndpoints.toJsArray(),
-    capabilities = capabilities.map { it.key.name to it.value.name }.toMap()
+    capabilities = capabilities.map { it.key.name to it.value.name }.toJsMap()
 )
 
 internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
@@ -176,7 +181,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toList().map { it.name }.toJsArray()
+    days = days.map { it.name }.toJsSet()
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -191,7 +196,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toList().map { it.name }.toJsArray(),
+    days = days.map { it.name }.toJsSet(),
     exceptions = exceptions.toJsArray()
 )
 
