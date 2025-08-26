@@ -34,7 +34,7 @@ class JsPlatformTest {
     fun shouldInitialize() = runTest {
         // Given
         val sdkConfig = SdkConfig.Builder()
-            .setApiEnvironment(TEST_ENVIRONMENT)
+            .setApiEnvironment(TEST_ENVIRONMENT.name)
             .setCloudAuthToken(randomString())
             .setCloudRefreshToken(randomString())
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
@@ -46,6 +46,6 @@ class JsPlatformTest {
         // Then
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
         assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-        assertEquals(sdkConfig.apiEnvironment?.name, sdk.contextManager().getApiEnvironment())
+        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }
