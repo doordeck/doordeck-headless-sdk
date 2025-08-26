@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.model.responses
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import com.doordeck.multiplatform.sdk.util.toJsArray
@@ -45,7 +44,7 @@ data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsArray<DayOfWeek>
+    val days: JsArray<String>
 )
 
 @JsExport
@@ -62,7 +61,7 @@ data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsArray<DayOfWeek>,
+    val days: JsArray<String>,
     val exceptions: JsArray<String> = emptyJsArray()
 )
 
@@ -181,7 +180,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toList().toJsArray()
+    days = days.toList().map { it.name }.toJsArray()
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -196,7 +195,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toList().toJsArray(),
+    days = days.toList().map { it.name }.toJsArray(),
     exceptions = exceptions.toJsArray()
 )
 

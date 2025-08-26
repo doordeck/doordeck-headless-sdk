@@ -154,7 +154,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsArrayOf(DayOfWeek.entries.random())
+            days = jsArrayOf(DayOfWeek.entries.random().name)
         )
 
         // When
@@ -688,7 +688,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsArrayOf(DayOfWeek.entries.random()),
+            days = jsArrayOf(DayOfWeek.entries.random().name),
             exceptions = emptyJsArray()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -750,7 +750,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsArrayOf(DayOfWeek.entries.random()),
+            days = jsArrayOf(DayOfWeek.entries.random().name),
             exceptions = emptyJsArray()
         )
         ContextManager.setOperationContext(

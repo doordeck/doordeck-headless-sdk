@@ -24,7 +24,7 @@ internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toJsArray()
+    days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsArray()
 )
 
 internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
@@ -39,7 +39,7 @@ internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toJsArray(),
+    days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsArray(),
     exceptions = (1..3).map { randomString() }.toJsArray()
 )
 
