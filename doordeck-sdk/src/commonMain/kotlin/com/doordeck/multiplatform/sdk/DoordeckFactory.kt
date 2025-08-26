@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
@@ -9,7 +9,7 @@ import kotlin.jvm.JvmSynthetic
 internal object DoordeckFactory {
 
     @JvmSynthetic
-    internal suspend fun initialize(sdkConfig: SdkConfig): Doordeck {
+    internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
         // Add the provided values into the context
         Context.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)
