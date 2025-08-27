@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
-import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_EXPIRED_CERTIFICATE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_VALID_CERTIFICATE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_JWT
@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
+import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomPrivateKey
 import com.doordeck.multiplatform.sdk.randomPublicKey
@@ -17,18 +18,22 @@ import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class ContextManagerTest : IntegrationTest() {
+class ContextManagerTest : CallbackTest() {
 
     @Test
     fun shouldStoreAndLoadContext() = runTest {
@@ -152,14 +157,19 @@ class ContextManagerTest : IntegrationTest() {
 
     @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
-        // Given
-        ContextManager.clearContext()
+        runBlocking {
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // When
-        val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
-
-        // Then
-        assertTrue { result }
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertTrue { result.success.result }
+        }
     }
 
     @Test
@@ -241,71 +251,111 @@ class ContextManagerTest : IntegrationTest() {
 
     @Test
     fun shouldGetContextStateCloudTokenIsInvalid() = runTest {
-        // Given
-        ContextManager.setCloudAuthToken(randomString())
+        runBlocking {
+            // Given
+            ContextManager.setCloudAuthToken(randomString())
 
-        // When
-        val result = ContextManager.getContextState()
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // Then
-        assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result)
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result.success.result)
+        }
     }
 
     @Test
     fun shouldGetContextStateKeyPairIsInvalid() = runTest {
-        // Given
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        runBlocking {
+            // Given
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
-        // When
-        val result = ContextManager.getContextState()
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // Then
-        assertEquals(ContextState.KEY_PAIR_IS_INVALID, result)
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.KEY_PAIR_IS_INVALID, result.success.result)
+        }
     }
 
     @Test
     fun shouldGetContextStateKeyPairIsNotVerified() = runTest {
-        // Given
-        val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-        ContextManager.setKeyPair(keyPair.public, keyPair.private)
+        runBlocking {
+            // Given
+            val keyPair = CryptoManager.generateRawKeyPair()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(keyPair.public, keyPair.private)
 
-        // When
-        val result = ContextManager.getContextState()
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // Then
-        assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result)
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result.success.result)
+        }
     }
 
     @Test
     fun shouldGetContextStateCertificateChainIsInvalid() = runTest {
-        // Given
-        val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-        ContextManager.setKeyPair(keyPair.public, keyPair.private)
-        ContextManager.setKeyPairVerified(keyPair.public)
-        ContextManager.setCertificateChain(listOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
+        runBlocking {
+            // Given
+            val keyPair = CryptoManager.generateRawKeyPair()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(keyPair.public, keyPair.private)
+            ContextManager.setKeyPairVerified(keyPair.public)
+            ContextManager.setCertificateChain(listOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
 
-        // When
-        val result = ContextManager.getContextState()
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // Then
-        assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result)
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result.success.result)
+        }
     }
 
     @Test
     fun shouldGetContextStateReady() = runTest {
-        // Given
-        val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-        ContextManager.setKeyPair(keyPair.public, keyPair.private)
-        ContextManager.setKeyPairVerified(keyPair.public)
-        ContextManager.setCertificateChain(listOf(PLATFORM_TEST_VALID_CERTIFICATE))
+        runBlocking {
+            // Given
+            val keyPair = CryptoManager.generateRawKeyPair()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(keyPair.public, keyPair.private)
+            ContextManager.setKeyPairVerified(keyPair.public)
+            ContextManager.setCertificateChain(listOf(PLATFORM_TEST_VALID_CERTIFICATE))
 
-        // When
-        val result = ContextManager.getContextState()
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
 
-        // Then
-        assertEquals(ContextState.READY, result)
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.READY, result.success.result)
+        }
     }
 }

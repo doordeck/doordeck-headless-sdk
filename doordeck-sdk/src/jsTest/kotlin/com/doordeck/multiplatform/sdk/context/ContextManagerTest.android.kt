@@ -15,6 +15,7 @@ import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
 import kotlin.test.Test
@@ -143,7 +144,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.clearContext()
 
         // When
-        val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
+        val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
         // Then
         assertTrue { result }
@@ -232,7 +233,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(randomString())
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState().await()
 
         // Then
         assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED.name, result)
@@ -244,7 +245,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState().await()
 
         // Then
         assertEquals(ContextState.KEY_PAIR_IS_INVALID.name, result)
@@ -258,7 +259,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState().await()
 
         // Then
         assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED.name, result)
@@ -274,7 +275,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState().await()
 
         // Then
         assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED.name, result)
@@ -290,7 +291,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE))
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState().await()
 
         // Then
         assertEquals(ContextState.READY.name, result)
