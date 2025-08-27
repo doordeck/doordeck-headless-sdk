@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 internal data class BasicSiteResponse(
     val id: String,
     val name: String,
+    val colour: String,
     val longitude: Double,
     val latitude: Double,
     val radius: Int,
