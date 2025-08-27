@@ -8,6 +8,7 @@ import kotlin.js.collections.JsReadonlyArray
 data class SiteResponse(
     val id: String,
     val name: String,
+    val colour: String,
     val longitude: Double,
     val latitude: Double,
     val radius: Int,
@@ -29,6 +30,7 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): JsArray<SiteResponse> = m
     SiteResponse(
         id = site.id,
         name = site.name,
+        colour = site.colour,
         longitude = site.longitude,
         latitude = site.latitude,
         radius = site.radius,
