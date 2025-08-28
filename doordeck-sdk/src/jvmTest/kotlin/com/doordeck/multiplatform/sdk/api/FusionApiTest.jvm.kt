@@ -103,7 +103,7 @@ class FusionApiTest : IntegrationTest() {
                 timeout {
                     connectTimeoutMillis = 10_000
                     socketTimeoutMillis = 30_000
-                    requestTimeoutMillis = 60_000
+                    requestTimeoutMillis = 50_000
                 }
             }.bodyAsText()
         } catch (_: Exception) {

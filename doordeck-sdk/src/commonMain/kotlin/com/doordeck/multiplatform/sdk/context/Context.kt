@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.common.ContextState
@@ -65,8 +66,15 @@ internal object Context {
      * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS] days).
      */
     @JvmSynthetic
-    internal fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired() ?: true
+    internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
+        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired()?.let {
+            try {
+                AccountClient.getUserDetailsRequest()
+                false
+            } catch (_: Exception) {
+                true
+            }
+        } ?: true
     }
 
     /**
@@ -268,7 +276,7 @@ internal object Context {
      * Checks the context and returns a [ContextState] representing its state.
      */
     @JvmSynthetic
-    internal fun getContextState(): ContextState {
+    internal suspend fun getContextState(): ContextState {
         if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }

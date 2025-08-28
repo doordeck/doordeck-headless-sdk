@@ -67,11 +67,6 @@ public unsafe class ContextManager(
         }
     }
 
-    public bool IsCloudAuthTokenInvalidOrExpired()
-    {
-        return contextManager.isCloudAuthTokenInvalidOrExpired_(context).ToBoolean();
-    }
-
     public void SetCloudRefreshToken(string token)
     {
         var data = token.ToSByte();

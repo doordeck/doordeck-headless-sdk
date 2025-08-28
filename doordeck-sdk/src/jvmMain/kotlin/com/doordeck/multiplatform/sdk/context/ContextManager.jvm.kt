@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPublicKey
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.completableFuture
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.doordeck.multiplatform.sdk.util.toUuid
 import java.net.URI
@@ -13,6 +14,7 @@ import java.security.KeyPair
 import java.security.PublicKey
 import java.security.cert.X509Certificate
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 actual object ContextManager {
 
@@ -24,7 +26,11 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
+    suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
+
+    fun isCloudAuthTokenInvalidOrExpiredAsync(): CompletableFuture<Boolean> = completableFuture {
+        Context.isCloudAuthTokenInvalidOrExpired()
+    }
 
     fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
 
@@ -88,7 +94,11 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    fun getContextState(): ContextState = Context.getContextState()
+    suspend fun getContextState(): ContextState = Context.getContextState()
+
+    fun getContextStateAsync(): CompletableFuture<ContextState> = completableFuture {
+        Context.getContextState()
+    }
 
     fun clearContext() = Context.clearContext()
 }

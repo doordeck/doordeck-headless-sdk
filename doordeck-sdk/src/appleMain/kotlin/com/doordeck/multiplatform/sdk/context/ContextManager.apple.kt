@@ -22,7 +22,7 @@ actual object ContextManager {
         return Context.getCloudAuthToken()
     }
 
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean {
+    suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
         return Context.isCloudAuthTokenInvalidOrExpired()
     }
 
@@ -109,7 +109,7 @@ actual object ContextManager {
         )
     }
 
-    fun getContextState(): ContextState {
+    suspend fun getContextState(): ContextState {
         return Context.getContextState()
     }
 

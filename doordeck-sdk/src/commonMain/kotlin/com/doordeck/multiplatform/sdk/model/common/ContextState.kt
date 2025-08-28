@@ -1,8 +1,10 @@
 package com.doordeck.multiplatform.sdk.model.common
 
+import kotlinx.serialization.Serializable
 import kotlin.js.JsExport
 
 @JsExport
+@Serializable
 enum class ContextState {
     /**
      * Logging in or providing valid authentication tokens in the context is required.
