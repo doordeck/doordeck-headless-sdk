@@ -16,19 +16,11 @@ import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuid
-import com.doordeck.multiplatform.sdk.respondContent
 import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
-import com.doordeck.multiplatform.sdk.util.installAuth
-import com.doordeck.multiplatform.sdk.util.installContentNegotiation
-import com.doordeck.multiplatform.sdk.util.installResponseValidator
 import com.doordeck.multiplatform.sdk.util.toUri
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.config
-import io.ktor.client.engine.mock.MockEngine
 import kotlinx.coroutines.test.runTest
 import java.security.KeyPair
 import kotlin.test.Test
@@ -255,22 +247,13 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsInvalid() = runTest {
         // Given
-        val mockEngine = MockEngine.config {
-            addHandler {
-                respondContent(BasicUserDetailsResponse(
-                    email = randomEmail(),
-                    displayName = randomString(),
-                    emailVerified = randomBoolean(),
-                    publicKey = randomPublicKey().encodeByteArrayToBase64()
-                ))
-            }
-        }
-        val client = HttpClient(mockEngine) {
-            installResponseValidator()
-            installContentNegotiation()
-            installAuth()
-        }.also { it.addExceptionInterceptor() }
-        CloudHttpClient.overrideClient(client)
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
         // When
