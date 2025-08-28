@@ -15,9 +15,6 @@ class ContextManager(object):
     def get_cloud_auth_token(self):
         return _doordeck_headless_sdk.getCloudAuthToken(self.resource)
 
-    def is_cloud_auth_token_invalid_or_expired(self):
-        return _doordeck_headless_sdk.isCloudAuthTokenInvalidOrExpired(self.resource)
-
     def set_cloud_refresh_token(self, token: str):
         _doordeck_headless_sdk.setCloudRefreshToken(self.resource, token)
 
