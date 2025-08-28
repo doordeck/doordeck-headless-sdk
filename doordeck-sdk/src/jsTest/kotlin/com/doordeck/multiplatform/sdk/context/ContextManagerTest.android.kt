@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_EXPIRED_CERTIFICATE
@@ -9,12 +10,17 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
+import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomEmail
+import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
@@ -242,6 +248,13 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsInvalid() = runTest {
         // Given
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
         // When
@@ -254,6 +267,13 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsNotVerified() = runTest {
         // Given
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
@@ -268,6 +288,13 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateCertificateChainIsInvalid() = runTest {
         // Given
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
@@ -284,6 +311,13 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateReady() = runTest {
         // Given
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
