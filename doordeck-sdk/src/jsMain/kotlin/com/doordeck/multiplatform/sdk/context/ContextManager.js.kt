@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.util.toJsArray
@@ -10,9 +9,10 @@ import kotlin.js.collections.toList
 @JsExport
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = Context.setApiEnvironment(apiEnvironment)
+    fun setApiEnvironment(apiEnvironment: String) =
+        Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
 
-    fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
+    fun getApiEnvironment(): String = Context.getApiEnvironment().name
 
     fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
 
@@ -70,7 +70,7 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    fun getContextState(): ContextState = Context.getContextState()
+    fun getContextState(): String = Context.getContextState().name
 
     fun clearContext() = Context.clearContext()
 }

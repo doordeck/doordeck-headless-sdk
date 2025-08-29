@@ -27,4 +27,5 @@ internal inline fun <reified T>JsArray<T>.firstOrNull(predicate: (T) -> Boolean)
 }
 
 internal inline fun <reified T>JsArray<T>.size() = toList().size
-internal inline fun <reified T>emptyJsSet(): JsSet<T> = emptySet<T>().toMutableSet().asJsSetView()
+
+internal inline fun <reified T>emptyJsSet(): JsSet<T> = mutableSetOf<T>().asJsSetView()

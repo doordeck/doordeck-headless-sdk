@@ -1,7 +1,5 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
-import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.BasicAlpetaController
 import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
 import com.doordeck.multiplatform.sdk.model.data.BasicAssaAbloyController
@@ -57,7 +55,7 @@ data class IntegrationTypeResponse(
 
 @JsExport
 data class DoorStateResponse(
-    val state: ServiceStateType
+    val state: String
 )
 
 @JsExport
@@ -71,12 +69,12 @@ data class IntegrationConfigurationResponse(
 data class ControllerResponse(
     val id: String,
     val name: String? = null,
-    val role: UserRole? = null
+    val role: String? = null
 )
 
 @JsExport
 data class ServiceStateResponse(
-    val state: ServiceStateType
+    val state: String
 )
 
 @JsExport
@@ -94,7 +92,7 @@ internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): Integrati
 )
 
 internal fun BasicDoorStateResponse.toDoorStateResponse(): DoorStateResponse = DoorStateResponse(
-    state = state
+    state = state.name
 )
 
 internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): JsArray<IntegrationConfigurationResponse> = map { configuration ->
@@ -108,11 +106,11 @@ internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurat
 internal fun BasicControllerResponse.toControllerResponse(): ControllerResponse = ControllerResponse(
     id = id,
     name = name,
-    role = role
+    role = role?.name
 )
 
 internal fun BasicServiceStateResponse.toServiceStateResponse(): ServiceStateResponse = ServiceStateResponse(
-    state = state
+    state = state.name
 )
 
 internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse = DiscoveredDeviceResponse(
@@ -271,5 +269,5 @@ internal fun BasicZktecoController.toZktecoController(): ZktecoController = Zkte
     clientSecret = clientSecret,
     doorId = doorId,
     baseUrl = baseUrl,
-    entityType = entityType
+    entityType = entityType.name
 )

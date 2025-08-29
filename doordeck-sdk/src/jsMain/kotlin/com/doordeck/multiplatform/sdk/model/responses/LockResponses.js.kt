@@ -1,14 +1,12 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.common.AuditEvent
-import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
-import com.doordeck.multiplatform.sdk.model.common.CapabilityType
-import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
-import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
+import com.doordeck.multiplatform.sdk.util.emptyJsMap
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsMap
 import com.doordeck.multiplatform.sdk.util.toJsSet
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsMap
 import kotlin.js.collections.JsSet
 
 @JsExport
@@ -17,7 +15,7 @@ data class LockResponse(
     val name: String,
     val start: String? = null,
     val end: String? = null,
-    val role: UserRole,
+    val role: String,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
     val favourite: Boolean
@@ -33,7 +31,7 @@ data class LockSettingsResponse(
     val tiles: JsArray<String>,
     val hidden: Boolean,
     val directAccessEndpoints: JsArray<String> = emptyJsArray(),
-    val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
+    val capabilities: JsMap<String, String> = emptyJsMap()
 )
 
 @JsExport
@@ -47,7 +45,7 @@ data class TimeRequirementResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsSet<DayOfWeek>
+    val days: JsSet<String>
 )
 
 @JsExport
@@ -64,7 +62,7 @@ data class UnlockBetweenSettingResponse(
     val start: String,
     val end: String,
     val timezone: String,
-    val days: JsSet<DayOfWeek>,
+    val days: JsSet<String>,
     val exceptions: JsArray<String> = emptyJsArray()
 )
 
@@ -102,7 +100,7 @@ data class UserLockResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val role: UserRole,
+    val role: String,
     val start: Double? = null,
     val end: Double? = null
 )
@@ -123,7 +121,7 @@ data class LockUserResponse(
 @JsExport
 data class LockUserDetailsResponse(
     val deviceId: String,
-    val role: UserRole,
+    val role: String,
     val start: Double? = null,
     val end: Double? = null
 )
@@ -132,7 +130,7 @@ data class LockUserDetailsResponse(
 data class AuditResponse(
     val deviceId: String,
     val timestamp: Double,
-    val type: AuditEvent,
+    val type: String,
     val issuer: AuditUserResponse,
     val subject: AuditUserResponse? = null,
     val rejectionReason: String? = null,
@@ -156,7 +154,7 @@ internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     name = name,
     start = start,
     end = end,
-    role = role,
+    role = role.name,
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
     favourite = favourite
@@ -171,7 +169,7 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
     tiles = tiles.toJsArray(),
     hidden = hidden,
     directAccessEndpoints = directAccessEndpoints.toJsArray(),
-    capabilities = capabilities
+    capabilities = capabilities.map { it.key.name to it.value.name }.toJsMap()
 )
 
 internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
@@ -183,7 +181,7 @@ internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequi
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toJsSet()
+    days = days.map { it.name }.toJsSet()
 )
 
 internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
@@ -198,7 +196,7 @@ internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse():
     start = start,
     end = end,
     timezone = timezone,
-    days = days.toJsSet(),
+    days = days.map { it.name }.toJsSet(),
     exceptions = exceptions.toJsArray()
 )
 
@@ -236,7 +234,7 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): JsArray<UserLockR
         displayName = user.displayName,
         orphan = user.orphan,
         foreign = user.foreign,
-        role = user.role,
+        role = user.role.name,
         start = user.start,
         end = user.end
     )
@@ -256,7 +254,7 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
 
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
     deviceId = deviceId,
-    role = role,
+    role = role.name,
     start = start,
     end = end
 )
@@ -265,7 +263,7 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): JsArray<AuditResponse> 
     AuditResponse(
         deviceId = audit.deviceId,
         timestamp = audit.timestamp.toDouble(),
-        type = audit.type,
+        type = audit.type.name,
         issuer = audit.issuer.toAuditUserResponse(),
         subject = audit.subject?.toAuditUserResponse(),
         rejectionReason = audit.rejectionReason,

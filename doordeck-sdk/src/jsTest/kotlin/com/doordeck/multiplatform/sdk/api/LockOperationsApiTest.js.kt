@@ -157,7 +157,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsSetOf(DayOfWeek.entries.random())
+            days = jsSetOf(DayOfWeek.entries.random().name)
         )
 
         // When
@@ -170,7 +170,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(addedTimeRestriction.start, actualTime.start)
         assertEquals(addedTimeRestriction.end, actualTime.end)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
-        assertContains(actualTime.days.toSet(), addedTimeRestriction.days.first())
+        assertContains(actualTime.days.toSet(), addedTimeRestriction.days.toSet().first())
 
         // Given - shouldRemoveLockSettingTimeRestrictions
         val removedTimeRestriction = emptyJsArray<LockOperations.TimeRequirement>()
@@ -396,7 +396,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 baseOperation = shareBaseOperation,
                 shareLock = LockOperations.ShareLock(
                     targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                    targetUserRole = UserRole.USER,
+                    targetUserRole = UserRole.USER.name,
                     targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
                 )
             )
@@ -444,12 +444,12 @@ class LockOperationsApiTest : IntegrationTest() {
         val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
             ),
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
             )
         )
@@ -517,7 +517,7 @@ class LockOperationsApiTest : IntegrationTest() {
         )
         val shareLock = LockOperations.ShareLock(
             targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-            targetUserRole = UserRole.USER,
+            targetUserRole = UserRole.USER.name,
             targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
         )
 
@@ -567,12 +567,12 @@ class LockOperationsApiTest : IntegrationTest() {
         val batchShareLock = jsArrayOf(
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
             ),
             LockOperations.ShareLock(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID,
-                targetUserRole = UserRole.USER,
+                targetUserRole = UserRole.USER.name,
                 targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
             )
         )
@@ -691,7 +691,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsSetOf(DayOfWeek.entries.random()),
+            days = jsSetOf(DayOfWeek.entries.random().name),
             exceptions = emptyJsArray()
         )
         val addBaseOperation = LockOperations.BaseOperation(
@@ -753,7 +753,7 @@ class LockOperationsApiTest : IntegrationTest() {
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
             timezone = TimeZone.UTC.id,
-            days = jsSetOf(DayOfWeek.entries.random()),
+            days = jsSetOf(DayOfWeek.entries.random().name),
             exceptions = emptyJsArray()
         )
         ContextManager.setOperationContext(
@@ -840,7 +840,7 @@ class LockOperationsApiTest : IntegrationTest() {
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
                         targetUserId = randomUuidString(),
-                        targetUserRole = UserRole.USER,
+                        targetUserRole = UserRole.USER.name,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )
                 )

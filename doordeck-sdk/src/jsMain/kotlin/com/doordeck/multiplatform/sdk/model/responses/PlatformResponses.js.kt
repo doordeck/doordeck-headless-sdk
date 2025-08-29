@@ -114,7 +114,7 @@ data class EmailCallToActionResponse(
 data class OauthResponse(
     val authorizationEndpoint: String,
     val clientId: String,
-    val grantType: GrantType
+    val grantType: String
 )
 
 @JsExport
@@ -222,7 +222,7 @@ internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): Email
 internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
     authorizationEndpoint = authorizationEndpoint,
     clientId = clientId,
-    grantType = grantType
+    grantType = grantType.name
 )
 
 internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): JsArray<ApplicationOwnerDetailsResponse> = map { owner ->

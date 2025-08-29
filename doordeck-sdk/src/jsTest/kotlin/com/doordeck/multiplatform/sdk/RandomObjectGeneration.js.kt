@@ -25,7 +25,7 @@ internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toSet().toJsSet()
+    days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsSet()
 )
 
 internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
@@ -40,7 +40,7 @@ internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
     start = randomString(),
     end = randomString(),
     timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).toSet().toJsSet(),
+    days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsSet(),
     exceptions = (1..3).map { randomString() }.toJsArray()
 )
 
@@ -51,7 +51,7 @@ internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessTo
 
 internal fun randomShareLock() = ShareLock(
     targetUserId = randomUuidString(),
-    targetUserRole = UserRole.entries.random(),
+    targetUserRole = UserRole.entries.random().name,
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
     start = randomNullable { randomInt() },
     end = randomNullable { randomInt() },

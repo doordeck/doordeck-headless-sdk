@@ -154,7 +154,7 @@ object FusionOperations {
         val clientSecret: String,
         val doorId: String,
         val baseUrl: String? = null,
-        val entityType: ZktecoEntityType
+        val entityType: String
     ) : LockController
 }
 
@@ -308,5 +308,5 @@ internal fun ZktecoController.toBasicZktecoController(): BasicZktecoController =
     clientSecret = clientSecret,
     doorId = doorId,
     baseUrl = baseUrl,
-    entityType = entityType
+    entityType = ZktecoEntityType.valueOf(entityType)
 )

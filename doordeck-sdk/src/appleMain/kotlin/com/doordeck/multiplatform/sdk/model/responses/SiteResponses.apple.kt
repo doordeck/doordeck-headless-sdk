@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.model.responses
 data class SiteResponse(
     val id: String,
     val name: String,
+    val colour: String,
     val longitude: Double,
     val latitude: Double,
     val radius: Int,
@@ -23,6 +24,7 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
     SiteResponse(
         id = site.id,
         name = site.name,
+        colour = site.colour,
         longitude = site.longitude,
         latitude = site.latitude,
         radius = site.radius,
