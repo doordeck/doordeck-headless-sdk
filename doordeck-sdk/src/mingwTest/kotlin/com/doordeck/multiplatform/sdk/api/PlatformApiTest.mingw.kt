@@ -72,12 +72,14 @@ class PlatformApiTest : CallbackTest() {
             )
 
             // When
-            callbackApiCall<ResultData<Unit>> {
+            val applicationIdResponse = callbackApiCall<ResultData<String>> {
                 PlatformApi.createApplication(
                     data = newApplication.toJson(),
                     callback = staticCFunction(::testCallback)
                 )
             }
+            assertNotNull(applicationIdResponse.success)
+            assertNotNull(applicationIdResponse.success.result)
 
             // Then
             val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
@@ -92,6 +94,7 @@ class PlatformApiTest : CallbackTest() {
                 it.name.equals(newApplication.name, true)
             }
             assertNotNull(application)
+            assertEquals(applicationIdResponse.success.result, application.applicationId)
             assertEquals(newApplication.name, application.name)
             assertEquals(newApplication.companyName, application.companyName)
             assertEquals(newApplication.mailingAddress, application.mailingAddress)

@@ -35,6 +35,8 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.parseUrl
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -48,16 +50,18 @@ internal object PlatformClient {
      * and define branding, UI, and authentication elements.
      *
      * @param application Contains new application definition to be created.
+     * @return The application's unique identifier.
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/create-application">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun createApplicationRequest(application: BasicCreateApplication) {
-        CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
+    internal suspend fun createApplicationRequest(application: BasicCreateApplication): String {
+        val response = CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
+        return response.extractApplicationIdFromLocationHeader()
     }
 
     /**
@@ -398,5 +402,25 @@ internal object PlatformClient {
     @JvmSynthetic
     internal suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
+    }
+
+    /**
+     * Extracts the string from the Location header of the HTTP response, parses it as a URL,
+     * and retrieves the last path parameter, which is expected to be the newly created application ID.
+     *
+     * @return The application's unique identifier.
+     * @throws SdkException if the Location header is missing or invalid.
+     */
+    private fun HttpResponse.extractApplicationIdFromLocationHeader(): String {
+        val location = headers.entries()
+            .firstOrNull { it.key.lowercase() == "location" }
+            ?.value
+            ?.firstOrNull()
+            ?: throw SdkException("Invalid location header")
+        val id = parseUrl(location)
+            ?.rawSegments
+            ?.lastOrNull()
+            ?: throw SdkException("Invalid location value")
+        return id
     }
 }

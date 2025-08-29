@@ -42,13 +42,14 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        PlatformApi.createApplication(newApplication).await()
+        val applicationId = PlatformApi.createApplication(newApplication).await()
 
         // Then
         var application = PlatformApi.listApplications().await().toList().firstOrNull {
             it.name.equals(newApplication.name, true)
         }
         assertNotNull(application)
+        assertEquals(applicationId, application.applicationId)
         assertEquals(newApplication.name, application.name)
         assertEquals(newApplication.companyName, application.companyName)
         assertEquals(newApplication.mailingAddress, application.mailingAddress)
