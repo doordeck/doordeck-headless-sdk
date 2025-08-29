@@ -35,7 +35,8 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import io.ktor.http.Url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.parseUrl
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -60,8 +61,7 @@ internal object PlatformClient {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
-        val location = response.headers.entries().first { it.key.lowercase() == "location" }.value.first()
-        return Url(location).rawSegments.last()
+        return response.extractApplicationIdFromLocationHeader()
     }
 
     /**
@@ -402,5 +402,25 @@ internal object PlatformClient {
     @JvmSynthetic
     internal suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
+    }
+
+    /**
+     * Extracts the string from the Location header of the HTTP response, parses it as a URL,
+     * and retrieves the last path parameter, which is expected to be the newly created application ID.
+     *
+     * @return The application's unique identifier.
+     * @throws SdkException if the Location header is missing or invalid.
+     */
+    private fun HttpResponse.extractApplicationIdFromLocationHeader(): String {
+        val location = headers.entries()
+            .firstOrNull { it.key.lowercase() == "location" }
+            ?.value
+            ?.firstOrNull()
+            ?: throw SdkException("Invalid location header")
+        val id = parseUrl(location)
+            ?.rawSegments
+            ?.lastOrNull()
+            ?: throw SdkException("Invalid location value")
+        return id
     }
 }
