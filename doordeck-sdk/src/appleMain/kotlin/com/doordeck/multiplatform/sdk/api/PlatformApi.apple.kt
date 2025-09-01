@@ -22,7 +22,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun createApplication(application: PlatformOperations.CreateApplication) {
+    suspend fun createApplication(application: PlatformOperations.CreateApplication): String {
         return PlatformClient.createApplicationRequest(application.toBasicCreateApplication())
     }
 
