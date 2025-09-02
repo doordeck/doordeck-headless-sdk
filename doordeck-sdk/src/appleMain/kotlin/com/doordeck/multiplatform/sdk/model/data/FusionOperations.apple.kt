@@ -18,6 +18,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import platform.Foundation.NSURL
 
 object FusionOperations {
@@ -195,24 +196,24 @@ internal fun AmagController.toBasicAmagController(): BasicAmagController = Basic
 )
 
 internal fun AssaAbloyController.toBasicAssaAbloyController(): BasicAssaAbloyController = BasicAssaAbloyController(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     doorId = doorId
 )
 
 internal fun AvigilonController.toBasicAvigilonController(): BasicAvigilonController = BasicAvigilonController(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     username = username,
     password = password,
     doorId = doorId
 )
 
 internal fun AxisController.toBasicAxisController(): BasicAxisController = BasicAxisController(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     doorIdentifier = doorIdentifier
 )
 
 internal fun CCureController.toBasicCCureController(): BasicCCureController = BasicCCureController(
-    baseUrl = baseUrl?.absoluteString,
+    baseUrl = baseUrl?.toUrlString(),
     username = username,
     password = password,
     doorType = doorType,
@@ -224,20 +225,20 @@ internal fun DemoController.toBasicDemoController(): BasicDemoController = Basic
 )
 
 internal fun GallagherController.toBasicGallagherController(): BasicGallagherController = BasicGallagherController(
-    baseUrl = baseUrl?.absoluteString,
+    baseUrl = baseUrl?.toUrlString(),
     apiKey = apiKey,
     doorId = doorId
 )
 
 internal fun GenetecController.toBasicGenetecController(): BasicGenetecController = BasicGenetecController(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     username = username,
     password = password,
     doorId = doorId
 )
 
 internal fun LenelController.toBasicLenelController(): BasicLenelController = BasicLenelController(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     username = username,
     password = password,
     directoryId = directoryId,
@@ -259,7 +260,7 @@ internal fun PaxtonNet2Controller.toBasicPaxtonNet2Controller(): BasicPaxtonNet2
 )
 
 internal fun Paxton10Controller.toBasicPaxton10Controller(): BasicPaxton10Controller = BasicPaxton10Controller(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     username = username,
     password = password,
     applianceId = applianceId
@@ -272,7 +273,7 @@ internal fun IntegraV1Controller.toBasicIntegraV1Controller(): BasicIntegraV1Con
 )
 
 internal fun IntegraV2Controller.toBasicIntegraV2Controller(): BasicIntegraV2Controller = BasicIntegraV2Controller(
-    baseUrl = baseUrl.absoluteString ?: "",
+    baseUrl = baseUrl.toUrlString(),
     sessionId = sessionId,
     controllerId = controllerId,
     cardholderId = cardholderId,

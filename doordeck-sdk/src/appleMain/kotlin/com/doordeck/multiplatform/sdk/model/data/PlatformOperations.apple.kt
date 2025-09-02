@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations.CreateApplication
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import platform.Foundation.NSURL
 
 object PlatformOperations {
@@ -283,7 +284,7 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
 
 internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
     return BasicEmailCallToAction(
-        actionTarget = actionTarget.absoluteString ?: "",
+        actionTarget = actionTarget.toUrlString(),
         headline = headline,
         actionText = actionText
     )

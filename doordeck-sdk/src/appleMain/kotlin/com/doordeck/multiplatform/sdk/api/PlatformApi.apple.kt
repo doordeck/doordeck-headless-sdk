@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import platform.Foundation.NSURL
 import platform.Foundation.NSUUID
 
@@ -154,7 +155,7 @@ actual object PlatformApi {
     @DoordeckOnly
     @Throws(Exception::class)
     suspend fun addAuthIssuer(applicationId: NSUUID, url: NSURL) {
-        return PlatformClient.addAuthIssuerRequest(applicationId.UUIDString, url.absoluteString ?: "")
+        return PlatformClient.addAuthIssuerRequest(applicationId.UUIDString, url.toUrlString())
     }
 
     /**
@@ -163,7 +164,7 @@ actual object PlatformApi {
     @DoordeckOnly
     @Throws(Exception::class)
     suspend fun deleteAuthIssuer(applicationId: NSUUID, url: NSURL) {
-        return PlatformClient.deleteAuthIssuerRequest(applicationId.UUIDString, url.absoluteString ?: "")
+        return PlatformClient.deleteAuthIssuerRequest(applicationId.UUIDString, url.toUrlString())
     }
 
     /**
@@ -172,7 +173,7 @@ actual object PlatformApi {
     @DoordeckOnly
     @Throws(Exception::class)
     suspend fun addCorsDomain(applicationId: NSUUID, url: NSURL) {
-        return PlatformClient.addCorsDomainRequest(applicationId.UUIDString, url.absoluteString ?: "")
+        return PlatformClient.addCorsDomainRequest(applicationId.UUIDString, url.toUrlString())
     }
 
     /**
@@ -181,7 +182,7 @@ actual object PlatformApi {
     @DoordeckOnly
     @Throws(Exception::class)
     suspend fun removeCorsDomain(applicationId: NSUUID, url: NSURL) {
-        return PlatformClient.removeCorsDomainRequest(applicationId.UUIDString, url.absoluteString ?: "")
+        return PlatformClient.removeCorsDomainRequest(applicationId.UUIDString, url.toUrlString())
     }
 
     /**
