@@ -62,8 +62,9 @@ internal object Context {
     }
 
     /**
-     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or expired.
-     * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS] days).
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed),
+     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]),
+     * or has been revoked on the backend (performing a network request to verify).
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
@@ -273,7 +274,12 @@ internal object Context {
     }
 
     /**
-     * Checks the context and returns a [ContextState] representing its state.
+     * Performs a sequence of checks to determine the [ContextState].
+     * The first check to fail determines the returned state.
+     * The checks are, in order: cloud token validity (performs a network request), key pair existence,
+     * key pair verification status, and certificate chain validity.
+     *
+     * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic
     internal suspend fun getContextState(): ContextState {

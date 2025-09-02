@@ -99,7 +99,7 @@ class FusionApiTest : IntegrationTest() {
         } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key.host){
+            TEST_HTTP_CLIENT.get(testController.key.toString()){
                 timeout {
                     connectTimeoutMillis = 10_000
                     socketTimeoutMillis = 30_000
