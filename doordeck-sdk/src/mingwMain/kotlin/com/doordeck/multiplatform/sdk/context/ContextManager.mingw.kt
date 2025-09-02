@@ -1,12 +1,15 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
+import com.doordeck.multiplatform.sdk.util.callback
 import com.doordeck.multiplatform.sdk.util.fromJson
+import kotlinx.cinterop.ByteVar
+import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.CPointer
 
 actual object ContextManager {
 
@@ -30,8 +33,13 @@ actual object ContextManager {
     }
 
     @CName("isCloudAuthTokenInvalidOrExpired")
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return Context.isCloudAuthTokenInvalidOrExpired()
+    fun isCloudAuthTokenInvalidOrExpired(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block =  {
+                Context.isCloudAuthTokenInvalidOrExpired()
+            },
+            callback = callback
+        )
     }
 
     @CName("setCloudRefreshToken")
@@ -146,8 +154,13 @@ actual object ContextManager {
     }
 
     @CName("getContextState")
-    fun getContextState(): ContextState {
-        return Context.getContextState()
+    fun getContextState(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
+        callback(
+            block =  {
+                Context.getContextState()
+            },
+            callback = callback
+        )
     }
 
     @CName("clearContext")

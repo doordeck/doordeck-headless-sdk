@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.common.ContextState
@@ -61,12 +62,20 @@ internal object Context {
     }
 
     /**
-     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or expired.
-     * (we consider it expired if it will expire within the next [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS] days).
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed),
+     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]),
+     * or has been revoked on the backend (performing a network request to verify).
      */
     @JvmSynthetic
-    internal fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired() ?: true
+    internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
+        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired()?.let {
+            try {
+                AccountClient.getUserDetailsRequest()
+                false
+            } catch (_: Exception) {
+                true
+            }
+        } ?: true
     }
 
     /**
@@ -265,10 +274,15 @@ internal object Context {
     }
 
     /**
-     * Checks the context and returns a [ContextState] representing its state.
+     * Performs a sequence of checks to determine the [ContextState].
+     * The first check to fail determines the returned state.
+     * The checks are, in order: cloud token validity (performs a network request), key pair existence,
+     * key pair verification status, and certificate chain validity.
+     *
+     * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic
-    internal fun getContextState(): ContextState {
+    internal suspend fun getContextState(): ContextState {
         if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }

@@ -15,8 +15,11 @@ class ContextManager(object):
     def get_cloud_auth_token(self):
         return _doordeck_headless_sdk.getCloudAuthToken(self.resource)
 
-    def is_cloud_auth_token_invalid_or_expired(self):
-        return _doordeck_headless_sdk.isCloudAuthTokenInvalidOrExpired(self.resource)
+    async def is_cloud_auth_token_invalid_or_expired(self):
+        return await execute_async(
+            _doordeck_headless_sdk.isCloudAuthTokenInvalidOrExpired,
+            [self.resource]
+        )
 
     def set_cloud_refresh_token(self, token: str):
         _doordeck_headless_sdk.setCloudRefreshToken(self.resource, token)
@@ -62,6 +65,12 @@ class ContextManager(object):
             "userPrivateKey": userPrivateKey
         }
         _doordeck_headless_sdk.setOperationContextJson(self.resource, json.dumps(data))
+
+    async def get_context_state(self):
+        return await execute_async(
+            _doordeck_headless_sdk.getContextState,
+            [self.resource]
+        )
 
     def clear_context(self):
         _doordeck_headless_sdk.clearContext(self.resource)
