@@ -12,6 +12,8 @@ import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
+import platform.Foundation.NSURL
+import platform.Foundation.NSUUID
 
 /**
  * Platform-specific implementations of platform-related API calls.
@@ -41,8 +43,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplication(applicationId: String): ApplicationResponse {
-        return PlatformClient.getApplicationRequest(applicationId)
+    suspend fun getApplication(applicationId: NSUUID): ApplicationResponse {
+        return PlatformClient.getApplicationRequest(applicationId.UUIDString)
             .toApplicationResponse()
     }
 
@@ -51,8 +53,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationName(applicationId: String, name: String) {
-        return PlatformClient.updateApplicationNameRequest(applicationId, name)
+    suspend fun updateApplicationName(applicationId: NSUUID, name: String) {
+        return PlatformClient.updateApplicationNameRequest(applicationId.UUIDString, name)
     }
 
     /**
@@ -60,8 +62,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String) {
-        return PlatformClient.updateApplicationCompanyNameRequest(applicationId, companyName)
+    suspend fun updateApplicationCompanyName(applicationId: NSUUID, companyName: String) {
+        return PlatformClient.updateApplicationCompanyNameRequest(applicationId.UUIDString, companyName)
     }
 
     /**
@@ -69,8 +71,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String) {
-        return PlatformClient.updateApplicationMailingAddressRequest(applicationId, mailingAddress)
+    suspend fun updateApplicationMailingAddress(applicationId: NSUUID, mailingAddress: String) {
+        return PlatformClient.updateApplicationMailingAddressRequest(applicationId.UUIDString, mailingAddress)
     }
 
     /**
@@ -78,8 +80,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String) {
-        return PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId, privacyPolicy)
+    suspend fun updateApplicationPrivacyPolicy(applicationId: NSUUID, privacyPolicy: String) {
+        return PlatformClient.updateApplicationPrivacyPolicyRequest(applicationId.UUIDString, privacyPolicy)
     }
 
     /**
@@ -87,8 +89,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String) {
-        return PlatformClient.updateApplicationSupportContactRequest(applicationId, supportContact)
+    suspend fun updateApplicationSupportContact(applicationId: NSUUID, supportContact: String) {
+        return PlatformClient.updateApplicationSupportContactRequest(applicationId.UUIDString, supportContact)
     }
 
     /**
@@ -96,8 +98,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationAppLink(applicationId: String, appLink: String) {
-        return PlatformClient.updateApplicationAppLinkRequest(applicationId, appLink)
+    suspend fun updateApplicationAppLink(applicationId: NSUUID, appLink: String) {
+        return PlatformClient.updateApplicationAppLinkRequest(applicationId.UUIDString, appLink)
     }
 
     /**
@@ -105,8 +107,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationEmailPreferences(applicationId: String, emailPreferences: PlatformOperations.EmailPreferences) {
-        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId, emailPreferences.toBasicEmailPreferences())
+    suspend fun updateApplicationEmailPreferences(applicationId: NSUUID, emailPreferences: PlatformOperations.EmailPreferences) {
+        return PlatformClient.updateApplicationEmailPreferencesRequest(applicationId.UUIDString, emailPreferences.toBasicEmailPreferences())
     }
 
     /**
@@ -114,8 +116,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String) {
-        return PlatformClient.updateApplicationLogoUrlRequest(applicationId, logoUrl)
+    suspend fun updateApplicationLogoUrl(applicationId: NSUUID, logoUrl: String) {
+        return PlatformClient.updateApplicationLogoUrlRequest(applicationId.UUIDString, logoUrl)
     }
 
     /**
@@ -123,8 +125,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun deleteApplication(applicationId: String) {
-        return PlatformClient.deleteApplicationRequest(applicationId)
+    suspend fun deleteApplication(applicationId: NSUUID) {
+        return PlatformClient.deleteApplicationRequest(applicationId.UUIDString)
     }
 
     /**
@@ -132,8 +134,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse {
-        return PlatformClient.getLogoUploadUrlRequest(applicationId, contentType)
+    suspend fun getLogoUploadUrl(applicationId: NSUUID, contentType: String): GetLogoUploadUrlResponse {
+        return PlatformClient.getLogoUploadUrlRequest(applicationId.UUIDString, contentType)
             .toGetLogoUploadUrlResponse()
     }
 
@@ -142,8 +144,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey) {
-        return PlatformClient.addAuthKeyRequest(applicationId, key.toBasicAuthKey())
+    suspend fun addAuthKey(applicationId: NSUUID, key: PlatformOperations.AuthKey) {
+        return PlatformClient.addAuthKeyRequest(applicationId.UUIDString, key.toBasicAuthKey())
     }
 
     /**
@@ -151,8 +153,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addAuthIssuer(applicationId: String, url: String) {
-        return PlatformClient.addAuthIssuerRequest(applicationId, url)
+    suspend fun addAuthIssuer(applicationId: NSUUID, url: NSURL) {
+        return PlatformClient.addAuthIssuerRequest(applicationId.UUIDString, url.absoluteString ?: "")
     }
 
     /**
@@ -160,8 +162,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun deleteAuthIssuer(applicationId: String, url: String) {
-        return PlatformClient.deleteAuthIssuerRequest(applicationId, url)
+    suspend fun deleteAuthIssuer(applicationId: NSUUID, url: NSURL) {
+        return PlatformClient.deleteAuthIssuerRequest(applicationId.UUIDString, url.absoluteString ?: "")
     }
 
     /**
@@ -169,8 +171,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addCorsDomain(applicationId: String, url: String) {
-        return PlatformClient.addCorsDomainRequest(applicationId, url)
+    suspend fun addCorsDomain(applicationId: NSUUID, url: NSURL) {
+        return PlatformClient.addCorsDomainRequest(applicationId.UUIDString, url.absoluteString ?: "")
     }
 
     /**
@@ -178,8 +180,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun removeCorsDomain(applicationId: String, url: String) {
-        return PlatformClient.removeCorsDomainRequest(applicationId, url)
+    suspend fun removeCorsDomain(applicationId: NSUUID, url: NSURL) {
+        return PlatformClient.removeCorsDomainRequest(applicationId.UUIDString, url.absoluteString ?: "")
     }
 
     /**
@@ -187,8 +189,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addApplicationOwner(applicationId: String, userId: String) {
-        return PlatformClient.addApplicationOwnerRequest(applicationId, userId)
+    suspend fun addApplicationOwner(applicationId: NSUUID, userId: NSUUID) {
+        return PlatformClient.addApplicationOwnerRequest(applicationId.UUIDString, userId.UUIDString)
     }
 
     /**
@@ -196,8 +198,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun removeApplicationOwner(applicationId: String, userId: String) {
-        return PlatformClient.removeApplicationOwnerRequest(applicationId, userId)
+    suspend fun removeApplicationOwner(applicationId: NSUUID, userId: NSUUID) {
+        return PlatformClient.removeApplicationOwnerRequest(applicationId.UUIDString, userId.UUIDString)
     }
 
     /**
@@ -205,8 +207,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getApplicationOwnersDetails(applicationId: String): List<ApplicationOwnerDetailsResponse> {
-        return PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
+    suspend fun getApplicationOwnersDetails(applicationId: NSUUID): List<ApplicationOwnerDetailsResponse> {
+        return PlatformClient.getApplicationOwnersDetailsRequest(applicationId.UUIDString)
             .toApplicationOwnerDetailsResponse()
     }
 }

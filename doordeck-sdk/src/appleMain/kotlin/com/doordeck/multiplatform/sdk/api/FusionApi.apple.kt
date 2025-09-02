@@ -22,76 +22,69 @@ actual object FusionApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun login(email: String, password: String): FusionLoginResponse {
-        return FusionClient.loginRequest(email, password)
-            .toFusionLoginResponse()
-    }
+    suspend fun login(email: String, password: String): FusionLoginResponse = FusionClient
+        .loginRequest(email, password)
+        .toFusionLoginResponse()
 
     /**
      * @see FusionClient.getIntegrationTypeRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getIntegrationType(): IntegrationTypeResponse {
-        return FusionClient.getIntegrationTypeRequest()
-            .toIntegrationTypeResponse()
-    }
+    suspend fun getIntegrationType(): IntegrationTypeResponse = FusionClient
+        .getIntegrationTypeRequest()
+        .toIntegrationTypeResponse()
 
     /**
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> {
-        return FusionClient.getIntegrationConfigurationRequest(type)
-            .toIntegrationConfigurationResponse()
-    }
+    suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> = FusionClient
+        .getIntegrationConfigurationRequest(type)
+        .toIntegrationConfigurationResponse()
 
     /**
      * @see FusionClient.enableDoorRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun enableDoor(name: String, siteId: String, controller: FusionOperations.LockController) {
-        return FusionClient.enableDoorRequest(name, siteId, controller.toBasicLockController())
-    }
+    suspend fun enableDoor(name: String, siteId: String, controller: FusionOperations.LockController) = FusionClient
+        .enableDoorRequest(
+            name = name,
+            siteId = siteId,
+            controller = controller.toBasicLockController()
+        )
 
     /**
      * @see FusionClient.deleteDoorRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun deleteDoor(deviceId: String) {
-        return FusionClient.deleteDoorRequest(deviceId)
-    }
+    suspend fun deleteDoor(deviceId: String) = FusionClient.deleteDoorRequest(deviceId)
 
     /**
      * @see FusionClient.getDoorStatusRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getDoorStatus(deviceId: String): DoorStateResponse {
-        return FusionClient.getDoorStatusRequest(deviceId)
-            .toDoorStateResponse()
-    }
+    suspend fun getDoorStatus(deviceId: String): DoorStateResponse = FusionClient
+        .getDoorStatusRequest(deviceId)
+        .toDoorStateResponse()
 
     /**
      * @see FusionClient.startDoorRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun startDoor(deviceId: String) {
-        return FusionClient.startDoorRequest(deviceId)
-    }
+    suspend fun startDoor(deviceId: String) = FusionClient.startDoorRequest(deviceId)
 
     /**
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun stopDoor(deviceId: String) {
-        return FusionClient.stopDoorRequest(deviceId)
-    }
+    suspend fun stopDoor(deviceId: String) = FusionClient.stopDoorRequest(deviceId)
 }
 
 /**

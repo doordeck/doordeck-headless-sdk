@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations.CreateApplication
+import platform.Foundation.NSURL
 
 object PlatformOperations {
 
@@ -8,30 +9,30 @@ object PlatformOperations {
         val name: String,
         val companyName: String,
         val mailingAddress: String,
-        val privacyPolicy: String? = null,
-        val supportContact: String? = null,
-        val appLink: String? = null,
+        val privacyPolicy: NSURL? = null,
+        val supportContact: NSURL? = null,
+        val appLink: NSURL? = null,
         val emailPreferences: EmailPreferences? = null,
-        val logoUrl: String? = null
+        val logoUrl: NSURL? = null
     ) {
         class Builder {
             private var name: String? = null
             private var companyName: String? = null
             private var mailingAddress: String? = null
-            private var privacyPolicy: String? = null
-            private var supportContact: String? = null
-            private var appLink: String? = null
+            private var privacyPolicy: NSURL? = null
+            private var supportContact: NSURL? = null
+            private var appLink: NSURL? = null
             private var emailPreferences: EmailPreferences? = null
-            private var logoUrl: String? = null
+            private var logoUrl: NSURL? = null
 
             fun setName(name: String) = apply { this.name = name }
             fun setCompanyName(companyName: String) = apply { this.companyName = companyName }
             fun setMailingAddress(mailingAddress: String) = apply { this.mailingAddress = mailingAddress }
-            fun setPrivacyPolicy(privacyPolicy: String?) = apply { this.privacyPolicy = privacyPolicy }
-            fun setSupportContact(supportContact: String?) = apply { this.supportContact = supportContact }
-            fun setAppLink(appLink: String?) = apply { this.appLink = appLink }
+            fun setPrivacyPolicy(privacyPolicy: NSURL?) = apply { this.privacyPolicy = privacyPolicy }
+            fun setSupportContact(supportContact: NSURL?) = apply { this.supportContact = supportContact }
+            fun setAppLink(appLink: NSURL?) = apply { this.appLink = appLink }
             fun setEmailPreferences(emailPreferences: EmailPreferences?) = apply { this.emailPreferences = emailPreferences }
-            fun setLogoUrl(logoUrl: String?) = apply { this.logoUrl = logoUrl }
+            fun setLogoUrl(logoUrl: NSURL?) = apply { this.logoUrl = logoUrl }
 
             fun build(): CreateApplication {
                 return CreateApplication(
@@ -85,16 +86,16 @@ object PlatformOperations {
     }
 
     data class EmailCallToAction(
-        val actionTarget: String,
+        val actionTarget: NSURL,
         val headline: String,
         val actionText: String
     ) {
         class Builder {
-            private var actionTarget: String? = null
+            private var actionTarget: NSURL? = null
             private var headline: String? = null
             private var actionText: String? = null
 
-            fun setActionTarget(actionTarget: String) = apply { this.actionTarget = actionTarget }
+            fun setActionTarget(actionTarget: NSURL) = apply { this.actionTarget = actionTarget }
             fun setHeadline(headline: String) = apply { this.headline = headline }
             fun setActionText(actionText: String) = apply { this.actionText = actionText }
 
@@ -233,11 +234,11 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplicatio
         name = name,
         companyName = companyName,
         mailingAddress = mailingAddress,
-        privacyPolicy = privacyPolicy,
-        supportContact = supportContact,
-        appLink = appLink,
+        privacyPolicy = privacyPolicy?.absoluteString,
+        supportContact = supportContact?.absoluteString,
+        appLink = appLink?.absoluteString,
         emailPreferences = emailPreferences?.toBasicEmailPreferences(),
-        logoUrl = logoUrl
+        logoUrl = logoUrl?.absoluteString
     )
 }
 
@@ -282,7 +283,7 @@ internal fun PlatformOperations.EmailPreferences.toBasicEmailPreferences(): Basi
 
 internal fun PlatformOperations.EmailCallToAction.toBasicEmailCallToAction(): BasicEmailCallToAction {
     return BasicEmailCallToAction(
-        actionTarget = actionTarget,
+        actionTarget = actionTarget.absoluteString ?: "",
         headline = headline,
         actionText = actionText
     )
