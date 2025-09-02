@@ -185,14 +185,14 @@ internal fun FusionOperations.AlpetaController.toBasicAlpetaController(): BasicA
     username = username,
     password = password,
     doorId = doorId,
-    baseUrl = baseUrl?.absoluteString
+    baseUrl = baseUrl?.toUrlString()
 )
 
 internal fun AmagController.toBasicAmagController(): BasicAmagController = BasicAmagController(
     username = username,
     password = password,
     doorId = doorId,
-    baseUrl = baseUrl?.absoluteString
+    baseUrl = baseUrl?.toUrlString()
 )
 
 internal fun AssaAbloyController.toBasicAssaAbloyController(): BasicAssaAbloyController = BasicAssaAbloyController(

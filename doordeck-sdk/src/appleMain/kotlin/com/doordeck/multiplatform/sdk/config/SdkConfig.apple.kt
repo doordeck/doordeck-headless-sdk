@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import platform.Foundation.NSURL
 
 /**
@@ -86,7 +87,7 @@ internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
     apiEnvironment = apiEnvironment,
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
-    fusionHost = fusionHost?.absoluteString,
+    fusionHost = fusionHost?.toUrlString(),
     secureStorage = secureStorage,
     debugLogging = debugLogging
 )

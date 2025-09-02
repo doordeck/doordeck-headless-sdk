@@ -235,11 +235,11 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplicatio
         name = name,
         companyName = companyName,
         mailingAddress = mailingAddress,
-        privacyPolicy = privacyPolicy?.absoluteString,
-        supportContact = supportContact?.absoluteString,
-        appLink = appLink?.absoluteString,
+        privacyPolicy = privacyPolicy?.toUrlString(),
+        supportContact = supportContact?.toUrlString(),
+        appLink = appLink?.toUrlString(),
         emailPreferences = emailPreferences?.toBasicEmailPreferences(),
-        logoUrl = logoUrl?.absoluteString
+        logoUrl = logoUrl?.toUrlString()
     )
 }
 
