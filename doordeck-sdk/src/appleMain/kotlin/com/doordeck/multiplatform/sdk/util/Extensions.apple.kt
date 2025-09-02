@@ -5,11 +5,14 @@ import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSProcessInfo
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
 import platform.Foundation.NSURLCredential
 import platform.Foundation.NSURLSessionAuthChallengePerformDefaultHandling
 import platform.Foundation.NSURLSessionAuthChallengeUseCredential
+import platform.Foundation.NSUUID
 import platform.Foundation.credentialForTrust
 import platform.Foundation.serverTrust
 
@@ -42,3 +45,13 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
 
 private fun isRunningOnSimulator(): Boolean =
     NSProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] != null
+
+internal fun String.toUuid(): NSUUID = NSUUID(this)
+
+private val TIME_FORMAT = NSDateFormatter().apply {
+    dateFormat = "hh:mm"
+}
+
+internal fun NSDate.totoLocalTimeString(): String = TIME_FORMAT.stringFromDate(this)
+
+internal fun String.toInstant(): NSDate = NSDate(toDouble())

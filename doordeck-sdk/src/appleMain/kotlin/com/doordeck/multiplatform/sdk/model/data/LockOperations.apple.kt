@@ -2,10 +2,13 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.totoLocalTimeString
 import com.doordeck.multiplatform.sdk.util.validateAccuracy
 import com.doordeck.multiplatform.sdk.util.validateLatitude
 import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
+import platform.Foundation.NSDate
+import platform.Foundation.NSTimeZone
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
 import kotlin.uuid.Uuid
@@ -13,20 +16,20 @@ import kotlin.uuid.Uuid
 object LockOperations {
 
     data class TimeRequirement(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
-        val timezone: String,
+        val start: NSDate, // HH:mm
+        val end: NSDate, // HH:mm
+        val timezone: NSTimeZone,
         val days: Set<DayOfWeek>
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
-            private var timezone: String? = null
+            private var start: NSDate? = null
+            private var end: NSDate? = null
+            private var timezone: NSTimeZone? = null
             private var days: Set<DayOfWeek>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
-            fun setTimezone(timezone: String) = apply { this.timezone = timezone }
+            fun setStart(start: NSDate): Builder = apply { this.start = start }
+            fun setEnd(end: NSDate): Builder = apply { this.end = end }
+            fun setTimezone(timezone: NSTimeZone) = apply { this.timezone = timezone }
             fun setDays(days: Set<DayOfWeek>) = apply { this.days = days }
 
             fun build(): TimeRequirement {
@@ -268,9 +271,9 @@ object LockOperations {
         val userCertificateChain: List<String>? = null,
         val userPrivateKey: ByteArray? = null,
         val lockId: String,
-        val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-        val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-        val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+        val notBefore: Long = Clock.System.now().epochSeconds,
+        val issuedAt: Long = Clock.System.now().epochSeconds,
+        val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
         val jti: String = Uuid.random().toString()
     ) {
         class Builder {
@@ -278,18 +281,18 @@ object LockOperations {
             private var userCertificateChain: List<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: String? = null
-            private var notBefore: Int = Clock.System.now().epochSeconds.toInt()
-            private var issuedAt: Int = Clock.System.now().epochSeconds.toInt()
-            private var expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt()
+            private var notBefore: Long = Clock.System.now().epochSeconds
+            private var issuedAt: Long = Clock.System.now().epochSeconds
+            private var expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds
             private var jti: String = Uuid.random().toString()
 
             fun setUserId(userId: String?): Builder = apply { this.userId = userId }
             fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
             fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
             fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
-            fun setNotBefore(notBefore: Int): Builder = apply { this.notBefore = notBefore }
-            fun setIssuedAt(issuedAt: Int): Builder = apply { this.issuedAt = issuedAt }
-            fun setExpiresAt(expiresAt: Int): Builder = apply { this.expiresAt = expiresAt }
+            fun setNotBefore(notBefore: Long): Builder = apply { this.notBefore = notBefore }
+            fun setIssuedAt(issuedAt: Long): Builder = apply { this.issuedAt = issuedAt }
+            fun setExpiresAt(expiresAt: Long): Builder = apply { this.expiresAt = expiresAt }
             fun setJti(jti: String): Builder = apply { this.jti = jti }
 
             fun build(): BaseOperation {
@@ -312,9 +315,9 @@ object LockOperations {
 
 internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
     BasicTimeRequirement(
-        start = requirement.start,
-        end = requirement.end,
-        timezone = requirement.timezone,
+        start = requirement.start.totoLocalTimeString(),
+        end = requirement.end.totoLocalTimeString(),
+        timezone = requirement.timezone.name,
         days = requirement.days
     )
 }

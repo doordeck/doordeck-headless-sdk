@@ -367,17 +367,15 @@ tasks.withType<AbstractTestTask>().configureEach {
 
 // Propagate env variables to the apple simulators
 tasks.withType<KotlinNativeSimulatorTest>().configureEach {
-    System.getenv("TEST_ENV_VAR")?.let {
-        environment("SIMCTL_CHILD_TEST_ENV_VAR", it)
-    }
-    System.getenv("TEST_MAIN_USER_PASSWORD")?.let {
-        environment("SIMCTL_CHILD_TEST_MAIN_USER_PASSWORD", it)
-    }
-    System.getenv("TEST_MAIN_USER_PRIVATE_KEY")?.let {
-        environment("SIMCTL_CHILD_TEST_MAIN_USER_PRIVATE_KEY", it)
-    }
-    System.getenv("FUSION_INTEGRATIONS")?.let {
-        environment("SIMCTL_CHILD_FUSION_INTEGRATIONS", it)
+    listOf(
+        "TEST_ENV_VAR",
+        "TEST_MAIN_USER_PASSWORD",
+        "TEST_MAIN_USER_PRIVATE_KEY",
+        "FUSION_INTEGRATIONS"
+    ).forEach {
+        System.getenv(it)?.let { env ->
+            environment("SIMCTL_CHILD_$it", env)
+        }
     }
 }
 
