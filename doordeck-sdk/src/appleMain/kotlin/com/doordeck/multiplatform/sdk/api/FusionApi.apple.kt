@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toDoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.toFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toIntegrationTypeResponse
+import platform.Foundation.NSUUID
 
 /**
  * Platform-specific implementations of fusion-related API calls.
@@ -49,10 +50,10 @@ actual object FusionApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun enableDoor(name: String, siteId: String, controller: FusionOperations.LockController) = FusionClient
+    suspend fun enableDoor(name: String, siteId: NSUUID, controller: FusionOperations.LockController) = FusionClient
         .enableDoorRequest(
             name = name,
-            siteId = siteId,
+            siteId = siteId.UUIDString,
             controller = controller.toBasicLockController()
         )
 
@@ -61,15 +62,15 @@ actual object FusionApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun deleteDoor(deviceId: String) = FusionClient.deleteDoorRequest(deviceId)
+    suspend fun deleteDoor(deviceId: NSUUID) = FusionClient.deleteDoorRequest(deviceId.UUIDString)
 
     /**
      * @see FusionClient.getDoorStatusRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getDoorStatus(deviceId: String): DoorStateResponse = FusionClient
-        .getDoorStatusRequest(deviceId)
+    suspend fun getDoorStatus(deviceId: NSUUID): DoorStateResponse = FusionClient
+        .getDoorStatusRequest(deviceId.UUIDString)
         .toDoorStateResponse()
 
     /**
@@ -77,14 +78,14 @@ actual object FusionApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun startDoor(deviceId: String) = FusionClient.startDoorRequest(deviceId)
+    suspend fun startDoor(deviceId: NSUUID) = FusionClient.startDoorRequest(deviceId.UUIDString)
 
     /**
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun stopDoor(deviceId: String) = FusionClient.stopDoorRequest(deviceId)
+    suspend fun stopDoor(deviceId: NSUUID) = FusionClient.stopDoorRequest(deviceId.UUIDString)
 }
 
 /**

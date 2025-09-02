@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.util.toUuid
+import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSUUID
 
 data class TileLocksResponse(
@@ -10,7 +10,7 @@ data class TileLocksResponse(
 )
 
 internal fun BasicTileLocksResponse.toTileLocksResponse(): TileLocksResponse = TileLocksResponse(
-    siteId = siteId.toUuid(),
-    tileId = tileId.toUuid(),
-    deviceIds = deviceIds.map { it.toUuid() }
+    siteId = siteId.toNsUuid(),
+    tileId = tileId.toNsUuid(),
+    deviceIds = deviceIds.map { it.toNsUuid() }
 )

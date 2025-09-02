@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
+import platform.Foundation.NSUUID
 
 /**
  * Platform-specific implementations of helper-related API calls.
@@ -14,9 +15,9 @@ actual object HelperApi {
      * @see HelperClient.uploadPlatformLogoRequest
      */
     @Throws(Exception::class)
-    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray) = HelperClient
+    suspend fun uploadPlatformLogo(applicationId: NSUUID, contentType: String, image: ByteArray) = HelperClient
         .uploadPlatformLogoRequest(
-            applicationId = applicationId,
+            applicationId = applicationId.UUIDString,
             contentType = contentType,
             image = image
         )

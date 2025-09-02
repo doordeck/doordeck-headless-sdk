@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.util.toInstant
-import com.doordeck.multiplatform.sdk.util.toUuid
+import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
 
@@ -27,7 +27,7 @@ data class UserForSiteResponse(
 
 internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
     SiteResponse(
-        id = site.id.toUuid(),
+        id = site.id.toNsUuid(),
         name = site.name,
         colour = site.colour,
         longitude = site.longitude,
@@ -40,7 +40,7 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
 
 internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserForSiteResponse> = map { user ->
     UserForSiteResponse(
-        userId = user.userId.toUuid(),
+        userId = user.userId.toNsUuid(),
         email = user.email,
         displayName = user.displayName,
         orphan = user.orphan

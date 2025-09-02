@@ -46,7 +46,7 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
 private fun isRunningOnSimulator(): Boolean =
     NSProcessInfo.processInfo.environment["SIMULATOR_DEVICE_NAME"] != null
 
-internal fun String.toUuid(): NSUUID = NSUUID(this)
+internal fun String.toNsUuid(): NSUUID = NSUUID(this)
 
 private val TIME_FORMAT = NSDateFormatter().apply {
     dateFormat = "hh:mm"
