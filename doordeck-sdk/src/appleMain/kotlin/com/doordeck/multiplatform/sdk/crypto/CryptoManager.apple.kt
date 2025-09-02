@@ -34,9 +34,7 @@ actual object CryptoManager {
         )
     }
 
-    fun generateKeyPair(): Crypto.KeyPair {
-        return generateRawKeyPair()
-    }
+    fun generateKeyPair(): Crypto.KeyPair = generateRawKeyPair()
 
     /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]

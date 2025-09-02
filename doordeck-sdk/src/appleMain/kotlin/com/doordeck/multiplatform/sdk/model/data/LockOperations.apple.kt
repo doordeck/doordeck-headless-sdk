@@ -9,9 +9,9 @@ import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
 import platform.Foundation.NSDate
 import platform.Foundation.NSTimeZone
+import platform.Foundation.NSUUID
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
-import kotlin.uuid.Uuid
 
 object LockOperations {
 
@@ -155,20 +155,20 @@ object LockOperations {
     }
 
     data class ShareLock(
-        val targetUserId: String,
+        val targetUserId: NSUUID,
         val targetUserRole: UserRole,
         val targetUserPublicKey: ByteArray,
         val start: Int? = null,
         val end: Int? = null
     ) {
         class Builder {
-            private var targetUserId: String? = null
+            private var targetUserId: NSUUID? = null
             private var targetUserRole: UserRole? = null
             private var targetUserPublicKey: ByteArray? = null
             private var start: Int? = null
             private var end: Int? = null
 
-            fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
+            fun setTargetUserId(targetUserId: NSUUID): Builder = apply { this.targetUserId = targetUserId }
             fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
             fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
             fun setStart(start: Int?): Builder = apply { this.start = start }
@@ -208,14 +208,14 @@ object LockOperations {
 
     data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
-        val users: List<String>
+        val users: List<NSUUID>
     ): Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
-            private var users: List<String>? = null
+            private var users: List<NSUUID>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUsers(users: List<String>): Builder = apply { this.users = users }
+            fun setUsers(users: List<NSUUID>): Builder = apply { this.users = users }
 
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
@@ -267,33 +267,33 @@ object LockOperations {
     }
 
     data class BaseOperation(
-        val userId: String? = null,
+        val userId: NSUUID? = null,
         val userCertificateChain: List<String>? = null,
         val userPrivateKey: ByteArray? = null,
-        val lockId: String,
+        val lockId: NSUUID,
         val notBefore: Long = Clock.System.now().epochSeconds,
         val issuedAt: Long = Clock.System.now().epochSeconds,
         val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
-        val jti: String = Uuid.random().toString()
+        val jti: NSUUID = NSUUID.UUID()
     ) {
         class Builder {
-            private var userId: String? = null
+            private var userId: NSUUID? = null
             private var userCertificateChain: List<String>? = null
             private var userPrivateKey: ByteArray? = null
-            private var lockId: String? = null
+            private var lockId: NSUUID? = null
             private var notBefore: Long = Clock.System.now().epochSeconds
             private var issuedAt: Long = Clock.System.now().epochSeconds
             private var expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds
-            private var jti: String = Uuid.random().toString()
+            private var jti: NSUUID = NSUUID.UUID()
 
-            fun setUserId(userId: String?): Builder = apply { this.userId = userId }
+            fun setUserId(userId: NSUUID?): Builder = apply { this.userId = userId }
             fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
             fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
-            fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
+            fun setLockId(lockId: NSUUID): Builder = apply { this.lockId = lockId }
             fun setNotBefore(notBefore: Long): Builder = apply { this.notBefore = notBefore }
             fun setIssuedAt(issuedAt: Long): Builder = apply { this.issuedAt = issuedAt }
             fun setExpiresAt(expiresAt: Long): Builder = apply { this.expiresAt = expiresAt }
-            fun setJti(jti: String): Builder = apply { this.jti = jti }
+            fun setJti(jti: NSUUID): Builder = apply { this.jti = jti }
 
             fun build(): BaseOperation {
                 return BaseOperation(
@@ -358,7 +358,7 @@ internal fun LockOperations.ShareLockOperation.toBasicShareLockOperation(): Basi
 
 internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
     return BasicShareLock(
-        targetUserId = targetUserId,
+        targetUserId = targetUserId.UUIDString,
         targetUserRole = targetUserRole,
         targetUserPublicKey = targetUserPublicKey,
         start = start?.toLong(),
@@ -376,7 +376,7 @@ internal fun LockOperations.BatchShareLockOperation.toBasicBatchShareLockOperati
 internal fun LockOperations.RevokeAccessToLockOperation.toBasicRevokeAccessToLockOperation(): BasicRevokeAccessToLockOperation {
     return BasicRevokeAccessToLockOperation(
         baseOperation = baseOperation.toBasicBaseOperation(),
-        users = users
+        users = users.map { it.UUIDString }
     )
 }
 
@@ -396,13 +396,13 @@ internal fun LockOperations.UpdateSecureSettingUnlockBetween.toBasicUpdateSecure
 
 internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOperation {
     return BasicBaseOperation(
-        userId = userId,
+        userId = userId?.UUIDString,
         userCertificateChain = userCertificateChain,
         userPrivateKey = userPrivateKey,
-        lockId = lockId,
-        notBefore = notBefore.toLong(),
-        issuedAt = issuedAt.toLong(),
-        expiresAt = expiresAt.toLong(),
-        jti = jti
+        lockId = lockId.UUIDString,
+        notBefore = notBefore,
+        issuedAt = issuedAt,
+        expiresAt = expiresAt,
+        jti = jti.UUIDString
     )
 }
