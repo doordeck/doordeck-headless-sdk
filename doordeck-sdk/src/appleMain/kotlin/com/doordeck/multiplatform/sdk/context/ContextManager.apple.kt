@@ -19,7 +19,7 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
+    suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean = Context.isCloudAuthTokenInvalidOrExpired()
 
     fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
 
@@ -71,7 +71,7 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    fun getContextState(): ContextState = Context.getContextState()
+    suspend fun getContextState(): ContextState = Context.getContextState()
 
     fun clearContext() = Context.clearContext()
 }
