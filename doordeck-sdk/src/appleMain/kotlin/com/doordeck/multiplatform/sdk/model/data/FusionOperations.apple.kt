@@ -19,7 +19,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Cont
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
 import com.doordeck.multiplatform.sdk.util.toUrlString
-import platform.Foundation.NSURL
+import platform.Foundation.NSURLComponents
 
 object FusionOperations {
 
@@ -29,35 +29,35 @@ object FusionOperations {
         val username: String,
         val password: String,
         val doorId: Long,
-        val baseUrl: NSURL? = null
+        val baseUrl: NSURLComponents? = null
     ) : LockController
     
     data class AmagController(
         val username: String,
         val password: String,
         val doorId: Int,
-        val baseUrl: NSURL? = null
+        val baseUrl: NSURLComponents? = null
     ) : LockController
     
     data class AssaAbloyController(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val doorId: String
     ) : LockController
 
     data class AvigilonController(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val username: String,
         val password: String,
         val doorId: String
     ) : LockController
 
     data class AxisController(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val doorIdentifier: String
     ) : LockController
     
     data class CCureController(
-        val baseUrl: NSURL? = null,
+        val baseUrl: NSURLComponents? = null,
         val username: String,
         val password: String,
         val doorType: String,
@@ -69,20 +69,20 @@ object FusionOperations {
     ) : LockController
     
     data class GallagherController(
-        val baseUrl: NSURL? = null,
+        val baseUrl: NSURLComponents? = null,
         val apiKey: String,
         val doorId: String
     ) : LockController
     
     data class GenetecController(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val username: String,
         val password: String,
         val doorId: String
     ) : LockController
 
     data class LenelController(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val username: String,
         val password: String,
         val directoryId: String,
@@ -104,7 +104,7 @@ object FusionOperations {
     ) : LockController
 
     data class Paxton10Controller(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val username: String,
         val password: String,
         val applianceId: Int
@@ -117,7 +117,7 @@ object FusionOperations {
     ) : LockController
     
     data class IntegraV2Controller(
-        val baseUrl: NSURL,
+        val baseUrl: NSURLComponents,
         val sessionId: String,
         val controllerId: Int,
         val cardholderId: Int,

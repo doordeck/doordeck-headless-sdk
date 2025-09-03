@@ -22,7 +22,9 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -143,7 +145,7 @@ class LockOperationsApiTest : IntegrationTest() {
         val addedTimeRestriction = LockOperations.TimeRequirement(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random())
         )
 
@@ -675,7 +677,7 @@ class LockOperationsApiTest : IntegrationTest() {
         val updatedUnlockBetween = LockOperations.UnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
@@ -737,7 +739,7 @@ class LockOperationsApiTest : IntegrationTest() {
         val updatedUnlockBetween = LockOperations.UnlockBetween(
             start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
             end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
@@ -824,7 +826,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 shareLockOperation = LockOperations.ShareLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
-                        targetUserId = randomUuidString(),
+                        targetUserId = randomUuid(),
                         targetUserRole = UserRole.USER,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )
@@ -854,7 +856,7 @@ class LockOperationsApiTest : IntegrationTest() {
                     unlockBetween = LockOperations.UnlockBetween(
                         start = "",
                         end = "",
-                        timezone = TimeZone.UTC.id,
+                        timezone = TimeZone.UTC.id.toNsTimeZone(),
                         days = emptySet(),
                         exceptions = emptyList()
                     )

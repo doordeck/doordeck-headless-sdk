@@ -1,20 +1,24 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSURLComponents
+import platform.Foundation.NSUUID
 
 data class ApplicationResponse(
-    val applicationId: String,
+    val applicationId: NSUUID,
     val name: String,
     val lastUpdated: Double? = null,
     val owners: List<String> = emptyList(),
-    val corsDomains: List<String> = emptyList(),
-    val authDomains: List<String> = emptyList(),
-    val logoUrl: String? = null,
-    val privacyPolicy: String? = null,
+    val corsDomains: List<NSURLComponents> = emptyList(),
+    val authDomains: List<NSURLComponents> = emptyList(),
+    val logoUrl: NSURLComponents? = null,
+    val privacyPolicy: NSURLComponents? = null,
     val mailingAddress: String? = null,
     val companyName: String? = null,
-    val supportContact: String? = null,
-    val appLink: String? = null,
+    val supportContact: NSURLComponents? = null,
+    val appLink: NSURLComponents? = null,
     val slug: String? = null,
     val emailPreferences: EmailPreferencesResponse,
     val authKeys: Map<String, AuthKeyResponse>,
@@ -95,19 +99,19 @@ data class EmailPreferencesResponse(
 )
 
 data class EmailCallToActionResponse(
-    val actionTarget: String,
+    val actionTarget: NSURLComponents,
     val headline: String,
     val actionText: String
 )
 
 data class OauthResponse(
-    val authorizationEndpoint: String,
+    val authorizationEndpoint: NSURLComponents,
     val clientId: String,
     val grantType: GrantType
 )
 
 data class ApplicationOwnerDetailsResponse(
-    val userId: String,
+    val userId: NSUUID,
     val email: String,
     val displayName: String? = null,
     val orphan: Boolean,
@@ -115,7 +119,7 @@ data class ApplicationOwnerDetailsResponse(
 )
 
 data class GetLogoUploadUrlResponse(
-    val uploadUrl: String
+    val uploadUrl: NSURLComponents
 )
 
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
@@ -123,18 +127,18 @@ internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<Applic
 }
 
 internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
-    applicationId = applicationId,
+    applicationId = applicationId.toNsUuid(),
     name = name,
     lastUpdated = lastUpdated,
     owners = owners,
-    corsDomains = corsDomains,
-    authDomains = authDomains,
-    logoUrl = logoUrl,
-    privacyPolicy = privacyPolicy,
+    corsDomains = corsDomains.map { it.toNSURLComponents() },
+    authDomains = authDomains.map { it.toNSURLComponents() },
+    logoUrl = logoUrl?.toNSURLComponents(),
+    privacyPolicy = privacyPolicy?.toNSURLComponents(),
     mailingAddress = mailingAddress,
     companyName = companyName,
-    supportContact = supportContact,
-    appLink = appLink,
+    supportContact = supportContact?.toNSURLComponents(),
+    appLink = appLink?.toNSURLComponents(),
     slug = slug,
     emailPreferences = emailPreferences.toEmailPreferencesResponse(),
     authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toMap(),
@@ -201,20 +205,20 @@ internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPr
 )
 
 internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
-    actionTarget = actionTarget,
+    actionTarget = actionTarget.toNSURLComponents(),
     headline = headline,
     actionText = actionText
 )
 
 internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
-    authorizationEndpoint = authorizationEndpoint,
+    authorizationEndpoint = authorizationEndpoint.toNSURLComponents(),
     clientId = clientId,
     grantType = grantType
 )
 
 internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
     ApplicationOwnerDetailsResponse(
-        userId = owner.userId,
+        userId = owner.userId.toNsUuid(),
         email = owner.email,
         displayName = owner.displayName,
         orphan = owner.orphan,
@@ -223,5 +227,5 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
 }
 
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
-    uploadUrl = uploadUrl
+    uploadUrl = uploadUrl.toNSURLComponents()
 )

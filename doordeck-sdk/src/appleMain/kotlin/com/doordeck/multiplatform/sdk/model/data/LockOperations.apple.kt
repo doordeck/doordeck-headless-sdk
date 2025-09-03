@@ -83,22 +83,22 @@ object LockOperations {
     }
 
     data class UnlockBetween(
-        val start: String, // HH:mm
-        val end: String, // HH:mm
-        val timezone: String,
+        val start: NSDate, // HH:mm
+        val end: NSDate, // HH:mm
+        val timezone: NSTimeZone,
         val days: Set<DayOfWeek>,
         val exceptions: List<String>? = null
     ) {
         class Builder {
-            private var start: String? = null
-            private var end: String? = null
-            private var timezone: String? = null
+            private var start: NSDate? = null
+            private var end: NSDate? = null
+            private var timezone: NSTimeZone? = null
             private var days: Set<DayOfWeek>? = null
             private var exceptions: List<String>? = null
 
-            fun setStart(start: String): Builder = apply { this.start = start }
-            fun setEnd(end: String): Builder = apply { this.end = end }
-            fun setTimezone(timezone: String): Builder = apply { this.timezone = timezone }
+            fun setStart(start: NSDate): Builder = apply { this.start = start }
+            fun setEnd(end: NSDate): Builder = apply { this.end = end }
+            fun setTimezone(timezone: NSTimeZone): Builder = apply { this.timezone = timezone }
             fun setDays(days: Set<DayOfWeek>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: List<String>?): Builder = apply { this.exceptions = exceptions }
 
@@ -334,9 +334,9 @@ internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): Ba
 
 internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBetween {
     return BasicUnlockBetween(
-        start = start,
-        end = end,
-        timezone = timezone,
+        start = start.totoLocalTimeString(),
+        end = end.totoLocalTimeString(),
+        timezone = timezone.name,
         days = days,
         exceptions = exceptions
     )

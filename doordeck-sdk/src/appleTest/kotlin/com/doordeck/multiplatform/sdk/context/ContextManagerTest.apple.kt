@@ -10,10 +10,11 @@ import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomUrlString
-import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.randomUri
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.toNSURLComponents
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -28,11 +29,11 @@ class ContextManagerTest : IntegrationTest() {
     fun shouldStoreAndLoadContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = randomUrlString()
+        val fusionHost = randomUri()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val email = randomEmail()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
@@ -75,11 +76,11 @@ class ContextManagerTest : IntegrationTest() {
     fun shouldClearContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = randomUrlString()
+        val fusionHost = randomUri()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val email = randomEmail()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
@@ -110,13 +111,13 @@ class ContextManagerTest : IntegrationTest() {
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
         assertNull(ContextManager.getFusionAuthToken())
-        assertEquals(DEFAULT_FUSION_HOST, ContextManager.getFusionHost())
+        assertEquals(DEFAULT_FUSION_HOST.toNSURLComponents(), ContextManager.getFusionHost())
     }
 
     @Test
     fun shouldStoreOperationContext() = runTest {
         // Given
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
         val settings = DefaultSecureStorage(MemorySettings())

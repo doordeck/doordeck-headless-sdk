@@ -3,9 +3,11 @@ package com.doordeck.multiplatform.sdk.context
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import com.doordeck.multiplatform.sdk.util.toNsUrl
+import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUuid
 import com.doordeck.multiplatform.sdk.util.toUrlString
-import platform.Foundation.NSURL
+import platform.Foundation.NSURLComponents
+import platform.Foundation.NSUUID
 
 actual object ContextManager {
 
@@ -23,17 +25,17 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: NSURL) = Context.setFusionHost(host.toUrlString())
+    fun setFusionHost(host: NSURLComponents) = Context.setFusionHost(host.toUrlString())
 
-    fun getFusionHost(): NSURL = Context.getFusionHost().toNsUrl()
+    fun getFusionHost(): NSURLComponents = Context.getFusionHost().toNSURLComponents()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 
     fun getFusionAuthToken(): String? = Context.getFusionAuthToken()
 
-    fun setUserId(userId: String) = Context.setUserId(userId)
+    fun setUserId(userId: NSUUID) = Context.setUserId(userId.UUIDString)
 
-    fun getUserId(): String? = Context.getUserId()
+    fun getUserId(): NSUUID? = Context.getUserId()?.toNsUuid()
 
     fun setUserEmail(email: String) = Context.setUserEmail(email)
 
@@ -56,13 +58,13 @@ actual object ContextManager {
     fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
 
     fun setOperationContext(
-        userId: String,
+        userId: NSUUID,
         certificateChain: List<String>,
         publicKey: ByteArray,
         privateKey: ByteArray,
         isKeyPairVerified: Boolean
     ) = Context.setOperationContext(
-        userId = userId,
+        userId = userId.UUIDString,
         certificateChain = certificateChain,
         publicKey = publicKey,
         privateKey = privateKey,

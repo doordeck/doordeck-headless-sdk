@@ -9,8 +9,8 @@ import platform.Foundation.NSDate
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSProcessInfo
 import platform.Foundation.NSTimeZone
-import platform.Foundation.NSURL
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
+import platform.Foundation.NSURLComponents
 import platform.Foundation.NSURLCredential
 import platform.Foundation.NSURLSessionAuthChallengePerformDefaultHandling
 import platform.Foundation.NSURLSessionAuthChallengeUseCredential
@@ -51,9 +51,9 @@ private fun isRunningOnSimulator(): Boolean =
 
 internal fun String.toNsUuid(): NSUUID = NSUUID(this)
 
-internal fun String.toNsUrl(): NSURL = NSURL.URLWithString(this)!!
+internal fun String.toNSURLComponents(): NSURLComponents = NSURLComponents(this)
 
-internal fun NSURL.toUrlString(): String = absoluteString!!
+internal fun NSURLComponents.toUrlString(): String = string!!
 
 internal fun String.toNsTimeZone(): NSTimeZone = NSTimeZone.create(this)!!
 

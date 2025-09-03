@@ -12,8 +12,9 @@ import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
+import com.doordeck.multiplatform.sdk.util.toNsUuid
 import com.doordeck.multiplatform.sdk.util.toUrlString
-import platform.Foundation.NSURL
+import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
 
 /**
@@ -25,8 +26,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun createApplication(application: PlatformOperations.CreateApplication): String = PlatformClient
+    suspend fun createApplication(application: PlatformOperations.CreateApplication): NSUUID = PlatformClient
         .createApplicationRequest(application.toBasicCreateApplication())
+        .toNsUuid()
 
     /**
      * @see PlatformClient.listApplicationsRequest
@@ -84,10 +86,10 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationPrivacyPolicy(applicationId: NSUUID, privacyPolicy: String) = PlatformClient
+    suspend fun updateApplicationPrivacyPolicy(applicationId: NSUUID, privacyPolicy: NSURLComponents) = PlatformClient
         .updateApplicationPrivacyPolicyRequest(
             applicationId = applicationId.UUIDString,
-            privacyPolicy = privacyPolicy
+            privacyPolicy = privacyPolicy.toUrlString()
         )
 
     /**
@@ -95,10 +97,10 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationSupportContact(applicationId: NSUUID, supportContact: String) = PlatformClient
+    suspend fun updateApplicationSupportContact(applicationId: NSUUID, supportContact: NSURLComponents) = PlatformClient
         .updateApplicationSupportContactRequest(
             applicationId = applicationId.UUIDString,
-            supportContact = supportContact
+            supportContact = supportContact.toUrlString()
         )
 
     /**
@@ -106,10 +108,10 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationAppLink(applicationId: NSUUID, appLink: String) = PlatformClient
+    suspend fun updateApplicationAppLink(applicationId: NSUUID, appLink: NSURLComponents) = PlatformClient
         .updateApplicationAppLinkRequest(
             applicationId = applicationId.UUIDString,
-            appLink = appLink
+            appLink = appLink.toUrlString()
         )
 
     /**
@@ -131,10 +133,10 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun updateApplicationLogoUrl(applicationId: NSUUID, logoUrl: String) = PlatformClient
+    suspend fun updateApplicationLogoUrl(applicationId: NSUUID, logoUrl: NSURLComponents) = PlatformClient
         .updateApplicationLogoUrlRequest(
             applicationId = applicationId.UUIDString,
-            logoUrl = logoUrl
+            logoUrl = logoUrl.toUrlString()
         )
 
     /**
@@ -176,7 +178,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addAuthIssuer(applicationId: NSUUID, url: NSURL) = PlatformClient
+    suspend fun addAuthIssuer(applicationId: NSUUID, url: NSURLComponents) = PlatformClient
         .addAuthIssuerRequest(
             applicationId = applicationId.UUIDString,
             url = url.toUrlString()
@@ -187,7 +189,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun deleteAuthIssuer(applicationId: NSUUID, url: NSURL) = PlatformClient
+    suspend fun deleteAuthIssuer(applicationId: NSUUID, url: NSURLComponents) = PlatformClient
         .deleteAuthIssuerRequest(
             applicationId = applicationId.UUIDString,
             url = url.toUrlString()
@@ -198,7 +200,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun addCorsDomain(applicationId: NSUUID, url: NSURL) = PlatformClient
+    suspend fun addCorsDomain(applicationId: NSUUID, url: NSURLComponents) = PlatformClient
         .addCorsDomainRequest(
             applicationId = applicationId.UUIDString,
             url = url.toUrlString()
@@ -209,7 +211,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun removeCorsDomain(applicationId: NSUUID, url: NSURL) = PlatformClient
+    suspend fun removeCorsDomain(applicationId: NSUUID, url: NSURLComponents) = PlatformClient
         .removeCorsDomainRequest(
             applicationId = applicationId.UUIDString,
             url = url.toUrlString()

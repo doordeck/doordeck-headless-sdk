@@ -7,16 +7,24 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
+import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSURLComponents
+import platform.Foundation.NSUUID
+
+internal fun randomUuid(): NSUUID = randomUuidString().toNsUuid()
+
+internal fun randomUri(): NSURLComponents = randomUrlString().toNSURLComponents()
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
-    userId = randomNullable { randomUuidString() },
+    userId = randomNullable { randomUuid() },
     userCertificateChain = randomNullable { listOf(PLATFORM_TEST_VALID_CERTIFICATE) },
     userPrivateKey = randomNullable { CryptoManager.generateKeyPair().private },
-    lockId = randomUuidString(),
-    notBefore = randomInt(),
-    issuedAt = randomInt(),
-    expiresAt = randomInt(),
-    jti = randomUuidString()
+    lockId = randomUuid(),
+    notBefore = randomLong(),
+    issuedAt = randomLong(),
+    expiresAt = randomLong(),
+    jti = randomUuid()
 )
 
 internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
@@ -44,11 +52,11 @@ internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
-    users = (1..3).map { randomUuidString() }
+    users = (1..3).map { randomUuid() }
 )
 
 internal fun randomShareLock() = ShareLock(
-    targetUserId = randomUuidString(),
+    targetUserId = randomUuid(),
     targetUserRole = UserRole.entries.random(),
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
     start = randomNullable { randomInt() },
@@ -84,11 +92,11 @@ internal fun randomCreateApplication() = PlatformOperations.CreateApplication(
     name = randomString(),
     companyName = randomString(),
     mailingAddress = randomString(),
-    privacyPolicy = randomNullable { randomUrlString() },
-    supportContact = randomNullable { randomUrlString() },
-    appLink = randomNullable { randomUrlString() },
+    privacyPolicy = randomNullable { randomUri() },
+    supportContact = randomNullable { randomUri() },
+    appLink = randomNullable { randomUri() },
     emailPreferences = randomNullable { randomEmailPreferences() },
-    logoUrl = randomNullable { randomUrlString() }
+    logoUrl = randomNullable { randomUri() }
 )
 
 internal fun randomEmailPreferences() = PlatformOperations.EmailPreferences(
@@ -101,7 +109,7 @@ internal fun randomEmailPreferences() = PlatformOperations.EmailPreferences(
 )
 
 internal fun randomEmailCallToAction() = PlatformOperations.EmailCallToAction(
-    actionTarget = randomUrlString(),
+    actionTarget = randomUri(),
     headline = randomString(),
     actionText = randomString()
 )

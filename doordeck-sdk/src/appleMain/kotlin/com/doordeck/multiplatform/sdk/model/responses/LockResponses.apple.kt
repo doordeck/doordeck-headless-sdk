@@ -41,7 +41,7 @@ data class UsageRequirementsResponse(
 data class TimeRequirementResponse(
     val start: String,
     val end: String,
-    val timezone: String,
+    val timezone: NSTimeZone,
     val days: Set<DayOfWeek>
 )
 
@@ -108,7 +108,7 @@ data class LockUserResponse(
 )
 
 data class LockUserDetailsResponse(
-    val deviceId: String,
+    val deviceId: NSUUID,
     val role: UserRole,
     val start: Double? = null,
     val end: Double? = null
@@ -166,7 +166,7 @@ internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): Usage
 internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
     start = start,
     end = end,
-    timezone = timezone,
+    timezone = timezone.toNsTimeZone(),
     days = days
 )
 
@@ -239,7 +239,7 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
 )
 
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
-    deviceId = deviceId,
+    deviceId = deviceId.toNsUuid(),
     role = role,
     start = start,
     end = end
