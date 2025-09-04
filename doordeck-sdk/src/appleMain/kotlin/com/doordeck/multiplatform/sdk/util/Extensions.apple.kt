@@ -2,18 +2,13 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.Constants.CERTIFICATE_PINNER_DOMAIN_PATTERN
 import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format.byUnicodePattern
-import kotlinx.datetime.toNSDate
-import kotlinx.datetime.toNSDateComponents
-import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
+import platform.Foundation.NSCalendarUnitHour
+import platform.Foundation.NSCalendarUnitMinute
 import platform.Foundation.NSCalendarUnitMonth
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
@@ -29,9 +24,11 @@ import platform.Foundation.NSURLSessionAuthChallengePerformDefaultHandling
 import platform.Foundation.NSURLSessionAuthChallengeUseCredential
 import platform.Foundation.NSUUID
 import platform.Foundation.credentialForTrust
+import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.serverTrust
 import platform.Foundation.timeIntervalSince1970
-import kotlin.time.Instant
+import platform.Foundation.timeZoneWithAbbreviation
+import platform.Foundation.timeZoneWithName
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
@@ -70,35 +67,37 @@ internal fun String.toNSURLComponents(): NSURLComponents = NSURLComponents(this)
 internal fun NSURLComponents.toUrlString(): String = string!!
 
 
-internal fun String.toNsTimeZone(): NSTimeZone = TimeZone.of(this).toNSTimeZone()
+internal fun String.toNsTimeZone(): NSTimeZone = (NSTimeZone.timeZoneWithName(this)
+    ?: NSTimeZone.timeZoneWithAbbreviation(this))!!
 
-private val TIME_FORMAT = NSDateFormatter().apply {
+
+private val NS_TIME_FORMAT = NSDateFormatter().apply {
     dateFormat = "hh:mm"
 }
 
-private val DATE_FORMAT = NSDateFormatter().apply {
+private val NS_DATE_FORMAT = NSDateFormatter().apply {
     dateFormat = "yyyy-MM-dd"
 }
 
 internal fun String.toNsDateComponents(): NSDateComponents {
     return NSCalendar.currentCalendar.components(
         unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
-        fromDate = TIME_FORMAT.dateFromString(this)!!
+        fromDate = NS_TIME_FORMAT.dateFromString(this)!!
     )
 }
 
 internal fun String.toNsLocalDateComponents(): NSDateComponents {
     return NSCalendar.currentCalendar.components(
-        unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
-        fromDate = DATE_FORMAT.dateFromString(this)!!
+        unitFlags = NSCalendarUnitHour or NSCalendarUnitMinute,
+        fromDate = NS_DATE_FORMAT.dateFromString(this)!!
     )
 }
 
-internal fun NSDateComponents.toLocalTimeString(): String = TIME_FORMAT.stringFromDate(
+internal fun NSDateComponents.toLocalTimeString(): String = NS_TIME_FORMAT.stringFromDate(
     NSCalendar.currentCalendar.dateFromComponents(this)!!
 )
 
-internal fun NSDateComponents.toLocalDateString(): String = DATE_FORMAT.stringFromDate(
+internal fun NSDateComponents.toLocalDateString(): String = NS_DATE_FORMAT.stringFromDate(
     NSCalendar.currentCalendar.dateFromComponents(this)!!
 )
 
@@ -108,10 +107,4 @@ internal fun NSTimeInterval.toWholeSeconds(): Int = toInt()
 
 internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
-internal fun String.toNsDate(): NSDate {
-    val split = split(".")
-    return Instant.fromEpochSeconds(
-        epochSeconds = split.first().toLong(),
-        nanosecondAdjustment = split.lastOrNull()?.toLong() ?: 0
-    ).toNSDate()
-}
+internal fun String.toNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
