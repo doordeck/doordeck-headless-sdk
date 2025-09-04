@@ -5,16 +5,20 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.toNsDate
 import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
+import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSUUID
 
 data class LockResponse(
     val id: NSUUID,
     val name: String,
-    val start: String? = null,
-    val end: String? = null,
+    val start: NSDate? = null,
+    val end: NSDate? = null,
     val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
@@ -22,7 +26,7 @@ data class LockResponse(
 )
 
 data class LockSettingsResponse(
-    val unlockTime: Double,
+    val unlockTime: NSTimeInterval,
     val permittedAddresses: List<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
@@ -39,8 +43,8 @@ data class UsageRequirementsResponse(
 )
 
 data class TimeRequirementResponse(
-    val start: String,
-    val end: String,
+    val start: NSDateComponents,
+    val end: NSDateComponents,
     val timezone: NSTimeZone,
     val days: Set<DayOfWeek>
 )
@@ -54,11 +58,11 @@ data class LocationRequirementResponse(
 )
 
 data class UnlockBetweenSettingResponse(
-    val start: String,
-    val end: String,
+    val start: NSDateComponents,
+    val end: NSDateComponents,
     val timezone: NSTimeZone,
     val days: Set<DayOfWeek>,
-    val exceptions: List<String> = emptyList()
+    val exceptions: List<NSDateComponents> = emptyList()
 )
 
 data class LockStateResponse(
@@ -102,21 +106,21 @@ data class LockUserResponse(
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val start: Double? = null,
-    val end: Double? = null,
+    val start: NSDate? = null,
+    val end: NSDate? = null,
     val devices: List<LockUserDetailsResponse>
 )
 
 data class LockUserDetailsResponse(
     val deviceId: NSUUID,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: NSDate? = null,
+    val end: NSDate? = null
 )
 
 data class AuditResponse(
     val deviceId: NSUUID,
-    val timestamp: Double,
+    val timestamp: NSDate,
     val type: AuditEvent,
     val issuer: AuditUserResponse,
     val subject: AuditUserResponse? = null,
@@ -138,8 +142,8 @@ internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map 
 internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
     id = id.toNsUuid(),
     name = name,
-    start = start,
-    end = end,
+    start = start?.toNsDate(),
+    end = end?.toNsDate(),
     role = role,
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
@@ -233,22 +237,22 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
     displayName = displayName,
     orphan = orphan,
     foreign = foreign,
-    start = start,
-    end = end,
+    start = start?.toNsDate(),
+    end = end?.toNsDate(),
     devices = devices.map { it.toLockUserDetailsResponse() }
 )
 
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
     deviceId = deviceId.toNsUuid(),
     role = role,
-    start = start,
-    end = end
+    start = start?.toNsDate(),
+    end = end?.toNsDate()
 )
 
 internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
     AuditResponse(
         deviceId = audit.deviceId.toNsUuid(),
-        timestamp = audit.timestamp.toDouble(),
+        timestamp = audit.timestamp.toNsDate(),
         type = audit.type,
         issuer = audit.issuer.toAuditUserResponse(),
         subject = audit.subject?.toAuditUserResponse(),

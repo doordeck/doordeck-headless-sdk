@@ -28,6 +28,8 @@ import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toNSDateComponents
+import platform.Foundation.NSDateComponents
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -143,8 +145,8 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
         val addedTimeRestriction = LockOperations.TimeRequirement(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
             timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random())
         )
@@ -612,7 +614,7 @@ class LockOperationsApiTest : IntegrationTest() {
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
         ).certificateChain
-        val updatedUnlockDuration = randomInt(1, 10)
+        val updatedUnlockDuration = randomInt(1, 10).toDouble()
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -641,7 +643,7 @@ class LockOperationsApiTest : IntegrationTest() {
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
         ).certificateChain
-        val updatedUnlockDuration = 1
+        val updatedUnlockDuration = 1.toDouble()
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -675,8 +677,8 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
             timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
@@ -845,7 +847,7 @@ class LockOperationsApiTest : IntegrationTest() {
             LockOperationsApi.updateSecureSettingUnlockDuration(
                 updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                    unlockDuration = 0
+                    unlockDuration = 0.0
                 )
             )
         }
@@ -854,8 +856,8 @@ class LockOperationsApiTest : IntegrationTest() {
                 updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockBetween = LockOperations.UnlockBetween(
-                        start = "",
-                        end = "",
+                        start = NSDateComponents(),
+                        end = NSDateComponents(),
                         timezone = TimeZone.UTC.id.toNsTimeZone(),
                         days = emptySet(),
                         exceptions = emptyList()

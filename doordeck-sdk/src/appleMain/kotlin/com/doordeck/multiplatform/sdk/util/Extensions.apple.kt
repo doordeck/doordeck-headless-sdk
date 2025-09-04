@@ -5,9 +5,12 @@ import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import platform.Foundation.NSCalendar
 import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSProcessInfo
+import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURLAuthenticationMethodServerTrust
 import platform.Foundation.NSURLComponents
@@ -18,6 +21,7 @@ import platform.Foundation.NSUUID
 import platform.Foundation.create
 import platform.Foundation.credentialForTrust
 import platform.Foundation.serverTrust
+import platform.Foundation.timeIntervalSince1970
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
@@ -61,6 +65,22 @@ private val TIME_FORMAT = NSDateFormatter().apply {
     dateFormat = "hh:mm"
 }
 
-internal fun NSDate.totoLocalTimeString(): String = TIME_FORMAT.stringFromDate(this)
+private val DATE_FORMAT = NSDateFormatter().apply {
+    dateFormat = "yyyy-MM-dd"
+}
 
-internal fun String.toInstant(): NSDate = NSDate(toDouble())
+internal fun NSDateComponents.toLocalTimeString(): String = TIME_FORMAT.stringFromDate(
+    NSCalendar.currentCalendar.dateFromComponents(this)!!
+)
+
+internal fun NSDateComponents.toLocalDateString(): String = DATE_FORMAT.stringFromDate(
+    NSCalendar.currentCalendar.dateFromComponents(this)!!
+)
+
+internal fun NSDate.toEpochSeconds(): Long = timeIntervalSince1970.toLong()
+
+internal fun NSTimeInterval.toWholeSeconds(): Int = toInt()
+
+internal fun Double.toNsDate(): NSDate = NSDate(this)
+
+internal fun String.toNsDate(): NSDate = toDouble().toNsDate()

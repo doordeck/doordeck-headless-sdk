@@ -9,6 +9,9 @@ import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.util.toNSURLComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
+import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
 
@@ -21,16 +24,16 @@ internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userCertificateChain = randomNullable { listOf(PLATFORM_TEST_VALID_CERTIFICATE) },
     userPrivateKey = randomNullable { CryptoManager.generateKeyPair().private },
     lockId = randomUuid(),
-    notBefore = randomLong(),
-    issuedAt = randomLong(),
-    expiresAt = randomLong(),
+    notBefore = NSDate(),
+    issuedAt = NSDate(),
+    expiresAt = NSDate(),
     jti = randomUuid()
 )
 
 internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
-    start = randomString(),
-    end = randomString(),
-    timezone = randomString(),
+    start = NSDateComponents(),
+    end = NSDateComponents(),
+    timezone = NSTimeZone(),
     days = DayOfWeek.entries.shuffled().take(3).toSet()
 )
 
@@ -43,11 +46,11 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
 )
 
 internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
-    start = randomString(),
-    end = randomString(),
-    timezone = randomString(),
+    start = NSDateComponents(),
+    end = NSDateComponents(),
+    timezone = NSTimeZone(),
     days = DayOfWeek.entries.shuffled().take(3).toSet(),
-    exceptions = (1..3).map { randomString() }
+    exceptions = (1..3).map { NSDateComponents() }
 )
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
@@ -59,8 +62,8 @@ internal fun randomShareLock() = ShareLock(
     targetUserId = randomUuid(),
     targetUserRole = UserRole.entries.random(),
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
-    start = randomNullable { randomInt() },
-    end = randomNullable { randomInt() },
+    start = randomNullable { NSDate() },
+    end = randomNullable { NSDate() },
 )
 
 internal fun randomBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
@@ -80,7 +83,7 @@ internal fun randomShareLockOperation() = LockOperations.ShareLockOperation(
 
 internal fun randomUpdateSecureSettingUnlockDuration() = LockOperations.UpdateSecureSettingUnlockDuration(
     baseOperation = randomBaseOperation(),
-    unlockDuration = randomInt(1, 10)
+    unlockDuration = randomInt(1, 10).toDouble()
 )
 
 internal fun randomUpdateSecureSettingUnlockBetween() = LockOperations.UpdateSecureSettingUnlockBetween(

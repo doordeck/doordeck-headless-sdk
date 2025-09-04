@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.util.toInstant
+import com.doordeck.multiplatform.sdk.util.toNsDate
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
@@ -33,8 +33,8 @@ internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map 
         longitude = site.longitude,
         latitude = site.latitude,
         radius = site.radius,
-        created = site.created.toInstant(),
-        updated = site.updated.toInstant()
+        created = site.created.toNsDate(),
+        updated = site.updated.toNsDate()
     )
 }
 
