@@ -61,6 +61,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Clock.System.now
+import kotlin.time.Duration.Companion.days
 import kotlin.uuid.Uuid
 
 /**
@@ -99,8 +101,11 @@ internal object LockOperationsClient {
     internal suspend fun getLockAuditTrailRequest(lockId: String, start: Long? = null, end: Long? = null): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-            start?.let { parameter(Params.START, it) }
-            end?.let { parameter(Params.END, it) }
+
+            val start = start ?: now().minus(7.days).epochSeconds
+            val end = end ?: now().epochSeconds
+            parameter(Params.START, start)
+            parameter(Params.END, end)
         }.body()
     }
 
@@ -119,8 +124,11 @@ internal object LockOperationsClient {
     internal suspend fun getAuditForUserRequest(userId: String, start: Long? = null, end: Long? = null): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-            start?.let { parameter(Params.START, it) }
-            end?.let { parameter(Params.END, it) }
+
+            val start = start ?: now().minus(7.days).epochSeconds
+            val end = end ?: now().epochSeconds
+            parameter(Params.START, start)
+            parameter(Params.END, end)
         }.body()
     }
 
