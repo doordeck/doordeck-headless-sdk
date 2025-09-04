@@ -66,7 +66,6 @@ internal fun String.toNSURLComponents(): NSURLComponents = NSURLComponents(this)
 
 internal fun NSURLComponents.toUrlString(): String = string!!
 
-
 internal fun String.toNsTimeZone(): NSTimeZone = (NSTimeZone.timeZoneWithName(this)
     ?: NSTimeZone.timeZoneWithAbbreviation(this))!!
 
