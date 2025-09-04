@@ -739,8 +739,8 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
             timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
