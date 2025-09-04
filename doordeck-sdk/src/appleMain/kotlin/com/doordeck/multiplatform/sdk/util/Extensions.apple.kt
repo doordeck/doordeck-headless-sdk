@@ -2,13 +2,20 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.Constants.CERTIFICATE_PINNER_DOMAIN_PATTERN
 import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.datetime.toNSDate
+import kotlinx.datetime.toNSDateComponents
 import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
+import platform.Foundation.NSCalendarUnitDay
+import platform.Foundation.NSCalendarUnitMonth
+import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSDateFormatter
@@ -74,11 +81,17 @@ private val DATE_FORMAT = NSDateFormatter().apply {
 }
 
 internal fun String.toNsDateComponents(): NSDateComponents {
-
+    return NSCalendar.currentCalendar.components(
+        unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
+        fromDate = TIME_FORMAT.dateFromString(this)!!
+    )
 }
 
 internal fun String.toNsLocalDateComponents(): NSDateComponents {
-
+    return NSCalendar.currentCalendar.components(
+        unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
+        fromDate = DATE_FORMAT.dateFromString(this)!!
+    )
 }
 
 internal fun NSDateComponents.toLocalTimeString(): String = TIME_FORMAT.stringFromDate(
