@@ -71,26 +71,22 @@ internal fun String.toNsTimeZone(): NSTimeZone = (NSTimeZone.timeZoneWithName(th
 
 
 private val NS_TIME_FORMAT = NSDateFormatter().apply {
-    dateFormat = "hh:mm"
+    dateFormat = "HH:mm"
 }
 
 private val NS_DATE_FORMAT = NSDateFormatter().apply {
     dateFormat = "yyyy-MM-dd"
 }
 
-internal fun String.toNsDateComponents(): NSDateComponents {
-    return NSCalendar.currentCalendar.components(
-        unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
-        fromDate = NS_TIME_FORMAT.dateFromString(this)!!
-    )
-}
+internal fun String.toNsDateComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
+    unitFlags = NSCalendarUnitHour or NSCalendarUnitMinute,
+    fromDate = NS_TIME_FORMAT.dateFromString(this)!!
+)
 
-internal fun String.toNsLocalDateComponents(): NSDateComponents {
-    return NSCalendar.currentCalendar.components(
-        unitFlags = NSCalendarUnitHour or NSCalendarUnitMinute,
-        fromDate = NS_DATE_FORMAT.dateFromString(this)!!
-    )
-}
+internal fun String.toNsLocalDateComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
+    unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
+    fromDate = NS_DATE_FORMAT.dateFromString(this)!!
+)
 
 internal fun NSDateComponents.toLocalTimeString(): String = NS_TIME_FORMAT.stringFromDate(
     NSCalendar.currentCalendar.dateFromComponents(this)!!
