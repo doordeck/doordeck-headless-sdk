@@ -5,6 +5,9 @@ import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toNSDate
+import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
@@ -18,10 +21,10 @@ import platform.Foundation.NSURLCredential
 import platform.Foundation.NSURLSessionAuthChallengePerformDefaultHandling
 import platform.Foundation.NSURLSessionAuthChallengeUseCredential
 import platform.Foundation.NSUUID
-import platform.Foundation.create
 import platform.Foundation.credentialForTrust
 import platform.Foundation.serverTrust
 import platform.Foundation.timeIntervalSince1970
+import kotlin.time.Instant
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
@@ -59,7 +62,8 @@ internal fun String.toNSURLComponents(): NSURLComponents = NSURLComponents(this)
 
 internal fun NSURLComponents.toUrlString(): String = string!!
 
-internal fun String.toNsTimeZone(): NSTimeZone = NSTimeZone.create(this)!!
+
+internal fun String.toNsTimeZone(): NSTimeZone = TimeZone.of(this).toNSTimeZone()
 
 private val TIME_FORMAT = NSDateFormatter().apply {
     dateFormat = "hh:mm"
@@ -67,6 +71,14 @@ private val TIME_FORMAT = NSDateFormatter().apply {
 
 private val DATE_FORMAT = NSDateFormatter().apply {
     dateFormat = "yyyy-MM-dd"
+}
+
+internal fun String.toNsDateComponents(): NSDateComponents {
+
+}
+
+internal fun String.toNsLocalDateComponents(): NSDateComponents {
+
 }
 
 internal fun NSDateComponents.toLocalTimeString(): String = TIME_FORMAT.stringFromDate(
@@ -81,6 +93,12 @@ internal fun NSDate.toEpochSeconds(): Long = timeIntervalSince1970.toLong()
 
 internal fun NSTimeInterval.toWholeSeconds(): Int = toInt()
 
-internal fun Double.toNsDate(): NSDate = NSDate(this)
+internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
-internal fun String.toNsDate(): NSDate = toDouble().toNsDate()
+internal fun String.toNsDate(): NSDate {
+    val split = split(".")
+    return Instant.fromEpochSeconds(
+        epochSeconds = split.first().toLong(),
+        nanosecondAdjustment = split.lastOrNull()?.toLong() ?: 0
+    ).toNSDate()
+}

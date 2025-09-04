@@ -6,6 +6,8 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.toNsDate
+import com.doordeck.multiplatform.sdk.util.toNsDateComponents
+import com.doordeck.multiplatform.sdk.util.toNsLocalDateComponents
 import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
@@ -95,8 +97,8 @@ data class UserLockResponse(
     val orphan: Boolean,
     val foreign: Boolean,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: NSDate? = null,
+    val end: NSDate? = null
 )
 
 data class LockUserResponse(
@@ -168,8 +170,8 @@ internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): Usage
 )
 
 internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
-    start = start,
-    end = end,
+    start = start.toNsDateComponents(),
+    end = end.toNsDateComponents(),
     timezone = timezone.toNsTimeZone(),
     days = days
 )
@@ -183,11 +185,11 @@ internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): L
 )
 
 internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
-    start = start,
-    end = end,
+    start = start.toNsDateComponents(),
+    end = end.toNsDateComponents(),
     timezone = timezone.toNsTimeZone(),
     days = days,
-    exceptions = exceptions
+    exceptions = exceptions.map { it.toNsLocalDateComponents() }
 )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
@@ -225,8 +227,8 @@ internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResp
         orphan = user.orphan,
         foreign = user.foreign,
         role = user.role,
-        start = user.start,
-        end = user.end
+        start = user.start?.toNsDate(),
+        end = user.end?.toNsDate()
     )
 }
 
