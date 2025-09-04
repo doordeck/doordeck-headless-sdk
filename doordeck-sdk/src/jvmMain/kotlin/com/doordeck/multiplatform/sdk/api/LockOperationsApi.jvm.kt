@@ -52,6 +52,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
+    @JvmOverloads
     suspend fun getLockAuditTrail(
         lockId: UUID,
         start: Instant? = null,
@@ -67,6 +68,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun getLockAuditTrailAsync(
         lockId: UUID,
         start: Instant? = null,
@@ -82,6 +84,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
+    @JvmOverloads
     suspend fun getAuditForUser(
         userId: UUID,
         start: Instant? = null,
@@ -97,6 +100,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun getAuditForUserAsync(
         userId: UUID,
         start: Instant? = null,

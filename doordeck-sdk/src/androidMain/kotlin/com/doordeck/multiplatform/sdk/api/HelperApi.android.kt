@@ -66,6 +66,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
+    @JvmOverloads
     suspend fun assistedRegisterEphemeralKey(
         keyPair: KeyPair? = null
     ): AssistedRegisterEphemeralKeyResponse = HelperClient
@@ -78,6 +79,7 @@ actual object HelperApi {
     /**
      * Async variant of [HelperApi.assistedRegisterEphemeralKey] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun assistedRegisterEphemeralKeyAsync(
         keyPair: KeyPair? = null
     ): CompletableFuture<AssistedRegisterEphemeralKeyResponse> = completableFuture {
@@ -87,6 +89,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterRequest
      */
+    @JvmOverloads
     suspend fun assistedRegister(
         email: String,
         password: String,
@@ -102,6 +105,7 @@ actual object HelperApi {
     /**
      * Async variant of [HelperApi.assistedRegister] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun assistedRegisterAsync(
         email: String,
         password: String,

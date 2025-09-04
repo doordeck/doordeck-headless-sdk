@@ -98,12 +98,13 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-lock-audit-trail-v2">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun getLockAuditTrailRequest(lockId: String, start: Long? = null, end: Long? = null): List<BasicAuditResponse> {
+    internal suspend fun getLockAuditTrailRequest(
+        lockId: String,
+        start: Long? = now().minus(7.days).epochSeconds,
+        end: Long? = now().epochSeconds
+    ): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-
-            val start = start ?: now().minus(7.days).epochSeconds
-            val end = end ?: now().epochSeconds
             parameter(Params.START, start)
             parameter(Params.END, end)
         }.body()
@@ -121,12 +122,13 @@ internal object LockOperationsClient {
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-audit-for-a-user">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun getAuditForUserRequest(userId: String, start: Long? = null, end: Long? = null): List<BasicAuditResponse> {
+    internal suspend fun getAuditForUserRequest(
+        userId: String,
+        start: Long? = now().minus(7.days).epochSeconds,
+        end: Long? = now().epochSeconds
+    ): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-
-            val start = start ?: now().minus(7.days).epochSeconds
-            val end = end ?: now().epochSeconds
             parameter(Params.START, start)
             parameter(Params.END, end)
         }.body()
