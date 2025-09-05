@@ -11,7 +11,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def get_lock_audit_trail(self, lockId: str, start: int, end: int):
+    async def get_lock_audit_trail(self, lockId: str, start: typing.Optional[int] = None, end: typing.Optional[int] = None):
         data = {
             "lockId": lockId,
             "start": start,
@@ -22,7 +22,7 @@ class LockOperations(object):
             [self.resource, json.dumps(data)]
         )
 
-    async def get_audit_for_user(self, lockId: str, start: int, end: int):
+    async def get_audit_for_user(self, lockId: str, start: typing.Optional[int] = None, end: typing.Optional[int] = None):
         data = {
             "lockId": lockId,
             "start": start,

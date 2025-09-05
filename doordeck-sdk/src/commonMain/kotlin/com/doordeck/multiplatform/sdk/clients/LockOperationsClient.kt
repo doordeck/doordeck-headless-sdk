@@ -61,6 +61,8 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Clock.System.now
+import kotlin.time.Duration.Companion.days
 import kotlin.uuid.Uuid
 
 /**
@@ -88,15 +90,19 @@ internal object LockOperationsClient {
      * Retrieves all log events associated with a particular lock.
      *
      * @param lockId The lock's unique identifier.
-     * @param start Start of the date range (epoch timestamp).
-     * @param end End of date range (epoch timestamp).
+     * @param start Start of the date range (epoch timestamp) or null to use the last week.
+     * @param end End of date range (epoch timestamp) or null to use the last week.
      * @return List of [BasicAuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-lock-audit-trail-v2">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun getLockAuditTrailRequest(lockId: String, start: Long, end: Long): List<BasicAuditResponse> {
+    internal suspend fun getLockAuditTrailRequest(
+        lockId: String,
+        start: Long? = now().minus(7.days).epochSeconds,
+        end: Long? = now().epochSeconds
+    ): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
@@ -108,15 +114,19 @@ internal object LockOperationsClient {
      * Retrieves all log events associated with a particular user.
      *
      * @param userId The user's unique identifier.
-     * @param start Start of the date range (epoch timestamp).
-     * @param end End of date range (epoch timestamp).
+     * @param start Start of the date range (epoch timestamp) or null to use the last week.
+     * @param end End of date range (epoch timestamp) or null to use the last week.
      * @return List of [BasicAuditResponse].
      * @throws SdkException if an unexpected error occurs while processing the request.
      *
      * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/lock-operations/get-audit-for-a-user">API Doc</a>
      */
     @JvmSynthetic
-    internal suspend fun getAuditForUserRequest(userId: String, start: Long, end: Long): List<BasicAuditResponse> {
+    internal suspend fun getAuditForUserRequest(
+        userId: String,
+        start: Long? = now().minus(7.days).epochSeconds,
+        end: Long? = now().epochSeconds
+    ): List<BasicAuditResponse> {
         return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
             parameter(Params.START, start)
