@@ -22,10 +22,14 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toNSDateComponents
+import platform.Foundation.NSDateComponents
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -141,9 +145,9 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
         val addedTimeRestriction = LockOperations.TimeRequirement(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random())
         )
 
@@ -154,8 +158,10 @@ class LockOperationsApiTest : IntegrationTest() {
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
         assertNotNull(actualTime)
-        assertEquals(addedTimeRestriction.start, actualTime.start)
-        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.start.hour, actualTime.start.hour)
+        assertEquals(addedTimeRestriction.start.minute, actualTime.start.minute)
+        assertEquals(addedTimeRestriction.end.hour, actualTime.end.hour)
+        assertEquals(addedTimeRestriction.end.minute, actualTime.end.minute)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
@@ -610,7 +616,7 @@ class LockOperationsApiTest : IntegrationTest() {
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
         ).certificateChain
-        val updatedUnlockDuration = randomInt(1, 10)
+        val updatedUnlockDuration = randomInt(1, 10).toDouble()
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -639,7 +645,7 @@ class LockOperationsApiTest : IntegrationTest() {
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
         ).certificateChain
-        val updatedUnlockDuration = 1
+        val updatedUnlockDuration = 1.toDouble()
         ContextManager.setOperationContext(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -673,9 +679,9 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
@@ -697,8 +703,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.hour, lock.settings.unlockBetweenWindow.start.hour)
+        assertEquals(updatedUnlockBetween.start.minute, lock.settings.unlockBetweenWindow.start.minute)
+        assertEquals(updatedUnlockBetween.end.hour, lock.settings.unlockBetweenWindow.end.hour)
+        assertEquals(updatedUnlockBetween.end.minute, lock.settings.unlockBetweenWindow.end.minute)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -735,9 +743,9 @@ class LockOperationsApiTest : IntegrationTest() {
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
         val updatedUnlockBetween = LockOperations.UnlockBetween(
-            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-            timezone = TimeZone.UTC.id,
+            start = min.toNSDateComponents(),
+            end = max.toNSDateComponents(),
+            timezone = TimeZone.UTC.id.toNsTimeZone(),
             days = setOf(DayOfWeek.entries.random()),
             exceptions = emptyList()
         )
@@ -760,8 +768,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.hour, lock.settings.unlockBetweenWindow.start.hour)
+        assertEquals(updatedUnlockBetween.start.minute, lock.settings.unlockBetweenWindow.start.minute)
+        assertEquals(updatedUnlockBetween.end.hour, lock.settings.unlockBetweenWindow.end.hour)
+        assertEquals(updatedUnlockBetween.end.minute, lock.settings.unlockBetweenWindow.end.minute)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -824,7 +834,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 shareLockOperation = LockOperations.ShareLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = LockOperations.ShareLock(
-                        targetUserId = randomUuidString(),
+                        targetUserId = randomUuid(),
                         targetUserRole = UserRole.USER,
                         targetUserPublicKey = CryptoManager.generateKeyPair().public
                     )
@@ -843,7 +853,7 @@ class LockOperationsApiTest : IntegrationTest() {
             LockOperationsApi.updateSecureSettingUnlockDuration(
                 updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                    unlockDuration = 0
+                    unlockDuration = 0.0
                 )
             )
         }
@@ -852,9 +862,9 @@ class LockOperationsApiTest : IntegrationTest() {
                 updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockBetween = LockOperations.UnlockBetween(
-                        start = "",
-                        end = "",
-                        timezone = TimeZone.UTC.id,
+                        start = NSDateComponents(),
+                        end = NSDateComponents(),
+                        timezone = TimeZone.UTC.id.toNsTimeZone(),
                         days = emptySet(),
                         exceptions = emptyList()
                     )

@@ -4,7 +4,7 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomNullable
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlinx.coroutines.test.runTest
@@ -20,7 +20,7 @@ class SdkConfigTest {
             apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
-            fusionHost = randomNullable { randomUrlString() },
+            fusionHost = randomNullable { randomUri() },
             secureStorage = DefaultSecureStorage(MemorySettings()),
             debugLogging = randomNullable { randomBoolean() }
         )

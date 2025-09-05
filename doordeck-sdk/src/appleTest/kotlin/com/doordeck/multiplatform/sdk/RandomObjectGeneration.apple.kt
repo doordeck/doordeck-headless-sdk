@@ -7,22 +7,34 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
+import platform.Foundation.NSTimeZone
+import platform.Foundation.NSURLComponents
+import platform.Foundation.NSUUID
+import platform.Foundation.systemTimeZone
+
+internal fun randomUuid(): NSUUID = randomUuidString().toNsUuid()
+
+internal fun randomUri(): NSURLComponents = randomUrlString().toNsUrlComponents()
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
-    userId = randomNullable { randomUuidString() },
+    userId = randomNullable { randomUuid() },
     userCertificateChain = randomNullable { listOf(PLATFORM_TEST_VALID_CERTIFICATE) },
     userPrivateKey = randomNullable { CryptoManager.generateKeyPair().private },
-    lockId = randomUuidString(),
-    notBefore = randomInt(),
-    issuedAt = randomInt(),
-    expiresAt = randomInt(),
-    jti = randomUuidString()
+    lockId = randomUuid(),
+    notBefore = NSDate(),
+    issuedAt = NSDate(),
+    expiresAt = NSDate(),
+    jti = randomUuid()
 )
 
 internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
-    start = randomString(),
-    end = randomString(),
-    timezone = randomString(),
+    start = NSDateComponents(),
+    end = NSDateComponents(),
+    timezone = NSTimeZone.systemTimeZone,
     days = DayOfWeek.entries.shuffled().take(3).toSet()
 )
 
@@ -35,24 +47,24 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
 )
 
 internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
-    start = randomString(),
-    end = randomString(),
-    timezone = randomString(),
+    start = NSDateComponents(),
+    end = NSDateComponents(),
+    timezone = NSTimeZone.systemTimeZone,
     days = DayOfWeek.entries.shuffled().take(3).toSet(),
-    exceptions = (1..3).map { randomString() }
+    exceptions = (1..3).map { NSDateComponents() }
 )
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
-    users = (1..3).map { randomUuidString() }
+    users = (1..3).map { randomUuid() }
 )
 
 internal fun randomShareLock() = ShareLock(
-    targetUserId = randomUuidString(),
+    targetUserId = randomUuid(),
     targetUserRole = UserRole.entries.random(),
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
-    start = randomNullable { randomInt() },
-    end = randomNullable { randomInt() },
+    start = randomNullable { NSDate() },
+    end = randomNullable { NSDate() },
 )
 
 internal fun randomBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
@@ -72,7 +84,7 @@ internal fun randomShareLockOperation() = LockOperations.ShareLockOperation(
 
 internal fun randomUpdateSecureSettingUnlockDuration() = LockOperations.UpdateSecureSettingUnlockDuration(
     baseOperation = randomBaseOperation(),
-    unlockDuration = randomInt(1, 10)
+    unlockDuration = randomInt(1, 10).toDouble()
 )
 
 internal fun randomUpdateSecureSettingUnlockBetween() = LockOperations.UpdateSecureSettingUnlockBetween(
@@ -84,11 +96,11 @@ internal fun randomCreateApplication() = PlatformOperations.CreateApplication(
     name = randomString(),
     companyName = randomString(),
     mailingAddress = randomString(),
-    privacyPolicy = randomNullable { randomUrlString() },
-    supportContact = randomNullable { randomUrlString() },
-    appLink = randomNullable { randomUrlString() },
+    privacyPolicy = randomNullable { randomUri() },
+    supportContact = randomNullable { randomUri() },
+    appLink = randomNullable { randomUri() },
     emailPreferences = randomNullable { randomEmailPreferences() },
-    logoUrl = randomNullable { randomUrlString() }
+    logoUrl = randomNullable { randomUri() }
 )
 
 internal fun randomEmailPreferences() = PlatformOperations.EmailPreferences(
@@ -101,7 +113,7 @@ internal fun randomEmailPreferences() = PlatformOperations.EmailPreferences(
 )
 
 internal fun randomEmailCallToAction() = PlatformOperations.EmailCallToAction(
-    actionTarget = randomUrlString(),
+    actionTarget = randomUri(),
     headline = randomString(),
     actionText = randomString()
 )

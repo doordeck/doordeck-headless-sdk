@@ -21,88 +21,97 @@ actual object AccountApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun refreshToken(refreshToken: String? = null): TokenResponse {
-        return AccountClient.refreshTokenRequest(refreshToken)
-            .toTokenResponse()
-    }
+    suspend fun refreshToken(refreshToken: String? = null): TokenResponse = AccountClient
+        .refreshTokenRequest(refreshToken)
+        .toTokenResponse()
 
     /**
      * @see AccountClient.logoutRequest
      */
     @Throws(Exception::class)
-    suspend fun logout() {
-        return AccountClient.logoutRequest()
-    }
+    suspend fun logout() = AccountClient.logoutRequest()
 
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKey(publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        return AccountClient.registerEphemeralKeyRequest(publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
-    }
+    suspend fun registerEphemeralKey(
+        publicKey: ByteArray? = null,
+        privateKey: ByteArray? = null
+    ): RegisterEphemeralKeyResponse = AccountClient
+        .registerEphemeralKeyRequest(
+            publicKey = publicKey,
+            privateKey = privateKey
+        )
+        .toRegisterEphemeralKeyResponse()
 
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
     @Throws(Exception::class)
-    suspend fun registerEphemeralKeyWithSecondaryAuthentication(publicKey: ByteArray? = null, method: TwoFactorMethod? = null): RegisterEphemeralKeyWithSecondaryAuthenticationResponse {
-        return AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(publicKey, method)
-            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
-    }
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(
+        publicKey: ByteArray? = null,
+        method: TwoFactorMethod? = null
+    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = AccountClient
+        .registerEphemeralKeyWithSecondaryAuthenticationRequest(
+            publicKey = publicKey,
+            method = method
+        )
+        .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
 
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
     @Throws(Exception::class)
-    suspend fun verifyEphemeralKeyRegistration(code: String, publicKey: ByteArray? = null, privateKey: ByteArray? = null): RegisterEphemeralKeyResponse {
-        return AccountClient.verifyEphemeralKeyRegistrationRequest(code, publicKey, privateKey)
-            .toRegisterEphemeralKeyResponse()
-    }
+    suspend fun verifyEphemeralKeyRegistration(
+        code: String,
+        publicKey: ByteArray? = null,
+        privateKey: ByteArray? = null
+    ): RegisterEphemeralKeyResponse = AccountClient
+        .verifyEphemeralKeyRegistrationRequest(
+            code = code,
+            publicKey = publicKey,
+            privateKey = privateKey
+        )
+        .toRegisterEphemeralKeyResponse()
 
     /**
      * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun reverifyEmail() {
-        return AccountClient.reverifyEmailRequest()
-    }
+    suspend fun reverifyEmail() = AccountClient.reverifyEmailRequest()
 
     /**
      * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun changePassword(oldPassword: String, newPassword: String) {
-        return AccountClient.changePasswordRequest(oldPassword, newPassword)
-    }
+    suspend fun changePassword(oldPassword: String, newPassword: String) = AccountClient
+        .changePasswordRequest(
+            oldPassword = oldPassword,
+            newPassword = newPassword
+        )
 
     /**
      * @see AccountClient.getUserDetailsRequest
      */
     @Throws(Exception::class)
-    suspend fun getUserDetails(): UserDetailsResponse {
-        return AccountClient.getUserDetailsRequest()
-            .toUserDetailsResponse()
-    }
+    suspend fun getUserDetails(): UserDetailsResponse = AccountClient
+        .getUserDetailsRequest()
+        .toUserDetailsResponse()
 
     /**
      * @see AccountClient.updateUserDetailsRequest
      */
     @Throws(Exception::class)
-    suspend fun updateUserDetails(displayName: String) {
-        return AccountClient.updateUserDetailsRequest(displayName)
-    }
+    suspend fun updateUserDetails(displayName: String) = AccountClient.updateUserDetailsRequest(displayName)
 
     /**
      * @see AccountClient.deleteAccountRequest
      */
     @Throws(Exception::class)
-    suspend fun deleteAccount() {
-        return AccountClient.deleteAccountRequest()
-    }
+    suspend fun deleteAccount() = AccountClient.deleteAccountRequest()
 }
 
 /**

@@ -5,12 +5,22 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import com.doordeck.multiplatform.sdk.util.toNsDate
+import com.doordeck.multiplatform.sdk.util.toNsTimeComponents
+import com.doordeck.multiplatform.sdk.util.toNsDateComponents
+import com.doordeck.multiplatform.sdk.util.toNsTimeZone
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
+import platform.Foundation.NSTimeInterval
+import platform.Foundation.NSTimeZone
+import platform.Foundation.NSUUID
 
 data class LockResponse(
-    val id: String,
+    val id: NSUUID,
     val name: String,
-    val start: String? = null,
-    val end: String? = null,
+    val start: NSDate? = null,
+    val end: NSDate? = null,
     val role: UserRole,
     val settings: LockSettingsResponse,
     val state: LockStateResponse,
@@ -18,12 +28,12 @@ data class LockResponse(
 )
 
 data class LockSettingsResponse(
-    val unlockTime: Double,
+    val unlockTime: NSTimeInterval,
     val permittedAddresses: List<String>,
     val defaultName: String,
     val usageRequirements: UsageRequirementsResponse? = null,
     val unlockBetweenWindow: UnlockBetweenSettingResponse? = null,
-    val tiles: List<String>,
+    val tiles: List<NSUUID>,
     val hidden: Boolean,
     val directAccessEndpoints: List<String> = emptyList(),
     val capabilities: Map<CapabilityType, CapabilityStatus> = emptyMap()
@@ -35,9 +45,9 @@ data class UsageRequirementsResponse(
 )
 
 data class TimeRequirementResponse(
-    val start: String,
-    val end: String,
-    val timezone: String,
+    val start: NSDateComponents,
+    val end: NSDateComponents,
+    val timezone: NSTimeZone,
     val days: Set<DayOfWeek>
 )
 
@@ -50,11 +60,11 @@ data class LocationRequirementResponse(
 )
 
 data class UnlockBetweenSettingResponse(
-    val start: String,
-    val end: String,
-    val timezone: String,
+    val start: NSDateComponents,
+    val end: NSDateComponents,
+    val timezone: NSTimeZone,
     val days: Set<DayOfWeek>,
-    val exceptions: List<String> = emptyList()
+    val exceptions: List<NSDateComponents> = emptyList()
 )
 
 data class LockStateResponse(
@@ -62,12 +72,12 @@ data class LockStateResponse(
 )
 
 data class UserPublicKeyResponse(
-    val id: String,
+    val id: NSUUID,
     val publicKey: String
 )
 
 data class BatchUserPublicKeyResponse(
-    val id: String,
+    val id: NSUUID,
     val email: String? = null,
     val foreignKey: String? = null,
     val phone: String? = null,
@@ -75,44 +85,44 @@ data class BatchUserPublicKeyResponse(
 )
 
 data class ShareableLockResponse(
-    val id: String,
+    val id: NSUUID,
     val name: String
 )
 
 data class UserLockResponse(
-    val userId: String,
+    val userId: NSUUID,
     val email: String,
     val publicKey: String,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: NSDate? = null,
+    val end: NSDate? = null
 )
 
 data class LockUserResponse(
-    val userId: String,
+    val userId: NSUUID,
     val email: String,
     val publicKey: String,
     val displayName: String? = null,
     val orphan: Boolean,
     val foreign: Boolean,
-    val start: Double? = null,
-    val end: Double? = null,
+    val start: NSDate? = null,
+    val end: NSDate? = null,
     val devices: List<LockUserDetailsResponse>
 )
 
 data class LockUserDetailsResponse(
-    val deviceId: String,
+    val deviceId: NSUUID,
     val role: UserRole,
-    val start: Double? = null,
-    val end: Double? = null
+    val start: NSDate? = null,
+    val end: NSDate? = null
 )
 
 data class AuditResponse(
-    val deviceId: String,
-    val timestamp: Double,
+    val deviceId: NSUUID,
+    val timestamp: NSDate,
     val type: AuditEvent,
     val issuer: AuditUserResponse,
     val subject: AuditUserResponse? = null,
@@ -121,7 +131,7 @@ data class AuditResponse(
 )
 
 data class AuditUserResponse(
-    val userId: String,
+    val userId: NSUUID,
     val email: String? = null,
     val displayName: String? = null,
     val ip: String? = null
@@ -132,10 +142,10 @@ internal fun List<BasicLockResponse>.toLockResponse(): List<LockResponse> = map 
 }
 
 internal fun BasicLockResponse.toLockResponse(): LockResponse = LockResponse(
-    id = id,
+    id = id.toNsUuid(),
     name = name,
-    start = start,
-    end = end,
+    start = start?.toNsDate(),
+    end = end?.toNsDate(),
     role = role,
     settings = settings.toLockSettingsResponse(),
     state = state.toLockStateResponse(),
@@ -148,7 +158,7 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
     defaultName = defaultName,
     usageRequirements = usageRequirements?.toUsageRequirementsResponse(),
     unlockBetweenWindow = unlockBetweenWindow?.toUnlockBetweenSettingResponse(),
-    tiles = tiles,
+    tiles = tiles.map { it.toNsUuid() },
     hidden = hidden,
     directAccessEndpoints = directAccessEndpoints,
     capabilities = capabilities
@@ -160,9 +170,9 @@ internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): Usage
 )
 
 internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
-    start = start,
-    end = end,
-    timezone = timezone,
+    start = start.toNsTimeComponents(),
+    end = end.toNsTimeComponents(),
+    timezone = timezone.toNsTimeZone(),
     days = days
 )
 
@@ -175,11 +185,11 @@ internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): L
 )
 
 internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
-    start = start,
-    end = end,
-    timezone = timezone,
+    start = start.toNsTimeComponents(),
+    end = end.toNsTimeComponents(),
+    timezone = timezone.toNsTimeZone(),
     days = days,
-    exceptions = exceptions
+    exceptions = exceptions.map { it.toNsDateComponents() }
 )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
@@ -187,13 +197,13 @@ internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = L
 )
 
 internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKeyResponse = UserPublicKeyResponse(
-    id = id,
+    id = id.toNsUuid(),
     publicKey = publicKey
 )
 
 internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
     BatchUserPublicKeyResponse(
-        id = user.id,
+        id = user.id.toNsUuid(),
         email = user.email,
         foreignKey = user.foreignKey,
         phone = user.phone,
@@ -203,48 +213,48 @@ internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(
 
 internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<ShareableLockResponse> = map { lock ->
     ShareableLockResponse(
-        id = lock.id,
+        id = lock.id.toNsUuid(),
         name = lock.name
     )
 }
 
 internal fun List<BasicUserLockResponse>.toUserLockResponse(): List<UserLockResponse> = map { user ->
     UserLockResponse(
-        userId = user.userId,
+        userId = user.userId.toNsUuid(),
         email = user.email,
         publicKey = user.publicKey,
         displayName = user.displayName,
         orphan = user.orphan,
         foreign = user.foreign,
         role = user.role,
-        start = user.start,
-        end = user.end
+        start = user.start?.toNsDate(),
+        end = user.end?.toNsDate()
     )
 }
 
 internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = LockUserResponse(
-    userId = userId,
+    userId = userId.toNsUuid(),
     email = email,
     publicKey = publicKey,
     displayName = displayName,
     orphan = orphan,
     foreign = foreign,
-    start = start,
-    end = end,
+    start = start?.toNsDate(),
+    end = end?.toNsDate(),
     devices = devices.map { it.toLockUserDetailsResponse() }
 )
 
 internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
-    deviceId = deviceId,
+    deviceId = deviceId.toNsUuid(),
     role = role,
-    start = start,
-    end = end
+    start = start?.toNsDate(),
+    end = end?.toNsDate()
 )
 
 internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
     AuditResponse(
-        deviceId = audit.deviceId,
-        timestamp = audit.timestamp.toDouble(),
+        deviceId = audit.deviceId.toNsUuid(),
+        timestamp = audit.timestamp.toNsDate(),
         type = audit.type,
         issuer = audit.issuer.toAuditUserResponse(),
         subject = audit.subject?.toAuditUserResponse(),
@@ -254,7 +264,7 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = m
 }
 
 internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(
-    userId = userId,
+    userId = userId.toNsUuid(),
     email = email,
     displayName = displayName,
     ip = ip
