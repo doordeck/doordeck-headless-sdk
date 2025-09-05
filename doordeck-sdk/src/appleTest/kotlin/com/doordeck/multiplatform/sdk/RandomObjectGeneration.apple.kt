@@ -14,6 +14,7 @@ import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
+import platform.Foundation.systemTimeZone
 
 internal fun randomUuid(): NSUUID = randomUuidString().toNsUuid()
 
@@ -33,7 +34,7 @@ internal fun randomBaseOperation() = LockOperations.BaseOperation(
 internal fun randomTimeRequirement() = LockOperations.TimeRequirement(
     start = NSDateComponents(),
     end = NSDateComponents(),
-    timezone = NSTimeZone(),
+    timezone = NSTimeZone.systemTimeZone,
     days = DayOfWeek.entries.shuffled().take(3).toSet()
 )
 
@@ -48,7 +49,7 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
 internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
     start = NSDateComponents(),
     end = NSDateComponents(),
-    timezone = NSTimeZone(),
+    timezone = NSTimeZone.systemTimeZone,
     days = DayOfWeek.entries.shuffled().take(3).toSet(),
     exceptions = (1..3).map { NSDateComponents() }
 )

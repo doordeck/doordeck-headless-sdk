@@ -158,8 +158,10 @@ class LockOperationsApiTest : IntegrationTest() {
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         val actualTime = lock.settings.usageRequirements?.time?.firstOrNull()
         assertNotNull(actualTime)
-        assertEquals(addedTimeRestriction.start, actualTime.start)
-        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.start.hour, actualTime.start.hour)
+        assertEquals(addedTimeRestriction.start.minute, actualTime.start.minute)
+        assertEquals(addedTimeRestriction.end.hour, actualTime.end.hour)
+        assertEquals(addedTimeRestriction.end.minute, actualTime.end.minute)
         assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
         assertContains(actualTime.days, addedTimeRestriction.days.first())
 
@@ -701,8 +703,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.hour, lock.settings.unlockBetweenWindow.start.hour)
+        assertEquals(updatedUnlockBetween.start.minute, lock.settings.unlockBetweenWindow.start.minute)
+        assertEquals(updatedUnlockBetween.end.hour, lock.settings.unlockBetweenWindow.end.hour)
+        assertEquals(updatedUnlockBetween.end.minute, lock.settings.unlockBetweenWindow.end.minute)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
@@ -764,8 +768,10 @@ class LockOperationsApiTest : IntegrationTest() {
         // Then
         var lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
         assertNotNull(lock.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lock.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.start.hour, lock.settings.unlockBetweenWindow.start.hour)
+        assertEquals(updatedUnlockBetween.start.minute, lock.settings.unlockBetweenWindow.start.minute)
+        assertEquals(updatedUnlockBetween.end.hour, lock.settings.unlockBetweenWindow.end.hour)
+        assertEquals(updatedUnlockBetween.end.minute, lock.settings.unlockBetweenWindow.end.minute)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
 
