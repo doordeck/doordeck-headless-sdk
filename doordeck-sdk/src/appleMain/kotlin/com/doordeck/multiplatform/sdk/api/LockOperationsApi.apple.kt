@@ -44,11 +44,15 @@ actual object LockOperationsApi {
      */
     @Throws(Exception::class)
     suspend fun getLockAuditTrail(
-        lockId: String,
+        lockId: NSUUID,
         start: Long? = null,
         end: Long? = null
     ): List<AuditResponse> = LockOperationsClient
-        .getLockAuditTrailRequest(lockId, start, end)
+        .getLockAuditTrailRequest(
+            lockId = lockId.UUIDString,
+            start = start,
+            end = end
+        )
         .toAuditResponse()
 
     /**
@@ -56,11 +60,15 @@ actual object LockOperationsApi {
      */
     @Throws(Exception::class)
     suspend fun getAuditForUser(
-        userId: String,
+        userId: NSUUID,
         start: Long? = null,
         end: Long? = null
     ): List<AuditResponse> = LockOperationsClient
-        .getAuditForUserRequest(userId, start, end)
+        .getAuditForUserRequest(
+            userId = userId.UUIDString,
+            start = start,
+            end = end
+        )
         .toAuditResponse()
 
     /**
