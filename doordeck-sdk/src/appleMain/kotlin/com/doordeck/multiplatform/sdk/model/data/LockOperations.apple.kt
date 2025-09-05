@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.model.data
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.toEpochSeconds
-import com.doordeck.multiplatform.sdk.util.toLocalDateString
-import com.doordeck.multiplatform.sdk.util.toLocalTimeString
+import com.doordeck.multiplatform.sdk.util.toDateString
+import com.doordeck.multiplatform.sdk.util.toTimeString
 import com.doordeck.multiplatform.sdk.util.toWholeSeconds
 import com.doordeck.multiplatform.sdk.util.validateAccuracy
 import com.doordeck.multiplatform.sdk.util.validateLatitude
@@ -319,8 +319,8 @@ object LockOperations {
 
 internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
     BasicTimeRequirement(
-        start = requirement.start.toLocalTimeString(),
-        end = requirement.end.toLocalTimeString(),
+        start = requirement.start.toTimeString(),
+        end = requirement.end.toTimeString(),
         timezone = requirement.timezone.name,
         days = requirement.days
     )
@@ -338,11 +338,11 @@ internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): Ba
 
 internal fun LockOperations.UnlockBetween.toBasicUnlockBetween(): BasicUnlockBetween {
     return BasicUnlockBetween(
-        start = start.toLocalTimeString(),
-        end = end.toLocalTimeString(),
+        start = start.toTimeString(),
+        end = end.toTimeString(),
         timezone = timezone.name,
         days = days,
-        exceptions = exceptions?.map { it.toLocalDateString() }
+        exceptions = exceptions?.map { it.toDateString() }
     )
 }
 

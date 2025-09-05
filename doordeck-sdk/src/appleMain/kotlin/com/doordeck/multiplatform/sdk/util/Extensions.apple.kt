@@ -62,7 +62,7 @@ private fun isRunningOnSimulator(): Boolean =
 
 internal fun String.toNsUuid(): NSUUID = NSUUID(this)
 
-internal fun String.toNSURLComponents(): NSURLComponents = NSURLComponents(this)
+internal fun String.toNsUrlComponents(): NSURLComponents = NSURLComponents(this)
 
 internal fun NSURLComponents.toUrlString(): String = string!!
 
@@ -78,21 +78,21 @@ private val NS_DATE_FORMAT = NSDateFormatter().apply {
     dateFormat = "yyyy-MM-dd"
 }
 
-internal fun String.toNsDateComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
+internal fun String.toNsTimeComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
     unitFlags = NSCalendarUnitHour or NSCalendarUnitMinute,
     fromDate = NS_TIME_FORMAT.dateFromString(this)!!
 )
 
-internal fun String.toNsLocalDateComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
+internal fun String.toNsDateComponents(): NSDateComponents = NSCalendar.currentCalendar.components(
     unitFlags = NSCalendarUnitYear or NSCalendarUnitMonth or NSCalendarUnitDay,
     fromDate = NS_DATE_FORMAT.dateFromString(this)!!
 )
 
-internal fun NSDateComponents.toLocalTimeString(): String = NS_TIME_FORMAT.stringFromDate(
+internal fun NSDateComponents.toTimeString(): String = NS_TIME_FORMAT.stringFromDate(
     NSCalendar.currentCalendar.dateFromComponents(this)!!
 )
 
-internal fun NSDateComponents.toLocalDateString(): String = NS_DATE_FORMAT.stringFromDate(
+internal fun NSDateComponents.toDateString(): String = NS_DATE_FORMAT.stringFromDate(
     NSCalendar.currentCalendar.dateFromComponents(this)!!
 )
 

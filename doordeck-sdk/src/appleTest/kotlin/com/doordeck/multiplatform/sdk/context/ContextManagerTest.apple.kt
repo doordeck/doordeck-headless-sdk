@@ -20,7 +20,7 @@ import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -117,7 +117,7 @@ class ContextManagerTest : IntegrationTest() {
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
         assertNull(ContextManager.getFusionAuthToken())
-        assertEquals(DEFAULT_FUSION_HOST.toNSURLComponents(), ContextManager.getFusionHost())
+        assertEquals(DEFAULT_FUSION_HOST.toNsUrlComponents(), ContextManager.getFusionHost())
     }
 
     @Test

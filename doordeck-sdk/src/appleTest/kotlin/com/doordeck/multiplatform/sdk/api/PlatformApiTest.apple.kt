@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuidString
-import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toUrlString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -142,7 +142,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, application.emailPreferences.callToAction?.actionText)
 
         // Given - shouldUpdateApplicationLogoUrl
-        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test".toNSURLComponents()
+        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test".toNsUrlComponents()
 
         // When
         PlatformApi.updateApplicationLogoUrl(application.applicationId, updatedApplicationLogoUrl)

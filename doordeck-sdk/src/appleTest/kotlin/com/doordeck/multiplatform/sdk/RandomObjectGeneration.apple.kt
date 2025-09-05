@@ -7,7 +7,7 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
-import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
@@ -18,7 +18,7 @@ import platform.Foundation.systemTimeZone
 
 internal fun randomUuid(): NSUUID = randomUuidString().toNsUuid()
 
-internal fun randomUri(): NSURLComponents = randomUrlString().toNSURLComponents()
+internal fun randomUri(): NSURLComponents = randomUrlString().toNsUrlComponents()
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userId = randomNullable { randomUuid() },

@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.context
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import com.doordeck.multiplatform.sdk.util.toUrlString
 import platform.Foundation.NSURLComponents
@@ -27,7 +27,7 @@ actual object ContextManager {
 
     fun setFusionHost(host: NSURLComponents) = Context.setFusionHost(host.toUrlString())
 
-    fun getFusionHost(): NSURLComponents = Context.getFusionHost().toNSURLComponents()
+    fun getFusionHost(): NSURLComponents = Context.getFusionHost().toNsUrlComponents()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 

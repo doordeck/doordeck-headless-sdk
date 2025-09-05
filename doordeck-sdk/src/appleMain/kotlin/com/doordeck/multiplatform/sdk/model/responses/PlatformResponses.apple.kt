@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
-import com.doordeck.multiplatform.sdk.util.toNSURLComponents
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
@@ -131,14 +131,14 @@ internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationRespon
     name = name,
     lastUpdated = lastUpdated,
     owners = owners.map { it.toNsUuid() },
-    corsDomains = corsDomains.map { it.toNSURLComponents() },
-    authDomains = authDomains.map { it.toNSURLComponents() },
-    logoUrl = logoUrl?.toNSURLComponents(),
-    privacyPolicy = privacyPolicy?.toNSURLComponents(),
+    corsDomains = corsDomains.map { it.toNsUrlComponents() },
+    authDomains = authDomains.map { it.toNsUrlComponents() },
+    logoUrl = logoUrl?.toNsUrlComponents(),
+    privacyPolicy = privacyPolicy?.toNsUrlComponents(),
     mailingAddress = mailingAddress,
     companyName = companyName,
-    supportContact = supportContact?.toNSURLComponents(),
-    appLink = appLink?.toNSURLComponents(),
+    supportContact = supportContact?.toNsUrlComponents(),
+    appLink = appLink?.toNsUrlComponents(),
     slug = slug,
     emailPreferences = emailPreferences.toEmailPreferencesResponse(),
     authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toMap(),
@@ -205,13 +205,13 @@ internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPr
 )
 
 internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
-    actionTarget = actionTarget.toNSURLComponents(),
+    actionTarget = actionTarget.toNsUrlComponents(),
     headline = headline,
     actionText = actionText
 )
 
 internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
-    authorizationEndpoint = authorizationEndpoint.toNSURLComponents(),
+    authorizationEndpoint = authorizationEndpoint.toNsUrlComponents(),
     clientId = clientId,
     grantType = grantType
 )
@@ -227,5 +227,5 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
 }
 
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
-    uploadUrl = uploadUrl.toNSURLComponents()
+    uploadUrl = uploadUrl.toNsUrlComponents()
 )

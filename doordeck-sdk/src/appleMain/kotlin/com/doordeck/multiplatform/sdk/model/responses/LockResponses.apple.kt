@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.toNsDate
+import com.doordeck.multiplatform.sdk.util.toNsTimeComponents
 import com.doordeck.multiplatform.sdk.util.toNsDateComponents
-import com.doordeck.multiplatform.sdk.util.toNsLocalDateComponents
 import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
@@ -170,8 +170,8 @@ internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): Usage
 )
 
 internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
-    start = start.toNsDateComponents(),
-    end = end.toNsDateComponents(),
+    start = start.toNsTimeComponents(),
+    end = end.toNsTimeComponents(),
     timezone = timezone.toNsTimeZone(),
     days = days
 )
@@ -185,11 +185,11 @@ internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): L
 )
 
 internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
-    start = start.toNsDateComponents(),
-    end = end.toNsDateComponents(),
+    start = start.toNsTimeComponents(),
+    end = end.toNsTimeComponents(),
     timezone = timezone.toNsTimeZone(),
     days = days,
-    exceptions = exceptions.map { it.toNsLocalDateComponents() }
+    exceptions = exceptions.map { it.toNsDateComponents() }
 )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
