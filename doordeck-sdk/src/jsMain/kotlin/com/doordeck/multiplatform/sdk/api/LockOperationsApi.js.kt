@@ -46,24 +46,33 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    fun getLockAuditTrail(lockId: String, start: Int, end: Int): Promise<JsArray<AuditResponse>> = promise {
+    fun getLockAuditTrail(
+        lockId: String,
+        start: Int? = null,
+        end: Int? = null
+    ): Promise<JsArray<AuditResponse>> = promise {
         LockOperationsClient
             .getLockAuditTrailRequest(
                 lockId = lockId,
-                start = start.toLong(),
-                end = end.toLong()
-            ).toAuditResponse()
+                start = start?.toLong(),
+                end = end?.toLong()
+            )
+            .toAuditResponse()
     }
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    fun getAuditForUser(userId: String, start: Int, end: Int): Promise<JsArray<AuditResponse>> = promise {
+    fun getAuditForUser(
+        userId: String,
+        start: Int? = null,
+        end: Int? = null
+    ): Promise<JsArray<AuditResponse>> = promise {
         LockOperationsClient
             .getAuditForUserRequest(
                 userId = userId,
-                start = start.toLong(),
-                end = end.toLong()
+                start = start?.toLong(),
+                end = end?.toLong()
             )
             .toAuditResponse()
     }

@@ -52,25 +52,27 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
+    @JvmOverloads
     suspend fun getLockAuditTrail(
         lockId: UUID,
-        start: Instant,
-        end: Instant
+        start: Instant? = null,
+        end: Instant? = null
     ): List<AuditResponse> = LockOperationsClient
         .getLockAuditTrailRequest(
             lockId = lockId.toString(),
-            start = start.epochSecond,
-            end = end.epochSecond
+            start = start?.epochSecond,
+            end = end?.epochSecond
         )
         .toAuditResponse()
 
     /**
      * Async variant of [LockOperationsApi.getLockAuditTrail] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun getLockAuditTrailAsync(
         lockId: UUID,
-        start: Instant,
-        end: Instant
+        start: Instant? = null,
+        end: Instant? = null
     ): CompletableFuture<List<AuditResponse>> = completableFuture {
         getLockAuditTrail(
             lockId = lockId,
@@ -82,21 +84,27 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    suspend fun getAuditForUser(userId: UUID, start: Instant, end: Instant): List<AuditResponse> = LockOperationsClient
+    @JvmOverloads
+    suspend fun getAuditForUser(
+        userId: UUID,
+        start: Instant? = null,
+        end: Instant? = null
+    ): List<AuditResponse> = LockOperationsClient
         .getAuditForUserRequest(
             userId = userId.toString(),
-            start = start.epochSecond,
-            end = end.epochSecond
+            start = start?.epochSecond,
+            end = end?.epochSecond
         )
         .toAuditResponse()
 
     /**
      * Async variant of [LockOperationsApi.getAuditForUser] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun getAuditForUserAsync(
         userId: UUID,
-        start: Instant,
-        end: Instant
+        start: Instant? = null,
+        end: Instant? = null
     ): CompletableFuture<List<AuditResponse>> = completableFuture {
         getAuditForUser(
             userId = userId,

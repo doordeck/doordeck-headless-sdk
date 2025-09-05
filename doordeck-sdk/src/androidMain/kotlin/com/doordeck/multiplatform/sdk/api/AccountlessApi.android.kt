@@ -35,6 +35,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.registrationRequest
      */
+    @JvmOverloads
     suspend fun registration(
         email: String,
         password: String,
@@ -54,6 +55,7 @@ actual object AccountlessApi {
     /**
      * Async variant of [AccountlessApi.registration] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun registrationAsync(
         email: String,
         password: String,

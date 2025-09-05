@@ -24,6 +24,7 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
+    @JvmOverloads
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse = AccountClient
         .refreshTokenRequest(refreshToken)
         .toTokenResponse()
@@ -32,6 +33,7 @@ actual object AccountApi {
      * Async variant of [AccountApi.refreshToken] returning [CompletableFuture].
      */
     @DoordeckOnly
+    @JvmOverloads
     fun refreshTokenAsync(refreshToken: String? = null): CompletableFuture<TokenResponse> = completableFuture {
         refreshToken(refreshToken)
     }
@@ -51,6 +53,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
+    @JvmOverloads
     suspend fun registerEphemeralKey(keyPair: KeyPair? = null): RegisterEphemeralKeyResponse = AccountClient
         .registerEphemeralKeyRequest(
             publicKey = keyPair?.public?.encoded,
@@ -61,6 +64,7 @@ actual object AccountApi {
     /**
      * Async variant of [AccountApi.registerEphemeralKey] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun registerEphemeralKeyAsync(
         keyPair: KeyPair? = null
     ): CompletableFuture<RegisterEphemeralKeyResponse> = completableFuture {
@@ -70,6 +74,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
+    @JvmOverloads
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
@@ -83,6 +88,7 @@ actual object AccountApi {
     /**
      * Async variant of [AccountApi.registerEphemeralKeyWithSecondaryAuthentication] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun registerEphemeralKeyWithSecondaryAuthenticationAsync(
         publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
@@ -96,6 +102,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
+    @JvmOverloads
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
         keyPair: KeyPair? = null
@@ -110,6 +117,7 @@ actual object AccountApi {
     /**
      * Async variant of [AccountApi.verifyEphemeralKeyRegistration] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun verifyEphemeralKeyRegistrationAsync(
         code: String,
         keyPair: KeyPair? = null
