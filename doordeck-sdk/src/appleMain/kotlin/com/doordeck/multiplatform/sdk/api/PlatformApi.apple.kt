@@ -2,10 +2,10 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
+import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.model.data.toBasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
-import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse

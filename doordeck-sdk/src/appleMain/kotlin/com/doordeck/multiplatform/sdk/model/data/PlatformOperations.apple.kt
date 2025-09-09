@@ -32,7 +32,9 @@ object PlatformOperations {
             fun setPrivacyPolicy(privacyPolicy: NSURLComponents?) = apply { this.privacyPolicy = privacyPolicy }
             fun setSupportContact(supportContact: NSURLComponents?) = apply { this.supportContact = supportContact }
             fun setAppLink(appLink: NSURLComponents?) = apply { this.appLink = appLink }
-            fun setEmailPreferences(emailPreferences: EmailPreferences?) = apply { this.emailPreferences = emailPreferences }
+            fun setEmailPreferences(emailPreferences: EmailPreferences?) =
+                apply { this.emailPreferences = emailPreferences }
+
             fun setLogoUrl(logoUrl: NSURLComponents?) = apply { this.logoUrl = logoUrl }
 
             fun build(): CreateApplication {
@@ -70,7 +72,9 @@ object PlatformOperations {
             fun setSenderName(senderName: String?) = apply { this.senderName = senderName }
             fun setPrimaryColour(primaryColour: String?) = apply { this.primaryColour = primaryColour }
             fun setSecondaryColour(secondaryColour: String?) = apply { this.secondaryColour = secondaryColour }
-            fun setOnlySendEssentialEmails(onlySendEssentialEmails: Boolean?) = apply { this.onlySendEssentialEmails = onlySendEssentialEmails }
+            fun setOnlySendEssentialEmails(onlySendEssentialEmails: Boolean?) =
+                apply { this.onlySendEssentialEmails = onlySendEssentialEmails }
+
             fun setCallToAction(callToAction: EmailCallToAction?) = apply { this.callToAction = callToAction }
 
             fun build(): EmailPreferences {
@@ -124,7 +128,7 @@ object PlatformOperations {
         override val alg: String? = null,
         val e: String,
         val n: String
-    ): AuthKey {
+    ) : AuthKey {
         class Builder {
             private var kty: String = "RSA"
             private var use: String? = null
@@ -161,7 +165,7 @@ object PlatformOperations {
         val crv: String,
         val x: String,
         val y: String
-    ): AuthKey {
+    ) : AuthKey {
         class Builder {
             private var kty: String = "EC"
             private var use: String? = null
@@ -200,7 +204,7 @@ object PlatformOperations {
         override val alg: String? = null,
         val crv: String,
         val x: String
-    ): AuthKey {
+    ) : AuthKey {
         class Builder {
             private var kty: String = "OKP"
             private var use: String? = null
@@ -243,7 +247,7 @@ internal fun CreateApplication.toBasicCreateApplication(): BasicCreateApplicatio
     )
 }
 
-internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
+internal fun PlatformOperations.AuthKey.toBasicAuthKey() = when (this) {
     is PlatformOperations.RsaKey -> BasicRsaKey(
         kty = kty,
         use = use,
@@ -252,6 +256,7 @@ internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
         e = e,
         n = n
     )
+
     is PlatformOperations.EcKey -> BasicEcKey(
         kty = kty,
         use = use,
@@ -261,6 +266,7 @@ internal fun PlatformOperations.AuthKey.toBasicAuthKey () = when(this) {
         x = x,
         y = y
     )
+
     is PlatformOperations.Ed25519Key -> BasicEd25519Key(
         kty = kty,
         use = use,

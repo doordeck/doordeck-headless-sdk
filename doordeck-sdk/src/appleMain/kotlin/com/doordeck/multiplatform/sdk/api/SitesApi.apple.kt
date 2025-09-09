@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.clients.SitesClient
-import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.SiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
+import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
 import platform.Foundation.NSUUID

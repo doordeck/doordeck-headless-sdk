@@ -2,15 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.LockOperationsClient
-import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
-import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.LockResponse
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
-import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
-import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
-import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
 import com.doordeck.multiplatform.sdk.model.data.toBasicBatchShareLockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicLocationRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicRevokeAccessToLockOperation
@@ -19,6 +11,14 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicTimeRequirement
 import com.doordeck.multiplatform.sdk.model.data.toBasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.toBasicUpdateSecureSettingUnlockDuration
+import com.doordeck.multiplatform.sdk.model.responses.AuditResponse
+import com.doordeck.multiplatform.sdk.model.responses.BatchUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockResponse
+import com.doordeck.multiplatform.sdk.model.responses.LockUserResponse
+import com.doordeck.multiplatform.sdk.model.responses.ShareableLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.UserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toAuditResponse
 import com.doordeck.multiplatform.sdk.model.responses.toBatchUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse

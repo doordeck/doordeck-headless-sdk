@@ -37,11 +37,13 @@ internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsRespon
     publicKey = publicKey
 )
 
-internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
-    certificateChain = certificateChain,
-    userId = userId.toNsUuid()
-)
+internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse =
+    RegisterEphemeralKeyResponse(
+        certificateChain = certificateChain,
+        userId = userId.toNsUuid()
+    )
 
-internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
-    method = method
-)
+internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse =
+    RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+        method = method
+    )

@@ -54,7 +54,7 @@ data class RsaKeyResponse(
     override val iat: Int? = null,
     val e: String,
     val n: String
-): AuthKeyResponse
+) : AuthKeyResponse
 
 data class EcKeyResponse(
     override val use: String,
@@ -71,7 +71,7 @@ data class EcKeyResponse(
     val crv: String,
     val x: String,
     val y: String
-): AuthKeyResponse
+) : AuthKeyResponse
 
 data class Ed25519KeyResponse(
     override val use: String,
@@ -87,7 +87,7 @@ data class Ed25519KeyResponse(
     override val iat: Int? = null,
     val crv: String,
     val x: String
-): AuthKeyResponse
+) : AuthKeyResponse
 
 data class EmailPreferencesResponse(
     val senderEmail: String? = null,
@@ -146,7 +146,7 @@ internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationRespon
     isDoordeckApplication = isDoordeckApplication
 )
 
-internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
+internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when (this) {
     is BasicRsaKeyResponse -> RsaKeyResponse(
         use = use,
         kid = kid,
@@ -162,6 +162,7 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         e = e,
         n = n
     )
+
     is BasicEcKeyResponse -> EcKeyResponse(
         use = use,
         kid = kid,
@@ -178,6 +179,7 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
         x = x,
         y = y
     )
+
     is BasicEd25519KeyResponse -> Ed25519KeyResponse(
         use = use,
         kid = kid,
@@ -195,20 +197,22 @@ internal fun BasicAuthKeyResponse.toAuthKeyResponse() = when(this) {
     )
 }
 
-internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse = EmailPreferencesResponse(
-    senderEmail = senderEmail,
-    senderName = senderName,
-    primaryColour = primaryColour,
-    secondaryColour = secondaryColour,
-    onlySendEssentialEmails = onlySendEssentialEmails,
-    callToAction = callToAction?.toEmailCallToActionResponse(),
-)
+internal fun BasicEmailPreferencesResponse.toEmailPreferencesResponse(): EmailPreferencesResponse =
+    EmailPreferencesResponse(
+        senderEmail = senderEmail,
+        senderName = senderName,
+        primaryColour = primaryColour,
+        secondaryColour = secondaryColour,
+        onlySendEssentialEmails = onlySendEssentialEmails,
+        callToAction = callToAction?.toEmailCallToActionResponse(),
+    )
 
-internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse = EmailCallToActionResponse(
-    actionTarget = actionTarget.toNsUrlComponents(),
-    headline = headline,
-    actionText = actionText
-)
+internal fun BasicEmailCallToActionResponse.toEmailCallToActionResponse(): EmailCallToActionResponse =
+    EmailCallToActionResponse(
+        actionTarget = actionTarget.toNsUrlComponents(),
+        headline = headline,
+        actionText = actionText
+    )
 
 internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse(
     authorizationEndpoint = authorizationEndpoint.toNsUrlComponents(),
@@ -216,16 +220,18 @@ internal fun BasicOauthResponse.toOauthResponse(): OauthResponse = OauthResponse
     grantType = grantType
 )
 
-internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> = map { owner ->
-    ApplicationOwnerDetailsResponse(
-        userId = owner.userId.toNsUuid(),
-        email = owner.email,
-        displayName = owner.displayName,
-        orphan = owner.orphan,
-        foreign = owner.foreign
-    )
-}
+internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetailsResponse(): List<ApplicationOwnerDetailsResponse> =
+    map { owner ->
+        ApplicationOwnerDetailsResponse(
+            userId = owner.userId.toNsUuid(),
+            email = owner.email,
+            displayName = owner.displayName,
+            orphan = owner.orphan,
+            foreign = owner.foreign
+        )
+    }
 
-internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
-    uploadUrl = uploadUrl.toNsUrlComponents()
-)
+internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse =
+    GetLogoUploadUrlResponse(
+        uploadUrl = uploadUrl.toNsUrlComponents()
+    )

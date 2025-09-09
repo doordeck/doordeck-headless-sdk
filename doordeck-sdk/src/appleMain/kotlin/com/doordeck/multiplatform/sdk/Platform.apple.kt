@@ -8,4 +8,5 @@ actual val platformType by lazy {
         else -> PlatformType.APPLE
     }
 }
+
 internal actual object ApplicationContext

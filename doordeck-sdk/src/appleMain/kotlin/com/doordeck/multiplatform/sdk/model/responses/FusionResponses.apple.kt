@@ -83,21 +83,23 @@ internal fun BasicFusionLoginResponse.toFusionLoginResponse(): FusionLoginRespon
     authToken = authToken,
 )
 
-internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): IntegrationTypeResponse = IntegrationTypeResponse(
-    status = status,
-)
+internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): IntegrationTypeResponse =
+    IntegrationTypeResponse(
+        status = status,
+    )
 
 internal fun BasicDoorStateResponse.toDoorStateResponse(): DoorStateResponse = DoorStateResponse(
     state = state
 )
 
-internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> = map { configuration ->
-    IntegrationConfigurationResponse(
-        doordeck = configuration.doordeck?.toControllerResponse(),
-        service = configuration.service?.toServiceStateResponse(),
-        integration = configuration.integration?.toDiscoveredDeviceResponse()
-    )
-}
+internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> =
+    map { configuration ->
+        IntegrationConfigurationResponse(
+            doordeck = configuration.doordeck?.toControllerResponse(),
+            service = configuration.service?.toServiceStateResponse(),
+            integration = configuration.integration?.toDiscoveredDeviceResponse()
+        )
+    }
 
 internal fun BasicControllerResponse.toControllerResponse(): ControllerResponse = ControllerResponse(
     id = id.toNsUuid(),
@@ -109,12 +111,13 @@ internal fun BasicServiceStateResponse.toServiceStateResponse(): ServiceStateRes
     state = state
 )
 
-internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse = DiscoveredDeviceResponse(
-    key = key.toLockControllerResponse(),
-    metadata = metadata
-)
+internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse =
+    DiscoveredDeviceResponse(
+        key = key.toLockControllerResponse(),
+        metadata = metadata
+    )
 
-internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when(this) {
+internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when (this) {
     is BasicAlpetaController -> toAlpetaController()
     is BasicAmagController -> toAmagController()
     is BasicAssaAbloyController -> toAssaAbloyController()
@@ -136,12 +139,13 @@ internal fun BasicLockController.toLockControllerResponse(): LockControllerRespo
     is BasicZktecoController -> toZktecoController()
 }
 
-internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController = FusionOperations.AlpetaController(
-    username = username,
-    password = password,
-    doorId = doorId,
-    baseUrl = baseUrl?.toNsUrlComponents()
-)
+internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController =
+    FusionOperations.AlpetaController(
+        username = username,
+        password = password,
+        doorId = doorId,
+        baseUrl = baseUrl?.toNsUrlComponents()
+    )
 
 internal fun BasicAmagController.toAmagController(): AmagController = AmagController(
     username = username,

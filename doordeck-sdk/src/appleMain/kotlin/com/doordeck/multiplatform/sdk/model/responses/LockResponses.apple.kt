@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.util.toNsDate
-import com.doordeck.multiplatform.sdk.util.toNsTimeComponents
 import com.doordeck.multiplatform.sdk.util.toNsDateComponents
+import com.doordeck.multiplatform.sdk.util.toNsTimeComponents
 import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import platform.Foundation.NSDate
@@ -164,33 +164,37 @@ internal fun BasicLockSettingsResponse.toLockSettingsResponse(): LockSettingsRes
     capabilities = capabilities
 )
 
-internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse = UsageRequirementsResponse(
-    time = time.map { it.toTimeRequirementResponse() },
-    location = location?.toLocationRequirementResponse()
-)
+internal fun BasicUsageRequirementsResponse.toUsageRequirementsResponse(): UsageRequirementsResponse =
+    UsageRequirementsResponse(
+        time = time.map { it.toTimeRequirementResponse() },
+        location = location?.toLocationRequirementResponse()
+    )
 
-internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse = TimeRequirementResponse(
-    start = start.toNsTimeComponents(),
-    end = end.toNsTimeComponents(),
-    timezone = timezone.toNsTimeZone(),
-    days = days
-)
+internal fun BasicTimeRequirementResponse.toTimeRequirementResponse(): TimeRequirementResponse =
+    TimeRequirementResponse(
+        start = start.toNsTimeComponents(),
+        end = end.toNsTimeComponents(),
+        timezone = timezone.toNsTimeZone(),
+        days = days
+    )
 
-internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse = LocationRequirementResponse(
-    latitude = latitude,
-    longitude = longitude,
-    enabled = enabled,
-    radius = radius,
-    accuracy = accuracy
-)
+internal fun BasicLocationRequirementResponse.toLocationRequirementResponse(): LocationRequirementResponse =
+    LocationRequirementResponse(
+        latitude = latitude,
+        longitude = longitude,
+        enabled = enabled,
+        radius = radius,
+        accuracy = accuracy
+    )
 
-internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse = UnlockBetweenSettingResponse(
-    start = start.toNsTimeComponents(),
-    end = end.toNsTimeComponents(),
-    timezone = timezone.toNsTimeZone(),
-    days = days,
-    exceptions = exceptions.map { it.toNsDateComponents() }
-)
+internal fun BasicUnlockBetweenSettingResponse.toUnlockBetweenSettingResponse(): UnlockBetweenSettingResponse =
+    UnlockBetweenSettingResponse(
+        start = start.toNsTimeComponents(),
+        end = end.toNsTimeComponents(),
+        timezone = timezone.toNsTimeZone(),
+        days = days,
+        exceptions = exceptions.map { it.toNsDateComponents() }
+    )
 
 internal fun BasicLockStateResponse.toLockStateResponse(): LockStateResponse = LockStateResponse(
     connected = connected
@@ -201,15 +205,16 @@ internal fun BasicUserPublicKeyResponse.toUserPublicKeyResponse(): UserPublicKey
     publicKey = publicKey
 )
 
-internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> = map { user ->
-    BatchUserPublicKeyResponse(
-        id = user.id.toNsUuid(),
-        email = user.email,
-        foreignKey = user.foreignKey,
-        phone = user.phone,
-        publicKey = user.publicKey
-    )
-}
+internal fun List<BasicBatchUserPublicKeyResponse>.toBatchUserPublicKeyResponse(): List<BatchUserPublicKeyResponse> =
+    map { user ->
+        BatchUserPublicKeyResponse(
+            id = user.id.toNsUuid(),
+            email = user.email,
+            foreignKey = user.foreignKey,
+            phone = user.phone,
+            publicKey = user.publicKey
+        )
+    }
 
 internal fun List<BasicShareableLockResponse>.toShareableLockResponse(): List<ShareableLockResponse> = map { lock ->
     ShareableLockResponse(
@@ -244,12 +249,13 @@ internal fun BasicLockUserResponse.toLockUserResponse(): LockUserResponse = Lock
     devices = devices.map { it.toLockUserDetailsResponse() }
 )
 
-internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse = LockUserDetailsResponse(
-    deviceId = deviceId.toNsUuid(),
-    role = role,
-    start = start?.toNsDate(),
-    end = end?.toNsDate()
-)
+internal fun BasicLockUserDetailsResponse.toLockUserDetailsResponse(): LockUserDetailsResponse =
+    LockUserDetailsResponse(
+        deviceId = deviceId.toNsUuid(),
+        role = role,
+        start = start?.toNsDate(),
+        end = end?.toNsDate()
+    )
 
 internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = map { audit ->
     AuditResponse(

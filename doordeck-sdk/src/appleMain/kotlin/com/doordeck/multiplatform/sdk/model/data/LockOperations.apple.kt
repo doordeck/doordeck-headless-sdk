@@ -2,8 +2,8 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
-import com.doordeck.multiplatform.sdk.util.toEpochSeconds
 import com.doordeck.multiplatform.sdk.util.toDateString
+import com.doordeck.multiplatform.sdk.util.toEpochSeconds
 import com.doordeck.multiplatform.sdk.util.toTimeString
 import com.doordeck.multiplatform.sdk.util.toWholeSeconds
 import com.doordeck.multiplatform.sdk.util.validateAccuracy
@@ -121,13 +121,14 @@ object LockOperations {
     data class UnlockOperation(
         val baseOperation: BaseOperation,
         val directAccessEndpoints: List<String>? = null
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var directAccessEndpoints: List<String>? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setDirectAccessEndpoints(directAccessEndpoints: List<String>?): Builder = apply { this.directAccessEndpoints = directAccessEndpoints }
+            fun setDirectAccessEndpoints(directAccessEndpoints: List<String>?): Builder =
+                apply { this.directAccessEndpoints = directAccessEndpoints }
 
             fun build(): UnlockOperation {
                 return UnlockOperation(
@@ -141,7 +142,7 @@ object LockOperations {
     data class ShareLockOperation(
         val baseOperation: BaseOperation,
         val shareLock: ShareLock
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var shareLock: ShareLock? = null
@@ -173,8 +174,10 @@ object LockOperations {
             private var end: NSDate? = null
 
             fun setTargetUserId(targetUserId: NSUUID): Builder = apply { this.targetUserId = targetUserId }
-            fun setTargetUserRole(targetUserRole: UserRole): Builder = apply {this.targetUserRole = targetUserRole }
-            fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
+            fun setTargetUserRole(targetUserRole: UserRole): Builder = apply { this.targetUserRole = targetUserRole }
+            fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder =
+                apply { this.targetUserPublicKey = targetUserPublicKey }
+
             fun setStart(start: NSDate?): Builder = apply { this.start = start }
             fun setEnd(end: NSDate?): Builder = apply { this.end = end }
 
@@ -193,7 +196,7 @@ object LockOperations {
     data class BatchShareLockOperation(
         val baseOperation: BaseOperation,
         val users: List<ShareLock>
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var users: List<ShareLock>? = null
@@ -213,7 +216,7 @@ object LockOperations {
     data class RevokeAccessToLockOperation(
         val baseOperation: BaseOperation,
         val users: List<NSUUID>
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var users: List<NSUUID>? = null
@@ -233,13 +236,14 @@ object LockOperations {
     data class UpdateSecureSettingUnlockDuration(
         val baseOperation: BaseOperation,
         val unlockDuration: NSTimeInterval
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var unlockDuration: NSTimeInterval? = null
 
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
-            fun setUnlockDuration(unlockDuration: NSTimeInterval): Builder = apply { this.unlockDuration = unlockDuration }
+            fun setUnlockDuration(unlockDuration: NSTimeInterval): Builder =
+                apply { this.unlockDuration = unlockDuration }
 
             fun build(): UpdateSecureSettingUnlockDuration {
                 return UpdateSecureSettingUnlockDuration(
@@ -253,7 +257,7 @@ object LockOperations {
     data class UpdateSecureSettingUnlockBetween(
         val baseOperation: BaseOperation,
         val unlockBetween: UnlockBetween? = null
-    ): Operation {
+    ) : Operation {
         class Builder {
             private var baseOperation: BaseOperation? = null
             private var unlockBetween: UnlockBetween? = null
@@ -291,7 +295,9 @@ object LockOperations {
             private var jti: NSUUID = NSUUID.UUID()
 
             fun setUserId(userId: NSUUID?): Builder = apply { this.userId = userId }
-            fun setUserCertificateChain(userCertificateChain: List<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
+            fun setUserCertificateChain(userCertificateChain: List<String>?): Builder =
+                apply { this.userCertificateChain = userCertificateChain }
+
             fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
             fun setLockId(lockId: NSUUID): Builder = apply { this.lockId = lockId }
             fun setNotBefore(notBefore: NSDate): Builder = apply { this.notBefore = notBefore }
@@ -317,14 +323,15 @@ object LockOperations {
     sealed interface Operation
 }
 
-internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> = map { requirement ->
-    BasicTimeRequirement(
-        start = requirement.start.toTimeString(),
-        end = requirement.end.toTimeString(),
-        timezone = requirement.timezone.name,
-        days = requirement.days
-    )
-}
+internal fun List<LockOperations.TimeRequirement>.toBasicTimeRequirement(): List<BasicTimeRequirement> =
+    map { requirement ->
+        BasicTimeRequirement(
+            start = requirement.start.toTimeString(),
+            end = requirement.end.toTimeString(),
+            timezone = requirement.timezone.name,
+            days = requirement.days
+        )
+    }
 
 internal fun LockOperations.LocationRequirement.toBasicLocationRequirement(): BasicLocationRequirement {
     return BasicLocationRequirement(

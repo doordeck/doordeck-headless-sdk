@@ -47,7 +47,8 @@ data class SdkConfig(
         /**
          * Sets the cloud refresh token.
          */
-        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder =
+            apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
          * Sets the fusion host i.e: http://localhost:500
@@ -57,7 +58,8 @@ data class SdkConfig(
         /**
          * Overrides the default secure storage with a custom implementation.
          */
-        fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
+        fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder =
+            apply { this.secureStorage = secureStorage }
 
         /**
          * Enables debug logging. Beware: it may output sensitive information.

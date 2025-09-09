@@ -24,21 +24,21 @@ import platform.Foundation.NSURLComponents
 object FusionOperations {
 
     sealed interface LockController
-    
+
     data class AlpetaController(
         val username: String,
         val password: String,
         val doorId: Long,
         val baseUrl: NSURLComponents? = null
     ) : LockController
-    
+
     data class AmagController(
         val username: String,
         val password: String,
         val doorId: Int,
         val baseUrl: NSURLComponents? = null
     ) : LockController
-    
+
     data class AssaAbloyController(
         val baseUrl: NSURLComponents,
         val doorId: String
@@ -55,7 +55,7 @@ object FusionOperations {
         val baseUrl: NSURLComponents,
         val doorIdentifier: String
     ) : LockController
-    
+
     data class CCureController(
         val baseUrl: NSURLComponents? = null,
         val username: String,
@@ -67,13 +67,13 @@ object FusionOperations {
     data class DemoController(
         val port: UShort = 8080u
     ) : LockController
-    
+
     data class GallagherController(
         val baseUrl: NSURLComponents? = null,
         val apiKey: String,
         val doorId: String
     ) : LockController
-    
+
     data class GenetecController(
         val baseUrl: NSURLComponents,
         val username: String,
@@ -115,7 +115,7 @@ object FusionOperations {
         val password: String,
         val controllerId: Int
     ) : LockController
-    
+
     data class IntegraV2Controller(
         val baseUrl: NSURLComponents,
         val sessionId: String,
@@ -129,28 +129,28 @@ object FusionOperations {
         val outputChannel: Int,
         val controllerSerial: Int
     ) : LockController
-    
+
     data class DataSource(
         val driverClass: String,
         val url: String,
         val user: String,
         val password: String
     )
-    
+
     data class TdsiExgardeController(
         val dbUrl: String? = null,
         val username: String,
         val password: String,
         val doorId: Int
     ) : LockController
-    
+
     data class TdsiGardisController(
         val host: String,
         val username: String,
         val password: String,
         val doorId: Int
     ) : LockController
-    
+
     data class ZktecoController(
         val clientSecret: String,
         val doorId: String,
@@ -159,7 +159,7 @@ object FusionOperations {
     ) : LockController
 }
 
-internal fun FusionOperations.LockController.toBasicLockController(): BasicLockController = when(this) {
+internal fun FusionOperations.LockController.toBasicLockController(): BasicLockController = when (this) {
     is FusionOperations.AlpetaController -> toBasicAlpetaController()
     is AmagController -> toBasicAmagController()
     is AssaAbloyController -> toBasicAssaAbloyController()
@@ -291,12 +291,13 @@ internal fun PacController.toBasicPacController(): BasicPacController = BasicPac
     controllerSerial = controllerSerial
 )
 
-internal fun FusionOperations.TdsiExgardeController.toBasicTdsiExgardeController(): BasicTdsiExgardeController = BasicTdsiExgardeController(
-    dbUrl = dbUrl,
-    username = username,
-    password = password,
-    doorId = doorId
-)
+internal fun FusionOperations.TdsiExgardeController.toBasicTdsiExgardeController(): BasicTdsiExgardeController =
+    BasicTdsiExgardeController(
+        dbUrl = dbUrl,
+        username = username,
+        password = password,
+        doorId = doorId
+    )
 
 internal fun TdsiGardisController.toBasicTdsiGardisController(): BasicTdsiGardisController = BasicTdsiGardisController(
     host = host,
