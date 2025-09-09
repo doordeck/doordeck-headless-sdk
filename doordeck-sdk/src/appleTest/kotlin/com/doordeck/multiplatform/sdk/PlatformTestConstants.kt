@@ -23,7 +23,7 @@ import kotlinx.serialization.Serializable
 
 internal object PlatformTestConstants {
 
-    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray()
+    val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY by lazy { TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray() }
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_MAIN_USER_ID = TEST_MAIN_USER_ID.toNsUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID.toNsUuid()

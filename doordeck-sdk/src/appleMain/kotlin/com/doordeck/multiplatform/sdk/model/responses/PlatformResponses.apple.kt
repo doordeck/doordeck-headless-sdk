@@ -1,15 +1,17 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.toNsDate
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSDate
 import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
 
 data class ApplicationResponse(
     val applicationId: NSUUID,
     val name: String,
-    val lastUpdated: Double? = null,
+    val lastUpdated: NSDate? = null,
     val owners: List<NSUUID> = emptyList(),
     val corsDomains: List<NSURLComponents> = emptyList(),
     val authDomains: List<NSURLComponents> = emptyList(),
@@ -129,7 +131,7 @@ internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<Applic
 internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationResponse = ApplicationResponse(
     applicationId = applicationId.toNsUuid(),
     name = name,
-    lastUpdated = lastUpdated,
+    lastUpdated = lastUpdated?.toNsDate(),
     owners = owners.map { it.toNsUuid() },
     corsDomains = corsDomains.map { it.toNsUrlComponents() },
     authDomains = authDomains.map { it.toNsUrlComponents() },
