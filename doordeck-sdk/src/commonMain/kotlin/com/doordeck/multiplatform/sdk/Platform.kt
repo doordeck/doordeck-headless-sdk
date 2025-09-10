@@ -25,6 +25,7 @@ enum class PlatformType {
     APPLE_IOS,
     APPLE_WATCH,
     WINDOWS,
+    JS,
     JS_BROWSER,
     JS_NODE
 }
