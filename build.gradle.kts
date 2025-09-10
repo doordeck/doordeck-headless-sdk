@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.swift.klib).apply(false)
     alias(libs.plugins.buildkonfig).apply(false)
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
-    id("com.netflix.nebula.release") version "20.2.0"
+    id("com.netflix.nebula.release") version "21.0.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
 }
 
