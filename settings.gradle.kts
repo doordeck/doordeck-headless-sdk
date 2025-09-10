@@ -14,4 +14,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "doordeck-headless-sdk"
-include(":doordeck-sdk")
+
+include("doordeck-sdk")
+project(":doordeck-sdk").projectDir.mkdirs()

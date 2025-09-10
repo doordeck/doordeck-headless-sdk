@@ -14,121 +14,121 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple
-            test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
-            os: macos-latest
-          - name: Windows
-            test: mingwX64Test
-            os: windows-latest
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.name }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Set up Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup WireGuard
-        uses: ./.github/actions/wireguard-action
-        continue-on-error: true
-        with:
-          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
-          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
-          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
-          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
-          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
-
-      - name: Tests
-        run: ./gradlew ${{ matrix.test }}
-
-  python-build:
-    name: Python build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Setup pyright
-        run: pip install pyright
-
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
-
-      - name: Generate bindings
-        uses: ./.github/actions/python-bindings-action
-
-      - name: Add pyrightconfig file
-        run: echo '{"reportMissingImports":false,"reportAttributeAccessIssue":false}' > pyrightconfig.json
-
-      - name: Code validator
-        run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
-
-  csharp-build:
-    name: CSharp build
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
-
-      - name: Generate bindings
-        uses: ./.github/actions/csharp-bindings-action
-
-      - name: Code validator
-        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
+#  build:
+#    env:
+#      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+#      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+#      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+#      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
+#    strategy:
+#      max-parallel: 1
+#      matrix:
+#        include:
+#          - name: JVM
+#            test: jvmTest
+#            os: ubuntu-latest
+#          - name: Android
+#            test: testReleaseUnitTest
+#            os: ubuntu-latest
+#          - name: JS
+#            test: kotlinUpgradeYarnLock jsTest
+#            os: ubuntu-latest
+#          - name: Apple
+#            test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
+#            os: macos-latest
+#          - name: Windows
+#            test: mingwX64Test
+#            os: windows-latest
+#    runs-on: ${{ matrix.os }}
+#    name: ${{ matrix.name }}
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#
+#      - name: Set up Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup WireGuard
+#        uses: ./.github/actions/wireguard-action
+#        continue-on-error: true
+#        with:
+#          WIREGUARD_PRIVATE_KEY: ${{ secrets.WIREGUARD_PRIVATE_KEY }}
+#          WIREGUARD_INTERFACE_ADDRESS: ${{ secrets.WIREGUARD_INTERFACE_ADDRESS }}
+#          WIREGUARD_PEER_PUBLIC_KEY: ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }}
+#          WIREGUARD_PEER_ALLOWED_IPS: ${{ secrets.WIREGUARD_PEER_ALLOWED_IPS }}
+#          WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
+#
+#      - name: Tests
+#        run: ./gradlew ${{ matrix.test }}
+#
+#  python-build:
+#    name: Python build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Setup pyright
+#        run: pip install pyright
+#
+#      - name: Generate artifact
+#        run: ./gradlew mingwX64Binaries
+#
+#      - name: Generate bindings
+#        uses: ./.github/actions/python-bindings-action
+#
+#      - name: Add pyrightconfig file
+#        run: echo '{"reportMissingImports":false,"reportAttributeAccessIssue":false}' > pyrightconfig.json
+#
+#      - name: Code validator
+#        run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
+#
+#  csharp-build:
+#    name: CSharp build
+#    runs-on: windows-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Generate artifact
+#        run: ./gradlew mingwX64Binaries
+#
+#      - name: Generate bindings
+#        uses: ./.github/actions/csharp-bindings-action
+#
+#      - name: Code validator
+#        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
 
   pre-release:
     name: Pre-release
-    needs: [build, python-build, csharp-build]
+#    needs: [build, python-build, csharp-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     outputs:
@@ -155,115 +155,115 @@ jobs:
         id: pre-release-tag
         run: echo "tag=$(git describe --tags --abbrev=0 | sed 's/^v//')" >> "$GITHUB_OUTPUT" # i.e: 0.74.0
 
-  spm:
-    name: SPM publish
-    needs: [pre-release]
-    runs-on: macos-latest
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
-        with:
-          role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
-          aws-region: eu-west-1
-
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true assembleDoordeckSDKReleaseXCFramework
-
-      - name: Publish
-        run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ needs.pre-release.outputs.tag }}/
-
-  cocoapods:
-    name: CocoaPods publish
-    needs: [pre-release, spm]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
-        with:
-          ruby-version: '3.3'
-
-      - name: Setup CocoaPods
-        run: sudo gem install cocoapods
-
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true podSpecRelease
-
-      - name: Publish
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
-
-  npm:
-    name: NPM publish
-    needs: [pre-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
-        with:
-          node-version: 'latest'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@doordeck'
-
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
-
-      - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
-        run: |
-          cd build/js/packages/doordeck-sdk
-          npm publish --access public
+#  spm:
+#    name: SPM publish
+#    needs: [pre-release]
+#    runs-on: macos-latest
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    permissions:
+#      id-token: write
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
+#        with:
+#          role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
+#          aws-region: eu-west-1
+#
+#      - name: Generate artifact
+#        run: ./gradlew -Prelease.useLastTag=true assembleDoordeckSDKReleaseXCFramework
+#
+#      - name: Publish
+#        run: aws s3 cp doordeck-sdk/DoordeckSDK.xcframework.zip s3://cdn.doordeck.com/xcframework/v${{ needs.pre-release.outputs.tag }}/
+#
+#  cocoapods:
+#    name: CocoaPods publish
+#    needs: [pre-release, spm]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: macos-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Setup Ruby
+#        uses: ruby/setup-ruby@44511735964dcb71245e7e55f72539531f7bc0eb # v1.257.0
+#        with:
+#          ruby-version: '3.3'
+#
+#      - name: Setup CocoaPods
+#        run: sudo gem install cocoapods
+#
+#      - name: Generate artifact
+#        run: ./gradlew -Prelease.useLastTag=true podSpecRelease
+#
+#      - name: Publish
+#        env:
+#          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#        run: pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
+#
+#  npm:
+#    name: NPM publish
+#    needs: [pre-release]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Setup Node
+#        uses: actions/setup-node@v5
+#        with:
+#          node-version: 'latest'
+#          registry-url: 'https://registry.npmjs.org'
+#          scope: '@doordeck'
+#
+#      - name: Generate artifact
+#        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
+#
+#      - name: Publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
+#        run: |
+#          cd build/js/packages/doordeck-sdk
+#          npm publish --access public
 
   maven-publish:
     name: Maven publish
@@ -360,131 +360,131 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
         run: ./gradlew -Prelease.useLastTag=true findSonatypeStagingRepository releaseSonatypeStagingRepository
 
-  nuget:
-    name: Nuget publish
-    needs: [pre-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: windows-latest
-    defaults:
-      run:
-        shell: bash
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
-
-      - name: Generate bindings
-        uses: ./.github/actions/csharp-bindings-action
-
-      - name: Generate .nuspec file
-        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
-
-      - name: Generate .nupkg file
-        run: |
-          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
-
-      - name: Publish
-        env:
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
-        run: |
-          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ needs.pre-release.outputs.tag }}.nupkg \
-            -Source https://api.nuget.org/v3/index.json \
-            -ApiKey ${{ secrets.NUGET_TOKEN }}
-
-  pypi:
-    name: PyPi publish
-    needs: [pre-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: corretto
-          java-version: 21
-
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
-
-      - name: Generate bindings
-        uses: ./.github/actions/python-bindings-action
-
-      - name: Generate .toml file
-        run: ./gradlew -Prelease.useLastTag=true generateTomlFile
-
-      - name: Python build
-        run: python -m build doordeck-sdk/build/bin/mingwX64/python
-
-      - name: Publish
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
-        with:
-          packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
-
-  release:
-    name: GitHub Release
-    needs: [pre-release, spm, cocoapods, npm, maven-release, nuget, pypi]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-
-      - name: Setup Git
-        run: |
-          git config --global user.name "Doordeck Development"
-          git config --global user.email "development@doordeck.com"
-
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create v${{ needs.pre-release.outputs.tag }} --title "Release v${{ needs.pre-release.outputs.tag }}" --verify-tag --generate-notes
-
-  spm-release:
-    name: SPM release
-    needs: [pre-release, release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    continue-on-error: true
-
-    steps:
-      - name: Trigger SPM release workflow
-        run: |
-          curl -L \
-            -X POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.PAT }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/doordeck/doordeck-headless-sdk-spm/dispatches \
-            -d "{\"event_type\": \"spm-release\", \"client_payload\": {\"tag\": \"${{ needs.pre-release.outputs.tag }}\"}}"
+#  nuget:
+#    name: Nuget publish
+#    needs: [pre-release]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: windows-latest
+#    defaults:
+#      run:
+#        shell: bash
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Generate artifact
+#        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+#
+#      - name: Generate bindings
+#        uses: ./.github/actions/csharp-bindings-action
+#
+#      - name: Generate .nuspec file
+#        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
+#
+#      - name: Generate .nupkg file
+#        run: |
+#          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
+#            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
+#
+#      - name: Publish
+#        env:
+#          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+#        run: |
+#          nuget push doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.${{ needs.pre-release.outputs.tag }}.nupkg \
+#            -Source https://api.nuget.org/v3/index.json \
+#            -ApiKey ${{ secrets.NUGET_TOKEN }}
+#
+#  pypi:
+#    name: PyPi publish
+#    needs: [pre-release]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: ubuntu-latest
+#    permissions:
+#      id-token: write
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v5
+#        with:
+#          distribution: corretto
+#          java-version: 21
+#
+#      - name: Generate artifact
+#        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+#
+#      - name: Generate bindings
+#        uses: ./.github/actions/python-bindings-action
+#
+#      - name: Generate .toml file
+#        run: ./gradlew -Prelease.useLastTag=true generateTomlFile
+#
+#      - name: Python build
+#        run: python -m build doordeck-sdk/build/bin/mingwX64/python
+#
+#      - name: Publish
+#        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+#        with:
+#          packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
+#
+#  release:
+#    name: GitHub Release
+#    needs: [pre-release, spm, cocoapods, npm, maven-release, nuget, pypi]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v5
+#        with:
+#          ref: 'v${{ needs.pre-release.outputs.tag }}'
+#
+#      - name: Setup Git
+#        run: |
+#          git config --global user.name "Doordeck Development"
+#          git config --global user.email "development@doordeck.com"
+#
+#      - name: Create GitHub Release
+#        env:
+#          GH_TOKEN: ${{ github.token }}
+#        run: |
+#          gh release create v${{ needs.pre-release.outputs.tag }} --title "Release v${{ needs.pre-release.outputs.tag }}" --verify-tag --generate-notes
+#
+#  spm-release:
+#    name: SPM release
+#    needs: [pre-release, release]
+#    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+#    runs-on: ubuntu-latest
+#    continue-on-error: true
+#
+#    steps:
+#      - name: Trigger SPM release workflow
+#        run: |
+#          curl -L \
+#            -X POST \
+#            -H "Accept: application/vnd.github+json" \
+#            -H "Authorization: Bearer ${{ secrets.PAT }}" \
+#            -H "X-GitHub-Api-Version: 2022-11-28" \
+#            https://api.github.com/repos/doordeck/doordeck-headless-sdk-spm/dispatches \
+#            -d "{\"event_type\": \"spm-release\", \"client_payload\": {\"tag\": \"${{ needs.pre-release.outputs.tag }}\"}}"
