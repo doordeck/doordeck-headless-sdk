@@ -12,8 +12,10 @@ import com.doordeck.multiplatform.sdk.model.responses.RsaKeyResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,8 +34,8 @@ class PlatformApiTest : IntegrationTest() {
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),
             mailingAddress = randomEmail(),
-            privacyPolicy = randomUrlString(),
-            supportContact = randomUrlString()
+            privacyPolicy = randomUri(),
+            supportContact = randomUri()
         )
 
         // When
@@ -82,7 +84,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
 
         // Given - shouldUpdateApplicationPrivacyPolicy
-        val updatedApplicationPrivacyPolicy = randomUrlString()
+        val updatedApplicationPrivacyPolicy = randomUri()
 
         // When
         PlatformApi.updateApplicationPrivacyPolicy(application.applicationId, updatedApplicationPrivacyPolicy)
@@ -92,7 +94,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
 
         // Given - shouldUpdateApplicationSupportContact
-        val updatedApplicationSupportContact = randomUrlString()
+        val updatedApplicationSupportContact = randomUri()
 
         // When
         PlatformApi.updateApplicationSupportContact(application.applicationId, updatedApplicationSupportContact)
@@ -102,7 +104,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationSupportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationAppLink
-        val updatedApplicationAppLink = randomUrlString()
+        val updatedApplicationAppLink = randomUri()
 
         // When
         PlatformApi.updateApplicationAppLink(application.applicationId, updatedApplicationAppLink)
@@ -119,7 +121,7 @@ class PlatformApiTest : IntegrationTest() {
             secondaryColour = "#000000",
             onlySendEssentialEmails = true,
             callToAction = PlatformOperations.EmailCallToAction(
-                actionTarget = randomUrlString(),
+                actionTarget = randomUri(),
                 headline = "test",
                 actionText = "test"
             )
@@ -140,7 +142,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, application.emailPreferences.callToAction?.actionText)
 
         // Given - shouldUpdateApplicationLogoUrl
-        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
+        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test".toNsUrlComponents()
 
         // When
         PlatformApi.updateApplicationLogoUrl(application.applicationId, updatedApplicationLogoUrl)
@@ -150,7 +152,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
-        val addApplicationAuthIssuer = randomUrlString()
+        val addApplicationAuthIssuer = randomUri()
 
         // When
         PlatformApi.addAuthIssuer(application.applicationId, addApplicationAuthIssuer)
@@ -172,7 +174,7 @@ class PlatformApiTest : IntegrationTest() {
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldAddCorsDomain
-        val addedApplicationCorsDomain = randomUrlString()
+        val addedApplicationCorsDomain = randomUri()
 
         // When
         PlatformApi.addCorsDomain(application.applicationId, addedApplicationCorsDomain)
@@ -300,7 +302,7 @@ class PlatformApiTest : IntegrationTest() {
         val url = PlatformApi.getLogoUploadUrl(application.applicationId, contentType)
 
         // Then
-        assertTrue { url.uploadUrl.contains("doordeck-upload") }
+        assertTrue { url.uploadUrl.toUrlString().contains("doordeck-upload") }
 
         // Given - shouldDeleteApplication
         // When

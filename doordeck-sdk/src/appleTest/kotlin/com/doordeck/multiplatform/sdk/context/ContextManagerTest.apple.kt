@@ -14,12 +14,13 @@ import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
-import com.doordeck.multiplatform.sdk.randomUrlString
-import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.randomUri
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
@@ -34,11 +35,11 @@ class ContextManagerTest : IntegrationTest() {
     fun shouldStoreAndLoadContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = randomUrlString()
+        val fusionHost = randomUri()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val email = randomEmail()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
@@ -81,11 +82,11 @@ class ContextManagerTest : IntegrationTest() {
     fun shouldClearContext() = runTest {
         // Given
         val apiEnvironment = ApiEnvironment.entries.random()
-        val fusionHost = randomUrlString()
+        val fusionHost = randomUri()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val email = randomEmail()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
@@ -116,13 +117,13 @@ class ContextManagerTest : IntegrationTest() {
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
         assertNull(ContextManager.getFusionAuthToken())
-        assertEquals(DEFAULT_FUSION_HOST, ContextManager.getFusionHost())
+        assertEquals(DEFAULT_FUSION_HOST.toNsUrlComponents(), ContextManager.getFusionHost())
     }
 
     @Test
     fun shouldStoreOperationContext() = runTest {
         // Given
-        val userId = randomUuidString()
+        val userId = randomUuid()
         val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
         val keyPair = CryptoManager.generateRawKeyPair()
         val settings = DefaultSecureStorage(MemorySettings())
@@ -251,7 +252,6 @@ class ContextManagerTest : IntegrationTest() {
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
         // When
@@ -270,7 +270,6 @@ class ContextManagerTest : IntegrationTest() {
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
@@ -291,7 +290,6 @@ class ContextManagerTest : IntegrationTest() {
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
@@ -314,7 +312,6 @@ class ContextManagerTest : IntegrationTest() {
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-
         val keyPair = CryptoManager.generateRawKeyPair()
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)

@@ -15,7 +15,8 @@ internal fun BasicAssistedLoginResponse.toAssistedLoginResponse(): AssistedLogin
     requiresRetry = requiresRetry
 )
 
-internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemeralKeyResponse(): AssistedRegisterEphemeralKeyResponse = AssistedRegisterEphemeralKeyResponse(
-    requiresVerification = requiresVerification,
-    requiresRetry = requiresRetry
-)
+internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemeralKeyResponse(): AssistedRegisterEphemeralKeyResponse =
+    AssistedRegisterEphemeralKeyResponse(
+        requiresVerification = requiresVerification,
+        requiresRetry = requiresRetry
+    )

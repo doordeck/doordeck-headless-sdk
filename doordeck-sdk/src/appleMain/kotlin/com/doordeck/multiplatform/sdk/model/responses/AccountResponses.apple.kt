@@ -1,6 +1,8 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSUUID
 
 data class TokenResponse(
     val authToken: String,
@@ -16,7 +18,7 @@ data class UserDetailsResponse(
 
 data class RegisterEphemeralKeyResponse(
     val certificateChain: List<String>,
-    val userId: String
+    val userId: NSUUID
 )
 
 data class RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
@@ -35,11 +37,13 @@ internal fun BasicUserDetailsResponse.toUserDetailsResponse(): UserDetailsRespon
     publicKey = publicKey
 )
 
-internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse = RegisterEphemeralKeyResponse(
-    certificateChain = certificateChain,
-    userId = userId
-)
+internal fun BasicRegisterEphemeralKeyResponse.toRegisterEphemeralKeyResponse(): RegisterEphemeralKeyResponse =
+    RegisterEphemeralKeyResponse(
+        certificateChain = certificateChain,
+        userId = userId.toNsUuid()
+    )
 
-internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
-    method = method
-)
+internal fun BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse(): RegisterEphemeralKeyWithSecondaryAuthenticationResponse =
+    RegisterEphemeralKeyWithSecondaryAuthenticationResponse(
+        method = method
+    )

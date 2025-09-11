@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toUrlString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -94,13 +95,12 @@ class FusionApiTest : IntegrationTest() {
     }
 
     private suspend fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = try {
-        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
-        if (testController == null) {
-            error("Controller of type ${controllerType.simpleName} not found, skipping test...")
-        }
+        val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
+            controllerType.isInstance(it.value.controller)
+        } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key){
+            TEST_HTTP_CLIENT.get(testController.key.toUrlString()){
                 timeout {
                     connectTimeoutMillis = 10_000
                     socketTimeoutMillis = 30_000

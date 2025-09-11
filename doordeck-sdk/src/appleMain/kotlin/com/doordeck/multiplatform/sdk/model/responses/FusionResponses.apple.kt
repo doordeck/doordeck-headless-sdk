@@ -40,6 +40,9 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
+import com.doordeck.multiplatform.sdk.util.toNsUuid
+import platform.Foundation.NSUUID
 
 typealias LockControllerResponse = FusionOperations.LockController
 
@@ -62,7 +65,7 @@ data class IntegrationConfigurationResponse(
 )
 
 data class ControllerResponse(
-    val id: String,
+    val id: NSUUID,
     val name: String? = null,
     val role: UserRole? = null
 )
@@ -80,24 +83,26 @@ internal fun BasicFusionLoginResponse.toFusionLoginResponse(): FusionLoginRespon
     authToken = authToken,
 )
 
-internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): IntegrationTypeResponse = IntegrationTypeResponse(
-    status = status,
-)
+internal fun BasicIntegrationTypeResponse.toIntegrationTypeResponse(): IntegrationTypeResponse =
+    IntegrationTypeResponse(
+        status = status,
+    )
 
 internal fun BasicDoorStateResponse.toDoorStateResponse(): DoorStateResponse = DoorStateResponse(
     state = state
 )
 
-internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> = map { configuration ->
-    IntegrationConfigurationResponse(
-        doordeck = configuration.doordeck?.toControllerResponse(),
-        service = configuration.service?.toServiceStateResponse(),
-        integration = configuration.integration?.toDiscoveredDeviceResponse()
-    )
-}
+internal fun List<BasicIntegrationConfigurationResponse>.toIntegrationConfigurationResponse(): List<IntegrationConfigurationResponse> =
+    map { configuration ->
+        IntegrationConfigurationResponse(
+            doordeck = configuration.doordeck?.toControllerResponse(),
+            service = configuration.service?.toServiceStateResponse(),
+            integration = configuration.integration?.toDiscoveredDeviceResponse()
+        )
+    }
 
 internal fun BasicControllerResponse.toControllerResponse(): ControllerResponse = ControllerResponse(
-    id = id,
+    id = id.toNsUuid(),
     name = name,
     role = role
 )
@@ -106,12 +111,13 @@ internal fun BasicServiceStateResponse.toServiceStateResponse(): ServiceStateRes
     state = state
 )
 
-internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse = DiscoveredDeviceResponse(
-    key = key.toLockControllerResponse(),
-    metadata = metadata
-)
+internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse =
+    DiscoveredDeviceResponse(
+        key = key.toLockControllerResponse(),
+        metadata = metadata
+    )
 
-internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when(this) {
+internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when (this) {
     is BasicAlpetaController -> toAlpetaController()
     is BasicAmagController -> toAmagController()
     is BasicAssaAbloyController -> toAssaAbloyController()
@@ -133,39 +139,40 @@ internal fun BasicLockController.toLockControllerResponse(): LockControllerRespo
     is BasicZktecoController -> toZktecoController()
 }
 
-internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController = FusionOperations.AlpetaController(
-    username = username,
-    password = password,
-    doorId = doorId,
-    baseUrl = baseUrl
-)
+internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController =
+    FusionOperations.AlpetaController(
+        username = username,
+        password = password,
+        doorId = doorId,
+        baseUrl = baseUrl?.toNsUrlComponents()
+    )
 
 internal fun BasicAmagController.toAmagController(): AmagController = AmagController(
     username = username,
     password = password,
     doorId = doorId,
-    baseUrl = baseUrl
+    baseUrl = baseUrl?.toNsUrlComponents()
 )
 
 internal fun BasicAssaAbloyController.toAssaAbloyController(): AssaAbloyController = AssaAbloyController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     doorId = doorId
 )
 
 internal fun BasicAvigilonController.toAvigilonController(): AvigilonController = AvigilonController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     username = username,
     password = password,
     doorId = doorId
 )
 
 internal fun BasicAxisController.toAxisController(): AxisController = AxisController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     doorIdentifier = doorIdentifier
 )
 
 internal fun BasicCCureController.toCCureController(): CCureController = CCureController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toNsUrlComponents(),
     username = username,
     password = password,
     doorType = doorType,
@@ -177,20 +184,20 @@ internal fun BasicDemoController.toDemoController(): DemoController = DemoContro
 )
 
 internal fun BasicGallagherController.toGallagherController(): GallagherController = GallagherController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toNsUrlComponents(),
     apiKey = apiKey,
     doorId = doorId
 )
 
 internal fun BasicGenetecController.toGenetecController(): GenetecController = GenetecController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     username = username,
     password = password,
     doorId = doorId
 )
 
 internal fun BasicLenelController.toLenelController(): LenelController = LenelController(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     username = username,
     password = password,
     directoryId = directoryId,
@@ -212,7 +219,7 @@ internal fun BasicPaxtonNet2Controller.toPaxtonNet2Controller(): PaxtonNet2Contr
 )
 
 internal fun BasicPaxton10Controller.toPaxton10Controller(): Paxton10Controller = Paxton10Controller(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     username = username,
     password = password,
     applianceId = applianceId
@@ -225,7 +232,7 @@ internal fun BasicIntegraV1Controller.toIntegraV1Controller(): IntegraV1Controll
 )
 
 internal fun BasicIntegraV2Controller.toIntegraV2Controller(): IntegraV2Controller = IntegraV2Controller(
-    baseUrl = baseUrl,
+    baseUrl = baseUrl.toNsUrlComponents(),
     sessionId = sessionId,
     controllerId = controllerId,
     cardholderId = cardholderId,

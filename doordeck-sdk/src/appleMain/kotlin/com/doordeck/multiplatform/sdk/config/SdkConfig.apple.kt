@@ -4,6 +4,8 @@ import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
+import com.doordeck.multiplatform.sdk.util.toUrlString
+import platform.Foundation.NSURLComponents
 
 /**
  * Configuration settings for the SDK.
@@ -14,7 +16,7 @@ data class SdkConfig(
     val apiEnvironment: ApiEnvironment? = null,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
-    val fusionHost: String?,
+    val fusionHost: NSURLComponents?,
     val secureStorage: SecureStorage,
     val debugLogging: Boolean? = null
 ) {
@@ -28,7 +30,7 @@ data class SdkConfig(
         private var apiEnvironment: ApiEnvironment? = null
         private var cloudAuthToken: String? = null
         private var cloudRefreshToken: String? = null
-        private var fusionHost: String? = null
+        private var fusionHost: NSURLComponents? = null
         private var secureStorage: SecureStorage? = null
         private var debugLogging: Boolean? = null
 
@@ -45,17 +47,19 @@ data class SdkConfig(
         /**
          * Sets the cloud refresh token.
          */
-        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder = apply { this.cloudRefreshToken = cloudRefreshToken }
+        fun setCloudRefreshToken(cloudRefreshToken: String?): Builder =
+            apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
          * Sets the fusion host i.e: http://localhost:500
          */
-        fun setFusionHost(fusionHost: String?): Builder = apply { this.fusionHost = fusionHost }
+        fun setFusionHost(fusionHost: NSURLComponents?): Builder = apply { this.fusionHost = fusionHost }
 
         /**
          * Overrides the default secure storage with a custom implementation.
          */
-        fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder = apply { this.secureStorage = secureStorage }
+        fun setSecureStorageOverride(secureStorage: SecureStorage?): Builder =
+            apply { this.secureStorage = secureStorage }
 
         /**
          * Enables debug logging. Beware: it may output sensitive information.
@@ -85,7 +89,7 @@ internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
     apiEnvironment = apiEnvironment,
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
-    fusionHost = fusionHost.toString(),
+    fusionHost = fusionHost?.toUrlString(),
     secureStorage = secureStorage,
     debugLogging = debugLogging
 )
