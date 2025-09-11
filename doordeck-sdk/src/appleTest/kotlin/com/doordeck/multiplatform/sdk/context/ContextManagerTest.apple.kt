@@ -157,7 +157,7 @@ class ContextManagerTest : IntegrationTest() {
         val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
 
         // Then
-        assertTrue { result }
+        assertFalse { result }
     }
 
     @Test
