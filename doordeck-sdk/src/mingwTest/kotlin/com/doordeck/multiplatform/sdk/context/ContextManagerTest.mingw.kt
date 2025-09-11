@@ -160,6 +160,32 @@ class ContextManagerTest : CallbackTest() {
     }
 
     @Test
+    fun shouldCheckAuthTokenValidity() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+                email = randomEmail(),
+                displayName = randomString(),
+                emailVerified = randomBoolean(),
+                publicKey = randomPublicKey().encodeByteArrayToBase64()
+            ))
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertFalse { result.success.result }
+        }
+    }
+
+    @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
         runBlocking {
             // When

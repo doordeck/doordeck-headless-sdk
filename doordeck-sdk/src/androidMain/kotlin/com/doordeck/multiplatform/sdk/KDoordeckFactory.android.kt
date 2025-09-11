@@ -1,5 +1,5 @@
-import com.doordeck.multiplatform.sdk.Doordeck
-import com.doordeck.multiplatform.sdk.DoordeckFactory
+package com.doordeck.multiplatform.sdk
+
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.config.toBasicSdkConfig
 import com.doordeck.multiplatform.sdk.util.completableFuture

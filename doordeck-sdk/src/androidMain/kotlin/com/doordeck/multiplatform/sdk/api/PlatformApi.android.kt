@@ -37,7 +37,7 @@ actual object PlatformApi {
     @DoordeckOnly
     fun createApplicationAsync(
         application: PlatformOperations.CreateApplication
-    ): CompletableFuture<Unit> = completableFuture {
+    ): CompletableFuture<UUID> = completableFuture {
         createApplication(application)
     }
 
