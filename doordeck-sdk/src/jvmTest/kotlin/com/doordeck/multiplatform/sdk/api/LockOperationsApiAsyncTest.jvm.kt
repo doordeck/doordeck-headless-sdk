@@ -759,7 +759,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContextAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
