@@ -1,14 +1,12 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CStringCallback
 import com.doordeck.multiplatform.sdk.annotations.SiteAdmin
 import com.doordeck.multiplatform.sdk.clients.TilesClient
 import com.doordeck.multiplatform.sdk.model.data.AssociateMultipleLocksData
 import com.doordeck.multiplatform.sdk.model.data.GetLocksBelongingToTileData
-import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.handleCallback
 import com.doordeck.multiplatform.sdk.util.fromJson
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CFunction
-import kotlinx.cinterop.CPointer
 
 actual object TilesApi {
     /**
@@ -17,14 +15,9 @@ actual object TilesApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-locks-belonging-to-tile-v3">API Doc</a>
      */
     @CName("getLocksBelongingToTile")
-    fun getLocksBelongingToTile(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val getLocksBelongingToTileData = data.fromJson<GetLocksBelongingToTileData>()
-                TilesClient.getLocksBelongingToTileRequest(getLocksBelongingToTileData.tileId)
-            },
-            callback = callback
-        )
+    fun getLocksBelongingToTile(data: String, callback: CStringCallback) = callback.handleCallback {
+        val getLocksBelongingToTileData = data.fromJson<GetLocksBelongingToTileData>()
+        TilesClient.getLocksBelongingToTileRequest(getLocksBelongingToTileData.tileId)
     }
 
     /**
@@ -34,17 +27,12 @@ actual object TilesApi {
      */
     @SiteAdmin
     @CName("associateMultipleLocks")
-    fun associateMultipleLocks(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val associateMultipleLocksData = data.fromJson<AssociateMultipleLocksData>()
-                TilesClient.associateMultipleLocksRequest(
-                    tileId = associateMultipleLocksData.tileId,
-                    siteId = associateMultipleLocksData.siteId,
-                    lockIds = associateMultipleLocksData.lockIds
-                )
-            },
-            callback = callback
+    fun associateMultipleLocks(data: String, callback: CStringCallback) = callback.handleCallback {
+        val associateMultipleLocksData = data.fromJson<AssociateMultipleLocksData>()
+        TilesClient.associateMultipleLocksRequest(
+            tileId = associateMultipleLocksData.tileId,
+            siteId = associateMultipleLocksData.siteId,
+            lockIds = associateMultipleLocksData.lockIds
         )
     }
 }

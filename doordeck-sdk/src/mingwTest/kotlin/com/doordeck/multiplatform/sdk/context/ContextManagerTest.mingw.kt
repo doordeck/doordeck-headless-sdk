@@ -42,7 +42,7 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
@@ -89,7 +89,7 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldClearContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
@@ -116,7 +116,7 @@ class ContextManagerTest : CallbackTest() {
         ContextManager.clearContext()
 
         // Then
-        assertEquals(ApiEnvironment.PROD, ContextManager.getApiEnvironment())
+        assertEquals(ApiEnvironment.PROD.name, ContextManager.getApiEnvironment())
         assertNull(ContextManager.getUserId())
         assertNull(ContextManager.getUserEmail())
         assertNull(ContextManager.getCertificateChain())
@@ -270,7 +270,7 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldUpdateApiEnvironment() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.STAGING
+        val apiEnvironment = ApiEnvironment.STAGING.name
 
         // When
         ContextManager.setApiEnvironment(apiEnvironment)

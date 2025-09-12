@@ -14,7 +14,7 @@ class KDoordeckFactoryTest {
     fun shouldInitialize() = runTest {
         // Given
         val sdkConfig = SdkConfig.Builder()
-            .setApiEnvironment(TEST_ENVIRONMENT)
+            .setApiEnvironment(TEST_ENVIRONMENT.name)
             .setCloudAuthToken(randomString())
             .setCloudRefreshToken(randomString())
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
