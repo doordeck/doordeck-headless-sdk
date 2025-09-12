@@ -1,142 +1,95 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.CStringCallback
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
-import com.doordeck.multiplatform.sdk.util.callback
+import com.doordeck.multiplatform.sdk.util.handleCallback
 import com.doordeck.multiplatform.sdk.util.fromJson
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CFunction
-import kotlinx.cinterop.CPointer
 
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        Context.setApiEnvironment(apiEnvironment)
-    }
+    fun setApiEnvironment(apiEnvironment: String) =
+        Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
 
     @CName("getApiEnvironment")
-    fun getApiEnvironment(): ApiEnvironment {
-        return Context.getApiEnvironment()
-    }
+    fun getApiEnvironment(): String = Context.getApiEnvironment().name
 
     @CName("setCloudAuthToken")
-    fun setCloudAuthToken(token: String) {
-        Context.setCloudAuthToken(token)
-    }
+    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
 
     @CName("getCloudAuthToken")
-    fun getCloudAuthToken(): String? {
-        return Context.getCloudAuthToken()
-    }
+    fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
     @CName("isCloudAuthTokenInvalidOrExpired")
-    fun isCloudAuthTokenInvalidOrExpired(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block =  {
-                Context.isCloudAuthTokenInvalidOrExpired()
-            },
-            callback = callback
-        )
+    fun isCloudAuthTokenInvalidOrExpired(callback: CStringCallback) = callback.handleCallback {
+        Context.isCloudAuthTokenInvalidOrExpired()
     }
 
     @CName("setCloudRefreshToken")
-    fun setCloudRefreshToken(token: String) {
-        Context.setCloudRefreshToken(token)
-    }
+    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
 
     @CName("getCloudRefreshToken")
-    fun getCloudRefreshToken(): String? {
-        return Context.getCloudRefreshToken()
-    }
+    fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
     @CName("setFusionHost")
-    fun setFusionHost(host: String) {
-        Context.setFusionHost(host)
-    }
+    fun setFusionHost(host: String) = Context.setFusionHost(host)
 
     @CName("getFusionHost")
-    fun getFusionHost(): String {
-        return Context.getFusionHost()
-    }
+    fun getFusionHost(): String = Context.getFusionHost()
 
     @CName("setFusionAuthToken")
-    fun setFusionAuthToken(token: String) {
-        Context.setFusionAuthToken(token)
-    }
+    fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 
     @CName("getFusionAuthToken")
-    fun getFusionAuthToken(): String? {
-        return Context.getFusionAuthToken()
-    }
+    fun getFusionAuthToken(): String? = Context.getFusionAuthToken()
 
     @CName("setUserId")
-    fun setUserId(userId: String) {
-        Context.setUserId(userId)
-    }
+    fun setUserId(userId: String) = Context.setUserId(userId)
 
     @CName("getUserId")
-    fun getUserId(): String? {
-        return Context.getUserId()
-    }
+    fun getUserId(): String? = Context.getUserId()
 
     @CName("setUserEmail")
-    fun setUserEmail(email: String) {
-        Context.setUserEmail(email)
-    }
+    fun setUserEmail(email: String) = Context.setUserEmail(email)
 
     @CName("getUserEmail")
-    fun getUserEmail(): String? {
-        return Context.getUserEmail()
-    }
+    fun getUserEmail(): String? = Context.getUserEmail()
 
-    fun setCertificateChain(certificateChain: List<String>) {
-        Context.setCertificateChain(certificateChain)
-    }
+    fun setCertificateChain(certificateChain: List<String>) = Context.setCertificateChain(certificateChain)
 
-    fun getCertificateChain(): List<String>? {
-        return Context.getCertificateChain()
-    }
+    fun getCertificateChain(): List<String>? = Context.getCertificateChain()
 
     @CName("isCertificateChainInvalidOrExpired")
-    fun isCertificateChainInvalidOrExpired(): Boolean {
-        return Context.isCertificateChainInvalidOrExpired()
-    }
+    fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
 
-    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) {
-        Context.setKeyPair(publicKey, privateKey)
-    }
+    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) = Context.setKeyPair(publicKey, privateKey)
 
-    fun getKeyPair(): Crypto.KeyPair? {
-        return Context.getKeyPair()
-    }
+    fun getKeyPair(): Crypto.KeyPair? = Context.getKeyPair()
 
-    fun setKeyPairVerified(publicKey: ByteArray?) {
-        Context.setKeyPairVerified(publicKey)
-    }
+    fun setKeyPairVerified(publicKey: ByteArray?) = Context.setKeyPairVerified(publicKey)
 
     @CName("isKeyPairVerified")
-    fun isKeyPairVerified(): Boolean {
-        return Context.isKeyPairVerified()
-    }
+    fun isKeyPairVerified(): Boolean = Context.isKeyPairVerified()
 
     @CName("isKeyPairValid")
-    fun isKeyPairValid(): Boolean {
-        return Context.isKeyPairValid()
-    }
+    fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
 
-    fun setOperationContext(userId: String, certificateChain: List<String>, publicKey: ByteArray,
-                            privateKey: ByteArray, isKeyPairVerified: Boolean) {
-        Context.setOperationContext(
-            userId = userId,
-            certificateChain = certificateChain,
-            publicKey = publicKey,
-            privateKey = privateKey,
-            isKeyPairVerified = isKeyPairVerified
-        )
-    }
+    fun setOperationContext(
+        userId: String,
+        certificateChain: List<String>,
+        publicKey: ByteArray,
+        privateKey: ByteArray,
+        isKeyPairVerified: Boolean
+    ) = Context.setOperationContext(
+        userId = userId,
+        certificateChain = certificateChain,
+        publicKey = publicKey,
+        privateKey = privateKey,
+        isKeyPairVerified = isKeyPairVerified
+    )
 
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.
@@ -154,19 +107,12 @@ actual object ContextManager {
     }
 
     @CName("getContextState")
-    fun getContextState(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block =  {
-                Context.getContextState()
-            },
-            callback = callback
-        )
+    fun getContextState(callback: CStringCallback) = callback.handleCallback {
+        Context.getContextState()
     }
 
     @CName("clearContext")
-    fun clearContext() {
-        Context.clearContext()
-    }
+    fun clearContext() = Context.clearContext()
 }
 
 actual fun contextManager(): ContextManager = ContextManager
