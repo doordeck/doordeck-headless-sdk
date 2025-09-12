@@ -143,6 +143,24 @@ class ContextManagerTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldCheckAuthTokenValidity() = runTest {
+        // Given
+        CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+
+        // When
+        val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
+
+        // Then
+        assertFalse { result }
+    }
+
+    @Test
     fun shouldCheckAuthTokenNullValidity() = runTest {
         // Given
         ContextManager.clearContext()

@@ -20,6 +20,7 @@ import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.OctetKeyPair
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.util.Base64URL
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -28,12 +29,12 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class PlatformApiTest : IntegrationTest() {
+class PlatformApiAsyncTest : IntegrationTest() {
 
     @Test
-    fun shouldTestPlatform() = runTest {
+    fun shouldTestPlatformAsync() = runTest {
         // Given - shouldCreateApplication
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val newApplication = PlatformOperations.CreateApplication(
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),
@@ -43,10 +44,10 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        val applicationId = PlatformApi.createApplication(newApplication)
+        val applicationId = PlatformApi.createApplicationAsync(newApplication).await()
 
         // Then
-        var application = PlatformApi.listApplications().firstOrNull {
+        var application = PlatformApi.listApplicationsAsync().await().firstOrNull {
             it.name.equals(newApplication.name, true)
         }
         assertNotNull(application)
@@ -61,60 +62,60 @@ class PlatformApiTest : IntegrationTest() {
         val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
 
         // When
-        PlatformApi.updateApplicationName(application.applicationId, updatedApplicationName)
+        PlatformApi.updateApplicationNameAsync(application.applicationId, updatedApplicationName).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationName, application.name)
 
         // Given - shouldUpdateApplicationCompanyName
         val updatedApplicationCompanyName = randomString()
 
         // When
-        PlatformApi.updateApplicationCompanyName(application.applicationId, updatedApplicationCompanyName)
+        PlatformApi.updateApplicationCompanyNameAsync(application.applicationId, updatedApplicationCompanyName).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationCompanyName, application.companyName)
 
         // Given - shouldUpdateApplicationMailingAddress
         val updatedApplicationMailingAddress = randomEmail()
 
         // When
-        PlatformApi.updateApplicationMailingAddress(application.applicationId, updatedApplicationMailingAddress)
+        PlatformApi.updateApplicationMailingAddressAsync(application.applicationId, updatedApplicationMailingAddress).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationMailingAddress, application.mailingAddress)
 
         // Given - shouldUpdateApplicationPrivacyPolicy
         val updatedApplicationPrivacyPolicy = randomUri()
 
         // When
-        PlatformApi.updateApplicationPrivacyPolicy(application.applicationId, updatedApplicationPrivacyPolicy)
+        PlatformApi.updateApplicationPrivacyPolicyAsync(application.applicationId, updatedApplicationPrivacyPolicy).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationPrivacyPolicy, application.privacyPolicy)
 
         // Given - shouldUpdateApplicationSupportContact
         val updatedApplicationSupportContact = randomUri()
 
         // When
-        PlatformApi.updateApplicationSupportContact(application.applicationId, updatedApplicationSupportContact)
+        PlatformApi.updateApplicationSupportContactAsync(application.applicationId, updatedApplicationSupportContact).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationSupportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationAppLink
         val updatedApplicationAppLink = randomUri()
 
         // When
-        PlatformApi.updateApplicationAppLink(application.applicationId, updatedApplicationAppLink)
+        PlatformApi.updateApplicationAppLinkAsync(application.applicationId, updatedApplicationAppLink).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationAppLink, application.appLink)
 
         // Given - shouldUpdateApplicationEmailPreferences
@@ -132,10 +133,10 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        PlatformApi.updateApplicationEmailPreferences(application.applicationId, updatedApplicationEmailPreferences)
+        PlatformApi.updateApplicationEmailPreferencesAsync(application.applicationId, updatedApplicationEmailPreferences).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationEmailPreferences.senderEmail, application.emailPreferences.senderEmail)
         assertEquals(updatedApplicationEmailPreferences.senderName, application.emailPreferences.senderName)
         assertEquals(updatedApplicationEmailPreferences.primaryColour, application.emailPreferences.primaryColour)
@@ -149,20 +150,20 @@ class PlatformApiTest : IntegrationTest() {
         val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test".toUri()
 
         // When
-        PlatformApi.updateApplicationLogoUrl(application.applicationId, updatedApplicationLogoUrl)
+        PlatformApi.updateApplicationLogoUrlAsync(application.applicationId, updatedApplicationLogoUrl).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(updatedApplicationLogoUrl, application.logoUrl)
 
         // Given - shouldAddAuthIssuer
         val addApplicationAuthIssuer = randomUri()
 
         // When
-        PlatformApi.addAuthIssuer(application.applicationId, addApplicationAuthIssuer)
+        PlatformApi.addAuthIssuerAsync(application.applicationId, addApplicationAuthIssuer).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertNotEquals(0, application.authDomains.size)
         assertTrue { application.authDomains.any { it == addApplicationAuthIssuer } }
 
@@ -170,10 +171,10 @@ class PlatformApiTest : IntegrationTest() {
         val removedApplicationAuthIssuer = addApplicationAuthIssuer
 
         // When
-        PlatformApi.deleteAuthIssuer(application.applicationId, removedApplicationAuthIssuer)
+        PlatformApi.deleteAuthIssuerAsync(application.applicationId, removedApplicationAuthIssuer).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(0, application.authDomains.size)
         assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
@@ -181,10 +182,10 @@ class PlatformApiTest : IntegrationTest() {
         val addedApplicationCorsDomain = randomUri()
 
         // When
-        PlatformApi.addCorsDomain(application.applicationId, addedApplicationCorsDomain)
+        PlatformApi.addCorsDomainAsync(application.applicationId, addedApplicationCorsDomain).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertNotEquals(0, application.corsDomains.size)
         assertTrue { application.corsDomains.any { it == addedApplicationCorsDomain } }
 
@@ -192,10 +193,10 @@ class PlatformApiTest : IntegrationTest() {
         val removedApplicationCorsDomain = addedApplicationCorsDomain
 
         // When
-        PlatformApi.removeCorsDomain(application.applicationId, removedApplicationCorsDomain)
+        PlatformApi.removeCorsDomainAsync(application.applicationId, removedApplicationCorsDomain).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         assertEquals(0, application.corsDomains.size)
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
@@ -219,10 +220,10 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        PlatformApi.addAuthKey(application.applicationId, ed25519Key)
+        PlatformApi.addAuthKeyAsync(application.applicationId, ed25519Key).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         val actualEd25519Key = application.authKeys.entries.firstOrNull {
             it.key == ed25519Key.keyID
         }?.value as? OctetKeyPair
@@ -249,10 +250,10 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        PlatformApi.addAuthKey(application.applicationId, rsaKey)
+        PlatformApi.addAuthKeyAsync(application.applicationId, rsaKey).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         val actualRsaKey = application.authKeys.entries.firstOrNull {
             it.key == rsaKey.keyID
         }?.value as? RSAKey
@@ -276,10 +277,10 @@ class PlatformApiTest : IntegrationTest() {
         )
 
         // When
-        PlatformApi.addAuthKey(application.applicationId, ecKey)
+        PlatformApi.addAuthKeyAsync(application.applicationId, ecKey).await()
 
         // Then
-        application = PlatformApi.getApplication(application.applicationId)
+        application = PlatformApi.getApplicationAsync(application.applicationId).await()
         val actualKeyEcKey = application.authKeys.entries.firstOrNull {
             it.key == ecKey.keyID
         }?.value as? ECKey
@@ -293,7 +294,7 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldGetApplicationOwnersDetails
         // When
-        var applicationOwnerDetails = PlatformApi.getApplicationOwnersDetails(application.applicationId)
+        var applicationOwnerDetails = PlatformApi.getApplicationOwnersDetailsAsync(application.applicationId).await()
 
         // Then
         assertTrue { applicationOwnerDetails.isNotEmpty() }
@@ -301,19 +302,19 @@ class PlatformApiTest : IntegrationTest() {
 
         // Given - shouldAddApplicationOwner
         // When
-        PlatformApi.addApplicationOwner(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        PlatformApi.addApplicationOwnerAsync(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
 
         // Then
-        applicationOwnerDetails  = PlatformApi.getApplicationOwnersDetails(application.applicationId)
+        applicationOwnerDetails  = PlatformApi.getApplicationOwnersDetailsAsync(application.applicationId).await()
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertTrue { applicationOwnerDetails.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
 
         // Given - shouldRemoveApplicationOwner
         // When
-        PlatformApi.removeApplicationOwner(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        PlatformApi.removeApplicationOwnerAsync(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
 
         // Then
-        applicationOwnerDetails = PlatformApi.getApplicationOwnersDetails(application.applicationId)
+        applicationOwnerDetails = PlatformApi.getApplicationOwnersDetailsAsync(application.applicationId).await()
         assertTrue { applicationOwnerDetails.isNotEmpty() }
         assertFalse { applicationOwnerDetails.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
 
@@ -321,17 +322,17 @@ class PlatformApiTest : IntegrationTest() {
         val contentType = "image/png"
 
         // When
-        val url = PlatformApi.getLogoUploadUrl(application.applicationId, contentType)
+        val url = PlatformApi.getLogoUploadUrlAsync(application.applicationId, contentType).await()
 
         // Then
         assertTrue { url.uploadUrl.host.contains("doordeck-upload") }
 
         // Given - shouldDeleteApplication
         // When
-        PlatformApi.deleteApplication(application.applicationId)
+        PlatformApi.deleteApplicationAsync(application.applicationId).await()
 
         // Then
-        val applications = PlatformApi.listApplications()
+        val applications = PlatformApi.listApplicationsAsync().await()
         assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }
