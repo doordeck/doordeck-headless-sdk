@@ -10,28 +10,12 @@ public unsafe class ContextManager(
         _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct contextManager,
     Doordeck_Headless_Sdk_ExportedSymbols* symbols) : AbstractWrapper
 {
-    public void SetApiEnvironment(ApiEnvironment apiEnvironment)
-    {
-        var newApiEnvironment = apiEnvironment switch
-        {
-            ApiEnvironment.DEV => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
-                .get(),
-            ApiEnvironment.STAGING => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-                .STAGING.get(),
-            ApiEnvironment.PROD => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
-                .get(),
-            _ => throw new ArgumentOutOfRangeException(nameof(apiEnvironment), apiEnvironment, null)
-        };
-        contextManager.setApiEnvironment(context, newApiEnvironment);
-    }
-
     public ApiEnvironment GetApiEnvironment()
     {
-        var apiEnvironment = contextManager.getApiEnvironment_(context);
         sbyte* result = null;
         try
         {
-            result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName_(apiEnvironment);
+            result = contextManager.getApiEnvironment(context);
             return Enum.Parse<ApiEnvironment>(Utils.Utils.ConvertSByteToString(result));
         }
         finally

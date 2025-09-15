@@ -8,7 +8,6 @@ public class DoordeckSdk
 {
     private readonly unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
-    private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment _apiEnvironment;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory _factory;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck _sdk;
 
@@ -38,17 +37,6 @@ public class DoordeckSdk
         string? cloudRefreshToken = null, string? fusionHost = null, ISecureStorage? secureStorageImpl = null,
         bool? debugLogging = null)
     {
-        _apiEnvironment = apiEnvironment switch
-        {
-            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
-                .get(),
-            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-                .STAGING.get(),
-            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
-                .get(),
-            _ => _apiEnvironment
-        };
-
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
         var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
@@ -58,7 +46,7 @@ public class DoordeckSdk
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
         var builder = sdkConfig.Builder.Builder();
-        sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
+        sdkConfig.Builder.setApiEnvironment(builder, apiEnvironment.ToString());
 
         if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
         if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
@@ -270,7 +258,6 @@ public class DoordeckSdk
 
     public unsafe void Release()
     {
-        _symbols->DisposeStablePointer(_apiEnvironment.pinned);
         _symbols->DisposeStablePointer(_factory.pinned);
         _symbols->DisposeStablePointer(_sdk.pinned);
         _symbols->DisposeStablePointer(_accountApi.pinned);
