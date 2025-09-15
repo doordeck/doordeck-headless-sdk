@@ -2,15 +2,19 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CStringCallback
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.handleCallback
 import com.doordeck.multiplatform.sdk.util.fromJson
+import com.doordeck.multiplatform.sdk.util.toJson
 
 actual object ContextManager {
 
+    @CName("setApiEnvironment")
     fun setApiEnvironment(apiEnvironment: String) =
         Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
 
@@ -58,18 +62,32 @@ actual object ContextManager {
     @CName("getUserEmail")
     fun getUserEmail(): String? = Context.getUserEmail()
 
-    fun setCertificateChain(certificateChain: List<String>) = Context.setCertificateChain(certificateChain)
+    @CName("setCertificateChain")
+    fun setCertificateChain(certificateChain: String) =
+        Context.setCertificateChain(certificateChain.stringToCertificateChain())
 
-    fun getCertificateChain(): List<String>? = Context.getCertificateChain()
+    @CName("getCertificateChain")
+    fun getCertificateChain(): String? = Context.getCertificateChain()?.certificateChainToString()
 
     @CName("isCertificateChainInvalidOrExpired")
     fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
 
-    fun setKeyPair(publicKey: ByteArray, privateKey: ByteArray) = Context.setKeyPair(publicKey, privateKey)
+    @CName("setKeyPair")
+    fun setKeyPair(publicKey: String, privateKey: String) = Context.setKeyPair(
+        publicKey = publicKey.decodeBase64ToByteArray(),
+        privateKey = privateKey.decodeBase64ToByteArray()
+    )
 
-    fun getKeyPair(): Crypto.KeyPair? = Context.getKeyPair()
+    @CName("getKeyPair")
+    fun getKeyPair(): String? = Context.getKeyPair()?.let {
+        EncodedKeyPair(
+            publicKey = it.public.encodeByteArrayToBase64(),
+            privateKey = it.private.encodeByteArrayToBase64()
+        )
+    }?.toJson()
 
-    fun setKeyPairVerified(publicKey: ByteArray?) = Context.setKeyPairVerified(publicKey)
+    @CName("setKeyPairVerified")
+    fun setKeyPairVerified(publicKey: String?) = Context.setKeyPairVerified(publicKey?.decodeBase64ToByteArray())
 
     @CName("isKeyPairVerified")
     fun isKeyPairVerified(): Boolean = Context.isKeyPairVerified()
@@ -77,31 +95,17 @@ actual object ContextManager {
     @CName("isKeyPairValid")
     fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
 
-    fun setOperationContext(
-        userId: String,
-        certificateChain: List<String>,
-        publicKey: ByteArray,
-        privateKey: ByteArray,
-        isKeyPairVerified: Boolean
-    ) = Context.setOperationContext(
-        userId = userId,
-        certificateChain = certificateChain,
-        publicKey = publicKey,
-        privateKey = privateKey,
-        isKeyPairVerified = isKeyPairVerified
-    )
-
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.
      */
-    @CName("setOperationContextJson")
-    fun setOperationContextJson(data: String) {
+    @CName("setOperationContext")
+    fun setOperationContext(data: String) {
         val operationContextData = data.fromJson<OperationContextData>()
-        setOperationContext(
+        Context.setOperationContext(
             userId = operationContextData.userId,
-            certificateChain = operationContextData.userCertificateChain.stringToCertificateChain(),
-            publicKey = operationContextData.userPublicKey.decodeBase64ToByteArray(),
-            privateKey = operationContextData.userPrivateKey.decodeBase64ToByteArray(),
+            certificateChain = operationContextData.certificateChain.stringToCertificateChain(),
+            publicKey = operationContextData.publicKey.decodeBase64ToByteArray(),
+            privateKey = operationContextData.privateKey.decodeBase64ToByteArray(),
             isKeyPairVerified = operationContextData.isKeyPairVerified
         )
     }
