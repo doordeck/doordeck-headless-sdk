@@ -31,8 +31,6 @@ nexusPublishing {
 // Force some JS dependencies to use specific versions (yarn.lock)
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
-        resolution("cross-spawn", "7.0.6")
-        resolution("webpack-dev-server", "5.2.1")
         resolution("brace-expansion", "2.0.2")
     }
 }
