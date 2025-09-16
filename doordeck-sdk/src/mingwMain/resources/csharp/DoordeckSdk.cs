@@ -39,6 +39,7 @@ public class DoordeckSdk
     {
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
+        var environment = Utils.Utils.ToSByte(apiEnvironment.ToString());
         var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
         var refreshToken = cloudRefreshToken != null ? Utils.Utils.ToSByte(cloudRefreshToken) : null;
         var fHost = fusionHost != null ? Utils.Utils.ToSByte(fusionHost) : null;
@@ -46,7 +47,7 @@ public class DoordeckSdk
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
         var builder = sdkConfig.Builder.Builder();
-        sdkConfig.Builder.setApiEnvironment(builder, apiEnvironment.ToString());
+        sdkConfig.Builder.setApiEnvironment(builder, environment);
 
         if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
         if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
@@ -168,6 +169,7 @@ public class DoordeckSdk
         }
         finally
         {
+            Marshal.FreeHGlobal((IntPtr)environment);
             if (token != null) Marshal.FreeHGlobal((IntPtr)token);
             if (refreshToken != null) Marshal.FreeHGlobal((IntPtr)refreshToken);
             if (fHost != null) Marshal.FreeHGlobal((IntPtr)fHost);

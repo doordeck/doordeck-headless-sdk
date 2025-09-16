@@ -15,7 +15,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getApiEnvironment(context);
+            result = contextManager.getApiEnvironment_(context);
             return Enum.Parse<ApiEnvironment>(Utils.Utils.ConvertSByteToString(result));
         }
         finally
@@ -219,7 +219,7 @@ public unsafe class ContextManager(
         var sData = new { userId, userCertificateChain, userPublicKey, userPrivateKey, isKeyPairVerified }.ToData();
         try
         {
-            contextManager.setOperationContextJson_(context, sData);
+            contextManager.setOperationContext_(context, sData);
         }
         finally
         {
