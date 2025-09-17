@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
+using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
@@ -42,7 +42,7 @@ public abstract class AbstractWrapper
     
             try
             {
-                var resultData = Utils.Utils.FromData<ResultData<TResponse>>(result);
+                var resultData = Utils.FromJson<ResultData<TResponse>>(result);
                 HandleException(resultData);
                 var response = resultData.Success!.Result ?? default!;
                 _tcs.SetResult(response);
@@ -73,7 +73,7 @@ public abstract class AbstractWrapper
         delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData) where TApi : unmanaged
     {
         var tcs = new TaskCompletionSource<TResponse>();
-        var sData = data != null ? data.ToData() : null;
+        var sData = data != null ? data.ToJsonSByte() : null;
         try
         {
             var holder = new CallbackHolder<TResponse>(tcs);

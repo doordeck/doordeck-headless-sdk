@@ -1,6 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
+﻿using Doordeck.Headless.Sdk.Model;
+using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
@@ -16,7 +15,7 @@ public unsafe class CryptoManager(
         try
         {
             result = cryptoManager.generateEncodedKeyPair_(crypto);
-            return Utils.Utils.FromData<EncodedKeyPair>(result);
+            return Utils.FromJsonSByte<EncodedKeyPair>(result);
         }
         finally
         {

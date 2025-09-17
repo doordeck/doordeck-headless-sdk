@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
+using Doordeck.Headless.Sdk.Utilities;
 using Doordeck.Headless.Sdk.Wrapper;
 
 namespace Doordeck.Headless.Sdk;
@@ -39,11 +40,11 @@ public class DoordeckSdk
     {
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        var environment = Utils.Utils.ToSByte(apiEnvironment.ToString());
-        var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
-        var refreshToken = cloudRefreshToken != null ? Utils.Utils.ToSByte(cloudRefreshToken) : null;
-        var fHost = fusionHost != null ? Utils.Utils.ToSByte(fusionHost) : null;
-        var dLogging = _symbols->createNullableBoolean(Convert.ToByte(debugLogging ?? false));
+        var environment = Utils.StringToSByte(apiEnvironment.ToString());
+        var token = cloudAuthToken != null ? Utils.StringToSByte(cloudAuthToken) : null;
+        var refreshToken = cloudRefreshToken != null ? Utils.StringToSByte(cloudRefreshToken) : null;
+        var fHost = fusionHost != null ? Utils.StringToSByte(fusionHost) : null;
+        var dLogging = _symbols->createNullableBoolean((debugLogging ?? false).BooleanToByte());
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
         var builder = sdkConfig.Builder.Builder();
