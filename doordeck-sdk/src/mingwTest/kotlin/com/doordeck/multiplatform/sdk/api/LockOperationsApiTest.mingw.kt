@@ -33,6 +33,7 @@ import com.doordeck.multiplatform.sdk.model.data.GetUserPublicKeyData
 import com.doordeck.multiplatform.sdk.model.data.GetUsersForLockData
 import com.doordeck.multiplatform.sdk.model.data.LocationRequirementData
 import com.doordeck.multiplatform.sdk.model.data.LoginData
+import com.doordeck.multiplatform.sdk.model.data.OperationContextData
 import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.RevokeAccessToLockOperationData
@@ -63,7 +64,7 @@ import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
@@ -722,11 +723,13 @@ class LockOperationsApiTest : CallbackTest() {
         assertNotNull(registerKeyResponse.success.result)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
         ContextManager.setOperationContext(
-            userId = PLATFORM_TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            isKeyPairVerified = true
+            OperationContextData(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.certificateChainToString(),
+                publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                isKeyPairVerified = true
+            ).toJson()
         )
 
         // When
@@ -971,11 +974,13 @@ class LockOperationsApiTest : CallbackTest() {
         assertNotNull(registerKeyResponse.success.result)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
         ContextManager.setOperationContext(
-            userId = PLATFORM_TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            isKeyPairVerified = true
+            OperationContextData(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.certificateChainToString(),
+                publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                isKeyPairVerified = true
+            ).toJson()
         )
         val shareLock = ShareLockData(
             targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
@@ -1050,11 +1055,13 @@ class LockOperationsApiTest : CallbackTest() {
         assertNotNull(registerKeyResponse.success.result)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
         ContextManager.setOperationContext(
-            userId = PLATFORM_TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            isKeyPairVerified = true
+            OperationContextData(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.certificateChainToString(),
+                publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                isKeyPairVerified = true
+            ).toJson()
         )
         val batchShareLock = listOf(
             ShareLockData(
@@ -1218,11 +1225,13 @@ class LockOperationsApiTest : CallbackTest() {
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
         val updatedUnlockDuration = 1
         ContextManager.setOperationContext(
-            userId = PLATFORM_TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            isKeyPairVerified = true
+            OperationContextData(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.certificateChainToString(),
+                publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                isKeyPairVerified = true
+            ).toJson()
         )
 
         // When
@@ -1369,11 +1378,13 @@ class LockOperationsApiTest : CallbackTest() {
             exceptions = emptyList()
         )
         ContextManager.setOperationContext(
-            userId = PLATFORM_TEST_MAIN_USER_ID,
-            certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-            publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray(),
-            privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
-            isKeyPairVerified = true
+            OperationContextData(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                certificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN.certificateChainToString(),
+                publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                isKeyPairVerified = true
+            ).toJson()
         )
 
         // When

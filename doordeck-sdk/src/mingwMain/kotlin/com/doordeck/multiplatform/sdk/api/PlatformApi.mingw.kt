@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
+import com.doordeck.multiplatform.sdk.CStringCallback
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
@@ -20,11 +21,8 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationSupportContact
 import com.doordeck.multiplatform.sdk.model.data.toAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toEmailPreferences
-import com.doordeck.multiplatform.sdk.util.callback
 import com.doordeck.multiplatform.sdk.util.fromJson
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CFunction
-import kotlinx.cinterop.CPointer
+import com.doordeck.multiplatform.sdk.util.handleCallback
 
 actual object PlatformApi {
     /**
@@ -34,14 +32,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("createApplication")
-    fun createApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val createApplicationData = data.fromJson<CreateApplicationData>()
-                PlatformClient.createApplicationRequest(createApplicationData.toCreateApplication())
-            },
-            callback = callback
-        )
+    fun createApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+        val createApplicationData = data.fromJson<CreateApplicationData>()
+        PlatformClient.createApplicationRequest(createApplicationData.toCreateApplication())
     }
 
     /**
@@ -51,13 +44,8 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("listApplications")
-    fun listApplications(callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                PlatformClient.listApplicationsRequest()
-            },
-            callback = callback
-        )
+    fun listApplications(callback: CStringCallback) = callback.handleCallback {
+        PlatformClient.listApplicationsRequest()
     }
 
     /**
@@ -67,14 +55,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getApplication")
-    fun getApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val applicationIdData = data.fromJson<ApplicationIdData>()
-                PlatformClient.getApplicationRequest(applicationIdData.applicationId)
-            },
-            callback = callback
-        )
+    fun getApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationIdData = data.fromJson<ApplicationIdData>()
+        PlatformClient.getApplicationRequest(applicationIdData.applicationId)
     }
 
     /**
@@ -84,13 +67,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationName")
-    fun updateApplicationName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
-                PlatformClient.updateApplicationNameRequest(updateApplicationName.applicationId, updateApplicationName.name)
-            },
-            callback = callback
+    fun updateApplicationName(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
+        PlatformClient.updateApplicationNameRequest(
+            applicationId = updateApplicationName.applicationId,
+            name = updateApplicationName.name
         )
     }
 
@@ -101,16 +82,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationCompanyName")
-    fun updateApplicationCompanyName(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
-                PlatformClient.updateApplicationCompanyNameRequest(
-                    applicationId = updateApplicationCompanyName.applicationId,
-                    companyName = updateApplicationCompanyName.companyName
-                )
-            },
-            callback = callback
+    fun updateApplicationCompanyName(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
+        PlatformClient.updateApplicationCompanyNameRequest(
+            applicationId = updateApplicationCompanyName.applicationId,
+            companyName = updateApplicationCompanyName.companyName
         )
     }
 
@@ -121,16 +97,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationMailingAddress")
-    fun updateApplicationMailingAddress(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
-                PlatformClient.updateApplicationMailingAddressRequest(
-                    applicationId = updateApplicationMailingAddressData.applicationId,
-                    mailingAddress = updateApplicationMailingAddressData.mailingAddress
-                )
-            },
-            callback = callback
+    fun updateApplicationMailingAddress(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
+        PlatformClient.updateApplicationMailingAddressRequest(
+            applicationId = updateApplicationMailingAddressData.applicationId,
+            mailingAddress = updateApplicationMailingAddressData.mailingAddress
         )
     }
 
@@ -141,16 +112,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationPrivacyPolicy")
-    fun updateApplicationPrivacyPolicy(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
-                PlatformClient.updateApplicationPrivacyPolicyRequest(
-                    applicationId = updateApplicationPrivacyPolicyData.applicationId,
-                    privacyPolicy = updateApplicationPrivacyPolicyData.privacyPolicy
-                )
-            },
-            callback = callback
+    fun updateApplicationPrivacyPolicy(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
+        PlatformClient.updateApplicationPrivacyPolicyRequest(
+            applicationId = updateApplicationPrivacyPolicyData.applicationId,
+            privacyPolicy = updateApplicationPrivacyPolicyData.privacyPolicy
         )
     }
 
@@ -161,16 +127,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationSupportContact")
-    fun updateApplicationSupportContact(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
-                PlatformClient.updateApplicationSupportContactRequest(
-                    applicationId = updateApplicationSupportContactData.applicationId,
-                    supportContact = updateApplicationSupportContactData.supportContact
-                )
-            },
-            callback = callback
+    fun updateApplicationSupportContact(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
+        PlatformClient.updateApplicationSupportContactRequest(
+            applicationId = updateApplicationSupportContactData.applicationId,
+            supportContact = updateApplicationSupportContactData.supportContact
         )
     }
 
@@ -181,16 +142,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationAppLink")
-    fun updateApplicationAppLink(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
-                PlatformClient.updateApplicationAppLinkRequest(
-                    applicationId = updateApplicationAppLinkData.applicationId,
-                    appLink = updateApplicationAppLinkData.appLink
-                )
-            },
-            callback = callback
+    fun updateApplicationAppLink(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
+        PlatformClient.updateApplicationAppLinkRequest(
+            applicationId = updateApplicationAppLinkData.applicationId,
+            appLink = updateApplicationAppLinkData.appLink
         )
     }
 
@@ -201,16 +157,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationEmailPreferences")
-    fun updateApplicationEmailPreferences(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
-                PlatformClient.updateApplicationEmailPreferencesRequest(
-                    applicationId = updateApplicationEmailPreferencesData.applicationId,
-                    emailPreferences = updateApplicationEmailPreferencesData.emailPreferences.toEmailPreferences()
-                )
-            },
-            callback = callback
+    fun updateApplicationEmailPreferences(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
+        PlatformClient.updateApplicationEmailPreferencesRequest(
+            applicationId = updateApplicationEmailPreferencesData.applicationId,
+            emailPreferences = updateApplicationEmailPreferencesData.emailPreferences.toEmailPreferences()
         )
     }
 
@@ -221,16 +172,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("updateApplicationLogoUrl")
-    fun updateApplicationLogoUrl(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
-                PlatformClient.updateApplicationLogoUrlRequest(
-                    applicationId = updateApplicationLogoUrlData.applicationId,
-                    logoUrl = updateApplicationLogoUrlData.logoUrl
-                )
-            },
-            callback = callback
+    fun updateApplicationLogoUrl(data: String, callback: CStringCallback) = callback.handleCallback {
+        val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
+        PlatformClient.updateApplicationLogoUrlRequest(
+            applicationId = updateApplicationLogoUrlData.applicationId,
+            logoUrl = updateApplicationLogoUrlData.logoUrl
         )
     }
 
@@ -241,14 +187,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("deleteApplication")
-    fun deleteApplication(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val applicationIdData = data.fromJson<ApplicationIdData>()
-                PlatformClient.deleteApplicationRequest(applicationIdData.applicationId)
-            },
-            callback = callback
-        )
+    fun deleteApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationIdData = data.fromJson<ApplicationIdData>()
+        PlatformClient.deleteApplicationRequest(applicationIdData.applicationId)
     }
 
     /**
@@ -258,13 +199,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getLogoUploadUrl")
-    fun getLogoUploadUrl(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
-                PlatformClient.getLogoUploadUrlRequest(getLogoUploadUrlData.applicationId, getLogoUploadUrlData.contentType)
-            },
-            callback = callback
+    fun getLogoUploadUrl(data: String, callback: CStringCallback) = callback.handleCallback {
+        val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
+        PlatformClient.getLogoUploadUrlRequest(
+            applicationId = getLogoUploadUrlData.applicationId,
+            contentType = getLogoUploadUrlData.contentType
         )
     }
 
@@ -275,13 +214,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addAuthKey")
-    fun addAuthKey(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val addAuthKeyData = data.fromJson<AddAuthKeyData>()
-                PlatformClient.addAuthKeyRequest(addAuthKeyData.applicationId, addAuthKeyData.key.toAuthKey())
-            },
-            callback = callback
+    fun addAuthKey(data: String, callback: CStringCallback) = callback.handleCallback {
+        val addAuthKeyData = data.fromJson<AddAuthKeyData>()
+        PlatformClient.addAuthKeyRequest(
+            applicationId = addAuthKeyData.applicationId,
+            key = addAuthKeyData.key.toAuthKey()
         )
     }
 
@@ -292,13 +229,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addAuthIssuer")
-    fun addAuthIssuer(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val authIssuerData = data.fromJson<AuthIssuerData>()
-                PlatformClient.addAuthIssuerRequest(authIssuerData.applicationId, authIssuerData.url)
-            },
-            callback = callback
+    fun addAuthIssuer(data: String, callback: CStringCallback) = callback.handleCallback {
+        val authIssuerData = data.fromJson<AuthIssuerData>()
+        PlatformClient.addAuthIssuerRequest(
+            applicationId = authIssuerData.applicationId,
+            url = authIssuerData.url
         )
     }
 
@@ -309,13 +244,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("deleteAuthIssuer")
-    fun deleteAuthIssuer(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val authIssuerData = data.fromJson<AuthIssuerData>()
-                PlatformClient.deleteAuthIssuerRequest(authIssuerData.applicationId, authIssuerData.url)
-            },
-            callback = callback
+    fun deleteAuthIssuer(data: String, callback: CStringCallback) = callback.handleCallback {
+        val authIssuerData = data.fromJson<AuthIssuerData>()
+        PlatformClient.deleteAuthIssuerRequest(
+            applicationId = authIssuerData.applicationId,
+            url = authIssuerData.url
         )
     }
 
@@ -326,13 +259,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addCorsDomain")
-    fun addCorsDomain(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val corsDomainData = data.fromJson<CorsDomainData>()
-                PlatformClient.addCorsDomainRequest(corsDomainData.applicationId, corsDomainData.url)
-            },
-            callback = callback
+    fun addCorsDomain(data: String, callback: CStringCallback) = callback.handleCallback {
+        val corsDomainData = data.fromJson<CorsDomainData>()
+        PlatformClient.addCorsDomainRequest(
+            applicationId = corsDomainData.applicationId,
+            url = corsDomainData.url
         )
     }
 
@@ -343,13 +274,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("removeCorsDomain")
-    fun removeCorsDomain(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val corsDomainData = data.fromJson<CorsDomainData>()
-                PlatformClient.removeCorsDomainRequest(corsDomainData.applicationId, corsDomainData.url)
-            },
-            callback = callback
+    fun removeCorsDomain(data: String, callback: CStringCallback) = callback.handleCallback {
+        val corsDomainData = data.fromJson<CorsDomainData>()
+        PlatformClient.removeCorsDomainRequest(
+            applicationId = corsDomainData.applicationId,
+            url = corsDomainData.url
         )
     }
 
@@ -360,16 +289,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("addApplicationOwner")
-    fun addApplicationOwner(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
-                PlatformClient.addApplicationOwnerRequest(
-                    applicationId = applicationOwnerData.applicationId,
-                    userId = applicationOwnerData.userId
-                )
-            },
-            callback = callback
+    fun addApplicationOwner(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
+        PlatformClient.addApplicationOwnerRequest(
+            applicationId = applicationOwnerData.applicationId,
+            userId = applicationOwnerData.userId
         )
     }
 
@@ -380,16 +304,11 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("removeApplicationOwner")
-    fun removeApplicationOwner(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
-                PlatformClient.removeApplicationOwnerRequest(
-                    applicationId = applicationOwnerData.applicationId,
-                    userId = applicationOwnerData.userId
-                )
-            },
-            callback = callback
+    fun removeApplicationOwner(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
+        PlatformClient.removeApplicationOwnerRequest(
+            applicationId = applicationOwnerData.applicationId,
+            userId = applicationOwnerData.userId
         )
     }
 
@@ -400,14 +319,9 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getApplicationOwnersDetails")
-    fun getApplicationOwnersDetails(data: String, callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>) {
-        callback(
-            block = {
-                val applicationIdData = data.fromJson<ApplicationIdData>()
-                PlatformClient.getApplicationOwnersDetailsRequest(applicationIdData.applicationId)
-            },
-            callback = callback
-        )
+    fun getApplicationOwnersDetails(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationIdData = data.fromJson<ApplicationIdData>()
+        PlatformClient.getApplicationOwnersDetailsRequest(applicationIdData.applicationId)
     }
 }
 

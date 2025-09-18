@@ -1,15 +1,12 @@
 package com.doordeck.multiplatform.sdk.util
 
+import com.doordeck.multiplatform.sdk.CStringCallback
 import com.doordeck.multiplatform.sdk.config.SdkConfig
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.FailedResultData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import io.ktor.client.HttpClientConfig
-import kotlinx.cinterop.ByteVar
-import kotlinx.cinterop.CFunction
-import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.cstr
 import kotlinx.cinterop.invoke
 import kotlinx.cinterop.memScoped
@@ -22,27 +19,11 @@ internal actual fun HttpClientConfig<*>.installCertificatePinner() {
 }
 
 /**
- * Utility extension to expose the `ApiEnvironment` enum name
- */
-@CName("getApiEnvironmentName")
-fun ApiEnvironment.getApiEnvironmentName(): String {
-    return name
-}
-
-/**
- * Utility extension to retrieve the ``ApiEnvironment`` by its name
- */
-@CName("getApiEnvironmentByName")
-fun ApiEnvironment.getApiEnvironmentByName(name: String): ApiEnvironment {
-    return ApiEnvironment.valueOf(name)
-}
-
-/**
  * Utility extension for easily building an [SdkConfig] instance externally.
  */
 @CName("buildSdkConfig")
 fun buildSdkConfig(
-    apiEnvironment: ApiEnvironment,
+    apiEnvironment: String,
     cloudAuthToken: String? = null,
     cloudRefreshToken: String? = null,
     fusionHost: String? = null,
@@ -60,16 +41,15 @@ fun buildSdkConfig(
 }
 
 /**
- * Executes a suspend [block] asynchronously and passes its result to a native [callback]. Wraps either the result
+ * Executes a suspend [block] asynchronously and passes its result to a native [handleCallback]. Wraps either the result
  * of the block or any exception thrown during its execution into a serialized JSON `ResultData` string.
  *
  * @param T The type of the result produced by the [block] function.
  * @param block A suspend function that returns a result of type [T]. Its successful output is processed as described.
- * @param callback A pointer to a C function that accepts a C-style string pointer ([CPointer<ByteVar>]) and returns a C-style string pointer.
+ * @param handleCallback A pointer to a C function that accepts a C-style string pointer ([CPointer<ByteVar>]) and returns a C-style string pointer.
  */
-internal inline fun <reified T>callback(
-    crossinline block: suspend () -> T,
-    callback: CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
+internal inline fun <reified T> CStringCallback.handleCallback(
+    crossinline block: suspend () -> T
 ) {
     GlobalScope.launch(Dispatchers.Default) {
         val result: String = try {
@@ -83,7 +63,7 @@ internal inline fun <reified T>callback(
 
         memScoped {
             val cString = result.cstr.ptr
-            callback.invoke(cString)
+            invoke(cString)
         }
     }
 }
