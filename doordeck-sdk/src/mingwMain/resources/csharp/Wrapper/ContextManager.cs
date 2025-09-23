@@ -4,6 +4,8 @@ using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
+using ContextManagerApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager;
+
 public unsafe class ContextManager(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager context,
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
@@ -52,7 +54,7 @@ public unsafe class ContextManager(
     }
 
     public Task<bool> IsCloudAuthTokenInvalidOrExpired() =>
-            Process<bool>(null, contextManager.isCloudAuthTokenInvalidOrExpired_, null);
+            Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_);
 
     public void SetCloudRefreshToken(string token)
     {
@@ -227,8 +229,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<ContextState> GetContextState() =>
-            Process<ContextState>(null, contextManager.getContextState_, null);
+    public Task<ContextState> GetContextState() => 
+        Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_);
 
     public void ClearContext()
     {
@@ -241,16 +243,4 @@ public unsafe class ContextManager(
 
         if (result != null) symbols->DisposeString(result);
     }
-
-    private Task<TResponse> Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager,
-            sbyte*, void*, void> processWithData,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager,
-            void*, void> processWithoutData,
-        object? data) =>
-        ProcessCommon<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager, TResponse>(
-            context,
-            data,
-            processWithData,
-            processWithoutData);
 }
