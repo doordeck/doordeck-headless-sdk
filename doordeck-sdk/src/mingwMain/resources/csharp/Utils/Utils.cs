@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text.Json;
+using Doordeck.Headless.Sdk.Converter;
 
 namespace Doordeck.Headless.Sdk.Utilities;
 

@@ -12,13 +12,14 @@ public class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {
         try
         {
-            var dateString = reader.GetString();
-            if (string.IsNullOrEmpty(dateString)) return default;
-            return DateOnly.ParseExact(dateString, Format, CultureInfo.InvariantCulture);
+            var value = reader.GetString();
+            return !string.IsNullOrWhiteSpace(value) ?
+                DateOnly.ParseExact(value, Format, CultureInfo.InvariantCulture) :
+                throw new JsonException($"Invalid date time: {value}");
         }
         catch (FormatException ex)
         {
-            throw new JsonException($"Invalid date format. Expected {Format}.", ex);
+            throw new JsonException($"Invalid date format", ex);
         }
     }
 

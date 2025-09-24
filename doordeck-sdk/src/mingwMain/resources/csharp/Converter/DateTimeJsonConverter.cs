@@ -10,29 +10,19 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
     
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     { 
-        string? s;
+        var value = reader.TokenType == JsonTokenType.String ?
+            reader.GetString() :
+            reader.TokenType == JsonTokenType.Number ?
+            reader.GetDouble().ToString("R", CultureInfo.InvariantCulture) :
+            throw new JsonException($"Invalid date time: {reader.TokenType}");
 
-        if (reader.TokenType == JsonTokenType.String)
-        {
-            s = reader.GetString();
-        }
-        else if (reader.TokenType == JsonTokenType.Number)
-        {
-            s = reader.GetDouble().ToString("R", CultureInfo.InvariantCulture);
-        }
-        else
-        {
-            throw new JsonException($"Unexpected token parsing DateTime. Token: {reader.TokenType}");
-        }
-
-        if (string.IsNullOrEmpty(s)) return default;
-
-        if (!decimal.TryParse(s, NumberStyles.Float | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture,
+        if (!string.IsNullOrWhiteSpace(value) ||
+            !decimal.TryParse(value, NumberStyles.Float | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture,
                 out var totalSeconds))
         {
-            throw new JsonException($"Invalid epoch-second.nano format: '{s}'");
+            throw new JsonException($"Invalid epoch-second.nano format: {value}");
         }
-        
+
         // Convert seconds (possibly fractional) to ticks
         var ticksDecimal = totalSeconds * TicksPerSecond;
         long ticks;
@@ -44,7 +34,7 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
         {
             throw new JsonException("Epoch seconds value is out of range for DateTime.", ex);
         }
-        
+
         var epoch = DateTime.UnixEpoch;
         try
         {
@@ -58,7 +48,6 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        // Convert back to Unix timestamp when serializing
         var unixTime = (value - DateTime.UnixEpoch).TotalSeconds;
         writer.WriteNumberValue(unixTime);
     }
