@@ -7,7 +7,16 @@ public static class Utils
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new()
     {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Converters =
+        {
+            new IpAddressJsonConverter(),
+            new DateTimeJsonConverter(),
+            new TimeOnlyJsonConverter(),
+            new TimeZoneInfoJsonConverter(),
+            new DateOnlyJsonConverter(),
+            new TimeSpanJsonConverter()
+        }
     };
 
     public static unsafe sbyte* ToJsonSByte<T>(this T input) => ToJson(input).StringToSByte();
