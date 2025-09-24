@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace ConsoleApp2.Doordeck.Headless.Sdk.Converter;
+namespace Doordeck.Headless.Sdk.Converter;
 
 public class TimeSpanJsonConverter : JsonConverter<TimeSpan>
 {
