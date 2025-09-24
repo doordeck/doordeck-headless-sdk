@@ -9,7 +9,7 @@ public class Helper(
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._HelperApi_e__Struct helperApi) : AbstractWrapper
 {
-    public unsafe Task<object> UploadPlatformLogo(string applicationId, string contentType, string image) =>
+    public unsafe Task<object> UploadPlatformLogo(Guid applicationId, string contentType, string image) =>
         Process<HelperApi, object>(helper, helperApi.uploadPlatformLogo_, new { applicationId, contentType, image });
 
     public unsafe Task<AssistedLoginResponse> AssistedLogin(string email, string password) =>

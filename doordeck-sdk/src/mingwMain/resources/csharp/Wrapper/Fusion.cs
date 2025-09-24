@@ -19,18 +19,18 @@ public class Fusion(
     public unsafe Task<List<IntegrationConfigurationResponse>> GetIntegrationConfiguration(string type) =>
         Process<FusionApi, List<IntegrationConfigurationResponse>>(fusion, fusionApi.getIntegrationConfiguration_, new { type });
 
-    public unsafe Task<object> EnableDoor(string name, string siteId, LockController controller) =>
+    public unsafe Task<object> EnableDoor(string name, Guid siteId, LockController controller) =>
         Process<FusionApi, object>(fusion, fusionApi.enableDoor_, new { name, siteId, controller });
 
-    public unsafe Task<object> DeleteDoor(string deviceId) =>
+    public unsafe Task<object> DeleteDoor(Guid deviceId) =>
         Process<FusionApi, object>(fusion, fusionApi.deleteDoor_, new { deviceId });
 
-    public unsafe Task<DoorStateResponse> GetDoorStatus(string deviceId) =>
+    public unsafe Task<DoorStateResponse> GetDoorStatus(Guid deviceId) =>
         Process<FusionApi, DoorStateResponse>(fusion, fusionApi.getDoorStatus_, new { deviceId });
 
-    public unsafe Task<object> StartDoor(string deviceId) =>
+    public unsafe Task<object> StartDoor(Guid deviceId) =>
         Process<FusionApi, object>(fusion, fusionApi.startDoor_, new { deviceId });
 
-    public unsafe Task<object> StopDoor(string deviceId) =>
+    public unsafe Task<object> StopDoor(Guid deviceId) =>
         Process<FusionApi, object>(fusion, fusionApi.stopDoor_, new { deviceId });
 }

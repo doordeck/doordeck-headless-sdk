@@ -1,4 +1,5 @@
-﻿using Doordeck.Headless.Sdk.Model;
+﻿using System.Net;
+using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
@@ -10,40 +11,40 @@ public class LockOperations(
     Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
         _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._LockOperationsApi_e__Struct lockOperationsApi) : AbstractWrapper
 {
-    public unsafe Task<LockResponse> GetSingleLock(string lockId) =>
+    public unsafe Task<LockResponse> GetSingleLock(Guid lockId) =>
         Process<LockOperationsApi, LockResponse>(lockOperations, lockOperationsApi.getSingleLock_, new { lockId });
 
-    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(string lockId, long? start = null, long? end = null) =>
+    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(Guid lockId, DateTime? start = null, DateTime? end = null) =>
         Process<LockOperationsApi, List<AuditResponse>>(lockOperations, lockOperationsApi.getLockAuditTrail_, new { lockId, start, end });
 
-    public unsafe Task<List<AuditResponse>> GetAuditForUser(string userId, long? start = null, long? end = null) =>
+    public unsafe Task<List<AuditResponse>> GetAuditForUser(Guid userId, DateTime? start = null, DateTime? end = null) =>
         Process<LockOperationsApi, List<AuditResponse>>(lockOperations, lockOperationsApi.getAuditForUser_, new { userId, start, end });
 
-    public unsafe Task<List<UserLockResponse>> GetUsersForLock(string lockId) =>
+    public unsafe Task<List<UserLockResponse>> GetUsersForLock(Guid lockId) =>
         Process<LockOperationsApi, List<UserLockResponse>>(lockOperations, lockOperationsApi.getUsersForLock_, new { lockId });
 
-    public unsafe Task<LockUserResponse> GetLocksForUser(string userId) =>
+    public unsafe Task<LockUserResponse> GetLocksForUser(Guid userId) =>
         Process<LockOperationsApi, LockUserResponse>(lockOperations, lockOperationsApi.getLocksForUser_, new { userId });
 
-    public unsafe Task<object> UpdateLockName(string lockId, string? name = null) =>
+    public unsafe Task<object> UpdateLockName(Guid lockId, string? name = null) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.updateLockName_, new { lockId, name });
 
-    public unsafe Task<object> UpdateLockFavourite(string lockId, bool favourite) =>
+    public unsafe Task<object> UpdateLockFavourite(Guid lockId, bool favourite) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.updateLockFavourite_, new { lockId, favourite });
 
-    public unsafe Task<object> UpdateLockSettingDefaultName(string lockId, string name) =>
+    public unsafe Task<object> UpdateLockSettingDefaultName(Guid lockId, string name) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.updateLockSettingDefaultName_, new { lockId, name });
 
-    public unsafe Task<object> SetLockSettingPermittedAddresses(string lockId, List<string> permittedAddresses) =>
+    public unsafe Task<object> SetLockSettingPermittedAddresses(Guid lockId, List<IPAddress> permittedAddresses) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.setLockSettingPermittedAddresses_, new { lockId,  permittedAddresses });
 
-    public unsafe Task<object> UpdateLockSettingHidden(string lockId, bool hidden) =>
+    public unsafe Task<object> UpdateLockSettingHidden(Guid lockId, bool hidden) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.updateLockSettingHidden_, new { lockId, hidden });
 
-    public unsafe Task<object> SetLockSettingTimeRestrictions(string lockId, List<TimeRequirement> times) =>
+    public unsafe Task<object> SetLockSettingTimeRestrictions(Guid lockId, List<TimeRequirement> times) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.setLockSettingTimeRestrictions_, new { lockId, times });
 
-    public unsafe Task<object> UpdateLockSettingLocationRestrictions(string lockId, LocationRequirement? location = null) =>
+    public unsafe Task<object> UpdateLockSettingLocationRestrictions(Guid lockId, LocationRequirement? location = null) =>
         Process<LockOperationsApi, object>(lockOperations, lockOperationsApi.updateLockSettingLocationRestrictions_, new { lockId, location });
 
     public unsafe Task<UserPublicKeyResponse> GetUserPublicKey(string userEmail, bool visitor = false) =>

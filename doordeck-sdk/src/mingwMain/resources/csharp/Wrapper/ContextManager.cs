@@ -137,9 +137,9 @@ public unsafe class ContextManager(
         }
     }
 
-    public void SetUserId(string userId)
+    public void SetUserId(Guid userId)
     {
-        var data = userId.StringToSByte();
+        var data = userId.ToString().StringToSByte();
         try
         {
             contextManager.setUserId_(context, data);
@@ -150,13 +150,13 @@ public unsafe class ContextManager(
         }
     }
 
-    public string GetUserId()
+    public Guid GetUserId()
     {
         sbyte* result = null;
         try
         {
             result = contextManager.getUserId_(context);
-            return Utils.SByteToString(result);
+            return Guid.Parse(Utils.SByteToString(result));
         }
         finally
         {

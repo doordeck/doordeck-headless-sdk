@@ -12,9 +12,9 @@ public class Sites(
     public unsafe Task<List<SiteResponse>> ListSites() =>
         Process<SitesApi, List<SiteResponse>>(sites, sitesApi.listSites_);
 
-    public unsafe Task<List<LockResponse>> GetLocksForSite(string siteId) =>
+    public unsafe Task<List<LockResponse>> GetLocksForSite(Guid siteId) =>
         Process<SitesApi, List<LockResponse>>(sites, sitesApi.getLocksForSite_, new { siteId });
 
-    public unsafe Task<List<UserForSiteResponse>> GetUsersForSite(string siteId) =>
+    public unsafe Task<List<UserForSiteResponse>> GetUsersForSite(Guid siteId) =>
         Process<SitesApi, List<UserForSiteResponse>>(sites, sitesApi.getUsersForSite_, new { siteId });
 }

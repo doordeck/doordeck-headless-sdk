@@ -21,6 +21,6 @@ public class Accountless(
     public unsafe Task<object> PasswordReset(string email) =>
         Process<AccountlessApi, object>(accountless, accountlessApi.passwordReset_, new { email });
 
-    public unsafe Task<object> PasswordResetVerify(string userId, string token, string password) =>
+    public unsafe Task<object> PasswordResetVerify(Guid userId, string token, string password) =>
         Process<AccountlessApi, object>(accountless, accountlessApi.passwordResetVerify_, new { userId, token, password });
 }
