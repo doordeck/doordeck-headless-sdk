@@ -2,6 +2,6 @@
 
 public class EncodedKeyPair
 {
-    public required string Private { get; set; }
-    public required string Public { get; set; }
+    public required string PrivateKey { get; set; }
+    public required string PublicKey { get; set; }
 }
