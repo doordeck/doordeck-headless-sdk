@@ -16,7 +16,7 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
             reader.GetDouble().ToString("R", CultureInfo.InvariantCulture) :
             throw new JsonException($"Invalid date time: {reader.TokenType}");
 
-        if (!string.IsNullOrWhiteSpace(value) ||
+        if (string.IsNullOrWhiteSpace(value) ||
             !decimal.TryParse(value, NumberStyles.Float | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture,
                 out var totalSeconds))
         {
