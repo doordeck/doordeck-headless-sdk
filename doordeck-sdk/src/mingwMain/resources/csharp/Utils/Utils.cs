@@ -16,6 +16,7 @@ public static class Utils
             new TimeOnlyJsonConverter(),
             new TimeZoneInfoJsonConverter(),
             new DateOnlyJsonConverter(),
+            new X509CertificateJsonConverter(),
             new TimeSpanJsonConverter()
         }
     };
