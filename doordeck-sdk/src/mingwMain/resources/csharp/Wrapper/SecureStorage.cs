@@ -170,12 +170,12 @@ internal static class SecureStorage
     {
         if (GetStringFromPtr(c) is {} result)
         {
-            Implementation?.AddUserId(result);
+            Implementation?.AddUserId(new Guid(result));
         }
     }
-    
+
     public static IntPtr GetUserId() =>
-        GetPtrFromString(Implementation?.GetUserId());
+        GetPtrFromString(Implementation?.GetUserId().ToString());
     
     public static void AddUserEmail(IntPtr c)
     {

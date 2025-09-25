@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Doordeck.Headless.Sdk.Converter;
 
@@ -41,7 +42,14 @@ public static class Utils
 
     public static string EncodeByteArrayToBase64(this byte[] input) => Convert.ToBase64String(input);
 
-    public static string CertificateChainToString(this List<string> input) => string.Join("|", input);
+    public static string CertificateChainToString(this List<X509Certificate> input) =>
+        string.Join("|", input.Select(cert => cert.Export(X509ContentType.Cert).EncodeByteArrayToBase64()));
 
-    public static List<string> StringToCertificateChain(this string input) => input.Split("|").ToList();
+    public static List<X509Certificate> StringToCertificateChain(this string input) =>
+    [
+        ..input.Split("|")
+            .ToList()
+            .Select(cert => X509CertificateLoader.LoadCertificate(cert.DecodeBase64ToByteArray()))
+            .ToList()
+    ];
 }

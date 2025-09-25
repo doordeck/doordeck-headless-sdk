@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Utilities;
 
@@ -216,9 +217,9 @@ public unsafe class ContextManager(
         return contextManager.isKeyPairValid_(context).ByteToBoolean();
     }
 
-    public void SetOperationContext(string userId, string certificateChain, string publicKey, string privateKey, bool isKeyPairVerified)
+    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, string publicKey, string privateKey, bool isKeyPairVerified)
     {
-        var sData = new { userId, certificateChain, publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
+        var sData = new { userId, certificateChain = certificateChain.CertificateChainToString(), publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
         try
         {
             contextManager.setOperationContext_(context, sData);
