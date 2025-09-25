@@ -3,14 +3,13 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
+import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.isCertificateInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.utils.io.core.toByteArray
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Platform-specific implementation of [CryptoManager].
@@ -43,11 +42,9 @@ actual object CryptoManager {
     @CName("generateEncodedKeyPair")
     fun generateEncodedKeyPair(): String {
         val keyPair = generateRawKeyPair()
-        return JsonObject(
-            content = mapOf(
-                "private" to JsonPrimitive(keyPair.private.encodeByteArrayToBase64()),
-                "public" to JsonPrimitive(keyPair.public.encodeByteArrayToBase64())
-            )
+        return EncodedKeyPair(
+            publicKey = keyPair.public.encodeByteArrayToBase64(),
+            privateKey = keyPair.private.encodeByteArrayToBase64()
         ).toJson()
     }
 
