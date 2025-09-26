@@ -6,17 +6,14 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public abstract class AbstractWrapper
 {
-    private static class Native
-    {
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CallbackDelegate(IntPtr ptr);
-    }
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    public delegate void CallbackDelegate(IntPtr ptr);
 
     private class NativeCallback<TResponse> : IDisposable
     {
         private readonly TaskCompletionSource<TResponse> _tcs;
         private GCHandle _handle;
-        public Native.CallbackDelegate CallbackDelegate { get; }
+        public CallbackDelegate CallbackDelegate { get; }
 
         public NativeCallback(TaskCompletionSource<TResponse> tcs)
         {
