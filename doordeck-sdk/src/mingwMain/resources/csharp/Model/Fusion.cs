@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Net;
+using System.Text.Json.Serialization;
 
 namespace Doordeck.Headless.Sdk.Model;
 
@@ -28,155 +29,155 @@ public abstract class LockController : ILockController;
 
 public class AlpetaController : LockController
 {
-    public string? Username { get; set; } = string.Empty;
-    public string? Password { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
-    public string? BaseUrl { get; set; } = null;
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public required int DoorId { get; set; }
+    public Uri? BaseUrl { get; set; }
 }
 
 public class AmagController : LockController
 {
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
-    public string? BaseUrl { get; set; } = null;
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int DoorId { get; set; }
+    public Uri? BaseUrl { get; set; }
 }
 
 public class AssaAbloyController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string DoorId { get; set; } = string.Empty;
+    public required Uri BaseUrl { get; set; }
+    public required string DoorId { get; set; }
 }
 
 public class AvigilonController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string DoorId { get; set; } = string.Empty;
+    public required Uri BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required string DoorId { get; set; }
 }
 
 public class AxisController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string DoorIdentifier { get; set; } = string.Empty;
+    public required Uri BaseUrl { get; set; }
+    public required string DoorIdentifier { get; set; }
 }
 
 public class CCureController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string DoorType { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
+    public Uri? BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required string DoorType { get; set; }
+    public required int DoorId { get; set; }
 }
 
 public class DemoController : LockController
 {
-    public ushort Port { get; set; } = 8080;
+    public required ushort Port { get; set; } = 8080;
 }
 
 public class GallagherController : LockController
 {
-    public string? BaseUrl { get; set; } = null;
-    public string ApiKey { get; set; } = string.Empty;
-    public string DoorId { get; set; } = string.Empty;
+    public Uri? BaseUrl { get; set; }
+    public required string ApiKey { get; set; }
+    public required string DoorId { get; set; }
 }
 
 public class GenetecController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string DoorId { get; set; } = string.Empty;
+    public required Uri BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required string DoorId { get; set; }
 }
 
 public class LenelController : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public string DirectoryId { get; set; } = string.Empty;
-    public string PanelId { get; set; } = string.Empty;
-    public string ReaderId { get; set; } = string.Empty;
+    public required Uri BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required string DirectoryId { get; set; }
+    public required string PanelId { get; set; }
+    public required string ReaderId { get; set; }
 }
 
 public class MitrefinchController : LockController
 {
-    public string Host { get; set; } = string.Empty;
-    public int Output { get; set; } = 0;
+    public required IPAddress Host { get; set; }
+    public required int Output { get; set; }
 }
 
 public class PaxtonNet2Controller : LockController
 {
-    public string Host { get; set; } = string.Empty;
-    public string? Username { get; set; } = null;
-    public string? Password { get; set; } = null;
-    public string Address { get; set; } = string.Empty;
-    public short Output { get; set; } = 0;
+    public required IPAddress Host { get; set; }
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public required string Address { get; set; }
+    public required short Output { get; set; }
 }
 
 public class Paxton10Controller : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public int ApplianceId { get; set; } = 0;
+    public required Uri BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int ApplianceId { get; set; }
 }
 
 public class IntegraV1Controller : LockController
 {
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public int ControllerId { get; set; } = 0;
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int ControllerId { get; set; }
 }
 
 public class IntegraV2Controller : LockController
 {
-    public string BaseUrl { get; set; } = string.Empty;
-    public string SessionId { get; set; } = string.Empty;
-    public int ControllerId { get; set; } = 0;
-    public int CardholderId { get; set; } = 0;
-    public int? PinCode { get; set; } = null;
+    public required Uri BaseUrl { get; set; }
+    public required string SessionId { get; set; }
+    public required int ControllerId { get; set; }
+    public required int CardholderId { get; set; }
+    public int? PinCode { get; set; }
 }
 
 public class PacController : LockController
 {
-    public DataSource DataSource { get; set; } = new();
-    public int OutputChannel { get; set; } = 0;
-    public int ControllerSerial { get; set; } = 0;
+    public required DataSource DataSource { get; set; }
+    public required int OutputChannel { get; set; }
+    public required int ControllerSerial { get; set; }
 }
 
 public class DataSource
 {
-    public string DriverClass { get; set; } = string.Empty;
-    public string Url { get; set; } = string.Empty;
-    public string User { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    public required string DriverClass { get; set; }
+    public required string Url { get; set; }
+    public required string User { get; set; }
+    public required string Password { get; set; }
 }
 
 public class TdsiExgardeController : LockController
 {
-    public string? DbUrl { get; set; } = null;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
+    public string? DbUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int DoorId { get; set; }
 }
 
 public class TdsiGardisController : LockController
 {
-    public string Host { get; set; } = string.Empty;
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
-    public int DoorId { get; set; } = 0;
+    public required IPAddress Host { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int DoorId { get; set; }
 }
 
 public class ZktecoController : LockController
 {
-    public string ClientSecret { get; set; } = string.Empty;
-    public string DoorId { get; set; } = string.Empty;
-    public string? BaseUrl { get; set; } = null;
-    public ZktecoEntityType EntityType { get; set; }
+    public required string ClientSecret { get; set; }
+    public required string DoorId { get; set; }
+    public string? BaseUrl { get; set; }
+    public required ZktecoEntityType EntityType { get; set; }
 }
     
 [JsonConverter(typeof(JsonStringEnumConverter))]

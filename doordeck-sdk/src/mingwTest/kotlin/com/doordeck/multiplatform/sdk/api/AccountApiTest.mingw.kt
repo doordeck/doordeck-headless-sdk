@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.data.ChangePasswordData
+import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.model.data.LoginData
 import com.doordeck.multiplatform.sdk.model.data.RefreshTokenData
 import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyData
@@ -16,7 +17,8 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyR
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.testCallback
-import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
+import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.runBlocking
@@ -82,9 +84,10 @@ class AccountApiTest : CallbackTest() {
             assertTrue { result.success.result.certificateChain.isNotEmpty() }
             assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.success.result.userId)
             assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
-            assertEquals(result.success.result.certificateChain, ContextManager.getCertificateChain())
-            assertEquals(publicKey, ContextManager.getKeyPair()?.public?.encodeByteArrayToBase64())
-            assertEquals(privateKey, ContextManager.getKeyPair()?.private?.encodeByteArrayToBase64())
+            assertEquals(result.success.result.certificateChain.certificateChainToString(), ContextManager.getCertificateChain())
+            val contextKeyPair = ContextManager.getKeyPair()?.fromJson<EncodedKeyPair>()
+            assertEquals(publicKey, contextKeyPair?.publicKey)
+            assertEquals(privateKey, contextKeyPair?.privateKey)
             assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
             assertTrue { ContextManager.isKeyPairVerified() }
         }

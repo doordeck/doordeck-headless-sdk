@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_JWT
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
@@ -25,6 +26,7 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.fromJson
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.runBlocking
@@ -42,16 +44,18 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldStoreAndLoadContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
         val userId = randomUuidString()
         val email = randomEmail()
-        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val certificateChain = PLATFORM_TEST_VALID_CERTIFICATE
         val keyPair = CryptoManager.generateRawKeyPair()
-        val keyPairVerified = keyPair.public
+        val publicKey = keyPair.public.encodeByteArrayToBase64()
+        val privateKey = keyPair.private.encodeByteArrayToBase64()
+        val keyPairVerified = publicKey
         val settings = DefaultSecureStorage(MemorySettings())
         Context.setSecureStorageImpl(settings)
         ContextManager.apply {
@@ -62,7 +66,7 @@ class ContextManagerTest : CallbackTest() {
             setFusionAuthToken(fusionAuthToken)
             setUserId(userId)
             setCertificateChain(certificateChain)
-            setKeyPair(keyPair.public, keyPair.private)
+            setKeyPair(publicKey, privateKey)
             setKeyPairVerified(keyPairVerified)
             setUserEmail(email)
         }
@@ -76,9 +80,10 @@ class ContextManagerTest : CallbackTest() {
         assertEquals(apiEnvironment, ContextManager.getApiEnvironment())
         assertEquals(userId, ContextManager.getUserId())
         assertEquals(email, ContextManager.getUserEmail())
-        assertContentEquals(certificateChain, ContextManager.getCertificateChain())
-        assertContentEquals(keyPair.public, ContextManager.getKeyPair()?.public)
-        assertContentEquals(keyPair.private, ContextManager.getKeyPair()?.private)
+        assertEquals(certificateChain, ContextManager.getCertificateChain())
+        val contextKeyPair = ContextManager.getKeyPair()?.fromJson<EncodedKeyPair>()
+        assertEquals(publicKey, contextKeyPair?.publicKey)
+        assertEquals(privateKey, contextKeyPair?.privateKey)
         assertTrue { ContextManager.isKeyPairVerified() }
         assertEquals(cloudAuthToken, ContextManager.getCloudAuthToken())
         assertEquals(cloudRefreshToken, ContextManager.getCloudRefreshToken())
@@ -89,16 +94,18 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldClearContext() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.entries.random()
+        val apiEnvironment = ApiEnvironment.entries.random().name
         val fusionHost = randomUrlString()
         val cloudAuthToken = randomString()
         val cloudRefreshToken = randomString()
         val fusionAuthToken = randomString()
         val userId = randomUuidString()
         val email = randomEmail()
-        val certificateChain = listOf(PLATFORM_TEST_VALID_CERTIFICATE)
+        val certificateChain = PLATFORM_TEST_VALID_CERTIFICATE
         val keyPair = CryptoManager.generateRawKeyPair()
-        val keyPairVerified = keyPair.public
+        val publicKeyEncoded = keyPair.public.encodeByteArrayToBase64()
+        val privateKeyEncoded = keyPair.private.encodeByteArrayToBase64()
+        val keyPairVerified = publicKeyEncoded
         ContextManager.apply {
             setApiEnvironment(apiEnvironment)
             setCloudAuthToken(cloudAuthToken)
@@ -107,7 +114,7 @@ class ContextManagerTest : CallbackTest() {
             setFusionAuthToken(fusionAuthToken)
             setUserId(userId)
             setCertificateChain(certificateChain)
-            setKeyPair(keyPair.public, keyPair.private)
+            setKeyPair(publicKeyEncoded, privateKeyEncoded)
             setKeyPairVerified(keyPairVerified)
             setUserEmail(email)
         }
@@ -116,7 +123,7 @@ class ContextManagerTest : CallbackTest() {
         ContextManager.clearContext()
 
         // Then
-        assertEquals(ApiEnvironment.PROD, ContextManager.getApiEnvironment())
+        assertEquals(ApiEnvironment.PROD.name, ContextManager.getApiEnvironment())
         assertNull(ContextManager.getUserId())
         assertNull(ContextManager.getUserEmail())
         assertNull(ContextManager.getCertificateChain())
@@ -129,7 +136,7 @@ class ContextManagerTest : CallbackTest() {
     }
 
     @Test
-    fun shouldStoreJsonOperationContext() = runTest {
+    fun shouldStoreOperationContext() = runTest {
         // Given
         val userId = randomUuidString()
         val certificateChain = (1..3).map { randomPublicKey().encodeByteArrayToBase64() }
@@ -137,13 +144,13 @@ class ContextManagerTest : CallbackTest() {
         val privateKey = randomPrivateKey()
         val operationContextData = OperationContextData(
             userId = userId,
-            userCertificateChain = certificateChain.certificateChainToString(),
-            userPublicKey = publicKey.encodeByteArrayToBase64(),
-            userPrivateKey = privateKey.encodeByteArrayToBase64()
+            certificateChain = certificateChain.certificateChainToString(),
+            publicKey = publicKey.encodeByteArrayToBase64(),
+            privateKey = privateKey.encodeByteArrayToBase64()
         )
         val settings = DefaultSecureStorage(MemorySettings())
         Context.setSecureStorageImpl(settings)
-        ContextManager.setOperationContextJson(operationContextData.toJson())
+        ContextManager.setOperationContext(operationContextData.toJson())
 
         // When
         Context.setSecureStorageImpl(DefaultSecureStorage(MemorySettings())) // Override the storage so that it is not deleted upon a reset call
@@ -243,8 +250,8 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldCheckKeyPairValidityWithNonMatchingKeys() = runTest {
         // Given
-        val publicKey = CryptoManager.generateRawKeyPair().public
-        val privateKey = CryptoManager.generateRawKeyPair().private
+        val publicKey = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64()
+        val privateKey = CryptoManager.generateRawKeyPair().private.encodeByteArrayToBase64()
         ContextManager.setKeyPair(publicKey, privateKey)
 
         // When
@@ -258,7 +265,9 @@ class ContextManagerTest : CallbackTest() {
     fun shouldCheckKeyPairValidity() = runTest {
         // Given
         val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setKeyPair(keyPair.public, keyPair.private)
+        val publicKey = keyPair.public.encodeByteArrayToBase64()
+        val privateKey = keyPair.private.encodeByteArrayToBase64()
+        ContextManager.setKeyPair(publicKey, privateKey)
 
         // When
         val result = ContextManager.isKeyPairValid()
@@ -270,7 +279,7 @@ class ContextManagerTest : CallbackTest() {
     @Test
     fun shouldUpdateApiEnvironment() = runTest {
         // Given
-        val apiEnvironment = ApiEnvironment.STAGING
+        val apiEnvironment = ApiEnvironment.STAGING.name
 
         // When
         ContextManager.setApiEnvironment(apiEnvironment)
@@ -338,8 +347,10 @@ class ContextManagerTest : CallbackTest() {
             ))
 
             val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
             ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-            ContextManager.setKeyPair(keyPair.public, keyPair.private)
+            ContextManager.setKeyPair(publicKey, privateKey)
 
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
@@ -367,10 +378,12 @@ class ContextManagerTest : CallbackTest() {
             ))
 
             val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
             ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-            ContextManager.setKeyPair(keyPair.public, keyPair.private)
-            ContextManager.setKeyPairVerified(keyPair.public)
-            ContextManager.setCertificateChain(listOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
+            ContextManager.setKeyPair(publicKey, privateKey)
+            ContextManager.setKeyPairVerified(publicKey)
+            ContextManager.setCertificateChain(PLATFORM_TEST_EXPIRED_CERTIFICATE)
 
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
@@ -398,10 +411,12 @@ class ContextManagerTest : CallbackTest() {
             ))
 
             val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
             ContextManager.setCloudAuthToken(TEST_VALID_JWT)
-            ContextManager.setKeyPair(keyPair.public, keyPair.private)
-            ContextManager.setKeyPairVerified(keyPair.public)
-            ContextManager.setCertificateChain(listOf(PLATFORM_TEST_VALID_CERTIFICATE))
+            ContextManager.setKeyPair(publicKey, privateKey)
+            ContextManager.setKeyPairVerified(publicKey)
+            ContextManager.setCertificateChain(PLATFORM_TEST_VALID_CERTIFICATE)
 
             // When
             val result = callbackApiCall<ResultData<ContextState>> {

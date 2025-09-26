@@ -2,20 +2,20 @@
 
 public class SiteResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string Colour { get; set; } = string.Empty;
-    public double Longitude { get; set; }
-    public double Latitude { get; set; }
-    public int Radius { get; set; }
-    public string Created { get; set; } = string.Empty;
-    public string Updated { get; set; } = string.Empty;
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required string Colour { get; set; }
+    public required double Longitude { get; set; }
+    public required double Latitude { get; set; }
+    public required int Radius { get; set; }
+    public required DateTime Created { get; set; }
+    public required DateTime Updated { get; set; }
 }
 
 public class UserForSiteResponse
 {
-    public string UserId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string? DisplayName { get; set; } = null;
-    public bool Orphan { get; set; }
+    public required Guid UserId { get; set; }
+    public required string Email { get; set; }
+    public string? DisplayName { get; set; }
+    public required bool Orphan { get; set; }
 }

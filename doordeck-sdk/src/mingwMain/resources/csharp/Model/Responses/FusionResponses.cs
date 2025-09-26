@@ -4,42 +4,42 @@ namespace Doordeck.Headless.Sdk.Model.Responses;
 
 public class FusionLoginResponse
 {
-    public string AuthToken { get; set; } = string.Empty;
+    public required string AuthToken { get; set; }
 }
     
 public class IntegrationTypeResponse
 {
-    public string Status { get; set; } = string.Empty;
+    public string? Status { get; set; }
 }
     
 public class DoorStateResponse
 {
-    public ServiceStateType State { get; set; } = ServiceStateType.UNDEFINED;
+    public required ServiceStateType State { get; set; }
 }
     
 public class IntegrationConfigurationResponse
 {
-    public ControllerResponse? Doordeck { get; set; } = null;
-    public ServiceStateResponse? Service { get; set; } = null;
-    public DiscoveredDeviceResponse? Integration { get; set; } = null;
+    public ControllerResponse? Doordeck { get; set; }
+    public ServiceStateResponse? Service { get; set; }
+    public DiscoveredDeviceResponse? Integration { get; set; }
 }
     
 public class ControllerResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string? Name { get; set; } = null;
-    public string? Role { get; set; } = null;
+    public required Guid Id { get; set; }
+    public string? Name { get; set; }
+    public UserRole? Role { get; set; }
 }
     
 public class ServiceStateResponse
 {
-    public ServiceStateType State { get; set; } = ServiceStateType.UNDEFINED;
+    public required ServiceStateType State { get; set; }
 }
     
 public class DiscoveredDeviceResponse
 {
-    public LockController Key { get; set; } = new DemoController();
-    public Dictionary<string, string> Metadata { get; set; } = new();
+    public required LockController Key { get; set; }
+    public required Dictionary<string, string> Metadata { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

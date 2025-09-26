@@ -1,136 +1,138 @@
-﻿namespace Doordeck.Headless.Sdk.Model.Responses;
+﻿using System.Net;
+
+namespace Doordeck.Headless.Sdk.Model.Responses;
 
 public class LockResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public string? Start { get; set; } = null;
-    public string? End { get; set; } = null;
-    public UserRole Role { get; set; }
-    public LockSettingsResponse Settings { get; set; } = new LockSettingsResponse();
-    public LockStateResponse State { get; set; } = new LockStateResponse();
-    public bool Favourite { get; set; }
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
+    public DateTime? Start { get; set; }
+    public DateTime? End { get; set; }
+    public required UserRole Role { get; set; }
+    public required LockSettingsResponse Settings { get; set; }
+    public required LockStateResponse State { get; set; }
+    public required bool Favourite { get; set; }
 }
 
 public class LockSettingsResponse
 {
-    public double UnlockTime { get; set; }
-    public List<string> PermittedAddresses { get; set; } = [];
-    public string DefaultName { get; set; } = string.Empty;
-    public UsageRequirementsResponse? UsageRequirements { get; set; } = null;
-    public UnlockBetweenSettingResponse? UnlockBetweenWindow { get; set; } = null;
-    public List<string> Tiles { get; set; } = [];
-    public bool Hidden { get; set; }
-    public List<string> DirectAccessEndpoints { get; set; } = [];
-    public Dictionary<CapabilityType, CapabilityStatus> Capabilities { get; set; } = [];
+    public required TimeSpan UnlockTime { get; set; }
+    public required List<IPAddress> PermittedAddresses { get; set; }
+    public required string DefaultName { get; set; }
+    public UsageRequirementsResponse? UsageRequirements { get; set; }
+    public UnlockBetweenSettingResponse? UnlockBetweenWindow { get; set; }
+    public required List<Guid> Tiles { get; set; }
+    public required bool Hidden { get; set; }
+    public required List<Uri> DirectAccessEndpoints { get; set; }
+    public required Dictionary<CapabilityType, CapabilityStatus> Capabilities { get; set; }
 }
 
 public class UsageRequirementsResponse
 {
-    public List<TimeRequirementResponse>? Time { get; set; } = null;
-    public LocationRequirementResponse? Location { get; set; } = null;
+    public List<TimeRequirementResponse>? Time { get; set; }
+    public LocationRequirementResponse? Location { get; set; }
 }
 
 public class TimeRequirementResponse
 {
-    public string Start { get; set; } = string.Empty;
-    public string End { get; set; } = string.Empty;
-    public string Timezone { get; set; } = string.Empty;
-    public List<DayOfWeek> Days { get; set; } = [];
+    public required TimeOnly Start { get; set; }
+    public required TimeOnly End { get; set; }
+    public required TimeZoneInfo Timezone { get; set; }
+    public required List<DayOfWeek> Days { get; set; }
 }
 
 public class LocationRequirementResponse
 {
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
-    public bool Enabled { get; set; }
-    public int Radius { get; set; }
-    public int Accuracy { get; set; }
+    public required double Latitude { get; set; }
+    public required double Longitude { get; set; }
+    public required bool Enabled { get; set; }
+    public required int Radius { get; set; }
+    public required int Accuracy { get; set; }
 }
 
 public class UnlockBetweenSettingResponse
 {
-    public string Start { get; set; } = string.Empty;
-    public string End { get; set; } = string.Empty;
-    public string Timezone { get; set; } = string.Empty;
-    public List<DayOfWeek> Days { get; set; } = [];
-    public List<string>? Exceptions { get; set; } = null;
+    public required TimeOnly Start { get; set; }
+    public required TimeOnly End { get; set; }
+    public required TimeZoneInfo Timezone { get; set; }
+    public required List<DayOfWeek> Days { get; set; }
+    public List<DateOnly>? Exceptions { get; set; }
 }
 
 public class LockStateResponse
 {
-    public bool? Connected { get; set; } = null;
+    public bool? Connected { get; set; }
 }
 
 public class UserPublicKeyResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string PublicKey { get; set; } = string.Empty;
+    public required Guid Id { get; set; }
+    public required string PublicKey { get; set; }
 }
 
 public class BatchUserPublicKeyResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string? Email { get; set; } = null;
-    public string? ForeignKey { get; set; } = null;
-    public string? Phone { get; set; } = null;
-    public string PublicKey { get; set; } = string.Empty;
+    public required Guid Id { get; set; }
+    public string? Email { get; set; }
+    public string? ForeignKey { get; set; }
+    public string? Phone { get; set; }
+    public required string PublicKey { get; set; }
 }
 
 public class ShareableLockResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
 }
 
 public class UserLockResponse
 {
-    public string UserId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string PublicKey { get; set; } = string.Empty;
-    public string? DisplayName { get; set; } = null;
-    public bool Orphan { get; set; }
-    public bool Foreign { get; set; }
-    public UserRole Role { get; set; }
-    public double? Start { get; set; } = null;
-    public double? End { get; set; } = null;
+    public required Guid UserId { get; set; }
+    public required string Email { get; set; }
+    public required string PublicKey { get; set; }
+    public string? DisplayName { get; set; }
+    public required bool Orphan { get; set; }
+    public required bool Foreign { get; set; }
+    public required UserRole Role { get; set; }
+    public DateTime? Start { get; set; }
+    public DateTime? End { get; set; }
 }
 
 public class LockUserResponse
 {
-    public string UserId { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string PublicKey { get; set; } = string.Empty;
-    public string? DisplayName { get; set; } = null;
-    public bool Orphan { get; set; }
-    public bool Foreign { get; set; }
-    public double? Start { get; set; } = null;
-    public double? End { get; set; } = null;
-    public List<LockUserDetailsResponse> Devices { get; set; } = [];
+    public required Guid UserId { get; set; }
+    public required string Email { get; set; }
+    public required string PublicKey { get; set; }
+    public string? DisplayName { get; set; }
+    public required bool Orphan { get; set; }
+    public required bool Foreign { get; set; }
+    public DateTime? Start { get; set; }
+    public DateTime? End { get; set; }
+    public required List<LockUserDetailsResponse> Devices { get; set; }
 }
 
 public class LockUserDetailsResponse
 {
-    public string DeviceId { get; set; } = string.Empty;
-    public UserRole Role { get; set; }
-    public double? Start { get; set; } = null;
-    public double? End { get; set; } = null;
+    public required Guid DeviceId { get; set; }
+    public required UserRole Role { get; set; }
+    public DateTime? Start { get; set; }
+    public DateTime? End { get; set; }
 }
 
 public class AuditResponse
 {
-    public string DeviceId { get; set; } = string.Empty;
-    public double Timestamp { get; set; }
-    public AuditEvent Type { get; set; }
-    public AuditUserResponse Issuer { get; set; } = new AuditUserResponse();
-    public AuditUserResponse? Subject { get; set; } = null;
-    public bool Rejected { get; set; }
+    public required Guid DeviceId { get; set; }
+    public required DateTime Timestamp { get; set; }
+    public required AuditEvent Type { get; set; }
+    public required AuditUserResponse Issuer { get; set; }
+    public AuditUserResponse? Subject { get; set; }
+    public required bool Rejected { get; set; }
 }
 
 public class AuditUserResponse
 {
-    public string UserId { get; set; } = string.Empty;
-    public string? Email { get; set; } = null;
-    public string? DisplayName { get; set; } = null;
-    public string? Ip { get; set; } = null;
+    public required Guid UserId { get; set; }
+    public string? Email { get; set; }
+    public string? DisplayName { get; set; }
+    public IPAddress? Ip { get; set; }
 }

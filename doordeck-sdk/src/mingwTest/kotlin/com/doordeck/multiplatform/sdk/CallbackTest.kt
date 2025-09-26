@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import kotlin.test.BeforeTest
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 private var capturedCallback: String = ""
@@ -30,7 +31,7 @@ open class CallbackTest : IntegrationTest() {
             apiCall()
             withTimeout(60.seconds) {
                 while (capturedCallback.isEmpty()) {
-                    delay(1.seconds)
+                    delay(10.milliseconds)
                 }
             }
             return@runBlocking capturedCallback.fromJson<T>().also {
