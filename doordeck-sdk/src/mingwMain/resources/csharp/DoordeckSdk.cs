@@ -40,10 +40,10 @@ public class DoordeckSdk
     {
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        var environment = Utils.StringToSByte(apiEnvironment.ToString());
-        var token = cloudAuthToken != null ? Utils.StringToSByte(cloudAuthToken) : null;
-        var refreshToken = cloudRefreshToken != null ? Utils.StringToSByte(cloudRefreshToken) : null;
-        var fHost = fusionHost != null ? Utils.StringToSByte(fusionHost) : null;
+        var environment = apiEnvironment.ToString().StringToSByte();
+        var token = cloudAuthToken != null ? cloudAuthToken.StringToSByte() : null;
+        var refreshToken = cloudRefreshToken != null ? cloudRefreshToken.StringToSByte() : null;
+        var fHost = fusionHost != null ? fusionHost.StringToSByte() : null;
         var dLogging = _symbols->createNullableBoolean((debugLogging ?? false).BooleanToByte());
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
@@ -209,55 +209,25 @@ public class DoordeckSdk
             _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager, _symbols);
     }
 
-    public Account GetAccount()
-    {
-        return _account;
-    }
+    public Account GetAccount() => _account;
 
-    public Accountless GetAccountless()
-    {
-        return _accountless;
-    }
+    public Accountless GetAccountless() => _accountless;
 
-    public Fusion GetFusion()
-    {
-        return _fusion;
-    }
+    public Fusion GetFusion() => _fusion;
 
-    public Helper GetHelper()
-    {
-        return _helper;
-    }
+    public Helper GetHelper() => _helper;
 
-    public LockOperations GetLockOperations()
-    {
-        return _lockOperations;
-    }
+    public LockOperations GetLockOperations() => _lockOperations;
 
-    public Platform GetPlatform()
-    {
-        return _platform;
-    }
+    public Platform GetPlatform() => _platform;
 
-    public Sites GetSites()
-    {
-        return _sites;
-    }
+    public Sites GetSites() => _sites;
 
-    public Tiles GetTiles()
-    {
-        return _tiles;
-    }
+    public Tiles GetTiles() => _tiles;
 
-    public ContextManager GetContextManager()
-    {
-        return _contextManager;
-    }
+    public ContextManager GetContextManager() => _contextManager;
 
-    public CryptoManager GetCryptoManager()
-    {
-        return _cryptoManager;
-    }
+    public CryptoManager GetCryptoManager() => _cryptoManager;
 
     public unsafe void Release()
     {
