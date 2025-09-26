@@ -48,8 +48,7 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
-        var unixTime = (value - DateTime.UnixEpoch).TotalSeconds;
-        writer.WriteNumberValue(unixTime);
+        writer.WriteNumberValue((long)(value.ToUniversalTime() - DateTime.UnixEpoch).TotalSeconds);
     }
 }
 
