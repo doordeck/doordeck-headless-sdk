@@ -7,13 +7,13 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 public abstract class AbstractWrapper
 {
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate void CallbackDelegate(IntPtr ptr);
+    private delegate void NativeCallbackDelegate(IntPtr ptr);
 
     private class NativeCallback<TResponse> : IDisposable
     {
         private readonly TaskCompletionSource<TResponse> _tcs;
         private GCHandle _handle;
-        public CallbackDelegate CallbackDelegate { get; }
+        public NativeCallbackDelegate CallbackDelegate { get; }
 
         public NativeCallback(TaskCompletionSource<TResponse> tcs)
         {
@@ -74,7 +74,7 @@ public abstract class AbstractWrapper
         delegate* unmanaged[Cdecl]<TApi, sbyte*, void*, void> processWithData,
         object data) where TApi : unmanaged =>
         Process<TApi, TResponse>(api, processWithData, null, data);
-    
+
     internal static unsafe Task<TResponse> Process<TApi, TResponse>(
         TApi api,
         delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData) where TApi : unmanaged =>
@@ -86,7 +86,7 @@ public abstract class AbstractWrapper
         delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData,
         object? data) where TApi : unmanaged
     {
-        var tcs = new TaskCompletionSource<TResponse>();
+        var tcs = new TaskCompletionSource<TResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
         var sData = data != null ? data.ToJsonSByte() : null;
         try
         {
