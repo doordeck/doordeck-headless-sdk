@@ -13,7 +13,7 @@ public class UserDetailsResponse
     public required string Email { get; set; }
     public string? DisplayName { get; set; }
     public required bool EmailVerified { get; set; }
-    public required string PublicKey { get; set; }
+    public required byte[] PublicKey { get; set; }
 }
 
 public class RegisterEphemeralKeyResponse

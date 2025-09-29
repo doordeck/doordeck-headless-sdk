@@ -217,7 +217,7 @@ public unsafe class ContextManager(
         return contextManager.isKeyPairValid_(context).ByteToBoolean();
     }
 
-    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, string publicKey, string privateKey, bool isKeyPairVerified)
+    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, byte[] publicKey, byte[] privateKey, bool isKeyPairVerified)
     {
         var sData = new { userId, certificateChain = certificateChain.CertificateChainToString(), publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
         try

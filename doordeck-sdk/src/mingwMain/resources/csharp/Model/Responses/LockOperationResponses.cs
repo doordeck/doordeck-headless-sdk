@@ -67,7 +67,7 @@ public class LockStateResponse
 public class UserPublicKeyResponse
 {
     public required Guid Id { get; set; }
-    public required string PublicKey { get; set; }
+    public required byte[] PublicKey { get; set; }
 }
 
 public class BatchUserPublicKeyResponse
@@ -76,7 +76,7 @@ public class BatchUserPublicKeyResponse
     public string? Email { get; set; }
     public string? ForeignKey { get; set; }
     public string? Phone { get; set; }
-    public required string PublicKey { get; set; }
+    public required byte[] PublicKey { get; set; }
 }
 
 public class ShareableLockResponse
@@ -89,7 +89,7 @@ public class UserLockResponse
 {
     public required Guid UserId { get; set; }
     public required string Email { get; set; }
-    public required string PublicKey { get; set; }
+    public required byte[] PublicKey { get; set; }
     public string? DisplayName { get; set; }
     public required bool Orphan { get; set; }
     public required bool Foreign { get; set; }
@@ -102,7 +102,7 @@ public class LockUserResponse
 {
     public required Guid UserId { get; set; }
     public required string Email { get; set; }
-    public required string PublicKey { get; set; }
+    public required byte[] PublicKey { get; set; }
     public string? DisplayName { get; set; }
     public required bool Orphan { get; set; }
     public required bool Foreign { get; set; }

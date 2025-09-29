@@ -22,7 +22,7 @@ class SdkConfigTest {
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUrlString() },
             secureStorage = DefaultSecureStorage(MemorySettings()),
-            debugLogging = randomNullable { randomBoolean() }
+            debugLogging = randomNullable { randomBoolean().toString() }
         )
 
         // When

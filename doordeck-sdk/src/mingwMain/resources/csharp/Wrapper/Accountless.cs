@@ -12,7 +12,7 @@ public class Accountless(
     public unsafe Task<TokenResponse> Login(string email, string password) =>
         Process<AccountlessApi, TokenResponse>(accountless, accountlessApi.login_, new { email, password });
 
-    public unsafe Task<TokenResponse> Registration(string email, string password, string? displayName = null, bool force = false, string? publicKey = null) =>
+    public unsafe Task<TokenResponse> Registration(string email, string password, string? displayName = null, bool force = false, byte[]? publicKey = null) =>
         Process<AccountlessApi, TokenResponse>(accountless, accountlessApi.registration_, new { email, password, displayName, force, publicKey });
     
     public unsafe Task<object> VerifyEmail(string code) =>

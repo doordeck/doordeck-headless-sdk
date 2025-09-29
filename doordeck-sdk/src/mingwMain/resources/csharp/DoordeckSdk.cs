@@ -40,20 +40,20 @@ public class DoordeckSdk
     {
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        var environment = apiEnvironment.ToString().StringToSByte();
-        var token = cloudAuthToken != null ? cloudAuthToken.StringToSByte() : null;
-        var refreshToken = cloudRefreshToken != null ? cloudRefreshToken.StringToSByte() : null;
-        var fHost = fusionHost != null ? fusionHost.StringToSByte() : null;
-        var dLogging = _symbols->createNullableBoolean((debugLogging ?? false).BooleanToByte());
+        var apiEnvironmentPtr = apiEnvironment.ToString().StringToSByte();
+        var cloudAuthTokenPtr = cloudAuthToken != null ? cloudAuthToken.StringToSByte() : null;
+        var cloudRefreshTokenPtr = cloudRefreshToken != null ? cloudRefreshToken.StringToSByte() : null;
+        var fusionHostPtr = fusionHost != null ? fusionHost.StringToSByte() : null;
+        var debugLoggingPtr = (debugLogging ?? false).ToString().StringToSByte();
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
-        var builder = sdkConfig.Builder.Builder();
-        sdkConfig.Builder.setApiEnvironment(builder, environment);
+        var sdkConfigBuilder = sdkConfig.Builder.Builder();
+        sdkConfig.Builder.setApiEnvironment(sdkConfigBuilder, apiEnvironmentPtr);
 
-        if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
-        if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
-        if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
-        sdkConfig.Builder.setDebugLogging(builder, dLogging);
+        if (cloudAuthTokenPtr != null) sdkConfig.Builder.setCloudAuthToken(sdkConfigBuilder, cloudAuthTokenPtr);
+        if (cloudRefreshTokenPtr != null) sdkConfig.Builder.setCloudRefreshToken(sdkConfigBuilder, cloudRefreshTokenPtr);
+        if (fusionHostPtr != null) sdkConfig.Builder.setFusionHost(sdkConfigBuilder, fusionHostPtr);
+        sdkConfig.Builder.setDebugLogging(sdkConfigBuilder, debugLoggingPtr);
 
         if (secureStorageImpl != null)
         {
@@ -161,19 +161,20 @@ public class DoordeckSdk
                 pinned = secureStorage.pinned
             };
 
-            sdkConfig.Builder.setSecureStorageOverride(builder, secureStorageP);
+            sdkConfig.Builder.setSecureStorageOverride(sdkConfigBuilder, secureStorageP);
         }
 
         try
         {
-            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, sdkConfig.Builder.build(builder));
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, sdkConfig.Builder.build(sdkConfigBuilder));
         }
         finally
         {
-            Marshal.FreeHGlobal((IntPtr)environment);
-            if (token != null) Marshal.FreeHGlobal((IntPtr)token);
-            if (refreshToken != null) Marshal.FreeHGlobal((IntPtr)refreshToken);
-            if (fHost != null) Marshal.FreeHGlobal((IntPtr)fHost);
+            Marshal.FreeHGlobal((IntPtr)apiEnvironmentPtr);
+            Marshal.FreeHGlobal((IntPtr)debugLoggingPtr);
+            if (cloudAuthTokenPtr != null) Marshal.FreeHGlobal((IntPtr)cloudAuthTokenPtr);
+            if (cloudRefreshTokenPtr != null) Marshal.FreeHGlobal((IntPtr)cloudRefreshTokenPtr);
+            if (fusionHostPtr != null) Marshal.FreeHGlobal((IntPtr)fusionHostPtr);
         }
 
         _accountApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account_(_sdk);

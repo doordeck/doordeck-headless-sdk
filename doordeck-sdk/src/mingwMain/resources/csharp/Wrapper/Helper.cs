@@ -15,7 +15,7 @@ public class Helper(
     public unsafe Task<AssistedLoginResponse> AssistedLogin(string email, string password) =>
         Process<HelperApi, AssistedLoginResponse>(helper, helperApi.assistedLogin_, new { email, password });
 
-    public unsafe Task<AssistedRegisterEphemeralKeyResponse> AssistedRegisterEphemeralKey(string? publicKey = null, string? privateKey = null) =>
+    public unsafe Task<AssistedRegisterEphemeralKeyResponse> AssistedRegisterEphemeralKey(byte[]? publicKey = null, byte[]? privateKey = null) =>
         Process<HelperApi, AssistedRegisterEphemeralKeyResponse>(helper, helperApi.assistedRegisterEphemeralKey_, new { publicKey, privateKey });
 
     public unsafe Task<object> AssistedRegister(string email, string password, string? displayName = null, bool force = false) =>

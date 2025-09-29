@@ -36,7 +36,7 @@ fun buildSdkConfig(
         .setCloudRefreshToken(cloudRefreshToken)
         .setFusionHost(fusionHost)
         .setSecureStorageOverride(secureStorage)
-        .setDebugLogging(debugLogging?.toBoolean())
+        .setDebugLogging(debugLogging)
         .build()
 }
 

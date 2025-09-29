@@ -16,7 +16,7 @@ data class SdkConfig(
     val cloudRefreshToken: String? = null,
     val fusionHost: String?,
     val secureStorage: SecureStorage,
-    val debugLogging: Boolean? = null
+    val debugLogging: String? = null
 ) {
     /**
      * Builder for constructing [SdkConfig] instances.
@@ -30,7 +30,7 @@ data class SdkConfig(
         private var cloudRefreshToken: String? = null
         private var fusionHost: String? = null
         private var secureStorage: SecureStorage? = null
-        private var debugLogging: Boolean? = null
+        private var debugLogging: String? = null
 
         /**
          * Sets the API environment for the SDK.
@@ -60,7 +60,7 @@ data class SdkConfig(
         /**
          * Enables debug logging. Beware: it may output sensitive information.
          */
-        fun setDebugLogging(enabled: Boolean?): Builder = apply { this.debugLogging = enabled }
+        fun setDebugLogging(enabled: String?): Builder = apply { this.debugLogging = enabled }
 
         /**
          * Builds a new [SdkConfig] instance.
@@ -87,5 +87,5 @@ internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
     cloudRefreshToken = cloudRefreshToken,
     fusionHost = fusionHost.toString(),
     secureStorage = secureStorage,
-    debugLogging = debugLogging
+    debugLogging = debugLogging?.toBoolean()
 )

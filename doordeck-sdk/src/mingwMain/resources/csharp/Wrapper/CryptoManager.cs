@@ -9,13 +9,13 @@ public unsafe class CryptoManager(
         _multiplatform_e__Struct._sdk_e__Struct._crypto_e__Struct._CryptoManager_e__Struct cryptoManager,
     Doordeck_Headless_Sdk_ExportedSymbols* symbols)
 {
-    public EncodedKeyPair GenerateEncodedKeyPair()
+    public KeyPair GenerateKeyPair()
     {
         sbyte* result = null;
         try
         {
             result = cryptoManager.generateEncodedKeyPair_(crypto);
-            return Utils.FromJsonSByte<EncodedKeyPair>(result);
+            return Utils.FromJsonSByte<KeyPair>(result);
         }
         finally
         {
