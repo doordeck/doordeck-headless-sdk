@@ -13,7 +13,7 @@ internal object TestConstants {
         ?: ""
     const val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
     const val TEST_MAIN_USER_ID = "05cf8ff0-1285-11e9-9f69-170748b9fca8"
-    const val TEST_MAIN_USER_PUBLIC_KEY = "MCowBQYDK2VwAyEAig090hqcWQ5JzkPo2w/9cgWVFvNch/45Q1ntWUrPf/A="
+    const val TEST_MAIN_USER_PUBLIC_KEY = "MCowBQYDK2VwAyEALuod+vy/bPZx2BJfNILzGNEagqrlYqVUfqTYsJe4eVw="
     const val TEST_SUPPLEMENTARY_USER_EMAIL = "training+tests@doordeck.com"
     const val TEST_SUPPLEMENTARY_USER_ID = "22c75ac0-c7ab-11ef-b34b-75fe33822921"
     const val TEST_SUPPLEMENTARY_USER_PUBLIC_KEY =
