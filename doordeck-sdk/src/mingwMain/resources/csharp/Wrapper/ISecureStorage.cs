@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Doordeck.Headless.Sdk.Model;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
@@ -36,17 +37,17 @@ public interface ISecureStorage
 
     public byte[]? GetKeyPairVerified();
 
-    public void AddUserId(string userId);
+    public void AddUserId(Guid userId);
 
-    public string? GetUserId();
+    public Guid? GetUserId();
 
     public void AddUserEmail(string email);
 
     public string? GetUserEmail();
 
-    public void AddCertificateChain(List<string> certificateChain);
+    public void AddCertificateChain(List<X509Certificate> certificateChain);
 
-    public List<string>? GetCertificateChain();
+    public List<X509Certificate>? GetCertificateChain();
 
     public void Clear();
 }

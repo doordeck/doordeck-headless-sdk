@@ -1,10 +1,10 @@
 ﻿namespace Doordeck.Headless.Sdk.Model;
 
-public class TimeRequirement(string start, string end, string timezone, List<DayOfWeek> days)
+public class TimeRequirement(TimeOnly start, TimeOnly end, TimeZoneInfo timezone, List<DayOfWeek> days)
 {
-    public string Start { get; set; } = start;
-    public string End { get; set; } = end;
-    public string Timezone { get; set; } = timezone;
+    public TimeOnly Start { get; set; } = start;
+    public TimeOnly End { get; set; } = end;
+    public TimeZoneInfo Timezone { get; set; } = timezone;
     public List<DayOfWeek> Days { get; set; } = days;
 }
 
@@ -22,24 +22,24 @@ public class LocationRequirement(
     public int Accuracy { get; set; } = accuracy;
 }
 
-public class UnlockOperation(BaseOperation baseOperation, List<string>? directAccessEndpoints = null)
+public class UnlockOperation(BaseOperation baseOperation, List<Uri>? directAccessEndpoints = null)
 {
     public BaseOperation BaseOperation { get; set; } = baseOperation;
-    public List<string>? DirectAccessEndpoints { get; set; } = directAccessEndpoints;
+    public List<Uri>? DirectAccessEndpoints { get; set; } = directAccessEndpoints;
 }
 
 public class BaseOperation
 {
-    public string? UserId { get; set; } = null;
-    public List<string>? UserCertificateChain { get; set; } = null;
-    public string? UserPrivateKey { get; set; } = null;
-    public string LockId { get; set; }
-    public int NotBefore { get; set; }
-    public int IssuedAt { get; set; }
-    public int ExpiresAt { get; set; }
-    public string Jti { get; set; }
+    public Guid? UserId { get; set; }
+    public List<string>? UserCertificateChain { get; set; }
+    public string? UserPrivateKey { get; set; }
+    public Guid LockId { get; set; }
+    public DateTime NotBefore { get; set; }
+    public DateTime IssuedAt { get; set; }
+    public DateTime ExpiresAt { get; set; }
+    public Guid Jti { get; set; }
 
-    public BaseOperation(string userId, List<string> userCertificateChain, string userPrivateKey, string lockId, int notBefore, int issuedAt, int expiresAt, string jti)
+    public BaseOperation(Guid userId, List<string> userCertificateChain, string userPrivateKey, Guid lockId, DateTime notBefore, DateTime issuedAt, DateTime expiresAt, Guid jti)
     {
         UserId = userId;
         UserCertificateChain = userCertificateChain;
@@ -51,28 +51,28 @@ public class BaseOperation
         Jti = jti;
     }
 
-    public BaseOperation(string lockId)
+    public BaseOperation(Guid lockId)
     {
         LockId = lockId;
-        NotBefore = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
-        IssuedAt = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
-        ExpiresAt = (int)DateTimeOffset.Now.AddMinutes(1).ToUnixTimeSeconds();
-        Jti = Guid.NewGuid().ToString();
+        NotBefore = DateTime.Now;
+        IssuedAt = DateTime.Now;
+        ExpiresAt = DateTime.Now.AddMinutes(1);
+        Jti = Guid.NewGuid();
     }
 }
 
 public class ShareLock(
-    string targetUserId,
+    Guid targetUserId,
     UserRole targetUserRole,
     string targetUserPublicKey,
-    int? start = null,
-    int? end = null)
+    DateTime? start = null,
+    DateTime? end = null)
 {
-    public string TargetUserId { get; set; } = targetUserId;
+    public Guid TargetUserId { get; set; } = targetUserId;
     public UserRole TargetUserRole { get; set; } = targetUserRole;
     public string TargetUserPublicKey { get; set; } = targetUserPublicKey;
-    public int? Start { get; set; } = start;
-    public int? End { get; set; } = end;
+    public DateTime? Start { get; set; } = start;
+    public DateTime? End { get; set; } = end;
 }
 
 public class ShareLockOperation(BaseOperation baseOperation, ShareLock shareLock)
@@ -87,30 +87,30 @@ public class BatchShareLockOperation(BaseOperation baseOperation, List<ShareLock
     public List<ShareLock> Users { get; set; } = users;
 }
 
-public class RevokeAccessToLockOperation(BaseOperation baseOperation, List<string> users)
+public class RevokeAccessToLockOperation(BaseOperation baseOperation, List<Guid> users)
 {
     public BaseOperation BaseOperation { get; set; } = baseOperation;
-    public List<string> Users { get; set; } = users;
+    public List<Guid> Users { get; set; } = users;
 }
 
-public class UpdateSecureSettingUnlockDuration(BaseOperation baseOperation, int unlockDuration)
+public class UpdateSecureSettingUnlockDuration(BaseOperation baseOperation, TimeSpan unlockDuration)
 {
     public BaseOperation BaseOperation { get; set; } = baseOperation;
-    public int UnlockDuration { get; set; } = unlockDuration;
+    public TimeSpan UnlockDuration { get; set; } = unlockDuration;
 }
 
 public class UnlockBetween(
-    string start,
-    string end,
-    string timezone,
+    TimeOnly start,
+    TimeOnly end,
+    TimeZoneInfo timezone,
     List<DayOfWeek> days,
-    List<string>? exceptions = null)
+    List<DateOnly>? exceptions = null)
 {
-    public string Start { get; set; } = start;
-    public string End { get; set; } = end;
-    public string Timezone { get; set; } = timezone;
+    public TimeOnly Start { get; set; } = start;
+    public TimeOnly End { get; set; } = end;
+    public TimeZoneInfo Timezone { get; set; } = timezone;
     public List<DayOfWeek> Days { get; set; } = days;
-    public List<string>? Exceptions { get; set; } = exceptions;
+    public List<DateOnly>? Exceptions { get; set; } = exceptions;
 }
 
 public class UpdateSecureSettingUnlockBetween(

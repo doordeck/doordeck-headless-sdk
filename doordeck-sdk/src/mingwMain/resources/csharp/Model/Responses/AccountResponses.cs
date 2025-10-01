@@ -1,26 +1,28 @@
-﻿namespace Doordeck.Headless.Sdk.Model.Responses;
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Doordeck.Headless.Sdk.Model.Responses;
 
 public class TokenResponse
 {
-    public string AuthToken { get; set; } = string.Empty;
-    public string RefreshToken { get; set; } = string.Empty;
+    public required string AuthToken { get; set; }
+    public required string RefreshToken { get; set; }
 }
 
 public class UserDetailsResponse
 {
-    public string Email { get; set; } = string.Empty;
-    public string? DisplayName { get; set; } = null;
-    public bool EmailVerified { get; set; }
-    public string PublicKey { get; set; } = string.Empty;
+    public required string Email { get; set; }
+    public string? DisplayName { get; set; }
+    public required bool EmailVerified { get; set; }
+    public required byte[] PublicKey { get; set; }
 }
 
 public class RegisterEphemeralKeyResponse
 {
-    public List<string> CertificateChain { get; set; } = [];
-    public string UserId { get; set; } = string.Empty;
+    public required List<X509Certificate> CertificateChain { get; set; }
+    public required Guid UserId { get; set; }
 }
 
 public class RegisterEphemeralKeyWithSecondaryAuthenticationResponse
 {
-    public TwoFactorMethod Method { get; set; }
+    public required TwoFactorMethod Method { get; set; }
 }
