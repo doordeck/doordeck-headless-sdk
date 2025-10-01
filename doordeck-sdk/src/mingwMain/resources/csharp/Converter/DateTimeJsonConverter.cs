@@ -6,10 +6,8 @@ namespace Doordeck.Headless.Sdk.Converter;
 
 public class DateTimeJsonConverter : JsonConverter<DateTime>
 {
-    private const long TicksPerSecond = TimeSpan.TicksPerSecond;
-    
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    { 
+    {
         var value = reader.TokenType == JsonTokenType.String ?
             reader.GetString() :
             reader.TokenType == JsonTokenType.Number ?
@@ -17,28 +15,16 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
             throw new JsonException($"Invalid date time: {reader.TokenType}");
 
         if (string.IsNullOrWhiteSpace(value) ||
-            !decimal.TryParse(value, NumberStyles.Float | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture,
+            !double.TryParse(value, NumberStyles.Float | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture,
                 out var totalSeconds))
         {
             throw new JsonException($"Invalid epoch-second.nano format: {value}");
         }
 
-        // Convert seconds (possibly fractional) to ticks
-        var ticksDecimal = totalSeconds * TicksPerSecond;
-        long ticks;
-        try
-        {
-            ticks = (long)Math.Round(ticksDecimal);
-        }
-        catch (OverflowException ex)
-        {
-            throw new JsonException("Epoch seconds value is out of range for DateTime.", ex);
-        }
-
         var epoch = DateTime.UnixEpoch;
         try
         {
-            return epoch.AddTicks(ticks);
+            return epoch.AddSeconds(totalSeconds);
         }
         catch (ArgumentOutOfRangeException ex)
         {
@@ -51,4 +37,3 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
         writer.WriteNumberValue((long)(value.ToUniversalTime() - DateTime.UnixEpoch).TotalSeconds);
     }
 }
-
