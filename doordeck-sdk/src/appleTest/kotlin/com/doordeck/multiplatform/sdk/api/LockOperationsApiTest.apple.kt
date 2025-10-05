@@ -635,7 +635,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
     }
 
     @Test
@@ -665,7 +665,7 @@ class LockOperationsApiTest : IntegrationTest() {
 
         // Then
         val lock = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
-        assertEquals(updatedUnlockDuration.toDouble(), lock.settings.unlockTime)
+        assertEquals(updatedUnlockDuration, lock.settings.unlockTime)
     }
 
     @Test
