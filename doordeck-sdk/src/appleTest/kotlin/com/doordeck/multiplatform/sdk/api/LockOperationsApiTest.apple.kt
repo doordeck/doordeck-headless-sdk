@@ -28,6 +28,7 @@ import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toNSDate
 import kotlinx.datetime.toNSDateComponents
 import platform.Foundation.NSDateComponents
 import kotlin.test.Test
@@ -793,8 +794,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds
-        val end = now.epochSeconds
+        val start = now.minus(14.days).toNSDate()
+        val end = now.toNSDate()
 
         // When
         val lockAuditTrail = LockOperationsApi.getLockAuditTrail(PLATFORM_TEST_MAIN_LOCK_ID, start, end)
@@ -808,8 +809,8 @@ class LockOperationsApiTest : IntegrationTest() {
         // Given
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
-        val start = now.minus(14.days).epochSeconds
-        val end = now.epochSeconds
+        val start = now.minus(14.days).toNSDate()
+        val end = now.toNSDate()
 
         // When
         val auditForUser = LockOperationsApi.getAuditForUser(PLATFORM_TEST_MAIN_USER_ID, start, end)

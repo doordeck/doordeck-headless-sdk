@@ -25,6 +25,8 @@ import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
+import com.doordeck.multiplatform.sdk.util.toEpochSeconds
+import platform.Foundation.NSDate
 import platform.Foundation.NSUUID
 
 /**
@@ -45,13 +47,13 @@ actual object LockOperationsApi {
     @Throws(Exception::class)
     suspend fun getLockAuditTrail(
         lockId: NSUUID,
-        start: Long? = null,
-        end: Long? = null
+        start: NSDate? = null,
+        end: NSDate? = null
     ): List<AuditResponse> = LockOperationsClient
         .getLockAuditTrailRequest(
             lockId = lockId.UUIDString,
-            start = start,
-            end = end
+            start = start?.toEpochSeconds(),
+            end = end?.toEpochSeconds()
         )
         .toAuditResponse()
 
@@ -61,13 +63,13 @@ actual object LockOperationsApi {
     @Throws(Exception::class)
     suspend fun getAuditForUser(
         userId: NSUUID,
-        start: Long? = null,
-        end: Long? = null
+        start: NSDate? = null,
+        end: NSDate? = null
     ): List<AuditResponse> = LockOperationsClient
         .getAuditForUserRequest(
             userId = userId.UUIDString,
-            start = start,
-            end = end
+            start = start?.toEpochSeconds(),
+            end = end?.toEpochSeconds()
         )
         .toAuditResponse()
 
