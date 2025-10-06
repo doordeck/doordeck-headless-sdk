@@ -64,13 +64,13 @@ public class BaseOperation
 public class ShareLock(
     Guid targetUserId,
     UserRole targetUserRole,
-    string targetUserPublicKey,
+    byte[] targetUserPublicKey,
     DateTime? start = null,
     DateTime? end = null)
 {
     public Guid TargetUserId { get; set; } = targetUserId;
     public UserRole TargetUserRole { get; set; } = targetUserRole;
-    public string TargetUserPublicKey { get; set; } = targetUserPublicKey;
+    public byte[] TargetUserPublicKey { get; set; } = targetUserPublicKey;
     public DateTime? Start { get; set; } = start;
     public DateTime? End { get; set; } = end;
 }
