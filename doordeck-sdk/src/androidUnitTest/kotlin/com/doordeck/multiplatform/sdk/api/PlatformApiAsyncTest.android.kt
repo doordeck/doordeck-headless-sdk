@@ -15,7 +15,6 @@ import com.doordeck.multiplatform.sdk.util.toUri
 import com.nimbusds.jose.Algorithm
 import com.nimbusds.jose.jwk.Curve
 import com.nimbusds.jose.jwk.ECKey
-import com.nimbusds.jose.jwk.KeyOperation
 import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.OctetKeyPair
 import com.nimbusds.jose.jwk.RSAKey
@@ -201,23 +200,11 @@ class PlatformApiAsyncTest : IntegrationTest() {
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
         // Given - shouldAddEd25519AuthKey
-        val ed25519Key = OctetKeyPair(
-            Curve.Ed25519,
-            Base64URL("vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"),
-            KeyUse.SIGNATURE,
-            emptySet<KeyOperation>(),
-            Algorithm.parse("EdDSA"),
-            randomUuidString(),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        )
+        val ed25519Key = OctetKeyPair.Builder(Curve.Ed25519, Base64URL("vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"))
+            .keyUse(KeyUse.SIGNATURE)
+            .algorithm(Algorithm.parse("EdDSA"))
+            .keyID(randomUuidString())
+            .build()
 
         // When
         PlatformApi.addAuthKeyAsync(application.applicationId, ed25519Key).await()
@@ -235,19 +222,13 @@ class PlatformApiAsyncTest : IntegrationTest() {
         assertEquals(ed25519Key.x, actualEd25519Key.x)
 
         // Given - shouldAddRsaAuthKey
-        val rsaKey = RSAKey(
+        val rsaKey = RSAKey.Builder(
             Base64URL("7PsoesJRZIBUKN3AlhGCJPflQd08U9n9EsdeQS70Dbr8ce-aIpVjNAWxPaNdddYQJBUcj6wy3jKe8Vzu04tCrfafjBR6Db8pZGhTEjRQP6wQKxuo7GbnqUeCgrbT2cE5W-zRJGX4ImSuaoOyNXuDjpmDA4stWqXrMeDZIUqXcFpcOTMfi-cbSZ0A4fgX43bTCef-noprBtBAig-kaz3W7NFcBSkA3faUdlaJ6Bj9DHpqkQYpUR-MuqmAyGUOli0JY0x6QhoVrNGFQ1ejivbvMH3lkuhrJwJlJEt0wD3JoH0Q03XBKcJSBeUl6pzZV0oD2lNrQIrQdsQ1_0yLUEVVWQ"),
-            Base64URL("AQAB"),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null, null,
-            KeyUse.SIGNATURE, emptySet<KeyOperation>(), Algorithm.parse("RS256"), randomUuidString(),
-            null, null, null, null, null, null, null, null, null,
-        )
+            Base64URL("AQAB"))
+            .keyUse(KeyUse.SIGNATURE)
+            .algorithm(Algorithm.parse("RS256"))
+            .keyID(randomUuidString())
+            .build()
 
         // When
         PlatformApi.addAuthKeyAsync(application.applicationId, rsaKey).await()
@@ -265,16 +246,11 @@ class PlatformApiAsyncTest : IntegrationTest() {
         assertEquals(rsaKey.modulus, actualRsaKey.modulus)
 
         // Given - shouldAddEcAuthKey
-        val ecKey = ECKey(
-            Curve.SECP256K1,
-            Base64URL("L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA"),
-            Base64URL("ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"),
-            KeyUse.SIGNATURE,
-            emptySet<KeyOperation>(),
-            Algorithm.parse("ES256"),
-            randomUuidString(),
-            null, null, null, null, null, null, null, null, null
-        )
+        val ecKey = ECKey.Builder(Curve.SECP256K1, Base64URL("L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA"), Base64URL("ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"))
+            .keyUse(KeyUse.SIGNATURE)
+            .algorithm(Algorithm.parse("ES256"))
+            .keyID(randomUuidString())
+            .build()
 
         // When
         PlatformApi.addAuthKeyAsync(application.applicationId, ecKey).await()
