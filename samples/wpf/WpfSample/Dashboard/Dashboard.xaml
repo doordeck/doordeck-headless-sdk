@@ -12,7 +12,6 @@
         <CollectionViewSource x:Key="UsersView" />
         <!-- Converters -->
         <converters:AuditEventToTextConverter x:Key="AuditEventToTextConverter" />
-        <converters:TimestampToTextConverter x:Key="TimestampToTextConverter" />
     </Window.Resources>
     <DockPanel>
         <!-- Menu -->
@@ -179,7 +178,7 @@
                                                            VerticalAlignment="Center" />
                                                 <!-- Timestamp -->
                                                 <TextBlock Grid.Column="2"
-                                                           Text="{Binding Timestamp, Converter={StaticResource TimestampToTextConverter}}"
+                                                           Text="{Binding Timestamp}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Right"
                                                            TextAlignment="Right" />
                                             </Grid>

@@ -2,14 +2,14 @@
 
 namespace WpfSample.TwoFactorVerify;
 
-public partial class TwoFactorVerify : Window
+public partial class TwoFactorVerify
 {
     public TwoFactorVerify()
     {
         InitializeComponent();
     }
 
-    public string TwoFactorCode { get; private set; }
+    public string? TwoFactorCode { get; private set; }
 
     private void SubmitTwoFactorVerify_Click(object sender, RoutedEventArgs e)
     {
