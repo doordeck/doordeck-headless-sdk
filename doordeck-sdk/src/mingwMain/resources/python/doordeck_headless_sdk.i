@@ -74,9 +74,8 @@ class InitializeSdk(object):
                 clearCp
             )
 
-        self.sdkApiEnvironment = _doordeck_headless_sdk.getApiEnvironmentByName(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment(), api_environment)
         self.debugLogging = 'False' if debug_logging is None else str(debug_logging)
-        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(self.sdkApiEnvironment, cloud_auth_token, cloud_refresh_token, fusion_host, self.secureStorage, self.debugLogging)
+        self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(api_environment, cloud_auth_token, cloud_refresh_token, fusion_host, self.secureStorage, self.debugLogging)
         self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))

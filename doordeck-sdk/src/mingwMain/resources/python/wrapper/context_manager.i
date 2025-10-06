@@ -5,9 +5,7 @@ class ContextManager(object):
         self.resource = resource
 
     def get_api_environment(self):
-        env = _doordeck_headless_sdk.getApiEnvironment(self.resource)
-        name = _doordeck_headless_sdk.getApiEnvironmentName(env)
-        return name
+        return _doordeck_headless_sdk.getApiEnvironment(self.resource)
 
     def set_cloud_auth_token(self, token: str):
         _doordeck_headless_sdk.setCloudAuthToken(self.resource, token)
@@ -60,9 +58,9 @@ class ContextManager(object):
     def set_operation_context(self, userId: str, userCertificateChain: str, userPublicKey: str, userPrivateKey: str):
         data = {
             "userId": userId,
-            "userCertificateChain": userCertificateChain,
-            "userPublicKey": userPublicKey,
-            "userPrivateKey": userPrivateKey
+            "certificateChain": userCertificateChain,
+            "publicKey": userPublicKey,
+            "privateKey": userPrivateKey
         }
         _doordeck_headless_sdk.setOperationContextJson(self.resource, json.dumps(data))
 

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
+using Doordeck.Headless.Sdk.Utilities;
 using Doordeck.Headless.Sdk.Wrapper;
 
 namespace Doordeck.Headless.Sdk;
@@ -8,7 +9,6 @@ public class DoordeckSdk
 {
     private readonly unsafe Doordeck_Headless_Sdk_ExportedSymbols* _symbols = Methods.Doordeck_Headless_Sdk_symbols();
 
-    private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_model_data_ApiEnvironment _apiEnvironment;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory _factory;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_Doordeck _sdk;
 
@@ -38,32 +38,22 @@ public class DoordeckSdk
         string? cloudRefreshToken = null, string? fusionHost = null, ISecureStorage? secureStorageImpl = null,
         bool? debugLogging = null)
     {
-        _apiEnvironment = apiEnvironment switch
-        {
-            ApiEnvironment.DEV => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
-                .get(),
-            ApiEnvironment.STAGING => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-                .STAGING.get(),
-            ApiEnvironment.PROD => _symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
-                .get(),
-            _ => _apiEnvironment
-        };
-
         _factory = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory._instance();
 
-        var token = cloudAuthToken != null ? Utils.Utils.ToSByte(cloudAuthToken) : null;
-        var refreshToken = cloudRefreshToken != null ? Utils.Utils.ToSByte(cloudRefreshToken) : null;
-        var fHost = fusionHost != null ? Utils.Utils.ToSByte(fusionHost) : null;
-        var dLogging = _symbols->createNullableBoolean(Convert.ToByte(debugLogging ?? false));
+        var apiEnvironmentPtr = apiEnvironment.ToString().StringToSByte();
+        var cloudAuthTokenPtr = cloudAuthToken != null ? cloudAuthToken.StringToSByte() : null;
+        var cloudRefreshTokenPtr = cloudRefreshToken != null ? cloudRefreshToken.StringToSByte() : null;
+        var fusionHostPtr = fusionHost != null ? fusionHost.StringToSByte() : null;
+        var debugLoggingPtr = (debugLogging ?? false).ToString().StringToSByte();
 
         var sdkConfig = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.config.SdkConfig;
-        var builder = sdkConfig.Builder.Builder();
-        sdkConfig.Builder.setApiEnvironment(builder, _apiEnvironment);
+        var sdkConfigBuilder = sdkConfig.Builder.Builder();
+        sdkConfig.Builder.setApiEnvironment(sdkConfigBuilder, apiEnvironmentPtr);
 
-        if (token != null) sdkConfig.Builder.setCloudAuthToken(builder, token);
-        if (refreshToken != null) sdkConfig.Builder.setCloudRefreshToken(builder, refreshToken);
-        if (fHost != null) sdkConfig.Builder.setFusionHost(builder, fHost);
-        sdkConfig.Builder.setDebugLogging(builder, dLogging);
+        if (cloudAuthTokenPtr != null) sdkConfig.Builder.setCloudAuthToken(sdkConfigBuilder, cloudAuthTokenPtr);
+        if (cloudRefreshTokenPtr != null) sdkConfig.Builder.setCloudRefreshToken(sdkConfigBuilder, cloudRefreshTokenPtr);
+        if (fusionHostPtr != null) sdkConfig.Builder.setFusionHost(sdkConfigBuilder, fusionHostPtr);
+        sdkConfig.Builder.setDebugLogging(sdkConfigBuilder, debugLoggingPtr);
 
         if (secureStorageImpl != null)
         {
@@ -171,18 +161,20 @@ public class DoordeckSdk
                 pinned = secureStorage.pinned
             };
 
-            sdkConfig.Builder.setSecureStorageOverride(builder, secureStorageP);
+            sdkConfig.Builder.setSecureStorageOverride(sdkConfigBuilder, secureStorageP);
         }
 
         try
         {
-            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, sdkConfig.Builder.build(builder));
+            _sdk = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.KDoordeckFactory.initialize_(_factory, sdkConfig.Builder.build(sdkConfigBuilder));
         }
         finally
         {
-            if (token != null) Marshal.FreeHGlobal((IntPtr)token);
-            if (refreshToken != null) Marshal.FreeHGlobal((IntPtr)refreshToken);
-            if (fHost != null) Marshal.FreeHGlobal((IntPtr)fHost);
+            Marshal.FreeHGlobal((IntPtr)apiEnvironmentPtr);
+            Marshal.FreeHGlobal((IntPtr)debugLoggingPtr);
+            if (cloudAuthTokenPtr != null) Marshal.FreeHGlobal((IntPtr)cloudAuthTokenPtr);
+            if (cloudRefreshTokenPtr != null) Marshal.FreeHGlobal((IntPtr)cloudRefreshTokenPtr);
+            if (fusionHostPtr != null) Marshal.FreeHGlobal((IntPtr)fusionHostPtr);
         }
 
         _accountApi = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.account_(_sdk);
@@ -218,59 +210,28 @@ public class DoordeckSdk
             _symbols->kotlin.root.com.doordeck.multiplatform.sdk.crypto.CryptoManager, _symbols);
     }
 
-    public Account GetAccount()
-    {
-        return _account;
-    }
+    public Account GetAccount() => _account;
 
-    public Accountless GetAccountless()
-    {
-        return _accountless;
-    }
+    public Accountless GetAccountless() => _accountless;
 
-    public Fusion GetFusion()
-    {
-        return _fusion;
-    }
+    public Fusion GetFusion() => _fusion;
 
-    public Helper GetHelper()
-    {
-        return _helper;
-    }
+    public Helper GetHelper() => _helper;
 
-    public LockOperations GetLockOperations()
-    {
-        return _lockOperations;
-    }
+    public LockOperations GetLockOperations() => _lockOperations;
 
-    public Platform GetPlatform()
-    {
-        return _platform;
-    }
+    public Platform GetPlatform() => _platform;
 
-    public Sites GetSites()
-    {
-        return _sites;
-    }
+    public Sites GetSites() => _sites;
 
-    public Tiles GetTiles()
-    {
-        return _tiles;
-    }
+    public Tiles GetTiles() => _tiles;
 
-    public ContextManager GetContextManager()
-    {
-        return _contextManager;
-    }
+    public ContextManager GetContextManager() => _contextManager;
 
-    public CryptoManager GetCryptoManager()
-    {
-        return _cryptoManager;
-    }
+    public CryptoManager GetCryptoManager() => _cryptoManager;
 
     public unsafe void Release()
     {
-        _symbols->DisposeStablePointer(_apiEnvironment.pinned);
         _symbols->DisposeStablePointer(_factory.pinned);
         _symbols->DisposeStablePointer(_sdk.pinned);
         _symbols->DisposeStablePointer(_accountApi.pinned);

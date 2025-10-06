@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
+using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
@@ -170,12 +170,12 @@ internal static class SecureStorage
     {
         if (GetStringFromPtr(c) is {} result)
         {
-            Implementation?.AddUserId(result);
+            Implementation?.AddUserId(new Guid(result));
         }
     }
-    
+
     public static IntPtr GetUserId() =>
-        GetPtrFromString(Implementation?.GetUserId());
+        GetPtrFromString(Implementation?.GetUserId().ToString());
     
     public static void AddUserEmail(IntPtr c)
     {

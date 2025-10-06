@@ -1,8 +1,11 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
+using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
+
+using ContextManagerApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager;
 
 public unsafe class ContextManager(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager context,
@@ -10,29 +13,13 @@ public unsafe class ContextManager(
         _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct contextManager,
     Doordeck_Headless_Sdk_ExportedSymbols* symbols) : AbstractWrapper
 {
-    public void SetApiEnvironment(ApiEnvironment apiEnvironment)
-    {
-        var newApiEnvironment = apiEnvironment switch
-        {
-            ApiEnvironment.DEV => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.DEV
-                .get(),
-            ApiEnvironment.STAGING => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-                .STAGING.get(),
-            ApiEnvironment.PROD => symbols->kotlin.root.com.doordeck.multiplatform.sdk.model.data.ApiEnvironment.PROD
-                .get(),
-            _ => throw new ArgumentOutOfRangeException(nameof(apiEnvironment), apiEnvironment, null)
-        };
-        contextManager.setApiEnvironment(context, newApiEnvironment);
-    }
-
     public ApiEnvironment GetApiEnvironment()
     {
-        var apiEnvironment = contextManager.getApiEnvironment_(context);
         sbyte* result = null;
         try
         {
-            result = symbols->kotlin.root.com.doordeck.multiplatform.sdk.util.getApiEnvironmentName_(apiEnvironment);
-            return Enum.Parse<ApiEnvironment>(Utils.Utils.ConvertSByteToString(result));
+            result = contextManager.getApiEnvironment_(context);
+            return Enum.Parse<ApiEnvironment>(Utils.SByteToString(result));
         }
         finally
         {
@@ -42,7 +29,7 @@ public unsafe class ContextManager(
 
     public void SetCloudAuthToken(string token)
     {
-        var data = token.ToSByte();
+        var data = token.StringToSByte();
         try
         {
             contextManager.setCloudAuthToken_(context, data);
@@ -59,7 +46,7 @@ public unsafe class ContextManager(
         try
         {
             result = contextManager.getCloudAuthToken_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Utils.SByteToString(result);
         }
         finally
         {
@@ -68,11 +55,11 @@ public unsafe class ContextManager(
     }
 
     public Task<bool> IsCloudAuthTokenInvalidOrExpired() =>
-            Process<bool>(null, contextManager.isCloudAuthTokenInvalidOrExpired_, null);
+            Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_);
 
     public void SetCloudRefreshToken(string token)
     {
-        var data = token.ToSByte();
+        var data = token.StringToSByte();
         try
         {
             contextManager.setCloudRefreshToken_(context, data);
@@ -89,7 +76,7 @@ public unsafe class ContextManager(
         try
         {
             result = contextManager.getCloudRefreshToken_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Utils.SByteToString(result);
         }
         finally
         {
@@ -99,7 +86,7 @@ public unsafe class ContextManager(
 
     public void SetFusionHost(string host)
     {
-        var data = host.ToSByte();
+        var data = host.StringToSByte();
         try
         {
             contextManager.setFusionHost_(context, data);
@@ -116,7 +103,7 @@ public unsafe class ContextManager(
         try
         {
             result = contextManager.getFusionHost_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Utils.SByteToString(result);
         }
         finally
         {
@@ -126,7 +113,7 @@ public unsafe class ContextManager(
 
     public void SetFusionAuthToken(string token)
     {
-        var data = token.ToSByte();
+        var data = token.StringToSByte();
         try
         {
             contextManager.setFusionAuthToken_(context, data);
@@ -143,7 +130,7 @@ public unsafe class ContextManager(
         try
         {
             result = contextManager.getFusionAuthToken_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Utils.SByteToString(result);
         }
         finally
         {
@@ -151,9 +138,9 @@ public unsafe class ContextManager(
         }
     }
 
-    public void SetUserId(string userId)
+    public void SetUserId(Guid userId)
     {
-        var data = userId.ToSByte();
+        var data = userId.ToString().StringToSByte();
         try
         {
             contextManager.setUserId_(context, data);
@@ -164,13 +151,13 @@ public unsafe class ContextManager(
         }
     }
 
-    public string GetUserId()
+    public Guid GetUserId()
     {
         sbyte* result = null;
         try
         {
             result = contextManager.getUserId_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Guid.Parse(Utils.SByteToString(result));
         }
         finally
         {
@@ -180,7 +167,7 @@ public unsafe class ContextManager(
 
     public void SetUserEmail(string email)
     {
-        var data = email.ToSByte();
+        var data = email.StringToSByte();
         try
         {
             contextManager.setUserEmail_(context, data);
@@ -197,7 +184,7 @@ public unsafe class ContextManager(
         try
         {
             result = contextManager.getUserEmail_(context);
-            return Utils.Utils.ConvertSByteToString(result);
+            return Utils.SByteToString(result);
         }
         finally
         {
@@ -211,7 +198,7 @@ public unsafe class ContextManager(
 
     public bool IsCertificateChainInvalidOrExpired()
     {
-        return contextManager.isCertificateChainInvalidOrExpired_(context).ToBoolean();
+        return contextManager.isCertificateChainInvalidOrExpired_(context).ByteToBoolean();
     }
 
     // SetKeyPair
@@ -222,20 +209,20 @@ public unsafe class ContextManager(
 
     public bool IsKeyPairVerified()
     {
-        return contextManager.isKeyPairVerified_(context).ToBoolean();
+        return contextManager.isKeyPairVerified_(context).ByteToBoolean();
     }
 
     public bool IsKeyPairValid()
     {
-        return contextManager.isKeyPairValid_(context).ToBoolean();
+        return contextManager.isKeyPairValid_(context).ByteToBoolean();
     }
 
-    public void SetOperationContext(string userId, string userCertificateChain, string userPublicKey, string userPrivateKey, bool isKeyPairVerified)
+    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, byte[] publicKey, byte[] privateKey, bool isKeyPairVerified)
     {
-        var sData = new { userId, userCertificateChain, userPublicKey, userPrivateKey, isKeyPairVerified }.ToData();
+        var sData = new { userId, certificateChain = certificateChain.CertificateChainToString(), publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
         try
         {
-            contextManager.setOperationContextJson_(context, sData);
+            contextManager.setOperationContext_(context, sData);
         }
         finally
         {
@@ -243,8 +230,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<ContextState> GetContextState() =>
-            Process<ContextState>(null, contextManager.getContextState_, null);
+    public Task<ContextState> GetContextState() => 
+        Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_);
 
     public void ClearContext()
     {
@@ -257,16 +244,4 @@ public unsafe class ContextManager(
 
         if (result != null) symbols->DisposeString(result);
     }
-
-    private Task<TResponse> Process<TResponse>(
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager,
-            sbyte*, void*, void> processWithData,
-        delegate* unmanaged[Cdecl]<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager,
-            void*, void> processWithoutData,
-        object? data) =>
-        ProcessCommon<Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager, TResponse>(
-            context,
-            data,
-            processWithData,
-            processWithoutData);
 }

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class OperationContextData(
     val userId: String,
-    val userCertificateChain: String,
-    val userPublicKey: String,
-    val userPrivateKey: String,
+    val certificateChain: String,
+    val publicKey: String,
+    val privateKey: String,
     val isKeyPairVerified: Boolean = true
 )

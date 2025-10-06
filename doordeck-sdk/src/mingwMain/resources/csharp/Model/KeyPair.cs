@@ -1,7 +1,7 @@
 ﻿namespace Doordeck.Headless.Sdk.Model;
 
-public class EncodedKeyPair
+public class KeyPair
 {
-    public string Private { get; set; } = String.Empty;
-    public string Public { get; set; } = string.Empty;
+    public required byte[] PrivateKey { get; set; }
+    public required byte[] PublicKey { get; set; }
 }

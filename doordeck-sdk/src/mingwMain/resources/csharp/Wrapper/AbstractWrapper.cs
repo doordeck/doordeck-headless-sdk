@@ -1,51 +1,54 @@
 using System.Runtime.InteropServices;
 using Doordeck.Headless.Sdk.Model;
-using Doordeck.Headless.Sdk.Utils;
+using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
 public abstract class AbstractWrapper
 {
-    private static class Native
-    {
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void CallbackDelegate(IntPtr ptr);
-    }
+    [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+    private delegate void NativeCallbackDelegate(IntPtr ptr);
 
-    private class CallbackHolder<TResponse> : IDisposable
+    private class NativeCallback<TResponse> : IDisposable
     {
         private readonly TaskCompletionSource<TResponse> _tcs;
         private GCHandle _handle;
-        public Native.CallbackDelegate CallbackDelegate { get; }
-    
-        public CallbackHolder(TaskCompletionSource<TResponse> tcs)
+        public NativeCallbackDelegate CallbackDelegate { get; }
+
+        public NativeCallback(TaskCompletionSource<TResponse> tcs)
         {
             _tcs = tcs;
-            CallbackDelegate = Callback;
+            CallbackDelegate = OnCallback;
             _handle = GCHandle.Alloc(this);
         }
-    
-        private void Callback(IntPtr ptr)
+
+        private void OnCallback(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
             {
                 Dispose();
                 return;
             }
-    
+
             var result = Marshal.PtrToStringAnsi(ptr);
             if (result == null)
             {
                 Dispose();
                 return;
             }
-    
+
             try
             {
-                var resultData = Utils.Utils.FromData<ResultData<TResponse>>(result);
-                HandleException(resultData);
-                var response = resultData.Success!.Result ?? default!;
-                _tcs.SetResult(response);
+                var resultData = Utils.FromJson<ResultData<TResponse>>(result);
+                if (resultData.Failure != null)
+                {
+                    _tcs.SetException(HandleException(resultData));
+                }
+                else
+                {
+                    var response = resultData.Success!.Result ?? default!;
+                    _tcs.SetResult(response);
+                }
             }
             catch (Exception exception)
             {
@@ -56,7 +59,7 @@ public abstract class AbstractWrapper
                 Dispose();
             }
         }
-    
+
         public void Dispose()
         {
             if (_handle.IsAllocated)
@@ -65,18 +68,29 @@ public abstract class AbstractWrapper
             }
         }
     }
-    
-    internal static unsafe Task<TResponse> ProcessCommon<TApi, TResponse>(
+
+    internal static unsafe Task<TResponse> Process<TApi, TResponse>(
         TApi api,
-        object? data,
         delegate* unmanaged[Cdecl]<TApi, sbyte*, void*, void> processWithData,
-        delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData) where TApi : unmanaged
+        object data) where TApi : unmanaged =>
+        Process<TApi, TResponse>(api, processWithData, null, data);
+
+    internal static unsafe Task<TResponse> Process<TApi, TResponse>(
+        TApi api,
+        delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData) where TApi : unmanaged =>
+        Process<TApi, TResponse>(api, null, processWithoutData, null);
+
+    private static unsafe Task<TResponse> Process<TApi, TResponse>(
+        TApi api,
+        delegate* unmanaged[Cdecl]<TApi, sbyte*, void*, void> processWithData,
+        delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData,
+        object? data) where TApi : unmanaged
     {
-        var tcs = new TaskCompletionSource<TResponse>();
-        var sData = data != null ? data.ToData() : null;
+        var tcs = new TaskCompletionSource<TResponse>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var sData = data != null ? data.ToJsonSByte() : null;
         try
         {
-            var holder = new CallbackHolder<TResponse>(tcs);
+            var holder = new NativeCallback<TResponse>(tcs);
             var callbackPointer = Marshal.GetFunctionPointerForDelegate(holder.CallbackDelegate);
             if (data != null)
             {
@@ -94,29 +108,28 @@ public abstract class AbstractWrapper
 
         return tcs.Task;
     }
-    
-    private static void HandleException<T>(ResultData<T> input)
+
+    private static Exception HandleException<T>(ResultData<T> input)
     {
-        if (input.IsSuccess) return;
         var exceptionType = input.Failure!.ExceptionType;
-        if (exceptionType.Contains("SdkException")) throw new SdkException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("MissingContextFieldException")) throw new MissingContextFieldException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("BatchShareFailedException")) throw new BatchShareFailedException(input.Failure.ExceptionMessage, []);
-        if (exceptionType.Contains("BadRequestException")) throw new BadRequestException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("UnauthorizedException")) throw new UnauthorizedException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("ForbiddenException")) throw new ForbiddenException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("NotFoundException")) throw new NotFoundException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("MethodNotAllowedException")) throw new MethodNotAllowedException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("NotAcceptableException")) throw new NotAcceptableException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("ConflictException")) throw new ConflictException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("GoneException")) throw new GoneException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("UnprocessableEntityException")) throw new UnprocessableEntityException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("LockedException")) throw new LockedException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("TooEarlyException")) throw new TooEarlyException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("TooManyRequestsException")) throw new TooManyRequestsException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("InternalServerErrorException")) throw new InternalServerErrorException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("ServiceUnavailableException")) throw new ServiceUnavailableException(input.Failure.ExceptionMessage);
-        if (exceptionType.Contains("GatewayTimeoutException")) throw new GatewayTimeoutException(input.Failure.ExceptionMessage);
-        throw new SdkException("Unhandled exception type: " + exceptionType);
+        if (exceptionType.Contains("SdkException")) return new SdkException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("MissingContextFieldException")) return new MissingContextFieldException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("BatchShareFailedException")) return new BatchShareFailedException(input.Failure.ExceptionMessage, []);
+        if (exceptionType.Contains("BadRequestException")) return new BadRequestException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("UnauthorizedException")) return new UnauthorizedException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("ForbiddenException")) return new ForbiddenException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("NotFoundException")) return new NotFoundException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("MethodNotAllowedException")) return new MethodNotAllowedException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("NotAcceptableException")) return new NotAcceptableException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("ConflictException")) return new ConflictException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("GoneException")) return new GoneException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("UnprocessableEntityException")) return new UnprocessableEntityException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("LockedException")) return new LockedException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("TooEarlyException")) return new TooEarlyException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("TooManyRequestsException")) return new TooManyRequestsException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("InternalServerErrorException")) return new InternalServerErrorException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("ServiceUnavailableException")) return new ServiceUnavailableException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("GatewayTimeoutException")) return new GatewayTimeoutException(input.Failure.ExceptionMessage);
+        return new SdkException("Unhandled exception type: " + exceptionType);
     }
 }
