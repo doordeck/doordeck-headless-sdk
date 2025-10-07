@@ -7,9 +7,9 @@ namespace WpfSample;
 /// <summary>
 ///     Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application
+public partial class App
 {
-    public static readonly DoordeckSdk Sdk = new(ApiEnvironment.DEV, null);
+    public static readonly DoordeckSdk Sdk = new(ApiEnvironment.DEV);
 
     protected override void OnStartup(StartupEventArgs e)
     {

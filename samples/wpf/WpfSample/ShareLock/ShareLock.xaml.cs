@@ -2,7 +2,7 @@
 
 namespace WpfSample.ShareLock;
 
-public partial class ShareLock : Window
+public partial class ShareLock
 {
     public ShareLock()
     {
