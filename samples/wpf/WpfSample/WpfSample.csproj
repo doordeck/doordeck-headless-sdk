@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Doordeck.Headless.Sdk" Version="0.159.0" />
+        <PackageReference Include="Doordeck.Headless.Sdk" Version="0.161.0" />
         <PackageReference Include="MaterialDesignThemes" Version="5.3.1-ci1141" />
     </ItemGroup>
 
