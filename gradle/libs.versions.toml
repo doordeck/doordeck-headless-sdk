@@ -1,7 +1,7 @@
 [versions]
 agp = "8.10.0" # 8.13.0 is not supported yet.
 bouncy-castle = "1.82"
-indispensable-asn1 = "3.17.0"
+indispensable-asn1 = "3.18.1"
 kotlin = "2.2.21"
 multiplatform-settings = "1.3.0"
 android-min-sdk = "26"
