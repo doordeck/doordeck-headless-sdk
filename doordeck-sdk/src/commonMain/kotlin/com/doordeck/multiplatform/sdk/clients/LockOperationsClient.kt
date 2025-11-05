@@ -505,8 +505,8 @@ internal object LockOperationsClient {
             user = shareLockOperation.shareLock.targetUserId,
             publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
             role = shareLockOperation.shareLock.targetUserRole,
-            start = shareLockOperation.shareLock.start?.toLong(),
-            end = shareLockOperation.shareLock.end?.toLong()
+            start = shareLockOperation.shareLock.start,
+            end = shareLockOperation.shareLock.end
         )
         val baseOperationRequest = shareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
@@ -558,8 +558,8 @@ internal object LockOperationsClient {
                     user = it.targetUserId,
                     publicKey = it.targetUserPublicKey.encodeByteArrayToBase64(),
                     role = it.targetUserRole,
-                    start = it.start?.toLong(),
-                    end = it.end?.toLong()
+                    start = it.start,
+                    end = it.end
                 )
             }
         )
@@ -638,9 +638,9 @@ internal object LockOperationsClient {
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
             sub = baseOperationRequest.lockId,
-            nbf = baseOperationRequest.notBefore.toLong(),
-            iat = baseOperationRequest.issuedAt.toLong(),
-            exp = baseOperationRequest.expiresAt.toLong(),
+            nbf = baseOperationRequest.notBefore,
+            iat = baseOperationRequest.issuedAt,
+            exp = baseOperationRequest.expiresAt,
             jti = baseOperationRequest.jti,
             operation = operationRequest
         )
