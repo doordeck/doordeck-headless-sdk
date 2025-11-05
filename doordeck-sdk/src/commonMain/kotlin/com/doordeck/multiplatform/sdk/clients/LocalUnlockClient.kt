@@ -6,6 +6,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
@@ -17,7 +18,7 @@ import kotlin.jvm.JvmSynthetic
  */
 internal object LocalUnlockClient {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default)
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     /**
      * Attempts to send unlock requests to all local endpoints concurrently, completing as soon as any request succeeds.
@@ -41,14 +42,21 @@ internal object LocalUnlockClient {
             }
         }
         coroutineScope.launch {
-            // Select the first successful response
-            select {
-                requests.forEach { request ->
-                    request.onAwait { it }
+            try {
+                // Select the first successful response
+                select {
+                    requests.forEach { request ->
+                        request.onAwait { it }
+                    }
+                }
+            } catch (_: Exception) {
+                /* Ignored */
+            } finally {
+                // Cancel remaining requests
+                requests.forEach {
+                    it.cancel()
                 }
             }
-            // Cancel the remaining requests
-            requests.forEach { it.cancel() }
         }
     }
 }
