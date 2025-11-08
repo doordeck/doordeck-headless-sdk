@@ -180,6 +180,8 @@ internal fun HttpClientConfig<*>.installUserAgent() {
 @JvmSynthetic
 internal fun HttpClientConfig<*>.installTimeout() {
     install(HttpTimeout) {
+        requestTimeoutMillis = 60_000
+        connectTimeoutMillis = 60_000
         socketTimeoutMillis = 60_000
     }
 }
