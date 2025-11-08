@@ -57,6 +57,49 @@ class LocalUnlockClientTest {
     }
 
     @Test
+    fun localEndpointsIsEmptyAndCloudRespond() = runTest {
+        // Given
+        val cloudEndpoint = "http://localhost/cloud"
+        val directAccessEndpoints = listOf<String>()
+
+        val cloudEngine = MockEngine.config {
+            addHandler {
+                respondOk("cloudresponse")
+            }
+        }
+        buildCloudClient(cloudEngine)
+
+        // When
+        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+
+        // Then
+        assertEquals("cloudresponse", response.bodyAsText())
+    }
+
+    @Test
+    fun localEndpointsIsEmptyAndCloudThrowsError() = runTest {
+        // Given
+        val cloudEndpoint = "http://localhost/cloud"
+        val directAccessEndpoints = listOf<String>()
+
+        val cloudEngine = MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.BadRequest, "Cloud endpoint error")
+            }
+        }
+        buildCloudClient(cloudEngine)
+
+        // When
+        val exception = assertFails {
+            LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        }
+
+        // Then
+        assertTrue { exception is BadRequestException }
+        assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
+    }
+
+    @Test
     fun cloudShouldRespondAndLocalShouldThrowError() = runTest {
         // Given
         val cloudEndpoint = "http://localhost/cloud"
