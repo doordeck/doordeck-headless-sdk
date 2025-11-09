@@ -85,6 +85,10 @@ internal fun createFusionHttpClient(): HttpClient {
 internal fun createHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
+        installUserAgent()
+        installTimeout()
+        installLogging()
+        expectSuccess = true
     }.also {
         it.addExceptionInterceptor()
     }

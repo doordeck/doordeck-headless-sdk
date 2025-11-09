@@ -505,8 +505,8 @@ internal object LockOperationsClient {
             user = shareLockOperation.shareLock.targetUserId,
             publicKey = shareLockOperation.shareLock.targetUserPublicKey.encodeByteArrayToBase64(),
             role = shareLockOperation.shareLock.targetUserRole,
-            start = shareLockOperation.shareLock.start?.toLong(),
-            end = shareLockOperation.shareLock.end?.toLong()
+            start = shareLockOperation.shareLock.start,
+            end = shareLockOperation.shareLock.end
         )
         val baseOperationRequest = shareLockOperation.baseOperation.toBaseOperationRequestUsingContext()
         performOperation(baseOperationRequest, operationRequest)
@@ -558,8 +558,8 @@ internal object LockOperationsClient {
                     user = it.targetUserId,
                     publicKey = it.targetUserPublicKey.encodeByteArrayToBase64(),
                     role = it.targetUserRole,
-                    start = it.start?.toLong(),
-                    end = it.end?.toLong()
+                    start = it.start,
+                    end = it.end
                 )
             }
         )
@@ -638,9 +638,9 @@ internal object LockOperationsClient {
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
             sub = baseOperationRequest.lockId,
-            nbf = baseOperationRequest.notBefore.toLong(),
-            iat = baseOperationRequest.issuedAt.toLong(),
-            exp = baseOperationRequest.expiresAt.toLong(),
+            nbf = baseOperationRequest.notBefore,
+            iat = baseOperationRequest.issuedAt,
+            exp = baseOperationRequest.expiresAt,
             jti = baseOperationRequest.jti,
             operation = operationRequest
         )
@@ -650,14 +650,18 @@ internal object LockOperationsClient {
             "$headerB64.$bodyB64".signWithPrivateKey(baseOperationRequest.userPrivateKey).encodeByteArrayToBase64()
         val body = "$headerB64.$bodyB64.$signatureB64"
 
-        // Launch the calls to the direct access endpoints
         if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
-            LocalUnlockClient.unlock(directAccessEndpoints, body)
-        }
-
-        CloudHttpClient.client.post(Paths.getOperationPath(baseOperationRequest.lockId)) {
-            addRequestHeaders(true)
-            setBody(body)
+            // Launch the calls to the direct access endpoints + cloud endpoint
+            LocalUnlockClient.unlock(
+                cloudEndpoint = Paths.getOperationPath(baseOperationRequest.lockId),
+                directAccessEndpoints = directAccessEndpoints,
+                body = body
+            )
+        } else {
+            CloudHttpClient.client.post(Paths.getOperationPath(baseOperationRequest.lockId)) {
+                addRequestHeaders(true)
+                setBody(body)
+            }
         }
     }
 
