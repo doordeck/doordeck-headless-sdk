@@ -66,11 +66,11 @@ internal object Context {
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
      *
      * @param networkCheck Whether it should verify with the backend if the token has been invalidated (by performing a network request)
-     * @return True if the token is null, malformed, expired (or invalidated if called with networkCheck = true), otherwise false.
+     * @return true if the token is null, malformed, expired, or invalidated (when networkCheck is true). Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(networkCheck: Boolean): Boolean {
-        val token = getCloudRefreshToken() ?: return true
+        val token = getCloudAuthToken() ?: return true
         if (token.isJwtTokenInvalidOrExpired()) {
             return true
         }
