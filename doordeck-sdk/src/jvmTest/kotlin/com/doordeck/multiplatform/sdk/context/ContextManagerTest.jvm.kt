@@ -155,7 +155,7 @@ class ContextManagerTest : IntegrationTest() {
         ))
 
         // When
-        val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
+        val result = ContextManager.isCloudAuthTokenInvalidOrExpired(true)
 
         // Then
         assertFalse { result }
@@ -167,7 +167,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.clearContext()
 
         // When
-        val result = ContextManager.isCloudAuthTokenInvalidOrExpired()
+        val result = ContextManager.isCloudAuthTokenInvalidOrExpired(true)
 
         // Then
         assertTrue { result }
@@ -256,7 +256,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(randomString())
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState(true)
 
         // Then
         assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result)
@@ -275,7 +275,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState(true)
 
         // Then
         assertEquals(ContextState.KEY_PAIR_IS_INVALID, result)
@@ -296,7 +296,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setKeyPair(keyPair)
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState(true)
 
         // Then
         assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result)
@@ -319,7 +319,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCertificateChain(listOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState(true)
 
         // Then
         assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result)
@@ -342,7 +342,7 @@ class ContextManagerTest : IntegrationTest() {
         ContextManager.setCertificateChain(listOf(PLATFORM_TEST_VALID_CERTIFICATE))
 
         // When
-        val result = ContextManager.getContextState()
+        val result = ContextManager.getContextState(true)
 
         // Then
         assertEquals(ContextState.READY, result)

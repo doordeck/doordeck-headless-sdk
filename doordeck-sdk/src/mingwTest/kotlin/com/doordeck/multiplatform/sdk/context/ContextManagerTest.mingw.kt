@@ -181,6 +181,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<Boolean>> {
                 ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -198,6 +199,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<Boolean>> {
                 ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -297,6 +299,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -324,6 +327,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -355,6 +359,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -388,6 +393,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -421,6 +427,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    networkCheck = true,
                     callback = staticCFunction(::testCallback)
                 )
             }

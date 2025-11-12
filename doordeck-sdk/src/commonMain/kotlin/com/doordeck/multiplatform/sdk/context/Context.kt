@@ -62,20 +62,28 @@ internal object Context {
     }
 
     /**
-     * Checks whether the cloud authentication token is invalid (e.g., null, malformed),
-     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]),
-     * or has been revoked on the backend (performing a network request to verify).
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
+     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
+     *
+     * @param networkCheck Whether it should verify with the backend if the token has been invalidated (by performing a network request)
+     * @return True if the token is null, malformed, expired (or invalidated if called with networkCheck = true), otherwise false.
      */
     @JvmSynthetic
-    internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired()?.let {
+    internal suspend fun isCloudAuthTokenInvalidOrExpired(networkCheck: Boolean): Boolean {
+        val token = getCloudRefreshToken() ?: return true
+        if (token.isJwtTokenInvalidOrExpired()) {
+            return true
+        }
+        return if (networkCheck) {
             try {
                 AccountClient.getUserDetailsRequest()
                 false
             } catch (_: Exception) {
                 true
             }
-        } ?: true
+        } else {
+            false
+        }
     }
 
     /**
@@ -282,8 +290,8 @@ internal object Context {
      * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic
-    internal suspend fun getContextState(): ContextState {
-        if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
+    internal suspend fun getContextState(networkCheck: Boolean): ContextState {
+        if (isCloudAuthTokenInvalidOrExpired(networkCheck)) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
         if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }
