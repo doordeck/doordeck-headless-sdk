@@ -26,11 +26,11 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    suspend fun isCloudAuthTokenInvalidOrExpired(networkCheck: Boolean): Boolean =
-        Context.isCloudAuthTokenInvalidOrExpired(networkCheck)
+    suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean =
+        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
 
-    fun isCloudAuthTokenInvalidOrExpiredAsync(networkCheck: Boolean): CompletableFuture<Boolean> = completableFuture {
-        Context.isCloudAuthTokenInvalidOrExpired(networkCheck)
+    fun isCloudAuthTokenInvalidOrExpiredAsync(checkServerInvalidation: Boolean): CompletableFuture<Boolean> = completableFuture {
+        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
     }
 
     fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
@@ -95,10 +95,10 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    suspend fun getContextState(networkCheck: Boolean): ContextState = Context.getContextState(networkCheck)
+    suspend fun getContextState(checkServerInvalidation: Boolean): ContextState = Context.getContextState(checkServerInvalidation)
 
-    fun getContextStateAsync(networkCheck: Boolean): CompletableFuture<ContextState> = completableFuture {
-        Context.getContextState(networkCheck)
+    fun getContextStateAsync(checkServerInvalidation: Boolean): CompletableFuture<ContextState> = completableFuture {
+        Context.getContextState(checkServerInvalidation)
     }
 
     fun clearContext() = Context.clearContext()

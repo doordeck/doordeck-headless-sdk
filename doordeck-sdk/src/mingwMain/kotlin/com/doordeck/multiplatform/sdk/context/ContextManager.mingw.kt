@@ -28,8 +28,8 @@ actual object ContextManager {
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
     @CName("isCloudAuthTokenInvalidOrExpired")
-    fun isCloudAuthTokenInvalidOrExpired(networkCheck: Boolean, callback: CStringCallback) = callback.handleCallback {
-        Context.isCloudAuthTokenInvalidOrExpired(networkCheck)
+    fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: String, callback: CStringCallback) = callback.handleCallback {
+        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation.toBoolean())
     }
 
     @CName("setCloudRefreshToken")
@@ -111,8 +111,8 @@ actual object ContextManager {
     }
 
     @CName("getContextState")
-    fun getContextState(networkCheck: Boolean, callback: CStringCallback) = callback.handleCallback {
-        Context.getContextState(networkCheck)
+    fun getContextState(checkServerInvalidation: String, callback: CStringCallback) = callback.handleCallback {
+        Context.getContextState(checkServerInvalidation.toBoolean())
     }
 
     @CName("clearContext")
