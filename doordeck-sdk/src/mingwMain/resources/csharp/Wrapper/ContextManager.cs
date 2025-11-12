@@ -59,7 +59,7 @@ public unsafe class ContextManager(
         var data = checkServerInvalidation.ToString().StringToSByte();
         try
         {
-            Process<ContextManagerApi, bool>(context, data, contextManager.isCloudAuthTokenInvalidOrExpired_);
+            return Process<ContextManagerApi, bool>(context, data, contextManager.isCloudAuthTokenInvalidOrExpired_);
         }
         finally
         {
@@ -245,7 +245,7 @@ public unsafe class ContextManager(
         var data = checkServerInvalidation.ToString().StringToSByte();
         try
         {
-            Process<ContextManagerApi, ContextState>(context, data, contextManager.getContextState_);
+            return Process<ContextManagerApi, ContextState>(context, data, contextManager.getContextState_);
         }
         finally
         {
