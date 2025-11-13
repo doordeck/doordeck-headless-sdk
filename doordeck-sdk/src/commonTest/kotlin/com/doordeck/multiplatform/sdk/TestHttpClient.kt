@@ -41,3 +41,7 @@ internal inline fun <reified T> MockRequestHandleScope.respondContent(content: T
     status = HttpStatusCode.OK,
     headers = headersOf(HttpHeaders.ContentType, "application/json")
 )
+
+fun HttpClient.mockEngine() = engine as MockEngine
+fun HttpClient.requestHistory() = mockEngine().requestHistory
+fun HttpClient.responseHistory() = mockEngine().responseHistory

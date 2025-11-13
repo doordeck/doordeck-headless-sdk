@@ -62,20 +62,28 @@ internal object Context {
     }
 
     /**
-     * Checks whether the cloud authentication token is invalid (e.g., null, malformed),
-     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]),
-     * or has been revoked on the backend (performing a network request to verify).
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
+     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
+     *
+     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
+     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true). Otherwise, returns false.
      */
     @JvmSynthetic
-    internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        return getCloudAuthToken()?.isJwtTokenInvalidOrExpired()?.let {
+    internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
+        val token = getCloudAuthToken() ?: return true
+        if (token.isJwtTokenInvalidOrExpired()) {
+            return true
+        }
+        return if (checkServerInvalidation) {
             try {
                 AccountClient.getUserDetailsRequest()
                 false
             } catch (_: Exception) {
                 true
             }
-        } ?: true
+        } else {
+            false
+        }
     }
 
     /**
@@ -276,14 +284,15 @@ internal object Context {
     /**
      * Performs a sequence of checks to determine the [ContextState].
      * The first check to fail determines the returned state.
-     * The checks are, in order: cloud token validity (performs a network request), key pair existence,
+     * The checks are, in order: cloud token validity, key pair existence,
      * key pair verification status, and certificate chain validity.
      *
+     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
      * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic
-    internal suspend fun getContextState(): ContextState {
-        if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
+    internal suspend fun getContextState(checkServerInvalidation: Boolean): ContextState {
+        if (isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
         if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }

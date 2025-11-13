@@ -20,6 +20,8 @@ import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.requestHistory
+import com.doordeck.multiplatform.sdk.responseHistory
 import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
@@ -181,6 +183,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<Boolean>> {
                 ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -189,15 +192,46 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertFalse { result.success.result }
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
         }
     }
 
     @Test
-    fun shouldCheckAuthTokenNullValidity() = runTest {
+    fun shouldCheckAuthTokenValidityWithoutServerCheck() = runTest {
         runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+
             // When
             val result = callbackApiCall<ResultData<Boolean>> {
                 ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertFalse { result.success.result }
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldCheckAuthTokenInvalidity() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            ContextManager.setCloudAuthToken(randomString())
+
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -206,6 +240,78 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertTrue { result.success.result }
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldCheckAuthTokenInvalidityWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            ContextManager.setCloudAuthToken(randomString())
+
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertTrue { result.success.result }
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldCheckAuthTokenNullValidity() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = true.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertTrue { result.success.result }
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldCheckAuthTokenNullValidityWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+
+            // When
+            val result = callbackApiCall<ResultData<Boolean>> {
+                ContextManager.isCloudAuthTokenInvalidOrExpired(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertTrue { result.success.result }
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -292,11 +398,13 @@ class ContextManagerTest : CallbackTest() {
     fun shouldGetContextStateCloudTokenIsInvalid() = runTest {
         runBlocking {
             // Given
+            CloudHttpClient.setupMockClient(null)
             ContextManager.setCloudAuthToken(randomString())
 
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -305,6 +413,32 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldGetContextStateCloudTokenIsInvalidWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            ContextManager.setCloudAuthToken(randomString())
+
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -318,12 +452,12 @@ class ContextManagerTest : CallbackTest() {
                 emailVerified = randomBoolean(),
                 publicKey = randomPublicKey().encodeByteArrayToBase64()
             ))
-
             ContextManager.setCloudAuthToken(TEST_VALID_JWT)
 
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -332,6 +466,32 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertEquals(ContextState.KEY_PAIR_IS_INVALID, result.success.result)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldGetContextStateKeyPairIsInvalidWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.KEY_PAIR_IS_INVALID, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -345,7 +505,6 @@ class ContextManagerTest : CallbackTest() {
                 emailVerified = randomBoolean(),
                 publicKey = randomPublicKey().encodeByteArrayToBase64()
             ))
-
             val keyPair = CryptoManager.generateRawKeyPair()
             val publicKey = keyPair.public.encodeByteArrayToBase64()
             val privateKey = keyPair.private.encodeByteArrayToBase64()
@@ -355,6 +514,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -363,6 +523,36 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result.success.result)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldGetContextStateKeyPairIsNotVerifiedWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(publicKey, privateKey)
+
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -376,7 +566,6 @@ class ContextManagerTest : CallbackTest() {
                 emailVerified = randomBoolean(),
                 publicKey = randomPublicKey().encodeByteArrayToBase64()
             ))
-
             val keyPair = CryptoManager.generateRawKeyPair()
             val publicKey = keyPair.public.encodeByteArrayToBase64()
             val privateKey = keyPair.private.encodeByteArrayToBase64()
@@ -388,6 +577,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -396,6 +586,38 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result.success.result)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldGetContextStateCertificateChainIsInvalidWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(publicKey, privateKey)
+            ContextManager.setKeyPairVerified(publicKey)
+            ContextManager.setCertificateChain(PLATFORM_TEST_EXPIRED_CERTIFICATE)
+
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -409,7 +631,6 @@ class ContextManagerTest : CallbackTest() {
                 emailVerified = randomBoolean(),
                 publicKey = randomPublicKey().encodeByteArrayToBase64()
             ))
-
             val keyPair = CryptoManager.generateRawKeyPair()
             val publicKey = keyPair.public.encodeByteArrayToBase64()
             val privateKey = keyPair.private.encodeByteArrayToBase64()
@@ -421,6 +642,7 @@ class ContextManagerTest : CallbackTest() {
             // When
             val result = callbackApiCall<ResultData<ContextState>> {
                 ContextManager.getContextState(
+                    checkServerInvalidation = true.toString(),
                     callback = staticCFunction(::testCallback)
                 )
             }
@@ -429,6 +651,38 @@ class ContextManagerTest : CallbackTest() {
             assertNotNull(result.success)
             assertNotNull(result.success.result)
             assertEquals(ContextState.READY, result.success.result)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
+    fun shouldGetContextStateReadyWithoutServerCheck() = runTest {
+        runBlocking {
+            // Given
+            CloudHttpClient.setupMockClient(null)
+            val keyPair = CryptoManager.generateRawKeyPair()
+            val publicKey = keyPair.public.encodeByteArrayToBase64()
+            val privateKey = keyPair.private.encodeByteArrayToBase64()
+            ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+            ContextManager.setKeyPair(publicKey, privateKey)
+            ContextManager.setKeyPairVerified(publicKey)
+            ContextManager.setCertificateChain(PLATFORM_TEST_VALID_CERTIFICATE)
+
+            // When
+            val result = callbackApiCall<ResultData<ContextState>> {
+                ContextManager.getContextState(
+                    checkServerInvalidation = false.toString(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            assertNotNull(result.success)
+            assertNotNull(result.success.result)
+            assertEquals(ContextState.READY, result.success.result)
+            assertEquals(0, CloudHttpClient.client.requestHistory().size)
+            assertEquals(0, CloudHttpClient.client.responseHistory().size)
         }
     }
 }

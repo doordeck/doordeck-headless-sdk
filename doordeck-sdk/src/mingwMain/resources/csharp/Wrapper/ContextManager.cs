@@ -54,8 +54,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<bool> IsCloudAuthTokenInvalidOrExpired() =>
-            Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_);
+    public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation) =>
+        Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_, checkServerInvalidation);
 
     public void SetCloudRefreshToken(string token)
     {
@@ -230,8 +230,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<ContextState> GetContextState() => 
-        Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_);
+    public Task<ContextState> GetContextState(bool checkServerInvalidation) =>
+            Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_,  checkServerInvalidation);
 
     public void ClearContext()
     {
