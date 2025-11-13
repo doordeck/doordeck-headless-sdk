@@ -284,9 +284,10 @@ internal object Context {
     /**
      * Performs a sequence of checks to determine the [ContextState].
      * The first check to fail determines the returned state.
-     * The checks are, in order: cloud token validity (performs a network request), key pair existence,
+     * The checks are, in order: cloud token validity, key pair existence,
      * key pair verification status, and certificate chain validity.
      *
+     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
      * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic

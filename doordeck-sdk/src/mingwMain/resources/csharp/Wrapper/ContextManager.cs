@@ -54,18 +54,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation)
-    {
-        var data = checkServerInvalidation.ToString().StringToSByte();
-        try
-        {
-            return Process<ContextManagerApi, bool>(context, data, contextManager.isCloudAuthTokenInvalidOrExpired_);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation) =>
+        Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_, checkServerInvalidation);
 
     public void SetCloudRefreshToken(string token)
     {
@@ -240,18 +230,8 @@ public unsafe class ContextManager(
         }
     }
 
-    public Task<ContextState> GetContextState(bool checkServerInvalidation)
-    {
-        var data = checkServerInvalidation.ToString().StringToSByte();
-        try
-        {
-            return Process<ContextManagerApi, ContextState>(context, data, contextManager.getContextState_);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public Task<ContextState> GetContextState(bool checkServerInvalidation) =>
+            Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_,  checkServerInvalidation);
 
     public void ClearContext()
     {
