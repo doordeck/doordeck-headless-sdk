@@ -32,5 +32,7 @@ nexusPublishing {
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
         resolution("brace-expansion", "2.0.2")
+        resolution("glob", "10.5.0")
+        resolution("js-yaml", "4.1.1")
     }
 }
