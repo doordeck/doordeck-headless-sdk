@@ -37,9 +37,9 @@ sealed interface AuthKeyResponse {
     val x5t: String?
     val x5t256: String?
     val x5c: List<String>?
-    val exp: Int?
-    val nbf: Int?
-    val iat: Int?
+    val exp: Long?
+    val nbf: Long?
+    val iat: Long?
 }
 
 data class RsaKeyResponse(
@@ -51,9 +51,9 @@ data class RsaKeyResponse(
     override val x5t: String? = null,
     override val x5t256: String? = null,
     override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
+    override val exp: Long? = null,
+    override val nbf: Long? = null,
+    override val iat: Long? = null,
     val e: String,
     val n: String
 ) : AuthKeyResponse
@@ -67,9 +67,9 @@ data class EcKeyResponse(
     override val x5t: String? = null,
     override val x5t256: String? = null,
     override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
+    override val exp: Long? = null,
+    override val nbf: Long? = null,
+    override val iat: Long? = null,
     val crv: String,
     val x: String,
     val y: String
@@ -84,9 +84,9 @@ data class Ed25519KeyResponse(
     override val x5t: String? = null,
     override val x5t256: String? = null,
     override val x5c: List<String>? = null,
-    override val exp: Int? = null,
-    override val nbf: Int? = null,
-    override val iat: Int? = null,
+    override val exp: Long? = null,
+    override val nbf: Long? = null,
+    override val iat: Long? = null,
     val crv: String,
     val x: String
 ) : AuthKeyResponse

@@ -130,6 +130,11 @@ kotlin {
         binaries.executable()
         generateTypeScriptDefinitions()
 
+        compilerOptions {
+            freeCompilerArgs.add("-Xes-long-as-bigint")
+            freeCompilerArgs.add("-XXLanguage:+JsAllowLongInExportedDeclarations")
+        }
+
         // Add the necessary fields to the package.json file
         compilations["main"].packageJson {
             name = npmPublish.packageName
@@ -182,6 +187,7 @@ kotlin {
                 optIn("kotlin.experimental.ExperimentalNativeApi")
                 optIn("kotlin.time.ExperimentalTime")
                 optIn("kotlin.js.ExperimentalJsCollectionsApi")
+                optIn("kotlin.js.ExperimentalWasmJsInterop")
             }
         }
 
