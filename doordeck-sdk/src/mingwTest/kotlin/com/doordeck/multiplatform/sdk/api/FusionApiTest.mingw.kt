@@ -36,8 +36,7 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.plugins.timeout
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.request.options
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -152,13 +151,13 @@ class FusionApiTest : CallbackTest() {
         }
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key){
+            TEST_HTTP_CLIENT.options(testController.key) {
                 timeout {
-                    connectTimeoutMillis = 10_000
-                    socketTimeoutMillis = 30_000
-                    requestTimeoutMillis = 50_000
+                    connectTimeoutMillis = 5_000
+                    socketTimeoutMillis = 5_000
+                    requestTimeoutMillis = 5_000
                 }
-            }.bodyAsText()
+            }
         } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
@@ -255,7 +254,7 @@ class FusionApiTest : CallbackTest() {
         }
         assertNotNull(doorStateResponse.success)
         assertNotNull(doorStateResponse.success.result)
-        //assertEquals(ServiceStateType.STOPPED, doorState.state)
+        assertEquals(ServiceStateType.STOPPED, doorStateResponse.success.result.state)
 
         // Given - shouldDeleteDoor
         // When
@@ -267,9 +266,7 @@ class FusionApiTest : CallbackTest() {
         }
 
         // Then
-        //assertFails {
-        //    FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //}
+        assertEquals(ServiceStateType.UNDEFINED, doorStateResponse.success.result.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
