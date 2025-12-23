@@ -26,13 +26,13 @@ jobs:
         include:
           - name: JVM
             test: jvmTest
-            os: ubuntu-slim
+            os: ubuntu-latest
           - name: Android
             test: testReleaseUnitTest
-            os: ubuntu-slim
+            os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-slim
+            os: ubuntu-latest
           - name: Apple
             test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
             os: macos-latest
@@ -70,7 +70,7 @@ jobs:
 
   python-build:
     name: Python build
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -130,7 +130,7 @@ jobs:
     name: Pre-release
     needs: [build, python-build, csharp-build]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.pre-release-tag.outputs.tag }}
     permissions:
@@ -231,7 +231,7 @@ jobs:
     name: NPM publish
     needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -298,7 +298,7 @@ jobs:
     name: Maven close staging repository
     needs: [pre-release, maven-publish]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -331,7 +331,7 @@ jobs:
     name: Maven release repository
     needs: [pre-release, maven-close]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -410,7 +410,7 @@ jobs:
     name: PyPi publish
     needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
 
@@ -450,7 +450,7 @@ jobs:
     name: GitHub Release
     needs: [pre-release, spm, cocoapods, npm, maven-release, nuget, pypi]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       contents: write
 
@@ -475,7 +475,7 @@ jobs:
     name: SPM release
     needs: [pre-release, release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     steps:

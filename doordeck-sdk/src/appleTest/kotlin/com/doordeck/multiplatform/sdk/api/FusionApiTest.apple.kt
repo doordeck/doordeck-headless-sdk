@@ -153,16 +153,14 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //assertEquals(ServiceStateType.STOPPED, doorState.state)
+        assertEquals(ServiceStateType.STOPPED, doorState.state)
 
         // Given - shouldDeleteDoor
         // When
         FusionApi.deleteDoor(actualDoor.doordeck.id)
 
         // Then
-        //assertFails {
-        //    FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //}
+        assertEquals(ServiceStateType.UNDEFINED, doorState.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
