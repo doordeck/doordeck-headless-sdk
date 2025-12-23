@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
-import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -11,10 +10,8 @@ import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
-import io.ktor.client.plugins.timeout
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
 import kotlinx.coroutines.test.runTest
+import java.net.InetAddress
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -99,13 +96,7 @@ class FusionApiTest : IntegrationTest() {
         } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key.toString()){
-                timeout {
-                    connectTimeoutMillis = 10_000
-                    socketTimeoutMillis = 30_000
-                    requestTimeoutMillis = 50_000
-                }
-            }.bodyAsText()
+            InetAddress.getByName("").isReachable(10_000)
         } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
@@ -152,16 +143,15 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //assertEquals(ServiceStateType.STOPPED, doorState.state)
+        assertEquals(ServiceStateType.STOPPED, doorState.state)
 
         // Given - shouldDeleteDoor
         // When
         FusionApi.deleteDoor(actualDoor.doordeck.id)
 
         // Then
-        //assertFails {
-        //    FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //}
+        doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
+        assertEquals(ServiceStateType.UNDEFINED, doorState.state) // Deleted devices will return UNDEFINED
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
