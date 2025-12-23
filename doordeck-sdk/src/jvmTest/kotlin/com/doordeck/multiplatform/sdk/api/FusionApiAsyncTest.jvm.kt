@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -10,9 +11,10 @@ import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
+import io.ktor.client.plugins.timeout
+import io.ktor.client.request.options
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
-import java.net.InetAddress
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
@@ -96,8 +98,15 @@ class FusionApiAsyncTest : IntegrationTest() {
             controllerType.isInstance(it.value.controller)
         } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
-        val isReachable = InetAddress.getByName(testController.key.host.toString()).isReachable(5_000)
-        if (!isReachable) {
+        try {
+            TEST_HTTP_CLIENT.options(testController.key.toString()) {
+                timeout {
+                    connectTimeoutMillis = 5_000
+                    socketTimeoutMillis = 5_000
+                    requestTimeoutMillis = 5_000
+                }
+            }
+        } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
 

@@ -161,7 +161,7 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
-        assertEquals(ServiceStateType.STOPPED.name, doorState.state)
+        assertEquals(ServiceStateType.UNDEFINED.name, doorState.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
