@@ -95,9 +95,8 @@ class FusionApiTest : IntegrationTest() {
             controllerType.isInstance(it.value.controller)
         } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
-        try {
-            InetAddress.getByName("").isReachable(10_000)
-        } catch (_: Exception) {
+        val isReachable = InetAddress.getByName(testController.key.host.toString()).isReachable(10_000)
+        if (!isReachable) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
 
