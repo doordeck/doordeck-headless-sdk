@@ -160,6 +160,7 @@ class FusionApiTest : IntegrationTest() {
         FusionApi.deleteDoor(actualDoor.doordeck.id).await()
 
         // Then
+        doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
         assertEquals(ServiceStateType.STOPPED.name, doorState.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")

@@ -266,6 +266,14 @@ class FusionApiTest : CallbackTest() {
         }
 
         // Then
+        doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
+            FusionApi.getDoorStatus(
+                data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(doorStateResponse.success)
+        assertNotNull(doorStateResponse.success.result)
         assertEquals(ServiceStateType.UNDEFINED, doorStateResponse.success.result.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
