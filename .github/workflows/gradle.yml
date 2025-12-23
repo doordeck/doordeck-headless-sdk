@@ -76,14 +76,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Setup pyright
         run: pip install pyright
@@ -108,14 +108,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Generate artifact
         run: ./gradlew mingwX64Binaries
@@ -169,14 +169,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
@@ -202,14 +202,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@ac793fdd38cc468a4dd57246fa9d0e868aba9085 # v1.270.0
@@ -239,14 +239,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -277,14 +277,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Publish
         env:
@@ -312,14 +312,14 @@ jobs:
             gradlew
             gradlew.bat
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Close staging repository
         env:
@@ -345,14 +345,14 @@ jobs:
             gradlew
             gradlew.bat
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Release repository
         env:
@@ -375,14 +375,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
@@ -420,14 +420,14 @@ jobs:
         with:
           ref: 'v${{ needs.pre-release.outputs.tag }}'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
-
       - name: Setup Java
         uses: actions/setup-java@v5
         with:
           distribution: corretto
           java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5.0.0
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries

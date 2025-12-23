@@ -12,8 +12,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
+import io.ktor.client.request.options
 import kotlinx.coroutines.test.runTest
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
@@ -99,13 +98,13 @@ class FusionApiTest : IntegrationTest() {
         } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
         try {
-            TEST_HTTP_CLIENT.get(testController.key.toString()){
+            TEST_HTTP_CLIENT.options(testController.key.toString()) {
                 timeout {
-                    connectTimeoutMillis = 10_000
-                    socketTimeoutMillis = 30_000
-                    requestTimeoutMillis = 50_000
+                    connectTimeoutMillis = 5_000
+                    socketTimeoutMillis = 5_000
+                    requestTimeoutMillis = 5_000
                 }
-            }.bodyAsText()
+            }
         } catch (_: Exception) {
             error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
         }
@@ -152,16 +151,15 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //assertEquals(ServiceStateType.STOPPED, doorState.state)
+        assertEquals(ServiceStateType.STOPPED, doorState.state)
 
         // Given - shouldDeleteDoor
         // When
         FusionApi.deleteDoor(actualDoor.doordeck.id)
 
         // Then
-        //assertFails {
-        //    FusionApi.getDoorStatus(actualDoor.doordeck.id)
-        //}
+        doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
+        assertEquals(ServiceStateType.UNDEFINED, doorState.state)
     } catch (exception: Throwable) {
         println("Failed to test $controllerType: ${exception.message}")
     }
