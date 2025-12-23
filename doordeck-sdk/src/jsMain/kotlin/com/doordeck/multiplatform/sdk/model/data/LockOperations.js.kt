@@ -160,21 +160,21 @@ object LockOperations {
         val targetUserId: String,
         val targetUserRole: String,
         val targetUserPublicKey: ByteArray,
-        val start: Int? = null,
-        val end: Int? = null
+        val start: Long? = null,
+        val end: Long? = null
     ) {
         class Builder {
             private var targetUserId: String? = null
             private var targetUserRole: String? = null
             private var targetUserPublicKey: ByteArray? = null
-            private var start: Int? = null
-            private var end: Int? = null
+            private var start: Long? = null
+            private var end: Long? = null
 
             fun setTargetUserId(targetUserId: String): Builder = apply { this.targetUserId = targetUserId }
             fun setTargetUserRole(targetUserRole: String): Builder = apply {this.targetUserRole = targetUserRole }
             fun setTargetUserPublicKey(targetUserPublicKey: ByteArray): Builder = apply { this.targetUserPublicKey = targetUserPublicKey }
-            fun setStart(start: Int?): Builder = apply { this.start = start }
-            fun setEnd(end: Int?): Builder = apply { this.end = end }
+            fun setStart(start: Long?): Builder = apply { this.start = start }
+            fun setEnd(end: Long?): Builder = apply { this.end = end }
 
             fun build(): ShareLock {
                 return ShareLock(
@@ -273,9 +273,9 @@ object LockOperations {
         val userCertificateChain: JsArray<String>? = null,
         val userPrivateKey: ByteArray? = null,
         val lockId: String,
-        val notBefore: Int = Clock.System.now().epochSeconds.toInt(),
-        val issuedAt: Int = Clock.System.now().epochSeconds.toInt(),
-        val expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt(),
+        val notBefore: Long = Clock.System.now().epochSeconds,
+        val issuedAt: Long = Clock.System.now().epochSeconds,
+        val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
         val jti: String = Uuid.random().toString()
     ) {
         class Builder {
@@ -283,18 +283,18 @@ object LockOperations {
             private var userCertificateChain: JsArray<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: String? = null
-            private var notBefore: Int = Clock.System.now().epochSeconds.toInt()
-            private var issuedAt: Int = Clock.System.now().epochSeconds.toInt()
-            private var expiresAt: Int = (Clock.System.now() + 1.minutes).epochSeconds.toInt()
+            private var notBefore: Long = Clock.System.now().epochSeconds
+            private var issuedAt: Long = Clock.System.now().epochSeconds
+            private var expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds
             private var jti: String = Uuid.random().toString()
 
             fun setUserId(userId: String?): Builder = apply { this.userId = userId }
             fun setUserCertificateChain(userCertificateChain: JsArray<String>?): Builder = apply { this.userCertificateChain = userCertificateChain }
             fun setUserPrivateKey(userPrivateKey: ByteArray?): Builder = apply { this.userPrivateKey = userPrivateKey }
             fun setLockId(lockId: String): Builder = apply { this.lockId = lockId }
-            fun setNotBefore(notBefore: Int): Builder = apply { this.notBefore = notBefore }
-            fun setIssuedAt(issuedAt: Int): Builder = apply { this.issuedAt = issuedAt }
-            fun setExpiresAt(expiresAt: Int): Builder = apply { this.expiresAt = expiresAt }
+            fun setNotBefore(notBefore: Long): Builder = apply { this.notBefore = notBefore }
+            fun setIssuedAt(issuedAt: Long): Builder = apply { this.issuedAt = issuedAt }
+            fun setExpiresAt(expiresAt: Long): Builder = apply { this.expiresAt = expiresAt }
             fun setJti(jti: String): Builder = apply { this.jti = jti }
 
             fun build(): BaseOperation {
@@ -363,8 +363,8 @@ internal fun LockOperations.ShareLock.toBasicShareLock(): BasicShareLock {
         targetUserId = targetUserId,
         targetUserRole = UserRole.valueOf(targetUserRole),
         targetUserPublicKey = targetUserPublicKey,
-        start = start?.toLong(),
-        end = end?.toLong()
+        start = start,
+        end = end
     )
 }
 
@@ -402,9 +402,9 @@ internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOpera
         userCertificateChain = userCertificateChain?.toList(),
         userPrivateKey = userPrivateKey,
         lockId = lockId,
-        notBefore = notBefore.toLong(),
-        issuedAt = issuedAt.toLong(),
-        expiresAt = expiresAt.toLong(),
+        notBefore = notBefore,
+        issuedAt = issuedAt,
+        expiresAt = expiresAt,
         jti = jti
     )
 }

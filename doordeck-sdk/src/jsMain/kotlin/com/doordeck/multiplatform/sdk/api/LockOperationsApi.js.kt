@@ -48,14 +48,14 @@ actual object LockOperationsApi {
      */
     fun getLockAuditTrail(
         lockId: String,
-        start: Int? = null,
-        end: Int? = null
+        start: Long? = null,
+        end: Long? = null
     ): Promise<JsArray<AuditResponse>> = promise {
         LockOperationsClient
             .getLockAuditTrailRequest(
                 lockId = lockId,
-                start = start?.toLong(),
-                end = end?.toLong()
+                start = start,
+                end = end
             )
             .toAuditResponse()
     }
@@ -65,14 +65,14 @@ actual object LockOperationsApi {
      */
     fun getAuditForUser(
         userId: String,
-        start: Int? = null,
-        end: Int? = null
+        start: Long? = null,
+        end: Long? = null
     ): Promise<JsArray<AuditResponse>> = promise {
         LockOperationsClient
             .getAuditForUserRequest(
                 userId = userId,
-                start = start?.toLong(),
-                end = end?.toLong()
+                start = start,
+                end = end
             )
             .toAuditResponse()
     }

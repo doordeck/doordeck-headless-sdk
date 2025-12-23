@@ -27,7 +27,7 @@ object FusionOperations {
     data class AlpetaController(
         val username: String,
         val password: String,
-        val doorId: Int,
+        val doorId: Long,
         val baseUrl: String? = null
     ) : LockController
     
@@ -183,7 +183,7 @@ internal fun FusionOperations.LockController.toBasicLockController(): BasicLockC
 internal fun FusionOperations.AlpetaController.toBasicAlpetaController(): BasicAlpetaController = BasicAlpetaController(
     username = username,
     password = password,
-    doorId = doorId.toLong(),
+    doorId = doorId,
     baseUrl = baseUrl
 )
 
