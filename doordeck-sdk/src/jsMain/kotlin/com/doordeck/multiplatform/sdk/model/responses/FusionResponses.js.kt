@@ -143,7 +143,7 @@ internal fun BasicLockController.toLockControllerResponse(): LockControllerRespo
 internal fun BasicAlpetaController.toAlpetaController(): FusionOperations.AlpetaController = FusionOperations.AlpetaController(
     username = username,
     password = password,
-    doorId = doorId.toInt(),
+    doorId = doorId,
     baseUrl = baseUrl
 )
 

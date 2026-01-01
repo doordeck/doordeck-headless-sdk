@@ -15,9 +15,9 @@ internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userCertificateChain = randomNullable { jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE) },
     userPrivateKey = randomNullable { CryptoManager.generateKeyPair().private },
     lockId = randomUuidString(),
-    notBefore = randomInt(),
-    issuedAt = randomInt(),
-    expiresAt = randomInt(),
+    notBefore = randomLong(),
+    issuedAt = randomLong(),
+    expiresAt = randomLong(),
     jti = randomUuidString()
 )
 
@@ -53,8 +53,8 @@ internal fun randomShareLock() = ShareLock(
     targetUserId = randomUuidString(),
     targetUserRole = UserRole.entries.random().name,
     targetUserPublicKey = CryptoManager.generateKeyPair().public,
-    start = randomNullable { randomInt() },
-    end = randomNullable { randomInt() },
+    start = randomNullable { randomLong() },
+    end = randomNullable { randomLong() },
 )
 
 internal fun randomBatchShareLockOperation() = LockOperations.BatchShareLockOperation(
