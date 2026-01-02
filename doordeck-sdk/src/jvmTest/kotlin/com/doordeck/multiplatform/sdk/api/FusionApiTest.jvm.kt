@@ -14,6 +14,8 @@ import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUnlockBetween
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
@@ -154,6 +156,7 @@ class FusionApiTest : IntegrationTest() {
         var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
         assertEquals(ServiceStateType.RUNNING, doorState.state)
 
+        // Given - shouldUpdateUnlockDuration
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -167,6 +170,7 @@ class FusionApiTest : IntegrationTest() {
             lockId = actualDoor.doordeck.id
         )
 
+        // When
         val newDuration = 9.seconds.toJavaDuration()
         LockOperationsApi.updateSecureSettingUnlockDuration(
             LockOperations.UpdateSecureSettingUnlockDuration.Builder()
@@ -175,8 +179,29 @@ class FusionApiTest : IntegrationTest() {
                 .build()
         )
 
-        val lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
+        // Then
+        var lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
         assertEquals(newDuration, lockResponse.settings.unlockTime)
+
+        // Given - shouldUpdateUnlockBetween
+        // Given
+        val newUnlockBetween = randomUnlockBetween()
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            LockOperations.UpdateSecureSettingUnlockBetween.Builder()
+                .setUnlockBetween(newUnlockBetween)
+                .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+                .build()
+        )
+
+        // Then
+        lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.days, newUnlockBetween.days)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions, newUnlockBetween.exceptions)
 
         // Given - shouldStopDoor
         // When
