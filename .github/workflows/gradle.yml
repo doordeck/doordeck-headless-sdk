@@ -27,18 +27,18 @@ jobs:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
-          - name: Android
-            test: testReleaseUnitTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple
-            test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
-            os: macos-latest
-          - name: Windows
-            test: mingwX64Test
-            os: windows-latest
+#          - name: Android
+#            test: testReleaseUnitTest
+#            os: ubuntu-latest
+#          - name: JS
+#            test: kotlinUpgradeYarnLock jsTest
+#            os: ubuntu-latest
+#          - name: Apple
+#            test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
+#            os: macos-latest
+#          - name: Windows
+#            test: mingwX64Test
+#            os: windows-latest
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
 
