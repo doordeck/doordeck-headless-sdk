@@ -19,7 +19,6 @@ import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
-import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import java.security.KeyPair
 import kotlin.reflect.KClass
@@ -157,12 +156,12 @@ class FusionApiTest : IntegrationTest() {
         assertEquals(ServiceStateType.RUNNING, doorState.state)
 
         // Given - shouldUpdateUnlockDuration
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
                 PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
             )
-        ).await().certificateChain
+        ).certificateChain
         val baseOperation = LockOperations.BaseOperation(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
