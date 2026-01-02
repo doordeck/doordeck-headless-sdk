@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_S
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -128,6 +129,20 @@ class FusionApiTest : IntegrationTest() {
         // Then
         assertTrue { fusionLogin.authToken.isNotEmpty() }
 
+        // Cleanup process, delete any remaining test devices
+        var integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
+        try {
+            integrations
+                .filter { integration ->
+                    PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
+                .forEach { integration ->
+                    integration.doordeck?.id?.let { integrationId ->
+                        FusionApi.stopDoor(integrationId)
+                        FusionApi.deleteDoor(integrationId)
+                    }
+                }
+        } catch (_: Throwable) { /* Ignored */ }
+
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
@@ -135,7 +150,7 @@ class FusionApiTest : IntegrationTest() {
         FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
 
         // Then
-        val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
+        integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
         val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor?.doordeck)
 
