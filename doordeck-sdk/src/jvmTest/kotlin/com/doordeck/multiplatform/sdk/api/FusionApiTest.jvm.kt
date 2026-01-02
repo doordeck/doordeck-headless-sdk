@@ -3,23 +3,31 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
+import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
+import java.security.KeyPair
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 class FusionApiTest : IntegrationTest() {
 
@@ -113,10 +121,11 @@ class FusionApiTest : IntegrationTest() {
         ContextManager.setFusionHost(testController.key)
 
         // When
-        val login = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val fusionLogin = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val cloudLogin = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // Then
-        assertTrue { login.authToken.isNotEmpty() }
+        assertTrue { fusionLogin.authToken.isNotEmpty() }
 
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
@@ -144,6 +153,30 @@ class FusionApiTest : IntegrationTest() {
         // Then
         var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
         assertEquals(ServiceStateType.RUNNING, doorState.state)
+
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
+            KeyPair(
+                PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+            )
+        ).await().certificateChain
+        val baseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = actualDoor.doordeck.id
+        )
+
+        val newDuration = 9.seconds.toJavaDuration()
+        LockOperationsApi.updateSecureSettingUnlockDuration(
+            LockOperations.UpdateSecureSettingUnlockDuration.Builder()
+                .setUnlockDuration(newDuration)
+                .setBaseOperation(baseOperation)
+                .build()
+        )
+
+        val lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
+        assertEquals(newDuration, lockResponse.settings.unlockTime)
 
         // Given - shouldStopDoor
         // When
