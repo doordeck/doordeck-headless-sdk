@@ -130,18 +130,17 @@ class FusionApiTest : IntegrationTest() {
         assertTrue { fusionLogin.authToken.isNotEmpty() }
 
         // Cleanup process, delete any remaining test devices
-        var integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
-        try {
-            integrations
-                .filter { integration ->
-                    PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
-                .forEach { integration ->
-                    integration.doordeck?.id?.let { integrationId ->
-                        FusionApi.stopDoor(integrationId)
-                        FusionApi.deleteDoor(integrationId)
-                    }
-                }
-        } catch (_: Throwable) { /* Ignored */ }
+        val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.value.type)
+            .filter { integration ->
+                PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
+        integrationsToDelete.forEach { integration ->
+            integration.doordeck?.id?.let { integrationId ->
+                try {
+                    FusionApi.stopDoor(integrationId)
+                    FusionApi.deleteDoor(integrationId)
+                } catch (_: Exception) { /* Ignored */ }
+            }
+        }
 
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
@@ -150,7 +149,7 @@ class FusionApiTest : IntegrationTest() {
         FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
 
         // Then
-        integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
+        val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
         val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
         assertNotNull(actualDoor?.doordeck)
 
