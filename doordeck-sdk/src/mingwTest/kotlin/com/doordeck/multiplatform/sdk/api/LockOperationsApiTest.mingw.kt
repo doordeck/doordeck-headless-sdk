@@ -1317,6 +1317,7 @@ class LockOperationsApiTest : CallbackTest() {
         assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
 
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = BaseOperationData(

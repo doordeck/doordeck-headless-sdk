@@ -197,7 +197,6 @@ class FusionApiTest : IntegrationTest() {
         assertEquals(newDuration, lockResponse.settings.unlockTime)
 
         // Given - shouldUpdateUnlockBetween
-        // Given
         val newUnlockBetween = randomUnlockBetween()
 
         // When
@@ -213,8 +212,8 @@ class FusionApiTest : IntegrationTest() {
         assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
-        assertEquals(lockResponse.settings.unlockBetweenWindow?.days, newUnlockBetween.days)
-        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions, newUnlockBetween.exceptions)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sorted(), newUnlockBetween.exceptions?.sorted())
 
         // Given - shouldStopDoor
         // When

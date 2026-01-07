@@ -3,14 +3,22 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
+import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomUnlockBetween
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.toDateString
 import com.doordeck.multiplatform.sdk.util.toUrlString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
@@ -114,10 +122,24 @@ class FusionApiTest : IntegrationTest() {
         ContextManager.setFusionHost(testController.key)
 
         // When
-        val login = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val fusionLogin = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val cloudLogin = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // Then
-        assertTrue { login.authToken.isNotEmpty() }
+        assertTrue { fusionLogin.authToken.isNotEmpty() }
+
+        // Cleanup process, delete any remaining test devices
+        val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.value.type)
+            .filter { integration ->
+                PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
+        integrationsToDelete.forEach { integration ->
+            integration.doordeck?.id?.let { integrationId ->
+                try {
+                    FusionApi.stopDoor(integrationId)
+                    FusionApi.deleteDoor(integrationId)
+                } catch (_: Exception) { /* Ignored */ }
+            }
+        }
 
         // Given - shouldEnableDoor
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
@@ -145,6 +167,50 @@ class FusionApiTest : IntegrationTest() {
         // Then
         var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
         assertEquals(ServiceStateType.RUNNING, doorState.state)
+
+        // Given - shouldUpdateUnlockDuration
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
+            PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+            PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+        ).certificateChain
+        val baseOperation = LockOperations.BaseOperation(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = actualDoor.doordeck.id
+        )
+
+        // When
+        val newDuration = 9.toDouble()
+        LockOperationsApi.updateSecureSettingUnlockDuration(
+            LockOperations.UpdateSecureSettingUnlockDuration.Builder()
+                .setUnlockDuration(newDuration)
+                .setBaseOperation(baseOperation)
+                .build()
+        )
+
+        // Then
+        var lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
+        assertEquals(newDuration, lockResponse.settings.unlockTime)
+
+        // Given - shouldUpdateUnlockBetween
+        val newUnlockBetween = randomUnlockBetween()
+
+        // When
+        LockOperationsApi.updateSecureSettingUnlockBetween(
+            LockOperations.UpdateSecureSettingUnlockBetween.Builder()
+                .setUnlockBetween(newUnlockBetween)
+                .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+                .build()
+        )
+
+        // Then
+        lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sortedBy { it.toDateString() }, newUnlockBetween.exceptions?.sortedBy { it.toDateString() })
 
         // Given - shouldStopDoor
         // When
