@@ -7,6 +7,8 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_S
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
@@ -14,6 +16,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
+import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.BaseOperationData
 import com.doordeck.multiplatform.sdk.model.data.BasicAlpetaController
 import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
@@ -33,10 +36,15 @@ import com.doordeck.multiplatform.sdk.model.data.DeviceIdData
 import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
+import com.doordeck.multiplatform.sdk.model.data.GetLocksForUserData
 import com.doordeck.multiplatform.sdk.model.data.GetSingleLockData
 import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.data.RevokeAccessToLockOperationData
+import com.doordeck.multiplatform.sdk.model.data.ShareLockData
+import com.doordeck.multiplatform.sdk.model.data.ShareLockOperationData
 import com.doordeck.multiplatform.sdk.model.data.UnlockBetweenData
+import com.doordeck.multiplatform.sdk.model.data.UnlockOperationData
 import com.doordeck.multiplatform.sdk.model.data.UpdateSecureSettingUnlockBetweenData
 import com.doordeck.multiplatform.sdk.model.data.UpdateSecureSettingUnlockDurationData
 import com.doordeck.multiplatform.sdk.model.responses.BasicDoorStateResponse
@@ -44,7 +52,9 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -61,6 +71,7 @@ import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Clock
@@ -329,6 +340,62 @@ class FusionApiTest : CallbackTest() {
         assertNotNull(response.success)
         assertNotNull(response.success.result)
         assertEquals(newDuration.toDouble(), response.success.result.settings.unlockTime)
+
+        // Given - Unlock
+        callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
+            LockOperationsApi.unlock(
+                data = UnlockOperationData(baseOperation.copy(jti = randomUuidString())).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Given - Share and revoke lock
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.shareLock(
+                data = ShareLockOperationData(
+                    baseOperation = baseOperation.copy(jti = randomUuidString()),
+                    shareLock = ShareLockData(
+                        targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                        targetUserRole = UserRole.USER,
+                        targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                    )
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        var locksResponse =  callbackApiCall<ResultData<BasicLockUserResponse>> {
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(locksResponse.success)
+        assertNotNull(locksResponse.success.result)
+        assertTrue { locksResponse.success.result.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = baseOperation.copy(jti = randomUuidString()),
+                    users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                ).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // Then
+        locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(locksResponse.success)
+        assertNotNull(locksResponse.success.result)
+        assertFalse { locksResponse.success.result.devices.any { it.deviceId == actualDoor.doordeck.id } }
 
         // Given - shouldUpdateUnlockBetween
         val now = Clock.System.now()

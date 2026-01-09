@@ -784,13 +784,6 @@ class LockOperationsApiTest : CallbackTest() {
         }
 
         // Then
-        callbackApiCall<ResultData<BasicLockUserResponse>> {
-            LockOperationsApi.getLocksForUser(
-                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
-            )
-        }
-
         var locksResponse =  callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
