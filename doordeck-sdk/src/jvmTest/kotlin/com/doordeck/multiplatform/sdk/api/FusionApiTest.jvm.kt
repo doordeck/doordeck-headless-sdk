@@ -6,15 +6,19 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_S
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
+import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUnlockBetween
 import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -26,6 +30,7 @@ import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
@@ -146,7 +151,8 @@ class FusionApiTest : IntegrationTest() {
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
         // When
-        FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
+        val controller = if (testController.value.controller is FusionOperations.DemoController) (testController.value.controller as FusionOperations.DemoController).copy(port = randomInt().toUShort()) else testController.value.controller
+        FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, controller)
 
         // Then
         val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
@@ -195,6 +201,37 @@ class FusionApiTest : IntegrationTest() {
         // Then
         var lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
         assertEquals(newDuration, lockResponse.settings.unlockTime)
+
+        // Given - Unlock
+        LockOperationsApi.unlock(LockOperations.UnlockOperation.Builder()
+            .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+            .build())
+
+        // Given - Share and revoke lock
+        LockOperationsApi.shareLock(
+            shareLockOperation = LockOperations.ShareLockOperation(
+                baseOperation = baseOperation.copy(jti = randomUuid()),
+                shareLock = LockOperations.ShareLock(
+                    targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                    targetUserRole = UserRole.USER,
+                    targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                )
+            ))
+
+        // Then
+        var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertTrue { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+        // When
+        LockOperationsApi.revokeAccessToLock(
+            LockOperations.RevokeAccessToLockOperation(
+                baseOperation = baseOperation.copy(jti = randomUuid()),
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+            ))
+
+        // Then
+        locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+        assertFalse { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
 
         // Given - shouldUpdateUnlockBetween
         val newUnlockBetween = randomUnlockBetween()

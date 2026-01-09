@@ -6,12 +6,15 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_S
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
+import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
@@ -27,6 +30,7 @@ import kotlin.reflect.KClass
 import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
@@ -196,6 +200,38 @@ class FusionApiAsyncTest : IntegrationTest() {
         // Then
         var lockResponse = LockOperationsApi.getSingleLockAsync(actualDoor.doordeck.id).await()
         assertEquals(newDuration, lockResponse.settings.unlockTime)
+
+        // Given - Unlock
+        LockOperationsApi.unlockAsync(LockOperations.UnlockOperation.Builder()
+            .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+            .build())
+            .await()
+
+        // Given - Share and revoke lock
+        LockOperationsApi.shareLockAsync(
+            shareLockOperation = LockOperations.ShareLockOperation(
+                baseOperation = baseOperation.copy(jti = randomUuid()),
+                shareLock = LockOperations.ShareLock(
+                    targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                    targetUserRole = UserRole.USER,
+                    targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                )
+            )).await()
+
+        // Then
+        var locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+        assertTrue { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+        // When
+        LockOperationsApi.revokeAccessToLockAsync(
+            LockOperations.RevokeAccessToLockOperation(
+                baseOperation = baseOperation.copy(jti = randomUuid()),
+                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+            )).await()
+
+        // Then
+        locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+        assertFalse { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
 
         // Given - shouldUpdateUnlockBetween
         val newUnlockBetween = randomUnlockBetween()
