@@ -776,6 +776,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.end.minute, lock.settings.unlockBetweenWindow.end.minute)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lock.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lock.settings.unlockBetweenWindow.exceptions)
 
         // Given
         LockOperationsApi.updateSecureSettingUnlockBetween(
