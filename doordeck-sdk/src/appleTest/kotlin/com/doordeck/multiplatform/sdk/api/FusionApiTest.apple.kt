@@ -241,8 +241,10 @@ class FusionApiTest : IntegrationTest() {
 
         // Then
         lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
-        assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
-        assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.start?.hour, newUnlockBetween.start.hour)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.start?.minute, newUnlockBetween.start.minute)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.end?.hour, newUnlockBetween.end.hour)
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.end?.minute, newUnlockBetween.end.minute)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
         assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sortedBy { it.toDateString() }, newUnlockBetween.exceptions?.sortedBy { it.toDateString() })

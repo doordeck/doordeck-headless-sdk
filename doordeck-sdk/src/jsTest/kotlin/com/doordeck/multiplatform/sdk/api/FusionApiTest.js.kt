@@ -238,8 +238,8 @@ class FusionApiTest : IntegrationTest() {
         // When
         LockOperationsApi.updateSecureSettingUnlockBetween(
             LockOperations.UpdateSecureSettingUnlockBetween.Builder()
-                .setUnlockBetween(newUnlockBetween)
                 .setBaseOperation(baseOperation.copy(jti = randomUuidString()))
+                .setUnlockBetween(newUnlockBetween)
                 .build()
         ).await()
 

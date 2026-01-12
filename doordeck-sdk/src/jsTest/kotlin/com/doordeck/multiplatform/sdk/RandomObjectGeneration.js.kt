@@ -9,6 +9,12 @@ import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.util.toJsArray
 import com.doordeck.multiplatform.sdk.util.toJsSet
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
 
 internal fun randomBaseOperation() = LockOperations.BaseOperation(
     userId = randomNullable { randomUuidString() },
@@ -36,13 +42,18 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
     accuracy = randomInt(1, 1000)
 )
 
-internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
-    start = randomString(),
-    end = randomString(),
-    timezone = randomString(),
-    days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsSet(),
-    exceptions = (1..3).map { randomString() }.toJsArray()
-)
+internal fun randomUnlockBetween(): LockOperations.UnlockBetween {
+    val now = Clock.System.now()
+    val localDateTime = now.toLocalDateTime(TimeZone.UTC)
+    val end = now.plus(1.hours).toLocalDateTime(TimeZone.UTC)
+    return LockOperations.UnlockBetween(
+        start = "${localDateTime.time.hour}:${localDateTime.time.minute}",
+        end = "${end.time.hour}:${end.time.minute}",
+        timezone = "UTC",
+        days = DayOfWeek.entries.shuffled().take(3).map { it.name }.toJsSet(),
+        exceptions = (1..3).map { localDateTime.date.plus(DatePeriod(days = it)).toString() }.toJsArray()
+    )
+}
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),
