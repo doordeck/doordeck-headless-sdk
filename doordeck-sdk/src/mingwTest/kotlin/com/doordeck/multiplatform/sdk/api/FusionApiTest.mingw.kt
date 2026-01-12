@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -333,7 +332,7 @@ class FusionApiTest : CallbackTest() {
         // Then
         val response = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
-                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
                 callback = staticCFunction(::testCallback)
             )
         }
@@ -423,7 +422,7 @@ class FusionApiTest : CallbackTest() {
         // Then
         val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
-                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
                 callback = staticCFunction(::testCallback)
             )
         }

@@ -247,7 +247,8 @@ class FusionApiTest : IntegrationTest() {
         assertEquals(lockResponse.settings.unlockBetweenWindow?.end?.minute, newUnlockBetween.end.minute)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
         assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
-        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sortedBy { it.toDateString() }, newUnlockBetween.exceptions?.sortedBy { it.toDateString() })
+        assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.map { it.toDateString() }?.sorted(),
+            newUnlockBetween.exceptions?.map { it.toDateString() }?.sorted())
 
         // Given - shouldStopDoor
         // When
