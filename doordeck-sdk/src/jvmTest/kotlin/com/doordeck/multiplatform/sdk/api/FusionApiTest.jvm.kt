@@ -151,8 +151,7 @@ class FusionApiTest : IntegrationTest() {
         val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
         // When
-        val controller = if (testController.value.controller is FusionOperations.DemoController) (testController.value.controller as FusionOperations.DemoController).copy(port = randomInt().toUShort()) else testController.value.controller
-        FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, controller)
+        FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
 
         // Then
         val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
