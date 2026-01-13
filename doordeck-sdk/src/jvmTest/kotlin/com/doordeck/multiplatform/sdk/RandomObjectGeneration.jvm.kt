@@ -15,6 +15,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 internal fun randomUuid(): UUID = randomUuidString().toUuid()
@@ -48,8 +49,8 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
 )
 
 internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
-    start = LocalTime.now(),
-    end = LocalTime.now(),
+    start = LocalTime.now().truncatedTo(ChronoUnit.MINUTES),
+    end = LocalTime.now().plus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES),
     timezone = ZoneId.of("UTC"),
     days = DayOfWeek.entries.shuffled().take(3).toEnumSet(),
     exceptions = (1..3).map { LocalDate.now().plusDays(it.toLong()) }

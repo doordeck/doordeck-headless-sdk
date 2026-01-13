@@ -716,6 +716,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days.toSet(), lock.settings.unlockBetweenWindow.days.toSet())
+        assertEquals(updatedUnlockBetween.exceptions?.toList(), lock.settings.unlockBetweenWindow.exceptions.toList())
 
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = LockOperations.BaseOperation(
@@ -779,6 +780,7 @@ class LockOperationsApiTest : IntegrationTest() {
         assertEquals(updatedUnlockBetween.end, lock.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lock.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days.toSet(), lock.settings.unlockBetweenWindow.days.toSet())
+        assertEquals(updatedUnlockBetween.exceptions?.toList(), lock.settings.unlockBetweenWindow.exceptions.toList())
 
         // Given
         LockOperationsApi.updateSecureSettingUnlockBetween(

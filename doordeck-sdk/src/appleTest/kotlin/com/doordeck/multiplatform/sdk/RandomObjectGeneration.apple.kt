@@ -7,14 +7,21 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations.ShareLock
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
+import com.doordeck.multiplatform.sdk.util.toNsTimeZone
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.toNSDateComponents
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeZone
 import platform.Foundation.NSURLComponents
 import platform.Foundation.NSUUID
 import platform.Foundation.systemTimeZone
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 internal fun randomUuid(): NSUUID = randomUuidString().toNsUuid()
 
@@ -46,13 +53,18 @@ internal fun randomLocationRequirement() = LockOperations.LocationRequirement(
     accuracy = randomInt(1, 1000)
 )
 
-internal fun randomUnlockBetween() = LockOperations.UnlockBetween(
-    start = NSDateComponents(),
-    end = NSDateComponents(),
-    timezone = NSTimeZone.systemTimeZone,
-    days = DayOfWeek.entries.shuffled().take(3).toSet(),
-    exceptions = (1..3).map { NSDateComponents() }
-)
+internal fun randomUnlockBetween(): LockOperations.UnlockBetween {
+    val now = Clock.System.now()
+    val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
+    val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
+    return LockOperations.UnlockBetween(
+        start = min.toNSDateComponents(),
+        end = max.toNSDateComponents(),
+        timezone = TimeZone.UTC.id.toNsTimeZone(),
+        days = DayOfWeek.entries.shuffled().take(3).toSet(),
+        exceptions = (1..3).map { now.plus(it.days).toLocalDateTime(TimeZone.UTC).toNSDateComponents() }
+    )
+}
 
 internal fun randomRevokeAccessToLockOperation() = LockOperations.RevokeAccessToLockOperation(
     baseOperation = randomBaseOperation(),

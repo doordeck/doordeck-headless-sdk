@@ -784,13 +784,6 @@ class LockOperationsApiTest : CallbackTest() {
         }
 
         // Then
-        callbackApiCall<ResultData<BasicLockUserResponse>> {
-            LockOperationsApi.getLocksForUser(
-                data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
-            )
-        }
-
         var locksResponse =  callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
@@ -1317,6 +1310,7 @@ class LockOperationsApiTest : CallbackTest() {
         assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
 
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = BaseOperationData(
@@ -1412,6 +1406,7 @@ class LockOperationsApiTest : CallbackTest() {
         assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
         assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
         assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
 
         // Given
         callbackApiCall<ResultData<Unit>> {
