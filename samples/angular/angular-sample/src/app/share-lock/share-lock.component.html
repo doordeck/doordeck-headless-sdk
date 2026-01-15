@@ -8,16 +8,22 @@
         <mat-form-field appearance="outline" class="share-lock-email-addresses">
           <mat-label>Email address</mat-label>
           <input matInput type="email" formControlName="email" required>
-          <mat-error *ngIf="firstFormGroup.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="firstFormGroup.get('email')?.invalid">
-            Email is is not valid
-          </mat-error>
+          @if (firstFormGroup.get('email')?.hasError('required')) {
+            <mat-error>
+              Email is required
+            </mat-error>
+          }
+          @if (firstFormGroup.get('email')?.invalid) {
+            <mat-error>
+              Email is is not valid
+            </mat-error>
+          }
         </mat-form-field>
-        <mat-error *ngIf="errorMessage">
-          {{ errorMessage }}
-        </mat-error>
+        @if (errorMessage) {
+          <mat-error>
+            {{ errorMessage }}
+          </mat-error>
+        }
         <mat-dialog-actions class="share-lock-action-buttons">
           <button mat-flat-button color="primary" matStepperNext>Next</button>
         </mat-dialog-actions>
