@@ -4,7 +4,7 @@ import {MatCard, MatCardTitle} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatButton} from '@angular/material/button';
-import {NgIf} from '@angular/common';
+
 import {Router} from '@angular/router';
 import {com} from '@doordeck/doordeck-headless-sdk';
 import {TwoFactorVerifyComponent} from '../two-factor-verify/two-factor-verify.component';
@@ -20,16 +20,15 @@ import sdk = com.doordeck.multiplatform.sdk;
 @Component({
     selector: 'app-login',
     imports: [
-        MatCardTitle,
-        MatCard,
-        ReactiveFormsModule,
-        MatFormField,
-        MatInput,
-        MatError,
-        MatLabel,
-        MatButton,
-        NgIf
-    ],
+    MatCardTitle,
+    MatCard,
+    ReactiveFormsModule,
+    MatFormField,
+    MatInput,
+    MatError,
+    MatLabel,
+    MatButton
+],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })

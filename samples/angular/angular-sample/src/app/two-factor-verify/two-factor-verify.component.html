@@ -6,9 +6,11 @@
     <mat-form-field appearance="outline" class="two-factor-verify-input-full-width">
       <mat-label>Code</mat-label>
       <input matInput formControlName="code" maxlength="6" />
-      <mat-error *ngIf="form.get('code')?.hasError('invalid')">
-        Code must be exactly 6 digits
-      </mat-error>
+      @if (form.get('code')?.hasError('invalid')) {
+        <mat-error>
+          Code must be exactly 6 digits
+        </mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>

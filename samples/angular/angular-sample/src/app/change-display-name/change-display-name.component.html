@@ -6,9 +6,11 @@
     <mat-form-field appearance="outline" class="change-display-name-input-full-width">
       <mat-label>Display name</mat-label>
       <input matInput type="text" formControlName="displayName" />
-      <mat-error *ngIf="form.get('displayName')?.hasError('required')">
-        Display name is required
-      </mat-error>
+      @if (form.get('displayName')?.hasError('required')) {
+        <mat-error>
+          Display name is required
+        </mat-error>
+      }
     </mat-form-field>
   </form>
 </mat-dialog-content>
