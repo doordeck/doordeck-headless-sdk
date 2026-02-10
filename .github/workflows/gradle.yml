@@ -259,8 +259,6 @@ jobs:
         run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
 
       - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISHING_TOKEN }}
         run: |
           cd build/js/packages/doordeck-sdk
           npm publish --access public
