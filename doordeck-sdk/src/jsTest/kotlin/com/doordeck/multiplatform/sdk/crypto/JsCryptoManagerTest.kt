@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
+import com.doordeck.multiplatform.sdk.jsmodule.Sodium
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -13,7 +13,7 @@ class JsCryptoManagerTest {
         val cryptoManager = CryptoManager // Initialize
 
         // When
-        val result = LibsodiumInitializer.isInitialized()
+        val result = Sodium.ready.get<Boolean>()
 
         // Then
         assertTrue { result }
