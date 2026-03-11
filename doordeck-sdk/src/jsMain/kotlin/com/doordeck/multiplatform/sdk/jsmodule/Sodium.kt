@@ -8,7 +8,7 @@ import kotlin.js.unsafeCast
 @JsModule("libsodium-wrappers-sumo")
 @JsNonModule
 external object Sodium {
-    val ready: Promise<Boolean>
+    val ready: Promise<Unit>
 
     fun crypto_sign_keypair(): dynamic
 
