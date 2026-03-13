@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.isCertificateInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -45,6 +46,14 @@ actual object CryptoManager {
         return EncodedKeyPair(
             publicKey = keyPair.public.encodeByteArrayToBase64(),
             privateKey = keyPair.private.encodeByteArrayToBase64()
+        ).toJson()
+    }
+
+    @CName("generateEncodedKeyPairFromEncodedBytes")
+    fun generateEncodedKeyPairFromEncodedBytes(encodedPublicKey: String, encodedPrivateKey: String): String {
+        return EncodedKeyPair(
+            publicKey = encodedPublicKey.decodeBase64ToByteArray().toPlatformPublicKey().encodeByteArrayToBase64(),
+            privateKey = encodedPrivateKey.decodeBase64ToByteArray().toPlatformPrivateKey().encodeByteArrayToBase64()
         ).toJson()
     }
 
