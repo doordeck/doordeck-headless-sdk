@@ -72,6 +72,7 @@ kotlin {
         compileSdk = libs.versions.android.compile.sdk.get().toInt()
         minSdk = libs.versions.android.min.sdk.get().toInt()
         withJava()
+        withHostTest {}
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
