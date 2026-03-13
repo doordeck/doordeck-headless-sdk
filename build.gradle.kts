@@ -1,7 +1,7 @@
 import java.time.Duration
 
 plugins {
-    alias(libs.plugins.android.library).apply(false)
+    alias(libs.plugins.kotlin.multiplatform.library).apply(false)
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.kotlin.cocoapods).apply(false)

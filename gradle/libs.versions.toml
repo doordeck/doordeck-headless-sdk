@@ -1,5 +1,5 @@
 [versions]
-agp = "8.12.0" # 8.13.0+ is not yet supported by IntelliJ
+kgp = "9.1.0"
 bouncy-castle = "1.83"
 indispensable-asn1 = "3.19.3"
 kotlin = "2.3.10"
@@ -52,7 +52,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
-android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "kgp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
