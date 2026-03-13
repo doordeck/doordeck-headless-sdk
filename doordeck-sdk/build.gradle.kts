@@ -239,7 +239,7 @@ kotlin {
         val jsMain by getting {
             dependencies {
                 implementation(libs.ktor.client.js)
-                implementation(libs.libsodium.bindings.js)
+                implementation(npm("libsodium-wrappers-sumo", libs.versions.libsodium.sumo.get()))
                 implementation(npm("asn1js", libs.versions.asn1js.get()))
                 implementation(npm("pkijs", libs.versions.pkijs.get()))
             }

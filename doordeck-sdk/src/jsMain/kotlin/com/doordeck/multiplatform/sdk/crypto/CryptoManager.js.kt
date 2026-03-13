@@ -3,13 +3,16 @@ package com.doordeck.multiplatform.sdk.crypto
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.jsmodule.ASN1
 import com.doordeck.multiplatform.sdk.jsmodule.PKI
+import com.doordeck.multiplatform.sdk.jsmodule.Sodium
+import com.doordeck.multiplatform.sdk.jsmodule.toByteArray
+import com.doordeck.multiplatform.sdk.jsmodule.toUint8Array
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import com.ionspin.kotlin.crypto.LibsodiumInitializer
-import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.util.decodeBase64Bytes
 import io.ktor.util.toJsArray
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.coroutines.await
+import org.khronos.webgl.Uint8Array
 import kotlin.js.Date
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -23,7 +26,7 @@ actual object CryptoManager {
 
     @JsExport.Ignore
     internal actual suspend fun initialize() {
-        LibsodiumInitializer.initialize()
+        Sodium.ready.await()
         SdkLogger.d("Successfully initialized Libsodium")
     }
 
@@ -31,10 +34,10 @@ actual object CryptoManager {
      * @see [CryptoManager.generateRawKeyPair]
      */
     internal actual fun generateRawKeyPair(): Crypto.KeyPair {
-        val keyPair = Signature.keypair()
+        val keyPair = Sodium.crypto_sign_keypair()
         return Crypto.KeyPair(
-            private = keyPair.secretKey.toByteArray(),
-            public = keyPair.publicKey.toByteArray()
+            private = (keyPair.privateKey as Uint8Array).toByteArray(),
+            public = (keyPair.publicKey as Uint8Array).toByteArray()
         )
     }
 
@@ -81,19 +84,19 @@ actual object CryptoManager {
         else -> throw SdkException("Unknown private key size: $size")
     }
 
-    private fun ByteArray.toSecretKeyBytes(): ByteArray = Signature
-        .seedKeypair(toUByteArray())
-        .secretKey
-        .toByteArray()
+    private fun ByteArray.toSecretKeyBytes(): ByteArray {
+        val keyPair = Sodium.crypto_sign_seed_keypair(toUint8Array())
+        return (keyPair.privateKey as Uint8Array).toByteArray()
+    }
 
     /**
      * @see [CryptoManager.signWithPrivateKey]
      */
     @JsExport.Ignore
     internal actual fun String.signWithPrivateKey(privateKey: ByteArray): ByteArray = try {
-        Signature.detached(
-            message = toByteArray().toUByteArray(),
-            secretKey = privateKey.toPlatformPrivateKey().toUByteArray()
+        Sodium.crypto_sign_detached(
+            message = toByteArray().toUint8Array(),
+            privateKey = privateKey.toPlatformPrivateKey().toUint8Array()
         ).toByteArray()
     } catch (exception: Exception) {
         throw SdkException("Failed to sign with private key", exception)
@@ -104,12 +107,11 @@ actual object CryptoManager {
      */
     @JsExport.Ignore
     internal actual fun ByteArray.verifySignature(publicKey: ByteArray, message: String): Boolean = try {
-        Signature.verifyDetached(
-            signature = toUByteArray(),
-            message = message.toByteArray().toUByteArray(),
-            publicKey = publicKey.toPlatformPublicKey().toUByteArray()
+        return Sodium.crypto_sign_verify_detached(
+            signature = toUint8Array(),
+            message = message.toByteArray().toUint8Array(),
+            publicKey = publicKey.toPlatformPublicKey().toUint8Array()
         )
-        true
     } catch (exception: Exception) {
         SdkLogger.e(exception) { "Failed to verify signature" }
         false
