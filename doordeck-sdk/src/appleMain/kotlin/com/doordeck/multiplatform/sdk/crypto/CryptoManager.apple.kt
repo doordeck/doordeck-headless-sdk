@@ -37,7 +37,7 @@ actual object CryptoManager {
     fun generateKeyPair(): Crypto.KeyPair = generateRawKeyPair()
 
     fun generateKeyPairFromBytes(publicKey: ByteArray, privateKey: ByteArray): Crypto.KeyPair =
-        Crypto.KeyPair(publicKey.toPlatformPublicKey(), privateKey.toPlatformPrivateKey())
+        Crypto.KeyPair(publicKey.toPlatformPrivateKey(), privateKey.toPlatformPublicKey())
 
     /**
      * @see [CryptoManager.isCertificateInvalidOrExpired]
