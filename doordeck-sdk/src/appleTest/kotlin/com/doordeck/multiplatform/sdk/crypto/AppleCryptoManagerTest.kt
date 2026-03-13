@@ -8,26 +8,13 @@ import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.jsmodule.Sodium
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class JsCryptoManagerTest {
-
-    @Test
-    fun shouldInitializeLibsodium() = runTest {
-        // Given
-        val cryptoManager = CryptoManager // Initialize
-
-        // When
-        val result = Sodium.ready.get<Boolean>()
-
-        // Then
-        assertTrue { result }
-    }
+class AppleCryptoManagerTest {
 
     @Test
     fun shouldGenerateKeyPairFromJavaBytes() = runTest {

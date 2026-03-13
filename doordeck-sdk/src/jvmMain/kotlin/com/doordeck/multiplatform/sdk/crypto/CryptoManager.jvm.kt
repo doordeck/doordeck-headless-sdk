@@ -48,6 +48,9 @@ actual object CryptoManager {
 
     fun generateKeyPair(): KeyPair = KeyPairGenerator.getInstance(EDDSA_ALGORITHM)
         .generateKeyPair()
+
+    fun generateKeyPairFromBytes(publicKey: ByteArray, privateKey: ByteArray): KeyPair =
+        KeyPair(publicKey.toPublicKey(), privateKey.toPrivateKey())
     
     @JvmSynthetic
     internal fun String.toRsaPublicKey(): PublicKey = try {

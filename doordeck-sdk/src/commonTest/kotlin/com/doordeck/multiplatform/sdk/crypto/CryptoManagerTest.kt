@@ -1,5 +1,13 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.TestKeyConstants.BOUNCY_CASTLE_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.BOUNCY_CASTLE_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.CRYPTO_KIT_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.CRYPTO_KIT_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PRIVATE_KEY
+import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -9,18 +17,6 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class CryptoManagerTest {
-
-    private val JAVA_PUBLIC_KEY = "MCowBQYDK2VwAyEA2E8RSaHnxBpnr+RGneGfpdLFhYEPVldzHx1TxuuyjD8="
-    private val JAVA_PRIVATE_KEY = "MC4CAQAwBQYDK2VwBCIEIIgEWMf5XswAhA4SwRRNl8IH34+4329pQKBfwWPVtFat"
-
-    private val SODIUM_PUBLIC_KEY = "9vG/XmIT0JxFjjWmXzd5F7XVbWLBeIPWb2qHKnjSz8o="
-    private val SODIUM_PRIVATE_KEY = "OLPBsJ3zReQj2r2YNgnGMn/B8SW/U7qP9hMrd0mdP9j28b9eYhPQnEWONaZfN3kXtdVtYsF4g9ZvaocqeNLPyg=="
-
-    private val CRYPTO_KIT_PUBLIC_KEY = "VpXka4JVjIYQ969Yqo92+x4JgwZPh0QiJIKx/3XzAxs="
-    private val CRYPTO_KIT_PRIVATE_KEY = "GJsHlbSK/tdAGDL5+7QjB/aJx/AfKOWjMUGOpQ/1F9U="
-
-    private val BOUNCY_CASTLE_PUBLIC_KEY = "MCowBQYDK2VwAyEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
-    private val BOUNCY_CASTLE_PRIVATE_KEY = "MFECAQEwBQYDK2VwBCIEIOmntkLRdLIVT+BDWRF88R3Bu3XIrl3PR5U2mPmlyD74gSEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
 
     @Test
     fun shouldGenerateCryptoKeyPair() = runTest {

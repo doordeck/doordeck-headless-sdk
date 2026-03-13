@@ -1,0 +1,16 @@
+package com.doordeck.multiplatform.sdk
+
+internal object TestKeyConstants {
+
+    const val JAVA_PUBLIC_KEY = "MCowBQYDK2VwAyEA2E8RSaHnxBpnr+RGneGfpdLFhYEPVldzHx1TxuuyjD8="
+    const val JAVA_PRIVATE_KEY = "MC4CAQAwBQYDK2VwBCIEIIgEWMf5XswAhA4SwRRNl8IH34+4329pQKBfwWPVtFat"
+
+    const val SODIUM_PUBLIC_KEY = "9vG/XmIT0JxFjjWmXzd5F7XVbWLBeIPWb2qHKnjSz8o="
+    const val SODIUM_PRIVATE_KEY = "OLPBsJ3zReQj2r2YNgnGMn/B8SW/U7qP9hMrd0mdP9j28b9eYhPQnEWONaZfN3kXtdVtYsF4g9ZvaocqeNLPyg=="
+
+    const val CRYPTO_KIT_PUBLIC_KEY = "VpXka4JVjIYQ969Yqo92+x4JgwZPh0QiJIKx/3XzAxs="
+    const val CRYPTO_KIT_PRIVATE_KEY = "GJsHlbSK/tdAGDL5+7QjB/aJx/AfKOWjMUGOpQ/1F9U="
+
+    const val BOUNCY_CASTLE_PUBLIC_KEY = "MCowBQYDK2VwAyEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
+    const val BOUNCY_CASTLE_PRIVATE_KEY = "MFECAQEwBQYDK2VwBCIEIOmntkLRdLIVT+BDWRF88R3Bu3XIrl3PR5U2mPmlyD74gSEAUoW8fvEIAw8cW+gx6TWh27NDzRvO9k/++9YsyN8xWsU="
+}
