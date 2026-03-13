@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.test.runTest
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class JvmCryptoManagerTest {
