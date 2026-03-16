@@ -1,16 +1,16 @@
 [versions]
-agp = "8.12.0" # 8.13.0+ is not yet supported by IntelliJ
+kgp = "9.1.0"
 bouncy-castle = "1.83"
-indispensable-asn1 = "3.19.1"
-kotlin = "2.3.0"
+indispensable-asn1 = "3.19.3"
+kotlin = "2.3.10"
 multiplatform-settings = "1.3.0"
 android-min-sdk = "26"
 android-compile-sdk = "34"
 ios-min-sdk = "14"
 macos-min-sdk = "14"
 watchos-min-sdk = "11"
-nimbus-jose-jwt = "10.7"
-ktor-client = "3.3.3"
+nimbus-jose-jwt = "10.8"
+ktor-client = "3.4.1"
 libsodium = "0.9.5"
 libsodium-sumo = "0.8.2"
 security-crypto = "1.1.0"
@@ -19,7 +19,7 @@ kotlin-coroutines-test = "1.10.2"
 swift-klib = "1.1.0"
 asn1js = "3.0.6"
 pkijs = "3.3.3"
-kermit = "2.0.8"
+kermit = "2.1.0"
 buildkonfig = "0.17.1"
 
 [libraries]
@@ -52,7 +52,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
-android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "kgp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }

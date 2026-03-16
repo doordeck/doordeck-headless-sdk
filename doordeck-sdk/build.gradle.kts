@@ -9,7 +9,7 @@ import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.multiplatform.library)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.swift.klib)
@@ -67,8 +67,12 @@ private val pypiPublish = PyPiPublishData()
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm()
-    androidTarget {
-        publishLibraryVariants("release")
+    android {
+        namespace = "com.doordeck.multiplatform.sdk"
+        compileSdk = libs.versions.android.compile.sdk.get().toInt()
+        minSdk = libs.versions.android.min.sdk.get().toInt()
+        withJava()
+        withHostTest {}
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_1_8)
         }
@@ -344,14 +348,6 @@ signing {
 
     useInMemoryPgpKeys(null, signingKey, signingPassword)
     sign(publishing.publications)
-}
-
-android {
-    namespace = "com.doordeck.multiplatform.sdk"
-    compileSdk = libs.versions.android.compile.sdk.get().toInt()
-    defaultConfig {
-        minSdk = libs.versions.android.min.sdk.get().toInt()
-    }
 }
 
 swiftklib {

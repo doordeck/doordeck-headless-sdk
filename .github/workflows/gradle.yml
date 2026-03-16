@@ -28,7 +28,7 @@ jobs:
             test: jvmTest
             os: ubuntu-latest
           - name: Android
-            test: testReleaseUnitTest
+            test: testAndroidHostTest
             os: ubuntu-latest
           - name: JS
             test: kotlinUpgradeYarnLock jsTest

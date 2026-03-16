@@ -1,7 +1,7 @@
 import java.time.Duration
 
 plugins {
-    alias(libs.plugins.android.library).apply(false)
+    alias(libs.plugins.kotlin.multiplatform.library).apply(false)
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.kotlin.cocoapods).apply(false)
@@ -31,6 +31,5 @@ nexusPublishing {
 // Force some JS dependencies to use specific versions (yarn.lock)
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
-        resolution("brace-expansion", "2.0.2")
     }
 }
