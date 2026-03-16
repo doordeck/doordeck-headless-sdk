@@ -149,7 +149,7 @@ jobs:
 
       - name: Tag for release (if on main)
         if: github.ref == 'refs/heads/main'
-        run: ./gradlew final -x test
+        run: ./gradlew final
 
       - name: Store tag
         id: pre-release-tag
@@ -293,7 +293,7 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
           MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype -x test
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype
 
   maven-close:
     name: Maven close staging repository
