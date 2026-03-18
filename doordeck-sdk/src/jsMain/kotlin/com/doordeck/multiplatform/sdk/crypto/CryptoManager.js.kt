@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.jsmodule.toByteArray
 import com.doordeck.multiplatform.sdk.jsmodule.toUint8Array
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import io.ktor.util.decodeBase64Bytes
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import io.ktor.util.toJsArray
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.await
@@ -50,7 +50,7 @@ actual object CryptoManager {
      * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean = try {
-        val asn1 = ASN1.fromBER(base64Certificate.decodeBase64Bytes().toJsArray().buffer)
+        val asn1 = ASN1.fromBER(base64Certificate.decodeBase64ToByteArray().toJsArray().buffer)
         val certificate = PKI.Certificate()
         certificate.fromSchema(asn1.result)
         val notAfterInstant = Instant.parse(Date(certificate.notAfter.value.toString()).toISOString())

@@ -80,9 +80,9 @@ kotlin {
 
     val xcf = XCFramework(cocoapodsPublish.packageName)
     val appleTargets = listOf(
-        iosX64(), iosArm64(), iosSimulatorArm64(),                                      // iOS
-        macosX64(), macosArm64(),                                                       // macOS
-        watchosX64(), watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()     // watchOS
+        iosX64(), iosArm64(), iosSimulatorArm64(),                      // iOS
+        macosArm64(),                                                   // macOS
+        watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()   // watchOS
     )
 
     appleTargets.forEach {

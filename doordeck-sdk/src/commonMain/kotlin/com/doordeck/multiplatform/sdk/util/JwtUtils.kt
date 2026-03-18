@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
-import io.ktor.util.decodeBase64String
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64String
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.jvm.JvmSynthetic
