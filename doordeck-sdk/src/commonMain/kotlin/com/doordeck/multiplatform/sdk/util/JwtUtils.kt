@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
-import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64String
+import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.jvm.JvmSynthetic
@@ -18,7 +18,7 @@ internal object JwtUtils {
 
     private fun getClaims(token: String): Map<String, String> {
         return try {
-            return JSON.parseToJsonElement(token.split(".")[1].decodeBase64String())
+            return JSON.parseToJsonElement(token.split(".")[1].decodeBase64ToByteArray().decodeToString())
                 .jsonObject
                 .map { it.key to it.value.jsonPrimitive.content }
                 .toMap()
