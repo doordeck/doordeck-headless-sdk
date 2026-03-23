@@ -6,6 +6,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Europe/London"
     open-pull-requests-limit: 10
     groups:
       gradle-patch:
@@ -16,6 +19,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Europe/London"
     groups:
       actions-all:
         patterns: ["*"]
