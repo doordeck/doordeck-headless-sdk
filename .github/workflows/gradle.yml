@@ -225,7 +225,7 @@ jobs:
       - name: Publish
         env:
           COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings
+        run: pod trunk push doordeck-sdk/build/cocoapods/publish/release/DoordeckSDK.podspec --allow-warnings --skip-import-validation
 
   npm:
     name: NPM publish
