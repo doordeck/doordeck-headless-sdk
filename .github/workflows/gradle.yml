@@ -51,9 +51,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Setup WireGuard
         uses: ./.github/actions/wireguard-action
@@ -81,9 +84,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Setup pyright
         run: pip install pyright
@@ -113,9 +119,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Generate artifact
         run: ./gradlew mingwX64Binaries
@@ -174,9 +183,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
@@ -207,9 +219,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64 # v1.299.0
@@ -247,9 +262,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -283,9 +301,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Publish
         env:
@@ -318,9 +339,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Close staging repository
         env:
@@ -351,9 +375,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Release repository
         env:
@@ -381,9 +408,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
@@ -426,9 +456,12 @@ jobs:
         with:
           distribution: corretto
           java-version: 21
+          cache: gradle
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        with:
+          cache-disabled: true
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
