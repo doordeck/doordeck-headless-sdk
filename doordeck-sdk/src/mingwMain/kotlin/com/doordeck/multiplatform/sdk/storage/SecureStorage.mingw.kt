@@ -171,7 +171,7 @@ class MingwSecureStorage(
     }
 
     override fun setKeyPairVerified(publicKey: ByteArray?) {
-        setKeyPairVerifiedCp.invokeNullableStringCallback(publicKey?.toString())
+        setKeyPairVerifiedCp.invokeNullableStringCallback(publicKey?.encodeByteArrayToBase64())
     }
 
     override fun getKeyPairVerified(): ByteArray? {
