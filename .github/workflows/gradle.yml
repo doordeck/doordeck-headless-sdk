@@ -191,7 +191,7 @@ jobs:
           cache-disabled: true
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
         with:
           role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
           aws-region: eu-west-1
@@ -227,7 +227,7 @@ jobs:
           cache-disabled: true
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64 # v1.299.0
+        uses: ruby/setup-ruby@4c56a21280b36d862b5fc31348f463d60bdc55d5 # v1.301.0
         with:
           ruby-version: '3.3'
 
@@ -476,7 +476,7 @@ jobs:
         run: python -m build doordeck-sdk/build/bin/mingwX64/python
 
       - name: Publish
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
+        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
         with:
           packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
 
