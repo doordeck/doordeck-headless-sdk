@@ -76,7 +76,7 @@ internal object Paths {
      */
     @JvmSynthetic
     internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
-            path != getVerifyEmailPath()
+            path != getVerifyEmailPath() && path != getPasswordResetPath() && path != getPasswordResetVerifyPath()
 }
 
 /**
