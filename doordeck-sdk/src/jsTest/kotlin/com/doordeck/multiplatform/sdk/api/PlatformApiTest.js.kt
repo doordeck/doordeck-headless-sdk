@@ -17,9 +17,11 @@ import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.size
+import com.doordeck.multiplatform.sdk.util.promise
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,7 +30,18 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiTest : IntegrationTest() {
-    
+
+    @AfterTest
+    fun cleanUp() = promise {
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        PlatformApi.listApplications().await().toList().filter { application ->
+            application.name.startsWith("Test Application $platformType") &&
+                    application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+        }.forEach { application ->
+            PlatformApi.deleteApplication(application.applicationId).await()
+        }
+    }
+
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication

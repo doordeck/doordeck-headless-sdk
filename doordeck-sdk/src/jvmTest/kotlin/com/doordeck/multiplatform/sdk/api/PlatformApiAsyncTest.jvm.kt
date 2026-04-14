@@ -20,7 +20,9 @@ import com.nimbusds.jose.jwk.OctetKeyPair
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.util.Base64URL
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -29,6 +31,17 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiAsyncTest : IntegrationTest() {
+
+    @After
+    fun cleanUp() = runBlocking {
+        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        PlatformApi.listApplicationsAsync().await().filter { application ->
+            application.name.startsWith("Test Application $platformType") &&
+                    application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+        }.forEach { application ->
+            PlatformApi.deleteApplicationAsync(application.applicationId).await()
+        }
+    }
 
     @Test
     fun shouldTestPlatformAsync() = runTest {

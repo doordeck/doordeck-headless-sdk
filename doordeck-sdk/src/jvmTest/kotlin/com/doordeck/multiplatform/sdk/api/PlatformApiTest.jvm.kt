@@ -19,7 +19,9 @@ import com.nimbusds.jose.jwk.KeyUse
 import com.nimbusds.jose.jwk.OctetKeyPair
 import com.nimbusds.jose.jwk.RSAKey
 import com.nimbusds.jose.util.Base64URL
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -28,6 +30,17 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiTest : IntegrationTest() {
+
+    @After
+    fun cleanUp() = runBlocking {
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        PlatformApi.listApplications().filter { application ->
+            application.name.startsWith("Test Application $platformType") &&
+                    application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+        }.forEach { application ->
+            PlatformApi.deleteApplication(application.applicationId)
+        }
+    }
 
     @Test
     fun shouldTestPlatform() = runTest {
