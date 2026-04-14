@@ -44,6 +44,7 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -52,6 +53,28 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiTest : CallbackTest() {
+
+    @AfterTest
+    fun cleanUp() {
+        runBlocking {
+            val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
+                PlatformApi.listApplications(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            applicationsResponse.success?.result?.filter { application ->
+                application.name.startsWith("Test Application $platformType") &&
+                        application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+            }?.forEach { application ->
+                callbackApiCall<ResultData<Unit>> {
+                    PlatformApi.deleteApplication(
+                        data = ApplicationIdData(application.applicationId).toJson(),
+                        callback = staticCFunction(::testCallback)
+                    )
+                }
+            }
+        }
+    }
 
     @Test
     fun shouldTestPlatform() = runTest {

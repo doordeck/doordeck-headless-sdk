@@ -16,7 +16,11 @@ import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toUrlString
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlin.test.AfterClass
+import kotlin.test.BeforeClass
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -25,7 +29,18 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 class PlatformApiTest : IntegrationTest() {
-    
+
+    @AfterClass
+    fun cleanUp() = runBlocking {
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        PlatformApi.listApplications().filter { application ->
+            application.name.startsWith("Test Application $platformType") &&
+                    application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+        }.forEach { application ->
+            PlatformApi.deleteApplication(application.applicationId)
+        }
+    }
+
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
