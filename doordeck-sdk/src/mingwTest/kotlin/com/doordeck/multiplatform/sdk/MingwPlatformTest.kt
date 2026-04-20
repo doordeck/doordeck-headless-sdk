@@ -14,6 +14,7 @@ class MingwPlatformTest {
 
         // Then
         assertTrue { client.engine.config is WinHttpClientEngineConfig }
+        client.close()
     }
 
     @Test

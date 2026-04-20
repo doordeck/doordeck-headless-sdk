@@ -19,6 +19,7 @@ class JsPlatformTest {
 
         // Then
         assertTrue { client.engine.config is JsClientEngineConfig }
+        client.close()
     }
 
     @Test

@@ -13,6 +13,7 @@ class IosPlatformTest {
 
         // Then
         assertTrue { client.engine.config is DarwinClientEngineConfig }
+        client.close()
     }
 
     @Test

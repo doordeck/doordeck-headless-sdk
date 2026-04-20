@@ -14,6 +14,7 @@ class AndroidPlatformTest {
 
         // When
         assertTrue { client.engine.config is OkHttpConfig }
+        client.close()
     }
 
     @Test
