@@ -107,7 +107,6 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
      */
     @JvmSynthetic
     internal fun overrideClient(httpClient: HttpClient) {
-        _client.close()
         _client = httpClient
     }
 }
