@@ -14,6 +14,7 @@ class JvmPlatformTest {
 
         // Then
         assertTrue { client.engine.config is OkHttpConfig }
+        client.close()
     }
 
     @Test
