@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 internal data class OperationHeaderRequest(
     val alg: String = "EdDSA",
     val x5c: List<String>,
+    @SerialName("typ")
     val type: String = "JWT"
 )
 
