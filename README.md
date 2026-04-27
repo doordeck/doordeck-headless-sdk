@@ -14,15 +14,15 @@ We are publishing the packages to multiple repositories:
 ## Supported platforms
 The SDK supports a range of targets for different platforms:
 
-| Platform | Target                                                | Language                   |
-|:--------:|-------------------------------------------------------|----------------------------|
-| Android  | `android`                                             | `Java`, `Kotlin`           |
-|   JVM    | `jvm`                                                 | `Java`, `Kotlin`           |
-|   iOS    | `iosX64`, `iosArm64`, `iosSimulatorArm64`             | `Swift`, `Objective-C`     |
-|  macOS   | `macosArm64`                                          | `Swift`, `Objective-C`     |
-| watchOS  | `watchosX64`, `watchosArm64`, `watchosSimulatorArm64` | `Swift`, `Objective-C`     |
-|    JS    | `jsNode`, `jsBrowser`                                 | `JavaScript`, `TypeScript` |
-| Windows  | `mingwX64`                                            | `C#`, `Python`             |
+| Platform | Target                                  | Language                   |
+|:--------:|-----------------------------------------|----------------------------|
+| Android  | `android`                               | `Java`, `Kotlin`           |
+|   JVM    | `jvm`                                   | `Java`, `Kotlin`           |
+|   iOS    | `iosArm64`, `iosSimulatorArm64`         | `Swift`, `Objective-C`     |
+|  macOS   | `macosArm64`                            | `Swift`, `Objective-C`     |
+| watchOS  | `watchosArm64`, `watchosSimulatorArm64` | `Swift`, `Objective-C`     |
+|    JS    | `jsNode`, `jsBrowser`                   | `JavaScript`, `TypeScript` |
+| Windows  | `mingwX64`                              | `C#`, `Python`             |
 
 ## Getting started
 To start using the Doordeck Headless SDK, refer to the [documentation index](https://developer.doordeck.com/docs/category/kotlin-multiplatform-sdk) for detailed setup and usage instructions tailored to your platform.
