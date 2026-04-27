@@ -265,12 +265,9 @@ kotlin {
                 val macosVersion = libs.versions.macos.min.sdk.get().toInt()
                 val watchosVersion = libs.versions.watchos.min.sdk.get().toInt()
                 val arguments = "-Xoverride-konan-properties=" + listOf(
-                    "osVersionMin.ios_x64=$iosVersion.0",
                     "osVersionMin.ios_arm64=$iosVersion.0",
                     "osVersionMin.ios_simulator_arm64=$iosVersion.0",
-                    "osVersionMin.macos_x64=$macosVersion.0",
                     "osVersionMin.macos_arm64=$macosVersion.0",
-                    "osVersionMin.watchos_x64=$watchosVersion.0",
                     "osVersionMin.watchos_arm64=$watchosVersion.0",
                     "osVersionMin.watchos_device_arm64=$watchosVersion.0",
                     "osVersionMin.watchos_simulator_arm64=$watchosVersion.0"
