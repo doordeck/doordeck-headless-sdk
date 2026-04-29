@@ -74,5 +74,5 @@ public class Platform(
         Process<PlatformApi, List<ApplicationOwnerDetailsResponse>>(platform, platformApi.getApplicationOwnersDetails_, new { applicationId, userId });
 
     public unsafe Task<List<ApplicationUserResponse>> GetApplicationUsers(Guid applicationId, int pageSize = 100, Guid? lastUserRetrieved = null) =>
-            Process<PlatformApi, List<ApplicationUserResponse>>(platform, platformApi.getApplicationUsers_, new { applicationId, pageSize, lastUserRetrieved });
+        Process<PlatformApi, List<ApplicationUserResponse>>(platform, platformApi.getApplicationUsers_, new { applicationId, pageSize, lastUserRetrieved });
 }

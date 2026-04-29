@@ -330,7 +330,7 @@ actual object PlatformApi {
      */
     @DoordeckOnly
     @CName("getApplicationUsers")
-    suspend fun getApplicationUsers(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getApplicationUsers(data: String, callback: CStringCallback) = callback.handleCallback {
         val applicationUserData = data.fromJson<ApplicationUserData>()
         PlatformClient.getApplicationUsersRequest(
             applicationId = applicationUserData.applicationId,
