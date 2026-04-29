@@ -140,3 +140,18 @@ internal data class BasicApplicationOwnerDetailsResponse(
 internal data class BasicGetLogoUploadUrlResponse(
     val uploadUrl: String
 )
+
+@Serializable
+internal class BasicApplicationUserResponse(
+    val userId: String,
+    val foreignKey: String? = null,
+    val displayName: String? = null,
+    val email: String? = null,
+    val emailVerified: Boolean,
+    val telephone: String? = null,
+    val telephoneVerified: Boolean,
+    val emailIndexed: Boolean,
+    val telephoneIndexed: Boolean,
+    val foreignKeyIndexed: Boolean,
+    val lastUpdated: String
+)

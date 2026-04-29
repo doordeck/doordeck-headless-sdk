@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.clients.PlatformClient
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
 import com.doordeck.multiplatform.sdk.model.data.ApplicationIdData
 import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationUserData
 import com.doordeck.multiplatform.sdk.model.data.AuthIssuerData
 import com.doordeck.multiplatform.sdk.model.data.CorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.CreateApplicationData
@@ -322,6 +323,20 @@ actual object PlatformApi {
     fun getApplicationOwnersDetails(data: String, callback: CStringCallback) = callback.handleCallback {
         val applicationIdData = data.fromJson<ApplicationIdData>()
         PlatformClient.getApplicationOwnersDetailsRequest(applicationIdData.applicationId)
+    }
+
+    /**
+     * @see PlatformClient.getApplicationUsersRequest
+     */
+    @DoordeckOnly
+    @CName("getApplicationUsers")
+    suspend fun getApplicationUsers(data: String, callback: CStringCallback) = callback.handleCallback {
+        val applicationUserData = data.fromJson<ApplicationUserData>()
+        PlatformClient.getApplicationUsersRequest(
+            applicationId = applicationUserData.applicationId,
+            pageSize = applicationUserData.pageSize,
+            lastUserRetrieved = applicationUserData.lastUserRetrieved
+        )
     }
 }
 

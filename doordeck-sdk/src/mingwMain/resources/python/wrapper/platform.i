@@ -196,4 +196,15 @@ class Platform(object):
             _doordeck_headless_sdk.getApplicationOwnersDetails,
             [self.resource, json.dumps(data)]
         )
+
+    async def get_application_users(self, applicationId: str, pageSize: int = 100, lastUserRetrieved: typing.Optional[str] = None):
+        data = {
+            "applicationId": applicationId,
+            "pageSize": pageSize,
+            "lastUserRetrieved": lastUserRetrieved,
+        }
+        return await execute_async(
+            _doordeck_headless_sdk.getApplicationUsers,
+            [self.resource, json.dumps(data)]
+        )
 %}

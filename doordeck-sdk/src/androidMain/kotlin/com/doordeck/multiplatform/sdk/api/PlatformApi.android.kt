@@ -8,9 +8,11 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import com.doordeck.multiplatform.sdk.util.toUuid
@@ -467,6 +469,38 @@ actual object PlatformApi {
         applicationId: UUID
     ): CompletableFuture<List<ApplicationOwnerDetailsResponse>> = completableFuture {
         getApplicationOwnersDetails(applicationId)
+    }
+
+    /**
+     * @see PlatformClient.getApplicationUsersRequest
+     */
+    @DoordeckOnly
+    suspend fun getApplicationUsers(
+        applicationId: UUID,
+        pageSize: Int = 100,
+        lastUserRetrieved: UUID? = null
+    ): List<ApplicationUserResponse> = PlatformClient
+        .getApplicationUsersRequest(
+            applicationId = applicationId.toString(),
+            pageSize = pageSize,
+            lastUserRetrieved = lastUserRetrieved?.toString()
+        )
+        .toApplicationUserResponse()
+
+    /**
+     * Async variant of [PlatformApi.getApplicationUsers] returning [CompletableFuture].
+     */
+    @DoordeckOnly
+    suspend fun getApplicationUsersAsync(
+        applicationId: UUID,
+        pageSize: Int = 100,
+        lastUserRetrieved: UUID? = null
+    ): CompletableFuture<List<ApplicationUserResponse>> = completableFuture {
+        getApplicationUsers(
+            applicationId = applicationId,
+            pageSize = pageSize,
+            lastUserRetrieved = lastUserRetrieved
+        )
     }
 }
 

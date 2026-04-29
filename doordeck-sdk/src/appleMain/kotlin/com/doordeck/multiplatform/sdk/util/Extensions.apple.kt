@@ -29,6 +29,7 @@ import platform.Foundation.serverTrust
 import platform.Foundation.timeIntervalSince1970
 import platform.Foundation.timeZoneWithAbbreviation
 import platform.Foundation.timeZoneWithName
+import kotlin.time.Instant
 
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
@@ -103,3 +104,5 @@ internal fun NSTimeInterval.toWholeSeconds(): Int = toInt()
 internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
 internal fun String.toNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
+
+internal fun String.isoToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(Instant.parse(this).epochSeconds.toDouble())
