@@ -153,6 +153,13 @@ internal data class ApplicationOwnerData(
     val userId: String
 )
 
+@Serializable
+internal data class ApplicationUserData(
+    val applicationId: String,
+    val pageSize: Int = 100,
+    val lastUserRetrieved: String? = null
+)
+
 internal fun CreateApplicationData.toCreateApplication() = BasicCreateApplication(
     name = name,
     companyName = companyName,

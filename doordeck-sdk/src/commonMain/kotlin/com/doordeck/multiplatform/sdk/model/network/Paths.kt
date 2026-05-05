@@ -70,6 +70,7 @@ internal object Paths {
     @JvmSynthetic internal fun getAddApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     @JvmSynthetic internal fun getRemoveApplicationOwnerPath(applicationId: String) = "/platform/application/$applicationId/owner"
     @JvmSynthetic internal fun getApplicationOwnersDetailsPath(applicationId: String) = "/platform/application/$applicationId/owner"
+    @JvmSynthetic internal fun getApplicationUsersPath(applicationId: String) = "/platform/application/$applicationId/user"
 
     /**
      * Determines if a given API path requires authentication.

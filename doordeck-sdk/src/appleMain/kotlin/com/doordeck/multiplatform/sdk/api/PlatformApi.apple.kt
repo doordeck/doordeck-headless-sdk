@@ -8,9 +8,11 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.toNsUuid
 import com.doordeck.multiplatform.sdk.util.toUrlString
@@ -249,6 +251,23 @@ actual object PlatformApi {
     ): List<ApplicationOwnerDetailsResponse> = PlatformClient
         .getApplicationOwnersDetailsRequest(applicationId.UUIDString)
         .toApplicationOwnerDetailsResponse()
+
+    /**
+     * @see PlatformClient.getApplicationUsersRequest
+     */
+    @DoordeckOnly
+    @Throws(Exception::class)
+    suspend fun getApplicationUsers(
+        applicationId: NSUUID,
+        pageSize: Int = 100,
+        lastUserRetrieved: NSUUID? = null
+    ): List<ApplicationUserResponse> = PlatformClient
+        .getApplicationUsersRequest(
+            applicationId = applicationId.toString(),
+            pageSize = pageSize,
+            lastUserRetrieved = lastUserRetrieved?.toString()
+        )
+        .toApplicationUserResponse()
 }
 
 /**

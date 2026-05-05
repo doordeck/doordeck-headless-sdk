@@ -5,6 +5,8 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.BasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
+import com.doordeck.multiplatform.sdk.model.network.Params.LAST_USER_RETRIEVED
+import com.doordeck.multiplatform.sdk.model.network.Params.PAGE_SIZE
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddAuthIssuerRequest
@@ -28,11 +30,13 @@ import com.doordeck.multiplatform.sdk.model.requests.toAddAuthKeyRequest
 import com.doordeck.multiplatform.sdk.model.requests.toCreateApplicationRequest
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
+import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -402,6 +406,25 @@ internal object PlatformClient {
     @JvmSynthetic
     internal suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
         return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
+    }
+
+    /**
+     * Retrieves a paginated list of users belonging to an application.
+     *
+     * @param applicationId The application's unique identifier.
+     * @param pageSize Number of users to return per page.
+     * @param lastUserRetrieved User ID of the last user returned in the previous page; omit to start from the beginning.
+     * @return List of [BasicApplicationUserResponse]
+     * @throws SdkException if an unexpected error occurs while processing the request.
+     *
+     * @see <a href="https://portal.sentryinteractive.com/docs/cloud-api/platform/get-application-users/">API Doc</a>
+     */
+    @JvmSynthetic
+    internal suspend fun getApplicationUsersRequest(applicationId: String, pageSize: Int, lastUserRetrieved: String?): List<BasicApplicationUserResponse> {
+        return CloudHttpClient.client.get(Paths.getApplicationUsersPath(applicationId)) {
+            parameter(PAGE_SIZE, pageSize)
+            lastUserRetrieved?.let { parameter(LAST_USER_RETRIEVED, it) }
+        }.body()
     }
 
     /**
