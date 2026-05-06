@@ -291,8 +291,8 @@ class PlatformApiAsyncTest : IntegrationTest() {
         val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
         val applicationJwtBody = ApplicationJwtBody(
             iss = addApplicationAuthIssuer.toString(),
-            exp = now().epochSecond,
-            iat = now().epochSecond + 1.days.inWholeSeconds,
+            exp = now().epochSecond + 1.days.inWholeSeconds,
+            iat = now().epochSecond,
             aud = ApiEnvironment.PROD.cloudHost,
             sub = applicationUserId.toString(),
             email = applicationUserEmail,

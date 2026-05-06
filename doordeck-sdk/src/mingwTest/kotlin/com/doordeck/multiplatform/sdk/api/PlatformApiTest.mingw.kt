@@ -526,8 +526,8 @@ class PlatformApiTest : CallbackTest() {
             val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
             val applicationJwtBody = ApplicationJwtBody(
                 iss = addApplicationAuthIssuer,
-                exp = Clock.System.now().epochSeconds,
-                iat = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
+                exp = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
+                iat = Clock.System.now().epochSeconds,
                 aud = ApiEnvironment.PROD.cloudHost,
                 sub = applicationUserId,
                 email = applicationUserEmail,

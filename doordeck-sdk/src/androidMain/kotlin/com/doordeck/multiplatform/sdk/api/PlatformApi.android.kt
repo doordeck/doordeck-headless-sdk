@@ -491,7 +491,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.getApplicationUsers] returning [CompletableFuture].
      */
     @DoordeckOnly
-    suspend fun getApplicationUsersAsync(
+    fun getApplicationUsersAsync(
         applicationId: UUID,
         pageSize: Int = 100,
         lastUserRetrieved: UUID? = null

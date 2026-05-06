@@ -142,7 +142,7 @@ internal data class BasicGetLogoUploadUrlResponse(
 )
 
 @Serializable
-internal class BasicApplicationUserResponse(
+internal data class BasicApplicationUserResponse(
     val userId: String,
     val foreignKey: String? = null,
     val displayName: String? = null,
