@@ -5,9 +5,16 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_U
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.ApplicationIdData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtBody
+import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtHeader
 import com.doordeck.multiplatform.sdk.model.data.ApplicationOwnerData
+import com.doordeck.multiplatform.sdk.model.data.ApplicationUserData
 import com.doordeck.multiplatform.sdk.model.data.AuthIssuerData
 import com.doordeck.multiplatform.sdk.model.data.CorsDomainData
 import com.doordeck.multiplatform.sdk.model.data.CreateApplicationData
@@ -29,17 +36,20 @@ import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationPrivacyPolicyD
 import com.doordeck.multiplatform.sdk.model.data.UpdateApplicationSupportContactData
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEcKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicEd25519KeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.testCallback
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.runBlocking
@@ -51,6 +61,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : CallbackTest() {
 
@@ -79,13 +91,17 @@ class PlatformApiTest : CallbackTest() {
     @Test
     fun shouldTestPlatform() = runTest {
         runBlocking {
+            CryptoManager.initialize() // Initialize
             // Given - shouldCreateApplication
-            callbackApiCall<ResultData<BasicTokenResponse>> {
+            val authTokens = callbackApiCall<ResultData<BasicTokenResponse>> {
                 AccountlessApi.login(
                     data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                     callback = staticCFunction(::testCallback)
                 )
             }
+            assertNotNull(authTokens.success)
+            assertNotNull(authTokens.success.result)
+
             val newApplication = CreateApplicationData(
                 name = "Test Application $platformType ${randomUuidString()}",
                 companyName = randomString(),
@@ -343,29 +359,6 @@ class PlatformApiTest : CallbackTest() {
             assertNotEquals(0, applicationResponse.success.result.authDomains.size)
             assertTrue { applicationResponse.success.result.authDomains.any { it == addApplicationAuthIssuer } }
 
-            // Given - shouldDeleteAuthIssuer
-            val removedApplicationAuthIssuer = addApplicationAuthIssuer
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.deleteAuthIssuer(
-                    data = AuthIssuerData(application.applicationId, removedApplicationAuthIssuer).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(0, applicationResponse.success.result.authDomains.size)
-            assertFalse { applicationResponse.success.result.authDomains.any { it == removedApplicationAuthIssuer } }
-
             // Given - shouldAddCorsDomain
             val addedApplicationCorsDomain = randomUrlString()
 
@@ -413,12 +406,14 @@ class PlatformApiTest : CallbackTest() {
             assertFalse { applicationResponse.success.result.corsDomains.any { it == removedApplicationCorsDomain } }
 
             // Given - shouldAddEd25519AuthKey
+            val ed25519KeyPair = CryptoManager.generateRawKeyPair()
+            val ed25519KeyId = randomUuidString()
             val ed25519Key = Ed25519KeyData(
-                kid = randomUuidString(),
+                kid = ed25519KeyId,
                 use = "sig",
                 alg = "EdDSA",
                 crv = "Ed25519",
-                x = "vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"
+                x = ed25519KeyPair.public.encodeByteArrayToBase64()
             )
 
             // When
@@ -524,6 +519,82 @@ class PlatformApiTest : CallbackTest() {
             assertEquals(ecKey.crv, actualKeyEcKey.crv)
             assertEquals(ecKey.x, actualKeyEcKey.x)
             assertEquals(ecKey.y, actualKeyEcKey.y)
+
+            // Given - shouldGetApplicationUsers
+            val applicationUserEmail = "training+${randomUuidString()}@doordeck.com"
+            val applicationUserId = randomUuidString()
+            val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
+            val applicationJwtBody = ApplicationJwtBody(
+                iss = addApplicationAuthIssuer,
+                exp = Clock.System.now().epochSeconds,
+                iat = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
+                aud = ApiEnvironment.PROD.cloudHost,
+                sub = applicationUserId,
+                email = applicationUserEmail,
+                emailVerified = true,
+                name = "Training Training"
+            )
+            val headerB64 = applicationJwtHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
+            val bodyB64 = applicationJwtBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
+            val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(ed25519KeyPair.private).encodeByteArrayToBase64()
+            val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
+
+            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+            // Perform a request to create the new user and attach it to the application
+            val userDetailsResponse = callbackApiCall<ResultData<BasicUserDetailsResponse>> {
+                AccountApi.getUserDetails(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(userDetailsResponse.success)
+            assertNotNull(userDetailsResponse.success.result)
+            ContextManager.setCloudAuthToken(authTokens.success.result.authToken) // Restore the context token
+
+            // Then
+            val applicationUsersResponse = callbackApiCall<ResultData<List<BasicApplicationUserResponse>>> {
+                PlatformApi.getApplicationUsers(
+                    data = ApplicationUserData(application.applicationId).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(applicationUsersResponse.success)
+            assertNotNull(applicationUsersResponse.success.result)
+            assertEquals(1, applicationUsersResponse.success.result.size)
+            assertEquals(applicationUserEmail, applicationUsersResponse.success.result.first().email)
+            assertEquals(applicationJwtBody.name, applicationUsersResponse.success.result.first().displayName)
+            assertEquals(applicationUserId, applicationUsersResponse.success.result.first().foreignKey)
+
+            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+            // Cleanup the application user
+            callbackApiCall<ResultData<BasicUserDetailsResponse>> {
+                AccountApi.deleteAccount(
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            ContextManager.setCloudAuthToken(authTokens.success.result.authToken) // Restore the context token
+
+            // Given - shouldDeleteAuthIssuer
+            val removedApplicationAuthIssuer = addApplicationAuthIssuer
+
+            // When
+            callbackApiCall<ResultData<Unit>> {
+                PlatformApi.deleteAuthIssuer(
+                    data = AuthIssuerData(application.applicationId, removedApplicationAuthIssuer).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+
+            // Then
+            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+                PlatformApi.getApplication(
+                    data = ApplicationIdData(application.applicationId).toJson(),
+                    callback = staticCFunction(::testCallback)
+                )
+            }
+            assertNotNull(applicationResponse.success)
+            assertNotNull(applicationResponse.success.result)
+            assertEquals(0, applicationResponse.success.result.authDomains.size)
+            assertFalse { applicationResponse.success.result.authDomains.any { it == removedApplicationAuthIssuer } }
 
             // Given - shouldGetApplicationOwnersDetails
             // When

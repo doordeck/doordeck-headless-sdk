@@ -1,5 +1,8 @@
 package com.doordeck.multiplatform.sdk.model.data
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 internal data class BasicCreateApplication(
     val name: String,
     val companyName: String,
@@ -60,3 +63,22 @@ internal data class BasicEd25519Key(
     val crv: String,
     val x: String
 ): BasicAuthKey
+
+@Serializable
+data class ApplicationJwtHeader(val alg: String, val kid: String)
+
+@Serializable
+data class ApplicationJwtBody(
+    val iss: String,
+    val exp: Long,
+    val iat: Long,
+    val aud: String,
+    val sub: String,
+    val email: String,
+    @SerialName("email_verified")
+    val emailVerified: Boolean,
+    val name: String,
+    val locale: String = "en-gb",
+    @SerialName("zoneinfo")
+    val zoneInfo: String = "Europe/London"
+)

@@ -5,12 +5,22 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_U
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.context.ContextManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
+import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtBody
+import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtHeader
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
+import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
+import com.doordeck.multiplatform.sdk.util.now
+import com.doordeck.multiplatform.sdk.util.toJson
 import com.doordeck.multiplatform.sdk.util.toUri
 import com.nimbusds.jose.Algorithm
 import com.nimbusds.jose.jwk.Curve
@@ -22,12 +32,14 @@ import com.nimbusds.jose.util.Base64URL
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import java.security.interfaces.EdECPublicKey
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : IntegrationTest() {
 
@@ -45,7 +57,7 @@ class PlatformApiTest : IntegrationTest() {
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),
@@ -178,17 +190,6 @@ class PlatformApiTest : IntegrationTest() {
         assertNotEquals(0, application.authDomains.size)
         assertTrue { application.authDomains.any { it == addApplicationAuthIssuer } }
 
-        // Given - shouldDeleteAuthIssuer
-        val removedApplicationAuthIssuer = addApplicationAuthIssuer
-
-        // When
-        PlatformApi.deleteAuthIssuer(application.applicationId, removedApplicationAuthIssuer)
-
-        // Then
-        application = PlatformApi.getApplication(application.applicationId)
-        assertEquals(0, application.authDomains.size)
-        assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
-
         // Given - shouldAddCorsDomain
         val addedApplicationCorsDomain = randomUri()
 
@@ -212,10 +213,13 @@ class PlatformApiTest : IntegrationTest() {
         assertFalse { application.corsDomains.any { it == removedApplicationCorsDomain } }
 
         // Given - shouldAddEd25519AuthKey
-        val ed25519Key = OctetKeyPair.Builder(Curve.Ed25519, Base64URL("vG0Xdtks-CANqLj2wYw7c72wd848QponNTyKr_xA_cg"))
+        val ed25519KeyPair = CryptoManager.generateKeyPair()
+        val ed25519KeyId = randomUuidString()
+        val ed25519Key = OctetKeyPair.Builder(Curve.Ed25519,
+            Base64URL((ed25519KeyPair.public as EdECPublicKey).encoded.takeLast(32).toByteArray().encodeByteArrayToBase64()))
             .keyUse(KeyUse.SIGNATURE)
             .algorithm(Algorithm.parse("EdDSA"))
-            .keyID(randomUuidString())
+            .keyID(ed25519KeyId)
             .build()
 
         // When
@@ -279,6 +283,51 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(ecKey.curve, actualKeyEcKey.curve)
         assertEquals(ecKey.x, actualKeyEcKey.x)
         assertEquals(ecKey.y, actualKeyEcKey.y)
+
+        // Given - shouldGetApplicationUsers
+        val applicationUserEmail = "training+${randomUuid()}@doordeck.com"
+        val applicationUserId = randomUuid()
+        val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
+        val applicationJwtBody = ApplicationJwtBody(
+            iss = addApplicationAuthIssuer.toString(),
+            exp = now().epochSecond,
+            iat = now().epochSecond + 1.days.inWholeSeconds,
+            aud = ApiEnvironment.PROD.cloudHost,
+            sub = applicationUserId.toString(),
+            email = applicationUserEmail,
+            emailVerified = true,
+            name = "Training Training"
+        )
+        val headerB64 = applicationJwtHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val bodyB64 = applicationJwtBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(ed25519KeyPair.private.encoded).encodeByteArrayToBase64()
+        val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
+
+        ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+        AccountApi.getUserDetails() // Perform a request to create the new user and attach it to the application
+        ContextManager.setCloudAuthToken(authTokens.authToken) // Restore the context token
+
+        // Then
+        val applicationUsers = PlatformApi.getApplicationUsers(application.applicationId)
+        assertEquals(1, applicationUsers.size)
+        assertEquals(applicationUserEmail, applicationUsers.first().email)
+        assertEquals(applicationJwtBody.name, applicationUsers.first().displayName)
+        assertEquals(applicationUserId.toString(), applicationUsers.first().foreignKey)
+
+        ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+        AccountApi.deleteAccount() // Cleanup the application user
+        ContextManager.setCloudAuthToken(authTokens.authToken) // Restore the context token
+
+        // Given - shouldDeleteAuthIssuer
+        val removedApplicationAuthIssuer = addApplicationAuthIssuer
+
+        // When
+        PlatformApi.deleteAuthIssuer(application.applicationId, removedApplicationAuthIssuer)
+
+        // Then
+        application = PlatformApi.getApplication(application.applicationId)
+        assertEquals(0, application.authDomains.size)
+        assertFalse { application.authDomains.any { it == removedApplicationAuthIssuer } }
 
         // Given - shouldGetApplicationOwnersDetails
         // When
