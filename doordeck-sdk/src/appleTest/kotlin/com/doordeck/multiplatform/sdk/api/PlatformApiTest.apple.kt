@@ -19,7 +19,6 @@ import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
-import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -285,15 +284,15 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(ecKey.y, actualKeyEcKey.y)
 
         // Given - shouldGetApplicationUsers
-        val applicationUserEmail = "training+${randomUuid()}@doordeck.com"
-        val applicationUserId = randomUuid()
+        val applicationUserEmail = "training+${randomUuidString()}@doordeck.com"
+        val applicationUserId = randomUuidString()
         val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
         val applicationJwtBody = ApplicationJwtBody(
             iss = addApplicationAuthIssuer.toString(),
             exp = Clock.System.now().epochSeconds,
             iat = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
             aud = ApiEnvironment.PROD.cloudHost,
-            sub = applicationUserId.toString(),
+            sub = applicationUserId,
             email = applicationUserEmail,
             emailVerified = true,
             name = "Training Training"
