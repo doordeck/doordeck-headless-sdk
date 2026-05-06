@@ -13,4 +13,6 @@ internal object Params {
     @JvmSynthetic internal const val END = "end"
     @JvmSynthetic internal const val VISITOR = "visitor"
     @JvmSynthetic internal const val FORCE = "force"
+    @JvmSynthetic internal const val PAGE_SIZE = "pageSize"
+    @JvmSynthetic internal const val LAST_USER_RETRIEVED = "lastUserRetrieved"
 }

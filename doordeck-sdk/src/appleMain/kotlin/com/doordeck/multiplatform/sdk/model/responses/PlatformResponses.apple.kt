@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.isoToNsDate
 import com.doordeck.multiplatform.sdk.util.toNsDate
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
@@ -124,6 +125,20 @@ data class GetLogoUploadUrlResponse(
     val uploadUrl: NSURLComponents
 )
 
+data class ApplicationUserResponse(
+    val userId: NSUUID,
+    val foreignKey: String? = null,
+    val displayName: String? = null,
+    val email: String? = null,
+    val emailVerified: Boolean,
+    val telephone: String? = null,
+    val telephoneVerified: Boolean,
+    val emailIndexed: Boolean,
+    val telephoneIndexed: Boolean,
+    val foreignKeyIndexed: Boolean,
+    val lastUpdated: NSDate
+)
+
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
     it.toApplicationResponse()
 }
@@ -237,3 +252,19 @@ internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogo
     GetLogoUploadUrlResponse(
         uploadUrl = uploadUrl.toNsUrlComponents()
     )
+
+internal fun List<BasicApplicationUserResponse>.toApplicationUserResponse(): List<ApplicationUserResponse> = map { user ->
+    ApplicationUserResponse(
+        userId = user.userId.toNsUuid(),
+        foreignKey = user.foreignKey,
+        displayName = user.displayName,
+        email = user.email,
+        emailVerified = user.emailVerified,
+        telephone = user.telephone,
+        telephoneVerified = user.telephoneVerified,
+        emailIndexed = user.emailIndexed,
+        telephoneIndexed = user.telephoneIndexed,
+        foreignKeyIndexed = user.foreignKeyIndexed,
+        lastUpdated = user.lastUpdated.isoToNsDate()
+    )
+}

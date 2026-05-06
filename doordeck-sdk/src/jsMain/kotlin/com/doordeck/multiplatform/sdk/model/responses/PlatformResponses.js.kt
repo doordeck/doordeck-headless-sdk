@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.model.common.GrantType
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import com.doordeck.multiplatform.sdk.util.toJsArray
 import kotlin.js.collections.JsArray
@@ -131,6 +130,21 @@ data class GetLogoUploadUrlResponse(
     val uploadUrl: String
 )
 
+@JsExport
+data class ApplicationUserResponse(
+    val userId: String,
+    val foreignKey: String? = null,
+    val displayName: String? = null,
+    val email: String? = null,
+    val emailVerified: Boolean,
+    val telephone: String? = null,
+    val telephoneVerified: Boolean,
+    val emailIndexed: Boolean,
+    val telephoneIndexed: Boolean,
+    val foreignKeyIndexed: Boolean,
+    val lastUpdated: String
+)
+
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): JsArray<ApplicationResponse> = map {
     it.toApplicationResponse()
 }.toJsArray()
@@ -238,3 +252,19 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
     uploadUrl = uploadUrl
 )
+
+internal fun List<BasicApplicationUserResponse>.toApplicationUserResponse(): JsArray<ApplicationUserResponse> = map { user ->
+    ApplicationUserResponse(
+        userId = user.userId,
+        foreignKey = user.foreignKey,
+        displayName = user.displayName,
+        email = user.email,
+        emailVerified = user.emailVerified,
+        telephone = user.telephone,
+        telephoneVerified = user.telephoneVerified,
+        emailIndexed = user.emailIndexed,
+        telephoneIndexed = user.telephoneIndexed,
+        foreignKeyIndexed = user.foreignKeyIndexed,
+        lastUpdated = user.lastUpdated
+    )
+}.toJsArray()

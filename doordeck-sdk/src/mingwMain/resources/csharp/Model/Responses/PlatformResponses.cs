@@ -129,3 +129,18 @@ public class GetLogoUploadUrlResponse
 {
     public required Uri UploadUrl { get; set; }
 }
+
+public class ApplicationUserResponse
+{
+    public required Guid UserId { get; set; }
+    public string? ForeignKey { get; set; }
+    public string? DisplayName { get; set; }
+    public string? Email { get; set; }
+    public required bool EmailVerified { get; set; }
+    public string? Telephone { get; set; }
+    public required bool TelephoneVerified { get; set; }
+    public required bool EmailIndexed { get; set; }
+    public required bool TelephoneIndexed { get; set; }
+    public required bool ForeignKeyIndexed { get; set; }
+    public required DateTime LastUpdated { get; set; }
+}

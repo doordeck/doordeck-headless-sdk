@@ -8,9 +8,11 @@ import com.doordeck.multiplatform.sdk.model.data.toBasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toBasicEmailPreferences
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.ApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.ApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.GetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
+import com.doordeck.multiplatform.sdk.model.responses.toApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
 import com.doordeck.multiplatform.sdk.util.promise
 import kotlin.js.Promise
@@ -245,6 +247,22 @@ actual object PlatformApi {
     ): Promise<JsArray<ApplicationOwnerDetailsResponse>> = promise {
         PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
             .toApplicationOwnerDetailsResponse()
+    }
+
+    /**
+     * @see PlatformClient.getApplicationUsersRequest
+     */
+    @DoordeckOnly
+    fun getApplicationUsers(
+        applicationId: String,
+        pageSize: Int = 100,
+        lastUserRetrieved: String? = null
+    ): Promise<JsArray<ApplicationUserResponse>> = promise {
+        PlatformClient.getApplicationUsersRequest(
+            applicationId = applicationId,
+            pageSize = pageSize,
+            lastUserRetrieved = lastUserRetrieved
+        ).toApplicationUserResponse()
     }
 }
 

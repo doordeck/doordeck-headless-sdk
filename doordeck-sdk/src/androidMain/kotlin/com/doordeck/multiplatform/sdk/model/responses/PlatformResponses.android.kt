@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.GrantType
+import com.doordeck.multiplatform.sdk.util.isoToInstant
 import com.doordeck.multiplatform.sdk.util.toInstant
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.doordeck.multiplatform.sdk.util.toUri
@@ -68,6 +69,20 @@ data class GetLogoUploadUrlResponse(
     val uploadUrl: URL
 )
 
+data class ApplicationUserResponse(
+    val userId: UUID,
+    val foreignKey: String? = null,
+    val displayName: String? = null,
+    val email: String? = null,
+    val emailVerified: Boolean,
+    val telephone: String? = null,
+    val telephoneVerified: Boolean,
+    val emailIndexed: Boolean,
+    val telephoneIndexed: Boolean,
+    val foreignKeyIndexed: Boolean,
+    val lastUpdated: Instant
+)
+
 @JvmSynthetic
 internal fun List<BasicApplicationResponse>.toApplicationResponse(): List<ApplicationResponse> = map {
     it.toApplicationResponse()
@@ -133,3 +148,20 @@ internal fun List<BasicApplicationOwnerDetailsResponse>.toApplicationOwnerDetail
 internal fun BasicGetLogoUploadUrlResponse.toGetLogoUploadUrlResponse(): GetLogoUploadUrlResponse = GetLogoUploadUrlResponse(
     uploadUrl = uploadUrl.toUrl()
 )
+
+@JvmSynthetic
+internal fun List<BasicApplicationUserResponse>.toApplicationUserResponse(): List<ApplicationUserResponse> = map { user ->
+    ApplicationUserResponse(
+        userId = user.userId.toUuid(),
+        foreignKey = user.foreignKey,
+        displayName = user.displayName,
+        email = user.email,
+        emailVerified = user.emailVerified,
+        telephone = user.telephone,
+        telephoneVerified = user.telephoneVerified,
+        emailIndexed = user.emailIndexed,
+        telephoneIndexed = user.telephoneIndexed,
+        foreignKeyIndexed = user.foreignKeyIndexed,
+        lastUpdated = user.lastUpdated.isoToInstant()
+    )
+}

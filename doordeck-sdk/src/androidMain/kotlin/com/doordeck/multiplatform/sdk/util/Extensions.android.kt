@@ -84,6 +84,9 @@ internal fun String.toInstant(): Instant {
 }
 
 @JvmSynthetic
+internal fun String.isoToInstant(): Instant = Instant.parse(this)
+
+@JvmSynthetic
 internal fun Double.toInstant(): Instant = Instant.ofEpochSecond(toLong())
 
 @JvmSynthetic
