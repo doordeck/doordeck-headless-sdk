@@ -27,7 +27,7 @@ actual object CryptoManager {
     @JsExport.Ignore
     internal actual suspend fun initialize() {
         Sodium.ready.await()
-        SdkLogger.d("Successfully initialized Libsodium")
+        SdkLogger.d("Successfully initialized Sodium")
     }
 
     /**

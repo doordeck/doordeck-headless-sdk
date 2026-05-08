@@ -54,4 +54,8 @@ interface Doordeck {
     @JsExport.Ignore
     @CName("crypto")
     fun crypto(): CryptoManager
+
+    @JsExport.Ignore
+    @CName("release")
+    fun release()
 }

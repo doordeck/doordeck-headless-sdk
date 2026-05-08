@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -10,6 +11,10 @@ internal object DoordeckFactory {
 
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
+        // Reset the HTTP clients
+        CloudHttpClient.reset()
+        FusionHttpClient.reset()
+        HttpClient.reset()
         // Add the provided values into the context
         Context.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)

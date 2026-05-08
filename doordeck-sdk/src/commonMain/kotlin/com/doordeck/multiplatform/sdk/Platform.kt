@@ -94,7 +94,7 @@ internal fun createHttpClient(): HttpClient {
     }
 }
 
-internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
+internal abstract class BaseHttpClient(private val clientProvider: () -> HttpClient) {
 
     private var _client: HttpClient = clientProvider()
 
@@ -108,6 +108,22 @@ internal abstract class BaseHttpClient(clientProvider: () -> HttpClient) {
     @JvmSynthetic
     internal fun overrideClient(httpClient: HttpClient) {
         _client = httpClient
+    }
+
+    /**
+     * Closes the underlying HTTP client, releasing connection pools, threads and native resources.
+     */
+    @JvmSynthetic
+    internal fun close() {
+        _client.close()
+    }
+
+    /**
+     * Closes the current HTTP client and creates a new one, allowing the SDK to be reused after [close].
+     */
+    internal fun reset() {
+        _client.close()
+        _client = clientProvider()
     }
 }
 

@@ -53,6 +53,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.append
+import io.ktor.http.auth.AuthScheme
 import io.ktor.http.encodedPath
 import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
@@ -100,7 +101,7 @@ internal fun HttpRequestBuilder.addRequestHeaders(
             append(HttpHeaders.Accept, apiVersion.toHeaderValue())
         }
         if (token != null) {
-            append(HttpHeaders.Authorization, "Bearer $token")
+            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $token")
         }
     }
 }
@@ -131,7 +132,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                         }
                         headers {
                             append(HttpHeaders.ContentType, ContentType.Application.Json)
-                            append(HttpHeaders.Authorization, "Bearer $currentRefreshToken")
+                            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
                         }
                         markAsRefreshTokenRequest()
                     }.body()
@@ -268,7 +269,7 @@ internal fun HttpClient.addAuthInterceptor(
         if (requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
             getAuthToken()?.let {
                 request.headers {
-                    append(HttpHeaders.Authorization, "Bearer $it")
+                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $it")
                 }
             }
         }
@@ -358,7 +359,7 @@ internal fun Double.validateLongitude() {
  */
 @JvmSynthetic
 internal fun Int.validateRadius() {
-    if (this < 1 || this > 1000) {
+    if (this !in 1..1000) {
         throw SdkException("Radius must be between 1m and 1km")
     }
 }
@@ -370,7 +371,7 @@ internal fun Int.validateRadius() {
  */
 @JvmSynthetic
 internal fun Int.validateAccuracy() {
-    if (this < 1 || this > 1000) {
+    if (this !in 1..1000) {
         throw SdkException("Accuracy must be between 1m and 1km")
     }
 }
