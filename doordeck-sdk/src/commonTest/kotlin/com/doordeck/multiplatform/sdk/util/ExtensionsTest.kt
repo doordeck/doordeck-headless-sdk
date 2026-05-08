@@ -21,6 +21,8 @@ import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.randomDouble
+import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomString
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
@@ -51,6 +53,7 @@ import io.ktor.http.HttpStatusCode.Companion.TooEarly
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
+import io.ktor.http.auth.AuthScheme
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -116,7 +119,7 @@ class ExtensionsTest {
         }
 
         // Then
-        assertEquals("Bearer $token", httpRequestBuilder.headers[HttpHeaders.Authorization])
+        assertEquals("${AuthScheme.Bearer} $token", httpRequestBuilder.headers[HttpHeaders.Authorization])
     }
 
     @Test
@@ -283,5 +286,105 @@ class ExtensionsTest {
 
         // Then
         assertEquals("awe***", result)
+    }
+
+    @Test
+    fun shouldNotThrowExceptionWithValidLatitude() = runTest {
+        // Given
+        val latitude = randomDouble(-90.0, 90.0)
+
+        // When
+        assertDoesNotThrow {
+            latitude.validateLatitude()
+        }
+    }
+
+    @Test
+    fun shouldThrowExceptionWithInvalidLatitude() = runTest {
+        // Given
+        val latitude = 190.0
+
+        // When
+        val exception = assertFails {
+            latitude.validateLatitude()
+        }
+
+        // Then
+        assertEquals("Latitude must be between -90 and 90 degrees", exception.message)
+    }
+
+    @Test
+    fun shouldNotThrowExceptionWithValidLongitude() = runTest {
+        // Given
+        val longitude = randomDouble(-180.0, 180.0)
+
+        // When
+        assertDoesNotThrow {
+            longitude.validateLongitude()
+        }
+    }
+
+    @Test
+    fun shouldThrowExceptionWithInvalidLongitude() = runTest {
+        // Given
+        val longitude = 190.0
+
+        // When
+        val exception = assertFails {
+            longitude.validateLongitude()
+        }
+
+        // Then
+        assertEquals("Longitude must be between -180 and 180 degrees", exception.message)
+    }
+
+    @Test
+    fun shouldNotThrowExceptionWithValidRadius() = runTest {
+        // Given
+        val radius = randomInt(1, 1000)
+
+        // When
+        assertDoesNotThrow {
+            radius.validateRadius()
+        }
+    }
+
+    @Test
+    fun shouldThrowExceptionWithInvalidRadius() = runTest {
+        // Given
+        val radius = 1001
+
+        // When
+        val exception = assertFails {
+            radius.validateRadius()
+        }
+
+        // Then
+        assertEquals("Radius must be between 1m and 1km", exception.message)
+    }
+
+    @Test
+    fun shouldNotThrowExceptionWithValidAccuracy() = runTest {
+        // Given
+        val accuracy = randomInt(1, 1000)
+
+        // When
+        assertDoesNotThrow {
+            accuracy.validateAccuracy()
+        }
+    }
+
+    @Test
+    fun shouldThrowExceptionWithInvalidAccuracy() = runTest {
+        // Given
+        val accuracy = 1001
+
+        // When
+        val exception = assertFails {
+            accuracy.validateAccuracy()
+        }
+
+        // Then
+        assertEquals("Accuracy must be between 1m and 1km", exception.message)
     }
 }
