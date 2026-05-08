@@ -40,7 +40,7 @@ internal inline fun <reified T>CloudHttpClient.setupMockClient(content: T) {
 internal inline fun <reified T> MockRequestHandleScope.respondContent(content: T): HttpResponseData = respond(
     content = ByteReadChannel(content.toJson().toByteArray(Charsets.UTF_8)),
     status = HttpStatusCode.OK,
-    headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.contentType)
+    headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
 )
 
 fun HttpClient.mockEngine() = engine as MockEngine

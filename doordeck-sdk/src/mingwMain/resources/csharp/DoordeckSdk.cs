@@ -232,6 +232,7 @@ public class DoordeckSdk
 
     public unsafe void Release()
     {
+        _symbols->kotlin.root.com.doordeck.multiplatform.sdk.Doordeck.release(_sdk);
         _symbols->DisposeStablePointer(_factory.pinned);
         _symbols->DisposeStablePointer(_sdk.pinned);
         _symbols->DisposeStablePointer(_accountApi.pinned);
