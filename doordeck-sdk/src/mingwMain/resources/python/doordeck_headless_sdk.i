@@ -87,6 +87,9 @@ class InitializeSdk(object):
         self.tiles = Tiles(tiles(self.sdk))
         self.contextManager = ContextManager(contextManager(self.sdk))
         self.cryptoManager = CryptoManager(crypto(self.sdk))
+
+    def release(self):
+        release(self.sdk)
 %}
 
 %{
