@@ -117,14 +117,6 @@ internal abstract class BaseHttpClient(private val clientProvider: () -> HttpCli
     internal fun close() {
         _client.close()
     }
-
-    /**
-     * Closes the current HTTP client and creates a new one, allowing the SDK to be reused after [close].
-     */
-    internal fun reset() {
-        _client.close()
-        _client = clientProvider()
-    }
 }
 
 internal object CloudHttpClient : BaseHttpClient(::createCloudHttpClient)
