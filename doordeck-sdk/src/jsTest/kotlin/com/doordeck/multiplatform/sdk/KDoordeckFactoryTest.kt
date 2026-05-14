@@ -42,14 +42,14 @@ class KDoordeckFactoryTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
         val sdk = KDoordeckFactory.initialize(config).await()
-        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         sdk.release()
 
         // Then
         val exception = assertFailsWith<SdkException> {
-            sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+            sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         }
         assertEquals("Failed to perform API call", exception.message)
     }
