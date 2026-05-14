@@ -17,7 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-class KDoordeckFactoryTest : CallbackTest() {
+class KDoordeckFactoryTest : BasicCallbackTest() {
 
     @Test
     fun shouldInitialize() = runTest {
