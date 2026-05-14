@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.context.Context
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
@@ -94,13 +95,14 @@ internal fun createHttpClient(): HttpClient {
     }
 }
 
-internal abstract class BaseHttpClient(private val clientProvider: () -> HttpClient) {
-
-    private var _client: HttpClient = clientProvider()
+internal abstract class BaseHttpClient(
+    private val clientProvider: () -> HttpClient
+) {
+    private var _client: HttpClient? = null
 
     @get:JvmSynthetic
     internal val client: HttpClient
-        get() = _client
+        get() = _client ?: throw SdkException("Http client is not initialized")
 
     /**
      * Internal function used in testing to override the default HTTP client.
@@ -115,7 +117,16 @@ internal abstract class BaseHttpClient(private val clientProvider: () -> HttpCli
      */
     @JvmSynthetic
     internal fun close() {
-        _client.close()
+        _client?.close()
+    }
+
+    /**
+     * Closes the current HTTP client and creates a new one, allowing the SDK to be reused after [close].
+     */
+    @JvmSynthetic
+    internal fun initialize() {
+        _client?.close()
+        _client = clientProvider()
     }
 }
 

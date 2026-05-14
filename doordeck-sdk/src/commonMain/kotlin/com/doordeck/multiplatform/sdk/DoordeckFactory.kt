@@ -10,6 +10,9 @@ internal object DoordeckFactory {
 
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
+        HttpClient.initialize()
+        CloudHttpClient.initialize()
+        FusionHttpClient.initialize()
         // Add the provided values into the context
         Context.also { context ->
             context.setSecureStorageImpl(sdkConfig.secureStorage)

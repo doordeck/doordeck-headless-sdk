@@ -1,14 +1,23 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
+import com.doordeck.multiplatform.sdk.api.AccountlessApi
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.model.data.LoginData
+import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
-class KDoordeckFactoryTest {
+class KDoordeckFactoryTest : CallbackTest() {
 
     @Test
     fun shouldInitialize() = runTest {
@@ -27,5 +36,31 @@ class KDoordeckFactoryTest {
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
         assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+    }
+
+    @Test
+    fun shouldReleaseHttpResources() = runTest {
+        // Given
+        val config = SdkConfig.Builder().setApiEnvironment(TEST_ENVIRONMENT.name).build()
+        val sdk = KDoordeckFactory.initialize(config)
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+
+        // When
+        sdk.release()
+
+        // Then
+        val response = callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = staticCFunction(::testCallback)
+            )
+        }
+        assertNotNull(response.failure)
+        assertEquals("Failed to perform API call", response.failure.exceptionMessage)
     }
 }
