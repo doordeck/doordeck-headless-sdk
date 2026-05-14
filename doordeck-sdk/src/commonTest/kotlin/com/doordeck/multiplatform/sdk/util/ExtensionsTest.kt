@@ -20,6 +20,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
@@ -62,6 +63,7 @@ import kotlin.test.assertFails
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlin.uuid.Uuid
 
 class ExtensionsTest {
 
@@ -386,5 +388,19 @@ class ExtensionsTest {
 
         // Then
         assertEquals("Accuracy must be between 1m and 1km", exception.message)
+    }
+
+    @Test
+    fun shouldSerializeAndDeserializeJson() = runTest {
+        // Given
+        val request = LoginRequest(Uuid.random().toString(), Uuid.random().toString())
+
+        // When
+        val result = request.toJson()
+
+        // Then
+        val restored = result.fromJson<LoginRequest>()
+        assertEquals(request.email, restored.email)
+        assertEquals(request.password, restored.password)
     }
 }

@@ -37,7 +37,10 @@ class KDoordeckFactoryTest {
     @Test
     fun shouldReleaseHttpResources() = runTest {
         // Given
-        val config = SdkConfig.Builder().setApiEnvironment(TEST_ENVIRONMENT.name).build()
+        val config = SdkConfig.Builder()
+            .setApiEnvironment(TEST_ENVIRONMENT.name)
+            .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
+            .build()
         val sdk = KDoordeckFactory.initialize(config).await()
         sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 

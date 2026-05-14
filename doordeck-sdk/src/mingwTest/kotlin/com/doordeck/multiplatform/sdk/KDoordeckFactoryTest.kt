@@ -41,7 +41,10 @@ class KDoordeckFactoryTest : CallbackTest() {
     @Test
     fun shouldReleaseHttpResources() = runTest {
         // Given
-        val config = SdkConfig.Builder().setApiEnvironment(TEST_ENVIRONMENT.name).build()
+        val config = SdkConfig.Builder()
+            .setApiEnvironment(TEST_ENVIRONMENT.name)
+            .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
+            .build()
         val sdk = KDoordeckFactory.initialize(config)
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
