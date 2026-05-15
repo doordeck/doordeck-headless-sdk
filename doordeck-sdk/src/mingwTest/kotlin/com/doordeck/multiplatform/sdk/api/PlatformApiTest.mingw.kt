@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
@@ -49,11 +50,9 @@ import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
-import com.doordeck.multiplatform.sdk.testCallback
+import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.cinterop.staticCFunction
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -69,626 +68,598 @@ class PlatformApiTest : CallbackTest() {
 
     @AfterTest
     fun cleanUp() {
-        runBlocking {
-            val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
-                PlatformApi.listApplications(
-                    callback = staticCFunction(::testCallback)
+        val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
+            PlatformApi.listApplications(TestCallback)
+        }
+        applicationsResponse.success?.result?.filter { application ->
+            application.name.startsWith("Test Application $platformType") &&
+                    application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
+        }?.forEach { application ->
+            callbackApiCall<ResultData<Unit>> {
+                PlatformApi.deleteApplication(
+                    data = ApplicationIdData(application.applicationId).toJson(),
+                    callback = TestCallback
                 )
-            }
-            applicationsResponse.success?.result?.filter { application ->
-                application.name.startsWith("Test Application $platformType") &&
-                        application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
-            }?.forEach { application ->
-                callbackApiCall<ResultData<Unit>> {
-                    PlatformApi.deleteApplication(
-                        data = ApplicationIdData(application.applicationId).toJson(),
-                        callback = staticCFunction(::testCallback)
-                    )
-                }
-            }
+            }.unwrap()
         }
     }
 
     @Test
     fun shouldTestPlatform() = runTest {
-        runBlocking {
-            CryptoManager.initialize() // Initialize
-            // Given - shouldCreateApplication
-            val authTokens = callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(authTokens.success)
-            assertNotNull(authTokens.success.result)
-
-            val newApplication = CreateApplicationData(
-                name = "Test Application $platformType ${randomUuidString()}",
-                companyName = randomString(),
-                mailingAddress = randomEmail(),
-                privacyPolicy = randomUrlString(),
-                supportContact = randomUrlString()
+        CryptoManager.initialize() // Initialize
+        // Given - shouldCreateApplication
+        val authTokens = callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
             )
+        }.unwrap()
 
-            // When
-            val applicationIdResponse = callbackApiCall<ResultData<String>> {
-                PlatformApi.createApplication(
-                    data = newApplication.toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationIdResponse.success)
-            assertNotNull(applicationIdResponse.success.result)
+        val newApplication = CreateApplicationData(
+            name = "Test Application $platformType ${randomUuidString()}",
+            companyName = randomString(),
+            mailingAddress = randomEmail(),
+            privacyPolicy = randomUrlString(),
+            supportContact = randomUrlString()
+        )
 
-            // Then
-            val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
-                PlatformApi.listApplications(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationsResponse.success)
-            assertNotNull(applicationsResponse.success.result)
-
-            val application: BasicApplicationResponse = applicationsResponse.success.result.first {
-                it.name.equals(newApplication.name, true)
-            }
-            assertNotNull(application)
-            assertEquals(applicationIdResponse.success.result, application.applicationId)
-            assertEquals(newApplication.name, application.name)
-            assertEquals(newApplication.companyName, application.companyName)
-            assertEquals(newApplication.mailingAddress, application.mailingAddress)
-            assertEquals(newApplication.privacyPolicy, application.privacyPolicy)
-            assertEquals(newApplication.supportContact, application.supportContact)
-
-            // Given - shouldUpdateApplicationName
-            val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationName(
-                    data = UpdateApplicationNameData(application.applicationId, updatedApplicationName).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            var applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationName, applicationResponse.success.result.name)
-
-            // Given - shouldUpdateApplicationCompanyName
-            val updatedApplicationCompanyName = randomString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationCompanyName(
-                    data = UpdateApplicationCompanyNameData(application.applicationId, updatedApplicationCompanyName).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationCompanyName, applicationResponse.success.result.companyName)
-
-            // Given - shouldUpdateApplicationMailingAddress
-            val updatedApplicationMailingAddress = randomEmail()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationMailingAddress(
-                    data = UpdateApplicationMailingAddressData(application.applicationId, updatedApplicationMailingAddress).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationMailingAddress, applicationResponse.success.result.mailingAddress)
-
-            // Given - shouldUpdateApplicationPrivacyPolicy
-            val updatedApplicationPrivacyPolicy = randomUrlString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationPrivacyPolicy(
-                    data = UpdateApplicationPrivacyPolicyData(application.applicationId, updatedApplicationPrivacyPolicy).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationPrivacyPolicy, applicationResponse.success.result.privacyPolicy)
-
-            // Given - shouldUpdateApplicationSupportContact
-            val updatedApplicationSupportContact = randomUrlString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationSupportContact(
-                    data = UpdateApplicationSupportContactData(application.applicationId, updatedApplicationSupportContact).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationSupportContact, applicationResponse.success.result.supportContact)
-
-            // Given - shouldUpdateApplicationAppLink
-            val updatedApplicationAppLink = randomUrlString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationAppLink(
-                    data = UpdateApplicationAppLinkData(application.applicationId, updatedApplicationAppLink).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationAppLink, applicationResponse.success.result.appLink)
-
-            // Given - shouldUpdateApplicationEmailPreferences
-            val updatedApplicationEmailPreferences = EmailPreferencesData(
-                senderEmail = randomEmail(),
-                senderName = "test",
-                primaryColour = "#000000",
-                secondaryColour = "#000000",
-                onlySendEssentialEmails = true,
-                callToAction = EmailCallToActionData(
-                    actionTarget = randomUrlString(),
-                    headline = "test",
-                    actionText = "test"
-                )
+        // When
+        val applicationIdResponse = callbackApiCall<ResultData<String>> {
+            PlatformApi.createApplication(
+                data = newApplication.toJson(),
+                callback = TestCallback
             )
+        }.unwrap()
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationEmailPreferences(
-                    data = UpdateApplicationEmailPreferencesData(application.applicationId, updatedApplicationEmailPreferences).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Then
+        val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
+            PlatformApi.listApplications(TestCallback)
+        }.unwrap()
 
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationEmailPreferences.senderEmail, applicationResponse.success.result.emailPreferences.senderEmail)
-            assertEquals(updatedApplicationEmailPreferences.senderName, applicationResponse.success.result.emailPreferences.senderName)
-            assertEquals(updatedApplicationEmailPreferences.primaryColour, applicationResponse.success.result.emailPreferences.primaryColour)
-            assertEquals(updatedApplicationEmailPreferences.secondaryColour, applicationResponse.success.result.emailPreferences.secondaryColour)
-            assertEquals(updatedApplicationEmailPreferences.onlySendEssentialEmails, applicationResponse.success.result.emailPreferences.onlySendEssentialEmails)
-            assertEquals(updatedApplicationEmailPreferences.callToAction?.actionTarget, applicationResponse.success.result.emailPreferences.callToAction?.actionTarget)
-            assertEquals(updatedApplicationEmailPreferences.callToAction?.headline, applicationResponse.success.result.emailPreferences.callToAction?.headline)
-            assertEquals(updatedApplicationEmailPreferences.callToAction?.actionText, applicationResponse.success.result.emailPreferences.callToAction?.actionText)
-
-            // Given - shouldUpdateApplicationLogoUrl
-            val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.updateApplicationLogoUrl(
-                    data = UpdateApplicationLogoUrlData(application.applicationId, updatedApplicationLogoUrl).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(updatedApplicationLogoUrl, applicationResponse.success.result.logoUrl)
-
-            // Given - shouldAddAuthIssuer
-            val addApplicationAuthIssuer = randomUrlString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addAuthIssuer(
-                    data = AuthIssuerData(application.applicationId, addApplicationAuthIssuer).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertNotEquals(0, applicationResponse.success.result.authDomains.size)
-            assertTrue { applicationResponse.success.result.authDomains.any { it == addApplicationAuthIssuer } }
-
-            // Given - shouldAddCorsDomain
-            val addedApplicationCorsDomain = randomUrlString()
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addCorsDomain(
-                    data = CorsDomainData(application.applicationId, addedApplicationCorsDomain).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertNotEquals(0, applicationResponse.success.result.corsDomains.size)
-            assertTrue { applicationResponse.success.result.corsDomains.any { it == addedApplicationCorsDomain } }
-
-            // Given - shouldDeleteCorsDomain
-            val removedApplicationCorsDomain = addedApplicationCorsDomain
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.removeCorsDomain(
-                    data = CorsDomainData(application.applicationId, removedApplicationCorsDomain).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(0, applicationResponse.success.result.corsDomains.size)
-            assertFalse { applicationResponse.success.result.corsDomains.any { it == removedApplicationCorsDomain } }
-
-            // Given - shouldAddEd25519AuthKey
-            val ed25519KeyPair = CryptoManager.generateRawKeyPair()
-            val ed25519KeyId = randomUuidString()
-            val ed25519Key = Ed25519KeyData(
-                kid = ed25519KeyId,
-                use = "sig",
-                alg = "EdDSA",
-                crv = "Ed25519",
-                x = ed25519KeyPair.public.encodeByteArrayToBase64()
-            )
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addAuthKey(
-                    data = AddAuthKeyData(application.applicationId, ed25519Key).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-
-            val actualEd25519Key = applicationResponse.success.result.authKeys.entries.firstOrNull {
-                it.key == ed25519Key.kid
-            }?.value as? BasicEd25519KeyResponse
-            assertNotNull(actualEd25519Key)
-            assertEquals(ed25519Key.use, actualEd25519Key.use)
-            assertEquals(ed25519Key.kid, actualEd25519Key.kid)
-            assertEquals(ed25519Key.alg, actualEd25519Key.alg)
-            assertEquals(ed25519Key.crv, actualEd25519Key.crv)
-            assertEquals(ed25519Key.x, actualEd25519Key.x)
-
-            // Given - shouldAddRsaAuthKey
-            val rsaKey = RsaKeyData(
-                kid = randomUuidString(),
-                use = "sig",
-                alg = "RS256",
-                e = "AQAB",
-                n = "7PsoesJRZIBUKN3AlhGCJPflQd08U9n9EsdeQS70Dbr8ce-aIpVjNAWxPaNdddYQJBUcj6wy3jKe8Vzu04tCrfafjBR6Db8pZGhTEjRQP6wQKxuo7GbnqUeCgrbT2cE5W-zRJGX4ImSuaoOyNXuDjpmDA4stWqXrMeDZIUqXcFpcOTMfi-cbSZ0A4fgX43bTCef-noprBtBAig-kaz3W7NFcBSkA3faUdlaJ6Bj9DHpqkQYpUR-MuqmAyGUOli0JY0x6QhoVrNGFQ1ejivbvMH3lkuhrJwJlJEt0wD3JoH0Q03XBKcJSBeUl6pzZV0oD2lNrQIrQdsQ1_0yLUEVVWQ"
-            )
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addAuthKey(
-                    data = AddAuthKeyData(application.applicationId, rsaKey).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-
-            val actualRsaKey = applicationResponse.success.result.authKeys.entries.firstOrNull {
-                it.key == rsaKey.kid
-            }?.value as? BasicRsaKeyResponse
-            assertNotNull(actualRsaKey)
-            assertEquals(rsaKey.use, actualRsaKey.use)
-            assertEquals(rsaKey.kid, actualRsaKey.kid)
-            assertEquals(rsaKey.alg, actualRsaKey.alg)
-            assertEquals(rsaKey.e, actualRsaKey.e)
-            assertEquals(rsaKey.n, actualRsaKey.n)
-
-            // Given - shouldAddEcAuthKey
-            val ecKey = EcKeyData(
-                kid = randomUuidString(),
-                use = "sig",
-                alg = "ES256",
-                crv = "secp256k1",
-                x = "L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA",
-                y = "ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"
-            )
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addAuthKey(
-                    data = AddAuthKeyData(application.applicationId, ecKey).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-
-            val actualKeyEcKey = applicationResponse.success.result.authKeys.entries.firstOrNull {
-                it.key == ecKey.kid
-            }?.value as? BasicEcKeyResponse
-            assertNotNull(actualKeyEcKey)
-            assertEquals(ecKey.use, actualKeyEcKey.use)
-            assertEquals(ecKey.kid, actualKeyEcKey.kid)
-            assertEquals(ecKey.alg, actualKeyEcKey.alg)
-            assertEquals(ecKey.crv, actualKeyEcKey.crv)
-            assertEquals(ecKey.x, actualKeyEcKey.x)
-            assertEquals(ecKey.y, actualKeyEcKey.y)
-
-            // Given - shouldGetApplicationUsers
-            val applicationUserEmail = "training+${randomUuidString()}@doordeck.com"
-            val applicationUserId = randomUuidString()
-            val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
-            val applicationJwtBody = ApplicationJwtBody(
-                iss = addApplicationAuthIssuer,
-                exp = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
-                iat = Clock.System.now().epochSeconds,
-                aud = ApiEnvironment.PROD.cloudHost,
-                sub = applicationUserId,
-                email = applicationUserEmail,
-                emailVerified = true,
-                name = "Training Training"
-            )
-            val headerB64 = applicationJwtHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
-            val bodyB64 = applicationJwtBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
-            val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(ed25519KeyPair.private).encodeByteArrayToBase64()
-            val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
-
-            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
-            // Perform a request to create the new user and attach it to the application
-            val userDetailsResponse = callbackApiCall<ResultData<BasicUserDetailsResponse>> {
-                AccountApi.getUserDetails(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(userDetailsResponse.success)
-            assertNotNull(userDetailsResponse.success.result)
-            ContextManager.setCloudAuthToken(authTokens.success.result.authToken) // Restore the context token
-
-            // Then
-            val applicationUsersResponse = callbackApiCall<ResultData<List<BasicApplicationUserResponse>>> {
-                PlatformApi.getApplicationUsers(
-                    data = ApplicationUserData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationUsersResponse.success)
-            assertNotNull(applicationUsersResponse.success.result)
-            assertEquals(1, applicationUsersResponse.success.result.size)
-            assertEquals(applicationUserEmail, applicationUsersResponse.success.result.first().email)
-            assertEquals(applicationJwtBody.name, applicationUsersResponse.success.result.first().displayName)
-            assertEquals(applicationUserId, applicationUsersResponse.success.result.first().foreignKey)
-
-            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
-            // Cleanup the application user
-            callbackApiCall<ResultData<BasicUserDetailsResponse>> {
-                AccountApi.deleteAccount(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            ContextManager.setCloudAuthToken(authTokens.success.result.authToken) // Restore the context token
-
-            // Given - shouldDeleteAuthIssuer
-            val removedApplicationAuthIssuer = addApplicationAuthIssuer
-
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.deleteAuthIssuer(
-                    data = AuthIssuerData(application.applicationId, removedApplicationAuthIssuer).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
-                PlatformApi.getApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationResponse.success)
-            assertNotNull(applicationResponse.success.result)
-            assertEquals(0, applicationResponse.success.result.authDomains.size)
-            assertFalse { applicationResponse.success.result.authDomains.any { it == removedApplicationAuthIssuer } }
-
-            // Given - shouldGetApplicationOwnersDetails
-            // When
-            var applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
-                PlatformApi.getApplicationOwnersDetails(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            assertNotNull(applicationOwnerDetailsResponse.success)
-            assertNotNull(applicationOwnerDetailsResponse.success.result)
-            assertTrue { applicationOwnerDetailsResponse.success.result.isNotEmpty() }
-            assertTrue { applicationOwnerDetailsResponse.success.result.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
-
-            // Given - shouldAddApplicationOwner
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.addApplicationOwner(
-                    data = ApplicationOwnerData(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
-                PlatformApi.getApplicationOwnersDetails(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationOwnerDetailsResponse.success)
-            assertNotNull(applicationOwnerDetailsResponse.success.result)
-            assertTrue { applicationOwnerDetailsResponse.success.result.isNotEmpty() }
-            assertTrue { applicationOwnerDetailsResponse.success.result.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
-
-            // Given - shouldRemoveApplicationOwner
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.removeApplicationOwner(
-                    data = ApplicationOwnerData(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
-                PlatformApi.getApplicationOwnersDetails(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(applicationOwnerDetailsResponse.success)
-            assertNotNull(applicationOwnerDetailsResponse.success.result)
-            assertTrue { applicationOwnerDetailsResponse.success.result.isNotEmpty() }
-            assertFalse { applicationOwnerDetailsResponse.success.result.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
-
-            // Given - shouldGetLogoUploadUrl
-            val contentType = "image/png"
-
-            // When
-            val uploadUrlResponse = callbackApiCall<ResultData<BasicGetLogoUploadUrlResponse>> {
-                PlatformApi.getLogoUploadUrl(
-                    data = GetLogoUploadUrlData(application.applicationId, contentType).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            assertNotNull(uploadUrlResponse.success)
-            assertNotNull(uploadUrlResponse.success.result)
-            assertTrue { uploadUrlResponse.success.result.uploadUrl.contains("doordeck-upload") }
-
-            // Given - shouldDeleteApplication
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                PlatformApi.deleteApplication(
-                    data = ApplicationIdData(application.applicationId).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            // Then
-            val applications = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
-                PlatformApi.listApplications(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-
-            assertNotNull(applications.success)
-            assertNotNull(applications.success.result)
-            assertFalse { applications.success.result.any { it.applicationId == application.applicationId } }
+        val application: BasicApplicationResponse = applicationsResponse.first {
+            it.name.equals(newApplication.name, true)
         }
+        assertNotNull(application)
+        assertEquals(applicationIdResponse, application.applicationId)
+        assertEquals(newApplication.name, application.name)
+        assertEquals(newApplication.companyName, application.companyName)
+        assertEquals(newApplication.mailingAddress, application.mailingAddress)
+        assertEquals(newApplication.privacyPolicy, application.privacyPolicy)
+        assertEquals(newApplication.supportContact, application.supportContact)
+
+        // Given - shouldUpdateApplicationName
+        val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationName(
+                data = UpdateApplicationNameData(application.applicationId, updatedApplicationName).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        var applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationName, applicationResponse.name)
+
+        // Given - shouldUpdateApplicationCompanyName
+        val updatedApplicationCompanyName = randomString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationCompanyName(
+                data = UpdateApplicationCompanyNameData(
+                    application.applicationId,
+                    updatedApplicationCompanyName
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationCompanyName, applicationResponse.companyName)
+
+        // Given - shouldUpdateApplicationMailingAddress
+        val updatedApplicationMailingAddress = randomEmail()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationMailingAddress(
+                data = UpdateApplicationMailingAddressData(
+                    application.applicationId,
+                    updatedApplicationMailingAddress
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationMailingAddress, applicationResponse.mailingAddress)
+
+        // Given - shouldUpdateApplicationPrivacyPolicy
+        val updatedApplicationPrivacyPolicy = randomUrlString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationPrivacyPolicy(
+                data = UpdateApplicationPrivacyPolicyData(
+                    application.applicationId,
+                    updatedApplicationPrivacyPolicy
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationPrivacyPolicy, applicationResponse.privacyPolicy)
+
+        // Given - shouldUpdateApplicationSupportContact
+        val updatedApplicationSupportContact = randomUrlString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationSupportContact(
+                data = UpdateApplicationSupportContactData(
+                    application.applicationId,
+                    updatedApplicationSupportContact
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationSupportContact, applicationResponse.supportContact)
+
+        // Given - shouldUpdateApplicationAppLink
+        val updatedApplicationAppLink = randomUrlString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationAppLink(
+                data = UpdateApplicationAppLinkData(application.applicationId, updatedApplicationAppLink).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationAppLink, applicationResponse.appLink)
+
+        // Given - shouldUpdateApplicationEmailPreferences
+        val updatedApplicationEmailPreferences = EmailPreferencesData(
+            senderEmail = randomEmail(),
+            senderName = "test",
+            primaryColour = "#000000",
+            secondaryColour = "#000000",
+            onlySendEssentialEmails = true,
+            callToAction = EmailCallToActionData(
+                actionTarget = randomUrlString(),
+                headline = "test",
+                actionText = "test"
+            )
+        )
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationEmailPreferences(
+                data = UpdateApplicationEmailPreferencesData(
+                    application.applicationId,
+                    updatedApplicationEmailPreferences
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(
+            updatedApplicationEmailPreferences.senderEmail,
+            applicationResponse.emailPreferences.senderEmail
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.senderName,
+            applicationResponse.emailPreferences.senderName
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.primaryColour,
+            applicationResponse.emailPreferences.primaryColour
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.secondaryColour,
+            applicationResponse.emailPreferences.secondaryColour
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.onlySendEssentialEmails,
+            applicationResponse.emailPreferences.onlySendEssentialEmails
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.callToAction?.actionTarget,
+            applicationResponse.emailPreferences.callToAction?.actionTarget
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.callToAction?.headline,
+            applicationResponse.emailPreferences.callToAction?.headline
+        )
+        assertEquals(
+            updatedApplicationEmailPreferences.callToAction?.actionText,
+            applicationResponse.emailPreferences.callToAction?.actionText
+        )
+
+        // Given - shouldUpdateApplicationLogoUrl
+        val updatedApplicationLogoUrl = "https://cdn.doordeck.com/application/test"
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.updateApplicationLogoUrl(
+                data = UpdateApplicationLogoUrlData(application.applicationId, updatedApplicationLogoUrl).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedApplicationLogoUrl, applicationResponse.logoUrl)
+
+        // Given - shouldAddAuthIssuer
+        val addApplicationAuthIssuer = randomUrlString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addAuthIssuer(
+                data = AuthIssuerData(application.applicationId, addApplicationAuthIssuer).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertNotEquals(0, applicationResponse.authDomains.size)
+        assertTrue { applicationResponse.authDomains.any { it == addApplicationAuthIssuer } }
+
+        // Given - shouldAddCorsDomain
+        val addedApplicationCorsDomain = randomUrlString()
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addCorsDomain(
+                data = CorsDomainData(application.applicationId, addedApplicationCorsDomain).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertNotEquals(0, applicationResponse.corsDomains.size)
+        assertTrue { applicationResponse.corsDomains.any { it == addedApplicationCorsDomain } }
+
+        // Given - shouldDeleteCorsDomain
+        val removedApplicationCorsDomain = addedApplicationCorsDomain
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.removeCorsDomain(
+                data = CorsDomainData(application.applicationId, removedApplicationCorsDomain).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(0, applicationResponse.corsDomains.size)
+        assertFalse { applicationResponse.corsDomains.any { it == removedApplicationCorsDomain } }
+
+        // Given - shouldAddEd25519AuthKey
+        val ed25519KeyPair = CryptoManager.generateRawKeyPair()
+        val ed25519KeyId = randomUuidString()
+        val ed25519Key = Ed25519KeyData(
+            kid = ed25519KeyId,
+            use = "sig",
+            alg = "EdDSA",
+            crv = "Ed25519",
+            x = ed25519KeyPair.public.encodeByteArrayToBase64()
+        )
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addAuthKey(
+                data = AddAuthKeyData(application.applicationId, ed25519Key).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        val actualEd25519Key = applicationResponse.authKeys.entries.firstOrNull {
+            it.key == ed25519Key.kid
+        }?.value as? BasicEd25519KeyResponse
+        assertNotNull(actualEd25519Key)
+        assertEquals(ed25519Key.use, actualEd25519Key.use)
+        assertEquals(ed25519Key.kid, actualEd25519Key.kid)
+        assertEquals(ed25519Key.alg, actualEd25519Key.alg)
+        assertEquals(ed25519Key.crv, actualEd25519Key.crv)
+        assertEquals(ed25519Key.x, actualEd25519Key.x)
+
+        // Given - shouldAddRsaAuthKey
+        val rsaKey = RsaKeyData(
+            kid = randomUuidString(),
+            use = "sig",
+            alg = "RS256",
+            e = "AQAB",
+            n = "7PsoesJRZIBUKN3AlhGCJPflQd08U9n9EsdeQS70Dbr8ce-aIpVjNAWxPaNdddYQJBUcj6wy3jKe8Vzu04tCrfafjBR6Db8pZGhTEjRQP6wQKxuo7GbnqUeCgrbT2cE5W-zRJGX4ImSuaoOyNXuDjpmDA4stWqXrMeDZIUqXcFpcOTMfi-cbSZ0A4fgX43bTCef-noprBtBAig-kaz3W7NFcBSkA3faUdlaJ6Bj9DHpqkQYpUR-MuqmAyGUOli0JY0x6QhoVrNGFQ1ejivbvMH3lkuhrJwJlJEt0wD3JoH0Q03XBKcJSBeUl6pzZV0oD2lNrQIrQdsQ1_0yLUEVVWQ"
+        )
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addAuthKey(
+                data = AddAuthKeyData(application.applicationId, rsaKey).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        val actualRsaKey = applicationResponse.authKeys.entries.firstOrNull {
+            it.key == rsaKey.kid
+        }?.value as? BasicRsaKeyResponse
+        assertNotNull(actualRsaKey)
+        assertEquals(rsaKey.use, actualRsaKey.use)
+        assertEquals(rsaKey.kid, actualRsaKey.kid)
+        assertEquals(rsaKey.alg, actualRsaKey.alg)
+        assertEquals(rsaKey.e, actualRsaKey.e)
+        assertEquals(rsaKey.n, actualRsaKey.n)
+
+        // Given - shouldAddEcAuthKey
+        val ecKey = EcKeyData(
+            kid = randomUuidString(),
+            use = "sig",
+            alg = "ES256",
+            crv = "secp256k1",
+            x = "L9Oy_4lde8GqwXyF9rRtkkTOr9iZF65S02JToBFzuPA",
+            y = "ac69MlrUIJQXlSEsp1lBG6erAZjBwSA6M3dT7pBOtMU"
+        )
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addAuthKey(
+                data = AddAuthKeyData(application.applicationId, ecKey).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        val actualKeyEcKey = applicationResponse.authKeys.entries.firstOrNull {
+            it.key == ecKey.kid
+        }?.value as? BasicEcKeyResponse
+        assertNotNull(actualKeyEcKey)
+        assertEquals(ecKey.use, actualKeyEcKey.use)
+        assertEquals(ecKey.kid, actualKeyEcKey.kid)
+        assertEquals(ecKey.alg, actualKeyEcKey.alg)
+        assertEquals(ecKey.crv, actualKeyEcKey.crv)
+        assertEquals(ecKey.x, actualKeyEcKey.x)
+        assertEquals(ecKey.y, actualKeyEcKey.y)
+
+        // Given - shouldGetApplicationUsers
+        val applicationUserEmail = "training+${randomUuidString()}@doordeck.com"
+        val applicationUserId = randomUuidString()
+        val applicationJwtHeader = ApplicationJwtHeader("Ed25519", ed25519KeyId)
+        val applicationJwtBody = ApplicationJwtBody(
+            iss = addApplicationAuthIssuer,
+            exp = Clock.System.now().epochSeconds + 1.days.inWholeSeconds,
+            iat = Clock.System.now().epochSeconds,
+            aud = ApiEnvironment.PROD.cloudHost,
+            sub = applicationUserId,
+            email = applicationUserEmail,
+            emailVerified = true,
+            name = "Training Training"
+        )
+        val headerB64 = applicationJwtHeader.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val bodyB64 = applicationJwtBody.toJson().encodeToByteArray().encodeByteArrayToBase64()
+        val signatureB64 = "$headerB64.$bodyB64".signWithPrivateKey(ed25519KeyPair.private).encodeByteArrayToBase64()
+        val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
+
+        ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+        // Perform a request to create the new user and attach it to the application
+        callbackApiCall<ResultData<BasicUserDetailsResponse>> {
+            AccountApi.getUserDetails(TestCallback)
+        }.unwrap()
+        ContextManager.setCloudAuthToken(authTokens.authToken) // Restore the context token
+
+        // Then
+        val applicationUsersResponse = callbackApiCall<ResultData<List<BasicApplicationUserResponse>>> {
+            PlatformApi.getApplicationUsers(
+                data = ApplicationUserData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(1, applicationUsersResponse.size)
+        assertEquals(applicationUserEmail, applicationUsersResponse.first().email)
+        assertEquals(applicationJwtBody.name, applicationUsersResponse.first().displayName)
+        assertEquals(applicationUserId, applicationUsersResponse.first().foreignKey)
+
+        ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+        // Cleanup the application user
+        callbackApiCall<ResultData<Unit>> {
+            AccountApi.deleteAccount(TestCallback)
+        }.unwrap()
+        ContextManager.setCloudAuthToken(authTokens.authToken) // Restore the context token
+
+        // Given - shouldDeleteAuthIssuer
+        val removedApplicationAuthIssuer = addApplicationAuthIssuer
+
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.deleteAuthIssuer(
+                data = AuthIssuerData(application.applicationId, removedApplicationAuthIssuer).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationResponse = callbackApiCall<ResultData<BasicApplicationResponse>> {
+            PlatformApi.getApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(0, applicationResponse.authDomains.size)
+        assertFalse { applicationResponse.authDomains.any { it == removedApplicationAuthIssuer } }
+
+        // Given - shouldGetApplicationOwnersDetails
+        // When
+        var applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
+            PlatformApi.getApplicationOwnersDetails(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        assertTrue { applicationOwnerDetailsResponse.isNotEmpty() }
+        assertTrue { applicationOwnerDetailsResponse.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
+
+        // Given - shouldAddApplicationOwner
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.addApplicationOwner(
+                data = ApplicationOwnerData(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
+            PlatformApi.getApplicationOwnersDetails(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertTrue { applicationOwnerDetailsResponse.isNotEmpty() }
+        assertTrue { applicationOwnerDetailsResponse.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
+
+        // Given - shouldRemoveApplicationOwner
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.removeApplicationOwner(
+                data = ApplicationOwnerData(application.applicationId, PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        applicationOwnerDetailsResponse = callbackApiCall<ResultData<List<BasicApplicationOwnerDetailsResponse>>> {
+            PlatformApi.getApplicationOwnersDetails(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertTrue { applicationOwnerDetailsResponse.isNotEmpty() }
+        assertFalse { applicationOwnerDetailsResponse.any { it.userId == PLATFORM_TEST_SUPPLEMENTARY_USER_ID } }
+
+        // Given - shouldGetLogoUploadUrl
+        val contentType = "image/png"
+
+        // When
+        val uploadUrlResponse = callbackApiCall<ResultData<BasicGetLogoUploadUrlResponse>> {
+            PlatformApi.getLogoUploadUrl(
+                data = GetLogoUploadUrlData(application.applicationId, contentType).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        assertTrue { uploadUrlResponse.uploadUrl.contains("doordeck-upload") }
+
+        // Given - shouldDeleteApplication
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            PlatformApi.deleteApplication(
+                data = ApplicationIdData(application.applicationId).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+
+        // Then
+        val applications = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
+            PlatformApi.listApplications(TestCallback)
+        }.unwrap()
+        assertFalse { applications.any { it.applicationId == application.applicationId } }
     }
 }

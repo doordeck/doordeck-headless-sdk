@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
+import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
@@ -58,12 +59,10 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
-import com.doordeck.multiplatform.sdk.testCallback
+import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
-import kotlinx.cinterop.staticCFunction
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -151,308 +150,297 @@ class FusionApiTest : CallbackTest() {
     private fun runFusionTest(controllerType: KClass<out BasicLockController>) {
         try {
             runTest {
-                runBlocking {
-                    val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
-                    if (testController == null) {
-                        error("Controller of type ${controllerType.simpleName} not found, skipping test...")
-                    }
-
-                    try {
-                        TEST_HTTP_CLIENT.options(testController.key) {
-                            timeout {
-                                connectTimeoutMillis = 5_000
-                                socketTimeoutMillis = 5_000
-                                requestTimeoutMillis = 5_000
-                            }
-                        }
-                    } catch (_: Exception) {
-                        error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
-                    }
-
-                    // Given - shouldLogin
-                    ContextManager.setFusionHost(testController.key)
-
-                    // When
-                    val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
-                        FusionApi.login(
-                            data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    val cloudLoginResponse = callbackApiCall<ResultData<BasicTokenResponse>> {
-                        AccountlessApi.login(
-                            data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    assertNotNull(fusionLoginResponse.success)
-                    assertNotNull(fusionLoginResponse.success.result)
-                    assertTrue { fusionLoginResponse.success.result.authToken.isNotEmpty() }
-                    assertNotNull(cloudLoginResponse.success)
-                    assertNotNull(cloudLoginResponse.success.result)
-                    assertTrue { cloudLoginResponse.success.result.authToken.isNotEmpty() }
-
-                    // Cleanup process, delete any remaining test devices
-                    val integrationsToDelete = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
-                        FusionApi.getIntegrationConfiguration(
-                            data = GetIntegrationConfigurationData(testController.value.type).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }.success?.result?.filter { integration ->
-                        PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
-                    integrationsToDelete?.forEach { integration ->
-                        integration.doordeck?.id?.let { integrationId ->
-                            try {
-                                callbackApiCall<ResultData<Unit>> {
-                                    FusionApi.stopDoor(
-                                        data = DeviceIdData(integrationId).toJson(),
-                                        callback = staticCFunction(::testCallback)
-                                    )
-                                }
-                                callbackApiCall<ResultData<Unit>> {
-                                    FusionApi.deleteDoor(
-                                        data = DeviceIdData(integrationId).toJson(),
-                                        callback = staticCFunction(::testCallback)
-                                    )
-                                }
-                            } catch (_: Exception) { /* Ignored */ }
-                        }
-                    }
-
-                    // Given - shouldEnableDoor
-                    val name = "Test Fusion Door $platformType ${randomUuidString()}"
-
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        FusionApi.enableDoor(
-                            data = EnableDoorData(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    val integrationsResponse = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
-                        FusionApi.getIntegrationConfiguration(
-                            data = GetIntegrationConfigurationData(testController.value.type).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(integrationsResponse.success)
-                    assertNotNull(integrationsResponse.success.result)
-
-                    val actualDoor = integrationsResponse.success.result.firstOrNull { it.doordeck?.name == name }
-                    assertNotNull(actualDoor?.doordeck)
-
-                    // Given - shouldGetIntegrationType
-                    // When
-                    val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
-                        FusionApi.getIntegrationType(
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    assertNotNull(integrationTypeResponse.success)
-                    assertNotNull(integrationTypeResponse.success.result)
-                    assertNotNull(integrationTypeResponse.success.result.status)
-                    assertEquals(testController.value.type, integrationTypeResponse.success.result.status)
-
-                    // Given - shouldStartDoor
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        FusionApi.startDoor(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    var doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
-                        FusionApi.getDoorStatus(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(doorStateResponse.success)
-                    assertNotNull(doorStateResponse.success.result)
-                    assertEquals(ServiceStateType.RUNNING, doorStateResponse.success.result.state)
-
-                    // Given - shouldUpdateUnlockDuration
-                    val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
-                        AccountApi.registerEphemeralKey(
-                            data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(registerKeyResponse.success)
-                    assertNotNull(registerKeyResponse.success.result)
-                    val baseOperation = BaseOperationData(
-                        userId = PLATFORM_TEST_MAIN_USER_ID,
-                        userCertificateChain = registerKeyResponse.success.result.certificateChain,
-                        userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
-                        lockId = actualDoor.doordeck.id
-                    )
-
-                    // When
-                    val newDuration = 9
-                    callbackApiCall<ResultData<Unit>> {
-                        LockOperationsApi.updateSecureSettingUnlockDuration(
-                            data = UpdateSecureSettingUnlockDurationData(
-                                baseOperation = baseOperation,
-                                unlockDuration = newDuration
-                            ).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    val response = callbackApiCall<ResultData<BasicLockResponse>> {
-                        LockOperationsApi.getSingleLock(
-                            data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(response.success)
-                    assertNotNull(response.success.result)
-                    assertEquals(newDuration.toDouble(), response.success.result.settings.unlockTime)
-
-                    // Given - Unlock
-                    callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
-                        LockOperationsApi.unlock(
-                            data = UnlockOperationData(baseOperation.copy(jti = randomUuidString())).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Given - Share and revoke lock
-                    callbackApiCall<ResultData<Unit>> {
-                        LockOperationsApi.shareLock(
-                            data = ShareLockOperationData(
-                                baseOperation = baseOperation.copy(jti = randomUuidString()),
-                                shareLock = ShareLockData(
-                                    targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                                    targetUserRole = UserRole.USER,
-                                    targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-                                )
-                            ).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    var locksResponse =  callbackApiCall<ResultData<BasicLockUserResponse>> {
-                        LockOperationsApi.getLocksForUser(
-                            data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(locksResponse.success)
-                    assertNotNull(locksResponse.success.result)
-                    assertTrue { locksResponse.success.result.devices.any { it.deviceId == actualDoor.doordeck.id } }
-
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        LockOperationsApi.revokeAccessToLock(
-                            data = RevokeAccessToLockOperationData(
-                                baseOperation = baseOperation.copy(jti = randomUuidString()),
-                                users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
-                            ).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
-                        LockOperationsApi.getLocksForUser(
-                            data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(locksResponse.success)
-                    assertNotNull(locksResponse.success.result)
-                    assertFalse { locksResponse.success.result.devices.any { it.deviceId == actualDoor.doordeck.id } }
-
-                    // Given - shouldUpdateUnlockBetween
-                    val now = Clock.System.now()
-                    val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
-                    val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
-                    val newUnlockBetween = UnlockBetweenData(
-                        start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-                        end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-                        timezone = TimeZone.UTC.id,
-                        days = setOf(DayOfWeek.entries.random()),
-                        exceptions = emptyList()
-                    )
-
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        LockOperationsApi.updateSecureSettingUnlockBetween(
-                            data = UpdateSecureSettingUnlockBetweenData(
-                                baseOperation = baseOperation.copy(jti = randomUuidString()),
-                                unlockBetween = newUnlockBetween
-                            ).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                        LockOperationsApi.getSingleLock(
-                            data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(lockResponse.success)
-                    assertNotNull(lockResponse.success.result)
-                    assertNotNull(lockResponse.success.result.settings.unlockBetweenWindow)
-                    assertEquals(newUnlockBetween.start, lockResponse.success.result.settings.unlockBetweenWindow.start)
-                    assertEquals(newUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
-                    assertEquals(newUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
-                    assertEquals(newUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
-                    assertEquals(newUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
-
-                    // Given - shouldStopDoor
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        FusionApi.stopDoor(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
-                        FusionApi.getDoorStatus(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(doorStateResponse.success)
-                    assertNotNull(doorStateResponse.success.result)
-                    assertEquals(ServiceStateType.STOPPED, doorStateResponse.success.result.state)
-
-                    // Given - shouldDeleteDoor
-                    // When
-                    callbackApiCall<ResultData<Unit>> {
-                        FusionApi.deleteDoor(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-
-                    // Then
-                    doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
-                        FusionApi.getDoorStatus(
-                            data = DeviceIdData(actualDoor.doordeck.id).toJson(),
-                            callback = staticCFunction(::testCallback)
-                        )
-                    }
-                    assertNotNull(doorStateResponse.success)
-                    assertNotNull(doorStateResponse.success.result)
-                    assertEquals(ServiceStateType.UNDEFINED, doorStateResponse.success.result.state)
+                val testController =
+                    PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
+                if (testController == null) {
+                    error("Controller of type ${controllerType.simpleName} not found, skipping test...")
                 }
+
+                try {
+                    TEST_HTTP_CLIENT.options(testController.key) {
+                        timeout {
+                            connectTimeoutMillis = 5_000
+                            socketTimeoutMillis = 5_000
+                            requestTimeoutMillis = 5_000
+                        }
+                    }
+                } catch (_: Exception) {
+                    error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
+                }
+
+                // Given - shouldLogin
+                ContextManager.setFusionHost(testController.key)
+
+                // When
+                val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
+                    FusionApi.login(
+                        data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                val cloudLoginResponse = callbackApiCall<ResultData<BasicTokenResponse>> {
+                    AccountlessApi.login(
+                        data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                assertTrue { fusionLoginResponse.authToken.isNotEmpty() }
+                assertTrue { cloudLoginResponse.authToken.isNotEmpty() }
+
+                // Cleanup process, delete any remaining test devices
+                val integrationsToDelete = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
+                    FusionApi.getIntegrationConfiguration(
+                        data = GetIntegrationConfigurationData(testController.value.type).toJson(),
+                        callback = TestCallback
+                    )
+                }.success?.result?.filter { integration ->
+                    PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true }
+                }
+                integrationsToDelete?.forEach { integration ->
+                    integration.doordeck?.id?.let { integrationId ->
+                        try {
+                            callbackApiCall<ResultData<Unit>> {
+                                FusionApi.stopDoor(
+                                    data = DeviceIdData(integrationId).toJson(),
+                                    callback = TestCallback
+                                )
+                            }.unwrap()
+                            callbackApiCall<ResultData<Unit>> {
+                                FusionApi.deleteDoor(
+                                    data = DeviceIdData(integrationId).toJson(),
+                                    callback = TestCallback
+                                )
+                            }.unwrap()
+                        } catch (_: Exception) {
+                            /* Ignored */
+                        }
+                    }
+                }
+
+                // Given - shouldEnableDoor
+                val name = "Test Fusion Door $platformType ${randomUuidString()}"
+
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    FusionApi.enableDoor(
+                        data = EnableDoorData(
+                            name,
+                            PLATFORM_TEST_MAIN_SITE_ID,
+                            testController.value.controller
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                val integrationsResponse = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
+                    FusionApi.getIntegrationConfiguration(
+                        data = GetIntegrationConfigurationData(testController.value.type).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                val actualDoor = integrationsResponse.firstOrNull { it.doordeck?.name == name }
+                assertNotNull(actualDoor?.doordeck)
+
+                // Given - shouldGetIntegrationType
+                // When
+                val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
+                    FusionApi.getIntegrationType(TestCallback)
+                }.unwrap()
+
+                // Then
+                assertNotNull(integrationTypeResponse.status)
+                assertEquals(testController.value.type, integrationTypeResponse.status)
+
+                // Given - shouldStartDoor
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    FusionApi.startDoor(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                var doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
+                    FusionApi.getDoorStatus(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertEquals(ServiceStateType.RUNNING, doorStateResponse.state)
+
+                // Given - shouldUpdateUnlockDuration
+                val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
+                    AccountApi.registerEphemeralKey(
+                        data = RegisterEphemeralKeyData(
+                            PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                            PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                val baseOperation = BaseOperationData(
+                    userId = PLATFORM_TEST_MAIN_USER_ID,
+                    userCertificateChain = registerKeyResponse.certificateChain,
+                    userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                    lockId = actualDoor.doordeck.id
+                )
+
+                // When
+                val newDuration = 9
+                callbackApiCall<ResultData<Unit>> {
+                    LockOperationsApi.updateSecureSettingUnlockDuration(
+                        data = UpdateSecureSettingUnlockDurationData(
+                            baseOperation = baseOperation,
+                            unlockDuration = newDuration
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                val response = callbackApiCall<ResultData<BasicLockResponse>> {
+                    LockOperationsApi.getSingleLock(
+                        data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertEquals(newDuration.toDouble(), response.settings.unlockTime)
+
+                // Given - Unlock
+                callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
+                    LockOperationsApi.unlock(
+                        data = UnlockOperationData(baseOperation.copy(jti = randomUuidString())).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Given - Share and revoke lock
+                callbackApiCall<ResultData<Unit>> {
+                    LockOperationsApi.shareLock(
+                        data = ShareLockOperationData(
+                            baseOperation = baseOperation.copy(jti = randomUuidString()),
+                            shareLock = ShareLockData(
+                                targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                                targetUserRole = UserRole.USER,
+                                targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                            )
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                var locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                    LockOperationsApi.getLocksForUser(
+                        data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertTrue { locksResponse.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    LockOperationsApi.revokeAccessToLock(
+                        data = RevokeAccessToLockOperationData(
+                            baseOperation = baseOperation.copy(jti = randomUuidString()),
+                            users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
+                    LockOperationsApi.getLocksForUser(
+                        data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertFalse { locksResponse.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+                // Given - shouldUpdateUnlockBetween
+                val now = Clock.System.now()
+                val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
+                val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
+                val newUnlockBetween = UnlockBetweenData(
+                    start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
+                    end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+                    timezone = TimeZone.UTC.id,
+                    days = setOf(DayOfWeek.entries.random()),
+                    exceptions = emptyList()
+                )
+
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    LockOperationsApi.updateSecureSettingUnlockBetween(
+                        data = UpdateSecureSettingUnlockBetweenData(
+                            baseOperation = baseOperation.copy(jti = randomUuidString()),
+                            unlockBetween = newUnlockBetween
+                        ).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+                    LockOperationsApi.getSingleLock(
+                        data = GetSingleLockData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertNotNull(lockResponse.settings.unlockBetweenWindow)
+                assertEquals(newUnlockBetween.start, lockResponse.settings.unlockBetweenWindow.start)
+                assertEquals(newUnlockBetween.end, lockResponse.settings.unlockBetweenWindow.end)
+                assertEquals(
+                    newUnlockBetween.timezone,
+                    lockResponse.settings.unlockBetweenWindow.timezone
+                )
+                assertEquals(newUnlockBetween.days, lockResponse.settings.unlockBetweenWindow.days)
+                assertEquals(
+                    newUnlockBetween.exceptions,
+                    lockResponse.settings.unlockBetweenWindow.exceptions
+                )
+
+                // Given - shouldStopDoor
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    FusionApi.stopDoor(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
+                    FusionApi.getDoorStatus(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertEquals(ServiceStateType.STOPPED, doorStateResponse.state)
+
+                // Given - shouldDeleteDoor
+                // When
+                callbackApiCall<ResultData<Unit>> {
+                    FusionApi.deleteDoor(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+
+                // Then
+                doorStateResponse = callbackApiCall<ResultData<BasicDoorStateResponse>> {
+                    FusionApi.getDoorStatus(
+                        data = DeviceIdData(actualDoor.doordeck.id).toJson(),
+                        callback = TestCallback
+                    )
+                }.unwrap()
+                assertEquals(ServiceStateType.UNDEFINED, doorStateResponse.state)
             }
         } catch (exception: Throwable) {
             println("Failed to test $controllerType: ${exception.message}")
