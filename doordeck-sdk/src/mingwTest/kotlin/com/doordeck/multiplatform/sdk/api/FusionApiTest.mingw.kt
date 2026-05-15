@@ -312,7 +312,7 @@ class FusionApiTest : CallbackTest() {
                 assertEquals(newDuration.toDouble(), response.settings.unlockTime)
 
                 // Given - Unlock
-                callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
+                callbackApiCall<ResultData<Unit>> {
                     LockOperationsApi.unlock(
                         data = UnlockOperationData(baseOperation.copy(jti = randomUuidString())).toJson(),
                         callback = TestCallback
