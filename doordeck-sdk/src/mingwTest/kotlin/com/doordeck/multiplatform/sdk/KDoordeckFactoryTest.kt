@@ -14,7 +14,6 @@ import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class KDoordeckFactoryTest : BasicCallbackTest() {
 
@@ -50,7 +49,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // When
         sdk.release()
@@ -61,8 +60,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
-        }
-        assertNotNull(response.failure)
-        assertEquals("Failed to perform API call", response.failure.exceptionMessage)
+        }.unwrapFailure()
+        assertEquals("Failed to perform API call", response.exceptionMessage)
     }
 }
