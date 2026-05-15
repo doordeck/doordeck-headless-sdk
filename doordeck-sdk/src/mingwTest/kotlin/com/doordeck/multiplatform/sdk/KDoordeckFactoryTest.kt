@@ -11,7 +11,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.cinterop.staticCFunction
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -49,7 +48,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
         }
 
@@ -60,7 +59,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
         }
         assertNotNull(response.failure)
