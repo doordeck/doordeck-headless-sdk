@@ -59,6 +59,17 @@ internal data class BasicCCureController(
 ) : BasicLockController
 
 @Serializable
+@SerialName("ccure-virtual-card")
+internal data class BasicCCureVirtualCardController(
+    val baseUrl: String? = null,
+    val username: String,
+    val password: String,
+    val readerId: Long,
+    val facilityCode: Int
+) : BasicLockController
+
+
+@Serializable
 @SerialName("demo")
 internal data class BasicDemoController(
     val port: UShort
