@@ -9,6 +9,7 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -64,12 +65,11 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicUserPublicKeyResponse
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUuidString
-import com.doordeck.multiplatform.sdk.testCallback
+import com.doordeck.multiplatform.sdk.unwrap
+import com.doordeck.multiplatform.sdk.unwrapFailure
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.cinterop.staticCFunction
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -88,621 +88,577 @@ class LockOperationsApiTest : CallbackTest() {
 
     @Test
     fun shouldGetSingleLock() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val response = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val response = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            assertEquals(PLATFORM_TEST_MAIN_LOCK_ID, response.success.result.id)
-        }
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_LOCK_ID, response.id)
     }
 
     @Test
     fun shouldUpdateLockName() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockName(
-                    data = UpdateLockNameData(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockName(
+                data = UpdateLockNameData(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(updatedLockName, lockResponse.success.result.name)
-        }
+        // Then
+        val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedLockName, lockResponse.name)
     }
 
     @Test
     fun shouldUpdateLockFavourite() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val updatedFavourite = true
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val updatedFavourite = true
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockFavourite(
-                    data = UpdateLockFavouriteData(PLATFORM_TEST_MAIN_LOCK_ID, updatedFavourite).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockFavourite(
+                data = UpdateLockFavouriteData(PLATFORM_TEST_MAIN_LOCK_ID, updatedFavourite).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(updatedFavourite, lockResponse.success.result.favourite)
-        }
+        // Then
+        val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedFavourite, lockResponse.favourite)
     }
 
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockSettingDefaultName(
-                    data = UpdateLockSettingDefaultNameData(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockSettingDefaultName(
+                data = UpdateLockSettingDefaultNameData(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(updatedLockDefaultName, lockResponse.success.result.settings.defaultName)
-        }
+        // Then
+        val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedLockDefaultName, lockResponse.settings.defaultName)
     }
 
     @Test
     fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
-        runBlocking {
-            // Given - shouldSetLockSettingPermittedAddresses
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val addedLockPermittedAddresses = listOf("95.19.38.42")
+        // Given - shouldSetLockSettingPermittedAddresses
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val addedLockPermittedAddresses = listOf("95.19.38.42")
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.setLockSettingPermittedAddresses(
-                    data = SetLockSettingPermittedAddressesData(PLATFORM_TEST_MAIN_LOCK_ID, addedLockPermittedAddresses).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.setLockSettingPermittedAddresses(
+                data = SetLockSettingPermittedAddressesData(
+                    PLATFORM_TEST_MAIN_LOCK_ID,
+                    addedLockPermittedAddresses
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertTrue { lockResponse.success.result.settings.permittedAddresses.isNotEmpty() }
-            assertContains(addedLockPermittedAddresses, lockResponse.success.result.settings.permittedAddresses.first())
+        // Then
+        var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertTrue { lockResponse.settings.permittedAddresses.isNotEmpty() }
+        assertContains(addedLockPermittedAddresses, lockResponse.settings.permittedAddresses.first())
 
-            // Given - shouldRemoveLockSettingPermittedAddresses
-            val removedLockPermittedAddresses = listOf<String>()
+        // Given - shouldRemoveLockSettingPermittedAddresses
+        val removedLockPermittedAddresses = listOf<String>()
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.setLockSettingPermittedAddresses(
-                    data = SetLockSettingPermittedAddressesData(PLATFORM_TEST_MAIN_LOCK_ID, removedLockPermittedAddresses).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.setLockSettingPermittedAddresses(
+                data = SetLockSettingPermittedAddressesData(
+                    PLATFORM_TEST_MAIN_LOCK_ID,
+                    removedLockPermittedAddresses
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertTrue { lockResponse.success.result.settings.permittedAddresses.isEmpty() }
-        }
+        // Then
+        lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertTrue { lockResponse.settings.permittedAddresses.isEmpty() }
     }
 
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val updatedHidden = false
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val updatedHidden = false
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockSettingHidden(
-                    data = UpdateLockSettingHiddenData(PLATFORM_TEST_MAIN_LOCK_ID, updatedHidden).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockSettingHidden(
+                data = UpdateLockSettingHiddenData(PLATFORM_TEST_MAIN_LOCK_ID, updatedHidden).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(updatedHidden, lockResponse.success.result.settings.hidden)
-        }
+        // Then
+        val lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(updatedHidden, lockResponse.settings.hidden)
     }
 
     @Test
     fun shouldSetAndRemoveLockSettingTimeRestrictions() = runTest {
-        runBlocking {
-            // Given - shouldSetLockSettingTimeRestrictions
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val now = Clock.System.now()
-            val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
-            val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
-            val addedTimeRestriction = TimeRequirementData(
-                start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
-                end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
-                timezone = TimeZone.UTC.id,
-                days = setOf(DayOfWeek.entries.random())
+        // Given - shouldSetLockSettingTimeRestrictions
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
             )
+        }.unwrap()
+        val now = Clock.System.now()
+        val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
+        val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
+        val addedTimeRestriction = TimeRequirementData(
+            start = "${min.hour.toString().padStart(2, '0')}:${min.minute.toString().padStart(2, '0')}",
+            end = "${max.hour.toString().padStart(2, '0')}:${max.minute.toString().padStart(2, '0')}",
+            timezone = TimeZone.UTC.id,
+            days = setOf(DayOfWeek.entries.random())
+        )
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.setLockSettingTimeRestrictions(
-                    data = SetLockSettingTimeRestrictionsData(PLATFORM_TEST_MAIN_LOCK_ID, listOf(addedTimeRestriction)).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.setLockSettingTimeRestrictions(
+                data = SetLockSettingTimeRestrictionsData(
+                    PLATFORM_TEST_MAIN_LOCK_ID,
+                    listOf(addedTimeRestriction)
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            val actualTime = lockResponse.success.result.settings.usageRequirements?.time?.firstOrNull()
-            assertNotNull(actualTime)
-            assertEquals(addedTimeRestriction.start, actualTime.start)
-            assertEquals(addedTimeRestriction.end, actualTime.end)
-            assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
-            assertContains(actualTime.days, addedTimeRestriction.days.first())
+        // Then
+        var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val actualTime = lockResponse.settings.usageRequirements?.time?.firstOrNull()
+        assertNotNull(actualTime)
+        assertEquals(addedTimeRestriction.start, actualTime.start)
+        assertEquals(addedTimeRestriction.end, actualTime.end)
+        assertEquals(addedTimeRestriction.timezone, actualTime.timezone)
+        assertContains(actualTime.days, addedTimeRestriction.days.first())
 
-            // Given - shouldRemoveLockSettingTimeRestrictions
-            val removedTimeRestriction = emptyList<TimeRequirementData>()
+        // Given - shouldRemoveLockSettingTimeRestrictions
+        val removedTimeRestriction = emptyList<TimeRequirementData>()
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.setLockSettingTimeRestrictions(
-                    data = SetLockSettingTimeRestrictionsData(PLATFORM_TEST_MAIN_LOCK_ID, removedTimeRestriction).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.setLockSettingTimeRestrictions(
+                data = SetLockSettingTimeRestrictionsData(PLATFORM_TEST_MAIN_LOCK_ID, removedTimeRestriction).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(0, lockResponse.success.result.settings.usageRequirements?.time?.size)
-        }
+        // Then
+        lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(0, lockResponse.settings.usageRequirements?.time?.size)
     }
 
     @Test
     fun shouldUpdateAndRemoveLockSettingLocationRestrictions() = runTest {
-        runBlocking {
-            // Given - shouldUpdateLockSettingLocationRestrictions
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val addedLocationRestriction = LocationRequirementData(
-                latitude = randomDouble(-90.0, 90.0),
-                longitude = randomDouble(-180.0, 180.0),
-                enabled = true,
-                radius = randomInt(1, 100),
-                accuracy = randomInt(1, 100)
+        // Given - shouldUpdateLockSettingLocationRestrictions
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
             )
+        }.unwrap()
+        val addedLocationRestriction = LocationRequirementData(
+            latitude = randomDouble(-90.0, 90.0),
+            longitude = randomDouble(-180.0, 180.0),
+            enabled = true,
+            radius = randomInt(1, 100),
+            accuracy = randomInt(1, 100)
+        )
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockSettingLocationRestrictions(
-                    data = UpdateLockSettingLocationRestrictionsData(PLATFORM_TEST_MAIN_LOCK_ID, addedLocationRestriction).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockSettingLocationRestrictions(
+                data = UpdateLockSettingLocationRestrictionsData(
+                    PLATFORM_TEST_MAIN_LOCK_ID,
+                    addedLocationRestriction
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertNotNull(lockResponse.success.result.settings.usageRequirements?.location)
-            assertEquals(addedLocationRestriction.latitude, lockResponse.success.result.settings.usageRequirements.location.latitude)
-            assertEquals(addedLocationRestriction.longitude, lockResponse.success.result.settings.usageRequirements.location.longitude)
-            assertEquals(addedLocationRestriction.enabled, lockResponse.success.result.settings.usageRequirements.location.enabled)
-            assertEquals(addedLocationRestriction.radius, lockResponse.success.result.settings.usageRequirements.location.radius)
-            assertEquals(addedLocationRestriction.accuracy, lockResponse.success.result.settings.usageRequirements.location.accuracy)
+        // Then
+        var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertNotNull(lockResponse.settings.usageRequirements?.location)
+        assertEquals(
+            addedLocationRestriction.latitude,
+            lockResponse.settings.usageRequirements.location.latitude
+        )
+        assertEquals(
+            addedLocationRestriction.longitude,
+            lockResponse.settings.usageRequirements.location.longitude
+        )
+        assertEquals(
+            addedLocationRestriction.enabled,
+            lockResponse.settings.usageRequirements.location.enabled
+        )
+        assertEquals(
+            addedLocationRestriction.radius,
+            lockResponse.settings.usageRequirements.location.radius
+        )
+        assertEquals(
+            addedLocationRestriction.accuracy,
+            lockResponse.settings.usageRequirements.location.accuracy
+        )
 
-            // Given - shouldRemoveLockSettingLocationRestrictions
-            val removedLocationRestriction = null
+        // Given - shouldRemoveLockSettingLocationRestrictions
+        val removedLocationRestriction = null
 
-            // When
-            callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateLockSettingLocationRestrictions(
-                    data = UpdateLockSettingLocationRestrictionsData(PLATFORM_TEST_MAIN_LOCK_ID, removedLocationRestriction).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateLockSettingLocationRestrictions(
+                data = UpdateLockSettingLocationRestrictionsData(
+                    PLATFORM_TEST_MAIN_LOCK_ID,
+                    removedLocationRestriction
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
-                LockOperationsApi.getSingleLock(
-                    data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(lockResponse.success)
-            assertNotNull(lockResponse.success.result)
-            assertEquals(removedLocationRestriction, lockResponse.success.result.settings.usageRequirements?.location)
-        }
+        // Then
+        lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
+            LockOperationsApi.getSingleLock(
+                data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        assertEquals(removedLocationRestriction, lockResponse.settings.usageRequirements?.location)
     }
 
     @Test
     fun shouldGetUserPublicKey() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
-                LockOperationsApi.getUserPublicKey(
-                    data = GetUserPublicKeyData(TEST_MAIN_USER_EMAIL, true).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
+            LockOperationsApi.getUserPublicKey(
+                data = GetUserPublicKeyData(TEST_MAIN_USER_EMAIL, true).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(result.success)
-            assertNotNull(result.success.result)
-            assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.success.result.id)
-        }
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
-                LockOperationsApi.getUserPublicKeyByEmail(
-                    data = GetUserPublicKeyByEmailData(TEST_MAIN_USER_EMAIL).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
+            LockOperationsApi.getUserPublicKeyByEmail(
+                data = GetUserPublicKeyByEmailData(TEST_MAIN_USER_EMAIL).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(result.success)
-            assertNotNull(result.success.result)
-            assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.success.result.id)
-        }
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
-                LockOperationsApi.getUserPublicKeyByLocalKey(
-                    data = GetUserPublicKeyByLocalKeyData(TEST_MAIN_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
+            LockOperationsApi.getUserPublicKeyByLocalKey(
+                data = GetUserPublicKeyByLocalKeyData(TEST_MAIN_USER_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(result.success)
-            assertNotNull(result.success.result)
-            assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.success.result.id)
-        }
+        // Then
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
     }
 
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val result = callbackApiCall<ResultData<List<BasicBatchUserPublicKeyResponse>>> {
-                LockOperationsApi.getUserPublicKeyByEmails(
-                    data = GetUserPublicKeyByEmailsData(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL)).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val result = callbackApiCall<ResultData<List<BasicBatchUserPublicKeyResponse>>> {
+            LockOperationsApi.getUserPublicKeyByEmails(
+                data = GetUserPublicKeyByEmailsData(
+                    listOf(
+                        TEST_MAIN_USER_EMAIL,
+                        TEST_SUPPLEMENTARY_USER_EMAIL
+                    )
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(result.success)
-            assertNotNull(result.success.result)
-            assertTrue { result.success.result.isNotEmpty() }
-        }
+        // Then
+        assertTrue { result.isNotEmpty() }
     }
 
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val result = callbackApiCall<ResultData<List<BasicBatchUserPublicKeyResponse>>> {
-                LockOperationsApi.getUserPublicKeyByLocalKeys(
-                    data = GetUserPublicKeyByLocalKeysData(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val result = callbackApiCall<ResultData<List<BasicBatchUserPublicKeyResponse>>> {
+            LockOperationsApi.getUserPublicKeyByLocalKeys(
+                data = GetUserPublicKeyByLocalKeysData(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(result.success)
-            assertNotNull(result.success.result)
-            assertTrue { result.success.result.isNotEmpty() }
-        }
+        // Then
+        assertTrue { result.isNotEmpty() }
     }
 
     @Test
     fun shouldGetUsersForLock() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val usersForLock = callbackApiCall<ResultData<List<BasicUserLockResponse>>> {
-                LockOperationsApi.getUsersForLock(
-                    data = GetUsersForLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val usersForLock = callbackApiCall<ResultData<List<BasicUserLockResponse>>> {
+            LockOperationsApi.getUsersForLock(
+                data = GetUsersForLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(usersForLock.success)
-            assertNotNull(usersForLock.success.result)
-            assertTrue { usersForLock.success.result.isNotEmpty() }
-            assertTrue { usersForLock.success.result.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
-        }
+        // Then
+        assertTrue { usersForLock.isNotEmpty() }
+        assertTrue { usersForLock.any { it.userId == PLATFORM_TEST_MAIN_USER_ID } }
     }
 
     @Test
     fun shouldGetLockForUser() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val locksForUser = callbackApiCall<ResultData<BasicLockUserResponse>> {
-                LockOperationsApi.getLocksForUser(
-                    data = GetLocksForUserData(TEST_MAIN_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val locksForUser = callbackApiCall<ResultData<BasicLockUserResponse>> {
+            LockOperationsApi.getLocksForUser(
+                data = GetLocksForUserData(TEST_MAIN_USER_ID).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(locksForUser.success)
-            assertNotNull(locksForUser.success.result)
-            assertTrue { locksForUser.success.result.devices.isNotEmpty() }
-            assertTrue { locksForUser.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
-        }
+        // Then
+        assertTrue { locksForUser.devices.isNotEmpty() }
+        assertTrue { locksForUser.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldGetPinnedLocks() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val pinnedLocks = callbackApiCall<ResultData<List<BasicLockResponse>>> {
-                LockOperationsApi.getPinnedLocks(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val pinnedLocks = callbackApiCall<ResultData<List<BasicLockResponse>>> {
+            LockOperationsApi.getPinnedLocks(TestCallback)
+        }.unwrap()
 
-            // Then
-            assertNotNull(pinnedLocks.success)
-            assertNotNull(pinnedLocks.success.result)
-            assertTrue { pinnedLocks.success.result.isNotEmpty() }
-        }
+        // Then
+        assertTrue { pinnedLocks.isNotEmpty() }
     }
 
     @Test
     fun shouldGetShareableLocks() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // When
-            val shareableLocks = callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
-                LockOperationsApi.getShareableLocks(
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val shareableLocks = callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
+            LockOperationsApi.getShareableLocks(TestCallback)
+        }.unwrap()
 
-            // Then
-            assertNotNull(shareableLocks.success)
-            assertNotNull(shareableLocks.success.result)
-            assertTrue { shareableLocks.success.result.isNotEmpty() }
-            assertTrue { shareableLocks.success.result.any { it.id == PLATFORM_TEST_MAIN_LOCK_ID } }
-        }
+        // Then
+        assertTrue { shareableLocks.isNotEmpty() }
+        assertTrue { shareableLocks.any { it.id == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
     fun shouldUnlock() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
-                AccountApi.registerEphemeralKey(
-                    data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            assertNotNull(registerKeyResponse.success)
-            assertNotNull(registerKeyResponse.success.result)
-            val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
-            val baseOperation = BaseOperationData(
-                userId = PLATFORM_TEST_MAIN_USER_ID,
-                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-                userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
-                lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
             )
+        }.unwrap()
+        val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
+            AccountApi.registerEphemeralKey(
+                data = RegisterEphemeralKeyData(
+                    PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                    PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
+        val baseOperation = BaseOperationData(
+            userId = PLATFORM_TEST_MAIN_USER_ID,
+            userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+            userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+            lockId = PLATFORM_TEST_MAIN_LOCK_ID
+        )
 
-            // When
-            callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
-                LockOperationsApi.unlock(
-                    data = UnlockOperationData(baseOperation).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-        }
+        // When
+        callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.unlock(
+                data = UnlockOperationData(baseOperation).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
     }
 
     @Test
@@ -711,18 +667,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         ContextManager.setOperationContext(
             OperationContextData(
                 userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -739,9 +693,9 @@ class LockOperationsApiTest : CallbackTest() {
                 data = UnlockOperationData(
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID)
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
     }
 
     @Test
@@ -750,18 +704,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val shareBaseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -780,20 +732,18 @@ class LockOperationsApiTest : CallbackTest() {
                         targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
                     )
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         var locksResponse =  callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(locksResponse.success)
-        assertNotNull(locksResponse.success.result)
-        assertTrue { locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+        }.unwrap()
+        assertTrue { locksResponse.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLock
         val revokeBaseOperation = BaseOperationData(
@@ -810,20 +760,18 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = revokeBaseOperation,
                     users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(locksResponse.success)
-        assertNotNull(locksResponse.success.result)
-        assertFalse { locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+        }.unwrap()
+        assertFalse { locksResponse.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
     }
 
     @Test
@@ -832,18 +780,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val shareBaseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
             userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -870,21 +816,19 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = shareBaseOperation,
                     users = batchShareLock
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         assertTrue {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -892,12 +836,10 @@ class LockOperationsApiTest : CallbackTest() {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -916,21 +858,19 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = revokeBaseOperation,
                     users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         assertFalse {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -938,12 +878,10 @@ class LockOperationsApiTest : CallbackTest() {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -955,18 +893,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         ContextManager.setOperationContext(
             OperationContextData(
                 userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -989,20 +925,18 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     shareLock = shareLock
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         var locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(locksResponse.success)
-        assertNotNull(locksResponse.success.result)
-        assertTrue { locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
+        }.unwrap()
+        assertTrue { locksResponse.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID } }
 
         // Given - shouldRevokeAccessToLockUsingContext
         // When
@@ -1012,21 +946,19 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         locksResponse = callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
                 data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(locksResponse.success)
-        assertNotNull(locksResponse.success.result)
+        }.unwrap()
         assertFalse {
-            locksResponse.success.result.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
+            locksResponse.devices.any { it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID }
         }
     }
 
@@ -1036,18 +968,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         ContextManager.setOperationContext(
             OperationContextData(
                 userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -1077,21 +1007,19 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     users = batchShareLock
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         assertTrue {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -1099,12 +1027,10 @@ class LockOperationsApiTest : CallbackTest() {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -1117,21 +1043,19 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID, PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID)
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         assertFalse {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -1139,12 +1063,10 @@ class LockOperationsApiTest : CallbackTest() {
             val response = callbackApiCall<ResultData<BasicLockUserResponse>> {
                 LockOperationsApi.getLocksForUser(
                     data = GetLocksForUserData(PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID).toJson(),
-                    callback = staticCFunction(::testCallback)
+                    callback = TestCallback
                 )
-            }
-            assertNotNull(response.success)
-            assertNotNull(response.success.result)
-            response.success.result.devices.any {
+            }.unwrap()
+            response.devices.any {
                 it.deviceId == PLATFORM_TEST_MAIN_LOCK_ID
             }
         }
@@ -1156,18 +1078,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val updatedUnlockDuration = randomInt(1, 10)
         val baseOperation = BaseOperationData(
             userId = PLATFORM_TEST_MAIN_USER_ID,
@@ -1183,20 +1103,18 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = baseOperation,
                     unlockDuration = updatedUnlockDuration
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         val response = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(response.success)
-        assertNotNull(response.success.result)
-        assertEquals(updatedUnlockDuration.toDouble(), response.success.result.settings.unlockTime)
+        }.unwrap()
+        assertEquals(updatedUnlockDuration.toDouble(), response.settings.unlockTime)
     }
 
     @Test
@@ -1205,18 +1123,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val updatedUnlockDuration = 1
         ContextManager.setOperationContext(
             OperationContextData(
@@ -1235,20 +1151,18 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockDuration = updatedUnlockDuration
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         val response = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(response.success)
-        assertNotNull(response.success.result)
-        assertEquals(updatedUnlockDuration.toDouble(), response.success.result.settings.unlockTime)
+        }.unwrap()
+        assertEquals(updatedUnlockDuration.toDouble(), response.settings.unlockTime)
     }
 
     @Test
@@ -1257,18 +1171,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val now = Clock.System.now()
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
@@ -1293,25 +1205,23 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = addBaseOperation,
                     unlockBetween = updatedUnlockBetween
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(lockResponse.success)
-        assertNotNull(lockResponse.success.result)
-        assertNotNull(lockResponse.success.result.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lockResponse.success.result.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
-        assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
-        assertEquals(updatedUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
+        }.unwrap()
+        assertNotNull(lockResponse.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lockResponse.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lockResponse.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lockResponse.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lockResponse.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lockResponse.settings.unlockBetweenWindow.exceptions)
 
         // Given - shouldRemoveSecureSettingUnlockBetween
         val removeBaseOperation = BaseOperationData(
@@ -1328,20 +1238,18 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = removeBaseOperation,
                     unlockBetween = null
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(lockResponse.success)
-        assertNotNull(lockResponse.success.result)
-        assertNull(lockResponse.success.result.settings.unlockBetweenWindow)
+        }.unwrap()
+        assertNull(lockResponse.settings.unlockBetweenWindow)
     }
 
     @Test
@@ -1350,18 +1258,16 @@ class LockOperationsApiTest : CallbackTest() {
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
         val registerKeyResponse = callbackApiCall<ResultData<BasicRegisterEphemeralKeyResponse>> {
             AccountApi.registerEphemeralKey(
                 data = RegisterEphemeralKeyData(PLATFORM_TEST_MAIN_USER_PUBLIC_KEY, PLATFORM_TEST_MAIN_USER_PRIVATE_KEY).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(registerKeyResponse.success)
-        assertNotNull(registerKeyResponse.success.result)
-        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.success.result.certificateChain
+        }.unwrap()
+        val TEST_MAIN_USER_CERTIFICATE_CHAIN = registerKeyResponse.certificateChain
         val now = Clock.System.now()
         val min = now.minus(5.minutes).toLocalDateTime(TimeZone.UTC)
         val max = now.plus(10.minutes).toLocalDateTime(TimeZone.UTC)
@@ -1389,25 +1295,23 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockBetween = updatedUnlockBetween
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         var lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(lockResponse.success)
-        assertNotNull(lockResponse.success.result)
-        assertNotNull(lockResponse.success.result.settings.unlockBetweenWindow)
-        assertEquals(updatedUnlockBetween.start, lockResponse.success.result.settings.unlockBetweenWindow.start)
-        assertEquals(updatedUnlockBetween.end, lockResponse.success.result.settings.unlockBetweenWindow.end)
-        assertEquals(updatedUnlockBetween.timezone, lockResponse.success.result.settings.unlockBetweenWindow.timezone)
-        assertEquals(updatedUnlockBetween.days, lockResponse.success.result.settings.unlockBetweenWindow.days)
-        assertEquals(updatedUnlockBetween.exceptions, lockResponse.success.result.settings.unlockBetweenWindow.exceptions)
+        }.unwrap()
+        assertNotNull(lockResponse.settings.unlockBetweenWindow)
+        assertEquals(updatedUnlockBetween.start, lockResponse.settings.unlockBetweenWindow.start)
+        assertEquals(updatedUnlockBetween.end, lockResponse.settings.unlockBetweenWindow.end)
+        assertEquals(updatedUnlockBetween.timezone, lockResponse.settings.unlockBetweenWindow.timezone)
+        assertEquals(updatedUnlockBetween.days, lockResponse.settings.unlockBetweenWindow.days)
+        assertEquals(updatedUnlockBetween.exceptions, lockResponse.settings.unlockBetweenWindow.exceptions)
 
         // Given
         callbackApiCall<ResultData<Unit>> {
@@ -1416,160 +1320,165 @@ class LockOperationsApiTest : CallbackTest() {
                     baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
                     unlockBetween = null
                 ).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
+        }.unwrap()
 
         // Then
         lockResponse = callbackApiCall<ResultData<BasicLockResponse>> {
             LockOperationsApi.getSingleLock(
                 data = GetSingleLockData(PLATFORM_TEST_MAIN_LOCK_ID).toJson(),
-                callback = staticCFunction(::testCallback)
+                callback = TestCallback
             )
-        }
-        assertNotNull(lockResponse.success)
-        assertNotNull(lockResponse.success.result)
-        assertNull(lockResponse.success.result.settings.unlockBetweenWindow)
+        }.unwrap()
+        assertNull(lockResponse.settings.unlockBetweenWindow)
     }
 
     @Test
     fun shouldGetLockAuditTrail() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val now = Clock.System.now()
-            val start = now.minus(14.days).epochSeconds
-            val end = now.epochSeconds
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val now = Clock.System.now()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
-            // When
-            val lockAuditTrail = callbackApiCall<ResultData<List<BasicAuditResponse>>> {
-                LockOperationsApi.getLockAuditTrail(
-                    data = GetLockAuditTrailData(PLATFORM_TEST_MAIN_LOCK_ID, start, end).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val lockAuditTrail = callbackApiCall<ResultData<List<BasicAuditResponse>>> {
+            LockOperationsApi.getLockAuditTrail(
+                data = GetLockAuditTrailData(PLATFORM_TEST_MAIN_LOCK_ID, start, end).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(lockAuditTrail.success)
-            assertNotNull(lockAuditTrail.success.result)
-            assertTrue { lockAuditTrail.success.result.isNotEmpty() }
-        }
+        // Then
+        assertTrue { lockAuditTrail.isNotEmpty() }
     }
 
     @Test
     fun shouldGetAuditForUser() = runTest {
-        runBlocking {
-            // Given
-            callbackApiCall<ResultData<BasicTokenResponse>> {
-                AccountlessApi.login(
-                    data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
-            val now = Clock.System.now()
-            val start = now.minus(14.days).epochSeconds
-            val end = now.epochSeconds
+        // Given
+        callbackApiCall<ResultData<BasicTokenResponse>> {
+            AccountlessApi.login(
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
+        val now = Clock.System.now()
+        val start = now.minus(14.days).epochSeconds
+        val end = now.epochSeconds
 
-            // When
-            val auditForUser = callbackApiCall<ResultData<List<BasicAuditResponse>>> {
-                LockOperationsApi.getAuditForUser(
-                    data = GetAuditForUserData(PLATFORM_TEST_MAIN_USER_ID, start, end).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val auditForUser = callbackApiCall<ResultData<List<BasicAuditResponse>>> {
+            LockOperationsApi.getAuditForUser(
+                data = GetAuditForUserData(PLATFORM_TEST_MAIN_USER_ID, start, end).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()
 
-            // Then
-            assertNotNull(auditForUser.success)
-            assertNotNull(auditForUser.success.result)
-            assertTrue { auditForUser.success.result.isNotEmpty() }
-        }
+        // Then
+        assertTrue { auditForUser.isNotEmpty() }
     }
 
     @Test
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
-        runBlocking {
-            // When
-            val revokeAccessToLockUsingContextException = callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.revokeAccessToLock(
-                    data = RevokeAccessToLockOperationData(
-                        baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                        users = emptyList()
-                    ).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        // When
+        val revokeAccessToLockUsingContextException = callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.revokeAccessToLock(
+                data = RevokeAccessToLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    users = emptyList()
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrapFailure()
 
-            val shareLockUsingContextException = callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.shareLock(
-                    data = ShareLockOperationData(
-                        baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                        shareLock = ShareLockData(
-                            targetUserId = randomUuidString(),
-                            targetUserRole = UserRole.USER,
-                            targetUserPublicKey = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64()
-                        )
-                    ).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        val shareLockUsingContextException = callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.shareLock(
+                data = ShareLockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    shareLock = ShareLockData(
+                        targetUserId = randomUuidString(),
+                        targetUserRole = UserRole.USER,
+                        targetUserPublicKey = CryptoManager.generateRawKeyPair().public.encodeByteArrayToBase64()
+                    )
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrapFailure()
 
-            val unlockUsingContextException = callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.unlock(
-                    data = UnlockOperationData(
-                        baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                        directAccessEndpoints = emptyList()
-                    ).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        val unlockUsingContextException = callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.unlock(
+                data = UnlockOperationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    directAccessEndpoints = emptyList()
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrapFailure()
 
-            val updateSecureSettingUnlockDurationUsingContextException = callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateSecureSettingUnlockDuration(
-                    data = UpdateSecureSettingUnlockDurationData(
-                        baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                        unlockDuration = 0
-                    ).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        val updateSecureSettingUnlockDurationUsingContextException = callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockDuration(
+                data = UpdateSecureSettingUnlockDurationData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockDuration = 0
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrapFailure()
 
-            val updateSecureSettingUnlockBetweenUsingContextException = callbackApiCall<ResultData<Unit>> {
-                LockOperationsApi.updateSecureSettingUnlockBetween(
-                    data = UpdateSecureSettingUnlockBetweenData(
-                        baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
-                        unlockBetween = UnlockBetweenData(
-                            start = "",
-                            end = "",
-                            timezone = TimeZone.UTC.id,
-                            days = emptySet(),
-                            exceptions = emptyList()
-                        )
-                    ).toJson(),
-                    callback = staticCFunction(::testCallback)
-                )
-            }
+        val updateSecureSettingUnlockBetweenUsingContextException = callbackApiCall<ResultData<Unit>> {
+            LockOperationsApi.updateSecureSettingUnlockBetween(
+                data = UpdateSecureSettingUnlockBetweenData(
+                    baseOperation = BaseOperationData(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
+                    unlockBetween = UnlockBetweenData(
+                        start = "",
+                        end = "",
+                        timezone = TimeZone.UTC.id,
+                        days = emptySet(),
+                        exceptions = emptyList()
+                    )
+                ).toJson(),
+                callback = TestCallback
+            )
+        }.unwrapFailure()
 
-            // Then
-            assertNotNull(revokeAccessToLockUsingContextException.failure)
-            assertContains(revokeAccessToLockUsingContextException.failure.exceptionType, MissingContextFieldException::class.simpleName!!)
-            assertContains("User ID is missing", revokeAccessToLockUsingContextException.failure.exceptionMessage)
-            assertNotNull(shareLockUsingContextException.failure)
-            assertContains(shareLockUsingContextException.failure.exceptionType, MissingContextFieldException::class.simpleName!!)
-            assertContains("User ID is missing", shareLockUsingContextException.failure.exceptionMessage)
-            assertNotNull(unlockUsingContextException.failure)
-            assertContains(unlockUsingContextException.failure.exceptionType, MissingContextFieldException::class.simpleName!!)
-            assertContains("User ID is missing", unlockUsingContextException.failure.exceptionMessage)
-            assertNotNull(updateSecureSettingUnlockDurationUsingContextException.failure)
-            assertContains(updateSecureSettingUnlockDurationUsingContextException.failure.exceptionType, MissingContextFieldException::class.simpleName!!)
-            assertContains("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.failure.exceptionMessage)
-            assertNotNull(updateSecureSettingUnlockBetweenUsingContextException.failure)
-            assertContains(updateSecureSettingUnlockBetweenUsingContextException.failure.exceptionType, MissingContextFieldException::class.simpleName!!)
-            assertContains("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.failure.exceptionMessage)
-        }
+        // Then
+        assertContains(
+            revokeAccessToLockUsingContextException.exceptionType,
+            MissingContextFieldException::class.simpleName!!
+        )
+        assertContains("User ID is missing", revokeAccessToLockUsingContextException.exceptionMessage)
+        assertContains(
+            shareLockUsingContextException.exceptionType,
+            MissingContextFieldException::class.simpleName!!
+        )
+        assertContains("User ID is missing", shareLockUsingContextException.exceptionMessage)
+        assertNotNull(unlockUsingContextException)
+        assertContains(
+            unlockUsingContextException.exceptionType,
+            MissingContextFieldException::class.simpleName!!
+        )
+        assertContains("User ID is missing", unlockUsingContextException.exceptionMessage)
+        assertContains(
+            updateSecureSettingUnlockDurationUsingContextException.exceptionType,
+            MissingContextFieldException::class.simpleName!!
+        )
+        assertContains(
+            "User ID is missing",
+            updateSecureSettingUnlockDurationUsingContextException.exceptionMessage
+        )
+        assertContains(
+            updateSecureSettingUnlockBetweenUsingContextException.exceptionType,
+            MissingContextFieldException::class.simpleName!!
+        )
+        assertContains(
+            "User ID is missing",
+            updateSecureSettingUnlockBetweenUsingContextException.exceptionMessage
+        )
     }
 }
