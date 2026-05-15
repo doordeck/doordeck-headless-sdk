@@ -12,6 +12,7 @@ public interface ILockController;
 [JsonDerivedType(typeof(AvigilonController), "avigilon")]
 [JsonDerivedType(typeof(AxisController), "axis")]
 [JsonDerivedType(typeof(CCureController), "ccure")]
+[JsonDerivedType(typeof(CCureVirtualCardController), "ccure-virtual-card")]
 [JsonDerivedType(typeof(DemoController), "demo")]
 [JsonDerivedType(typeof(GallagherController), "gallagher")]
 [JsonDerivedType(typeof(GenetecController), "genetec")]
@@ -70,6 +71,15 @@ public class CCureController : LockController
     public required string Password { get; set; }
     public required string DoorType { get; set; }
     public required int DoorId { get; set; }
+}
+
+public class CCureVirtualCardController : LockController
+{
+    public Uri? BaseUrl { get; set; }
+    public required string Username { get; set; }
+    public required string Password { get; set; }
+    public required int ReaderId { get; set; }
+    public required int FacilityCode { get; set; }
 }
 
 public class DemoController : LockController

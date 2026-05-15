@@ -59,6 +59,11 @@ class FusionApiTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldTestCcureVirtualCard() {
+        runFusionTest(FusionOperations.CCureVirtualCardController::class)
+    }
+
+    @Test
     fun shouldTestDemo() {
         runFusionTest(FusionOperations.DemoController::class)
     }
