@@ -8,8 +8,10 @@ import com.doordeck.multiplatform.sdk.api.LockOperationsApi
 import com.doordeck.multiplatform.sdk.api.PlatformApi
 import com.doordeck.multiplatform.sdk.api.SitesApi
 import com.doordeck.multiplatform.sdk.api.TilesApi
+import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 
 internal object DoordeckImpl : Doordeck {
 
@@ -36,4 +38,12 @@ internal object DoordeckImpl : Doordeck {
     override fun fusion(): FusionApi = fusion
     override fun helper(): HelperApi = helper
     override fun crypto(): CryptoManager = CryptoManager
+
+    override fun release() {
+        CloudHttpClient.close()
+        FusionHttpClient.close()
+        HttpClient.close()
+        CapabilityCache.reset()
+        SdkLogger.d { "Successfully released SDK resources" }
+    }
 }

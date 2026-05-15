@@ -6,7 +6,6 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withTimeout
 import kotlin.test.BeforeTest
 import kotlin.time.Duration.Companion.milliseconds
@@ -20,23 +19,20 @@ internal fun testCallback(data: CPointer<ByteVar>): CPointer<ByteVar> {
     return data
 }
 
-open class CallbackTest : IntegrationTest() {
-    @BeforeTest
-    fun resetCallback() = runTest {
-        capturedCallback = ""
+internal inline fun <reified T> callbackApiCall(
+    noinline apiCall: suspend () -> Unit
+): T = runBlocking {
+    apiCall()
+    withTimeout(60.seconds) {
+        while (capturedCallback.isEmpty()) delay(10.milliseconds)
     }
+    capturedCallback.fromJson<T>().also { capturedCallback = "" }
+}
 
-    internal inline fun <reified T> callbackApiCall(noinline apiCall: suspend () -> Unit): T {
-        return runBlocking {
-            apiCall()
-            withTimeout(60.seconds) {
-                while (capturedCallback.isEmpty()) {
-                    delay(10.milliseconds)
-                }
-            }
-            return@runBlocking capturedCallback.fromJson<T>().also {
-                capturedCallback = ""
-            }
-        }
-    }
+open class CallbackTest : IntegrationTest() {
+    @BeforeTest fun resetCallback() { capturedCallback = "" }
+}
+
+open class BasicCallbackTest {
+    @BeforeTest fun resetCallback() { capturedCallback = "" }
 }

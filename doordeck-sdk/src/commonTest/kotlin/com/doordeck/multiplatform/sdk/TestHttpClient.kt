@@ -11,6 +11,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.request.HttpResponseData
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
@@ -39,7 +40,7 @@ internal inline fun <reified T>CloudHttpClient.setupMockClient(content: T) {
 internal inline fun <reified T> MockRequestHandleScope.respondContent(content: T): HttpResponseData = respond(
     content = ByteReadChannel(content.toJson().toByteArray(Charsets.UTF_8)),
     status = HttpStatusCode.OK,
-    headers = headersOf(HttpHeaders.ContentType, "application/json")
+    headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
 )
 
 fun HttpClient.mockEngine() = engine as MockEngine
