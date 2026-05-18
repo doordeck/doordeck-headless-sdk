@@ -17,8 +17,10 @@ import io.ktor.client.engine.mock.respondOk
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -49,11 +51,13 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("cloudresponse", response.bodyAsText())
+            // Then
+            assertEquals("cloudresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -69,11 +73,13 @@ class LocalUnlockClientTest {
         }
         buildCloudClient(cloudEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("cloudresponse", response.bodyAsText())
+            // Then
+            assertEquals("cloudresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -89,14 +95,16 @@ class LocalUnlockClientTest {
         }
         buildCloudClient(cloudEngine)
 
-        // When
-        val exception = assertFails {
-            LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
-        }
+        withContext(Dispatchers.Default) {
+            // When
+            val exception = assertFails {
+                LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+            }
 
-        // Then
-        assertTrue { exception is BadRequestException }
-        assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
+            // Then
+            assertTrue { exception is BadRequestException }
+            assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
+        }
     }
 
     @Test
@@ -120,11 +128,13 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("cloudresponse", response.bodyAsText())
+            // Then
+            assertEquals("cloudresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -148,11 +158,13 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("localresponse", response.bodyAsText())
+            // Then
+            assertEquals("localresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -176,11 +188,13 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("localresponse", response.bodyAsText())
+            // Then
+            assertEquals("localresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -213,11 +227,13 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+        withContext(Dispatchers.Default) {
+            // When
+            val response = LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
 
-        // Then
-        assertEquals("localresponse", response.bodyAsText())
+            // Then
+            assertEquals("localresponse", response.bodyAsText())
+        }
     }
 
     @Test
@@ -240,14 +256,16 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val exception = assertFails {
-            LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
-        }
+        withContext(Dispatchers.Default) {
+            // When
+            val exception = assertFails {
+                LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+            }
 
-        // Then
-        assertTrue { exception is BadRequestException }
-        assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
+            // Then
+            assertTrue { exception is BadRequestException }
+            assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
+        }
     }
 
     @Test
@@ -272,14 +290,18 @@ class LocalUnlockClientTest {
         }
         buildHttpClient(httpEngine)
 
-        // When
-        val exception = assertFails {
-            LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
-        }
+        withContext(Dispatchers.Default) {
+            // When
+            val exception = assertFails {
+                withContext(Dispatchers.Default) {
+                    LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
+                }
+            }
 
-        // Then
-        assertTrue { exception is SdkException }
-        assertEquals("Failed to perform API call", exception.message)
+            // Then
+            assertTrue { exception is SdkException }
+            assertEquals("Failed to perform API call", exception.message)
+        }
     }
 
     private fun buildCloudClient(engine: HttpClientEngineFactory<MockEngineConfig>) {

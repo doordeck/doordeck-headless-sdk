@@ -19,9 +19,9 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.charsets.Charsets
 import io.ktor.utils.io.core.toByteArray
 
-internal val TEST_FUSION_CLIENT = createFusionHttpClient()
-internal val TEST_CLOUD_CLIENT = createCloudHttpClient()
-internal val TEST_HTTP_CLIENT = createHttpClient()
+internal val TEST_FUSION_CLIENT = createFusionHttpClient(false)
+internal val TEST_CLOUD_CLIENT = createCloudHttpClient(false)
+internal val TEST_HTTP_CLIENT = createHttpClient(false)
 
 internal inline fun <reified T>CloudHttpClient.setupMockClient(content: T) {
     val mockEngine = MockEngine.config {
