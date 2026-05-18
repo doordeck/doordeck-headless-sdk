@@ -39,10 +39,10 @@ internal val JSON = Json {
 }
 
 @JvmSynthetic
-internal fun createCloudHttpClient(): HttpClient {
+internal fun createCloudHttpClient(withTimeout: Boolean = true): HttpClient {
     return HttpClient {
         installContentNegotiation()
-        installTimeout()
+        if (withTimeout) installTimeout()
         installAuth()
         installCertificatePinner()
         installUserAgent()
@@ -63,10 +63,10 @@ internal fun createCloudHttpClient(): HttpClient {
 }
 
 @JvmSynthetic
-internal fun createFusionHttpClient(): HttpClient {
+internal fun createFusionHttpClient(withTimeout: Boolean = true): HttpClient {
     return HttpClient {
         installContentNegotiation()
-        installTimeout()
+        if (withTimeout) installTimeout()
         installUserAgent()
         installLogging()
         installResponseValidator()
@@ -83,11 +83,11 @@ internal fun createFusionHttpClient(): HttpClient {
 }
 
 @JvmSynthetic
-internal fun createHttpClient(): HttpClient {
+internal fun createHttpClient(withTimeout: Boolean = true): HttpClient {
     return HttpClient {
         installContentNegotiation()
         installUserAgent()
-        installTimeout()
+        if (withTimeout) installTimeout()
         installLogging()
         expectSuccess = true
     }.also {
