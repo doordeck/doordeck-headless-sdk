@@ -69,13 +69,15 @@ class AuthPluginTest : IntegrationTest() {
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
-        // When
-        val response = AccountClient.getUserDetailsRequest()
+        client.use { _ ->
+            // When
+            val response = AccountClient.getUserDetailsRequest()
 
-        // Then
-        assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
-        assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
-        assertEquals(userDetails, response)
+            // Then
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            assertEquals(userDetails, response)
+        }
     }
 
     /**
@@ -105,15 +107,17 @@ class AuthPluginTest : IntegrationTest() {
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
-        // When
-        val exception = assertFails {
-            AccountClient.getUserDetailsRequest()
-        }
+        client.use {
+            // When
+            val exception = assertFails {
+                AccountClient.getUserDetailsRequest()
+            }
 
-        // Then
-        assertTrue { exception is UnauthorizedException }
-        assertEquals(currentAuthToken, Context.getCloudAuthToken())
-        assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            // Then
+            assertTrue { exception is UnauthorizedException }
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+        }
     }
 
     /**
@@ -136,14 +140,16 @@ class AuthPluginTest : IntegrationTest() {
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
-        // When
-        val exception = assertFails {
-            AccountClient.getUserDetailsRequest()
-        }
+        client.use {
+            // When
+            val exception = assertFails {
+                AccountClient.getUserDetailsRequest()
+            }
 
-        // Then
-        assertTrue { exception is UnauthorizedException }
-        assertNull(Context.getCloudAuthToken())
-        assertNull(Context.getCloudRefreshToken())
+            // Then
+            assertTrue { exception is UnauthorizedException }
+            assertNull(Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
+        }
     }
 }

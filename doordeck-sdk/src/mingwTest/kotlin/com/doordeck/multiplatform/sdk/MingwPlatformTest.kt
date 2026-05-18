@@ -12,9 +12,10 @@ class MingwPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // Then
-        assertTrue { client.engine.config is WinHttpClientEngineConfig }
-        client.close()
+        client.use { client ->
+            // Then
+            assertTrue { client.engine.config is WinHttpClientEngineConfig }
+        }
     }
 
     @Test
