@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,7 @@ class KDoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseHttpResources() = runTest {
+    fun shouldReleaseHttpResources() = runBlocking {
         // Given
         val config = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)
