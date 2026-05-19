@@ -12,9 +12,10 @@ class AndroidPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // When
-        assertTrue { client.engine.config is OkHttpConfig }
-        client.close()
+        client.use { client ->
+            // When
+            assertTrue { client.engine.config is OkHttpConfig }
+        }
     }
 
     @Test

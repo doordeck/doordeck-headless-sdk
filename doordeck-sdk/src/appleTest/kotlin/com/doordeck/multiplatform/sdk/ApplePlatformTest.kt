@@ -11,9 +11,10 @@ class IosPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // Then
-        assertTrue { client.engine.config is DarwinClientEngineConfig }
-        client.close()
+        client.use { client ->
+            // Then
+            assertTrue { client.engine.config is DarwinClientEngineConfig }
+        }
     }
 
     @Test

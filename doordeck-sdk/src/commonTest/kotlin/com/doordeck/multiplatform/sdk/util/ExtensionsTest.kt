@@ -195,12 +195,15 @@ class ExtensionsTest {
             )
         }
 
-        // Then
-        assertNotNull(httpClient.pluginOrNull(HttpSend))
+        httpClient.use { client ->
+            // Then
+            assertNotNull(client.pluginOrNull(HttpSend))
+        }
     }
 
     @Test
     fun shouldInstallResponseValidator() = runTest {
+        // Given
         val status = listOf(BadRequest, Unauthorized, Forbidden, NotFound, MethodNotAllowed, NotAcceptable, Conflict,
             Gone, UnprocessableEntity, Locked, TooEarly, TooManyRequests, InternalServerError, ServiceUnavailable, GatewayTimeout
         )
@@ -214,30 +217,33 @@ class ExtensionsTest {
                 installResponseValidator()
             }
 
-            val response = assertFails {
-                httpClient.get("")
-            }
+            httpClient.use { client ->
+                // When
+                val response = assertFails {
+                    client.get("")
+                }
 
-            // Then
-            when (responseStatus) {
-                BadRequest -> assertTrue { response is BadRequestException }
-                Unauthorized -> assertTrue { response is UnauthorizedException }
-                Forbidden -> assertTrue { response is ForbiddenException }
-                NotFound -> assertTrue { response is NotFoundException }
-                MethodNotAllowed -> assertTrue { response is MethodNotAllowedException }
-                NotAcceptable -> assertTrue { response is NotAcceptableException }
-                Conflict -> assertTrue { response is ConflictException }
-                Gone -> assertTrue { response is GoneException }
-                UnprocessableEntity -> assertTrue { response is UnprocessableEntityException }
-                Locked -> assertTrue { response is LockedException }
-                TooEarly -> assertTrue { response is TooEarlyException }
-                TooManyRequests -> assertTrue { response is TooManyRequestsException }
-                InternalServerError -> assertTrue { response is InternalServerErrorException }
-                ServiceUnavailable -> assertTrue { response is ServiceUnavailableException }
-                GatewayTimeout -> assertTrue { response is GatewayTimeoutException }
+                // Then
+                when (responseStatus) {
+                    BadRequest -> assertTrue { response is BadRequestException }
+                    Unauthorized -> assertTrue { response is UnauthorizedException }
+                    Forbidden -> assertTrue { response is ForbiddenException }
+                    NotFound -> assertTrue { response is NotFoundException }
+                    MethodNotAllowed -> assertTrue { response is MethodNotAllowedException }
+                    NotAcceptable -> assertTrue { response is NotAcceptableException }
+                    Conflict -> assertTrue { response is ConflictException }
+                    Gone -> assertTrue { response is GoneException }
+                    UnprocessableEntity -> assertTrue { response is UnprocessableEntityException }
+                    Locked -> assertTrue { response is LockedException }
+                    TooEarly -> assertTrue { response is TooEarlyException }
+                    TooManyRequests -> assertTrue { response is TooManyRequestsException }
+                    InternalServerError -> assertTrue { response is InternalServerErrorException }
+                    ServiceUnavailable -> assertTrue { response is ServiceUnavailableException }
+                    GatewayTimeout -> assertTrue { response is GatewayTimeoutException }
 
+                }
+                assertNotNull(client.pluginOrNull(HttpSend))
             }
-            assertNotNull(httpClient.pluginOrNull(HttpSend))
         }
 
     }
@@ -255,14 +261,16 @@ class ExtensionsTest {
                 it.addExceptionInterceptor()
             }
 
-            // When
-            val response = assertFails {
-                httpClient.get("")
-            }
+            httpClient.use { client ->
+                // When
+                val response = assertFails {
+                    client.get("")
+                }
 
-            // Then
-            assertTrue { response is SdkException }
-            assertNotNull(httpClient.pluginOrNull(HttpSend))
+                // Then
+                assertTrue { response is SdkException }
+                assertNotNull(client.pluginOrNull(HttpSend))
+            }
         }
     }
 
