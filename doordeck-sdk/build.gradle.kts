@@ -287,18 +287,6 @@ buildkonfig {
     }
 }
 
-// Solves maven publishing issues with latest buildKonfig version, verify in the future if that's still needed
-val generateBuildKonfig = tasks.named("generateBuildKonfig")
-tasks.configureEach {
-    if (name == "generateBuildKonfig") return@configureEach
-    val n = name
-    val needsBuildKonfig =
-        (n.startsWith("extract") && n.endsWith("Annotations")) ||  // ExtractAnnotations
-                (n.startsWith("prepare") && n.endsWith("ArtProfile"))  ||  // ProcessLibraryArtProfileTask
-                n.endsWith("SourcesJar")                                   // source jars during publish
-    if (needsBuildKonfig) dependsOn(generateBuildKonfig)
-}
-
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central
 val javadocJar by tasks.registering(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
