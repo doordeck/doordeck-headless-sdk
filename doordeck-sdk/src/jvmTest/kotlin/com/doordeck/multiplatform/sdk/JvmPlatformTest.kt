@@ -12,9 +12,10 @@ class JvmPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // Then
-        assertTrue { client.engine.config is OkHttpConfig }
-        client.close()
+        client.use { client ->
+            // Then
+            assertTrue { client.engine.config is OkHttpConfig }
+        }
     }
 
     @Test

@@ -17,9 +17,10 @@ class JsPlatformTest {
         // Given
         val client = createCloudHttpClient()
 
-        // Then
-        assertTrue { client.engine.config is JsClientEngineConfig }
-        client.close()
+        client.use { client ->
+            // Then
+            assertTrue { client.engine.config is JsClientEngineConfig }
+        }
     }
 
     @Test
