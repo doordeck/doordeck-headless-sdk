@@ -59,6 +59,11 @@ class FusionApiAsyncTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldTestCcureVirtualCardAsync() {
+        runFusionTest(FusionOperations.CCureVirtualCardController::class)
+    }
+
+    @Test
     fun shouldTestDemoAsync() {
         runFusionTest(FusionOperations.DemoController::class)
     }

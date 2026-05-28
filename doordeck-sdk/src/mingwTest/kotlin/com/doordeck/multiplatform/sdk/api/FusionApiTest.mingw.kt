@@ -23,6 +23,7 @@ import com.doordeck.multiplatform.sdk.model.data.BasicAlpetaController
 import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
 import com.doordeck.multiplatform.sdk.model.data.BasicAxisController
 import com.doordeck.multiplatform.sdk.model.data.BasicCCureController
+import com.doordeck.multiplatform.sdk.model.data.BasicCCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.BasicDemoController
 import com.doordeck.multiplatform.sdk.model.data.BasicGenetecController
 import com.doordeck.multiplatform.sdk.model.data.BasicIntegraV2Controller
@@ -96,6 +97,11 @@ class FusionApiTest : CallbackTest() {
     @Test
     fun shouldTestCcure() {
         runFusionTest(BasicCCureController::class)
+    }
+
+    @Test
+    fun shouldTestCcureVirtualCard() {
+        runFusionTest(BasicCCureVirtualCardController::class)
     }
 
     @Test

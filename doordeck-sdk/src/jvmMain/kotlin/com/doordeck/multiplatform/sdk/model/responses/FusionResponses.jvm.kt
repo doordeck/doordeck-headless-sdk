@@ -8,6 +8,7 @@ import com.doordeck.multiplatform.sdk.model.data.BasicAssaAbloyController
 import com.doordeck.multiplatform.sdk.model.data.BasicAvigilonController
 import com.doordeck.multiplatform.sdk.model.data.BasicAxisController
 import com.doordeck.multiplatform.sdk.model.data.BasicCCureController
+import com.doordeck.multiplatform.sdk.model.data.BasicCCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.BasicDemoController
 import com.doordeck.multiplatform.sdk.model.data.BasicGallagherController
 import com.doordeck.multiplatform.sdk.model.data.BasicGenetecController
@@ -28,6 +29,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AssaAbloyContr
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AvigilonController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AxisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureController
+import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.DemoController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.GallagherController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.GenetecController
@@ -130,6 +132,7 @@ internal fun BasicLockController.toLockControllerResponse(): LockControllerRespo
     is BasicAvigilonController -> toAvigilonController()
     is BasicAxisController -> toAxisController()
     is BasicCCureController -> toCCureController()
+    is BasicCCureVirtualCardController -> toCCureVirtualCardController()
     is BasicDemoController -> toDemoController()
     is BasicGallagherController -> toGallagherController()
     is BasicGenetecController -> toGenetecController()
@@ -188,6 +191,15 @@ internal fun BasicCCureController.toCCureController(): CCureController = CCureCo
     password = password,
     doorType = doorType,
     doorId = doorId
+)
+
+@JvmSynthetic
+internal fun BasicCCureVirtualCardController.toCCureVirtualCardController(): CCureVirtualCardController = CCureVirtualCardController(
+    baseUrl = baseUrl?.toUri(),
+    username = username,
+    password = password,
+    readerId = readerId,
+    facilityCode = facilityCode
 )
 
 @JvmSynthetic

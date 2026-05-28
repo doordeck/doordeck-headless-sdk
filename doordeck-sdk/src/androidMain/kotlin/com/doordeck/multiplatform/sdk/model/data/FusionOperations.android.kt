@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AssaAbloyContr
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AvigilonController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AxisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureController
+import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.DemoController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.GallagherController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.GenetecController
@@ -62,6 +63,14 @@ object FusionOperations {
         val password: String,
         val doorType: String,
         val doorId: Int
+    ) : LockController
+
+    data class CCureVirtualCardController(
+        val baseUrl: URI? = null,
+        val username: String,
+        val password: String,
+        val readerId: Long,
+        val facilityCode: Int
     ) : LockController
 
     data class DemoController(
@@ -167,6 +176,7 @@ internal fun FusionOperations.LockController.toBasicLockController(): BasicLockC
     is AvigilonController -> toBasicAvigilonController()
     is AxisController -> toBasicAxisController()
     is CCureController -> toBasicCCureController()
+    is CCureVirtualCardController -> toBasicCCureVirtualCardController()
     is DemoController -> toBasicDemoController()
     is GallagherController -> toBasicGallagherController()
     is GenetecController -> toBasicGenetecController()
@@ -225,6 +235,15 @@ internal fun CCureController.toBasicCCureController(): BasicCCureController = Ba
     password = password,
     doorType = doorType,
     doorId = doorId
+)
+
+@JvmSynthetic
+internal fun CCureVirtualCardController.toBasicCCureVirtualCardController(): BasicCCureVirtualCardController = BasicCCureVirtualCardController(
+    baseUrl = baseUrl?.toString(),
+    username = username,
+    password = password,
+    facilityCode = facilityCode,
+    readerId = readerId
 )
 
 @JvmSynthetic
