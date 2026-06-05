@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomByteArray
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrate0To1
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrate1To2
+import com.doordeck.multiplatform.sdk.storage.migrations.Migrate2To3
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrations
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.russhwolf.settings.contains
@@ -11,6 +12,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MigrationTest {
@@ -56,6 +58,22 @@ class MigrationTest {
         assertFalse { settings.contains(deprecatedKey) }
         assertTrue { settings.contains(newKey) }
         assertEquals(key, settings.getStringOrNull(newKey))
+    }
+
+    @Test
+    fun shouldMigrate2To3Test() = runTest {
+        // Given
+        Migrations.overrideMigrations(listOf(Migrate2To3))
+        val fusionHostKey = "FUSION_HOST_KEY"
+        val settings = MemorySettings().apply {
+            putString(fusionHostKey, "null")
+        }
+
+        // When
+        val storage = DefaultSecureStorage(settings)
+
+        // Then
+        assertNull(storage.getFusionHost())
     }
 
     @Test

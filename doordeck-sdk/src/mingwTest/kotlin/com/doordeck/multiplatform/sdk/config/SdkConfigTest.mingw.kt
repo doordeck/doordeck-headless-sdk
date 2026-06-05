@@ -38,4 +38,27 @@ class SdkConfigTest {
         // Then
         assertEquals(sdkConfig, result)
     }
+
+    @Test
+    fun shouldMapToBasicConfig () = runTest {
+        // Given
+        val sdkConfig = SdkConfig(
+            apiEnvironment = randomNullable { ApiEnvironment.entries.random().name },
+            cloudAuthToken = randomNullable { randomString() },
+            cloudRefreshToken = randomNullable { randomString() },
+            fusionHost = randomNullable { randomUrlString() },
+            secureStorage = DefaultSecureStorage(MemorySettings()),
+            debugLogging = randomNullable { randomBoolean().toString() }
+        )
+
+        // When
+        val result = sdkConfig.toBasicSdkConfig()
+
+        // Then
+        assertEquals(sdkConfig.apiEnvironment, result.apiEnvironment?.name)
+        assertEquals(sdkConfig.cloudAuthToken, result.cloudAuthToken)
+        assertEquals(sdkConfig.cloudRefreshToken, result.cloudRefreshToken)
+        assertEquals(sdkConfig.fusionHost, result.fusionHost)
+        assertEquals(sdkConfig.debugLogging, result.debugLogging?.toString())
+    }
 }

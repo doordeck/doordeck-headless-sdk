@@ -86,7 +86,7 @@ internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
     apiEnvironment = apiEnvironment?.let { ApiEnvironment.valueOf(it) },
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
-    fusionHost = fusionHost.toString(),
+    fusionHost = fusionHost,
     secureStorage = secureStorage,
     debugLogging = debugLogging
 )
