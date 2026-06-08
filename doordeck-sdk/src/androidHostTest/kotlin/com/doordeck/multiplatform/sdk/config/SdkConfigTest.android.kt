@@ -7,6 +7,7 @@ import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import com.doordeck.multiplatform.sdk.util.toUri
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -37,5 +38,28 @@ class SdkConfigTest {
 
         // Then
         assertEquals(sdkConfig, result)
+    }
+
+    @Test
+    fun shouldMapToBasicConfig () = runTest {
+        // Given
+        val sdkConfig = SdkConfig(
+            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            cloudAuthToken = randomNullable { randomString() },
+            cloudRefreshToken = randomNullable { randomString() },
+            fusionHost = randomNullable { randomUri() },
+            secureStorage = DefaultSecureStorage(MemorySettings()),
+            debugLogging = randomNullable { randomBoolean() }
+        )
+
+        // When
+        val result = sdkConfig.toBasicSdkConfig()
+
+        // Then
+        assertEquals(sdkConfig.apiEnvironment, result.apiEnvironment)
+        assertEquals(sdkConfig.cloudAuthToken, result.cloudAuthToken)
+        assertEquals(sdkConfig.cloudRefreshToken, result.cloudRefreshToken)
+        assertEquals(sdkConfig.fusionHost, result.fusionHost?.toUri())
+        assertEquals(sdkConfig.debugLogging, result.debugLogging)
     }
 }

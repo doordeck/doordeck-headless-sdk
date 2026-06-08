@@ -14,7 +14,8 @@ internal const val CURRENT_STORAGE_VERSION = 2
 internal object Migrations {
     private var _migrations: List<StorageMigration> = listOf(
         Migrate0To1,
-        Migrate1To2
+        Migrate1To2,
+        Migrate2To3
     )
 
     @get:JvmSynthetic
