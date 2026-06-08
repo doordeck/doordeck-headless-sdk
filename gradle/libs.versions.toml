@@ -2,7 +2,7 @@
 kgp = "9.2.1"
 bouncy-castle = "1.84"
 indispensable-asn1 = "3.23.0"
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 multiplatform-settings = "1.3.0"
 android-min-sdk = "26"
 android-compile-sdk = "34"
