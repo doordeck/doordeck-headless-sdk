@@ -306,7 +306,7 @@ actual object LockOperationsApi {
      * Async variant of [LockOperationsApi.getUserPublicKey] returning [CompletableFuture].
      */
     @DoordeckOnly
-    suspend fun getUserPublicKeyAsync(
+    fun getUserPublicKeyAsync(
         userEmail: String,
         visitor: Boolean = false
     ): CompletableFuture<UserPublicKeyResponse> = completableFuture {
