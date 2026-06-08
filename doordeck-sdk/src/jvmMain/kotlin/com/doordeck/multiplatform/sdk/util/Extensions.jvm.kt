@@ -78,8 +78,8 @@ internal fun String.toUuid(): UUID = UUID.fromString(this)
 internal fun String.toInstant(): Instant {
     val split = split(".")
     return Instant.ofEpochSecond(
-        split.first().toLong(),
-        split.lastOrNull()?.toLong() ?: 0
+        split[0].toLong(),
+        split.getOrNull(1)?.toLong() ?: 0
     )
 }
 

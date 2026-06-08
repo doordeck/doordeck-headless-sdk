@@ -5,14 +5,23 @@ import com.doordeck.multiplatform.sdk.randomUuid
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toNSTimeZone
+import platform.Foundation.NSCalendar
+import platform.Foundation.NSDate
+import platform.Foundation.NSDateComponents
+import platform.Foundation.NSTimeInterval
+import platform.Foundation.NSTimeZone
+import platform.Foundation.date
+import platform.Foundation.timeZoneWithName
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
+import kotlin.test.assertIs
 import kotlin.time.Clock.System.now
 
 class AppleExtensionsTest {
 
     @Test
-    fun shouldConvertStringToNsUuid() = runTest {
+    fun shouldMapStringToNsUuid() = runTest {
         // Given
         val uuid = randomUuid()
 
@@ -24,7 +33,33 @@ class AppleExtensionsTest {
     }
 
     @Test
-    fun shouldConvertStringToNsUrlComponentes() = runTest {
+    fun shouldFailToMapStringToNsUuid() = runTest {
+        // Given
+        val wrong = "wrong"
+
+        // When
+        val exception = assertFails {
+            wrong.toNsUuid()
+        }
+
+        // Then
+        assertIs<NullPointerException>(exception)
+    }
+
+    @Test
+    fun shouldMapNsUrlComponentsToUrlString() = runTest {
+        // Given
+        val url = randomUri().toString()
+
+        // When
+        val result = url.toNsUrlComponents().toUrlString()
+
+        // Then
+        assertEquals(url, result)
+    }
+
+    @Test
+    fun shouldMapStringToNsUrlComponents() = runTest {
         // Given
         val url = randomUri()
 
@@ -72,7 +107,31 @@ class AppleExtensionsTest {
     }
 
     @Test
-    fun shouldConvertStringToNsDate() = runTest {
+    fun shouldMapNsTimeIntervalToWholeSeconds() = runTest {
+        // Given
+        val interval: NSTimeInterval = 90.75
+
+        // When
+        val result = interval.toWholeSeconds()
+
+        // Then
+        assertEquals(90, result)
+    }
+
+    @Test
+    fun shouldMapDoubleToNsDate() = runTest {
+        // Given
+        val date = now().epochSeconds
+
+        // When
+        val result = date.toDouble().toNsDate()
+
+        // Then
+        assertEquals(date, result.toEpochSeconds())
+    }
+
+    @Test
+    fun shouldMapStringToNsDate() = runTest {
         // Given
         val date = now().epochSeconds
 
@@ -84,14 +143,40 @@ class AppleExtensionsTest {
     }
 
     @Test
-    fun shouldConvertDoubleToNsDate() = runTest {
+    fun shouldMapIsoStringToNsDate() = runTest {
         // Given
-        val date = now().epochSeconds
+        val isoString = "2023-01-01T00:00:00Z"
+        val calendar = NSCalendar.currentCalendar.apply {
+            timeZone = NSTimeZone.timeZoneWithName("UTC")!!
+        }
+        val components = NSDateComponents().apply {
+            year = 2023
+            month = 1
+            day = 1
+            hour = 0
+            minute = 0
+            second = 0
+        }
+        val date = calendar.dateFromComponents(components)
 
         // When
-        val result = date.toDouble().toNsDate()
+        val result = isoString.isoToNsDate()
 
         // Then
-        assertEquals(date, result.toEpochSeconds())
+        assertEquals(date, result)
+    }
+
+    @Test
+    fun shouldFailToMapIsoStringToNsDate() = runTest {
+        // Given
+        val isoString = "wrong"
+
+        // When
+        val exception = assertFails {
+            isoString.isoToNsDate()
+        }
+
+        // Then
+        assertIs<Exception>(exception) // InstantFormatException
     }
 }
