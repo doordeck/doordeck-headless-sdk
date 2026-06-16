@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
@@ -20,6 +20,7 @@ import {MatButton} from '@angular/material/button';
     MatError
 ],
     templateUrl: './two-factor-verify.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './two-factor-verify.component.css'
 })
 export class TwoFactorVerifyComponent {

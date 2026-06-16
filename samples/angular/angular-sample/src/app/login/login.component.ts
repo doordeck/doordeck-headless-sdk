@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatCard, MatCardTitle} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
@@ -30,6 +30,7 @@ import sdk = com.doordeck.multiplatform.sdk;
     MatButton
 ],
     templateUrl: './login.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './login.component.css'
 })
 export class LoginComponent  {

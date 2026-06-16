@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
@@ -20,6 +20,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
     ReactiveFormsModule
 ],
     templateUrl: './change-display-name.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './change-display-name.component.css'
 })
 export class ChangeDisplayNameComponent {
