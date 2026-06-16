@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -13,6 +13,7 @@ import {ReactiveFormsModule} from '@angular/forms';
         ReactiveFormsModule
     ],
     templateUrl: './remove-user-from-lock.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './remove-user-from-lock.component.css'
 })
 export class RemoveUserFromLockComponent {

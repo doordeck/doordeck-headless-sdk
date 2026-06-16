@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ChangeDetectionStrategy} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
@@ -28,6 +28,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     MatSlideToggle
 ],
     templateUrl: './share-lock.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './share-lock.component.css'
 })
 export class ShareLockComponent {

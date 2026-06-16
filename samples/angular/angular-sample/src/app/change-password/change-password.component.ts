@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle} from "@angular/material/dialog";
@@ -21,6 +21,7 @@ import {MatInput} from "@angular/material/input";
     ReactiveFormsModule
 ],
     templateUrl: './change-password.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './change-password.component.css'
 })
 export class ChangePasswordComponent {
