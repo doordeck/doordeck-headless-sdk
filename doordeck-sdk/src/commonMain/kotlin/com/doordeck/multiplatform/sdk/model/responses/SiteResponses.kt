@@ -21,6 +21,7 @@ internal data class BasicUserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
-    val orphan: Boolean
+    val orphan: Boolean,
+    val foreign: Boolean
 )
 

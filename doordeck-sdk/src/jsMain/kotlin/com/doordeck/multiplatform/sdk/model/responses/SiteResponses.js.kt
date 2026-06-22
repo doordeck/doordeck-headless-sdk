@@ -23,7 +23,8 @@ data class UserForSiteResponse(
     val userId: String,
     val email: String,
     val displayName: String? = null,
-    val orphan: Boolean
+    val orphan: Boolean,
+    val foreign: Boolean
 )
 
 internal fun List<BasicSiteResponse>.toSiteResponse(): JsArray<SiteResponse> = map { site ->
@@ -44,7 +45,8 @@ internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): JsArray<Use
         userId = user.userId,
         email = user.email,
         displayName = user.displayName,
-        orphan = user.orphan
+        orphan = user.orphan,
+        foreign = user.foreign
     )
 }.toJsArray()
 

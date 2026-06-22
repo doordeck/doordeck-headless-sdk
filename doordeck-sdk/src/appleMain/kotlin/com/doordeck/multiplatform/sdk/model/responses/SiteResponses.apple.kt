@@ -22,7 +22,8 @@ data class UserForSiteResponse(
     val userId: NSUUID,
     val email: String,
     val displayName: String? = null,
-    val orphan: Boolean
+    val orphan: Boolean,
+    val foreign: Boolean
 )
 
 internal fun List<BasicSiteResponse>.toSiteResponse(): List<SiteResponse> = map { site ->
@@ -43,7 +44,8 @@ internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserFo
         userId = user.userId.toNsUuid(),
         email = user.email,
         displayName = user.displayName,
-        orphan = user.orphan
+        orphan = user.orphan,
+        foreign = user.foreign
     )
 }
 

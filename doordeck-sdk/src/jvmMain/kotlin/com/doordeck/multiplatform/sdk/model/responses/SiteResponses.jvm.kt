@@ -22,7 +22,8 @@ data class UserForSiteResponse(
     val userId: UUID,
     val email: String,
     val displayName: String? = null,
-    val orphan: Boolean
+    val orphan: Boolean,
+    val foreign: Boolean
 )
 
 @JvmSynthetic
@@ -45,6 +46,7 @@ internal fun List<BasicUserForSiteResponse>.toUserForSiteResponse(): List<UserFo
         userId = user.userId.toUuid(),
         email = user.email,
         displayName = user.displayName,
-        orphan = user.orphan
+        orphan = user.orphan,
+        foreign = user.foreign
     )
 }
