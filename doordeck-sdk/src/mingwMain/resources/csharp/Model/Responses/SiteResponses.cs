@@ -18,4 +18,5 @@ public class UserForSiteResponse
     public required string Email { get; set; }
     public string? DisplayName { get; set; }
     public required bool Orphan { get; set; }
+    public required bool Foreign { get; set; }
 }
