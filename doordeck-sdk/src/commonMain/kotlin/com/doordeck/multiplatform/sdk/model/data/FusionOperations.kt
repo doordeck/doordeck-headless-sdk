@@ -49,6 +49,23 @@ internal data class BasicAxisController(
 ) : BasicLockController
 
 @Serializable
+@SerialName("azure")
+internal data class BasicAzureController(
+    val host: String,
+    val port: Int,
+    val tlsConfig: BasicTlsConfig,
+    val accessPointId: Int
+) : BasicLockController
+
+@Serializable
+internal data class BasicTlsConfig(
+    val certificate: String,
+    val trustedCertificate: String,
+    val privateKey: String,
+    val privateKeyPassword: String
+)
+
+@Serializable
 @SerialName("ccure")
 internal data class BasicCCureController(
     val baseUrl: String? = null,
