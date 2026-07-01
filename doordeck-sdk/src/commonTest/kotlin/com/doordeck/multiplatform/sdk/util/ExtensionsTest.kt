@@ -18,13 +18,18 @@ import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
+import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
+import com.doordeck.multiplatform.sdk.model.data.BasicDataSource
+import com.doordeck.multiplatform.sdk.model.data.BasicPacController
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomDouble
 import com.doordeck.multiplatform.sdk.randomInt
+import com.doordeck.multiplatform.sdk.randomNullable
 import com.doordeck.multiplatform.sdk.randomString
+import com.doordeck.multiplatform.sdk.randomUrlString
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
@@ -410,5 +415,62 @@ class ExtensionsTest {
         val restored = result.fromJson<LoginRequest>()
         assertEquals(request.email, restored.email)
         assertEquals(request.password, restored.password)
+    }
+
+    @Test
+    fun shouldSerializeFusionControllerToParameters() = runTest {
+        // Given
+        val username = randomString()
+        val password = randomString()
+        val doorId = randomInt()
+        val baseUrl = randomNullable { randomUrlString() }
+        val controller = BasicAmagController(
+            username = username,
+            password = password,
+            doorId = doorId,
+            baseUrl = baseUrl
+        )
+
+        // When
+        val result = controller.toParameters()
+
+        // Then
+        assertEquals(username, result["username"])
+        assertEquals(password, result["password"])
+        assertEquals(doorId.toString(), result["doorId"])
+        assertEquals(baseUrl, result["baseUrl"])
+    }
+
+    @Test
+    fun shouldSerializeFusionControllerToNestedParameters() = runTest {
+        // Given
+        val driverClass = randomString()
+        val url = randomUrlString()
+        val user = randomString()
+        val password = randomString()
+        val dataSource = BasicDataSource(
+            driverClass = driverClass,
+            url = url,
+            user = user,
+            password = password,
+        )
+        val outputChannel = randomInt()
+        val controllerSerial = randomInt()
+        val controller = BasicPacController(
+            dataSource = dataSource,
+            outputChannel = outputChannel,
+            controllerSerial = controllerSerial
+        )
+
+        // When
+        val result = controller.toParameters()
+
+        // Then
+        assertEquals(driverClass, result["dataSource.driverClass"])
+        assertEquals(url, result["dataSource.url"])
+        assertEquals(user, result["dataSource.user"])
+        assertEquals(password, result["dataSource.password"])
+        assertEquals(outputChannel.toString(), result["outputChannel"])
+        assertEquals(controllerSerial.toString(), result["controllerSerial"])
     }
 }
