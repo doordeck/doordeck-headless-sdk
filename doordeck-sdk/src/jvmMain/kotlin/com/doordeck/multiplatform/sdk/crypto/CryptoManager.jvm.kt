@@ -63,7 +63,7 @@ actual object CryptoManager {
     @JvmSynthetic
     internal fun String.toRsaPrivateKey(): PrivateKey = try {
         KeyFactory.getInstance(RSA_ALGORITHM)
-            .generatePrivate(X509EncodedKeySpec(decodeBase64ToByteArray()))
+            .generatePrivate(PKCS8EncodedKeySpec(decodeBase64ToByteArray()))
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $RSA_ALGORITHM private key", exception)
     }
@@ -83,7 +83,7 @@ actual object CryptoManager {
     } catch (exception: Exception) {
         throw SdkException("Failed to generate $EDDSA_ALGORITHM private key", exception)
     }
-    
+
     @JvmSynthetic
     internal fun String.toCertificate(): X509Certificate = try {
         CertificateFactory.getInstance(CERTIFICATE_TYPE)
