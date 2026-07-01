@@ -58,6 +58,8 @@ import io.ktor.http.encodedPath
 import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.properties.Properties
+import kotlinx.serialization.properties.encodeToStringMap
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -310,6 +312,9 @@ internal expect fun HttpClientConfig<*>.installCertificatePinner()
  */
 @JvmSynthetic
 internal inline fun <reified T>T.toJson(): String = JSON.encodeToString(this)
+
+@JvmSynthetic
+internal inline fun <reified T>T.toParameters() = Properties.encodeToStringMap(this)
 
 /**
  * Parses a JSON string into an object of type T.

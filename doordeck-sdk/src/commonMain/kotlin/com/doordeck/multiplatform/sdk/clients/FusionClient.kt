@@ -13,6 +13,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import com.doordeck.multiplatform.sdk.util.toParameters
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -61,10 +62,10 @@ internal object FusionClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     @JvmSynthetic
-    internal suspend fun getIntegrationConfigurationRequest(type: String): List<BasicIntegrationConfigurationResponse> {
+    internal suspend fun getIntegrationConfigurationRequest(type: String, controller: BasicLockController? = null): List<BasicIntegrationConfigurationResponse> {
         return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
-            setBody(IntegrationConfigurationRequest(type))
+            setBody(IntegrationConfigurationRequest(mapOf("type" to type) + (controller?.toParameters() ?: emptyMap())))
         }.body()
     }
 

@@ -201,6 +201,7 @@ kotlin {
                 implementation(libs.ktor.client.auth)
                 implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.kotlinx.serialization.properties)
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.kotlinx.datetime)
