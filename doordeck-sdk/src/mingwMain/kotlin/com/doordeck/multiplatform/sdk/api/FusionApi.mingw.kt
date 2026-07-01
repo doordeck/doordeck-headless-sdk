@@ -32,7 +32,10 @@ actual object FusionApi {
     @CName("getIntegrationConfiguration")
     fun getIntegrationConfiguration(data: String, callback: CStringCallback) = callback.handleCallback {
         val getIntegrationConfigurationData = data.fromJson<GetIntegrationConfigurationData>()
-        FusionClient.getIntegrationConfigurationRequest(getIntegrationConfigurationData.type)
+        FusionClient.getIntegrationConfigurationRequest(
+            type = getIntegrationConfigurationData.type,
+            controller = getIntegrationConfigurationData.controller
+        )
     }
 
     @DoordeckOnly

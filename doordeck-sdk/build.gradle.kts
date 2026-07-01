@@ -204,6 +204,7 @@ kotlin {
                 implementation(libs.ktor.client.content.negotiation)
                 implementation(libs.ktor.client.encoding)
                 implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.serialization.properties)
                 implementation(libs.multiplatform.settings)
                 implementation(libs.indispensable.asn1)
                 implementation(libs.kermit.logger)

@@ -10,7 +10,8 @@ internal data class FusionLoginData(
 
 @Serializable
 internal data class GetIntegrationConfigurationData(
-    val type: String
+    val type: String,
+    val controller: BasicLockController? = null
 )
 
 @Serializable

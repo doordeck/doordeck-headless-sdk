@@ -20,8 +20,8 @@ class Fusion(object):
             [self.resource]
         )
 
-    async def get_integration_configuration(self, type: str):
-        data = { "type": type }
+    async def get_integration_configuration(self, type: str, controller: typing.Optional[LockController] = None):
+        data = { "type": type, "controller": controller }
         return await execute_async(
             _doordeck_headless_sdk.getIntegrationConfiguration,
             [self.resource, json.dumps(data)]

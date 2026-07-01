@@ -13,7 +13,7 @@ internal data class FusionLoginRequest(
 
 @Serializable
 internal data class IntegrationConfigurationRequest(
-    val type: String
+    val params: Map<String, String>
 )
 
 @Serializable
