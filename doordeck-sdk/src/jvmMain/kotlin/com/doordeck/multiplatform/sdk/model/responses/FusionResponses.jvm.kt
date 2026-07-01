@@ -1,5 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toCertificate
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toRsaPrivateKey
 import com.doordeck.multiplatform.sdk.model.common.ServiceStateType
 import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.BasicAlpetaController
@@ -192,9 +194,9 @@ internal fun BasicAzureController.toAzureController(): AzureController = AzureCo
     host = host.toInetAddress(),
     port = port,
     tlsConfig = FusionOperations.AzureTlsConfig(
-        certificate = tlsConfig.certificate,
-        trustedCertificate = tlsConfig.trustedCertificate,
-        privateKey = tlsConfig.privateKey,
+        certificate = tlsConfig.certificate.toCertificate(),
+        trustedCertificate = tlsConfig.trustedCertificate.toCertificate(),
+        privateKey = tlsConfig.privateKey.toRsaPrivateKey(),
         privateKeyPassword = tlsConfig.privateKeyPassword
     ),
     accessPointId = accessPointId,

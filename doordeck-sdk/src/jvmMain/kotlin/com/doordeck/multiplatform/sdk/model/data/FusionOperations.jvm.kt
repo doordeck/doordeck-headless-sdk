@@ -20,8 +20,11 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import java.net.InetAddress
 import java.net.URI
+import java.security.PrivateKey
+import java.security.cert.X509Certificate
 
 object FusionOperations {
 
@@ -66,9 +69,9 @@ object FusionOperations {
     ) : LockController
 
     data class AzureTlsConfig(
-        val certificate: String,
-        val trustedCertificate: String,
-        val privateKey: String,
+        val certificate: X509Certificate,
+        val trustedCertificate: X509Certificate,
+        val privateKey: PrivateKey,
         val privateKeyPassword: String
     )
 
@@ -249,9 +252,9 @@ internal fun AzureController.toBasicAzureController(): BasicAzureController = Ba
     host = host.hostAddress,
     port = port,
     tlsConfig = BasicTlsConfig(
-        certificate = tlsConfig.certificate,
-        trustedCertificate = tlsConfig.trustedCertificate,
-        privateKey = tlsConfig.privateKey,
+        certificate = tlsConfig.certificate.encoded.encodeByteArrayToBase64(),
+        trustedCertificate = tlsConfig.trustedCertificate.encoded.encodeByteArrayToBase64(),
+        privateKey = tlsConfig.privateKey.encoded.encodeByteArrayToBase64(),
         privateKeyPassword = tlsConfig.privateKeyPassword
     ),
     accessPointId = accessPointId
