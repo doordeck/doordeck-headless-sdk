@@ -62,6 +62,14 @@ actual object CryptoManager {
     }
 
     @JvmSynthetic
+    internal fun String.toRsaPrivateKey(): PrivateKey = try {
+        KeyFactory.getInstance(RSA_ALGORITHM)
+            .generatePrivate(PKCS8EncodedKeySpec(decodeBase64ToByteArray()))
+    } catch (exception: Exception) {
+        throw SdkException("Failed to generate $RSA_ALGORITHM private key", exception)
+    }
+
+    @JvmSynthetic
     internal fun ByteArray.toPublicKey(): PublicKey = try {
         KeyFactory.getInstance(EDDSA_ALGORITHM)
             .generatePublic(X509EncodedKeySpec(toPlatformPublicKey()))

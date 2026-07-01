@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AmagController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AssaAbloyController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AvigilonController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AxisController
+import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AzureController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.DemoController
@@ -19,8 +20,11 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.Paxton10Contro
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Controller
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import java.net.InetAddress
 import java.net.URI
+import java.security.PrivateKey
+import java.security.cert.X509Certificate
 
 object FusionOperations {
 
@@ -56,6 +60,20 @@ object FusionOperations {
         val baseUrl: URI,
         val doorIdentifier: String
     ) : LockController
+
+    data class AzureController(
+        val host: InetAddress,
+        val port: Int,
+        val tlsConfig: AzureTlsConfig,
+        val accessPointId: Int
+    ) : LockController
+
+    data class AzureTlsConfig(
+        val certificate: X509Certificate,
+        val trustedCertificate: X509Certificate,
+        val privateKey: PrivateKey,
+        val privateKeyPassword: String
+    )
 
     data class CCureController(
         val baseUrl: URI? = null,
@@ -175,6 +193,7 @@ internal fun FusionOperations.LockController.toBasicLockController(): BasicLockC
     is AssaAbloyController -> toBasicAssaAbloyController()
     is AvigilonController -> toBasicAvigilonController()
     is AxisController -> toBasicAxisController()
+    is AzureController -> toBasicAzureController()
     is CCureController -> toBasicCCureController()
     is CCureVirtualCardController -> toBasicCCureVirtualCardController()
     is DemoController -> toBasicDemoController()
@@ -226,6 +245,19 @@ internal fun AvigilonController.toBasicAvigilonController(): BasicAvigilonContro
 internal fun AxisController.toBasicAxisController(): BasicAxisController = BasicAxisController(
     baseUrl = baseUrl.toString(),
     doorIdentifier = doorIdentifier
+)
+
+@JvmSynthetic
+internal fun AzureController.toBasicAzureController(): BasicAzureController = BasicAzureController(
+    host = host.hostAddress ?: "",
+    port = port,
+    tlsConfig = BasicTlsConfig(
+        certificate = tlsConfig.certificate.encoded.encodeByteArrayToBase64(),
+        trustedCertificate = tlsConfig.trustedCertificate.encoded.encodeByteArrayToBase64(),
+        privateKey = tlsConfig.privateKey.encoded.encodeByteArrayToBase64(),
+        privateKeyPassword = tlsConfig.privateKeyPassword
+    ),
+    accessPointId = accessPointId
 )
 
 @JvmSynthetic

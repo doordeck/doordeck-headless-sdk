@@ -52,6 +52,11 @@ class FusionApiTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldTestAzure() {
+        runFusionTest(FusionOperations.AzureController::class)
+    }
+
+    @Test
     fun shouldTestCcure() {
         runFusionTest(FusionOperations.CCureController::class)
     }

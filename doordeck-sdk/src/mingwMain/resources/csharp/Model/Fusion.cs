@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Doordeck.Headless.Sdk.Model;
 
@@ -11,6 +12,7 @@ public interface ILockController;
 [JsonDerivedType(typeof(AssaAbloyController), "assa-abloy")]
 [JsonDerivedType(typeof(AvigilonController), "avigilon")]
 [JsonDerivedType(typeof(AxisController), "axis")]
+[JsonDerivedType(typeof(AzureController), "azure")]
 [JsonDerivedType(typeof(CCureController), "ccure")]
 [JsonDerivedType(typeof(CCureVirtualCardController), "ccure-virtual-card")]
 [JsonDerivedType(typeof(DemoController), "demo")]
@@ -62,6 +64,22 @@ public class AxisController : LockController
 {
     public required Uri BaseUrl { get; set; }
     public required string DoorIdentifier { get; set; }
+}
+
+public class AzureController : LockController
+{
+    public required IPAddress Host { get; set; }
+    public required int Port { get; set; }
+    public required AzureTlsConfig TlsConfig { get; set; }
+    public required int AccessPointId { get; set; }
+}
+
+public class AzureTlsConfig
+{
+    public required X509Certificate Certificate { get; set; }
+    public required X509Certificate TrustedCertificate { get; set; }
+    public required byte[] PrivateKey { get; set; }
+    public required string PrivateKeyPassword { get; set; }
 }
 
 public class CCureController : LockController

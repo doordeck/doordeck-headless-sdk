@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AmagController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AssaAbloyController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AvigilonController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AxisController
+import com.doordeck.multiplatform.sdk.model.data.FusionOperations.AzureController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.CCureVirtualCardController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.DemoController
@@ -63,6 +64,20 @@ object FusionOperations {
         val doorType: String,
         val doorId: Int
     ) : LockController
+
+    data class AzureController(
+        val host: String,
+        val port: Int,
+        val tlsConfig: AzureTlsConfig,
+        val accessPointId: Int
+    ) : LockController
+
+    data class AzureTlsConfig(
+        val certificate: String,
+        val trustedCertificate: String,
+        val privateKey: String,
+        val privateKeyPassword: String
+    )
 
     data class CCureVirtualCardController(
         val baseUrl: String? = null,
@@ -173,6 +188,7 @@ internal fun FusionOperations.LockController.toBasicLockController(): BasicLockC
     is AssaAbloyController -> toBasicAssaAbloyController()
     is AvigilonController -> toBasicAvigilonController()
     is AxisController -> toBasicAxisController()
+    is AzureController -> toBasicAzureController()
     is CCureController -> toBasicCCureController()
     is CCureVirtualCardController -> toBasicCCureVirtualCardController()
     is DemoController -> toBasicDemoController()
@@ -219,6 +235,18 @@ internal fun AvigilonController.toBasicAvigilonController(): BasicAvigilonContro
 internal fun AxisController.toBasicAxisController(): BasicAxisController = BasicAxisController(
     baseUrl = baseUrl,
     doorIdentifier = doorIdentifier
+)
+
+internal fun AzureController.toBasicAzureController(): BasicAzureController = BasicAzureController(
+    host = host,
+    port = port,
+    tlsConfig = BasicTlsConfig(
+        certificate = tlsConfig.certificate,
+        trustedCertificate = tlsConfig.trustedCertificate,
+        privateKey = tlsConfig.privateKey,
+        privateKeyPassword = tlsConfig.privateKeyPassword
+    ),
+    accessPointId = accessPointId
 )
 
 internal fun CCureController.toBasicCCureController(): BasicCCureController = BasicCCureController(
