@@ -47,8 +47,11 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
-    fun getIntegrationConfiguration(type: String): Promise<JsArray<IntegrationConfigurationResponse>> = promise {
-        FusionClient.getIntegrationConfigurationRequest(type)
+    fun getIntegrationConfiguration(
+        type: String,
+        controller: FusionOperations.LockController? = null
+    ): Promise<JsArray<IntegrationConfigurationResponse>> = promise {
+        FusionClient.getIntegrationConfigurationRequest(type, controller?.toBasicLockController())
             .toIntegrationConfigurationResponse()
     }
 

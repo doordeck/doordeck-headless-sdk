@@ -62,8 +62,11 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
-    suspend fun getIntegrationConfiguration(type: String): List<IntegrationConfigurationResponse> = FusionClient
-        .getIntegrationConfigurationRequest(type)
+    suspend fun getIntegrationConfiguration(
+        type: String,
+        controller: FusionOperations.LockController? = null
+    ): List<IntegrationConfigurationResponse> = FusionClient
+        .getIntegrationConfigurationRequest(type, controller?.toBasicLockController())
         .toIntegrationConfigurationResponse()
 
     /**
