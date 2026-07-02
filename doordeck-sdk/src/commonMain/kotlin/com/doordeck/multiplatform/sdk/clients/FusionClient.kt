@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.requests.EnableDoorRequest
 import com.doordeck.multiplatform.sdk.model.requests.FusionLoginRequest
-import com.doordeck.multiplatform.sdk.model.requests.IntegrationConfigurationRequest
 import com.doordeck.multiplatform.sdk.model.responses.BasicDoorStateResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicFusionLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
@@ -65,7 +64,7 @@ internal object FusionClient {
     internal suspend fun getIntegrationConfigurationRequest(type: String, controller: BasicLockController? = null): List<BasicIntegrationConfigurationResponse> {
         return FusionHttpClient.client.post(FusionPaths.getIntegrationConfiguration()) {
             addRequestHeaders()
-            setBody(IntegrationConfigurationRequest(mapOf("type" to type) + (controller?.toParameters() ?: emptyMap())))
+            setBody(mapOf("type" to type) + (controller?.toParameters() ?: emptyMap()))
         }.body()
     }
 

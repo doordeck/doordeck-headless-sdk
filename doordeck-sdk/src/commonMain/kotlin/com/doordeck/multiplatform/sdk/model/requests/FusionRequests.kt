@@ -12,11 +12,6 @@ internal data class FusionLoginRequest(
 )
 
 @Serializable
-internal data class IntegrationConfigurationRequest(
-    val params: Map<String, String>
-)
-
-@Serializable
 internal data class EnableDoorRequest(
     val name: String,
     val siteId: String,
