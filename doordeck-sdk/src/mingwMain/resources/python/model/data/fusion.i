@@ -55,6 +55,24 @@ class AxisController(LockController):
         self.type = "axis"
 
 @dataclass
+class AzureTlsConfig:
+    certificate: str
+    trustedCertificate: str
+    privateKey: str
+    privateKeyPassword: str
+
+@dataclass
+class AzureController(LockController):
+    type: str = field(init=False)
+    host: str
+    port: int
+    tlsConfig: AzureTlsConfig
+    accessPointId: int
+
+    def __post_init__(self):
+        self.type = "azure"
+
+@dataclass
 class CCureController(LockController):
     type: str = field(init=False)
     baseUrl: str

@@ -54,6 +54,11 @@ class FusionApiAsyncTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldTestAzureAsync() {
+        runFusionTest(FusionOperations.AzureController::class)
+    }
+
+    @Test
     fun shouldTestCcureAsync() {
         runFusionTest(FusionOperations.CCureController::class)
     }
