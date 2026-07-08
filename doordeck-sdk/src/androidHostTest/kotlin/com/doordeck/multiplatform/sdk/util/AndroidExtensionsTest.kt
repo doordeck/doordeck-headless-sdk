@@ -328,6 +328,18 @@ class AndroidExtensionsTest {
     }
 
     @Test
+    fun shouldMapLongEpochSecondToInstant() = runTest {
+        // Given
+        val now = now()
+
+        // When
+        val result = now.epochSecond.epochSecondToInstant()
+
+        // Then
+        assertEquals(now, result)
+    }
+
+    @Test
     fun shouldMapStringToInetAddress() = runTest {
         // Given
         val host = "127.0.0.1"

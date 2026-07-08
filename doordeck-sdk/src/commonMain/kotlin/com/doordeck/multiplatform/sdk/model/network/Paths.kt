@@ -73,11 +73,17 @@ internal object Paths {
     @JvmSynthetic internal fun getApplicationUsersPath(applicationId: String) = "/platform/application/$applicationId/user"
 
     /**
+     * Helper
+     */
+    @JvmSynthetic internal fun getServerTimePath() = "/time";
+
+    /**
      * Determines if a given API path requires authentication.
      */
     @JvmSynthetic
     internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
-            path != getVerifyEmailPath() && path != getPasswordResetPath() && path != getPasswordResetVerifyPath()
+            path != getVerifyEmailPath() && path != getPasswordResetPath() && path != getPasswordResetVerifyPath() &&
+            path != getServerTimePath()
 }
 
 /**

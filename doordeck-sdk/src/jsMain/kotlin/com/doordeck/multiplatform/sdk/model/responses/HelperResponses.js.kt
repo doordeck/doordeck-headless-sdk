@@ -12,6 +12,11 @@ data class AssistedRegisterEphemeralKeyResponse(
     val requiresRetry: Boolean
 )
 
+@JsExport
+data class ServerTimeResponse(
+    val now: Long
+)
+
 internal fun BasicAssistedLoginResponse.toAssistedLoginResponse(): AssistedLoginResponse = AssistedLoginResponse(
     requiresVerification = requiresVerification,
     requiresRetry = requiresRetry
@@ -21,3 +26,5 @@ internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemer
     requiresVerification = requiresVerification,
     requiresRetry = requiresRetry
 )
+
+internal fun BasicServerTimeResponse.toServerTimeResponse(): ServerTimeResponse = ServerTimeResponse(now)

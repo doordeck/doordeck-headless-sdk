@@ -90,6 +90,9 @@ internal fun String.isoToInstant(): Instant = Instant.parse(this)
 internal fun Double.toInstant(): Instant = Instant.ofEpochSecond(toLong())
 
 @JvmSynthetic
+internal fun Long.epochSecondToInstant(): Instant = Instant.ofEpochSecond(this)
+
+@JvmSynthetic
 internal fun String.toInetAddress(): InetAddress = InetAddress.getByName(this)
 
 @JvmSynthetic

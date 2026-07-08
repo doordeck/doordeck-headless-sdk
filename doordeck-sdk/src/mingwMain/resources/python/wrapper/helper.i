@@ -43,4 +43,10 @@ class Helper(object):
             _doordeck_headless_sdk.assistedRegister,
             [self.resource, json.dumps(data)]
         )
+
+    async def server_time(self):
+        return await execute_async(
+            _doordeck_headless_sdk.serverTime,
+            [self.resource]
+        )
 %}

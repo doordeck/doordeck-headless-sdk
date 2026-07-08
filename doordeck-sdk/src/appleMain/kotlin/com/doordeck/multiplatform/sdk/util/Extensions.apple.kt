@@ -105,4 +105,6 @@ internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
 internal fun String.toNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
 
+internal fun Long.epochSecondToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
+
 internal fun String.isoToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(Instant.parse(this).epochSeconds.toDouble())

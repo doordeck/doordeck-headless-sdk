@@ -50,6 +50,11 @@ actual object HelperApi {
             force = assistedRegisterData.force
         )
     }
+
+    @CName("serverTime")
+    fun serverTime(callback: CStringCallback) = callback.handleCallback {
+        HelperClient.serverTimeRequest()
+    }
 }
 
 actual fun helper(): HelperApi = HelperApi
