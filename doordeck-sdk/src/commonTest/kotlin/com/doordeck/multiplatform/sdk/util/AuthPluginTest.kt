@@ -22,9 +22,8 @@ import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 class AuthPluginTest : IntegrationTest() {
 
@@ -109,12 +108,12 @@ class AuthPluginTest : IntegrationTest() {
 
         client.use {
             // When
-            val exception = assertFails {
+            val exception = assertFailsWith<UnauthorizedException> {
                 AccountClient.getUserDetailsRequest()
             }
 
             // Then
-            assertTrue { exception is UnauthorizedException }
+            assertEquals("API call failed with: 401 (Unauthorized) - Unauthorized", exception.message)
             assertEquals(currentAuthToken, Context.getCloudAuthToken())
             assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
         }
@@ -142,12 +141,12 @@ class AuthPluginTest : IntegrationTest() {
 
         client.use {
             // When
-            val exception = assertFails {
+            val exception = assertFailsWith<UnauthorizedException> {
                 AccountClient.getUserDetailsRequest()
             }
 
             // Then
-            assertTrue { exception is UnauthorizedException }
+            assertEquals("API call failed with: 401 (Unauthorized) - Unauthorized", exception.message)
             assertNull(Context.getCloudAuthToken())
             assertNull(Context.getCloudRefreshToken())
         }

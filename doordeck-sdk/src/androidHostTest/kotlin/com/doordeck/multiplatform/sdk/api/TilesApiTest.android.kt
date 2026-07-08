@@ -11,7 +11,7 @@ import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TilesApiTest : IntegrationTest() {
@@ -46,9 +46,9 @@ class TilesApiTest : IntegrationTest() {
         TilesApi.associateMultipleLocks(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, emptyList())
 
         // Then
-        val exception = assertFails {
+        val exception = assertFailsWith<NotFoundException> {
             TilesApi.getLocksBelongingToTile(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID)
         }
-        assertTrue { exception is NotFoundException }
+        assertEquals("API call failed with: No devices associated with this tile", exception.message)
     }
 }

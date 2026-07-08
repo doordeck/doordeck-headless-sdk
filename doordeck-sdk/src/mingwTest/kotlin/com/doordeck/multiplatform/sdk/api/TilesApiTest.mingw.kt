@@ -102,5 +102,6 @@ class TilesApiTest : CallbackTest() {
             )
         }.unwrapFailure()
         assertContains(result.exceptionType, NotFoundException::class.simpleName!!)
+        assertEquals("API call failed with: No devices associated with this tile", result.exceptionMessage)
     }
 }

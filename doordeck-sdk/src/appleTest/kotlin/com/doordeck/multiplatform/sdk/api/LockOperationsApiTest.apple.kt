@@ -34,7 +34,7 @@ import platform.Foundation.NSDateComponents
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -824,7 +824,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldThrowExceptionWhenOperationContextIsMissing() = runTest {
         // When
-        val revokeAccessToLockUsingContextException = assertFails {
+        val revokeAccessToLockUsingContextException = assertFailsWith<MissingContextFieldException> {
             LockOperationsApi.revokeAccessToLock(
                 revokeAccessToLockOperation = LockOperations.RevokeAccessToLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
@@ -832,7 +832,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 )
             )
         }
-        val shareLockUsingContextException = assertFails {
+        val shareLockUsingContextException = assertFailsWith<MissingContextFieldException> {
             LockOperationsApi.shareLock(
                 shareLockOperation = LockOperations.ShareLockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
@@ -844,7 +844,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 )
             )
         }
-        val unlockUsingContextException = assertFails {
+        val unlockUsingContextException = assertFailsWith<MissingContextFieldException> {
             LockOperationsApi.unlock(
                 unlockOperation = LockOperations.UnlockOperation(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
@@ -852,7 +852,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 )
             )
         }
-        val updateSecureSettingUnlockDurationUsingContextException = assertFails {
+        val updateSecureSettingUnlockDurationUsingContextException = assertFailsWith<MissingContextFieldException> {
             LockOperationsApi.updateSecureSettingUnlockDuration(
                 updateSecureSettingUnlockDuration = LockOperations.UpdateSecureSettingUnlockDuration(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
@@ -860,7 +860,7 @@ class LockOperationsApiTest : IntegrationTest() {
                 )
             )
         }
-        val updateSecureSettingUnlockBetweenUsingContextException = assertFails {
+        val updateSecureSettingUnlockBetweenUsingContextException = assertFailsWith<MissingContextFieldException> {
             LockOperationsApi.updateSecureSettingUnlockBetween(
                 updateSecureSettingUnlockBetween = LockOperations.UpdateSecureSettingUnlockBetween(
                     baseOperation = LockOperations.BaseOperation(lockId = PLATFORM_TEST_MAIN_LOCK_ID),
@@ -876,15 +876,10 @@ class LockOperationsApiTest : IntegrationTest() {
         }
 
         // Then
-        assertTrue { revokeAccessToLockUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", revokeAccessToLockUsingContextException.message)
-        assertTrue { shareLockUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", shareLockUsingContextException.message)
-        assertTrue { unlockUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", unlockUsingContextException.message)
-        assertTrue { updateSecureSettingUnlockDurationUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", updateSecureSettingUnlockDurationUsingContextException.message)
-        assertTrue { updateSecureSettingUnlockBetweenUsingContextException is MissingContextFieldException }
         assertEquals("User ID is missing", updateSecureSettingUnlockBetweenUsingContextException.message)
     }
 }

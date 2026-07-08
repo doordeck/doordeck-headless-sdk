@@ -12,7 +12,7 @@ import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class TilesApiAsyncTest : IntegrationTest() {
@@ -47,9 +47,9 @@ class TilesApiAsyncTest : IntegrationTest() {
         TilesApi.associateMultipleLocksAsync(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, emptyList()).await()
 
         // Then
-        val exception = assertFails {
+        val exception = assertFailsWith<NotFoundException> {
             TilesApi.getLocksBelongingToTileAsync(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID).await()
         }
-        assertTrue { exception is NotFoundException }
+        assertEquals("API call failed with: No devices associated with this tile", exception.message)
     }
 }

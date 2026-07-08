@@ -93,5 +93,6 @@ class AccountlessApiTest : CallbackTest() {
             )
         }.unwrapFailure()
         assertContains(loginResponse.exceptionType, UnauthorizedException::class.simpleName!!)
+        assertEquals("API call failed with: HTTP 401 Unauthorized", loginResponse.exceptionMessage)
     }
 }
