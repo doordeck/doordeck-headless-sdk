@@ -73,7 +73,7 @@ internal object Paths {
     @JvmSynthetic internal fun getApplicationUsersPath(applicationId: String) = "/platform/application/$applicationId/user"
 
     /**
-     * Helper
+     * Time
      */
     @JvmSynthetic internal fun getServerTimePath() = "/time";
 
