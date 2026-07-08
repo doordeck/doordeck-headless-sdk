@@ -64,10 +64,9 @@ import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 class ExtensionsTest {
@@ -224,29 +223,29 @@ class ExtensionsTest {
 
             httpClient.use { client ->
                 // When
-                val response = assertFails {
+                val type = when (responseStatus) {
+                    BadRequest -> BadRequestException::class
+                    Unauthorized -> UnauthorizedException::class
+                    Forbidden -> ForbiddenException::class
+                    NotFound -> NotFoundException::class
+                    MethodNotAllowed -> MethodNotAllowedException::class
+                    NotAcceptable -> NotAcceptableException::class
+                    Conflict -> ConflictException::class
+                    Gone -> GoneException::class
+                    UnprocessableEntity -> UnprocessableEntityException::class
+                    Locked -> LockedException::class
+                    TooEarly -> TooEarlyException::class
+                    TooManyRequests -> TooManyRequestsException::class
+                    InternalServerError -> InternalServerErrorException::class
+                    ServiceUnavailable -> ServiceUnavailableException::class
+                    GatewayTimeout -> GatewayTimeoutException::class
+                    else -> error("Unhandled status: $responseStatus")
+                }
+                val exception = assertFailsWith(type) {
                     client.get("")
                 }
 
                 // Then
-                when (responseStatus) {
-                    BadRequest -> assertTrue { response is BadRequestException }
-                    Unauthorized -> assertTrue { response is UnauthorizedException }
-                    Forbidden -> assertTrue { response is ForbiddenException }
-                    NotFound -> assertTrue { response is NotFoundException }
-                    MethodNotAllowed -> assertTrue { response is MethodNotAllowedException }
-                    NotAcceptable -> assertTrue { response is NotAcceptableException }
-                    Conflict -> assertTrue { response is ConflictException }
-                    Gone -> assertTrue { response is GoneException }
-                    UnprocessableEntity -> assertTrue { response is UnprocessableEntityException }
-                    Locked -> assertTrue { response is LockedException }
-                    TooEarly -> assertTrue { response is TooEarlyException }
-                    TooManyRequests -> assertTrue { response is TooManyRequestsException }
-                    InternalServerError -> assertTrue { response is InternalServerErrorException }
-                    ServiceUnavailable -> assertTrue { response is ServiceUnavailableException }
-                    GatewayTimeout -> assertTrue { response is GatewayTimeoutException }
-
-                }
                 assertNotNull(client.pluginOrNull(HttpSend))
             }
         }
@@ -268,12 +267,11 @@ class ExtensionsTest {
 
             httpClient.use { client ->
                 // When
-                val response = assertFails {
+                val exception = assertFailsWith<SdkException> {
                     client.get("")
                 }
 
                 // Then
-                assertTrue { response is SdkException }
                 assertNotNull(client.pluginOrNull(HttpSend))
             }
         }
@@ -320,7 +318,7 @@ class ExtensionsTest {
         val latitude = 190.0
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<SdkException> {
             latitude.validateLatitude()
         }
 
@@ -345,7 +343,7 @@ class ExtensionsTest {
         val longitude = 190.0
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<SdkException> {
             longitude.validateLongitude()
         }
 
@@ -370,7 +368,7 @@ class ExtensionsTest {
         val radius = 1001
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<SdkException> {
             radius.validateRadius()
         }
 
@@ -395,7 +393,7 @@ class ExtensionsTest {
         val accuracy = 1001
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<SdkException> {
             accuracy.validateAccuracy()
         }
 
