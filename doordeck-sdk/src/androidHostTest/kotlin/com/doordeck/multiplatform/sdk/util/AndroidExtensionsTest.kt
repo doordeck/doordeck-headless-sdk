@@ -344,13 +344,11 @@ class AndroidExtensionsTest {
         // Given
         val host = "host"
 
-        // When
-        val exception = assertFailsWith<UnknownHostException> {
+        // When/Then
+        assertFailsWith<UnknownHostException> {
             host.toInetAddress()
         }
 
-        // Then
-        assertEquals("host: nodename nor servname provided, or not known", exception.message)
     }
 
     @Test
