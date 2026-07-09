@@ -6,16 +6,13 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
-import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimeZone
-import platform.Foundation.date
 import platform.Foundation.timeZoneWithName
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertIs
+import kotlin.test.assertFailsWith
 import kotlin.time.Clock.System.now
 
 class AppleExtensionsTest {
@@ -37,13 +34,10 @@ class AppleExtensionsTest {
         // Given
         val wrong = "wrong"
 
-        // When
-        val exception = assertFails {
+        // When/Then
+        assertFailsWith<NullPointerException> {
             wrong.toNsUuid()
         }
-
-        // Then
-        assertIs<NullPointerException>(exception)
     }
 
     @Test
@@ -171,12 +165,9 @@ class AppleExtensionsTest {
         // Given
         val isoString = "wrong"
 
-        // When
-        val exception = assertFails {
+        // When/Then
+        assertFailsWith<Exception> {
             isoString.isoToNsDate()
         }
-
-        // Then
-        assertIs<Exception>(exception) // InstantFormatException
     }
 }

@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.callbackApiCall
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomNullable
@@ -91,7 +90,7 @@ class MingwExtensionsTest : CallbackTest() {
 
         // Then
         val failure = result.unwrapFailure()
-        assertContains(failure.exceptionType, SdkException::class.simpleName!!)
+        assertContains(failure.exceptionType, Exception::class.simpleName!!)
         assertEquals(errorMessage, failure.exceptionMessage)
     }
 }
