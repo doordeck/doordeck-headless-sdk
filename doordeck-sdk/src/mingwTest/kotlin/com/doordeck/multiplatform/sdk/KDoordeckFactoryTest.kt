@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.api.AccountlessApi
 import com.doordeck.multiplatform.sdk.config.SdkConfig
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.LoginData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
@@ -13,6 +14,7 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class KDoordeckFactoryTest : BasicCallbackTest() {
@@ -61,6 +63,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
                 callback = TestCallback
             )
         }.unwrapFailure()
+        assertContains(response.exceptionType, SdkException::class.simpleName!!)
         assertEquals("Failed to perform API call", response.exceptionMessage)
     }
 }

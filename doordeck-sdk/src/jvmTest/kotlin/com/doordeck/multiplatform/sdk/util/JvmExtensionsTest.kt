@@ -18,7 +18,7 @@ import java.util.EnumSet
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
 
 class JvmExtensionsTest {
@@ -64,13 +64,13 @@ class JvmExtensionsTest {
         // Given
         val wrong = "localtime"
 
-        // When
-        val exception = assertFails {
+        // When / Then
+        val exception = assertFailsWith<DateTimeParseException> {
             wrong.toLocalTime()
         }
 
         // Then
-        assertIs<DateTimeParseException>(exception)
+        assertEquals("Text 'localtime' could not be parsed at index 0", exception.message)
     }
 
     @Test
@@ -115,12 +115,12 @@ class JvmExtensionsTest {
         val wrong = "localdate"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<DateTimeParseException> {
             wrong.toLocalDate()
         }
 
         // Then
-        assertIs<DateTimeParseException>(exception)
+        assertEquals("Text 'localdate' could not be parsed at index 0", exception.message)
     }
 
     @Test
@@ -165,12 +165,12 @@ class JvmExtensionsTest {
         val wrong = "`"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<IllegalArgumentException> {
             wrong.toUri()
         }
 
         // Then
-        assertIs<IllegalArgumentException>(exception)
+        assertEquals("Illegal character in path at index 0: `", exception.message)
     }
 
     @Test
@@ -191,12 +191,12 @@ class JvmExtensionsTest {
         val wrong = "wrong"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<IllegalArgumentException> {
             wrong.toUrl()
         }
 
         // Then
-        assertIs<IllegalArgumentException>(exception)
+        assertEquals("URI is not absolute", exception.message)
     }
 
     @Test
@@ -217,12 +217,12 @@ class JvmExtensionsTest {
         val wrong = "wrong"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<ZoneRulesException> {
             wrong.toZoneId()
         }
 
         // Then
-        assertIs<ZoneRulesException>(exception)
+        assertEquals("Unknown time-zone ID: wrong", exception.message)
     }
 
     @Test
@@ -243,12 +243,12 @@ class JvmExtensionsTest {
         val wrong = "wrong"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<IllegalArgumentException> {
             wrong.toUuid()
         }
 
         // Then
-        assertIs<IllegalArgumentException>(exception)
+        assertEquals("Invalid UUID string: wrong", exception.message)
     }
 
     @Test
@@ -281,12 +281,12 @@ class JvmExtensionsTest {
         val wrong = "wrong"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<NumberFormatException> {
             wrong.toInstant()
         }
 
         // Then
-        assertIs<NumberFormatException>(exception)
+        assertEquals("For input string: \"wrong\"", exception.message)
     }
 
     @Test
@@ -307,12 +307,12 @@ class JvmExtensionsTest {
         val wrong = "wrong"
 
         // When
-        val exception = assertFails {
+        val exception = assertFailsWith<DateTimeParseException> {
             wrong.isoToInstant()
         }
 
         // Then
-        assertIs<DateTimeParseException>(exception)
+        assertEquals("Text 'wrong' could not be parsed at index 0", exception.message)
     }
 
     @Test
@@ -344,13 +344,10 @@ class JvmExtensionsTest {
         // Given
         val host = "host"
 
-        // When
-        val exception = assertFails {
+        // When/Then
+        assertFailsWith<UnknownHostException> {
             host.toInetAddress()
         }
-
-        // Then
-        assertIs<UnknownHostException>(exception)
     }
 
     @Test

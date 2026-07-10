@@ -5,12 +5,13 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
@@ -57,8 +58,9 @@ class AccountlessApiTest : IntegrationTest() {
         assertNull(ContextManager.getUserEmail())
         assertNull(ContextManager.getCertificateChain())
         assertNull(ContextManager.getKeyPair())
-        assertFails {
+        val exception = assertFailsWith<UnauthorizedException> {
             AccountlessApi.login(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }
+        assertEquals("API call failed with: HTTP 401 Unauthorized", exception.message)
     }
 }
