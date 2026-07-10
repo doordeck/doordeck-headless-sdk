@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.clients
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.Constants
 import com.doordeck.multiplatform.sdk.HttpClient
 import com.doordeck.multiplatform.sdk.context.Context
@@ -7,9 +8,13 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
+import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicServerTimeResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import kotlin.jvm.JvmSynthetic
@@ -131,5 +136,12 @@ internal object HelperClient {
         // Add the key pair to the context manager
         Context.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
         Context.setKeyPairVerified(keyPair.public)
+    }
+
+    @JvmSynthetic
+    internal suspend fun serverTimeRequest(): BasicServerTimeResponse {
+        return CloudHttpClient.client.get(Paths.getServerTimePath()) {
+            addRequestHeaders()
+        }.body()
     }
 }

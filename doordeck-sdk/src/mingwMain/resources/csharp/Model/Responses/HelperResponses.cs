@@ -11,3 +11,8 @@ public class AssistedRegisterEphemeralKeyResponse
     public required bool RequiresVerification { get; set; }
     public required bool RequiresRetry { get; set; }
 }
+
+public class ServerTimeResponse
+{
+    public required DateTime Now { get; set; }
+}

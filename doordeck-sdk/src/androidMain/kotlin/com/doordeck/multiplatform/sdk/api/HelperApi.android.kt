@@ -3,8 +3,10 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.clients.HelperClient
 import com.doordeck.multiplatform.sdk.model.responses.AssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.AssistedRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.ServerTimeResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
+import com.doordeck.multiplatform.sdk.model.responses.toServerTimeResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
 import java.io.InputStream
 import java.security.KeyPair
@@ -118,6 +120,14 @@ actual object HelperApi {
             displayName = displayName,
             force = force
         )
+    }
+
+    suspend fun serverTime(): ServerTimeResponse = HelperClient
+        .serverTimeRequest()
+        .toServerTimeResponse()
+
+    fun serverTimeAsync(): CompletableFuture<ServerTimeResponse> = completableFuture {
+        serverTime()
     }
 }
 

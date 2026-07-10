@@ -13,3 +13,8 @@ internal data class BasicAssistedRegisterEphemeralKeyResponse(
     val requiresVerification: Boolean,
     val requiresRetry: Boolean
 )
+
+@Serializable
+internal data class BasicServerTimeResponse(
+    val now: Long
+)

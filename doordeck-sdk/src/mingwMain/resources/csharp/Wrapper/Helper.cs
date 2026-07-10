@@ -20,4 +20,7 @@ public class Helper(
 
     public unsafe Task<object> AssistedRegister(string email, string password, string? displayName = null, bool force = false) =>
         Process<HelperApi, object>(helper, helperApi.assistedRegister_, new { email, password, displayName, force });
+
+    public unsafe Task<ServerTimeResponse> ServerTime() =>
+            Process<HelperApi, ServerTimeResponse>(helper, helperApi.serverTime_);
 }

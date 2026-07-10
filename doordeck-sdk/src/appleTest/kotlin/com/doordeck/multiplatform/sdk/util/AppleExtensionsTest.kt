@@ -4,11 +4,13 @@ import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuid
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toNSDate
 import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimeZone
+import platform.Foundation.timeIntervalSince1970
 import platform.Foundation.timeZoneWithName
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -134,6 +136,19 @@ class AppleExtensionsTest {
 
         // Then
         assertEquals(date, result.toEpochSeconds())
+    }
+
+    @Test
+    fun shouldMapLongEpochSecondToNsDate() = runTest {
+        // Given
+        val date = now()
+
+        // When
+        val result = date.epochSeconds.epochSecondToNsDate()
+
+        // Then
+        assertEquals(date.toNSDate().timeIntervalSince1970.toLong(),
+            result.timeIntervalSince1970.toLong())
     }
 
     @Test
