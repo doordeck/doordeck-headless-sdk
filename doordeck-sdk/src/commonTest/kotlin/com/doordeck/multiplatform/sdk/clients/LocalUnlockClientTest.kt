@@ -23,8 +23,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.withContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
-import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
 import kotlin.time.Duration.Companion.seconds
 import io.ktor.client.HttpClient as KtorHttpClient
 
@@ -105,12 +104,11 @@ class LocalUnlockClientTest {
         cloudClient.use {
             withContext(Dispatchers.Default) {
                 // When
-                val exception = assertFails {
+                val exception = assertFailsWith<BadRequestException> {
                     LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
                 }
 
                 // Then
-                assertTrue { exception is BadRequestException }
                 assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
             }
         }
@@ -289,12 +287,11 @@ class LocalUnlockClientTest {
         try {
             withContext(Dispatchers.Default) {
                 // When
-                val exception = assertFails {
+                val exception = assertFailsWith<BadRequestException> {
                     LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
                 }
 
                 // Then
-                assertTrue { exception is BadRequestException }
                 assertEquals("API call failed with: 400 (Bad Request) - Cloud endpoint error", exception.message)
             }
         } finally {
@@ -328,14 +325,13 @@ class LocalUnlockClientTest {
         try {
             withContext(Dispatchers.Default) {
                 // When
-                val exception = assertFails {
+                val exception = assertFailsWith<SdkException> {
                     withContext(Dispatchers.Default) {
                         LocalUnlockClient.unlock(cloudEndpoint, directAccessEndpoints, randomString())
                     }
                 }
 
                 // Then
-                assertTrue { exception is SdkException }
                 assertEquals("Failed to perform API call", exception.message)
             }
         } finally {

@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.unwrapFailure
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class MingwExtensionsTest : CallbackTest() {
@@ -89,6 +90,7 @@ class MingwExtensionsTest : CallbackTest() {
 
         // Then
         val failure = result.unwrapFailure()
+        assertContains(failure.exceptionType, Exception::class.simpleName!!)
         assertEquals(errorMessage, failure.exceptionMessage)
     }
 }
