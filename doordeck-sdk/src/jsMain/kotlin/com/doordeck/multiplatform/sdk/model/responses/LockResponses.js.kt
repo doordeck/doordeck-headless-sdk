@@ -134,7 +134,14 @@ data class AuditResponse(
     val issuer: AuditUserResponse,
     val subject: AuditUserResponse? = null,
     val rejectionReason: String? = null,
-    val rejected: Boolean
+    val rejected: Boolean,
+    val userAgent: AuditUserAgentResponse? = null
+)
+
+@JsExport
+data class AuditUserAgentResponse(
+    val type: String,
+    val version: String? = null
 )
 
 @JsExport
@@ -267,7 +274,13 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): JsArray<AuditResponse> 
         issuer = audit.issuer.toAuditUserResponse(),
         subject = audit.subject?.toAuditUserResponse(),
         rejectionReason = audit.rejectionReason,
-        rejected = audit.rejected
+        rejected = audit.rejected,
+        userAgent = audit.userAgent?.let { userAgent ->
+            AuditUserAgentResponse(
+                type = userAgent.type.name,
+                version = userAgent.version
+            )
+        }
     )
 }.toJsArray()
 
