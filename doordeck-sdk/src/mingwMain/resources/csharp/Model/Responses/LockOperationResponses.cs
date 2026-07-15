@@ -132,7 +132,7 @@ public class AuditResponse
 
 public class AuditUserAgentResponse
 {
-    public required AuditUserAgentType { get; set; }
+    public required AuditUserAgentType Type { get; set; }
     public string? Version { get; set; }
 }
 
