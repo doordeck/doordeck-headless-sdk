@@ -292,14 +292,15 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): List<AuditResponse> = m
         subject = audit.subject?.toAuditUserResponse(),
         rejectionReason = audit.rejectionReason,
         rejected = audit.rejected,
-        userAgent = audit.userAgent?.let { userAgent ->
-            AuditUserAgentResponse(
-                type = userAgent.type,
-                version = userAgent.version
-            )
-        }
+        userAgent = audit.userAgent?.toAuditUserAgentResponse()
     )
 }
+
+@JvmSynthetic
+internal fun BasicAuditUserAgentResponse.toAuditUserAgentResponse(): AuditUserAgentResponse = AuditUserAgentResponse(
+    type = type,
+    version = version
+)
 
 @JvmSynthetic
 internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(

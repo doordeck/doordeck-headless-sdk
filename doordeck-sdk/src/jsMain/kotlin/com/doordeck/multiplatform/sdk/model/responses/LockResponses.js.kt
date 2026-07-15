@@ -275,14 +275,14 @@ internal fun List<BasicAuditResponse>.toAuditResponse(): JsArray<AuditResponse> 
         subject = audit.subject?.toAuditUserResponse(),
         rejectionReason = audit.rejectionReason,
         rejected = audit.rejected,
-        userAgent = audit.userAgent?.let { userAgent ->
-            AuditUserAgentResponse(
-                type = userAgent.type.name,
-                version = userAgent.version
-            )
-        }
+        userAgent = audit.userAgent?.toAuditUserAgentResponse()
     )
 }.toJsArray()
+
+internal fun BasicAuditUserAgentResponse.toAuditUserAgentResponse(): AuditUserAgentResponse = AuditUserAgentResponse(
+    type = type.name,
+    version = version
+)
 
 internal fun BasicAuditUserResponse.toAuditUserResponse(): AuditUserResponse = AuditUserResponse(
     userId = userId,
