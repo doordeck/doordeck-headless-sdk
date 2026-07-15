@@ -127,7 +127,7 @@ public class AuditResponse
     public required AuditUserResponse Issuer { get; set; }
     public AuditUserResponse? Subject { get; set; }
     public required bool Rejected { get; set; }
-    public AuditUserAgentResponse? { get; set; }
+    public AuditUserAgentResponse? UserAgent { get; set; }
 }
 
 public class AuditUserAgentResponse
