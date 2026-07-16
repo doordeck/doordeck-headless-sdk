@@ -86,8 +86,8 @@ kotlin {
     }
 
     val minVersions = AppleMinVersions(
-        ios     = libs.versions.ios.min.sdk.get().toInt(),
-        macos   = libs.versions.macos.min.sdk.get().toInt(),
+        ios = libs.versions.ios.min.sdk.get().toInt(),
+        macos = libs.versions.macos.min.sdk.get().toInt(),
         watchos = libs.versions.watchos.min.sdk.get().toInt(),
     )
 
@@ -595,10 +595,10 @@ fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions
         val header = File(outDir, "$moduleName-Swift.h")
         val staticLib = File(outDir, "lib$moduleName.a")
         val swiftModule = File(outDir, "$moduleName.swiftmodule")
-        val moduleMap = File(outDir, "module.modulemap")          // <-- new
+        val moduleMap = File(outDir, "module.modulemap")
 
         inputs.file(swiftSrc)
-        outputs.files(header, staticLib, swiftModule, moduleMap)    // <-- include it
+        outputs.files(header, staticLib, swiftModule, moduleMap)
         doFirst { outDir.mkdirs() }
 
         commandLine(
