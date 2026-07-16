@@ -98,13 +98,16 @@ kotlin {
         watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()   // watchOS
     )
 
+    val isMacHost = System.getProperty("os.name").startsWith("Mac", ignoreCase = true)
     appleTargets.forEach {
         it.binaries.framework {
             baseName = cocoapodsPublish.packageName
             binaryOption("bundleId", cocoapodsPublish.bundleId)
             xcf.add(this)
         }
-        configureSwiftBridge(it, minVersions)
+        if (isMacHost) {
+            configureSwiftBridge(it, minVersions)
+        }
     }
 
     mingwX64 {
