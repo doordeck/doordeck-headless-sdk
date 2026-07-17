@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTes
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.tasks.CInteropProcess
 import org.jetbrains.kotlin.konan.target.KonanTarget
+import java.io.ByteArrayInputStream
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -577,6 +578,7 @@ private fun Project.runCommand(vararg cmd: String): String =
     }.standardOutput.asText.get().trim()
 
 fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions) {
+    println("Configuring swift bridge for ${target.konanTarget.name}")
     val spec = specFor(target, v)
 
     val swiftBin = runCommand("xcrun", "--find", "swift")
@@ -591,20 +593,27 @@ fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions
     val buildSwift = tasks.register<Exec>(
         "buildSwift${target.name.replaceFirstChar(Char::titlecase)}"
     ) {
+        standardInput = ByteArrayInputStream(ByteArray(0))
+
         group = "build"
         description = "Compile $moduleName for ${target.name}"
 
         val outDir = outDirProv.get().asFile
         val header = File(outDir, "$moduleName-Swift.h")
         val staticLib = File(outDir, "lib$moduleName.a")
+        val moduleCache = File(outDir, "moduleCache")
         val swiftModule = File(outDir, "$moduleName.swiftmodule")
         val moduleMap = File(outDir, "module.modulemap")
 
         inputs.file(swiftSrc)
         outputs.files(header, staticLib, swiftModule, moduleMap)
-        doFirst { outDir.mkdirs() }
+        doFirst {
+            outDir.mkdirs()
+            moduleCache.mkdirs()
+        }
 
-        commandLine(
+        val logFile = File(outDir, "$moduleName-build.log")
+        val swiftcArgs = listOf(
             "xcrun", "--sdk", spec.sdk, "swiftc",
             "-emit-library", "-static",
             "-emit-module",
@@ -615,10 +624,13 @@ fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions
             "-parse-as-library",
             "-swift-version", "5",
             "-target", spec.triple,
-            "-sdk",    sdkPath,
-            "-o",      staticLib.absolutePath,
+            "-sdk", sdkPath,
+            "-module-cache-path", moduleCache.absolutePath,
+            "-o", staticLib.absolutePath,
             swiftSrc.asFile.absolutePath
-        )
+        ).joinToString(" ") { "'" + it.replace("'", "'\\''") + "'" }
+
+        commandLine("/bin/sh", "-c", "$swiftcArgs < /dev/null > '${logFile.absolutePath}' 2>&1")
 
         // After swiftc runs, drop a module map next to the generated header
         doLast {
@@ -658,7 +670,10 @@ fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions
             "-L${outDirProv.get().asFile.absolutePath}",
             "-force_load", libFile,
             "-framework", "CryptoKit",
-            "-L$swiftRuntime"
+            "-L", "/usr/lib/swift",
+            "-L$swiftRuntime",
+            "-rpath", "/usr/lib/swift",
+            "-rpath", swiftRuntime
         )
     }
 }
