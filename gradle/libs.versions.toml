@@ -1,5 +1,5 @@
 [versions]
-kgp = "9.2.1"
+kgp = "9.3.0"
 bouncy-castle = "1.85"
 indispensable-asn1 = "3.24.0"
 kotlin = "2.4.0"
