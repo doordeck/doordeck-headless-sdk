@@ -273,8 +273,6 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: 'latest'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@doordeck'
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
