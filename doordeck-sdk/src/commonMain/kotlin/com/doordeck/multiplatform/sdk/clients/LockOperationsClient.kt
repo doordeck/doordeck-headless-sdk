@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
@@ -634,13 +635,14 @@ internal object LockOperationsClient {
         baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
         directAccessEndpoints: List<String>? = null
     ) {
+        val skewSeconds = SystemClock.getSkew().inWholeSeconds
         val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
             sub = baseOperationRequest.lockId,
-            nbf = baseOperationRequest.notBefore,
-            iat = baseOperationRequest.issuedAt,
-            exp = baseOperationRequest.expiresAt,
+            nbf = baseOperationRequest.notBefore + skewSeconds,
+            iat = baseOperationRequest.issuedAt + skewSeconds,
+            exp = baseOperationRequest.expiresAt + skewSeconds,
             jti = baseOperationRequest.jti,
             operation = operationRequest
         )
