@@ -26,7 +26,7 @@ import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toUrlString
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import kotlin.test.AfterClass
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -38,7 +38,7 @@ import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : IntegrationTest() {
 
-    @AfterClass
+    @AfterTest
     fun cleanUp() = runBlocking {
         AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         PlatformApi.listApplications().filter { application ->
@@ -311,7 +311,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(1, applicationUsers.size)
         assertEquals(applicationUserEmail, applicationUsers.first().email)
         assertEquals(applicationJwtBody.name, applicationUsers.first().displayName)
-        assertEquals(applicationUserId.toString(), applicationUsers.first().foreignKey)
+        assertEquals(applicationUserId, applicationUsers.first().foreignKey)
 
         ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
         AccountApi.deleteAccount() // Cleanup the application user
