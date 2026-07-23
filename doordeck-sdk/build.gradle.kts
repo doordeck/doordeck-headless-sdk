@@ -110,7 +110,7 @@ kotlin {
         }
     }
 
-    js(IR) {
+    js {
         outputModuleName = "doordeck-sdk"
         useCommonJs()
         nodejs {
