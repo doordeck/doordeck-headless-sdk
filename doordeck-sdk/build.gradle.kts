@@ -92,8 +92,12 @@ kotlin {
             xcf.add(this)
         }
 
-        it.compilations.named("main") {
-            cinterops.register("KCryptoKit")
+        it.compilations {
+            val main by getting {
+                cinterops {
+                    create("KCryptoKit")
+                }
+            }
         }
     }
 
