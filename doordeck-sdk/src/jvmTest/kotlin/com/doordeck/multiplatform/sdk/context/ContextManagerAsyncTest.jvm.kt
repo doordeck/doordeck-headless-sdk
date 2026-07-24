@@ -15,6 +15,7 @@ import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.requestHistory
 import com.doordeck.multiplatform.sdk.responseHistory
 import com.doordeck.multiplatform.sdk.setupMockClient
+import com.doordeck.multiplatform.sdk.setupMockErrorClient
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
@@ -65,19 +66,44 @@ class ContextManagerAsyncTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldCheckAuthTokenValidityWhenLocallyExpiredButServerAcceptsAsync() = runTest {
+        // Given: a token that looks invalid/expired to the local check.
+        ContextManager.setCloudAuthToken(randomString())
+        val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
+            email = randomEmail(),
+            displayName = randomString(),
+            emailVerified = randomBoolean(),
+            publicKey = randomPublicKey().encodeByteArrayToBase64()
+        ))
+
+        client.use {
+            // When
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpiredAsync(true).await()
+
+            // Then: the server call still happens and succeeds, so a still-valid refresh token
+            // silently renews the session instead of forcing the user to log back in.
+            assertFalse { result }
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
+        }
+    }
+
+    @Test
     fun shouldCheckAuthTokenInvalidityAsync() = runTest {
         // Given
         ContextManager.setCloudAuthToken(randomString())
-        val client = CloudHttpClient.setupMockClient(null)
+        val client = CloudHttpClient.setupMockErrorClient()
 
         client.use {
             // When
             val result = ContextManager.isCloudAuthTokenInvalidOrExpiredAsync(true).await()
 
             // Then
+            // A locally-malformed token still asks the server (rather than short-circuiting)
+            // so a genuinely valid refresh token gets a chance to silently renew the session.
             assertTrue { result }
-            assertEquals(0, CloudHttpClient.client.requestHistory().size)
-            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
         }
     }
 
@@ -135,7 +161,7 @@ class ContextManagerAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateCloudTokenIsInvalidAsync() = runTest {
         // Given
-        val client = CloudHttpClient.setupMockClient(null)
+        val client = CloudHttpClient.setupMockErrorClient()
         ContextManager.setCloudAuthToken(randomString())
 
         client.use {
@@ -144,8 +170,8 @@ class ContextManagerAsyncTest : IntegrationTest() {
 
             // Then
             assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, result)
-            assertEquals(0, CloudHttpClient.client.requestHistory().size)
-            assertEquals(0, CloudHttpClient.client.responseHistory().size)
+            assertEquals(1, CloudHttpClient.client.requestHistory().size)
+            assertEquals(1, CloudHttpClient.client.responseHistory().size)
         }
     }
 

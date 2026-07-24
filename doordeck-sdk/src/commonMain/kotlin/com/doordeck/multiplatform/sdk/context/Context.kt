@@ -65,24 +65,29 @@ internal object Context {
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
      *
+     * When [checkServerInvalidation] is true, this always asks the backend rather than trusting
+     * the local expiry check alone: the HTTP client's auth plugin transparently redeems the
+     * stored refresh token on a 401 and retries, so an access token that's merely past its local
+     * expiry (but whose refresh token is still valid) doesn't force a full re-login. Skipping the
+     * request whenever the local check already looks expired — as this used to do — meant that
+     * chance to silently refresh never happened.
+     *
      * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
      * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true). Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
         val token = getCloudAuthToken() ?: return true
-        if (token.isJwtTokenInvalidOrExpired()) {
-            return true
+
+        if (!checkServerInvalidation) {
+            return token.isJwtTokenInvalidOrExpired()
         }
-        return if (checkServerInvalidation) {
-            try {
-                AccountClient.getUserDetailsRequest()
-                false
-            } catch (_: Exception) {
-                true
-            }
-        } else {
+
+        return try {
+            AccountClient.getUserDetailsRequest()
             false
+        } catch (_: Exception) {
+            true
         }
     }
 

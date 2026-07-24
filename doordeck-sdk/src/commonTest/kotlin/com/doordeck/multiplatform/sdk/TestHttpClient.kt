@@ -10,6 +10,7 @@ import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
+import io.ktor.client.engine.mock.respondError
 import io.ktor.client.request.HttpResponseData
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -27,6 +28,21 @@ internal inline fun <reified T>CloudHttpClient.setupMockClient(content: T): Http
     val mockEngine = MockEngine.config {
         addHandler {
             respondContent(content)
+        }
+    }
+    val client = HttpClient(mockEngine) {
+        installResponseValidator()
+        installContentNegotiation()
+        installAuth()
+    }.also { it.addExceptionInterceptor() }
+    overrideClient(client)
+    return client
+}
+
+internal fun CloudHttpClient.setupMockErrorClient(status: HttpStatusCode = HttpStatusCode.Unauthorized): HttpClient {
+    val mockEngine = MockEngine.config {
+        addHandler {
+            respondError(status)
         }
     }
     val client = HttpClient(mockEngine) {
