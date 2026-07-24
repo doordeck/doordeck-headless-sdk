@@ -87,7 +87,7 @@ internal object ServerTimeSynchronizer {
             val skew = serverTime - deviceAtServer
 
             SystemClock.setSkew(skew)
-            SdkLogger.d { "Synchronized server time, applied clock skew: $skew" }
+            SdkLogger.i { "Synchronized server time, applied clock skew: $skew" }
         } catch (exception: Exception) {
             SdkLogger.d { "Failed to synchronize server time: ${exception.message}" }
         }

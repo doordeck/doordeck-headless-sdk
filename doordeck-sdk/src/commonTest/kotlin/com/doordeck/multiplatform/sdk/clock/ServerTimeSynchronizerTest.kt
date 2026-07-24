@@ -24,15 +24,17 @@ class ServerTimeSynchronizerTest {
         // Given
         val expectedSkew = 1.hours
         val serverEpochSeconds = (Clock.System.now() + expectedSkew).epochSeconds
-        CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
+        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
 
-        // When
-        ServerTimeSynchronizer.synchronize()
+        client.use {
+            // When
+            ServerTimeSynchronizer.synchronize()
 
-        // Then
-        val skew = SystemClock.getSkew()
-        assertTrue((skew - expectedSkew).absoluteValue < 5.seconds,
-            "Expected ~$expectedSkew skew but was $skew")
+            // Then
+            val skew = SystemClock.getSkew()
+            assertTrue((skew - expectedSkew).absoluteValue < 5.seconds,
+                "Expected ~$expectedSkew skew but was $skew")
+        }
     }
 
     @Test
@@ -40,27 +42,31 @@ class ServerTimeSynchronizerTest {
         // Given
         val expectedSkew = (-1).hours
         val serverEpochSeconds = (Clock.System.now() + expectedSkew).epochSeconds
-        CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
+        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
 
-        // When
-        ServerTimeSynchronizer.synchronize()
+        client.use {
+            // When
+            ServerTimeSynchronizer.synchronize()
 
-        // Then
-        val skew = SystemClock.getSkew()
-        assertTrue((skew - expectedSkew).absoluteValue < 5.seconds,
-            "Expected ~$expectedSkew skew but was $skew")
+            // Then
+            val skew = SystemClock.getSkew()
+            assertTrue((skew - expectedSkew).absoluteValue < 5.seconds,
+                "Expected ~$expectedSkew skew but was $skew")
+        }
     }
 
     @Test
     fun shouldKeepPreviousSkewWhenSynchronizationFails() = runTest {
         // Given
         SystemClock.setSkew(2.hours)
-        CloudHttpClient.setupMockClient<BasicServerTimeResponse?>(null)
+        val client = CloudHttpClient.setupMockClient<BasicServerTimeResponse?>(null)
 
-        // When
-        ServerTimeSynchronizer.synchronize()
+        client.use {
+            // When
+            ServerTimeSynchronizer.synchronize()
 
-        // Then
-        assertTrue((SystemClock.getSkew() - 2.hours).absoluteValue < 5.seconds)
+            // Then
+            assertTrue((SystemClock.getSkew() - 2.hours).absoluteValue < 5.seconds)
+        }
     }
 }
