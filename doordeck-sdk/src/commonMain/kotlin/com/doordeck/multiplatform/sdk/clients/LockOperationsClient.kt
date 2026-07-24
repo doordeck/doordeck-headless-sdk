@@ -635,14 +635,14 @@ internal object LockOperationsClient {
         baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
         directAccessEndpoints: List<String>? = null
     ) {
-        val skewMs = SystemClock.getSkew().inWholeMilliseconds
+        val skewSeconds = SystemClock.getSkew().inWholeSeconds
         val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
             sub = baseOperationRequest.lockId,
-            nbf = baseOperationRequest.notBefore + skewMs,
-            iat = baseOperationRequest.issuedAt + skewMs,
-            exp = baseOperationRequest.expiresAt + skewMs,
+            nbf = baseOperationRequest.notBefore + skewSeconds,
+            iat = baseOperationRequest.issuedAt + skewSeconds,
+            exp = baseOperationRequest.expiresAt + skewSeconds,
             jti = baseOperationRequest.jti,
             operation = operationRequest
         )
