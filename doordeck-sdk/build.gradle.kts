@@ -110,7 +110,7 @@ kotlin {
         }
     }
 
-    js(IR) {
+    js {
         outputModuleName = "doordeck-sdk"
         useCommonJs()
         nodejs {
@@ -195,67 +195,53 @@ kotlin {
             }
         }
 
-        val commonMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.core)
-                implementation(libs.ktor.client.auth)
-                implementation(libs.ktor.client.logging)
-                implementation(libs.ktor.serialization.kotlinx.json)
-                implementation(libs.ktor.client.content.negotiation)
-                implementation(libs.ktor.client.encoding)
-                implementation(libs.kotlinx.datetime)
-                implementation(libs.kotlinx.serialization.properties)
-                implementation(libs.multiplatform.settings)
-                implementation(libs.indispensable.asn1)
-                implementation(libs.kermit.logger)
-            }
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.encoding)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.properties)
+            implementation(libs.multiplatform.settings)
+            implementation(libs.indispensable.asn1)
+            implementation(libs.kermit.logger)
         }
 
-        val commonTest by getting {
-            dependencies {
-                implementation(libs.kotlin.test)
-                implementation(libs.kotlin.coroutines.test)
-                implementation(libs.ktor.client.mock)
-            }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.kotlin.coroutines.test)
+            implementation(libs.ktor.client.mock)
         }
 
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-                implementation(libs.security.crypto)
-                implementation(libs.bouncy.castle)
-                implementation(libs.nimbus.jose.jwt)
-            }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.security.crypto)
+            implementation(libs.bouncy.castle)
+            implementation(libs.nimbus.jose.jwt)
         }
 
-        val appleMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-            }
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
-        val jvmMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.okhttp)
-                implementation(libs.nimbus.jose.jwt)
-            }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+            implementation(libs.nimbus.jose.jwt)
         }
 
-        val jsMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.js)
-                implementation(npm("libsodium-wrappers-sumo", libs.versions.libsodium.sumo.get()))
-                implementation(npm("asn1js", libs.versions.asn1js.get()))
-                implementation(npm("pkijs", libs.versions.pkijs.get()))
-                implementation(npm("ws", "8.21.0"))
-            }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
+            implementation(npm("libsodium-wrappers-sumo", libs.versions.libsodium.sumo.get()))
+            implementation(npm("asn1js", libs.versions.asn1js.get()))
+            implementation(npm("pkijs", libs.versions.pkijs.get()))
+            implementation(npm("ws", "8.21.0"))
         }
 
-        val mingwMain by getting {
-            dependencies {
-                implementation(libs.ktor.client.winhttp)
-                implementation(libs.libsodium.bindings.mingwx64)
-            }
+        mingwMain.dependencies {
+            implementation(libs.ktor.client.winhttp)
+            implementation(libs.libsodium.bindings.mingwx64)
         }
     }
 
@@ -290,7 +276,7 @@ buildkonfig {
 }
 
 // Generates empty Javadoc JARs, which are required for publishing to Maven Central
-val javadocJar by tasks.registering(Jar::class) {
+val javadocJar = tasks.register<Jar>("javadocJar") {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
     description = "Assembles java doc to jar"
     archiveClassifier.set("javadoc")
