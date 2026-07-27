@@ -20,6 +20,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 class AndroidExtensionsTest {
 
@@ -400,6 +401,20 @@ class AndroidExtensionsTest {
 
         // Then
         assertEquals(toReturn, result)
+    }
+
+    @Test
+    fun shouldProcessNullCompletableFuture() = runTest {
+        // Given
+        val toReturn = null
+
+        // When
+        val result = completableFuture {
+            toReturn
+        }.await()
+
+        // Then
+        assertNull(result)
     }
 
     @Test
