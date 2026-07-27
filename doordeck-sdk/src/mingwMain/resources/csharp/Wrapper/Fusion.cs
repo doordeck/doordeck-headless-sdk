@@ -13,7 +13,7 @@ public class Fusion(
     public unsafe Task<FusionLoginResponse> Login(string email, string password) =>
         Process<FusionApi, FusionLoginResponse>(fusion, fusionApi.login, new { email, password });
 
-    public unsafe Task<IntegrationTypeResponse> GetIntegrationType() =>
+    public unsafe Task<IntegrationTypeResponse?> GetIntegrationType() =>
         Process<FusionApi, IntegrationTypeResponse>(fusion, fusionApi.getIntegrationType_);
 
     public unsafe Task<List<IntegrationConfigurationResponse>> GetIntegrationConfiguration(string type, LockController? controller = null) =>
