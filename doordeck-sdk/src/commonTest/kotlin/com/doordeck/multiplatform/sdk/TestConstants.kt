@@ -30,7 +30,7 @@ internal object TestConstants {
 
     @Serializable
     data class BasicTestController(
-        val hostAddress: String,
+        val uri: String,
         val type: String,
         val controller: BasicLockController
     )

@@ -42,7 +42,7 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_EXPIRED_CERTIFICATE = TEST_EXPIRED_CERTIFICATE.toCertificate()
     val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
         TestController(
-            uri = it.hostAddress.toUri(),
+            uri = it.uri.toUri(),
             type = it.type,
             controller = it.controller.toLockControllerResponse()
         )

@@ -56,7 +56,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeRespon
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -163,7 +162,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 try {
-                    TEST_HTTP_CLIENT.options(testController.hostAddress) {
+                    TEST_HTTP_CLIENT.options(testController.uri) {
                         timeout {
                             connectTimeoutMillis = 5_000
                             socketTimeoutMillis = 5_000
@@ -175,7 +174,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 // Given - shouldLogin
-                ContextManager.setFusionHost(testController.hostAddress)
+                ContextManager.setFusionHost(testController.uri)
 
                 // When
                 val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
