@@ -17,7 +17,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_CERTIFICATE
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.responses.toLockControllerResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import kotlinx.serialization.Serializable
 
 internal object PlatformTestConstants {
 
@@ -35,14 +34,15 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE
     val PLATFORM_TEST_EXPIRED_CERTIFICATE = TEST_EXPIRED_CERTIFICATE
     val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
-        it.key to TestController(
-            type = it.value.type,
-            controller = it.value.controller.toLockControllerResponse()
+        TestController(
+            uri = it.hostAddress,
+            type = it.type,
+            controller = it.controller.toLockControllerResponse()
         )
-    }.toMap()
+    }
 
-    @Serializable
     internal data class TestController(
+        val uri: String,
         val type: String,
         val controller: FusionOperations.LockController
     )

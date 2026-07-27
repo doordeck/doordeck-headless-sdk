@@ -120,12 +120,12 @@ class FusionApiAsyncTest : IntegrationTest() {
     private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) {
         try {
             runTest {
-                val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
-                    controllerType.isInstance(it.value.controller)
+                val testController = PLATFORM_FUSION_INTEGRATIONS.firstOrNull {
+                    controllerType.isInstance(it.controller)
                 } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
                 try {
-                    TEST_HTTP_CLIENT.options(testController.key.toString()) {
+                    TEST_HTTP_CLIENT.options(testController.uri.toString()) {
                         timeout {
                             connectTimeoutMillis = 5_000
                             socketTimeoutMillis = 5_000
@@ -137,7 +137,7 @@ class FusionApiAsyncTest : IntegrationTest() {
                 }
 
                 // Given - shouldLogin
-                ContextManager.setFusionHost(testController.key)
+                ContextManager.setFusionHost(testController.uri)
 
                 // When
                 val fusionLogin = FusionApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
@@ -148,12 +148,12 @@ class FusionApiAsyncTest : IntegrationTest() {
 
                 // Skip the test if it's not targeting the expected integration
                 val integrationType = FusionApi.getIntegrationTypeAsync().await()
-                if (integrationType != null && integrationType.status != null && integrationType.status != testController.value.type) {
-                    error("Running integration is ${integrationType.status} instead of ${testController.value.type}, skipping test...")
+                if (integrationType != null && integrationType.status != null && integrationType.status != testController.type) {
+                    error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
                 }
 
                 // Cleanup process, delete any remaining test devices
-                val integrationsToDelete = FusionApi.getIntegrationConfigurationAsync(testController.value.type).await()
+                val integrationsToDelete = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
                     .filter { integration ->
                         PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
                 integrationsToDelete.forEach { integration ->
@@ -169,10 +169,10 @@ class FusionApiAsyncTest : IntegrationTest() {
                 val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
                 // When
-                FusionApi.enableDoorAsync(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller).await()
+                FusionApi.enableDoorAsync(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller).await()
 
                 // Then
-                val integrations = FusionApi.getIntegrationConfigurationAsync(testController.value.type).await()
+                val integrations = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
                 val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
                 assertNotNull(actualDoor?.doordeck)
 
@@ -183,7 +183,7 @@ class FusionApiAsyncTest : IntegrationTest() {
                 // Then
                 assertNotNull(integrationTypeResponse)
                 assertNotNull(integrationTypeResponse.status)
-                assertEquals(testController.value.type, integrationTypeResponse.status)
+                assertEquals(testController.type, integrationTypeResponse.status)
 
                 // Given - shouldStartDoor
                 // When
