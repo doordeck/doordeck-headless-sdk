@@ -26,7 +26,7 @@ internal object TestConstants {
     const val TEST_SUPPLEMENTARY_TILE_ID = "8bdc10ea-7443-4561-9716-eeac5aaf68f4"
     const val TEST_MAIN_LOCK_ID = "eb868970-e882-11ef-bced-bf10e8a8d751"
     const val TEST_MAIN_SITE_ID = "97b26c60-e882-11ef-b506-e76037f764f5"
-    val FUSION_INTEGRATIONS: Map<String, BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyMap()
+    val FUSION_INTEGRATIONS: List<BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyList()
 
     @Serializable
     data class BasicTestController(
