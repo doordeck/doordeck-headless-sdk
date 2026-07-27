@@ -32,9 +32,8 @@ actual object FusionApi {
      */
     @DoordeckOnly
     @Throws(Exception::class)
-    suspend fun getIntegrationType(): IntegrationTypeResponse = FusionClient
-        .getIntegrationTypeRequest()
-        .toIntegrationTypeResponse()
+    suspend fun getIntegrationType(): IntegrationTypeResponse? = FusionClient
+        .getIntegrationTypeRequest()?.toIntegrationTypeResponse()
 
     /**
      * @see FusionClient.getIntegrationConfigurationRequest

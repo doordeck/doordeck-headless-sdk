@@ -46,15 +46,14 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationTypeRequest
      */
     @DoordeckOnly
-    suspend fun getIntegrationType(): IntegrationTypeResponse = FusionClient
-        .getIntegrationTypeRequest()
-        .toIntegrationTypeResponse()
+    suspend fun getIntegrationType(): IntegrationTypeResponse? = FusionClient
+        .getIntegrationTypeRequest()?.toIntegrationTypeResponse()
 
     /**
      * Async variant of [FusionApi.getIntegrationType] returning [CompletableFuture].
      */
     @DoordeckOnly
-    fun getIntegrationTypeAsync(): CompletableFuture<IntegrationTypeResponse> = completableFuture {
+    fun getIntegrationTypeAsync(): CompletableFuture<IntegrationTypeResponse?> = completableFuture {
         getIntegrationType()
     }
 

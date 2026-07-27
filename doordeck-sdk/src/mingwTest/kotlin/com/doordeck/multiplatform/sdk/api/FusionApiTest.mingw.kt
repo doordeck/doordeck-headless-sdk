@@ -195,6 +195,15 @@ class FusionApiTest : CallbackTest() {
                 assertTrue { fusionLoginResponse.authToken.isNotEmpty() }
                 assertTrue { cloudLoginResponse.authToken.isNotEmpty() }
 
+                // Skip the test if it's not targeting the expected integration
+                val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
+                    FusionApi.getIntegrationType(TestCallback)
+                }.unwrap()
+
+                if (integrationType != null && integrationType.status != null && integrationType.status != testController.value.type) {
+                    error("Running integration is ${integrationType.status} instead of ${testController.value.type}, skipping test...")
+                }
+
                 // Cleanup process, delete any remaining test devices
                 val integrationsToDelete = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
                     FusionApi.getIntegrationConfiguration(
@@ -253,11 +262,12 @@ class FusionApiTest : CallbackTest() {
 
                 // Given - shouldGetIntegrationType
                 // When
-                val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
+                val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
                     FusionApi.getIntegrationType(TestCallback)
                 }.unwrap()
 
                 // Then
+                assertNotNull(integrationTypeResponse)
                 assertNotNull(integrationTypeResponse.status)
                 assertEquals(testController.value.type, integrationTypeResponse.status)
 

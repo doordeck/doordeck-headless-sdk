@@ -4,6 +4,8 @@ import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
+import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationConfigurationResponse
 import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomNullable
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
@@ -14,6 +16,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class MingwExtensionsTest : CallbackTest() {
 
@@ -74,6 +77,19 @@ class MingwExtensionsTest : CallbackTest() {
 
         // Then
         assertEquals(unit, result.unwrap())
+    }
+
+    @Test
+    fun shouldHandleCallbackSuccessNull() {
+        // Given
+        val result = callbackApiCall<ResultData<SuccessResultData<BasicIntegrationConfigurationResponse?>>> {
+            TestCallback.handleCallback {
+                null
+            }
+        }
+
+        // Then
+        assertNull(result.unwrap().result)
     }
 
     @Test

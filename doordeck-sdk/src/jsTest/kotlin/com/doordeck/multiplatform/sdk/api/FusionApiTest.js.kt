@@ -146,6 +146,12 @@ class FusionApiTest : IntegrationTest() {
                 // Then
                 assertTrue { fusionLogin.authToken.isNotEmpty() }
 
+                // Skip the test if it's not targeting the expected integration
+                val integrationType = FusionApi.getIntegrationType().await()
+                if (integrationType != null && integrationType.status != null && integrationType.status != testController.value.type) {
+                    error("Running integration is ${integrationType.status} instead of ${testController.value.type}, skipping test...")
+                }
+
                 // Cleanup process, delete any remaining test devices
                 val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.value.type).await()
                     .toList()
@@ -176,6 +182,7 @@ class FusionApiTest : IntegrationTest() {
                 val integrationTypeResponse = FusionApi.getIntegrationType().await()
 
                 // Then
+                assertNotNull(integrationTypeResponse)
                 assertNotNull(integrationTypeResponse.status)
                 assertEquals(testController.value.type, integrationTypeResponse.status)
 
