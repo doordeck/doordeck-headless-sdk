@@ -18,7 +18,6 @@ import com.doordeck.multiplatform.sdk.model.common.UserRole
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations
 import com.doordeck.multiplatform.sdk.model.data.LockOperations
 import com.doordeck.multiplatform.sdk.platformType
-import com.doordeck.multiplatform.sdk.randomInt
 import com.doordeck.multiplatform.sdk.randomUnlockBetween
 import com.doordeck.multiplatform.sdk.randomUuid
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -120,12 +119,12 @@ class FusionApiTest : IntegrationTest() {
     private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) {
         try {
             runTest {
-                val testController = PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull {
-                    controllerType.isInstance(it.value.controller)
+                val testController = PLATFORM_FUSION_INTEGRATIONS.firstOrNull {
+                    controllerType.isInstance(it.controller)
                 } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
                 try {
-                    TEST_HTTP_CLIENT.options(testController.key.toString()) {
+                    TEST_HTTP_CLIENT.options(testController.uri.toString()) {
                         timeout {
                             connectTimeoutMillis = 5_000
                             socketTimeoutMillis = 5_000
@@ -137,7 +136,7 @@ class FusionApiTest : IntegrationTest() {
                 }
 
                 // Given - shouldLogin
-                ContextManager.setFusionHost(testController.key)
+                ContextManager.setFusionHost(testController.uri)
 
                 // When
                 val fusionLogin = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
@@ -146,8 +145,14 @@ class FusionApiTest : IntegrationTest() {
                 // Then
                 assertTrue { fusionLogin.authToken.isNotEmpty() }
 
+                // Skip the test if it's not targeting the expected integration
+                val integrationType = FusionApi.getIntegrationType()
+                if (integrationType.status != null && integrationType.status != testController.type) {
+                    error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
+                }
+
                 // Cleanup process, delete any remaining test devices
-                val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.value.type)
+                val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.type)
                     .filter { integration ->
                         PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true } }
                 integrationsToDelete.forEach { integration ->
@@ -163,10 +168,10 @@ class FusionApiTest : IntegrationTest() {
                 val name = "Test Fusion Door $platformType ${randomUuidString()}"
 
                 // When
-                FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.value.controller)
+                FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller)
 
                 // Then
-                val integrations = FusionApi.getIntegrationConfiguration(testController.value.type)
+                val integrations = FusionApi.getIntegrationConfiguration(testController.type)
                 val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
                 assertNotNull(actualDoor?.doordeck)
 
@@ -176,7 +181,7 @@ class FusionApiTest : IntegrationTest() {
 
                 // Then
                 assertNotNull(integrationTypeResponse.status)
-                assertEquals(testController.value.type, integrationTypeResponse.status)
+                assertEquals(testController.type, integrationTypeResponse.status)
 
                 // Given - shouldStartDoor
                 // When
