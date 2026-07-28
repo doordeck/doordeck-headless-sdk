@@ -18,6 +18,7 @@ import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.HttpStatusCode
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -51,7 +52,9 @@ internal object FusionClient {
      */
     @JvmSynthetic
     internal suspend fun getIntegrationTypeRequest(): BasicIntegrationTypeResponse {
-        return FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath()).body()
+        val response = FusionHttpClient.client.get(FusionPaths.getConfigurationTypePath())
+        if (response.status == HttpStatusCode.NoContent) return BasicIntegrationTypeResponse(null)
+        return response.body()
     }
 
     /**

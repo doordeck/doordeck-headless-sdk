@@ -19,7 +19,7 @@ import com.doordeck.multiplatform.sdk.model.responses.toLockControllerResponse
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toNsUuid
-import kotlinx.serialization.Serializable
+import platform.Foundation.NSURLComponents
 
 internal object PlatformTestConstants {
 
@@ -37,14 +37,15 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE
     val PLATFORM_TEST_EXPIRED_CERTIFICATE = TEST_EXPIRED_CERTIFICATE
     val PLATFORM_FUSION_INTEGRATIONS = FUSION_INTEGRATIONS.map {
-        it.key.toNsUrlComponents() to TestController(
-            type = it.value.type,
-            controller = it.value.controller.toLockControllerResponse()
+        TestController(
+            uri = it.uri.toNsUrlComponents(),
+            type = it.type,
+            controller = it.controller.toLockControllerResponse()
         )
-    }.toMap()
+    }
 
-    @Serializable
     data class TestController(
+        val uri: NSURLComponents,
         val type: String,
         val controller: FusionOperations.LockController
     )
