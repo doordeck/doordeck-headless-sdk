@@ -60,6 +60,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.unwrap
+import com.doordeck.multiplatform.sdk.unwrapOrNull
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
@@ -197,7 +198,7 @@ class FusionApiTest : CallbackTest() {
                 // Skip the test if it's not targeting the expected integration
                 val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
                     FusionApi.getIntegrationType(TestCallback)
-                }.unwrap()
+                }.unwrapOrNull()
 
                 if (integrationType != null && integrationType.status != null && integrationType.status != testController.type) {
                     error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
@@ -263,7 +264,7 @@ class FusionApiTest : CallbackTest() {
                 // When
                 val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
                     FusionApi.getIntegrationType(TestCallback)
-                }.unwrap()
+                }.unwrapOrNull()
 
                 // Then
                 assertNotNull(integrationTypeResponse)

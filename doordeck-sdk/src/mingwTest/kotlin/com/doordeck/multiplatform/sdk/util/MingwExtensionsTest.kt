@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.unwrapFailure
+import com.doordeck.multiplatform.sdk.unwrapOrNull
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -89,7 +90,7 @@ class MingwExtensionsTest : CallbackTest() {
         }
 
         // Then
-        assertNull(result.unwrap().result)
+        assertNull(result.unwrapOrNull())
     }
 
     @Test
