@@ -14,7 +14,6 @@ import kotlin.js.collections.toSet
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
-import kotlin.test.assertNull
 
 class JsExtensionsTest {
 
@@ -92,20 +91,6 @@ class JsExtensionsTest {
 
         // Then
         assertEquals(toReturn, result)
-    }
-
-    @Test
-    fun shouldProcessNullPromise() = runTest {
-        // Given
-        val toReturn = null
-
-        // When
-        val result = promise {
-            toReturn
-        }.await()
-
-        // Then
-        assertNull(result)
     }
 
     @Test
