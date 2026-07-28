@@ -60,7 +60,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.unwrap
-import com.doordeck.multiplatform.sdk.unwrapOrNull
 import com.doordeck.multiplatform.sdk.util.toJson
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
@@ -196,11 +195,11 @@ class FusionApiTest : CallbackTest() {
                 assertTrue { cloudLoginResponse.authToken.isNotEmpty() }
 
                 // Skip the test if it's not targeting the expected integration
-                val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
+                val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
                     FusionApi.getIntegrationType(TestCallback)
-                }.unwrapOrNull()
+                }.unwrap()
 
-                if (integrationType != null && integrationType.status != null && integrationType.status != testController.type) {
+                if (integrationType.status != null && integrationType.status != testController.type) {
                     error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
                 }
 
@@ -262,12 +261,11 @@ class FusionApiTest : CallbackTest() {
 
                 // Given - shouldGetIntegrationType
                 // When
-                val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse?>> {
+                val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
                     FusionApi.getIntegrationType(TestCallback)
-                }.unwrapOrNull()
+                }.unwrap()
 
                 // Then
-                assertNotNull(integrationTypeResponse)
                 assertNotNull(integrationTypeResponse.status)
                 assertEquals(testController.type, integrationTypeResponse.status)
 

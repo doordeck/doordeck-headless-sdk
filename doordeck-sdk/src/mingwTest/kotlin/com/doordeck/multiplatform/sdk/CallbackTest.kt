@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.model.data.FailedResultData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
-import com.doordeck.multiplatform.sdk.model.data.SuccessResultData
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
@@ -44,23 +43,23 @@ open class BasicCallbackTest {
     @BeforeTest fun resetCallback() { pendingCallback = null }
 }
 
-internal fun <T> ResultData<T>.requireSuccess(): SuccessResultData<T> {
+internal inline fun <reified T> ResultData<T>.unwrap(): T {
     failure?.let { fail("API error [${it.exceptionType}]: ${it.exceptionMessage}") }
-    return success ?: fail("Both success and failure were null")
-}
-
-internal inline fun <reified T : Any> ResultData<T>.unwrap(): T {
-    requireSuccess().result?.let { return it }
-    if (T::class == Unit::class) {
-        @Suppress("UNCHECKED_CAST")
-        return Unit as T
+    val success = checkNotNull(success) { "Both success and failure were null" }
+    return success.result ?: when {
+        T::class == Unit::class -> {
+            @Suppress("UNCHECKED_CAST")
+            Unit as T
+        }
+        else -> fail("Expected ${T::class.simpleName} but success.result was null")
     }
-    fail("Expected ${T::class.simpleName} but success.result was null")
 }
-
-internal fun <T> ResultData<T>.unwrapOrNull(): T? = requireSuccess().result
 
 internal fun <T> ResultData<T>.unwrapFailure(): FailedResultData {
-    if (success != null) fail("Expected failure but got success")
-    return failure ?: fail("Expected failure but both success and failure were null")
+    success?.let {
+        fail("Expected failure but got success")
+    }
+    return checkNotNull(failure) {
+        "Expected failure but both success and failure were null"
+    }
 }

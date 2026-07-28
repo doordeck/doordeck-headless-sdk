@@ -147,7 +147,7 @@ class FusionApiTest : IntegrationTest() {
 
                 // Skip the test if it's not targeting the expected integration
                 val integrationType = FusionApi.getIntegrationType()
-                if (integrationType != null && integrationType.status != null && integrationType.status != testController.type) {
+                if (integrationType.status != null && integrationType.status != testController.type) {
                     error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
                 }
 
@@ -180,7 +180,6 @@ class FusionApiTest : IntegrationTest() {
                 val integrationTypeResponse = FusionApi.getIntegrationType()
 
                 // Then
-                assertNotNull(integrationTypeResponse)
                 assertNotNull(integrationTypeResponse.status)
                 assertEquals(testController.type, integrationTypeResponse.status)
 

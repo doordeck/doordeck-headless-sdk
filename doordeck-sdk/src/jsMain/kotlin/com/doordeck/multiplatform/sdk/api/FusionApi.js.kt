@@ -38,8 +38,9 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationTypeRequest
      */
     @DoordeckOnly
-    fun getIntegrationType(): Promise<IntegrationTypeResponse?> = promise {
-        FusionClient.getIntegrationTypeRequest()?.toIntegrationTypeResponse()
+    fun getIntegrationType(): Promise<IntegrationTypeResponse> = promise {
+        FusionClient.getIntegrationTypeRequest()
+            .toIntegrationTypeResponse()
     }
 
     /**
