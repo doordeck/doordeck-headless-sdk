@@ -159,7 +159,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(true).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertFalse { result }
@@ -176,7 +176,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(false).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertFalse { result }
@@ -193,7 +193,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(true).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertTrue { result }
@@ -210,7 +210,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(false).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertTrue { result }
@@ -227,7 +227,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(true).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertTrue { result }
@@ -244,7 +244,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.isCloudAuthTokenInvalidOrExpired(false).await()
+            val result = ContextManager.isCloudAuthTokenInvalidOrExpired().await()
 
             // Then
             assertTrue { result }
@@ -338,7 +338,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(true).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED.name, result)
@@ -355,7 +355,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(false).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED.name, result)
@@ -377,7 +377,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(true).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.KEY_PAIR_IS_INVALID.name, result)
@@ -394,7 +394,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(false).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.KEY_PAIR_IS_INVALID.name, result)
@@ -418,7 +418,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(true).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED.name, result)
@@ -437,7 +437,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(false).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.KEY_PAIR_IS_NOT_VERIFIED.name, result)
@@ -463,7 +463,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(true).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED.name, result)
@@ -484,7 +484,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(false).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED.name, result)
@@ -510,7 +510,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(true).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.READY.name, result)
@@ -531,7 +531,7 @@ class ContextManagerTest : IntegrationTest() {
 
         client.use {
             // When
-            val result = ContextManager.getContextState(false).await()
+            val result = ContextManager.getContextState().await()
 
             // Then
             assertEquals(ContextState.READY.name, result)

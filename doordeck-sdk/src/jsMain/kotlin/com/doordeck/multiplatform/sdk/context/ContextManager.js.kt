@@ -20,8 +20,8 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Promise<Boolean> = promise {
-        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
+    fun isCloudAuthTokenInvalidOrExpired(): Promise<Boolean> = promise {
+        Context.isCloudAuthTokenInvalidOrExpired()
     }
 
     fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
@@ -74,8 +74,8 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    fun getContextState(checkServerInvalidation: Boolean): Promise<String> = promise {
-        Context.getContextState(checkServerInvalidation).name
+    fun getContextState(): Promise<String> = promise {
+        Context.getContextState().name
     }
 
     fun clearContext() = Context.clearContext()
