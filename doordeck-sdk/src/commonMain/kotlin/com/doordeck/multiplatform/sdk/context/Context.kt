@@ -300,15 +300,20 @@ internal object Context {
     }
 
     /**
-     * Performs a network request in order to attempt to refresh the cloud auth tokens if necessary.
-     * This behavior relies on the Ktor auth plugin to perform the refresh.
+     * Refreshes the cloud auth tokens if they are no longer valid.
      *
-     * Note: This function is only meant to be used during SDK initialization.
+     * The refresh is done by the Ktor auth plugin, which intercepts outgoing requests; this function
+     * just issues a throwaway authenticated request to trigger it. Failures are ignored, so a
+     * successful return does not guarantee valid tokens.
+     *
+     * Only meant to be called during SDK initialization.
      */
     @JvmSynthetic
     internal suspend fun attemptToRefreshAuthTokens() {
-        runCatching {
-            AccountClient.getUserDetailsRequest()
+        if (getCloudAuthToken() != null && getCloudRefreshToken() != null) {
+            runCatching {
+                AccountClient.getUserDetailsRequest()
+            }
         }
     }
 
