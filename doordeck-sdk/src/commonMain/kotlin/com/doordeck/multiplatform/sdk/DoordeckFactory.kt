@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.clock.ServerTimeSynchronizer
+import com.doordeck.multiplatform.sdk.clock.ServerTimeSynchronizer
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -25,6 +26,7 @@ internal object DoordeckFactory {
         }
         CryptoManager.initialize()
         ServerTimeSynchronizer.initialize()
+        Context.attemptToRefreshAuthTokens()
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
     }
