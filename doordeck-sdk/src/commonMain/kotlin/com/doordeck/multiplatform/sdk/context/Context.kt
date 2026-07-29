@@ -64,41 +64,25 @@ internal object Context {
     /**
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
-     * This function performs a network request to verify if the token has been invalidated in the backend (e.g after a logout call),
-     * its also expected that the auth tokens will be automatically refreshed if necessary uppon the usage of this function.
      *
-     * @return true if the token is null, malformed, expired, or invalidated. Otherwise, returns false.
-     */
-
-    /**
-     * Checks whether the cloud session is unusable, i.e. both the access token and the
-     * refresh token are missing, malformed, or expired (a token is treated as expired
-     * once its remaining lifetime drops below [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
-     *
-     * If either token still looks usable locally, **this performs a network request** to let
-     * the backend decide, catching cases where the tokens were invalidated server-side
-     * (for example after a logout). That request is also expected to transparently
-     * refresh the tokens when the access token is stale.
-     *
-     * Note that the network request makes this function fail closed: if the backend is
-     * unreachable, the session is reported as invalid even though the tokens may still
-     * be good.
-     *
-     * @return `true` if the session is invalid — both tokens are null, malformed or
-     *   expired, or the backend rejected them (or could not be reached); `false` if the
-     *   session is usable.
+     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
+     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true). Otherwise, returns false.
      */
     @JvmSynthetic
-    internal suspend fun isCloudAuthTokenInvalidOrExpired(): Boolean {
-        val tokenOk = getCloudAuthToken()?.isJwtTokenInvalidOrExpired() == false
-        val refreshOk = getCloudRefreshToken()?.isJwtTokenInvalidOrExpired() == false
-        if (!tokenOk && !refreshOk) return true
-        // Let the server be the judge
-        return try {
-            AccountClient.getUserDetailsRequest()
+    internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
+        val token = getCloudAuthToken() ?: return true
+        if (token.isJwtTokenInvalidOrExpired()) {
+            return true
+        }
+        return if (checkServerInvalidation) {
+            try {
+                AccountClient.getUserDetailsRequest()
+                false
+            } catch (_: Exception) {
+                true
+            }
+        } else {
             false
-        } catch (_: Exception) {
-            true
         }
     }
 
@@ -300,14 +284,15 @@ internal object Context {
     /**
      * Performs a sequence of checks to determine the [ContextState].
      * The first check to fail determines the returned state.
-     * The checks are, in order: [isCloudAuthTokenInvalidOrExpired], [isKeyPairValid],
-     * [isKeyPairVerified], and [isCertificateChainInvalidOrExpired].
+     * The checks are, in order: cloud token validity, key pair existence,
+     * key pair verification status, and certificate chain validity.
      *
+     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
      * @return A [ContextState] representing the context state.
      */
     @JvmSynthetic
-    internal suspend fun getContextState(): ContextState {
-        if (isCloudAuthTokenInvalidOrExpired()) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
+    internal suspend fun getContextState(checkServerInvalidation: Boolean): ContextState {
+        if (isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)) { return ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED }
         if (!isKeyPairValid()) { return ContextState.KEY_PAIR_IS_INVALID }
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
         if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }
