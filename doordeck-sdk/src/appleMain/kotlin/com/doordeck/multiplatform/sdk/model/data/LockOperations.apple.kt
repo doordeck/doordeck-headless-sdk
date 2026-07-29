@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.util.validateAccuracy
 import com.doordeck.multiplatform.sdk.util.validateLatitude
 import com.doordeck.multiplatform.sdk.util.validateLongitude
 import com.doordeck.multiplatform.sdk.util.validateRadius
+import kotlinx.datetime.toKotlinInstant
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeInterval
@@ -411,9 +412,9 @@ internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOpera
         userCertificateChain = userCertificateChain,
         userPrivateKey = userPrivateKey,
         lockId = lockId.UUIDString,
-        notBefore = notBefore.toEpochSeconds(),
-        issuedAt = issuedAt.toEpochSeconds(),
-        expiresAt = expiresAt.toEpochSeconds(),
+        notBefore = notBefore.toKotlinInstant(),
+        issuedAt = issuedAt.toKotlinInstant(),
+        expiresAt = expiresAt.toKotlinInstant(),
         jti = jti.UUIDString
     )
 }

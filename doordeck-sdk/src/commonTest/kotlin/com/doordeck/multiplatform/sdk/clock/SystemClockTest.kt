@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.clock
 
+import kotlinx.coroutines.test.runTest
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,7 +18,7 @@ class SystemClockTest {
     }
 
     @Test
-    fun shouldDefaultToNoSkew() {
+    fun shouldDefaultToNoSkew() = runTest {
         // When
         val result = SystemClock.getSkew()
 
@@ -28,7 +29,7 @@ class SystemClockTest {
     }
 
     @Test
-    fun shouldApplyPositiveSkew() {
+    fun shouldApplyPositiveSkew() = runTest {
         // Given
         SystemClock.setSkew(3.hours)
 
@@ -41,7 +42,7 @@ class SystemClockTest {
     }
 
     @Test
-    fun shouldApplyNegativeSkew() {
+    fun shouldApplyNegativeSkew() = runTest {
         // Given
         SystemClock.setSkew((-3).hours)
 
@@ -53,7 +54,7 @@ class SystemClockTest {
     }
 
     @Test
-    fun shouldResetSkew() {
+    fun shouldResetSkew() = runTest {
         // Given
         SystemClock.setSkew(3.hours)
 

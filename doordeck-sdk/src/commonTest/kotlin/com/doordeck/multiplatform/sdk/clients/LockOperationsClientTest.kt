@@ -37,9 +37,9 @@ class LockOperationsClientTest : IntegrationTest() {
                 userCertificateChain = certificateChain,
                 userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
                 lockId = TEST_MAIN_LOCK_ID,
-                notBefore = behindNow.epochSeconds,
-                issuedAt = behindNow.epochSeconds,
-                expiresAt = behindNow.plus(60.seconds).epochSeconds,
+                notBefore = behindNow,
+                issuedAt = behindNow,
+                expiresAt = behindNow.plus(60.seconds),
                 jti = Uuid.random().toString(),
             )
         )
@@ -65,9 +65,9 @@ class LockOperationsClientTest : IntegrationTest() {
                 userCertificateChain = certificateChain,
                 userPrivateKey = TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray(),
                 lockId = TEST_MAIN_LOCK_ID,
-                notBefore = aheadNow.epochSeconds,
-                issuedAt = aheadNow.epochSeconds,
-                expiresAt = aheadNow.plus(60.seconds).epochSeconds,
+                notBefore = aheadNow,
+                issuedAt = aheadNow,
+                expiresAt = aheadNow.plus(60.seconds),
                 jti = Uuid.random().toString(),
             )
         )

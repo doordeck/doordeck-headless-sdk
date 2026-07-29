@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.model.data
 
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
 import com.doordeck.multiplatform.sdk.model.common.UserRole
+import kotlin.time.Instant
 
 internal data class BasicTimeRequirement(
     val start: String,
@@ -69,9 +70,9 @@ internal data class BasicBaseOperation(
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: ByteArray? = null,
     val lockId: String,
-    val notBefore: Long,
-    val issuedAt: Long,
-    val expiresAt: Long,
+    val notBefore: Instant,
+    val issuedAt: Instant,
+    val expiresAt: Instant,
     val jti: String
 )
 

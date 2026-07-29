@@ -635,14 +635,13 @@ internal object LockOperationsClient {
         baseOperationRequest: BaseOperationRequest, operationRequest: OperationRequest,
         directAccessEndpoints: List<String>? = null
     ) {
-        val skewSeconds = SystemClock.getSkew().inWholeSeconds
         val operationHeader = OperationHeaderRequest(x5c = baseOperationRequest.userCertificateChain)
         val operationBody = OperationBodyRequest(
             iss = baseOperationRequest.userId,
             sub = baseOperationRequest.lockId,
-            nbf = baseOperationRequest.notBefore + skewSeconds,
-            iat = baseOperationRequest.issuedAt + skewSeconds,
-            exp = baseOperationRequest.expiresAt + skewSeconds,
+            nbf = baseOperationRequest.notBefore,
+            iat = baseOperationRequest.issuedAt,
+            exp = baseOperationRequest.expiresAt,
             jti = baseOperationRequest.jti,
             operation = operationRequest
         )
@@ -711,14 +710,15 @@ internal object LockOperationsClient {
         val userPrivateKey = userPrivateKey
             ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
+        val skew = SystemClock.getSkew()
         return BaseOperationRequest(
             userId = userId,
             userCertificateChain = userCertificateChain,
             userPrivateKey = userPrivateKey,
             lockId = lockId,
-            notBefore = notBefore,
-            issuedAt = issuedAt,
-            expiresAt = expiresAt,
+            notBefore = (notBefore + skew).epochSeconds,
+            issuedAt = (issuedAt + skew).epochSeconds,
+            expiresAt = (expiresAt + skew).epochSeconds,
             jti = jti
         )
     }
