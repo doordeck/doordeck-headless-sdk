@@ -17,7 +17,7 @@ class HelperApiTest : IntegrationTest() {
 
         // Then
         assertTrue {
-            abs(response.now - Clock.System.now().epochSeconds) < 5
+            abs(response.now - Clock.System.now().toEpochMilliseconds()) < 5000
         }
     }
 }
