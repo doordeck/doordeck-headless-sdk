@@ -23,6 +23,7 @@ internal object DoordeckFactory {
             sdkConfig.fusionHost?.let { context.setFusionHost(it) }
         }
         CryptoManager.initialize()
+        Context.attemptToRefreshAuthTokens()
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
     }
