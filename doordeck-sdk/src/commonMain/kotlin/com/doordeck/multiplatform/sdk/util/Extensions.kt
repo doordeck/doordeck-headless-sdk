@@ -142,6 +142,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                         context.setCloudAuthToken(refreshTokens.authToken)
                         context.setCloudRefreshToken(refreshTokens.refreshToken)
                     }
+                    SdkLogger.i { "Auth tokens were automatically refreshed" }
                     BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
                 }
             }

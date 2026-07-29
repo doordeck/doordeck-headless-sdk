@@ -13,6 +13,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeParseException
+import java.time.temporal.ChronoUnit
 import java.time.zone.ZoneRulesException
 import java.util.EnumSet
 import java.util.UUID
@@ -330,7 +331,7 @@ class JvmExtensionsTest {
     @Test
     fun shouldMapLongEpochSecondToInstant() = runTest {
         // Given
-        val now = now()
+        val now = now().truncatedTo(ChronoUnit.SECONDS)
 
         // When
         val result = now.epochSecond.epochSecondToInstant()
