@@ -75,7 +75,7 @@ internal object Paths {
     /**
      * Time
      */
-    @JvmSynthetic internal fun getServerTimePath() = "/time";
+    @JvmSynthetic internal fun getServerTimePath() = "/time"
 
     /**
      * Determines if a given API path requires authentication.

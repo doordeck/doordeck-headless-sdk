@@ -23,7 +23,7 @@ class HelperApiTest : CallbackTest() {
 
         // Then
         assertTrue {
-            abs(result.now - Clock.System.now().epochSeconds) < 5
+            abs(result.now - Clock.System.now().toEpochMilliseconds()) < 5000
         }
     }
 }
