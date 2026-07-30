@@ -15,6 +15,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
+import kotlin.time.measureTimedValue
 
 /**
  * Background task that keeps [SystemClock] aligned with the backend.
@@ -76,18 +77,19 @@ internal object ServerTimeSynchronizer {
     @JvmSynthetic
     internal suspend fun synchronize() {
         try {
-            val before = Clock.System.now()
-            val serverEpochMilliseconds = HelperClient.serverTimeRequest().now
-            val after = Clock.System.now()
+            val (serverEpochMilliseconds, duration) = measureTimedValue {
+                HelperClient.serverTimeRequest().now
+            }
 
-            // Estimate the device time at the instant the server read its own clock as the midpoint
-            // of the round-trip, so half of the network latency is discounted from the skew.
-            val deviceAtServer = before + (after - before) / 2
+            // Estimate device time at the instant the server read its clock.
+            // The midpoint of the request is: end time - half the measured duration.
+            val after = Clock.System.now()
+            val deviceAtServer = after - duration / 2
+
             val serverTime = Instant.fromEpochMilliseconds(serverEpochMilliseconds)
             val skew = serverTime - deviceAtServer
 
             SystemClock.setSkew(skew)
-            SdkLogger.i { "Synchronized server time, applied clock skew: $skew" }
         } catch (exception: Exception) {
             SdkLogger.d { "Failed to synchronize server time: ${exception.message}" }
         }
