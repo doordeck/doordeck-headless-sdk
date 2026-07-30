@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.clock
 
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
-import kotlin.time.Clock
 import kotlin.time.Duration
-import kotlin.time.Instant
 
 /**
  * A skew-aware clock used by the SDK to produce timestamps that are aligned with the
@@ -24,12 +22,6 @@ internal object SystemClock {
      */
     @Volatile
     private var skew: Duration = Duration.ZERO
-
-    /**
-     * Returns the current time corrected by the most recently measured [skew].
-     */
-    @JvmSynthetic
-    internal fun now(): Instant = Clock.System.now() + skew
 
     /**
      * Returns the currently applied clock [skew].

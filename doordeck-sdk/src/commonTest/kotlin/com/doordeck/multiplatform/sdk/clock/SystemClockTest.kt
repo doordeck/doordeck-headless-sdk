@@ -24,7 +24,7 @@ class SystemClockTest {
 
         // Then
         assertEquals(Duration.ZERO, result)
-        val delta = SystemClock.now() - Clock.System.now()
+        val delta = (Clock.System.now() + SystemClock.getSkew()) - Clock.System.now()
         assertTrue(delta.absoluteValue < 2.seconds)
     }
 
@@ -34,7 +34,7 @@ class SystemClockTest {
         SystemClock.setSkew(3.hours)
 
         // When
-        val delta = SystemClock.now() - Clock.System.now()
+        val delta = (Clock.System.now() + SystemClock.getSkew()) - Clock.System.now()
 
         // Then
         assertTrue((delta - 3.hours).absoluteValue < 2.seconds)
@@ -47,7 +47,7 @@ class SystemClockTest {
         SystemClock.setSkew((-3).hours)
 
         // When
-        val delta = SystemClock.now() - Clock.System.now()
+        val delta = (Clock.System.now() + SystemClock.getSkew()) - Clock.System.now()
 
         // Then
         assertTrue((delta + 3.hours).absoluteValue < 2.seconds)

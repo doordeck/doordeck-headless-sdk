@@ -77,13 +77,13 @@ internal object ServerTimeSynchronizer {
     internal suspend fun synchronize() {
         try {
             val before = Clock.System.now()
-            val serverEpochSeconds = HelperClient.serverTimeRequest().now
+            val serverEpochMilliseconds = HelperClient.serverTimeRequest().now
             val after = Clock.System.now()
 
             // Estimate the device time at the instant the server read its own clock as the midpoint
             // of the round-trip, so half of the network latency is discounted from the skew.
             val deviceAtServer = before + (after - before) / 2
-            val serverTime = Instant.fromEpochSeconds(serverEpochSeconds)
+            val serverTime = Instant.fromEpochMilliseconds(serverEpochMilliseconds)
             val skew = serverTime - deviceAtServer
 
             SystemClock.setSkew(skew)
