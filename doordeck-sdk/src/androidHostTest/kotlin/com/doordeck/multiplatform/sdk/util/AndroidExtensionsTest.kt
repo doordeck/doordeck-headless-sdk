@@ -331,7 +331,7 @@ class AndroidExtensionsTest {
     @Test
     fun shouldMapLongEpochMillisecondToInstant() = runTest {
         // Given
-        val now = now().truncatedTo(ChronoUnit.SECONDS)
+        val now = now().truncatedTo(ChronoUnit.MILLIS)
 
         // When
         val result = now.toEpochMilli().epochMillisecondToInstant()
