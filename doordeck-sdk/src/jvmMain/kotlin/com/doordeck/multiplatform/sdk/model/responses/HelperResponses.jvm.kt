@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.util.epochSecondToInstant
+import com.doordeck.multiplatform.sdk.util.epochMillisecondToInstant
 import java.time.Instant
 
 data class AssistedLoginResponse(
@@ -31,5 +31,5 @@ internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemer
 
 @JvmSynthetic
 internal fun BasicServerTimeResponse.toServerTimeResponse(): ServerTimeResponse = ServerTimeResponse(
-    now.epochSecondToInstant()
+    now.epochMillisecondToInstant()
 )

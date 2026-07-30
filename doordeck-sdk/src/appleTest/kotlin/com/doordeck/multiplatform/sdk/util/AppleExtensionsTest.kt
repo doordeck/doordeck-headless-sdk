@@ -4,18 +4,20 @@ import com.doordeck.multiplatform.sdk.randomUri
 import com.doordeck.multiplatform.sdk.randomUuid
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toKotlinInstant
 import kotlinx.datetime.toNSDate
 import kotlinx.datetime.toNSTimeZone
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSDateComponents
 import platform.Foundation.NSTimeInterval
 import platform.Foundation.NSTimeZone
-import platform.Foundation.timeIntervalSince1970
 import platform.Foundation.timeZoneWithName
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.time.Clock.System.now
+import kotlin.test.assertTrue
+import kotlin.time.Clock
 
 class AppleExtensionsTest {
 
@@ -117,7 +119,7 @@ class AppleExtensionsTest {
     @Test
     fun shouldMapDoubleToNsDate() = runTest {
         // Given
-        val date = now().epochSeconds
+        val date = Clock.System.now().epochSeconds
 
         // When
         val result = date.toDouble().toNsDate()
@@ -129,7 +131,7 @@ class AppleExtensionsTest {
     @Test
     fun shouldMapStringToNsDate() = runTest {
         // Given
-        val date = now().epochSeconds
+        val date = Clock.System.now().epochSeconds
 
         // When
         val result = date.toString().toNsDate()
@@ -139,16 +141,18 @@ class AppleExtensionsTest {
     }
 
     @Test
-    fun shouldMapLongEpochSecondToNsDate() = runTest {
+    fun shouldMapLongEpochMillisecondToNsDate() = runTest {
         // Given
-        val date = now()
+        val date = Clock.System.now()
 
         // When
-        val result = date.epochSeconds.epochSecondToNsDate()
+        val result = date.toEpochMilliseconds().epochMillisecondToNsDate()
 
         // Then
-        assertEquals(date.toNSDate().timeIntervalSince1970.toLong(),
-            result.timeIntervalSince1970.toLong())
+        assertTrue {
+            abs(date.toEpochMilliseconds() -
+                    result.toKotlinInstant().toEpochMilliseconds()) <= 1
+        }
     }
 
     @Test

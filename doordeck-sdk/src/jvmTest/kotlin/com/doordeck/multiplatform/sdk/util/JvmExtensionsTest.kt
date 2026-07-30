@@ -329,12 +329,12 @@ class JvmExtensionsTest {
     }
 
     @Test
-    fun shouldMapLongEpochSecondToInstant() = runTest {
+    fun shouldMapLongEpochMillisecondToInstant() = runTest {
         // Given
         val now = now().truncatedTo(ChronoUnit.SECONDS)
 
         // When
-        val result = now.epochSecond.epochSecondToInstant()
+        val result = now.toEpochMilli().epochMillisecondToInstant()
 
         // Then
         assertEquals(now, result)
