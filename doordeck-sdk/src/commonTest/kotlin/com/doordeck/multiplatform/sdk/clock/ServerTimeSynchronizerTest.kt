@@ -23,8 +23,8 @@ class ServerTimeSynchronizerTest {
     fun shouldComputePositiveSkewWhenDeviceIsBehind() = runTest {
         // Given
         val expectedSkew = 1.hours
-        val serverEpochSeconds = (Clock.System.now() + expectedSkew).epochSeconds
-        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
+        val serverEpochMilliseconds = (Clock.System.now() + expectedSkew).toEpochMilliseconds()
+        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochMilliseconds))
 
         client.use {
             // When
@@ -41,8 +41,8 @@ class ServerTimeSynchronizerTest {
     fun shouldComputeNegativeSkewWhenDeviceIsAhead() = runTest {
         // Given
         val expectedSkew = (-1).hours
-        val serverEpochSeconds = (Clock.System.now() + expectedSkew).epochSeconds
-        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochSeconds))
+        val serverEpochMilliseconds = (Clock.System.now() + expectedSkew).toEpochMilliseconds()
+        val client = CloudHttpClient.setupMockClient(BasicServerTimeResponse(now = serverEpochMilliseconds))
 
         client.use {
             // When
