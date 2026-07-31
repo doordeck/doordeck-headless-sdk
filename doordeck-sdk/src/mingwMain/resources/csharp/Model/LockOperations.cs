@@ -1,4 +1,7 @@
-﻿namespace Doordeck.Headless.Sdk.Model;
+﻿using System.Text.Json.Serialization;
+using Doordeck.Headless.Sdk.Converter;
+
+namespace Doordeck.Headless.Sdk.Model;
 
 public class TimeRequirement(TimeOnly start, TimeOnly end, TimeZoneInfo timezone, List<DayOfWeek> days)
 {
@@ -34,8 +37,11 @@ public class BaseOperation
     public List<string>? UserCertificateChain { get; set; }
     public string? UserPrivateKey { get; set; }
     public Guid LockId { get; set; }
+    [JsonConverter(typeof(DateTimeMillisecondsJsonConverter))]
     public DateTime NotBefore { get; set; }
+    [JsonConverter(typeof(DateTimeMillisecondsJsonConverter))]
     public DateTime IssuedAt { get; set; }
+    [JsonConverter(typeof(DateTimeMillisecondsJsonConverter))]
     public DateTime ExpiresAt { get; set; }
     public Guid Jti { get; set; }
 

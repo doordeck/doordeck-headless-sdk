@@ -18,7 +18,6 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.EnumSet
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
@@ -100,7 +99,7 @@ internal inline fun <reified T : Enum<T>> List<T>.toEnumSet(): EnumSet<T> =
     if (isNotEmpty()) EnumSet.copyOf(this) else EnumSet.noneOf(T::class.java)
 
 @JvmSynthetic
-internal fun now(): Instant = Instant.now().truncatedTo(ChronoUnit.SECONDS)
+internal fun now(): Instant = Instant.now()
 
 /**
  * Creates a `CompletableFuture` from a suspendable function.

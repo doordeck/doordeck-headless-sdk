@@ -23,6 +23,7 @@ import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.EnumSet
 import java.util.UUID
+import kotlin.time.toKotlinInstant
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek as KDayOfWeek
 
 object LockOperations {
@@ -423,9 +424,9 @@ internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOpera
         userCertificateChain = userCertificateChain?.map { it.encoded.encodeByteArrayToBase64() },
         userPrivateKey = userPrivateKey?.encoded,
         lockId = lockId.toString(),
-        notBefore = notBefore.epochSecond,
-        issuedAt = issuedAt.epochSecond,
-        expiresAt = expiresAt.epochSecond,
+        notBefore = notBefore.toKotlinInstant(),
+        issuedAt = issuedAt.toKotlinInstant(),
+        expiresAt = expiresAt.toKotlinInstant(),
         jti = jti.toString()
     )
 }

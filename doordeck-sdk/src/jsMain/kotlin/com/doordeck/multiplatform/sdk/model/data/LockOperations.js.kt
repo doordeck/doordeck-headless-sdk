@@ -12,6 +12,7 @@ import kotlin.js.collections.JsSet
 import kotlin.js.collections.toList
 import kotlin.js.collections.toMutableSet
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @JsExport
@@ -273,9 +274,9 @@ object LockOperations {
         val userCertificateChain: JsArray<String>? = null,
         val userPrivateKey: ByteArray? = null,
         val lockId: String,
-        val notBefore: Long = Clock.System.now().epochSeconds,
-        val issuedAt: Long = Clock.System.now().epochSeconds,
-        val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
+        val notBefore: Long = Clock.System.now().toEpochMilliseconds(),
+        val issuedAt: Long = Clock.System.now().toEpochMilliseconds(),
+        val expiresAt: Long = (Clock.System.now() + 1.minutes).toEpochMilliseconds(),
         val jti: String = Uuid.random().toString()
     ) {
         class Builder {
@@ -283,9 +284,9 @@ object LockOperations {
             private var userCertificateChain: JsArray<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: String? = null
-            private var notBefore: Long = Clock.System.now().epochSeconds
-            private var issuedAt: Long = Clock.System.now().epochSeconds
-            private var expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds
+            private var notBefore: Long = Clock.System.now().toEpochMilliseconds()
+            private var issuedAt: Long = Clock.System.now().toEpochMilliseconds()
+            private var expiresAt: Long = (Clock.System.now() + 1.minutes).toEpochMilliseconds()
             private var jti: String = Uuid.random().toString()
 
             fun setUserId(userId: String?): Builder = apply { this.userId = userId }
@@ -402,9 +403,9 @@ internal fun LockOperations.BaseOperation.toBasicBaseOperation(): BasicBaseOpera
         userCertificateChain = userCertificateChain?.toList(),
         userPrivateKey = userPrivateKey,
         lockId = lockId,
-        notBefore = notBefore,
-        issuedAt = issuedAt,
-        expiresAt = expiresAt,
+        notBefore = Instant.fromEpochMilliseconds(notBefore),
+        issuedAt = Instant.fromEpochMilliseconds(issuedAt),
+        expiresAt = Instant.fromEpochMilliseconds(expiresAt),
         jti = jti
     )
 }
