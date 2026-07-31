@@ -106,7 +106,9 @@ jobs:
         with:
           name: windows-binary-files
           path: |
-            doordeck-sdk/build/bin/mingwX64/releaseShared/*.{h,dll,def}
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.h
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.dll
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.def
           retention-days: 1
         
 
