@@ -1,4 +1,6 @@
-﻿namespace Doordeck.Headless.Sdk.Model;
+﻿using System.Text.Json.Serialization;
+
+namespace Doordeck.Headless.Sdk.Model;
 
 public class TimeRequirement(TimeOnly start, TimeOnly end, TimeZoneInfo timezone, List<DayOfWeek> days)
 {
