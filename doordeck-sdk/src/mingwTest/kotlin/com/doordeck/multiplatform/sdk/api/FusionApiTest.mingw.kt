@@ -56,7 +56,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicIntegrationTypeRespon
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
-import com.doordeck.multiplatform.sdk.model.responses.BasicShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -157,13 +156,13 @@ class FusionApiTest : CallbackTest() {
         try {
             runTest {
                 val testController =
-                    PLATFORM_FUSION_INTEGRATIONS.entries.firstOrNull { controllerType.isInstance(it.value.controller) }
+                    PLATFORM_FUSION_INTEGRATIONS.firstOrNull { controllerType.isInstance(it.controller) }
                 if (testController == null) {
                     error("Controller of type ${controllerType.simpleName} not found, skipping test...")
                 }
 
                 try {
-                    TEST_HTTP_CLIENT.options(testController.key) {
+                    TEST_HTTP_CLIENT.options(testController.uri) {
                         timeout {
                             connectTimeoutMillis = 5_000
                             socketTimeoutMillis = 5_000
@@ -175,7 +174,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 // Given - shouldLogin
-                ContextManager.setFusionHost(testController.key)
+                ContextManager.setFusionHost(testController.uri)
 
                 // When
                 val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
@@ -195,10 +194,19 @@ class FusionApiTest : CallbackTest() {
                 assertTrue { fusionLoginResponse.authToken.isNotEmpty() }
                 assertTrue { cloudLoginResponse.authToken.isNotEmpty() }
 
+                // Skip the test if it's not targeting the expected integration
+                val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
+                    FusionApi.getIntegrationType(TestCallback)
+                }.unwrap()
+
+                if (integrationType.status != null && integrationType.status != testController.type) {
+                    error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
+                }
+
                 // Cleanup process, delete any remaining test devices
                 val integrationsToDelete = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
                     FusionApi.getIntegrationConfiguration(
-                        data = GetIntegrationConfigurationData(testController.value.type).toJson(),
+                        data = GetIntegrationConfigurationData(testController.type).toJson(),
                         callback = TestCallback
                     )
                 }.success?.result?.filter { integration ->
@@ -234,7 +242,7 @@ class FusionApiTest : CallbackTest() {
                         data = EnableDoorData(
                             name,
                             PLATFORM_TEST_MAIN_SITE_ID,
-                            testController.value.controller
+                            testController.controller
                         ).toJson(),
                         callback = TestCallback
                     )
@@ -243,7 +251,7 @@ class FusionApiTest : CallbackTest() {
                 // Then
                 val integrationsResponse = callbackApiCall<ResultData<List<BasicIntegrationConfigurationResponse>>> {
                     FusionApi.getIntegrationConfiguration(
-                        data = GetIntegrationConfigurationData(testController.value.type).toJson(),
+                        data = GetIntegrationConfigurationData(testController.type).toJson(),
                         callback = TestCallback
                     )
                 }.unwrap()
@@ -259,7 +267,7 @@ class FusionApiTest : CallbackTest() {
 
                 // Then
                 assertNotNull(integrationTypeResponse.status)
-                assertEquals(testController.value.type, integrationTypeResponse.status)
+                assertEquals(testController.type, integrationTypeResponse.status)
 
                 // Given - shouldStartDoor
                 // When

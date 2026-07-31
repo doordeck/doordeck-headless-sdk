@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import kotlinx.datetime.toNSDate
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarIdentifierGregorian
 import platform.Foundation.NSCalendarUnitDay
@@ -127,6 +128,6 @@ internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
 internal fun String.toNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
 
-internal fun Long.epochSecondToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
+internal fun Long.epochMillisecondToNsDate(): NSDate = Instant.fromEpochMilliseconds(this).toNSDate()
 
 internal fun String.isoToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(Instant.parse(this).epochSeconds.toDouble())

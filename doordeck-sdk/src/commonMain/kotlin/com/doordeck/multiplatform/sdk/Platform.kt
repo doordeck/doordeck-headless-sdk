@@ -15,6 +15,7 @@ import com.doordeck.multiplatform.sdk.util.installResponseValidator
 import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.cancel
 import kotlinx.serialization.json.Json
 import kotlin.jvm.JvmSynthetic
 
@@ -118,6 +119,7 @@ internal abstract class BaseHttpClient(
     @JvmSynthetic
     internal fun close() {
         _client?.close()
+        _client?.coroutineContext?.cancel()
     }
 
     /**

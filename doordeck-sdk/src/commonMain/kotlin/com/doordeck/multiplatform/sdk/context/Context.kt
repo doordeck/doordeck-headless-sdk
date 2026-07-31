@@ -284,8 +284,8 @@ internal object Context {
     /**
      * Performs a sequence of checks to determine the [ContextState].
      * The first check to fail determines the returned state.
-     * The checks are, in order: cloud token validity, key pair existence,
-     * key pair verification status, and certificate chain validity.
+     * The checks are, in order: [isCloudAuthTokenInvalidOrExpired], [isKeyPairValid],
+     * [isKeyPairVerified], and [isCertificateChainInvalidOrExpired].
      *
      * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
      * @return A [ContextState] representing the context state.
@@ -297,6 +297,24 @@ internal object Context {
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
         if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }
         return ContextState.READY
+    }
+
+    /**
+     * Refreshes the cloud auth tokens if they are no longer valid.
+     *
+     * The refresh is done by the Ktor auth plugin, which intercepts outgoing requests; this function
+     * just issues a throwaway authenticated request to trigger it. Failures are ignored, so a
+     * successful return does not guarantee valid tokens.
+     *
+     * Only meant to be called during SDK initialization.
+     */
+    @JvmSynthetic
+    internal suspend fun attemptToRefreshAuthTokens() {
+        if (getCloudAuthToken() != null && getCloudRefreshToken() != null) {
+            runCatching {
+                AccountClient.getUserDetailsRequest()
+            }
+        }
     }
 
     @JvmSynthetic

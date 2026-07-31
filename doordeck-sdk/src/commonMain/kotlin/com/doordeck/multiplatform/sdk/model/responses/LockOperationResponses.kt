@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.model.common.AuditEvent
+import com.doordeck.multiplatform.sdk.model.common.AuditUserAgentType
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.model.common.DayOfWeek
@@ -132,7 +133,14 @@ internal data class BasicAuditResponse(
     val issuer: BasicAuditUserResponse,
     val subject: BasicAuditUserResponse? = null,
     val rejectionReason: String? = null,
-    val rejected: Boolean
+    val rejected: Boolean,
+    val userAgent: BasicAuditUserAgentResponse? = null
+)
+
+@Serializable
+internal data class BasicAuditUserAgentResponse(
+    val type: AuditUserAgentType,
+    val version: String? = null
 )
 
 @Serializable

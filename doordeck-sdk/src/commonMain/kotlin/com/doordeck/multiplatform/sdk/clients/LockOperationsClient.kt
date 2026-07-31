@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.BatchShareFailedException
@@ -709,14 +710,15 @@ internal object LockOperationsClient {
         val userPrivateKey = userPrivateKey
             ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
+        val skew = SystemClock.getSkew()
         return BaseOperationRequest(
             userId = userId,
             userCertificateChain = userCertificateChain,
             userPrivateKey = userPrivateKey,
             lockId = lockId,
-            notBefore = notBefore,
-            issuedAt = issuedAt,
-            expiresAt = expiresAt,
+            notBefore = (notBefore + skew).epochSeconds,
+            issuedAt = (issuedAt + skew).epochSeconds,
+            expiresAt = (expiresAt + skew).epochSeconds,
             jti = jti
         )
     }

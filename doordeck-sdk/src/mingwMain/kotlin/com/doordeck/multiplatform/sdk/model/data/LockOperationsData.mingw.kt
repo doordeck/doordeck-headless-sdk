@@ -6,6 +6,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.serialization.Serializable
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 @Serializable
@@ -159,9 +160,9 @@ internal data class BaseOperationData(
     val userCertificateChain: List<String>? = null,
     val userPrivateKey: String? = null,
     val lockId: String,
-    val notBefore: Long = Clock.System.now().epochSeconds,
-    val issuedAt: Long = Clock.System.now().epochSeconds,
-    val expiresAt: Long = (Clock.System.now() + 1.minutes).epochSeconds,
+    val notBefore: Long = Clock.System.now().toEpochMilliseconds(),
+    val issuedAt: Long = Clock.System.now().toEpochMilliseconds(),
+    val expiresAt: Long = (Clock.System.now() + 1.minutes).toEpochMilliseconds(),
     val jti: String = Uuid.random().toString()
 )
 
@@ -240,9 +241,9 @@ internal fun BaseOperationData.toBaseOperation() = BasicBaseOperation(
     userCertificateChain = userCertificateChain,
     userPrivateKey = userPrivateKey?.decodeBase64ToByteArray(),
     lockId = lockId,
-    notBefore = notBefore,
-    issuedAt = issuedAt,
-    expiresAt = expiresAt,
+    notBefore = Instant.fromEpochMilliseconds(notBefore),
+    issuedAt = Instant.fromEpochMilliseconds(issuedAt),
+    expiresAt = Instant.fromEpochMilliseconds(expiresAt),
     jti = jti
 )
 

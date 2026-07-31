@@ -71,8 +71,49 @@ jobs:
       - name: Tests
         run: ./gradlew ${{ matrix.test }}
 
+  windows-binary:
+    name: Generate Windows binary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 21
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+        with:
+          cache-disabled: true
+
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
+
+      - name: Adjust header
+        shell: bash
+        run: |
+          sed -i \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-binary-files
+          path: |
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.h
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.dll
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.def
+          retention-days: 1
+
   python-build:
     name: Python build
+    needs: [windows-binary]
     runs-on: ubuntu-latest
 
     steps:
@@ -94,8 +135,11 @@ jobs:
       - name: Setup pyright
         run: pip install pyright
 
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
@@ -108,6 +152,7 @@ jobs:
 
   csharp-build:
     name: CSharp build
+    needs: [windows-binary]
     runs-on: windows-latest
 
     steps:
@@ -126,8 +171,11 @@ jobs:
         with:
           cache-disabled: true
 
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
@@ -191,7 +239,7 @@ jobs:
           cache-disabled: true
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@254c19bd240aabef8777f48595e9d2d7b972184b # v6.2.1
+        uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         with:
           role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
           aws-region: eu-west-1
@@ -227,7 +275,7 @@ jobs:
           cache-disabled: true
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@d45b1a4e94b71acab930e56e79c6aa188764e7f9 # v1.316.0
+        uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
         with:
           ruby-version: '3.3'
 
@@ -270,11 +318,9 @@ jobs:
           cache-disabled: true
 
       - name: Setup Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 'latest'
-          registry-url: 'https://registry.npmjs.org'
-          scope: '@doordeck'
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock jsBrowserProductionLibraryDistribution
@@ -388,9 +434,52 @@ jobs:
           MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
         run: ./gradlew -Prelease.useLastTag=true findSonatypeStagingRepository releaseSonatypeStagingRepository
 
+  windows-binary-release:
+    name: Generate Windows binary release
+    needs: [pre-release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: 'v${{ needs.pre-release.outputs.tag }}'
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: corretto
+          java-version: 21
+          cache: gradle
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+        with:
+          cache-disabled: true
+
+      - name: Generate artifact
+        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+
+      - name: Adjust header
+        shell: bash
+        run: |
+          sed -i \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-binary-release-files
+          path: |
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.h
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.dll
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.def
+          retention-days: 1
+
   nuget:
     name: Nuget publish
-    needs: [pre-release]
+    needs: [pre-release,windows-binary-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: windows-latest
     defaults:
@@ -415,8 +504,11 @@ jobs:
         with:
           cache-disabled: true
 
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-release-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
@@ -439,7 +531,7 @@ jobs:
 
   pypi:
     name: PyPi publish
-    needs: [pre-release]
+    needs: [pre-release,windows-binary-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
@@ -463,8 +555,11 @@ jobs:
         with:
           cache-disabled: true
 
-      - name: Generate artifact
-        run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-release-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
@@ -476,7 +571,7 @@ jobs:
         run: python -m build doordeck-sdk/build/bin/mingwX64/python
 
       - name: Publish
-        uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b # v1.14.0
+        uses: pypa/gh-action-pypi-publish@ba38be9e461d3875417946c167d0b5f3d385a247 # v1.14.1
         with:
           packages-dir: doordeck-sdk/build/bin/mingwX64/python/dist/
 
