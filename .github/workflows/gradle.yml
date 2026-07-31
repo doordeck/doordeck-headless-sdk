@@ -71,8 +71,33 @@ jobs:
       - name: Tests
         run: ./gradlew ${{ matrix.test }}
 
+  windows-binary:
+    name: Generate Windows binary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate artifact
+        run: ./gradlew mingwX64Binaries
+
+      - name: Adjust header
+        shell: bash
+        run: |
+          sed -i \
+            -e 's/_\$$/_/g' \
+            -e 's/\$//g' \
+            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-binary-files
+          path: |
+            doordeck-sdk/build/bin/mingwX64/releaseShared/*.{h,dll,def}
+          retention-days: 1
+        
+
   python-build:
     name: Python build
+    needs: [windows-binary]
     runs-on: ubuntu-latest
 
     steps:
@@ -94,8 +119,11 @@ jobs:
       - name: Setup pyright
         run: pip install pyright
 
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/python-bindings-action
@@ -108,6 +136,7 @@ jobs:
 
   csharp-build:
     name: CSharp build
+    needs: [windows-binary]
     runs-on: windows-latest
 
     steps:
@@ -126,8 +155,11 @@ jobs:
         with:
           cache-disabled: true
 
-      - name: Generate artifact
-        run: ./gradlew mingwX64Binaries
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: windows-binary-files
+          path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
       - name: Generate bindings
         uses: ./.github/actions/csharp-bindings-action
