@@ -5,6 +5,7 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotEquals
 
 class TileUrlParserTest {
 
@@ -15,10 +16,7 @@ class TileUrlParserTest {
         val input = "https://doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -29,12 +27,10 @@ class TileUrlParserTest {
     fun simpleTileUrl() = runTest {
         // Given
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://doordeck.link/$uuid"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = "https://doordeck.link/$uuid",
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -47,10 +43,7 @@ class TileUrlParserTest {
         val input = "https://doordeck.link/$uuid/"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -63,10 +56,7 @@ class TileUrlParserTest {
         val input = "https://doordeck.link/uuid/$uuid"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -79,10 +69,7 @@ class TileUrlParserTest {
         val input = "https://this.thirdparty.com/tile/scan/what/not/$uuid/?uuid=hello"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -95,10 +82,7 @@ class TileUrlParserTest {
         val input = "\u0004doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.NFC
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -115,10 +99,7 @@ class TileUrlParserTest {
         val input = "\u0000$url"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.NFC
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
 
         // Then
         assertEquals(uuid, result.tileId)
@@ -131,10 +112,7 @@ class TileUrlParserTest {
         val input = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
 
         // When
-        val result = TileUrlParser.parseTileUrl(
-            input = input,
-            source = TileUrlSource.OTHER
-        )
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
 
         // Then
         assertEquals(input, result.tileId)
@@ -147,10 +125,7 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.OTHER
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
         }
 
         // Then
@@ -164,10 +139,7 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.OTHER
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
         }
 
         // Then
@@ -181,10 +153,7 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.OTHER
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
         }
 
         // Then
@@ -198,10 +167,7 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.OTHER
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
         }
 
         // Then
@@ -215,10 +181,7 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.OTHER
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
         }
 
         // Then
@@ -233,13 +196,82 @@ class TileUrlParserTest {
 
         // When
         val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(
-                input = input,
-                source = TileUrlSource.NFC
-            )
+            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
         }
 
         // Then
         assertEquals("Invalid identifier code: 100", exception.message)
+    }
+
+    @Test
+    fun mixedCaseUuidInPathIsPreservedExactly() = runTest {
+        // Given
+        val uuid = "E2fcD000-8ce3-11F1-9876-d923122AC2fc"
+        val input = "https://doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+    }
+
+    @Test
+    fun fullyUppercaseUuidInPathIsPreserved() = runTest {
+        // Given
+        val uuid = "E2FCD000-8CE3-11F1-9876-D923122AC2FC"
+        val input = "https://doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+    }
+
+    @Test
+    fun bareMixedCaseUuidIsPreservedExactly() = runTest {
+        // Given
+        val input = "0C019ad0-38D4-11f1-8662-339EF0f86a15"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+
+        // Then
+        assertEquals(input, result.tileId)
+    }
+
+    @Test
+    fun nfcDecompressionDoesNotAlterUuidCasing() = runTest {
+        // Given
+        val uuid = "E2fcD000-8ce3-11F1-9876-d923122AC2fc"
+        val input = "\u0004doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals("https://doordeck.link/$uuid", result.url)
+    }
+
+    @Test
+    fun differentlyCasedSameUuidProduceDistinctTileIdStrings() = runTest {
+        // Given
+        val lower = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val upper = "0C019AD0-38D4-11F1-8662-339EF0F86A15"
+
+        // When
+        val resultLower = TileUrlParser.parseTileUrl(
+            "https://doordeck.link/$lower", TileUrlSource.OTHER
+        )
+        val resultUpper = TileUrlParser.parseTileUrl(
+            "https://doordeck.link/$upper", TileUrlSource.OTHER
+        )
+
+        // Then
+        assertNotEquals(resultLower.tileId, resultUpper.tileId)
+        assertEquals(lower, resultLower.tileId)
+        assertEquals(upper, resultUpper.tileId)
     }
 }
