@@ -44,10 +44,11 @@ class TileUrlParserTest {
     fun trailingSlashIsIgnored() = runTest {
         // Given
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://doordeck.link/$uuid/"
 
         // When
         val result = TileUrlParser.parseTileUrl(
-            input = "https://doordeck.link/$uuid/",
+            input = input,
             source = TileUrlSource.OTHER
         )
 
@@ -59,10 +60,11 @@ class TileUrlParserTest {
     fun extraPathPrefixSegmentsAreIgnored() = runTest {
         // Given
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://doordeck.link/uuid/$uuid"
 
         // When
         val result = TileUrlParser.parseTileUrl(
-            input = "https://doordeck.link/uuid/$uuid",
+            input = input,
             source = TileUrlSource.OTHER
         )
 
@@ -74,10 +76,11 @@ class TileUrlParserTest {
     fun deepNestedPathWithTrailingSlashAndQueryStillFindsLastSegment() = runTest {
         // Given
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://this.thirdparty.com/tile/scan/what/not/$uuid/?uuid=hello"
 
         // When
         val result = TileUrlParser.parseTileUrl(
-            input = "https://this.thirdparty.com/tile/scan/what/not/$uuid/?uuid=hello",
+            input = input,
             source = TileUrlSource.OTHER
         )
 
@@ -86,14 +89,14 @@ class TileUrlParserTest {
     }
 
     @Test
-    fun nfcPayloadWithHttpsPrefixCodeIsDecompressed() = runTest {
+    fun nfcWithHttpsPrefixCodeIsDecompressed() = runTest {
         // Given
         val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val payload = "\u0004doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+        val input = "\u0004doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
 
         // When
         val result = TileUrlParser.parseTileUrl(
-            input = payload,
+            input = input,
             source = TileUrlSource.NFC
         )
 
@@ -109,11 +112,11 @@ class TileUrlParserTest {
     fun nfcPayloadWithNoAbbreviationCodeIsPassed() = runTest {
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
         val url = "https://doordeck.link/$uuid"
-        val payload = "\u0000$url"
+        val input = "\u0000$url"
 
         // When
         val result = TileUrlParser.parseTileUrl(
-            input = payload,
+            input = input,
             source = TileUrlSource.NFC
         )
 
@@ -221,7 +224,6 @@ class TileUrlParserTest {
         // Then
         assertEquals("Tile url is empty", exception.message)
     }
-
 
 
     @Test
