@@ -151,7 +151,7 @@ class TileUrlParserTest {
         }
 
         // Then
-        assertEquals("Last path segment 'not-a-uuid' is not a valid tile UUID", exception.message)
+        assertEquals("Last path segment: not-a-uuid, is not a valid tile UUID", exception.message)
     }
 
     @Test
@@ -168,7 +168,7 @@ class TileUrlParserTest {
         }
 
         // Then
-        assertEquals("No path segments found in '$input'", exception.message)
+        assertEquals("No path segments found in: $input", exception.message)
     }
 
     @Test
@@ -185,7 +185,7 @@ class TileUrlParserTest {
         }
 
         // Then
-        assertEquals("Last path segment 'extra-segment' is not a valid tile UUID", exception.message)
+        assertEquals("Last path segment: extra-segment, is not a valid tile UUID", exception.message)
     }
 
     @Test
@@ -202,7 +202,7 @@ class TileUrlParserTest {
         }
 
         // Then
-        assertEquals("No path segments found in '$input'", exception.message)
+        assertEquals("No path segments found in: $input", exception.message)
     }
 
     @Test
@@ -220,5 +220,24 @@ class TileUrlParserTest {
 
         // Then
         assertEquals("Tile url is empty", exception.message)
+    }
+
+
+
+    @Test
+    fun nfcWithoutIdentifierCodeShouldThrow() = runTest {
+        // Given
+        val input = "doordeck.link/e2fcd000-8ce3-11f1-9876-d923122ac2fc?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(
+                input = input,
+                source = TileUrlSource.NFC
+            )
+        }
+
+        // Then
+        assertEquals("Invalid identifier code: 100", exception.message)
     }
 }

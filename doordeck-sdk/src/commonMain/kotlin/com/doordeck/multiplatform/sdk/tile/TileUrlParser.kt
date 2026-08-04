@@ -64,7 +64,9 @@ object TileUrlParser {
      */
     @JsExport.Ignore
     fun parseTileUrl(input: String, source: TileUrlSource): ParsedTileUrl {
-        if (input.isEmpty()) throw InvalidTileUrlException("Tile url is empty")
+        if (input.isEmpty()) {
+            throw InvalidTileUrlException("Tile url is empty")
+        }
 
         val url = when (source) {
             TileUrlSource.NFC -> decompressNfcPayload(input)
@@ -78,17 +80,18 @@ object TileUrlParser {
         }
 
         val lastSegment = segments.lastOrNull()
-            ?: throw InvalidTileUrlException("No path segments found in '$url'")
+            ?: throw InvalidTileUrlException("No path segments found in: $url")
 
         Uuid.parseHexDashOrNull(lastSegment)
-            ?: throw InvalidTileUrlException("Last path segment '$lastSegment' is not a valid tile UUID")
+            ?: throw InvalidTileUrlException("Last path segment: $lastSegment, is not a valid tile UUID")
 
         return ParsedTileUrl(tileId = lastSegment, url = url)
     }
 
     private fun decompressNfcPayload(payload: String): String {
         val code = payload[0].code
-        val prefix = URI_PREFIXES.getOrNull(code) ?: ""
+        val prefix = URI_PREFIXES.getOrNull(code)
+            ?: throw InvalidTileUrlException("Invalid identifier code: $code")
         return prefix + payload.substring(1)
     }
 }
