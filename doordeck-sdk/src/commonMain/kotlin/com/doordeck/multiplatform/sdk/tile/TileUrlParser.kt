@@ -10,9 +10,15 @@ import kotlin.uuid.Uuid
 object TileUrlParser {
 
     // NFC Forum "URI Record Type Definition" (NDEF), URI Identifier Code table.
-    // Index = first payload byte value. Codes 0x24-0xFF are reserved; per the RTD spec they are
-    // treated as "no prefix expansion" — the byte is still consumed as the identifier byte, it
-    // just doesn't prepend anything (handled below by the array bounds check).
+    // Index = first payload byte value. Codes 0x24-0xFF are reserved/unassigned by the spec.
+    // No compliant NDEF writer emits a reserved code, so encountering one here almost always means
+    // the input isn't actually an NDEF URI payload (e.g. wrong TileUrlSource passed) or the bytes
+    // were corrupted/mis-decoded upstream. Reserved codes are therefore rejected rather than
+    // silently falling back to "no prefix" — the first byte is always positional (the identifier
+    // code) and stripping it without a matching prefix would reconstruct a truncated, wrong URL.
+    // That's especially dangerous here since the URL's query string (uid/ctr/cmac for NTAG 424 DNA)
+    // feeds server-side CMAC verification, so a subtly-mangled but still-parseable URL is a worse
+    // failure mode than a loud, immediate throw. See decompressNfcPayload below.
     private val URI_PREFIXES = arrayOf(
         "",                           // 0x00 - no abbreviation, URI stored in full
         "http://www.",                // 0x01
@@ -88,6 +94,17 @@ object TileUrlParser {
         return ParsedTileUrl(tileId = lastSegment, url = url)
     }
 
+    /**
+     * Decompresses a raw NDEF URI record payload back into a full URL string.
+     *
+     * The first byte of the payload is always the URI Identifier Code (never payload data) and is
+     * always consumed, regardless of its value. Recognised codes (0x00-0x23) are expanded via
+     * [URI_PREFIXES]; reserved codes (0x24-0xFF) are rejected with [InvalidTileUrlException] rather
+     * than treated as "no prefix", since silently proceeding would reconstruct a URL missing its
+     * first character with no way to detect the corruption downstream.
+     *
+     * @throws InvalidTileUrlException if the identifier code is reserved/unrecognised
+     */
     private fun decompressNfcPayload(payload: String): String {
         val code = payload[0].code
         val prefix = URI_PREFIXES.getOrNull(code)
