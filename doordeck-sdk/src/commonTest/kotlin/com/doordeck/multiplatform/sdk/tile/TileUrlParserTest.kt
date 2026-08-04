@@ -274,4 +274,76 @@ class TileUrlParserTest {
         assertEquals(lower, resultLower.tileId)
         assertEquals(upper, resultUpper.tileId)
     }
+
+    @Test
+    fun uuidWithInvalidHexCharacterThrows() = runTest {
+        // Given
+        val invalidUuid = "0c019adg-38d4-11f1-8662-339ef0f86a1z"
+        val input = "https://doordeck.link/$invalidUuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals(
+            "Last path segment: $invalidUuid, is not a valid tile UUID",
+            exception.message
+        )
+    }
+
+    @Test
+    fun uuidWithWrongSegmentLengthsThrows() = runTest {
+        // Given
+        val invalidUuid = "0c019a-d038d4-11f1866-2339ef0f86a15"
+        val input = "https://doordeck.link/$invalidUuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals(
+            "Last path segment: $invalidUuid, is not a valid tile UUID",
+            exception.message
+        )
+    }
+
+    @Test
+    fun uuidWithMissingHyphensThrows() = runTest {
+        // Given
+        val noSeparatorsUuid = "0c019ad038d411f18662339ef0f86a15"
+        val input = "https://doordeck.link/$noSeparatorsUuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals(
+            "Last path segment: $noSeparatorsUuid, is not a valid tile UUID",
+            exception.message
+        )
+    }
+
+    @Test
+    fun uuidWithExtraCharacterThrows() = runTest {
+        // Given
+        val invalidUuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15a"
+        val input = "https://doordeck.link/$invalidUuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals(
+            "Last path segment: $invalidUuid, is not a valid tile UUID",
+            exception.message
+        )
+    }
 }
