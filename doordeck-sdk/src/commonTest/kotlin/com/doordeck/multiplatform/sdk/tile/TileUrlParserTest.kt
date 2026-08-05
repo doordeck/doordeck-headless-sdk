@@ -346,4 +346,32 @@ class TileUrlParserTest {
             exception.message
         )
     }
+
+    @Test
+    fun malformedSchemeThrowsInvalidUrlFormat() = runTest {
+        // Given
+        val input = "ht tp://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals("Invalid URL format: $input", exception.message)
+    }
+
+    @Test
+    fun malformedPercentEncodingThrowsInvalidUrlFormat() = runTest {
+        // Given
+        val input = "https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15%3"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals("Invalid URL format: $input", exception.message)
+    }
 }
