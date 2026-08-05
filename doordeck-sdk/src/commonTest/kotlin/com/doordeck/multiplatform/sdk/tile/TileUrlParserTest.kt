@@ -107,6 +107,33 @@ class TileUrlParserTest {
     }
 
     @Test
+    fun nfcWithFullUrlDoesNotDecompressAndUsesUrlAsIs() = runTest {
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals(input, result.url)
+    }
+
+    @Test
+    fun nfcPlainPayloadWithoutCodeIsAcceptedAsIs() = runTest {
+        // Given
+        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
+        val input = "doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals(input, result.url)
+    }
+
+    @Test
     fun bareUuidWithNoUrlWrapperParses() = runTest {
         // Given
         val input = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
@@ -186,21 +213,6 @@ class TileUrlParserTest {
 
         // Then
         assertEquals("Tile url is empty", exception.message)
-    }
-
-
-    @Test
-    fun nfcWithoutIdentifierCodeShouldThrow() = runTest {
-        // Given
-        val input = "doordeck.link/e2fcd000-8ce3-11f1-9876-d923122ac2fc?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-        }
-
-        // Then
-        assertEquals("Invalid identifier code: 100", exception.message)
     }
 
     @Test

@@ -59,15 +59,14 @@ object TileUrlParser {
      * Decompresses a raw NDEF URI record payload back into a full URL string.
      *
      * The first byte of the payload is always the URI Identifier Code (never payload data) and is
-     * always consumed, regardless of its value. Recognised codes (0x00-0x04) are expanded via
-     * [URI_PREFIXES]; the rest of codes (0x05-0xFF) are rejected with [InvalidTileUrlException].
+     * always consumed, regardless of its value. recognized codes (0x00-0x04) are expanded via
+     * [URI_PREFIXES]; if the code is not recognized, the payload is returned unchanged.
      *
-     * @throws InvalidTileUrlException if the identifier code is unexpected
+     * @return the decompressed URL string, or the original payload if the identifier code is unrecognized.
      */
     private fun decompressNfcPayload(payload: String): String {
         val code = payload[0].code
         val prefix = URI_PREFIXES.getOrNull(code)
-            ?: throw InvalidTileUrlException("Invalid identifier code: $code")
-        return prefix + payload.substring(1)
+        return if (prefix != null) prefix + payload.substring(1) else payload
     }
 }
