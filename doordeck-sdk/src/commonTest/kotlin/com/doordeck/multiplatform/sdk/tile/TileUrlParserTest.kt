@@ -66,7 +66,7 @@ class TileUrlParserTest {
     fun deepNestedPathWithTrailingSlashAndQueryStillFindsLastSegment() = runTest {
         // Given
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://this.thirdparty.com/tile/scan/what/not/$uuid/?uuid=hello"
+        val input = "https://doordeck.link/tile/scan/what/not/$uuid/?uuid=hello"
 
         // When
         val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
