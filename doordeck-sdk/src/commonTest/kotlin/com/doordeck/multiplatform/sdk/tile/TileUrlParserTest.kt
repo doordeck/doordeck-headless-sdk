@@ -93,7 +93,22 @@ class TileUrlParserTest {
     }
 
     @Test
-    fun nfcPayloadWithNoAbbreviationCodeIsPassed() = runTest {
+    fun nfcWithUnknownPrefixCodeThrows() = runTest {
+        // Given
+        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
+        val input = "\u0006doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+        }
+
+        // Then
+        assertEquals("Invalid URL format: $input", exception.message)
+    }
+
+    @Test
+    fun nfcWithEmptyPrefixCodeIsParsed() = runTest {
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
         val url = "https://doordeck.link/$uuid"
         val input = "\u0000$url"
@@ -107,7 +122,7 @@ class TileUrlParserTest {
     }
 
     @Test
-    fun nfcWithFullUrlDoesNotDecompressAndUsesUrlAsIs() = runTest {
+    fun nfcWithFullUrlDoesNotDecompress() = runTest {
         val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
         val input = "https://doordeck.link/$uuid"
 
@@ -120,29 +135,32 @@ class TileUrlParserTest {
     }
 
     @Test
-    fun nfcPlainPayloadWithoutCodeIsAcceptedAsIs() = runTest {
+    fun nfcWithoutPrefixCodeThrows() = runTest {
         // Given
         val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
         val input = "doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
 
         // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+        }
 
         // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
+        assertEquals("Invalid URL format: $input", exception.message)
     }
 
     @Test
-    fun bareUuidWithNoUrlWrapperParses() = runTest {
+    fun bareUuidThrows() = runTest {
         // Given
         val input = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
 
         // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
 
         // Then
-        assertEquals(input, result.tileId)
+        assertEquals("Invalid URL format: $input", exception.message)
     }
 
     @Test
@@ -212,7 +230,7 @@ class TileUrlParserTest {
         }
 
         // Then
-        assertEquals("Tile url is empty", exception.message)
+        assertEquals("Input is empty", exception.message)
     }
 
     @Test
@@ -239,18 +257,6 @@ class TileUrlParserTest {
 
         // Then
         assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun bareMixedCaseUuidIsPreservedExactly() = runTest {
-        // Given
-        val input = "0C019ad0-38D4-11f1-8662-339EF0f86a15"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(input, result.tileId)
     }
 
     @Test

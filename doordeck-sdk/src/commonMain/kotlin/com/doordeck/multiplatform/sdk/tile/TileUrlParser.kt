@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.tile
 
 import com.doordeck.multiplatform.sdk.exceptions.InvalidTileUrlException
-import io.ktor.http.Url
+import io.ktor.http.parseUrl
 import kotlin.js.JsExport
 import kotlin.uuid.Uuid
 
@@ -18,6 +18,8 @@ object TileUrlParser {
         "https://"                    // 0x04
     )
 
+    private val NON_EMPTY_URI_PREFIXES = URI_PREFIXES.filter { it.isNotEmpty() }
+
     /**
      * @throws InvalidTileUrlException if no tile ID can be extracted
      */
@@ -32,27 +34,30 @@ object TileUrlParser {
     @Throws(Exception::class)
     fun parseTileUrl(input: String, source: TileUrlSource): ParsedTileUrl {
         if (input.isEmpty()) {
-            throw InvalidTileUrlException("Tile url is empty")
+            throw InvalidTileUrlException("Input is empty")
         }
 
-        val url = when (source) {
+        val parsedUrlString = when (source) {
             TileUrlSource.NFC -> decompressNfcPayload(input)
             TileUrlSource.OTHER -> input
         }
 
-        val segments = try {
-            Url(url).segments.filter { it.isNotEmpty() }
-        } catch (_: Throwable) {
-            throw InvalidTileUrlException("Invalid URL format: $url")
+        val url = parseUrl(parsedUrlString)
+            ?: throw InvalidTileUrlException("Invalid URL format: $parsedUrlString")
+
+        if (!NON_EMPTY_URI_PREFIXES.any { parsedUrlString.startsWith(it, true) }) {
+            throw InvalidTileUrlException("Invalid URL scheme: $url")
         }
 
-        val lastSegment = segments.lastOrNull()
+        val segments = url.segments.filter { it.isNotEmpty() }
+
+        val lastSegment = segments.lastOrNull { it.isNotEmpty() }
             ?: throw InvalidTileUrlException("No path segments found in: $url")
 
         Uuid.parseHexDashOrNull(lastSegment)
             ?: throw InvalidTileUrlException("Last path segment: $lastSegment, is not a valid tile UUID")
 
-        return ParsedTileUrl(tileId = lastSegment, url = url)
+        return ParsedTileUrl(tileId = lastSegment, url = parsedUrlString)
     }
 
     /**
