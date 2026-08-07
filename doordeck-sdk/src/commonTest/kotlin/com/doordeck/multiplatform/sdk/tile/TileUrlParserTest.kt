@@ -392,4 +392,19 @@ class TileUrlParserTest {
         // Then
         assertEquals("Invalid URL format: $input", exception.message)
     }
+
+    @Test
+    fun arbitraryHostThrows() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://totally-not-doordeck.evil.com/$uuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals("Invalid URL host: $input", exception.message)
+    }
 }

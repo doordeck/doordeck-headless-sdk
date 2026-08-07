@@ -8,6 +8,8 @@ import kotlin.uuid.Uuid
 @JsExport
 object TileUrlParser {
 
+    private val TILE_URL_HOST = "doordeck.link"
+
     // NFC Forum "URI Record Type Definition" (NDEF), URI Identifier Code table.
     // Index = first payload byte value.
     private val URI_PREFIXES = arrayOf(
@@ -47,6 +49,10 @@ object TileUrlParser {
 
         if (!NON_EMPTY_URI_PREFIXES.any { parsedUrlString.startsWith(it, true) }) {
             throw InvalidTileUrlException("Invalid URL scheme: $url")
+        }
+
+        if (!url.host.equals(TILE_URL_HOST, true)) {
+            throw InvalidTileUrlException("Invalid URL host: $url")
         }
 
         val segments = url.segments.filter { it.isNotEmpty() }
