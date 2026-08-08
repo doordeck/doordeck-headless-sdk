@@ -392,4 +392,128 @@ class TileUrlParserTest {
         // Then
         assertEquals("Invalid URL format: $input", exception.message)
     }
+
+    @Test
+    fun nfcWithHttpWwwPrefixCodeIsDecompressed() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "\u0001doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals("http://www.doordeck.link/$uuid", result.url)
+    }
+
+    @Test
+    fun nfcWithHttpsWwwPrefixCodeIsDecompressed() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "\u0002doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals("https://www.doordeck.link/$uuid", result.url)
+    }
+
+    @Test
+    fun nfcWithHttpPrefixCodeIsDecompressed() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "\u0003doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals("http://doordeck.link/$uuid", result.url)
+    }
+
+    @Test
+    fun nonHttpsSchemeIsAccepted() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "http://doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals(input, result.url)
+    }
+
+    @Test
+    fun customSchemeIsAccepted() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "doordeck://open/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals(input, result.url)
+    }
+
+    @Test
+    fun urlWithUserInfoThrows() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://user:pass@doordeck.link/$uuid"
+
+        // When
+        val exception = assertFailsWith<InvalidTileUrlException> {
+            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+        }
+
+        // Then
+        assertEquals("Invalid URL format: $input", exception.message)
+    }
+
+    @Test
+    fun stringSourceOverloadParsesLikeEnumOverload() = runTest {
+        // Given
+        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
+        val input = "https://doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, "OTHER")
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals(input, result.url)
+    }
+
+    @Test
+    fun stringSourceOverloadDecompressesNfc() = runTest {
+        // Given
+        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
+        val input = "\u0004doordeck.link/$uuid"
+
+        // When
+        val result = TileUrlParser.parseTileUrl(input, "NFC")
+
+        // Then
+        assertEquals(uuid, result.tileId)
+        assertEquals("https://doordeck.link/$uuid", result.url)
+    }
+
+    @Test
+    fun stringSourceOverloadWithUnknownSourceThrowsIllegalArgument() = runTest {
+        // Given
+        val input = "https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15"
+
+        // When / Then
+        assertFailsWith<IllegalArgumentException> {
+            TileUrlParser.parseTileUrl(input, "HELLO")
+        }
+    }
 }
