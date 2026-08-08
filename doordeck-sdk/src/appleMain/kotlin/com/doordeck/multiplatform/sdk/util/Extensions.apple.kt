@@ -2,9 +2,11 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.Constants.CERTIFICATE_PINNER_DOMAIN_PATTERN
 import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
+// TODO replace with io.ktor.client.engine.darwin.certificates.CertificatePinner and delete the
+//  util/certificates fork once this is fixed upstream: https://github.com/ktorio/ktor/pull/5802
+import com.doordeck.multiplatform.sdk.util.certificates.CertificatePinner
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
-import io.ktor.client.engine.darwin.certificates.CertificatePinner
 import kotlinx.datetime.toNSDate
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
