@@ -18,8 +18,6 @@ object TileUrlParser {
         "https://"                    // 0x04
     )
 
-    private val NON_EMPTY_URI_PREFIXES = URI_PREFIXES.filter { it.isNotEmpty() }
-
     /**
      * @throws InvalidTileUrlException if no tile ID can be extracted
      */
@@ -45,8 +43,8 @@ object TileUrlParser {
         val url = parseUrl(parsedUrlString)
             ?: throw InvalidTileUrlException("Invalid URL format: $parsedUrlString")
 
-        if (!NON_EMPTY_URI_PREFIXES.any { parsedUrlString.startsWith(it, true) }) {
-            throw InvalidTileUrlException("Invalid URL scheme: $url")
+        if (url.user != null || url.password != null) {
+            throw InvalidTileUrlException("Invalid URL format: $url")
         }
 
         val segments = url.segments.filter { it.isNotEmpty() }
