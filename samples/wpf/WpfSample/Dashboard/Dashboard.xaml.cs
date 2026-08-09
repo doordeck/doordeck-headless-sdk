@@ -5,6 +5,7 @@ using System.Windows.Data;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Model.Responses;
 using MaterialDesignThemes.Wpf;
+using WpfSample.Collections;
 using WpfSample.Login;
 
 namespace WpfSample.Dashboard;
@@ -23,7 +24,7 @@ public partial class Dashboard
     public ObservableCollection<LockResponse> Locks { get; } = [];
     private ObservableCollection<UserLockResponse> LockUsers { get; } = [];
     private ObservableCollection<UserLockResponse> LockAdmins { get; } = [];
-    public ObservableCollection<AuditResponse> Audits { get; } = [];
+    public RangeObservableCollection<AuditResponse> Audits { get; } = [];
 
     private void Load()
     {
@@ -76,17 +77,15 @@ public partial class Dashboard
         {
             if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null) return;
 
-            // Clear audits
-            Audits.Clear();
-
             // Load audit
             var lockAudit = await App.Sdk
                 .GetLockOperations()
                 .GetLockAuditTrail(lockId,
                     StartDatePicker.SelectedDate.Value,
                     EndDatePicker.SelectedDate.Value);
-            
-            lockAudit.ForEach(audit => Audits.Add(audit));
+
+            // Repopulate in a single reset instead of one notification per item
+            Audits.ReplaceAll(lockAudit);
         }
         catch (Exception exception)
         {
