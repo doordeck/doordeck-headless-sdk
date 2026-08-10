@@ -33,6 +33,8 @@ class TileUrlParserTest {
         TestCase("http://doordeck.link/$testUuid", OTHER, SuccessResult()),
         // Custom scheme
         TestCase("doordeck://open/$testUuid", OTHER, SuccessResult()),
+        // URL with fragments
+        TestCase("https://doordeck.link/$testUuid#section", OTHER, SuccessResult()),
 
         // NCF
         // NFC with empty prefix code & http www
@@ -54,8 +56,9 @@ class TileUrlParserTest {
         // NFC with full URL
         TestCase("https://doordeck.link/$testUuid", NFC, SuccessResult()),
         // NFC with mixed case UUID
-        TestCase("\u0004doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc",
-            NFC, SuccessResult("E2fcD000-8ce3-11F1-9876-d923122AC2fc", "https://doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc"))
+        TestCase("\u0004doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc", NFC, SuccessResult("E2fcD000-8ce3-11F1-9876-d923122AC2fc", "https://doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc")),
+        // NFC with DNA query
+        TestCase("\u0004doordeck.link/$testUuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07", NFC, SuccessResult(url = "https://doordeck.link/$testUuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"))
     )
 
     private val failureCases = listOf(
@@ -118,6 +121,23 @@ class TileUrlParserTest {
             assertIs<FailureResult>(case.result)
             assertEquals(case.result.message, exception.message)
         }
+    }
+
+    @Test
+    fun stringSourceOverloadParsesValidSources() = runTest {
+        // Given
+        val otherInput = "https://doordeck.link/$testUuid"
+        val nfcInput = "\u0004doordeck.link/$testUuid"
+
+        // When
+        val otherResult = TileUrlParser.parseTileUrl(otherInput, "OTHER")
+        val nfcResult = TileUrlParser.parseTileUrl(nfcInput, "NFC")
+
+        // Then
+        assertEquals(testUuid, otherResult.tileId)
+        assertEquals(otherInput, otherResult.url)
+        assertEquals(testUuid, nfcResult.tileId)
+        assertEquals("https://doordeck.link/$testUuid", nfcResult.url)
     }
 
     @Test
