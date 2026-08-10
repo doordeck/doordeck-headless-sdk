@@ -1,509 +1,123 @@
 package com.doordeck.multiplatform.sdk.tile
 
 import com.doordeck.multiplatform.sdk.exceptions.InvalidTileUrlException
+import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.tile.TileUrlSource.NFC
+import com.doordeck.multiplatform.sdk.tile.TileUrlSource.OTHER
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNotEquals
+import kotlin.test.assertIs
 
 class TileUrlParserTest {
 
-    @Test
-    fun dnaQueryStringIsPreservedAndNotExtracted() = runTest {
-        // Given
-        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val input = "https://doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+    private val testUuid = randomUuidString()
 
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
+    private val successCases = listOf(
+        // OTHER
+        // DNA query is preserved
+        TestCase("https://doordeck.link/e2fcd000-8ce3-11f1-9876-d923122ac2fc?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07",
+            OTHER, SuccessResult("e2fcd000-8ce3-11f1-9876-d923122ac2fc")),
+        // Ending trailing slash
+        TestCase("https://doordeck.link/$testUuid/", OTHER, SuccessResult()),
+        // Extra path segments
+        TestCase("https://doordeck.link/uuid/$testUuid", OTHER, SuccessResult()),
+        // Deep nested path with trailing slash and query
+        TestCase("https://this.thirdparty.com/tile/scan/what/not/$testUuid/?uuid=hello", OTHER, SuccessResult()),
+        // Mixed case UUID
+        TestCase("https://doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc", OTHER, SuccessResult("E2fcD000-8ce3-11F1-9876-d923122AC2fc")),
+        // Fully upper case UUID
+        TestCase("https://doordeck.link/E2FCD000-8CE3-11F1-9876-D923122AC2FC", OTHER, SuccessResult("E2FCD000-8CE3-11F1-9876-D923122AC2FC")),
+        // Non https scheme
+        TestCase("http://doordeck.link/$testUuid", OTHER, SuccessResult()),
+        // Custom scheme
+        TestCase("doordeck://open/$testUuid", OTHER, SuccessResult()),
 
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
-    }
+        // NCF
+        // NFC with empty prefix code & http www
+        TestCase("\u0000http://www.doordeck.link/$testUuid", NFC, SuccessResult(url = "http://www.doordeck.link/$testUuid")),
+        // NFC with empty prefix code & https www
+        TestCase("\u0000https://www.doordeck.link/$testUuid", NFC, SuccessResult(url = "https://www.doordeck.link/$testUuid")),
+        // NFC with empty prefix code & http
+        TestCase("\u0000http://doordeck.link/$testUuid", NFC, SuccessResult(url = "http://doordeck.link/$testUuid")),
+        // NFC with empty prefix code & https
+        TestCase("\u0000https://doordeck.link/$testUuid", NFC, SuccessResult(url = "https://doordeck.link/$testUuid")),
+        // NFC with http www prefix code
+        TestCase("\u0001doordeck.link/$testUuid", NFC, SuccessResult(url = "http://www.doordeck.link/$testUuid")),
+        // NFC with https www prefix code
+        TestCase("\u0002doordeck.link/$testUuid", NFC, SuccessResult(url = "https://www.doordeck.link/$testUuid")),
+        // NFC with http prefix code
+        TestCase("\u0003doordeck.link/$testUuid", NFC, SuccessResult(url = "http://doordeck.link/$testUuid")),
+        // NFC with https prefix code
+        TestCase("\u0004doordeck.link/$testUuid", NFC, SuccessResult(url = "https://doordeck.link/$testUuid")),
+        // NFC with full URL
+        TestCase("https://doordeck.link/$testUuid", NFC, SuccessResult()),
+        // NFC with mixed case UUID
+        TestCase("\u0004doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc",
+            NFC, SuccessResult("E2fcD000-8ce3-11F1-9876-d923122AC2fc", "https://doordeck.link/E2fcD000-8ce3-11F1-9876-d923122AC2fc"))
+    )
 
-    @Test
-    fun simpleTileUrl() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun trailingSlashIsIgnored() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://doordeck.link/$uuid/"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun extraPathPrefixSegmentsAreIgnored() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://doordeck.link/uuid/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun deepNestedPathWithTrailingSlashAndQueryStillFindsLastSegment() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://this.thirdparty.com/tile/scan/what/not/$uuid/?uuid=hello"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun nfcWithHttpsPrefixCodeIsDecompressed() = runTest {
-        // Given
-        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val input = "\u0004doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(
-            "https://doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07",
-            result.url
-        )
-    }
+    private val failureCases = listOf(
+        // Empty URL
+        TestCase("", OTHER, FailureResult("Input is empty")),
+        // Malformed scheme
+        TestCase("ht tp://doordeck.link/$testUuid", OTHER, FailureResult("Invalid URL format: ht tp://doordeck.link/$testUuid")),
+        // Malformed encoding
+        TestCase("https://doordeck.link/$testUuid%3", OTHER, FailureResult("Invalid URL format: https://doordeck.link/$testUuid%3")),
+        // URL with user info
+        TestCase("https://user:pass@doordeck.link/$testUuid", OTHER, FailureResult("Invalid URL format: https://user:pass@doordeck.link/$testUuid")),
+        // Base UUID
+        TestCase(testUuid, OTHER, FailureResult("Invalid URL format: $testUuid")),
+        // UUID with invalid HEX characters
+        TestCase("https://doordeck.link/0c019adg-38d4-11f1-8662-339ef0f86a1z", OTHER, FailureResult("Last path segment: 0c019adg-38d4-11f1-8662-339ef0f86a1z, is not a valid tile UUID")),
+        // UUID with invalid segment length
+        TestCase("https://doordeck.link/0c019a-d038d4-11f1866-2339ef0f86a15", OTHER, FailureResult("Last path segment: 0c019a-d038d4-11f1866-2339ef0f86a15, is not a valid tile UUID")),
+        // UUID with missing hyphens
+        TestCase("https://doordeck.link/0c019ad038d411f18662339ef0f86a15", OTHER, FailureResult("Last path segment: 0c019ad038d411f18662339ef0f86a15, is not a valid tile UUID")),
+        // UUID with extra character
+        TestCase("https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15a", OTHER, FailureResult("Last path segment: 0c019ad0-38d4-11f1-8662-339ef0f86a15a, is not a valid tile UUID")),
+        // Non UUID last segment
+        TestCase("https://doordeck.link/not-a-uuid", OTHER, FailureResult("Last path segment: not-a-uuid, is not a valid tile UUID")),
+        // No path segments
+        TestCase("https://doordeck.link/", OTHER, FailureResult("No path segments found in: https://doordeck.link/")),
+        // UUID only in query string
+        TestCase("https://doordeck.link/?uuid=$testUuid", OTHER, FailureResult("No path segments found in: https://doordeck.link/?uuid=$testUuid")),
+        // Extra trailing segments after UUID
+        TestCase("https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15/extra-segment", OTHER, FailureResult("Last path segment: extra-segment, is not a valid tile UUID")),
+        // NFC with unknown prefix code
+        TestCase("\u0006doordeck.link/$testUuid", NFC, FailureResult("Invalid URL format: \u0006doordeck.link/$testUuid")),
+        // NFC without prefix
+        TestCase("doordeck.link/$testUuid", NFC, FailureResult("Invalid URL format: doordeck.link/$testUuid"))
+    )
 
     @Test
-    fun nfcWithUnknownPrefixCodeThrows() = runTest {
+    fun shouldSuccessToParseTileUr() = runTest {
         // Given
-        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val input = "\u0006doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+        successCases.forEach { case ->
+            // When
+            val result = TileUrlParser.parseTileUrl(case.url, case.type)
 
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+            // Then
+            assertIs<SuccessResult>(case.result)
+            assertEquals(case.result.uuid ?: testUuid, result.tileId)
+            assertEquals(case.result.url ?: case.url, result.url)
         }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
     }
 
     @Test
-    fun nfcWithEmptyPrefixCodeIsParsed() = runTest {
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val url = "https://doordeck.link/$uuid"
-        val input = "\u0000$url"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(url, result.url)
-    }
-
-    @Test
-    fun nfcWithFullUrlDoesNotDecompress() = runTest {
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
-    }
-
-    @Test
-    fun nfcWithoutPrefixCodeThrows() = runTest {
+    fun shouldFailToParseTileUrl() = runTest {
         // Given
-        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val input = "doordeck.link/$uuid?uid=047448CA9C1790&ctr=000011&cmac=C780B85F5F3DAD07"
+        failureCases.forEach { case ->
+            // When
+            val exception = assertFailsWith<InvalidTileUrlException> {
+                TileUrlParser.parseTileUrl(case.url, case.type)
+            }
 
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
+            // Then
+            assertIs<FailureResult>(case.result)
+            assertEquals(case.result.message, exception.message)
         }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
-    }
-
-    @Test
-    fun bareUuidThrows() = runTest {
-        // Given
-        val input = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
-    }
-
-    @Test
-    fun nonUuidLastSegmentThrows() = runTest {
-        // Given
-        val input = "https://doordeck.link/not-a-uuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Last path segment: not-a-uuid, is not a valid tile UUID", exception.message)
-    }
-
-    @Test
-    fun noPathSegmentsThrows() = runTest {
-        // Given
-        val input = "https://doordeck.link/"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("No path segments found in: $input", exception.message)
-    }
-
-    @Test
-    fun extraTrailingSegmentAfterUuidThrows() = runTest {
-        // Given
-        val input = "https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15/extra-segment"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Last path segment: extra-segment, is not a valid tile UUID", exception.message)
-    }
-
-    @Test
-    fun uuidInQueryStringIsNeverUsedAsTileId() = runTest {
-        // Given
-        val input = "https://doordeck.link/?uuid=0c019ad0-38d4-11f1-8662-339ef0f86a15"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("No path segments found in: $input", exception.message)
-    }
-
-    @Test
-    fun emptyInputShouldThrow() = runTest {
-        // Given
-        val input = ""
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Input is empty", exception.message)
-    }
-
-    @Test
-    fun mixedCaseUuidInPathIsPreservedExactly() = runTest {
-        // Given
-        val uuid = "E2fcD000-8ce3-11F1-9876-d923122AC2fc"
-        val input = "https://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun fullyUppercaseUuidInPathIsPreserved() = runTest {
-        // Given
-        val uuid = "E2FCD000-8CE3-11F1-9876-D923122AC2FC"
-        val input = "https://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-    }
-
-    @Test
-    fun nfcDecompressionDoesNotAlterUuidCasing() = runTest {
-        // Given
-        val uuid = "E2fcD000-8ce3-11F1-9876-d923122AC2fc"
-        val input = "\u0004doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals("https://doordeck.link/$uuid", result.url)
-    }
-
-    @Test
-    fun differentlyCasedSameUuidProduceDistinctTileIdStrings() = runTest {
-        // Given
-        val lower = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val upper = "0C019AD0-38D4-11F1-8662-339EF0F86A15"
-
-        // When
-        val resultLower = TileUrlParser.parseTileUrl(
-            "https://doordeck.link/$lower", TileUrlSource.OTHER
-        )
-        val resultUpper = TileUrlParser.parseTileUrl(
-            "https://doordeck.link/$upper", TileUrlSource.OTHER
-        )
-
-        // Then
-        assertNotEquals(resultLower.tileId, resultUpper.tileId)
-        assertEquals(lower, resultLower.tileId)
-        assertEquals(upper, resultUpper.tileId)
-    }
-
-    @Test
-    fun uuidWithInvalidHexCharacterThrows() = runTest {
-        // Given
-        val invalidUuid = "0c019adg-38d4-11f1-8662-339ef0f86a1z"
-        val input = "https://doordeck.link/$invalidUuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals(
-            "Last path segment: $invalidUuid, is not a valid tile UUID",
-            exception.message
-        )
-    }
-
-    @Test
-    fun uuidWithWrongSegmentLengthsThrows() = runTest {
-        // Given
-        val invalidUuid = "0c019a-d038d4-11f1866-2339ef0f86a15"
-        val input = "https://doordeck.link/$invalidUuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals(
-            "Last path segment: $invalidUuid, is not a valid tile UUID",
-            exception.message
-        )
-    }
-
-    @Test
-    fun uuidWithMissingHyphensThrows() = runTest {
-        // Given
-        val noSeparatorsUuid = "0c019ad038d411f18662339ef0f86a15"
-        val input = "https://doordeck.link/$noSeparatorsUuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals(
-            "Last path segment: $noSeparatorsUuid, is not a valid tile UUID",
-            exception.message
-        )
-    }
-
-    @Test
-    fun uuidWithExtraCharacterThrows() = runTest {
-        // Given
-        val invalidUuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15a"
-        val input = "https://doordeck.link/$invalidUuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals(
-            "Last path segment: $invalidUuid, is not a valid tile UUID",
-            exception.message
-        )
-    }
-
-    @Test
-    fun malformedSchemeThrowsInvalidUrlFormat() = runTest {
-        // Given
-        val input = "ht tp://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
-    }
-
-    @Test
-    fun malformedPercentEncodingThrowsInvalidUrlFormat() = runTest {
-        // Given
-        val input = "https://doordeck.link/0c019ad0-38d4-11f1-8662-339ef0f86a15%3"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
-    }
-
-    @Test
-    fun nfcWithHttpWwwPrefixCodeIsDecompressed() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "\u0001doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals("http://www.doordeck.link/$uuid", result.url)
-    }
-
-    @Test
-    fun nfcWithHttpsWwwPrefixCodeIsDecompressed() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "\u0002doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals("https://www.doordeck.link/$uuid", result.url)
-    }
-
-    @Test
-    fun nfcWithHttpPrefixCodeIsDecompressed() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "\u0003doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.NFC)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals("http://doordeck.link/$uuid", result.url)
-    }
-
-    @Test
-    fun nonHttpsSchemeIsAccepted() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "http://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
-    }
-
-    @Test
-    fun customSchemeIsAccepted() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "doordeck://open/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
-    }
-
-    @Test
-    fun urlWithUserInfoThrows() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://user:pass@doordeck.link/$uuid"
-
-        // When
-        val exception = assertFailsWith<InvalidTileUrlException> {
-            TileUrlParser.parseTileUrl(input, TileUrlSource.OTHER)
-        }
-
-        // Then
-        assertEquals("Invalid URL format: $input", exception.message)
-    }
-
-    @Test
-    fun stringSourceOverloadParsesLikeEnumOverload() = runTest {
-        // Given
-        val uuid = "0c019ad0-38d4-11f1-8662-339ef0f86a15"
-        val input = "https://doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, "OTHER")
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals(input, result.url)
-    }
-
-    @Test
-    fun stringSourceOverloadDecompressesNfc() = runTest {
-        // Given
-        val uuid = "e2fcd000-8ce3-11f1-9876-d923122ac2fc"
-        val input = "\u0004doordeck.link/$uuid"
-
-        // When
-        val result = TileUrlParser.parseTileUrl(input, "NFC")
-
-        // Then
-        assertEquals(uuid, result.tileId)
-        assertEquals("https://doordeck.link/$uuid", result.url)
     }
 
     @Test
@@ -516,4 +130,21 @@ class TileUrlParserTest {
             TileUrlParser.parseTileUrl(input, "HELLO")
         }
     }
+
+    private data class TestCase(
+        val url: String,
+        val type: TileUrlSource,
+        val result: TestResult
+    )
+
+    private interface TestResult
+
+    private data class SuccessResult(
+        val uuid: String? = null, // if null TEST_UUID is used in the verification
+        val url: String? = null // if null TestCase.url is used in the verification
+    ) : TestResult
+
+    private data class FailureResult(
+        val message: String
+    ) : TestResult
 }
