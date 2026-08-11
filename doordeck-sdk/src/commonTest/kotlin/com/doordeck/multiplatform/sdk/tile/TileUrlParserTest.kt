@@ -31,8 +31,6 @@ class TileUrlParserTest {
         TestCase("https://doordeck.link/E2FCD000-8CE3-11F1-9876-D923122AC2FC", OTHER, SuccessResult("E2FCD000-8CE3-11F1-9876-D923122AC2FC")),
         // Non https scheme
         TestCase("http://doordeck.link/$testUuid", OTHER, SuccessResult()),
-        // Custom scheme
-        TestCase("doordeck://open/$testUuid", OTHER, SuccessResult()),
         // URL with fragments
         TestCase("https://doordeck.link/$testUuid#section", OTHER, SuccessResult()),
 
@@ -64,6 +62,8 @@ class TileUrlParserTest {
     private val failureCases = listOf(
         // Empty URL
         TestCase("", OTHER, FailureResult("Input is empty")),
+        // Custom scheme
+        TestCase("doordeck://open/$testUuid", OTHER, FailureResult("Invalid URL format: doordeck://open/$testUuid")),
         // Malformed scheme
         TestCase("ht tp://doordeck.link/$testUuid", OTHER, FailureResult("Invalid URL format: ht tp://doordeck.link/$testUuid")),
         // Malformed encoding
@@ -95,7 +95,7 @@ class TileUrlParserTest {
     )
 
     @Test
-    fun shouldSuccessToParseTileUr() = runTest {
+    fun shouldSuccessToParseTileUrl() = runTest {
         // Given
         successCases.forEach { case ->
             // When

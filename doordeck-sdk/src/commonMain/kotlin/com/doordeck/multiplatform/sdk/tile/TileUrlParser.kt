@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.tile
 
 import com.doordeck.multiplatform.sdk.exceptions.InvalidTileUrlException
+import io.ktor.http.URLProtocol
 import io.ktor.http.parseUrl
 import kotlin.js.JsExport
 import kotlin.uuid.Uuid
@@ -43,7 +44,8 @@ object TileUrlParser {
         val url = parseUrl(parsedUrlString)
             ?: throw InvalidTileUrlException("Invalid URL format: $parsedUrlString")
 
-        if (url.user != null || url.password != null) {
+        if ((url.protocolOrNull != URLProtocol.HTTP && url.protocolOrNull != URLProtocol.HTTPS) ||
+            url.user != null || url.password != null) {
             throw InvalidTileUrlException("Invalid URL format: $url")
         }
 
