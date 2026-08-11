@@ -6,6 +6,19 @@ import io.ktor.http.parseUrl
 import kotlin.js.JsExport
 import kotlin.uuid.Uuid
 
+/**
+ * Extracts a tile ID from a URL.
+ *
+ * Accepts either a plain URL or a raw NDEF URI record payload (see [TileUrlSource]).
+ * A URL is considered valid only if it is http/https, carries no userinfo, and its last
+ * non-empty path segment is a hex-dash UUID — that segment is the tile ID.
+ *
+ * Note: validation is deliberately permissive — it checks only the scheme, the absence of
+ * userinfo, and that the last path segment is a UUID. Everything else (host, port, query,
+ * fragment, encoding) is accepted as parsed. A [ParsedTileUrl.url] should therefore be treated
+ * as "well-formed enough to yield a tile ID", not as a fully validated or reachable URL;
+ * re-validate before using it for anything other than the tile ID.
+ */
 @JsExport
 object TileUrlParser {
 
@@ -20,14 +33,31 @@ object TileUrlParser {
     )
 
     /**
-     * @throws InvalidTileUrlException if no tile ID can be extracted
+     * JS-friendly overload taking the source as a string.
+     *
+     * @param input a URL, or an NDEF URI record payload when [source] is `NFC`.
+     * @param source the name of a [TileUrlSource] constant, e.g. `"NFC"` or `"OTHER"`.
+     * @throws IllegalArgumentException if [source] is not a valid [TileUrlSource] name.
+     * @throws InvalidTileUrlException if no tile ID can be extracted.
      */
     fun parseTileUrl(input: String, source: String): ParsedTileUrl {
         return parseTileUrl(input, TileUrlSource.valueOf(source))
     }
 
     /**
-     * @throws InvalidTileUrlException if no tile ID can be extracted
+     * Parses [input] and extracts the tile ID from its last path segment.
+     *
+     * When [source] is [TileUrlSource.NFC], [input] is first decompressed from an NDEF URI
+     * record payload; otherwise it is used as-is.
+     *
+     * Validation is minimal, so the returned [ParsedTileUrl.url] may still be malformed in ways
+     * this parser does not inspect — only the tile ID is guaranteed to be a valid UUID.
+     *
+     * @param input a non-empty URL, or an NDEF URI record payload when [source] is NFC.
+     * @param source how [input] is encoded.
+     * @return the tile ID plus the decompressed URL it was taken from.
+     * @throws InvalidTileUrlException if [input] is empty, is not a parsable URL, is not
+     * http/https, contains userinfo, has no path segments, or its last segment is not a UUID.
      */
     @JsExport.Ignore
     @Throws(Exception::class)
@@ -61,13 +91,14 @@ object TileUrlParser {
     }
 
     /**
-     * Decompresses a raw NDEF URI record payload back into a full URL string.
+     * Decompresses a raw NDEF URI record payload into a full URL string.
      *
-     * The first byte of the payload is always the URI Identifier Code (never payload data) and is
-     * always consumed, regardless of its value. recognized codes (0x00-0x04) are expanded via
-     * [URI_PREFIXES]; if the code is not recognized, the payload is returned unchanged.
+     * The first byte is the URI Identifier Code. If it maps to a known prefix (0x00–0x04 in
+     * [URI_PREFIXES]) that byte is dropped and the prefix prepended to the remainder; otherwise
+     * the payload is returned verbatim, identifier byte included.
      *
-     * @return the decompressed URL string, or the original payload if the identifier code is unrecognized.
+     * @param payload a non-empty NDEF URI record payload.
+     * @return the expanded URL, or [payload] unchanged if the identifier code is unrecognized.
      */
     private fun decompressNfcPayload(payload: String): String {
         val code = payload[0].code
