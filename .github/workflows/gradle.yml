@@ -27,18 +27,23 @@ jobs:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
+            konan: false
           - name: Android
             test: testAndroidHostTest
             os: ubuntu-latest
+            konan: false
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
+            konan: false
           - name: Apple
             test: macosArm64Test iosSimulatorArm64Test watchosSimulatorArm64Test
             os: macos-15
+            konan: true
           - name: Windows
             test: mingwX64Test
             os: windows-latest
+            konan: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
 
@@ -69,12 +74,13 @@ jobs:
           WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Cache Kotlin/Native
+        if: matrix.konan
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: konan-${{ runner.os }}-${{ github.job }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
-            konan-${{ runner.os }}-
+            konan-${{ runner.os }}-${{ github.job }}-
 
       - name: Tests
         run: ./gradlew ${{ matrix.test }}
@@ -102,9 +108,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: konan-${{ runner.os }}-${{ github.job }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
-            konan-${{ runner.os }}-
+            konan-${{ runner.os }}-${{ github.job }}-
 
       - name: Generate artifact
         run: ./gradlew mingwX64Binaries
@@ -258,9 +264,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: konan-${{ runner.os }}-${{ github.job }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
-            konan-${{ runner.os }}-
+            konan-${{ runner.os }}-${{ github.job }}-
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
@@ -297,14 +303,6 @@ jobs:
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
           cache-disabled: true
-
-      - name: Cache Kotlin/Native
-        uses: actions/cache@v6
-        with:
-          path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
-          restore-keys: |
-            konan-${{ runner.os }}-
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
@@ -390,9 +388,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: konan-${{ runner.os }}-${{ github.job }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
-            konan-${{ runner.os }}-
+            konan-${{ runner.os }}-${{ github.job }}-
 
       - name: Publish
         env:
@@ -500,9 +498,9 @@ jobs:
         uses: actions/cache@v6
         with:
           path: ~/.konan
-          key: konan-${{ runner.os }}-${{ hashFiles('gradle/libs.versions.toml') }}
+          key: konan-${{ runner.os }}-${{ github.job }}-${{ hashFiles('gradle/libs.versions.toml') }}
           restore-keys: |
-            konan-${{ runner.os }}-
+            konan-${{ runner.os }}-${{ github.job }}-
 
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
