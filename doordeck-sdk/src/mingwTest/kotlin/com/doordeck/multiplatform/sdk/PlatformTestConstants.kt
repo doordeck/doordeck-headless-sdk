@@ -2,10 +2,6 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_EXPIRED_CERTIFICATE
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_SITE_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_TILE_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
@@ -19,12 +15,14 @@ internal object PlatformTestConstants {
 
     val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY = TEST_MAIN_USER_PRIVATE_KEY
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY
-    val PLATFORM_TEST_MAIN_USER_ID = TEST_MAIN_USER_ID
+    val PLATFORM_TEST_MAIN_LOCK_NAME = "KMP $platformType LOCK"
+    val PLATFORM_TEST_MAIN_USER_EMAIL = "training+$platformType@doordeck.com"
+    val PLATFORM_TEST_MAIN_USER_ID = "2f89bca0-9697-11f1-80c4-0f8537fbb53f"
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-    val PLATFORM_TEST_MAIN_TILE_ID = TEST_MAIN_TILE_ID
-    val PLATFORM_TEST_MAIN_LOCK_ID = TEST_MAIN_LOCK_ID
-    val PLATFORM_TEST_MAIN_SITE_ID = TEST_MAIN_SITE_ID
+    val PLATFORM_TEST_MAIN_TILE_ID = "00000000-0000-0000-0000-000000000000"
+    val PLATFORM_TEST_MAIN_LOCK_ID = "b382fc10-9697-11f1-80c4-0f8537fbb53f" // WINDOWS Demo Lock
+    val PLATFORM_TEST_MAIN_SITE_ID = "1df0b0d0-9696-11f1-a47a-dba4cb2c41d0" // KMP WINDOWS SITE
     val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY

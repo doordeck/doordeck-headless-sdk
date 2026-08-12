@@ -1,11 +1,11 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestCallback
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -36,7 +36,7 @@ class AccountApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -47,7 +47,7 @@ class AccountApiTest : CallbackTest() {
         }.unwrap()
 
         // Then
-        assertEquals(TEST_MAIN_USER_EMAIL, response.email)
+        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, response.email)
     }
 
     @Test
@@ -55,7 +55,7 @@ class AccountApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -90,7 +90,7 @@ class AccountApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -106,7 +106,7 @@ class AccountApiTest : CallbackTest() {
         // Then
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -117,7 +117,7 @@ class AccountApiTest : CallbackTest() {
         // Given
         val loginResult = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -142,7 +142,7 @@ class AccountApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()

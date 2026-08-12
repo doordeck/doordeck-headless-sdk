@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_NAME
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
@@ -10,7 +12,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestCallback
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
@@ -91,7 +92,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -113,11 +114,11 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
-        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        val updatedLockName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         callbackApiCall<ResultData<Unit>> {
@@ -142,7 +143,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -171,11 +172,11 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
-        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        val updatedLockDefaultName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         callbackApiCall<ResultData<Unit>> {
@@ -200,7 +201,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldSetLockSettingPermittedAddresses
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -256,7 +257,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -285,7 +286,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldSetLockSettingTimeRestrictions
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -350,7 +351,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldUpdateLockSettingLocationRestrictions
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -431,7 +432,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -439,7 +440,7 @@ class LockOperationsApiTest : CallbackTest() {
         // When
         val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
             LockOperationsApi.getUserPublicKey(
-                data = GetUserPublicKeyData(TEST_MAIN_USER_EMAIL, true).toJson(),
+                data = GetUserPublicKeyData(PLATFORM_TEST_MAIN_USER_EMAIL, true).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -453,7 +454,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -461,7 +462,7 @@ class LockOperationsApiTest : CallbackTest() {
         // When
         val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
             LockOperationsApi.getUserPublicKeyByEmail(
-                data = GetUserPublicKeyByEmailData(TEST_MAIN_USER_EMAIL).toJson(),
+                data = GetUserPublicKeyByEmailData(PLATFORM_TEST_MAIN_USER_EMAIL).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -475,7 +476,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -497,7 +498,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -507,7 +508,7 @@ class LockOperationsApiTest : CallbackTest() {
             LockOperationsApi.getUserPublicKeyByEmails(
                 data = GetUserPublicKeyByEmailsData(
                     listOf(
-                        TEST_MAIN_USER_EMAIL,
+                        PLATFORM_TEST_MAIN_USER_EMAIL,
                         TEST_SUPPLEMENTARY_USER_EMAIL
                     )
                 ).toJson(),
@@ -524,7 +525,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -546,7 +547,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -569,7 +570,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -592,7 +593,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -611,7 +612,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -631,7 +632,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -666,7 +667,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -703,7 +704,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldShareLock
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -779,7 +780,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldShareLockUsingContext
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -892,7 +893,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldShareLockUsingContext
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -967,7 +968,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given - shouldShareLockUsingContext
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1077,7 +1078,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1122,7 +1123,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1170,7 +1171,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1257,7 +1258,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1339,7 +1340,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -1364,7 +1365,7 @@ class LockOperationsApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
