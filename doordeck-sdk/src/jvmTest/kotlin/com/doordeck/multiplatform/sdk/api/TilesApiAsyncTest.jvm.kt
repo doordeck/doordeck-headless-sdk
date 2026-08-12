@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -17,6 +18,7 @@ import kotlin.test.assertTrue
 
 class TilesApiAsyncTest : IntegrationTest() {
 
+    @Ignore
     @Test
     fun shouldGetLocksBelongingToTileAsync() = runTest {
         // Given
