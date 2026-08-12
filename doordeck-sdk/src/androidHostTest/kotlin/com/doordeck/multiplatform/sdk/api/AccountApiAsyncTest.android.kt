@@ -28,7 +28,7 @@ class AccountApiAsyncTest : IntegrationTest() {
         val response = AccountApi.getUserDetailsAsync().await()
 
         // Then
-        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, response.email)
+        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL.lowercase(), response.email)
     }
 
     @Ignore

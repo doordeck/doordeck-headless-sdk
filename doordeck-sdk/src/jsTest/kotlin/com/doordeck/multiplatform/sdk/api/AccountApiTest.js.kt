@@ -30,7 +30,7 @@ class AccountApiTest : IntegrationTest() {
         val response = AccountApi.getUserDetails().await()
 
         // Then
-        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, response.email)
+        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL.lowercase(), response.email)
     }
 
     @Ignore
