@@ -23,10 +23,10 @@ internal object TestConstants {
     const val TEST_SUPPLEMENTARY_TILE_ID = "8bdc10ea-7443-4561-9716-eeac5aaf68f4"
     val FUSION_INTEGRATIONS: List<BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyList()
 
-    // TODO DELETE
-    val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
-    val TEST_MAIN_USER_ID = ""
-    val TEST_MAIN_LOCK_ID = ""
+    internal val TEST_MAIN_USER_EMAIL = "training@doordeck.com"
+    internal val TEST_MAIN_USER_ID = "05cf8ff0-1285-11e9-9f69-170748b9fca8"
+    internal val TEST_MAIN_LOCK_ID = "eb868970-e882-11ef-bced-bf10e8a8d751"
+
     @Serializable
     data class BasicTestController(
         val uri: String,
