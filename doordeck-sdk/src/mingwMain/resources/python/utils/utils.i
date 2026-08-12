@@ -1,6 +1,6 @@
 %pythoncode %{
-def current_epoch_seconds() -> int:
-    return int(time.time())
+def current_epoch_millis() -> int:
+    return time.time_ns() // 1_000_000
 
 def decode_base64_to_byte_array(input):
     return base64.b64decode(input)

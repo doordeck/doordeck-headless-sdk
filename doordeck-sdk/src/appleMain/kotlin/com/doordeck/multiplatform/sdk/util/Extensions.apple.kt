@@ -2,9 +2,12 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.Constants.CERTIFICATE_PINNER_DOMAIN_PATTERN
 import com.doordeck.multiplatform.sdk.Constants.TRUSTED_CERTIFICATES
+import com.doordeck.multiplatform.sdk.PlatformType
+import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import io.ktor.client.engine.darwin.certificates.CertificatePinner
+import kotlinx.datetime.toNSDate
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitDay
 import platform.Foundation.NSCalendarUnitHour
@@ -34,11 +37,17 @@ import kotlin.time.Instant
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
         if (this is DarwinClientEngineConfig) {
-            if (!isRunningOnSimulator()) {
+            // watchOS installs no challenge handler at all, so NSURLSession keeps doing its own full
+            // validation - CA chain and hostname - just without pinning. Ktor's CertificatePinner
+            // over-releases two Core Foundation objects per handshake, and on Apple Watch models with
+            // 32-bit pointers (Series 8 and earlier, where those values can't be tagged pointers) the
+            // GC later dies freeing them. Restore pinning here once that is fixed upstream:
+            // https://github.com/ktorio/ktor/pull/5802
+            if (!isRunningOnSimulator() && platformType != PlatformType.APPLE_WATCH) {
                 val certificatePinner = CertificatePinner.Builder()
                     .add(CERTIFICATE_PINNER_DOMAIN_PATTERN, *TRUSTED_CERTIFICATES.toTypedArray())
                 handleChallenge(certificatePinner.build())
-            } else {
+            } else if (isRunningOnSimulator()) {
                 handleChallenge { session, task, challenge, completionHandler ->
                     if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
                         val serverTrust = challenge.protectionSpace.serverTrust!!
@@ -105,6 +114,6 @@ internal fun Double.toNsDate(): NSDate = toString().toNsDate()
 
 internal fun String.toNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
 
-internal fun Long.epochSecondToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(toDouble())
+internal fun Long.epochMillisecondToNsDate(): NSDate = Instant.fromEpochMilliseconds(this).toNSDate()
 
 internal fun String.isoToNsDate(): NSDate = NSDate.dateWithTimeIntervalSince1970(Instant.parse(this).epochSeconds.toDouble())

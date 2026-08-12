@@ -29,9 +29,9 @@ class BaseOperation:
     userId: typing.Optional[str] = None
     userCertificateChain: typing.Optional[typing.List[str]] = None
     userPrivateKey: typing.Optional[str] = None
-    notBefore: int = field(default_factory=current_epoch_seconds)
-    issuedAt: int = field(default_factory=current_epoch_seconds)
-    expiresAt: int = field(default_factory=lambda: current_epoch_seconds() + 60)  # 1 minute from now
+    notBefore: int = field(default_factory=current_epoch_millis)
+    issuedAt: int = field(default_factory=current_epoch_millis)
+    expiresAt: int = field(default_factory=lambda: current_epoch_millis() + 60000)  # 1 minute from now
     jti: str = field(default_factory=lambda: str(uuid.uuid4()))
 
 @dataclass

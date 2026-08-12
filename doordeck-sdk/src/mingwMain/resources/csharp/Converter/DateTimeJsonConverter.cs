@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Doordeck.Headless.Sdk.Converter;
 
-public class DateTimeJsonConverter : JsonConverter<DateTime>
+public abstract class EpochDateTimeConverterBase : JsonConverter<DateTime>
 {
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -21,10 +21,9 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
             throw new JsonException($"Invalid epoch-second.nano format: {value}");
         }
 
-        var epoch = DateTime.UnixEpoch;
         try
         {
-            return epoch.AddSeconds(totalSeconds);
+            return DateTime.UnixEpoch.AddSeconds(totalSeconds);
         }
         catch (ArgumentOutOfRangeException ex)
         {
@@ -32,8 +31,21 @@ public class DateTimeJsonConverter : JsonConverter<DateTime>
         }
     }
 
+    public abstract override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options);
+}
+
+public sealed class DateTimeJsonConverter : EpochDateTimeConverterBase
+{
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
     {
         writer.WriteNumberValue((long)(value.ToUniversalTime() - DateTime.UnixEpoch).TotalSeconds);
+    }
+}
+
+public sealed class DateTimeMillisecondsJsonConverter : EpochDateTimeConverterBase
+{
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+    {
+        writer.WriteNumberValue((long)(value.ToUniversalTime() - DateTime.UnixEpoch).TotalMilliseconds);
     }
 }

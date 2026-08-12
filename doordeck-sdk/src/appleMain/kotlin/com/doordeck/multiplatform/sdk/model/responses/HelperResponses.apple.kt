@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.model.responses
 
-import com.doordeck.multiplatform.sdk.util.epochSecondToNsDate
+import com.doordeck.multiplatform.sdk.util.epochMillisecondToNsDate
 import platform.Foundation.NSDate
 
 data class AssistedLoginResponse(
@@ -29,5 +29,5 @@ internal fun BasicAssistedRegisterEphemeralKeyResponse.toAssistedRegisterEphemer
     )
 
 internal fun BasicServerTimeResponse.toServerTimeResponse(): ServerTimeResponse = ServerTimeResponse(
-    now = now.epochSecondToNsDate()
+    now = now.epochMillisecondToNsDate()
 )
