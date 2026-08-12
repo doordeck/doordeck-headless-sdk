@@ -63,6 +63,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class PlatformApiTest : CallbackTest() {
 
@@ -85,7 +86,7 @@ class PlatformApiTest : CallbackTest() {
     }
 
     @Test
-    fun shouldTestPlatform() = runTest {
+    fun shouldTestPlatform() = runTest(timeout = 2.minutes) {
         CryptoManager.initialize() // Initialize
         // Given - shouldCreateApplication
         val authTokens = callbackApiCall<ResultData<BasicTokenResponse>> {

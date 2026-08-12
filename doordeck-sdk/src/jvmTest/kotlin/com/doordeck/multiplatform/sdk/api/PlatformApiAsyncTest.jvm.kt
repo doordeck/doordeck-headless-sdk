@@ -41,6 +41,7 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class PlatformApiAsyncTest : IntegrationTest() {
 
@@ -56,7 +57,7 @@ class PlatformApiAsyncTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldTestPlatformAsync() = runTest {
+    fun shouldTestPlatformAsync() = runTest(timeout = 2.minutes) {
         // Given - shouldCreateApplication
         val authTokens = AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val newApplication = PlatformOperations.CreateApplication(

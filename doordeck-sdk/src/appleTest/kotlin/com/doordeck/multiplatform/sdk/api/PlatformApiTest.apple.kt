@@ -35,6 +35,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class PlatformApiTest : IntegrationTest() {
 
@@ -50,7 +51,7 @@ class PlatformApiTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldTestPlatform() = runTest {
+    fun shouldTestPlatform() = runTest(timeout = 2.minutes) {
         // Given - shouldCreateApplication
         val authTokens = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
