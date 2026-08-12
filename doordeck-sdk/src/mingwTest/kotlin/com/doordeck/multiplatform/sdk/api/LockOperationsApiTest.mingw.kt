@@ -12,7 +12,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestCallback
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
@@ -484,7 +483,7 @@ class LockOperationsApiTest : CallbackTest() {
         // When
         val result = callbackApiCall<ResultData<BasicUserPublicKeyResponse>> {
             LockOperationsApi.getUserPublicKeyByLocalKey(
-                data = GetUserPublicKeyByLocalKeyData(TEST_MAIN_USER_ID).toJson(),
+                data = GetUserPublicKeyByLocalKeyData(PLATFORM_TEST_MAIN_USER_ID).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -533,7 +532,7 @@ class LockOperationsApiTest : CallbackTest() {
         // When
         val result = callbackApiCall<ResultData<List<BasicBatchUserPublicKeyResponse>>> {
             LockOperationsApi.getUserPublicKeyByLocalKeys(
-                data = GetUserPublicKeyByLocalKeysData(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).toJson(),
+                data = GetUserPublicKeyByLocalKeysData(listOf(PLATFORM_TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -578,7 +577,7 @@ class LockOperationsApiTest : CallbackTest() {
         // When
         val locksForUser = callbackApiCall<ResultData<BasicLockUserResponse>> {
             LockOperationsApi.getLocksForUser(
-                data = GetLocksForUserData(TEST_MAIN_USER_ID).toJson(),
+                data = GetLocksForUserData(PLATFORM_TEST_MAIN_USER_ID).toJson(),
                 callback = TestCallback
             )
         }.unwrap()

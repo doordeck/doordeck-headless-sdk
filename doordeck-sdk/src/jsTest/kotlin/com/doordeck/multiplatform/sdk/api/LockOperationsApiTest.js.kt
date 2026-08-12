@@ -11,7 +11,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
@@ -252,7 +251,7 @@ class LockOperationsApiTest : IntegrationTest() {
         AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByLocalKey(TEST_MAIN_USER_ID).await()
+        val result = LockOperationsApi.getUserPublicKeyByLocalKey(PLATFORM_TEST_MAIN_USER_ID).await()
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -276,7 +275,7 @@ class LockOperationsApiTest : IntegrationTest() {
         AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByLocalKeys(jsArrayOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).await()
+        val result = LockOperationsApi.getUserPublicKeyByLocalKeys(jsArrayOf(PLATFORM_TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).await()
 
         // Then
         assertTrue { result.isNotEmpty() }

@@ -1,6 +1,5 @@
 package com.doordeck.multiplatform.sdk.cache
 
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.randomUuidString
@@ -24,24 +23,26 @@ class CapabilityCacheTest {
     fun shouldAddCapabilities() = runTest {
         // Given
         val capabilities = mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED)
+        val lockId = randomUuidString()
 
         // When
-        CapabilityCache.put(TEST_MAIN_LOCK_ID, capabilities)
+        CapabilityCache.put(lockId, capabilities)
 
         // Then
-        assertEquals(capabilities, CapabilityCache.get(TEST_MAIN_LOCK_ID))
+        assertEquals(capabilities, CapabilityCache.get(lockId))
     }
 
     @Test
     fun shouldCheckSupported() = runTest {
         // Given
         val capabilities = mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.SUPPORTED)
+        val lockId = randomUuidString()
 
         // When
-        CapabilityCache.put(TEST_MAIN_LOCK_ID, capabilities)
+        CapabilityCache.put(lockId, capabilities)
 
         // Then
-        val result = CapabilityCache.isSupported(TEST_MAIN_LOCK_ID, CapabilityType.BATCH_SHARING_25)
+        val result = CapabilityCache.isSupported(lockId, CapabilityType.BATCH_SHARING_25)
         assertNotNull(result)
         assertTrue { result }
     }
@@ -50,12 +51,13 @@ class CapabilityCacheTest {
     fun shouldCheckNotSupported() = runTest {
         // Given
         val capabilities = mapOf(CapabilityType.BATCH_SHARING_25 to CapabilityStatus.UNSUPPORTED)
+        val lockId = randomUuidString()
 
         // When
-        CapabilityCache.put(TEST_MAIN_LOCK_ID, capabilities)
+        CapabilityCache.put(lockId, capabilities)
 
         // Then
-        val result = CapabilityCache.isSupported(TEST_MAIN_LOCK_ID, CapabilityType.BATCH_SHARING_25)
+        val result = CapabilityCache.isSupported(lockId, CapabilityType.BATCH_SHARING_25)
         assertNotNull(result)
         assertFalse { result }
     }
@@ -64,12 +66,13 @@ class CapabilityCacheTest {
     fun shouldCheckNotSupportedMissingCapability() = runTest {
         // Given
         val capabilities = emptyMap<CapabilityType, CapabilityStatus>()
+        val lockId = randomUuidString()
 
         // When
-        CapabilityCache.put(TEST_MAIN_LOCK_ID, capabilities)
+        CapabilityCache.put(lockId, capabilities)
 
         // Then
-        val result = CapabilityCache.isSupported(TEST_MAIN_LOCK_ID, CapabilityType.BATCH_SHARING_25)
+        val result = CapabilityCache.isSupported(lockId, CapabilityType.BATCH_SHARING_25)
         assertNotNull(result)
         assertFalse { result }
     }
@@ -78,11 +81,12 @@ class CapabilityCacheTest {
     fun shouldCheckNotSupportedMissingDevice() = runTest {
         // Given
         val capabilities = emptyMap<CapabilityType, CapabilityStatus>()
+        val lockId = randomUuidString()
 
         // When
         CapabilityCache.put(randomUuidString(), capabilities)
 
         // Then
-        assertNull(CapabilityCache.isSupported(TEST_MAIN_LOCK_ID, CapabilityType.BATCH_SHARING_25))
+        assertNull(CapabilityCache.isSupported(lockId, CapabilityType.BATCH_SHARING_25))
     }
 }
