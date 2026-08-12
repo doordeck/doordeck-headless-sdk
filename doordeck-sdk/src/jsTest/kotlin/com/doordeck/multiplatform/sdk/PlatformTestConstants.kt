@@ -22,14 +22,22 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_MAIN_LOCK_NAME = "KMP $platformType LOCK"
     val PLATFORM_TEST_MAIN_USER_EMAIL = "training+$platformType@doordeck.com"
-    val PLATFORM_TEST_MAIN_USER_ID = "00000000-0000-0000-0000-000000000000"
+    val PLATFORM_TEST_MAIN_USER_ID = when (platformType) {
+        PlatformType.JS_NODE -> "47614e60-969c-11f1-80c4-0f8537fbb53f"
+        PlatformType.JS_BROWSER -> "58634a50-969d-11f1-80c4-0f8537fbb53f"
+        else -> ""
+    }
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
-    val PLATFORM_TEST_MAIN_TILE_ID = "00000000-0000-0000-0000-000000000000"
-    val PLATFORM_TEST_MAIN_LOCK_ID = "00000000-0000-0000-0000-000000000000"
+    val PLATFORM_TEST_MAIN_TILE_ID = "00000000-0000-0000-0000-000000000000" // TODO
+    val PLATFORM_TEST_MAIN_LOCK_ID = when (platformType) {
+        PlatformType.JS_NODE -> "ad396380-969c-11f1-80c4-0f8537fbb53f" // JS_NODE Demo Lock
+        PlatformType.JS_BROWSER -> "bc573620-969d-11f1-80c4-0f8537fbb53f" // JS_BROWSER Demo Lock
+        else -> ""
+    }
     val PLATFORM_TEST_MAIN_SITE_ID = when (platformType) {
-        PlatformType.JS_NODE -> "7b7bd8c0-969a-11f1-a47a-dba4cb2c41d0"
-        PlatformType.JS_BROWSER -> "ad067e90-969a-11f1-a47a-dba4cb2c41d0"
+        PlatformType.JS_NODE -> "7b7bd8c0-969a-11f1-a47a-dba4cb2c41d0" // KMP JS_NODE SITE
+        PlatformType.JS_BROWSER -> "ad067e90-969a-11f1-a47a-dba4cb2c41d0" // KMP JS_BROWSER SITE
         else -> ""
     }
     val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID
