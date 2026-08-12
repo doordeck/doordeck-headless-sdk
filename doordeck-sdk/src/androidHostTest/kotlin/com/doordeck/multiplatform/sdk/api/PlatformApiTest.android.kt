@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -45,7 +45,7 @@ class PlatformApiTest : IntegrationTest() {
 
     @After
     fun cleanUp() = runBlocking {
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         PlatformApi.listApplications().filter { application ->
             application.name.startsWith("Test Application $platformType") &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
@@ -57,7 +57,7 @@ class PlatformApiTest : IntegrationTest() {
     @Test
     fun shouldTestPlatform() = runTest {
         // Given - shouldCreateApplication
-        val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val authTokens = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),

@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import kotlinx.coroutines.future.await
@@ -22,20 +22,20 @@ class AccountApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserDetailsAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val response = AccountApi.getUserDetailsAsync().await()
 
         // Then
-        assertEquals(TEST_MAIN_USER_EMAIL, response.email)
+        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, response.email)
     }
 
     @Ignore
     @Test
     fun shouldUpdateUserDetailsAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val updatedUserDisplayName = "Training"
 
         // When
@@ -49,7 +49,7 @@ class AccountApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldRegisterEphemeralKeyAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
         val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
@@ -70,19 +70,19 @@ class AccountApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldChangePasswordAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         AccountApi.changePasswordAsync(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD).await()
 
         // Then
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
     }
 
     @Test
     fun shouldRefreshTokenAsync() = runTest {
         // Given
-        val login = AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val response = AccountApi.refreshTokenAsync(login.refreshToken).await()
@@ -97,7 +97,7 @@ class AccountApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldLogoutAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         AccountApi.logoutAsync().await()
