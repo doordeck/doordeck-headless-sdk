@@ -25,7 +25,7 @@ internal object PlatformTestConstants {
 
     val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY by lazy { TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray().toPrivateKey() }
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray().toPublicKey()
-    
+    val PLATFORM_TEST_MAIN_LOCK_NAME = "KMP $platformType LOCK"
     val PLATFORM_TEST_MAIN_USER_EMAIL = "training+$platformType@doordeck.com"
     val PLATFORM_TEST_MAIN_USER_ID = "c88119c0-9675-11f1-80c4-0f8537fbb53f".toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID.toUuid()

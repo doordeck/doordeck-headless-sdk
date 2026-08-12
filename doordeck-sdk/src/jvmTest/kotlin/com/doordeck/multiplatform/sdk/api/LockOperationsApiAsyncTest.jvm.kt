@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_NAME
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -66,7 +67,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     fun shouldUpdateLockNameAsync() = runTest {
         // Given
         AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        val updatedLockName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockNameAsync(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName).await()
@@ -94,7 +95,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     fun shouldUpdateLockSettingDefaultNameAsync() = runTest {
         // Given
         AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        val updatedLockDefaultName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockSettingDefaultNameAsync(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName).await()
