@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import kotlinx.coroutines.test.runTest
@@ -21,20 +21,20 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserDetails() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val response = AccountApi.getUserDetails()
 
         // Then
-        assertEquals(TEST_MAIN_USER_EMAIL, response.email)
+        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, response.email)
     }
 
     @Ignore
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val updatedUserDisplayName = "Training"
 
         // When
@@ -48,7 +48,7 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
         val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
@@ -69,19 +69,19 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldChangePassword() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         AccountApi.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
 
         // Then
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
     }
 
     @Test
     fun shouldRefreshToken() = runTest {
         // Given
-        val login = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val login = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val response = AccountApi.refreshToken(login.refreshToken)
@@ -96,7 +96,7 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldLogout() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         AccountApi.logout()
