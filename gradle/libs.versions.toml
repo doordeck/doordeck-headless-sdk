@@ -56,5 +56,4 @@ kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "kgp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }

@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
@@ -16,7 +16,7 @@ class SitesApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldListSitesAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val sites = SitesApi.listSitesAsync().await()
@@ -29,7 +29,7 @@ class SitesApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSiteAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val locksForSite = SitesApi.getLocksForSiteAsync(PLATFORM_TEST_MAIN_SITE_ID).await()
@@ -42,7 +42,7 @@ class SitesApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSiteAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val usersForSite = SitesApi.getUsersForSiteAsync(PLATFORM_TEST_MAIN_SITE_ID).await()

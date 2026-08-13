@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_NAME
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
@@ -9,8 +11,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
@@ -54,7 +54,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetSingleLockAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val response = LockOperationsApi.getSingleLockAsync(PLATFORM_TEST_MAIN_LOCK_ID).await()
@@ -66,8 +66,8 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockNameAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val updatedLockName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockNameAsync(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName).await()
@@ -80,7 +80,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockFavouriteAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val updatedFavourite = true
 
         // When
@@ -94,8 +94,8 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockSettingDefaultNameAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-        val updatedLockDefaultName = "Doordeck Fusion Test Site - ${randomUuidString()}"
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val updatedLockDefaultName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockSettingDefaultNameAsync(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName).await()
@@ -108,7 +108,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldSetAndRemoveLockSettingPermittedAddressesAsync() = runTest {
         // Given - shouldSetLockSettingPermittedAddresses
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val addedLockPermittedAddresses = listOf("95.19.38.42".toInetAddress())
 
         // When
@@ -133,7 +133,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockSettingHiddenAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val updatedHidden = false
 
         // When
@@ -147,7 +147,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldSetAndRemoveLockSettingTimeRestrictionsAsync() = runTest {
         // Given - shouldSetLockSettingTimeRestrictions
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val now = now()
         val addedTimeRestriction = LockOperations.TimeRequirement(
             start = LocalTime.ofInstant(now.minus(1, ChronoUnit.MINUTES), ZoneId.of("UTC")),
@@ -182,7 +182,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveLockSettingLocationRestrictionsAsync() = runTest {
         // Given - shouldUpdateLockSettingLocationRestrictions
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val addedLocationRestriction = LockOperations.LocationRequirement(
             latitude = randomDouble(-90.0, 90.0),
             longitude = randomDouble(-180.0, 180.0),
@@ -220,10 +220,10 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyAsync(TEST_MAIN_USER_EMAIL, true).await()
+        val result = LockOperationsApi.getUserPublicKeyAsync(PLATFORM_TEST_MAIN_USER_EMAIL, true).await()
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -232,10 +232,10 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByEmailAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByEmailAsync(TEST_MAIN_USER_EMAIL).await()
+        val result = LockOperationsApi.getUserPublicKeyByEmailAsync(PLATFORM_TEST_MAIN_USER_EMAIL).await()
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -244,10 +244,10 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByLocalKeyAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByLocalKeyAsync(TEST_MAIN_USER_ID).await()
+        val result = LockOperationsApi.getUserPublicKeyByLocalKeyAsync(PLATFORM_TEST_MAIN_USER_ID.toString()).await()
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -256,10 +256,10 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByEmailsAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByEmailsAsync(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL)).await()
+        val result = LockOperationsApi.getUserPublicKeyByEmailsAsync(listOf(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL)).await()
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -268,10 +268,10 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByLocalKeysAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByLocalKeysAsync(listOf(TEST_MAIN_USER_ID, TEST_SUPPLEMENTARY_USER_ID)).await()
+        val result = LockOperationsApi.getUserPublicKeyByLocalKeysAsync(listOf(PLATFORM_TEST_MAIN_USER_ID.toString(), TEST_SUPPLEMENTARY_USER_ID)).await()
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -280,7 +280,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForLockAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val usersForLock = LockOperationsApi.getUsersForLockAsync(PLATFORM_TEST_MAIN_LOCK_ID).await()
@@ -293,7 +293,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetLockForUserAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val locksForUser = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_MAIN_USER_ID).await()
@@ -306,7 +306,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetPinnedLocksAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val pinnedLocks = LockOperationsApi.getPinnedLocksAsync().await()
@@ -318,7 +318,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetShareableLocksAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val shareableLocks = LockOperationsApi.getShareableLocksAsync().await()
@@ -331,7 +331,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUnlockAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -352,7 +352,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUnlockUsingContextAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -380,7 +380,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldShareAndRevokeLockAsync() = runTest {
         // Given - shouldShareLock
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -432,7 +432,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldBatchShareAndRevokeLockAsync() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -507,7 +507,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldShareAndRevokeLockUsingContextAsync() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -560,7 +560,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldBatchShareAndRevokeLockUsingContextAsync() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -632,7 +632,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDurationAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -663,7 +663,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContextAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -697,7 +697,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -760,7 +760,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContextAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
             KeyPair(
                 PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
@@ -820,7 +820,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetLockAuditTrailAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val now = now()
         val start = now.minus(14, ChronoUnit.DAYS)
         val end = now
@@ -835,7 +835,7 @@ class LockOperationsApiAsyncTest : IntegrationTest() {
     @Test
     fun shouldGetAuditForUserAsync() = runTest {
         // Given
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val now = now()
         val start = now.minus(14, ChronoUnit.DAYS)
         val end = now
