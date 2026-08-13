@@ -20,7 +20,6 @@ import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.unwrapFailure
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -28,7 +27,6 @@ import kotlin.test.assertTrue
 
 class TilesApiTest : CallbackTest() {
 
-    @Ignore
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
         // Given
