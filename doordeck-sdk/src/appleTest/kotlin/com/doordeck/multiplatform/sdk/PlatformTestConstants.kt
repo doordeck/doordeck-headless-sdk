@@ -31,7 +31,12 @@ internal object PlatformTestConstants {
     }.toNsUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID.toNsUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
-    val PLATFORM_TEST_MAIN_TILE_ID = "00000000-0000-0000-0000-000000000000".toNsUuid() // TODO
+    val PLATFORM_TEST_MAIN_TILE_ID = when(platformType) {
+        PlatformType.APPLE_MAC -> "eb86c471-1f34-441b-99de-1afddf6f32c5"
+        PlatformType.APPLE_WATCH -> "26d8c620-9fa1-4201-93ce-239057d430e7"
+        PlatformType.APPLE_IOS -> "a830a74b-0154-4da3-a23a-92b20b817bcd"
+        else -> ""
+    }.toNsUuid()
     val PLATFORM_TEST_MAIN_LOCK_ID = when(platformType) {
         PlatformType.APPLE_MAC -> "420d6b00-96a2-11f1-80c4-0f8537fbb53f" // APPLE_MAC Demo Lock
         PlatformType.APPLE_WATCH -> "cabb58e0-96a2-11f1-80c4-0f8537fbb53f" // APPLE_WATCH Demo Lock
