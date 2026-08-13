@@ -4,9 +4,9 @@ import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_TILE_ID
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_TILE_ID
 import com.doordeck.multiplatform.sdk.TestCallback
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
@@ -32,7 +32,7 @@ class TilesApiTest : CallbackTest() {
         // Given
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -56,7 +56,7 @@ class TilesApiTest : CallbackTest() {
         // Given - associate
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
