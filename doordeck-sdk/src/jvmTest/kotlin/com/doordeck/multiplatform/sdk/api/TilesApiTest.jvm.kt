@@ -9,7 +9,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -17,7 +16,6 @@ import kotlin.test.assertTrue
 
 class TilesApiTest : IntegrationTest() {
 
-    @Ignore
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
         // Given
