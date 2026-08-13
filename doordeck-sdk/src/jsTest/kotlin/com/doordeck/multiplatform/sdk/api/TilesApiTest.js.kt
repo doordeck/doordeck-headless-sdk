@@ -13,7 +13,6 @@ import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -21,7 +20,6 @@ import kotlin.test.assertTrue
 
 class TilesApiTest : IntegrationTest() {
 
-    @Ignore
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
         // Given

@@ -27,7 +27,11 @@ internal object PlatformTestConstants {
     }
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()
-    val PLATFORM_TEST_MAIN_TILE_ID = "00000000-0000-0000-0000-000000000000" // TODO
+    val PLATFORM_TEST_MAIN_TILE_ID = when (platformType) {
+        PlatformType.JS_NODE -> "4b4aa116-1792-4c68-b848-f5cd66bf58eb"
+        PlatformType.JS_BROWSER -> "df199a97-41c0-46a2-a2ed-da47069cd994"
+        else -> ""
+    }
     val PLATFORM_TEST_MAIN_LOCK_ID = when (platformType) {
         PlatformType.JS_NODE -> "ad396380-969c-11f1-80c4-0f8537fbb53f" // JS_NODE Demo Lock
         PlatformType.JS_BROWSER -> "bc573620-969d-11f1-80c4-0f8537fbb53f" // JS_BROWSER Demo Lock
