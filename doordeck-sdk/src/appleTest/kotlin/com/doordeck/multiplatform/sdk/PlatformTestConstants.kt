@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_TILE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_CERTIFICATE
@@ -49,7 +48,12 @@ internal object PlatformTestConstants {
         PlatformType.APPLE_IOS -> "93e22080-96a0-11f1-a47a-dba4cb2c41d0" // KMP APPLE_IOS SITE
         else -> ""
     }.toNsUuid()
-    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID.toNsUuid()
+    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = when(platformType) {
+        PlatformType.APPLE_MAC -> "43289f22-feb0-4c5a-87e2-216eab36ad7f"
+        PlatformType.APPLE_WATCH -> "4704ea50-3417-41ed-a88d-dd2f2912f37f"
+        PlatformType.APPLE_IOS -> "a713f790-a738-48a2-b5e6-47347ca29e30"
+        else -> ""
+    }.toNsUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID.toNsUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE

@@ -20,7 +20,6 @@ internal object TestConstants {
     const val TEST_SUPPLEMENTARY_SECOND_USER_ID = "6a89ba70-c7af-11ef-b34b-75fe33822921"
     const val TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY =
         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1TjwsBrtiI6GwJ4QLgYTRBc9pdeWwtJQFq8R2MUAtnFmHgKIq4QFIVfn5N7WUy8GB3myFp+o0nhhzUO++q5hCsJN9oFdpwUnXc8MtB+8d0rYFKAC3I/Om5PokYoNQEfa8usfIZjrV/NJwQY85rTHqAZ/Vvc64Thoz3W5z/F/yoL3vDVzB147lLPKnj7Ilvm+Q21GhMvmc9l10IWum10CM1Hv8h64G/r/Eqhu4POn6ajpN1YsvlewFg4yjOA8CJLpMon6QFWc/6xoP4wHDr1EUfsKMqGlK5nO2YyeGcqI0dX7Y6JASk8lXemNgYnzUIm3oNEk+8/10monNFjEwU0BZwIDAQAB"
-    const val TEST_SUPPLEMENTARY_TILE_ID = "8bdc10ea-7443-4561-9716-eeac5aaf68f4"
     val FUSION_INTEGRATIONS: List<BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyList()
 
     internal val TEST_MAIN_USER_EMAIL = "training@doordeck.com"

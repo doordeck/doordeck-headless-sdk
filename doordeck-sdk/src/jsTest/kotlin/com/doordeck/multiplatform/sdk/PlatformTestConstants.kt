@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_TILE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_CERTIFICATE
@@ -42,7 +41,11 @@ internal object PlatformTestConstants {
         PlatformType.JS_BROWSER -> "ad067e90-969a-11f1-a47a-dba4cb2c41d0" // KMP JS_BROWSER SITE
         else -> ""
     }
-    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID
+    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = when (platformType) {
+        PlatformType.JS_NODE -> "ba014939-cfaf-45e1-bacc-03d89a2586ed"
+        PlatformType.JS_BROWSER -> "78123a60-58e8-4276-8ad4-45b7f91e27bd"
+        else -> ""
+    }
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.decodeBase64ToByteArray()
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE

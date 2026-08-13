@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_TILE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_CERTIFICATE
@@ -33,7 +32,7 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_MAIN_TILE_ID = "70284036-5155-4e86-94b3-125a5a8b66e7".toUuid()
     val PLATFORM_TEST_MAIN_LOCK_ID = "fcb4eaf0-9693-11f1-80c4-0f8537fbb53f".toUuid() // ANDROID Demo Lock
     val PLATFORM_TEST_MAIN_SITE_ID = "752d5c00-9690-11f1-a47a-dba4cb2c41d0".toUuid() // KMP ANDROID SITE
-    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID.toUuid()
+    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = "49c5df50-4933-49be-9985-5478199c43ca".toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID.toUuid()
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY.toRsaPublicKey()
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE.toCertificate()

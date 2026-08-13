@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_TILE_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_CERTIFICATE
@@ -23,7 +22,7 @@ internal object PlatformTestConstants {
     val PLATFORM_TEST_MAIN_TILE_ID = "556a35da-ce79-4c11-bcca-93857986c97c"
     val PLATFORM_TEST_MAIN_LOCK_ID = "b382fc10-9697-11f1-80c4-0f8537fbb53f" // WINDOWS Demo Lock
     val PLATFORM_TEST_MAIN_SITE_ID = "1df0b0d0-9696-11f1-a47a-dba4cb2c41d0" // KMP WINDOWS SITE
-    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = TEST_SUPPLEMENTARY_TILE_ID
+    val PLATFORM_TEST_SUPPLEMENTARY_TILE_ID = "3351bbae-7982-47ea-ad8c-29335819a058"
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_ID = TEST_SUPPLEMENTARY_SECOND_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
     val PLATFORM_TEST_VALID_CERTIFICATE = TEST_VALID_CERTIFICATE
