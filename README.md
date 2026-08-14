@@ -7,7 +7,7 @@ We are publishing the packages to multiple repositories:
 |          Platform           | Repository                                                                                                             |
 |:---------------------------:|------------------------------------------------------------------------------------------------------------------------|
 | Multiplatform, Android, JVM | [Maven central](https://central.sonatype.com/namespace/com.doordeck.headless.sdk)                                      |
-|     iOS, macOS, watchOS     | [Cocoapods](https://cocoapods.org/pods/DoordeckSDK), [SPM](https://github.com/doordeck/doordeck-headless-sdk-spm)      |
+|     iOS, macOS, watchOS     | [SPM](https://github.com/doordeck/doordeck-headless-sdk-spm)                                                           |
 |             JS              | [NPM](https://www.npmjs.com/package/@doordeck/doordeck-headless-sdk)                                                   |
 |           Windows           | [NuGet](https://www.nuget.org/packages/Doordeck.Headless.Sdk), [PyPi](https://pypi.org/project/doordeck-headless-sdk/) |
 

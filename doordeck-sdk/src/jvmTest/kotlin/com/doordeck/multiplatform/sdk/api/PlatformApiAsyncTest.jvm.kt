@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -41,12 +41,13 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class PlatformApiAsyncTest : IntegrationTest() {
 
     @After
     fun cleanUp() = runBlocking {
-        AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         PlatformApi.listApplicationsAsync().await().filter { application ->
             application.name.startsWith("Test Application $platformType") &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
@@ -56,9 +57,9 @@ class PlatformApiAsyncTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldTestPlatformAsync() = runTest {
+    fun shouldTestPlatformAsync() = runTest(timeout = 2.minutes) {
         // Given - shouldCreateApplication
-        val authTokens = AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val authTokens = AccountlessApi.loginAsync(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val newApplication = PlatformOperations.CreateApplication(
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),

@@ -1,9 +1,9 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -38,12 +38,13 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 
 class PlatformApiTest : IntegrationTest() {
 
     @AfterTest
     fun cleanUp() = promise {
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         PlatformApi.listApplications().await().toList().filter { application ->
             application.name.startsWith("Test Application $platformType") &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
@@ -53,10 +54,10 @@ class PlatformApiTest : IntegrationTest() {
     }
 
     @Test
-    fun shouldTestPlatform() = runTest {
+    fun shouldTestPlatform() = runTest(timeout = 2.minutes) {
         CryptoManager.initialize() // Initialize
         // Given - shouldCreateApplication
-        val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val authTokens = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val newApplication = PlatformOperations.CreateApplication(
             name = "Test Application $platformType ${randomUuidString()}",
             companyName = randomString(),

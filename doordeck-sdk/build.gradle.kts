@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.multiplatform.library)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.swift.klib)
     alias(libs.plugins.buildkonfig)
     `maven-publish`
@@ -29,8 +28,7 @@ private sealed class PublishData(
     val authorRepository: String = "https://github.com/doordeck",
     val authorHomepage: String = "https://www.doordeck.com",
     val licenseType: String = "Apache-2.0",
-    val licenseUrl: String = "$repository/blob/main/LICENSE",
-    val readmeUrl: String = "$repository/blob/main/README.md"
+    val licenseUrl: String = "$repository/blob/main/LICENSE"
 )
 
 private data class NpmPublishData(
@@ -38,7 +36,7 @@ private data class NpmPublishData(
     val keywords: List<String> = listOf("doordeck", "sdk", "javascript", "access control")
 ): PublishData()
 
-private data class CocoapodsPublishData(
+private data class SpmPublishData(
     val packageName: String = "DoordeckSDK",
     val vendoredFrameworks: String = "$packageName.xcframework",
     val bundleId: String = "com.doordeck.$packageName"
@@ -59,7 +57,7 @@ private data class PyPiPublishData(
 ) : PublishData()
 
 private val npmPublish = NpmPublishData()
-private val cocoapodsPublish = CocoapodsPublishData()
+private val spmPublish = SpmPublishData()
 private val mavenPublish = MavenPublishData()
 private val nugetPublish = NugetPublishData()
 private val pypiPublish = PyPiPublishData()
@@ -78,7 +76,7 @@ kotlin {
         }
     }
 
-    val xcf = XCFramework(cocoapodsPublish.packageName)
+    val xcf = XCFramework(spmPublish.packageName)
     val appleTargets = listOf(
         iosArm64(), iosSimulatorArm64(),                                // iOS
         macosArm64(),                                                   // macOS
@@ -87,8 +85,8 @@ kotlin {
 
     appleTargets.forEach {
         it.binaries.framework {
-            baseName = cocoapodsPublish.packageName
-            binaryOption("bundleId", cocoapodsPublish.bundleId)
+            baseName = spmPublish.packageName
+            binaryOption("bundleId", spmPublish.bundleId)
             xcf.add(this)
         }
 
@@ -149,25 +147,6 @@ kotlin {
             customField("bugs", mapOf("url" to npmPublish.issues))
             customField("repository", mapOf("type" to "git", "url" to "git+${npmPublish.gitRepository}"))
         }
-    }
-
-    cocoapods {
-        summary = cocoapodsPublish.title
-        homepage = cocoapodsPublish.authorHomepage
-        license = "{ :type => '${cocoapodsPublish.licenseType}' }"
-        authors = cocoapodsPublish.author
-        version = "${project.version}"
-        source = "{ :http => 'https://cdn.doordeck.com/xcframework/v${project.version}/${cocoapodsPublish.vendoredFrameworks}.zip' }"
-        ios.deploymentTarget = libs.versions.ios.min.sdk.get()
-        osx.deploymentTarget = libs.versions.macos.min.sdk.get()
-        watchos.deploymentTarget = libs.versions.watchos.min.sdk.get()
-        name = cocoapodsPublish.packageName
-        framework {
-            baseName = cocoapodsPublish.packageName
-        }
-
-        extraSpecAttributes["readme"] = "'${cocoapodsPublish.readmeUrl}'"
-        extraSpecAttributes["vendored_frameworks"] = "'${cocoapodsPublish.vendoredFrameworks}'"
     }
 
     sourceSets {
@@ -380,12 +359,12 @@ tasks.named("jsBrowserProductionLibraryDistribution").configure {
 
 tasks.register<Zip>("zipXCFramework") {
     from("build/XCFrameworks/release")
-    archiveFileName.set("${cocoapodsPublish.vendoredFrameworks}.zip")
+    archiveFileName.set("${spmPublish.vendoredFrameworks}.zip")
     destinationDirectory.set(file("."))
     include("**/*")
 }
 
-tasks.named("assemble${cocoapodsPublish.packageName}ReleaseXCFramework").configure {
+tasks.named("assemble${spmPublish.packageName}ReleaseXCFramework").configure {
     finalizedBy("zipXCFramework")
 }
 
