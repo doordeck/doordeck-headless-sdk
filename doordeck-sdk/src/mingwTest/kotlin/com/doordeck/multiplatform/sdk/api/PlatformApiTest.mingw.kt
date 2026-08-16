@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_APPLICATION_NAME
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
@@ -45,7 +46,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicGetLogoUploadUrlRespo
 import com.doordeck.multiplatform.sdk.model.responses.BasicRsaKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
-import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
@@ -73,7 +73,7 @@ class PlatformApiTest : CallbackTest() {
             PlatformApi.listApplications(TestCallback)
         }
         applicationsResponse.success?.result?.filter { application ->
-            application.name.startsWith("Test Application $platformType") &&
+            application.name.startsWith(PLATFORM_TEST_MAIN_APPLICATION_NAME) &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
         }?.forEach { application ->
             callbackApiCall<ResultData<Unit>> {
@@ -97,7 +97,7 @@ class PlatformApiTest : CallbackTest() {
         }.unwrap()
 
         val newApplication = CreateApplicationData(
-            name = "Test Application $platformType ${randomUuidString()}",
+            name = "$PLATFORM_TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
             companyName = randomString(),
             mailingAddress = randomEmail(),
             privacyPolicy = randomUrlString(),
@@ -129,7 +129,7 @@ class PlatformApiTest : CallbackTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
+        val updatedApplicationName = "$PLATFORM_TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}"
 
         // When
         callbackApiCall<ResultData<Unit>> {

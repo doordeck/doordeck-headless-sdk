@@ -30,6 +30,7 @@ internal object TestConstants {
     val FUSION_INTEGRATIONS: List<BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyList()
 
     val TEST_MAIN_FUSION_DOOR_NAME = "Test Fusion Door $platformType"
+    val TEST_MAIN_APPLICATION_NAME = "Test Application $platformType"
     val TEST_MAIN_LOCK_NAME = "KMP $platformType LOCK"
     val TEST_MAIN_USER_EMAIL = "training+$platformType@doordeck.com"
     val TEST_MAIN_USER_ID = PLATFORM_MAIN_USER_ID
