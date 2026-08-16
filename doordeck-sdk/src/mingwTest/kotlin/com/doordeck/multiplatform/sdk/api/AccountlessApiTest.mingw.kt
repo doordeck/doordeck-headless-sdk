@@ -1,8 +1,8 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestCallback
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -32,7 +32,7 @@ class AccountlessApiTest : CallbackTest() {
         // When
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -42,13 +42,13 @@ class AccountlessApiTest : CallbackTest() {
         assertTrue { response.refreshToken.isNotEmpty() }
         assertEquals(response.authToken, ContextManager.getCloudAuthToken())
         assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
-        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
+        assertEquals(TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
     }
 
     @Test
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
-        val newUserEmail = PLATFORM_TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
+        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
         val keyPair = CryptoManager.generateRawKeyPair()
 
         // When

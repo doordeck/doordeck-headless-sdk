@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_FUSION_DOOR_NAME
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
@@ -12,6 +10,8 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestCallback
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_FUSION_DOOR_NAME
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -178,13 +178,13 @@ class FusionApiTest : CallbackTest() {
                 // When
                 val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
                     FusionApi.login(
-                        data = FusionLoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                        data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                         callback = TestCallback
                     )
                 }.unwrap()
                 val cloudLoginResponse = callbackApiCall<ResultData<BasicTokenResponse>> {
                     AccountlessApi.login(
-                        data = FusionLoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                        data = FusionLoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                         callback = TestCallback
                     )
                 }.unwrap()
@@ -209,7 +209,7 @@ class FusionApiTest : CallbackTest() {
                         callback = TestCallback
                     )
                 }.success?.result?.filter { integration ->
-                    integration.doordeck?.name?.startsWith(PLATFORM_TEST_MAIN_FUSION_DOOR_NAME) == true
+                    integration.doordeck?.name?.startsWith(TEST_MAIN_FUSION_DOOR_NAME) == true
                 }
                 integrationsToDelete?.forEach { integration ->
                     integration.doordeck?.id?.let { integrationId ->
@@ -233,7 +233,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 // Given - shouldEnableDoor
-                val name = "$PLATFORM_TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
+                val name = "$TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
 
                 // When
                 callbackApiCall<ResultData<Unit>> {

@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.api.AccountlessApi
 import com.doordeck.multiplatform.sdk.config.SdkConfig
@@ -48,7 +48,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         val sdk = KDoordeckFactory.initialize(config)
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrap()
@@ -59,7 +59,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         // Then
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
-                data = LoginData(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
+                data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
                 callback = TestCallback
             )
         }.unwrapFailure()
