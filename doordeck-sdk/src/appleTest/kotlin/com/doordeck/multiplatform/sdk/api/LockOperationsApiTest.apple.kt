@@ -2,8 +2,6 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_NAME
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
@@ -11,6 +9,8 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_SECOND_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_NAME
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_USER_ID
@@ -48,7 +48,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetSingleLock() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val response = LockOperationsApi.getSingleLock(PLATFORM_TEST_MAIN_LOCK_ID)
@@ -60,8 +60,8 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockName() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedLockName = "$TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockName)
@@ -74,7 +74,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockFavourite() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val updatedFavourite = true
 
         // When
@@ -88,8 +88,8 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockSettingDefaultName() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
-        val updatedLockDefaultName = "$PLATFORM_TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val updatedLockDefaultName = "$TEST_MAIN_LOCK_NAME - ${randomUuidString()}"
 
         // When
         LockOperationsApi.updateLockSettingDefaultName(PLATFORM_TEST_MAIN_LOCK_ID, updatedLockDefaultName)
@@ -102,7 +102,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldSetAndRemoveLockSettingPermittedAddresses() = runTest {
         // Given - shouldSetLockSettingPermittedAddresses
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val addedLockPermittedAddresses = listOf("95.19.38.42")
 
         // When
@@ -127,7 +127,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateLockSettingHidden() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val updatedHidden = false
 
         // When
@@ -141,7 +141,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldSetAndRemoveLockSettingTimeRestrictions() = runTest {
         // Given - shouldSetLockSettingTimeRestrictions
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
         val min = (now - 1.minutes).toLocalDateTime(TimeZone.UTC)
         val max = (now + 5.minutes).toLocalDateTime(TimeZone.UTC)
@@ -180,7 +180,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveLockSettingLocationRestrictions() = runTest {
         // Given - shouldUpdateLockSettingLocationRestrictions
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val addedLocationRestriction = LockOperations.LocationRequirement(
             latitude = randomDouble(-90.0, 90.0),
             longitude = randomDouble(-180.0, 180.0),
@@ -218,10 +218,10 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKey() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val result = LockOperationsApi.getUserPublicKey(PLATFORM_TEST_MAIN_USER_EMAIL, true)
+        val result = LockOperationsApi.getUserPublicKey(TEST_MAIN_USER_EMAIL, true)
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -230,10 +230,10 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByEmail() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByEmail(PLATFORM_TEST_MAIN_USER_EMAIL)
+        val result = LockOperationsApi.getUserPublicKeyByEmail(TEST_MAIN_USER_EMAIL)
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.id)
@@ -242,7 +242,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByLocalKey() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val result = LockOperationsApi.getUserPublicKeyByLocalKey(PLATFORM_TEST_MAIN_USER_ID.UUIDString)
@@ -254,10 +254,10 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByEmails() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val result = LockOperationsApi.getUserPublicKeyByEmails(listOf(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL))
+        val result = LockOperationsApi.getUserPublicKeyByEmails(listOf(TEST_MAIN_USER_EMAIL, TEST_SUPPLEMENTARY_USER_EMAIL))
 
         // Then
         assertTrue { result.isNotEmpty() }
@@ -266,7 +266,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserPublicKeyByLocalKeys() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val result = LockOperationsApi.getUserPublicKeyByLocalKeys(listOf(PLATFORM_TEST_MAIN_USER_ID.UUIDString, TEST_SUPPLEMENTARY_USER_ID))
@@ -278,7 +278,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForLock() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val usersForLock = LockOperationsApi.getUsersForLock(PLATFORM_TEST_MAIN_LOCK_ID)
@@ -291,7 +291,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetLockForUser() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val locksForUser = LockOperationsApi.getLocksForUser(PLATFORM_TEST_MAIN_USER_ID)
@@ -304,7 +304,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetPinnedLocks() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val pinnedLocks = LockOperationsApi.getPinnedLocks()
@@ -316,7 +316,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetShareableLocks() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val shareableLocks = LockOperationsApi.getShareableLocks()
@@ -329,7 +329,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUnlock() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -348,7 +348,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUnlockUsingContext() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -372,7 +372,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldShareAndRevokeLock() = runTest {
         // Given - shouldShareLock
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -422,7 +422,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldBatchShareAndRevokeLock() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -495,7 +495,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -544,7 +544,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldBatchShareAndRevokeLockUsingContext() = runTest {
         // Given - shouldShareLockUsingContext
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -612,7 +612,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDuration() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -641,7 +641,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateSecureSettingUnlockDurationUsingContext() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -671,7 +671,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetween() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -736,7 +736,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateAndRemoveSecureSettingUnlockBetweenUsingContext() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
             publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
             privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
@@ -794,7 +794,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetLockAuditTrail() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
         val start = now.minus(14.days).toNSDate()
         val end = now.toNSDate()
@@ -809,7 +809,7 @@ class LockOperationsApiTest : IntegrationTest() {
     @Test
     fun shouldGetAuditForUser() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val now = Clock.System.now()
         val start = now.minus(14.days).toNSDate()
         val end = now.toNSDate()
