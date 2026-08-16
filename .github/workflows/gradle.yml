@@ -29,11 +29,8 @@ jobs:
           - name: Android
             test: testAndroidHostTest
             os: ubuntu-latest
-          - name: JS Node
-            test: kotlinUpgradeYarnLock jsNodeTest
-            os: ubuntu-latest
-          - name: JS Browser
-            test: kotlinUpgradeYarnLock jsBrowserTest
+          - name: JS
+            test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
           - name: Apple macOS
             test: macosArm64Test
