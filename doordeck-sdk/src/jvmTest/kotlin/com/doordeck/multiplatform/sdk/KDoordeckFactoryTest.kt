@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
