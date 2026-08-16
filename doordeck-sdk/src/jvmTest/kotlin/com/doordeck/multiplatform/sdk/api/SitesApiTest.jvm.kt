@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -15,7 +15,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldListSites() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val sites = SitesApi.listSites()
@@ -28,7 +28,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSite() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val locksForSite = SitesApi.getLocksForSite(PLATFORM_TEST_MAIN_SITE_ID)
@@ -41,7 +41,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSite() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         val usersForSite = SitesApi.getUsersForSite(PLATFORM_TEST_MAIN_SITE_ID)
