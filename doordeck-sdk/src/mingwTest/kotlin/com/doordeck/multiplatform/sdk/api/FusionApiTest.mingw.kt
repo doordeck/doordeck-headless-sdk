@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_FUSION_INTEGRATIONS
+import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_FUSION_DOOR_NAME
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
@@ -9,7 +10,6 @@ import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_U
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.TEST_HTTP_CLIENT
 import com.doordeck.multiplatform.sdk.TestCallback
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
@@ -57,7 +57,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
-import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -210,7 +209,7 @@ class FusionApiTest : CallbackTest() {
                         callback = TestCallback
                     )
                 }.success?.result?.filter { integration ->
-                    PlatformType.entries.any { integration.doordeck?.name?.startsWith("Test Fusion Door $it") == true }
+                    integration.doordeck?.name?.startsWith(PLATFORM_TEST_MAIN_FUSION_DOOR_NAME) == true
                 }
                 integrationsToDelete?.forEach { integration ->
                     integration.doordeck?.id?.let { integrationId ->
@@ -234,7 +233,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 // Given - shouldEnableDoor
-                val name = "Test Fusion Door $platformType ${randomUuidString()}"
+                val name = "$PLATFORM_TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
 
                 // When
                 callbackApiCall<ResultData<Unit>> {

@@ -29,6 +29,7 @@ internal object TestConstants {
         "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1TjwsBrtiI6GwJ4QLgYTRBc9pdeWwtJQFq8R2MUAtnFmHgKIq4QFIVfn5N7WUy8GB3myFp+o0nhhzUO++q5hCsJN9oFdpwUnXc8MtB+8d0rYFKAC3I/Om5PokYoNQEfa8usfIZjrV/NJwQY85rTHqAZ/Vvc64Thoz3W5z/F/yoL3vDVzB147lLPKnj7Ilvm+Q21GhMvmc9l10IWum10CM1Hv8h64G/r/Eqhu4POn6ajpN1YsvlewFg4yjOA8CJLpMon6QFWc/6xoP4wHDr1EUfsKMqGlK5nO2YyeGcqI0dX7Y6JASk8lXemNgYnzUIm3oNEk+8/10monNFjEwU0BZwIDAQAB"
     val FUSION_INTEGRATIONS: List<BasicTestController> = getEnvironmentVariable("FUSION_INTEGRATIONS")?.fromJson() ?: emptyList()
 
+    val TEST_MAIN_FUSION_DOOR_NAME = "Test Fusion Door $platformType"
     val TEST_MAIN_LOCK_NAME = "KMP $platformType LOCK"
     val TEST_MAIN_USER_EMAIL = "training+$platformType@doordeck.com"
     val TEST_MAIN_USER_ID = PLATFORM_MAIN_USER_ID
