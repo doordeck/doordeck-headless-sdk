@@ -1,10 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_APPLICATION_NAME
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_APPLICATION_NAME
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.context.ContextManager
@@ -44,9 +44,9 @@ class PlatformApiTest : IntegrationTest() {
 
     @AfterTest
     fun cleanUp() = promise {
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         PlatformApi.listApplications().await().toList().filter { application ->
-            application.name.startsWith(PLATFORM_TEST_MAIN_APPLICATION_NAME) &&
+            application.name.startsWith(TEST_MAIN_APPLICATION_NAME) &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
         }.forEach { application ->
             PlatformApi.deleteApplication(application.applicationId).await()
@@ -57,9 +57,9 @@ class PlatformApiTest : IntegrationTest() {
     fun shouldTestPlatform() = runTest(timeout = 2.minutes) {
         CryptoManager.initialize() // Initialize
         // Given - shouldCreateApplication
-        val authTokens = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         val newApplication = PlatformOperations.CreateApplication(
-            name = "$PLATFORM_TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
+            name = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
             companyName = randomString(),
             mailingAddress = randomEmail(),
             privacyPolicy = randomUrlString(),
@@ -82,7 +82,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "$PLATFORM_TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}"
+        val updatedApplicationName = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}"
 
         // When
         PlatformApi.updateApplicationName(application.applicationId, updatedApplicationName).await()

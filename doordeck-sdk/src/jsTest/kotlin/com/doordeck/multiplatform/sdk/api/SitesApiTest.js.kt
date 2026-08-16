@@ -3,8 +3,8 @@ package com.doordeck.multiplatform.sdk.api
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_LOCK_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_SITE_ID
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.isNotEmpty
@@ -18,7 +18,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldListSites() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val sites = SitesApi.listSites().await()
@@ -31,7 +31,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSite() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val locksForSite = SitesApi.getLocksForSite(PLATFORM_TEST_MAIN_SITE_ID).await()
@@ -44,7 +44,7 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSite() = runTest {
         // Given
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         val usersForSite = SitesApi.getUsersForSite(PLATFORM_TEST_MAIN_SITE_ID).await()
