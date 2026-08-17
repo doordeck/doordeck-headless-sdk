@@ -23,7 +23,6 @@ import com.doordeck.multiplatform.sdk.randomUnlockBetween
 import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
 import kotlin.js.collections.toSet
@@ -139,28 +138,28 @@ class FusionApiTest : IntegrationTest() {
                 ContextManager.setFusionHost(testController.uri)
 
                 // When
-                val fusionLogin = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-                val cloudLogin = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+                val fusionLogin = FusionApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+                val cloudLogin = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
                 // Then
                 assertTrue { fusionLogin.authToken.isNotEmpty() }
 
                 // Skip the test if it's not targeting the expected integration
-                val integrationType = FusionApi.getIntegrationType().await()
+                val integrationType = FusionApi.getIntegrationType()
                 if (integrationType.status != null && integrationType.status != testController.type) {
                     error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
                 }
 
                 // Cleanup process, delete any remaining test devices
-                val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.type).await()
+                val integrationsToDelete = FusionApi.getIntegrationConfiguration(testController.type)
                     .toList()
                     .filter { integration ->
                         integration.doordeck?.name?.startsWith(TEST_MAIN_FUSION_DOOR_NAME) == true }
                 integrationsToDelete.forEach { integration ->
                     integration.doordeck?.id?.let { integrationId ->
                         try {
-                            FusionApi.stopDoor(integrationId).await()
-                            FusionApi.deleteDoor(integrationId).await()
+                            FusionApi.stopDoor(integrationId)
+                            FusionApi.deleteDoor(integrationId)
                         } catch (_: Exception) { /* Ignored */ }
                     }
                 }
@@ -169,16 +168,16 @@ class FusionApiTest : IntegrationTest() {
                 val name = "$TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
 
                 // When
-                FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller).await()
+                FusionApi.enableDoor(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller)
 
                 // Then
-                val integrations = FusionApi.getIntegrationConfiguration(testController.type).await()
+                val integrations = FusionApi.getIntegrationConfiguration(testController.type)
                 val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
                 assertNotNull(actualDoor?.doordeck)
 
                 // Given - shouldGetIntegrationType
                 // When
-                val integrationTypeResponse = FusionApi.getIntegrationType().await()
+                val integrationTypeResponse = FusionApi.getIntegrationType()
 
                 // Then
                 assertNotNull(integrationTypeResponse.status)
@@ -186,17 +185,17 @@ class FusionApiTest : IntegrationTest() {
 
                 // Given - shouldStartDoor
                 // When
-                FusionApi.startDoor(actualDoor.doordeck.id).await()
+                FusionApi.startDoor(actualDoor.doordeck.id)
 
                 // Then
-                var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
+                var doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
                 assertEquals(ServiceStateType.RUNNING.name, doorState.state)
 
                 // Given - shouldUpdateUnlockDuration
                 val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKey(
                     PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
                     PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
-                ).await().certificateChain
+                ).certificateChain
                 val baseOperation = LockOperations.BaseOperation(
                     userId = PLATFORM_TEST_MAIN_USER_ID,
                     userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
@@ -211,17 +210,17 @@ class FusionApiTest : IntegrationTest() {
                         .setUnlockDuration(newDuration)
                         .setBaseOperation(baseOperation)
                         .build()
-                ).await()
+                )
 
                 // Then
-                var lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id).await()
+                var lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
                 assertEquals(newDuration.toDouble(), lockResponse.settings.unlockTime)
 
                 // Given - Unlock
                 LockOperationsApi.unlock(LockOperations.UnlockOperation.Builder()
                     .setBaseOperation(baseOperation.copy(jti = randomUuidString()))
                     .build())
-                    .await()
+                    
 
                 // Given - Share and revoke lock
                 LockOperationsApi.shareLock(
@@ -235,7 +234,7 @@ class FusionApiTest : IntegrationTest() {
                     ))
 
                 // Then
-                var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+                var locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
                 assertTrue { locks.devices.toList().any { it.deviceId == actualDoor.doordeck.id } }
 
                 // When
@@ -243,10 +242,10 @@ class FusionApiTest : IntegrationTest() {
                     LockOperations.RevokeAccessToLockOperation(
                         baseOperation = baseOperation.copy(jti = randomUuidString()),
                         users = jsArrayOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
-                    )).await()
+                    ))
 
                 // Then
-                locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+                locks = LockOperationsApi.getLocksForUser(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
                 assertFalse { locks.devices.toList().any { it.deviceId == actualDoor.doordeck.id } }
 
                 // Given - shouldUpdateUnlockBetween
@@ -258,10 +257,10 @@ class FusionApiTest : IntegrationTest() {
                         .setBaseOperation(baseOperation.copy(jti = randomUuidString()))
                         .setUnlockBetween(newUnlockBetween)
                         .build()
-                ).await()
+                )
 
                 // Then
-                lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id).await()
+                lockResponse = LockOperationsApi.getSingleLock(actualDoor.doordeck.id)
                 assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
                 assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
                 assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
@@ -270,18 +269,18 @@ class FusionApiTest : IntegrationTest() {
 
                 // Given - shouldStopDoor
                 // When
-                FusionApi.stopDoor(actualDoor.doordeck.id).await()
+                FusionApi.stopDoor(actualDoor.doordeck.id)
 
                 // Then
-                doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
+                doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
                 assertEquals(ServiceStateType.STOPPED.name, doorState.state)
 
                 // Given - shouldDeleteDoor
                 // When
-                FusionApi.deleteDoor(actualDoor.doordeck.id).await()
+                FusionApi.deleteDoor(actualDoor.doordeck.id)
 
                 // Then
-                doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id).await()
+                doorState = FusionApi.getDoorStatus(actualDoor.doordeck.id)
                 assertEquals(ServiceStateType.UNDEFINED.name, doorState.state)
             }
         } catch (exception: Throwable) {

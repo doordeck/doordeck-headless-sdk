@@ -7,7 +7,6 @@ import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -26,7 +25,7 @@ class KDoordeckFactoryTest {
             .build()
 
         // When
-        val sdk = KDoordeckFactory.initialize(sdkConfig).await()
+        val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
@@ -41,15 +40,15 @@ class KDoordeckFactoryTest {
             .setApiEnvironment(TEST_ENVIRONMENT.name)
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
-        val sdk = KDoordeckFactory.initialize(config).await()
-        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val sdk = KDoordeckFactory.initialize(config)
+        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         sdk.release()
 
         // Then
         val exception = assertFailsWith<SdkException> {
-            sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+            sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         }
         assertEquals("Failed to perform API call", exception.message)
     }
