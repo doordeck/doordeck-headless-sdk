@@ -9,7 +9,6 @@ import com.doordeck.multiplatform.sdk.storage.migrations.Migrations
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.russhwolf.settings.contains
 import kotlinx.coroutines.test.runTest
-import kotlin.math.max
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
