@@ -12,10 +12,26 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class MigrationTest {
+
+    @Test
+    fun shouldInstallAllMigrations() = runTest {
+        // Given
+        val settings = MemorySettings()
+        val storage = DefaultSecureStorage(settings)
+        val maxVersion = Migrations.migrations.maxOf { it.toVersion } // Init
+
+        // When
+        val currentVersion = storage.getStorageVersion()
+
+        // Then
+        assertNotNull(currentVersion)
+        assertEquals(maxVersion, currentVersion)
+    }
 
     @Test
     fun shouldMigrate0To1Test() = runTest {

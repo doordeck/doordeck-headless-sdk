@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.storage
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.storage.migrations.CURRENT_STORAGE_VERSION
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrations.migrations
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
@@ -139,7 +138,8 @@ internal class DefaultSecureStorage(
 
     private fun migrate() {
         val storedVersion = settings.getIntOrNull(storageVersionKey) ?: 0
-        if (storedVersion < CURRENT_STORAGE_VERSION) {
+        val maxStorageVersion = migrations.maxOf { it.toVersion }
+        if (storedVersion < maxStorageVersion) {
             try {
                 migrations
                     .sortedBy { it.fromVersion }
