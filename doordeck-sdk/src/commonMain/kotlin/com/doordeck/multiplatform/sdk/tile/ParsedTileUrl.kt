@@ -6,7 +6,7 @@ import kotlin.js.JsExport
  * The result of successfully parsing a tile URL or NFC URI record payload.
  *
  * @property tileId the tile UUID exactly as it appeared in the source's last non-empty path
- *   segment (or the raw input itself, for a bare-UUID input with no URL wrapper). Casing is
+ *   segment (or the raw input itself). Casing is
  *   preserved as-is and is **not** normalized — validity checking against the UUID format is
  *   case-insensitive, but this value is not coerced to any particular case. Callers that need
  *   to compare or key on this value (e.g. cache lookups, equality checks against a

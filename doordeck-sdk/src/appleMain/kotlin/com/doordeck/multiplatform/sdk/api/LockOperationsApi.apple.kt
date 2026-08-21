@@ -337,4 +337,5 @@ actual object LockOperationsApi {
 /**
  * Defines the platform-specific implementation of [LockOperationsApi]
  */
+@HiddenFromObjC
 actual fun lockOperations(): LockOperationsApi = LockOperationsApi
