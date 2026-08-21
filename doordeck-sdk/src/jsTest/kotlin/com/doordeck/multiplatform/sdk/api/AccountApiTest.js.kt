@@ -8,7 +8,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.isNotEmpty
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
 import kotlin.test.Ignore
@@ -24,10 +23,10 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldGetUserDetails() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val response = AccountApi.getUserDetails().await()
+        val response = AccountApi.getUserDetails()
 
         // Then
         assertEquals(TEST_MAIN_USER_EMAIL.lowercase(), response.email)
@@ -37,26 +36,26 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldUpdateUserDetails() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val updatedUserDisplayName = "Training"
 
         // When
-        AccountApi.updateUserDetails(updatedUserDisplayName).await()
+        AccountApi.updateUserDetails(updatedUserDisplayName)
 
         // Then
-        val result = AccountApi.getUserDetails().await()
+        val result = AccountApi.getUserDetails()
         assertEquals(updatedUserDisplayName, result.displayName)
     }
 
     @Test
     fun shouldRegisterEphemeralKey() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val publicKey = PLATFORM_TEST_MAIN_USER_PUBLIC_KEY
         val privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
 
         // When
-        val result = AccountApi.registerEphemeralKey(publicKey, privateKey).await()
+        val result = AccountApi.registerEphemeralKey(publicKey, privateKey)
 
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
@@ -72,22 +71,22 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldChangePassword() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        AccountApi.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD).await()
+        AccountApi.changePassword(TEST_MAIN_USER_PASSWORD, TEST_MAIN_USER_PASSWORD)
 
         // Then
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
     }
 
     @Test
     fun shouldRefreshToken() = runTest {
         // Given
-        val login = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val login = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val response = AccountApi.refreshToken(login.refreshToken).await()
+        val response = AccountApi.refreshToken(login.refreshToken)
 
         // Then
         assertTrue { response.authToken.isNotEmpty() }
@@ -99,10 +98,10 @@ class AccountApiTest : IntegrationTest() {
     @Test
     fun shouldLogout() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        AccountApi.logout().await()
+        AccountApi.logout()
 
         // Then
         assertNull(ContextManager.getCloudAuthToken())

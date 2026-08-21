@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.math.abs
 import kotlin.test.Test
@@ -13,7 +12,7 @@ class HelperApiTest : IntegrationTest() {
     @Test
     fun shouldGetServerTime() = runTest {
         // When
-        val response = HelperApi.serverTime().await()
+        val response = HelperApi.serverTime()
 
         // Then
         assertTrue {

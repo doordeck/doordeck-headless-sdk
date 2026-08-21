@@ -11,8 +11,6 @@ import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyResp
 import com.doordeck.multiplatform.sdk.model.responses.toRegisterEphemeralKeyWithSecondaryAuthenticationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserDetailsResponse
-import com.doordeck.multiplatform.sdk.util.promise
-import kotlin.js.Promise
 
 /**
  * Platform-specific implementations of account-related API calls.
@@ -23,105 +21,89 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
-    fun refreshToken(refreshToken: String? = null): Promise<TokenResponse> = promise {
-        AccountClient.refreshTokenRequest(refreshToken)
-            .toTokenResponse()
-    }
+    suspend fun refreshToken(refreshToken: String? = null): TokenResponse = AccountClient
+        .refreshTokenRequest(refreshToken)
+        .toTokenResponse()
 
     /**
      * @see AccountClient.logoutRequest
      */
-    fun logout(): Promise<dynamic> = promise {
-        AccountClient.logoutRequest()
-    }
+    suspend fun logout(): dynamic = AccountClient.logoutRequest()
 
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    fun registerEphemeralKey(
+    suspend fun registerEphemeralKey(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): Promise<RegisterEphemeralKeyResponse> = promise {
-        AccountClient
-            .registerEphemeralKeyRequest(
-                publicKey = publicKey,
-                privateKey = privateKey
-            )
-            .toRegisterEphemeralKeyResponse()
-    }
+    ): RegisterEphemeralKeyResponse = AccountClient
+        .registerEphemeralKeyRequest(
+            publicKey = publicKey,
+            privateKey = privateKey
+        )
+        .toRegisterEphemeralKeyResponse()
 
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
-    fun registerEphemeralKeyWithSecondaryAuthentication(
+    suspend fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: ByteArray? = null,
         method: String? = null
-    ): Promise<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> = promise {
-        AccountClient
-            .registerEphemeralKeyWithSecondaryAuthenticationRequest(
-                publicKey = publicKey,
-                method = method?.let { TwoFactorMethod.valueOf(it) }
-            )
-            .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
-    }
+    ): RegisterEphemeralKeyWithSecondaryAuthenticationResponse = AccountClient
+        .registerEphemeralKeyWithSecondaryAuthenticationRequest(
+            publicKey = publicKey,
+            method = method?.let { TwoFactorMethod.valueOf(it) }
+        )
+        .toRegisterEphemeralKeyWithSecondaryAuthenticationResponse()
 
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
-    fun verifyEphemeralKeyRegistration(
+    suspend fun verifyEphemeralKeyRegistration(
         code: String,
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): Promise<RegisterEphemeralKeyResponse> = promise {
-        AccountClient
-            .verifyEphemeralKeyRegistrationRequest(
-                code = code,
-                publicKey = publicKey,
-                privateKey = privateKey
-            )
-            .toRegisterEphemeralKeyResponse()
-    }
+    ): RegisterEphemeralKeyResponse = AccountClient
+        .verifyEphemeralKeyRegistrationRequest(
+            code = code,
+            publicKey = publicKey,
+            privateKey = privateKey
+        )
+        .toRegisterEphemeralKeyResponse()
 
     /**
      * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
-    fun reverifyEmail(): Promise<dynamic> = promise {
-        AccountClient.reverifyEmailRequest()
-    }
+    suspend fun reverifyEmail(): dynamic = AccountClient.reverifyEmailRequest()
 
     /**
      * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
-    fun changePassword(oldPassword: String, newPassword: String): Promise<dynamic> = promise {
-        AccountClient.changePasswordRequest(
+    suspend fun changePassword(oldPassword: String, newPassword: String): dynamic = AccountClient
+        .changePasswordRequest(
             oldPassword = oldPassword,
             newPassword = newPassword
         )
-    }
 
     /**
      * @see AccountClient.getUserDetailsRequest
      */
-    fun getUserDetails(): Promise<UserDetailsResponse> = promise {
-        AccountClient.getUserDetailsRequest()
-            .toUserDetailsResponse()
-    }
+    suspend fun getUserDetails(): UserDetailsResponse = AccountClient
+        .getUserDetailsRequest()
+        .toUserDetailsResponse()
+
 
     /**
      * @see AccountClient.updateUserDetailsRequest
      */
-    fun updateUserDetails(displayName: String): Promise<dynamic> = promise {
-        AccountClient.updateUserDetailsRequest(displayName)
-    }
+    suspend fun updateUserDetails(displayName: String): dynamic = AccountClient.updateUserDetailsRequest(displayName)
 
     /**
      * @see AccountClient.deleteAccountRequest
      */
-    fun deleteAccount(): Promise<dynamic> = promise {
-        AccountClient.deleteAccountRequest()
-    }
+    suspend fun deleteAccount(): dynamic = AccountClient.deleteAccountRequest()
 }
 
 private val account = AccountApi

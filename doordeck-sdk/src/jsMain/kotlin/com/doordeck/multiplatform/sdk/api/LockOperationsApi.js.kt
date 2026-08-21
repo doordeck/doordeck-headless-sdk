@@ -25,8 +25,6 @@ import com.doordeck.multiplatform.sdk.model.responses.toLockUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toShareableLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserPublicKeyResponse
-import com.doordeck.multiplatform.sdk.util.promise
-import kotlin.js.Promise
 import kotlin.js.collections.JsArray
 import kotlin.js.collections.toList
 
@@ -38,307 +36,269 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
-    fun getSingleLock(lockId: String): Promise<LockResponse> = promise {
-        LockOperationsClient.getSingleLockRequest(lockId)
-            .toLockResponse()
-    }
+    suspend fun getSingleLock(lockId: String): LockResponse = LockOperationsClient
+        .getSingleLockRequest(lockId)
+        .toLockResponse()
 
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    fun getLockAuditTrail(
+    suspend fun getLockAuditTrail(
         lockId: String,
         start: Long? = null,
         end: Long? = null
-    ): Promise<JsArray<AuditResponse>> = promise {
-        LockOperationsClient
-            .getLockAuditTrailRequest(
-                lockId = lockId,
-                start = start,
-                end = end
-            )
-            .toAuditResponse()
-    }
+    ): JsArray<AuditResponse> = LockOperationsClient
+        .getLockAuditTrailRequest(
+            lockId = lockId,
+            start = start,
+            end = end
+        )
+        .toAuditResponse()
 
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    fun getAuditForUser(
+    suspend fun getAuditForUser(
         userId: String,
         start: Long? = null,
         end: Long? = null
-    ): Promise<JsArray<AuditResponse>> = promise {
-        LockOperationsClient
-            .getAuditForUserRequest(
-                userId = userId,
-                start = start,
-                end = end
-            )
-            .toAuditResponse()
-    }
+    ): JsArray<AuditResponse> = LockOperationsClient
+        .getAuditForUserRequest(
+            userId = userId,
+            start = start,
+            end = end
+        )
+        .toAuditResponse()
 
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
-    fun getUsersForLock(lockId: String): Promise<JsArray<UserLockResponse>> = promise {
-        LockOperationsClient.getUsersForLockRequest(lockId)
-            .toUserLockResponse()
-    }
+    suspend fun getUsersForLock(lockId: String): JsArray<UserLockResponse> = LockOperationsClient
+        .getUsersForLockRequest(lockId)
+        .toUserLockResponse()
 
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
-    fun getLocksForUser(userId: String): Promise<LockUserResponse> = promise {
-        LockOperationsClient.getLocksForUserRequest(userId)
-            .toLockUserResponse()
-    }
+    suspend fun getLocksForUser(userId: String): LockUserResponse = LockOperationsClient
+        .getLocksForUserRequest(userId)
+        .toLockUserResponse()
 
     /**
      * @see LockOperationsClient.updateLockNameRequest
      */
-    fun updateLockName(lockId: String, name: String? = null): Promise<dynamic> = promise {
-        LockOperationsClient.updateLockNameRequest(
+    suspend fun updateLockName(lockId: String, name: String? = null): dynamic = LockOperationsClient
+        .updateLockNameRequest(
             lockId = lockId,
             name = name
         )
-    }
 
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    fun updateLockFavourite(lockId: String, favourite: Boolean): Promise<dynamic> = promise {
-        LockOperationsClient.updateLockFavouriteRequest(
+    suspend fun updateLockFavourite(lockId: String, favourite: Boolean): dynamic = LockOperationsClient
+        .updateLockFavouriteRequest(
             lockId = lockId,
             favourite = favourite
         )
-    }
 
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    fun updateLockSettingDefaultName(lockId: String, name: String): Promise<dynamic> = promise {
-        LockOperationsClient.updateLockSettingDefaultNameRequest(
+    suspend fun updateLockSettingDefaultName(lockId: String, name: String): dynamic = LockOperationsClient
+        .updateLockSettingDefaultNameRequest(
             lockId = lockId,
             name = name
         )
-    }
 
     /**
      * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
-    fun setLockSettingPermittedAddresses(
+    suspend fun setLockSettingPermittedAddresses(
         lockId: String,
         permittedAddresses: JsArray<String>
-    ): Promise<dynamic> = promise {
-        LockOperationsClient.setLockSettingPermittedAddressesRequest(
+    ): dynamic = LockOperationsClient
+        .setLockSettingPermittedAddressesRequest(
             lockId = lockId,
             permittedAddresses = permittedAddresses.toList()
         )
-    }
 
     /**
      * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
-    fun updateLockSettingHidden(lockId: String, hidden: Boolean): Promise<dynamic> = promise {
-        LockOperationsClient.updateLockSettingHiddenRequest(
+    suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean): dynamic = LockOperationsClient
+        .updateLockSettingHiddenRequest(
             lockId = lockId,
             hidden = hidden
         )
-    }
 
     /**
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
-    fun setLockSettingTimeRestrictions(
+    suspend fun setLockSettingTimeRestrictions(
         lockId: String,
         times: JsArray<LockOperations.TimeRequirement>
-    ): Promise<dynamic> = promise {
-        LockOperationsClient.setLockSettingTimeRestrictionsRequest(
+    ): dynamic = LockOperationsClient
+        .setLockSettingTimeRestrictionsRequest(
             lockId = lockId,
             times = times.toBasicTimeRequirement()
         )
-    }
 
     /**
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
-    fun updateLockSettingLocationRestrictions(
+    suspend fun updateLockSettingLocationRestrictions(
         lockId: String,
         location: LockOperations.LocationRequirement? = null
-    ): Promise<dynamic> = promise {
-        LockOperationsClient.updateLockSettingLocationRestrictionsRequest(
+    ): dynamic = LockOperationsClient
+        .updateLockSettingLocationRestrictionsRequest(
             lockId = lockId,
             location = location?.toBasicLocationRequirement()
         )
-    }
 
     /**
      * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
-    fun getUserPublicKey(userEmail: String, visitor: Boolean = false): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient
-            .getUserPublicKeyRequest(
-                userEmail = userEmail,
-                visitor = visitor
-            )
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKey(userEmail: String, visitor: Boolean = false): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyRequest(
+            userEmail = userEmail,
+            visitor = visitor
+        )
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
-    fun getUserPublicKeyByEmail(email: String): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient.getUserPublicKeyByEmailRequest(email)
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyByEmailRequest(email)
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
-    fun getUserPublicKeyByTelephone(telephone: String): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient.getUserPublicKeyByTelephoneRequest(telephone)
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyByTelephoneRequest(telephone)
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
-    fun getUserPublicKeyByLocalKey(localKey: String): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient.getUserPublicKeyByLocalKeyRequest(localKey)
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyByLocalKeyRequest(localKey)
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
-    fun getUserPublicKeyByForeignKey(foreignKey: String): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient.getUserPublicKeyByForeignKeyRequest(foreignKey)
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyByForeignKeyRequest(foreignKey)
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
-    fun getUserPublicKeyByIdentity(identity: String): Promise<UserPublicKeyResponse> = promise {
-        LockOperationsClient.getUserPublicKeyByIdentityRequest(identity)
-            .toUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse = LockOperationsClient
+        .getUserPublicKeyByIdentityRequest(identity)
+        .toUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
-    fun getUserPublicKeyByEmails(emails: JsArray<String>): Promise<JsArray<BatchUserPublicKeyResponse>> = promise {
-        LockOperationsClient.getUserPublicKeyByEmailsRequest(emails.toList())
-            .toBatchUserPublicKeyResponse()
-    }
+    suspend fun getUserPublicKeyByEmails(emails: JsArray<String>): JsArray<BatchUserPublicKeyResponse> = LockOperationsClient
+        .getUserPublicKeyByEmailsRequest(emails.toList())
+        .toBatchUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
-    fun getUserPublicKeyByTelephones(
+    suspend fun getUserPublicKeyByTelephones(
         telephones: JsArray<String>
-    ): Promise<JsArray<BatchUserPublicKeyResponse>> = promise {
-        LockOperationsClient.getUserPublicKeyByTelephonesRequest(telephones.toList())
-            .toBatchUserPublicKeyResponse()
-    }
+    ): JsArray<BatchUserPublicKeyResponse> = LockOperationsClient
+        .getUserPublicKeyByTelephonesRequest(telephones.toList())
+        .toBatchUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
-    fun getUserPublicKeyByLocalKeys(localKeys: JsArray<String>): Promise<JsArray<BatchUserPublicKeyResponse>> =
-        promise {
-            LockOperationsClient.getUserPublicKeyByLocalKeysRequest(localKeys.toList())
-                .toBatchUserPublicKeyResponse()
-        }
+    suspend fun getUserPublicKeyByLocalKeys(localKeys: JsArray<String>): JsArray<BatchUserPublicKeyResponse> = LockOperationsClient
+        .getUserPublicKeyByLocalKeysRequest(localKeys.toList())
+        .toBatchUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
-    fun getUserPublicKeyByForeignKeys(
+    suspend fun getUserPublicKeyByForeignKeys(
         foreignKeys: JsArray<String>
-    ): Promise<JsArray<BatchUserPublicKeyResponse>> = promise {
-        LockOperationsClient.getUserPublicKeyByForeignKeysRequest(foreignKeys.toList())
-            .toBatchUserPublicKeyResponse()
-    }
+    ): JsArray<BatchUserPublicKeyResponse> = LockOperationsClient
+        .getUserPublicKeyByForeignKeysRequest(foreignKeys.toList())
+        .toBatchUserPublicKeyResponse()
 
     /**
      * @see LockOperationsClient.unlockRequest
      */
-    fun unlock(unlockOperation: LockOperations.UnlockOperation): Promise<dynamic> = promise {
-        LockOperationsClient.unlockRequest(unlockOperation.toBasicUnlockOperation())
-    }
+    suspend fun unlock(unlockOperation: LockOperations.UnlockOperation): dynamic = LockOperationsClient
+        .unlockRequest(unlockOperation.toBasicUnlockOperation())
 
     /**
      * @see LockOperationsClient.shareLockRequest
      */
-    fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): Promise<dynamic> = promise {
-        LockOperationsClient.shareLockRequest(shareLockOperation.toBasicShareLockOperation())
-    }
+    suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): dynamic = LockOperationsClient
+        .shareLockRequest(shareLockOperation.toBasicShareLockOperation())
 
     /**
      * @see LockOperationsClient.batchShareLockRequest
      */
-    fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): Promise<dynamic> = promise {
-        LockOperationsClient
-            .batchShareLockRequest(
-                batchShareLockOperation = batchShareLockOperation.toBasicBatchShareLockOperation()
-            )
-    }
+    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): dynamic = LockOperationsClient
+        .batchShareLockRequest(
+            batchShareLockOperation = batchShareLockOperation.toBasicBatchShareLockOperation()
+        )
 
     /**
      * @see LockOperationsClient.revokeAccessToLockRequest
      */
-    fun revokeAccessToLock(
+    suspend fun revokeAccessToLock(
         revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation
-    ): Promise<dynamic> = promise {
-        LockOperationsClient
-            .revokeAccessToLockRequest(
-                revokeAccessToLockOperation = revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation()
-            )
-    }
+    ): dynamic = LockOperationsClient
+        .revokeAccessToLockRequest(
+            revokeAccessToLockOperation = revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation()
+        )
 
     /**
      * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
-    fun updateSecureSettingUnlockDuration(
+    suspend fun updateSecureSettingUnlockDuration(
         updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration
-    ): Promise<dynamic> = promise {
-        LockOperationsClient
-            .updateSecureSettingUnlockDurationRequest(
-                updateSecureSettingUnlockDuration = updateSecureSettingUnlockDuration
-                    .toBasicUpdateSecureSettingUnlockDuration()
-            )
-    }
+    ): dynamic = LockOperationsClient
+        .updateSecureSettingUnlockDurationRequest(
+            updateSecureSettingUnlockDuration = updateSecureSettingUnlockDuration
+                .toBasicUpdateSecureSettingUnlockDuration()
+        )
 
     /**
      * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
-    fun updateSecureSettingUnlockBetween(
+    suspend fun updateSecureSettingUnlockBetween(
         updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween
-    ): Promise<dynamic> = promise {
-        LockOperationsClient
-            .updateSecureSettingUnlockBetweenRequest(
-                updateSecureSettingUnlockBetween = updateSecureSettingUnlockBetween
-                    .toBasicUpdateSecureSettingUnlockBetween()
-            )
-    }
+    ): dynamic = LockOperationsClient
+        .updateSecureSettingUnlockBetweenRequest(
+            updateSecureSettingUnlockBetween = updateSecureSettingUnlockBetween
+                .toBasicUpdateSecureSettingUnlockBetween()
+        )
 
     /**
      * @see LockOperationsClient.getPinnedLocksRequest
      */
-    fun getPinnedLocks(): Promise<JsArray<LockResponse>> = promise {
-        LockOperationsClient.getPinnedLocksRequest()
-            .toLockResponse()
-    }
+    suspend fun getPinnedLocks(): JsArray<LockResponse> = LockOperationsClient
+        .getPinnedLocksRequest()
+        .toLockResponse()
 
     /**
      * @see LockOperationsClient.getShareableLocksRequest
      */
-    fun getShareableLocks(): Promise<JsArray<ShareableLockResponse>> = promise {
-        LockOperationsClient.getShareableLocksRequest()
-            .toShareableLockResponse()
-    }
+    suspend fun getShareableLocks(): JsArray<ShareableLockResponse> = LockOperationsClient
+        .getShareableLocksRequest()
+        .toShareableLockResponse()
 }
 
 private val lockOperations = LockOperationsApi
