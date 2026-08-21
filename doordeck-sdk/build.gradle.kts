@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -89,9 +88,6 @@ kotlin {
             baseName = spmPublish.packageName
             binaryOption("bundleId", spmPublish.bundleId)
             xcf.add(this)
-
-            @OptIn(ExperimentalKotlinGradlePluginApi::class)
-            exportKdoc = true
         }
 
         it.compilations {
