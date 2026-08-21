@@ -220,7 +220,6 @@ class FusionApiTest : IntegrationTest() {
                 LockOperationsApi.unlock(LockOperations.UnlockOperation.Builder()
                     .setBaseOperation(baseOperation.copy(jti = randomUuidString()))
                     .build())
-                    
 
                 // Given - Share and revoke lock
                 LockOperationsApi.shareLock(
