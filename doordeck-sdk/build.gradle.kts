@@ -171,6 +171,7 @@ kotlin {
                 optIn("kotlin.time.ExperimentalTime")
                 optIn("kotlin.js.ExperimentalJsCollectionsApi")
                 optIn("kotlin.js.ExperimentalWasmJsInterop")
+                optIn("kotlin.experimental.ExperimentalObjCRefinement")
             }
         }
 
