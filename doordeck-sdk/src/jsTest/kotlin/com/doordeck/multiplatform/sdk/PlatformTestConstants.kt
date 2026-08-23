@@ -2,8 +2,6 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.FUSION_INTEGRATIONS
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_EXPIRED_CERTIFICATE
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_LOCK_NAME
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_SUPPLEMENTARY_SECOND_USER_ID
@@ -30,8 +28,6 @@ internal object PlatformTestConstants {
 
     val PLATFORM_TEST_MAIN_USER_PRIVATE_KEY by lazy { TEST_MAIN_USER_PRIVATE_KEY.decodeBase64ToByteArray() }
     val PLATFORM_TEST_MAIN_USER_PUBLIC_KEY = TEST_MAIN_USER_PUBLIC_KEY.decodeBase64ToByteArray()
-    val PLATFORM_TEST_MAIN_LOCK_NAME = TEST_MAIN_LOCK_NAME
-    val PLATFORM_TEST_MAIN_USER_EMAIL = TEST_MAIN_USER_EMAIL
     val PLATFORM_TEST_MAIN_USER_ID = PLATFORM_MAIN_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_ID = TEST_SUPPLEMENTARY_USER_ID
     val PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY = TEST_SUPPLEMENTARY_USER_PUBLIC_KEY.decodeBase64ToByteArray()

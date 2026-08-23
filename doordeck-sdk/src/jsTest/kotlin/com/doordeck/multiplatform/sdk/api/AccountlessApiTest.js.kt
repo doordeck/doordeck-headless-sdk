@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -21,20 +21,20 @@ class AccountlessApiTest : IntegrationTest() {
     @Test
     fun shouldLogin() = runTest {
         // When
-        val response = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val response = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
         assertEquals(response.authToken, ContextManager.getCloudAuthToken())
         assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
-        assertEquals(PLATFORM_TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
+        assertEquals(TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
     }
 
     @Test
     fun shouldRegisterAndDelete() = runTest {
         // Given - shouldRegister
-        val newUserEmail = PLATFORM_TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
+        val newUserEmail = TEST_MAIN_USER_EMAIL.replace("@", "+$platformType-${randomUuidString()}@")
         val keyPair = CryptoManager.generateKeyPair()
 
         // When

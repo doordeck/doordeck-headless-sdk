@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
@@ -42,14 +42,14 @@ class KDoordeckFactoryTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
         val sdk = KDoordeckFactory.initialize(config).await()
-        sdk.accountless().login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         sdk.release()
 
         // Then
         val exception = assertFailsWith<SdkException> {
-            sdk.accountless().login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+            sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
         }
         assertEquals("Failed to perform API call", exception.message)
     }

@@ -1,9 +1,10 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_MAIN_USER_ID
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_SUPPLEMENTARY_USER_ID
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_APPLICATION_NAME
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -12,7 +13,6 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtBody
 import com.doordeck.multiplatform.sdk.model.data.ApplicationJwtHeader
 import com.doordeck.multiplatform.sdk.model.data.PlatformOperations
-import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUri
@@ -46,9 +46,9 @@ class PlatformApiTest : IntegrationTest() {
 
     @After
     fun cleanUp() = runBlocking {
-        AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         PlatformApi.listApplications().filter { application ->
-            application.name.startsWith("Test Application $platformType") &&
+            application.name.startsWith(TEST_MAIN_APPLICATION_NAME) &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
         }.forEach { application ->
             PlatformApi.deleteApplication(application.applicationId)
@@ -58,9 +58,9 @@ class PlatformApiTest : IntegrationTest() {
     @Test
     fun shouldTestPlatform() = runTest(timeout = 2.minutes) {
         // Given - shouldCreateApplication
-        val authTokens = AccountlessApi.login(PLATFORM_TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         val newApplication = PlatformOperations.CreateApplication(
-            name = "Test Application $platformType ${randomUuidString()}",
+            name = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
             companyName = randomString(),
             mailingAddress = randomEmail(),
             privacyPolicy = randomUri(),
@@ -83,7 +83,7 @@ class PlatformApiTest : IntegrationTest() {
         assertEquals(newApplication.supportContact, application.supportContact)
 
         // Given - shouldUpdateApplicationName
-        val updatedApplicationName = "Test Application $platformType ${randomUuidString()}"
+        val updatedApplicationName = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}"
 
         // When
         PlatformApi.updateApplicationName(application.applicationId, updatedApplicationName)
