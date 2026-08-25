@@ -7,8 +7,6 @@ import com.doordeck.multiplatform.sdk.model.responses.ServerTimeResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.toServerTimeResponse
-import com.doordeck.multiplatform.sdk.util.promise
-import kotlin.js.Promise
 
 /**
  * Platform-specific implementations of helper-related API calls.
@@ -18,62 +16,55 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Promise<dynamic> = promise {
-        HelperClient.uploadPlatformLogoRequest(
+    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): dynamic = HelperClient
+        .uploadPlatformLogoRequest(
             applicationId = applicationId,
             contentType = contentType,
             image = image
         )
-    }
 
     /**
      * @see HelperClient.assistedLoginRequest
      */
-    fun assistedLogin(email: String, password: String): Promise<AssistedLoginResponse> = promise {
-        HelperClient
-            .assistedLoginRequest(
-                email = email,
-                password = password
-            )
-            .toAssistedLoginResponse()
-    }
+    suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse = HelperClient
+        .assistedLoginRequest(
+            email = email,
+            password = password
+        )
+        .toAssistedLoginResponse()
 
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    fun assistedRegisterEphemeralKey(
+    suspend fun assistedRegisterEphemeralKey(
         publicKey: ByteArray? = null,
         privateKey: ByteArray? = null
-    ): Promise<AssistedRegisterEphemeralKeyResponse> = promise {
-        HelperClient
-            .assistedRegisterEphemeralKeyRequest(
-                publicKey = publicKey,
-                privateKey = privateKey
-            )
-            .toAssistedRegisterEphemeralKeyResponse()
-    }
+    ): AssistedRegisterEphemeralKeyResponse = HelperClient
+        .assistedRegisterEphemeralKeyRequest(
+            publicKey = publicKey,
+            privateKey = privateKey
+        )
+        .toAssistedRegisterEphemeralKeyResponse()
 
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    fun assistedRegister(
+    suspend fun assistedRegister(
         email: String,
         password: String,
         displayName: String? = null,
         force: Boolean = false
-    ): Promise<dynamic> = promise {
-        HelperClient.assistedRegisterRequest(
+    ): dynamic = HelperClient
+        .assistedRegisterRequest(
             email = email,
             password = password,
             displayName = displayName,
             force = force
         )
-    }
 
-    fun serverTime(): Promise<ServerTimeResponse> = promise {
-        HelperClient.serverTimeRequest()
-            .toServerTimeResponse()
-    }
+    suspend fun serverTime(): ServerTimeResponse = HelperClient
+        .serverTimeRequest()
+        .toServerTimeResponse()
 }
 
 private val helper = HelperApi

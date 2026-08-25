@@ -7,8 +7,6 @@ import com.doordeck.multiplatform.sdk.model.responses.UserForSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.toLockResponse
 import com.doordeck.multiplatform.sdk.model.responses.toSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.toUserForSiteResponse
-import com.doordeck.multiplatform.sdk.util.promise
-import kotlin.js.Promise
 import kotlin.js.collections.JsArray
 
 /**
@@ -19,26 +17,23 @@ actual object SitesApi {
     /**
      * @see SitesClient.listSitesRequest
      */
-    fun listSites(): Promise<JsArray<SiteResponse>> = promise {
-        SitesClient.listSitesRequest()
-            .toSiteResponse()
-    }
+    suspend fun listSites(): JsArray<SiteResponse> = SitesClient
+        .listSitesRequest()
+        .toSiteResponse()
 
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
-    fun getLocksForSite(siteId: String): Promise<JsArray<SiteLocksResponse>> = promise {
-        SitesClient.getLocksForSiteRequest(siteId)
-            .toLockResponse()
-    }
+    suspend fun getLocksForSite(siteId: String): JsArray<SiteLocksResponse> = SitesClient
+        .getLocksForSiteRequest(siteId)
+        .toLockResponse()
 
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
-    fun getUsersForSite(siteId: String): Promise<JsArray<UserForSiteResponse>> = promise {
-        SitesClient.getUsersForSiteRequest(siteId)
-            .toUserForSiteResponse()
-    }
+    suspend fun getUsersForSite(siteId: String): JsArray<UserForSiteResponse> = SitesClient
+        .getUsersForSiteRequest(siteId)
+        .toUserForSiteResponse()
 }
 
 private val sites = SitesApi

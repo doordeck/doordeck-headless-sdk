@@ -8,7 +8,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.any
 import com.doordeck.multiplatform.sdk.isNotEmpty
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -18,10 +17,10 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldListSites() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val sites = SitesApi.listSites().await()
+        val sites = SitesApi.listSites()
 
         // Then
         assertTrue { sites.isNotEmpty() }
@@ -31,10 +30,10 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetLocksForSite() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val locksForSite = SitesApi.getLocksForSite(PLATFORM_TEST_MAIN_SITE_ID).await()
+        val locksForSite = SitesApi.getLocksForSite(PLATFORM_TEST_MAIN_SITE_ID)
 
         // Then
         assertTrue { locksForSite.isNotEmpty() }
@@ -44,10 +43,10 @@ class SitesApiTest : IntegrationTest() {
     @Test
     fun shouldGetUsersForSite() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val usersForSite = SitesApi.getUsersForSite(PLATFORM_TEST_MAIN_SITE_ID).await()
+        val usersForSite = SitesApi.getUsersForSite(PLATFORM_TEST_MAIN_SITE_ID)
 
         // Then
         assertTrue { usersForSite.isNotEmpty() }
