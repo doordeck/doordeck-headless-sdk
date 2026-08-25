@@ -14,8 +14,6 @@ import com.doordeck.multiplatform.sdk.model.responses.toApplicationOwnerDetailsR
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationResponse
 import com.doordeck.multiplatform.sdk.model.responses.toApplicationUserResponse
 import com.doordeck.multiplatform.sdk.model.responses.toGetLogoUploadUrlResponse
-import com.doordeck.multiplatform.sdk.util.promise
-import kotlin.js.Promise
 import kotlin.js.collections.JsArray
 
 /**
@@ -27,243 +25,219 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
-    fun createApplication(application: PlatformOperations.CreateApplication): Promise<String> = promise {
-        PlatformClient.createApplicationRequest(application.toBasicCreateApplication())
-    }
+    suspend fun createApplication(application: PlatformOperations.CreateApplication): String = PlatformClient
+        .createApplicationRequest(application.toBasicCreateApplication())
 
     /**
      * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
-    fun listApplications(): Promise<JsArray<ApplicationResponse>> = promise {
-        PlatformClient.listApplicationsRequest()
-            .toApplicationResponse()
-    }
+    suspend fun listApplications(): JsArray<ApplicationResponse> = PlatformClient
+        .listApplicationsRequest()
+        .toApplicationResponse()
 
     /**
      * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
-    fun getApplication(applicationId: String): Promise<ApplicationResponse> = promise {
-        PlatformClient.getApplicationRequest(applicationId)
-            .toApplicationResponse()
-    }
+    suspend fun getApplication(applicationId: String): ApplicationResponse = PlatformClient
+        .getApplicationRequest(applicationId)
+        .toApplicationResponse()
 
     /**
      * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
-    fun updateApplicationName(applicationId: String, name: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationNameRequest(
+    suspend fun updateApplicationName(applicationId: String, name: String): dynamic = PlatformClient
+        .updateApplicationNameRequest(
             applicationId = applicationId,
             name = name
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
-    fun updateApplicationCompanyName(applicationId: String, companyName: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationCompanyNameRequest(
+    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String): dynamic = PlatformClient
+        .updateApplicationCompanyNameRequest(
             applicationId = applicationId,
             companyName = companyName
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
-    fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationMailingAddressRequest(
+    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String): dynamic = PlatformClient
+        .updateApplicationMailingAddressRequest(
             applicationId = applicationId,
             mailingAddress = mailingAddress
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
-    fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationPrivacyPolicyRequest(
+    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String): dynamic = PlatformClient
+        .updateApplicationPrivacyPolicyRequest(
             applicationId = applicationId,
             privacyPolicy = privacyPolicy
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
-    fun updateApplicationSupportContact(applicationId: String, supportContact: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationSupportContactRequest(
+    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String): dynamic = PlatformClient
+        .updateApplicationSupportContactRequest(
             applicationId = applicationId,
             supportContact = supportContact
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
-    fun updateApplicationAppLink(applicationId: String, appLink: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationAppLinkRequest(
+    suspend fun updateApplicationAppLink(applicationId: String, appLink: String): dynamic = PlatformClient
+        .updateApplicationAppLinkRequest(
             applicationId = applicationId,
             appLink = appLink
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
-    fun updateApplicationEmailPreferences(
+    suspend fun updateApplicationEmailPreferences(
         applicationId: String,
         emailPreferences: PlatformOperations.EmailPreferences
-    ): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationEmailPreferencesRequest(
+    ): dynamic = PlatformClient
+        .updateApplicationEmailPreferencesRequest(
             applicationId = applicationId,
             emailPreferences = emailPreferences.toBasicEmailPreferences()
         )
-    }
 
     /**
      * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
-    fun updateApplicationLogoUrl(applicationId: String, logoUrl: String): Promise<dynamic> = promise {
-        PlatformClient.updateApplicationLogoUrlRequest(
+    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String): dynamic = PlatformClient
+        .updateApplicationLogoUrlRequest(
             applicationId = applicationId,
             logoUrl = logoUrl
         )
-    }
 
     /**
      * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
-    fun deleteApplication(applicationId: String): Promise<dynamic> = promise {
-        PlatformClient.deleteApplicationRequest(applicationId)
-    }
+    suspend fun deleteApplication(applicationId: String): dynamic = PlatformClient.deleteApplicationRequest(applicationId)
 
     /**
      * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
-    fun getLogoUploadUrl(applicationId: String, contentType: String): Promise<GetLogoUploadUrlResponse> = promise {
-        PlatformClient
-            .getLogoUploadUrlRequest(
-                applicationId = applicationId,
-                contentType = contentType
-            )
-            .toGetLogoUploadUrlResponse()
-    }
+    suspend fun getLogoUploadUrl(applicationId: String, contentType: String): GetLogoUploadUrlResponse = PlatformClient
+        .getLogoUploadUrlRequest(
+            applicationId = applicationId,
+            contentType = contentType
+        )
+        .toGetLogoUploadUrlResponse()
 
     /**
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey): Promise<dynamic> = promise {
-        PlatformClient.addAuthKeyRequest(
+    suspend fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey): dynamic = PlatformClient
+        .addAuthKeyRequest(
             applicationId = applicationId,
             key = key.toBasicAuthKey()
         )
-    }
 
     /**
      * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
-    fun addAuthIssuer(applicationId: String, url: String): Promise<dynamic> = promise {
-        PlatformClient.addAuthIssuerRequest(
+    suspend fun addAuthIssuer(applicationId: String, url: String): dynamic = PlatformClient
+        .addAuthIssuerRequest(
             applicationId = applicationId,
             url = url
         )
-    }
 
     /**
      * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
-    fun deleteAuthIssuer(applicationId: String, url: String): Promise<dynamic> = promise {
-        PlatformClient.deleteAuthIssuerRequest(
+    suspend fun deleteAuthIssuer(applicationId: String, url: String): dynamic = PlatformClient
+        .deleteAuthIssuerRequest(
             applicationId = applicationId,
             url = url
         )
-    }
 
     /**
      * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
-    fun addCorsDomain(applicationId: String, url: String): Promise<dynamic> = promise {
-        PlatformClient.addCorsDomainRequest(
+    suspend fun addCorsDomain(applicationId: String, url: String): dynamic = PlatformClient
+        .addCorsDomainRequest(
             applicationId = applicationId,
             url = url
         )
-    }
 
     /**
      * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
-    fun removeCorsDomain(applicationId: String, url: String): Promise<dynamic> = promise {
-        PlatformClient.removeCorsDomainRequest(
+    suspend fun removeCorsDomain(applicationId: String, url: String): dynamic = PlatformClient
+        .removeCorsDomainRequest(
             applicationId = applicationId,
             url = url
         )
-    }
 
     /**
      * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
-    fun addApplicationOwner(applicationId: String, userId: String): Promise<dynamic> = promise {
-        PlatformClient.addApplicationOwnerRequest(
+    suspend fun addApplicationOwner(applicationId: String, userId: String): dynamic = PlatformClient
+        .addApplicationOwnerRequest(
             applicationId = applicationId,
             userId = userId
         )
-    }
 
     /**
      * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
-    fun removeApplicationOwner(applicationId: String, userId: String): Promise<dynamic> = promise {
-        PlatformClient.removeApplicationOwnerRequest(
+    suspend fun removeApplicationOwner(applicationId: String, userId: String): dynamic = PlatformClient
+        .removeApplicationOwnerRequest(
             applicationId = applicationId,
             userId = userId
         )
-    }
 
     /**
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
-    fun getApplicationOwnersDetails(
+    suspend fun getApplicationOwnersDetails(
         applicationId: String
-    ): Promise<JsArray<ApplicationOwnerDetailsResponse>> = promise {
-        PlatformClient.getApplicationOwnersDetailsRequest(applicationId)
-            .toApplicationOwnerDetailsResponse()
-    }
+    ): JsArray<ApplicationOwnerDetailsResponse> = PlatformClient
+        .getApplicationOwnersDetailsRequest(applicationId)
+        .toApplicationOwnerDetailsResponse()
 
     /**
      * @see PlatformClient.getApplicationUsersRequest
      */
     @DoordeckOnly
-    fun getApplicationUsers(
+    suspend fun getApplicationUsers(
         applicationId: String,
         pageSize: Int = 100,
         lastUserRetrieved: String? = null
-    ): Promise<JsArray<ApplicationUserResponse>> = promise {
-        PlatformClient.getApplicationUsersRequest(
+    ): JsArray<ApplicationUserResponse> = PlatformClient
+        .getApplicationUsersRequest(
             applicationId = applicationId,
             pageSize = pageSize,
             lastUserRetrieved = lastUserRetrieved
         ).toApplicationUserResponse()
-    }
 }
 
 private val platform = PlatformApi

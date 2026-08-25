@@ -2,9 +2,7 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
-import com.doordeck.multiplatform.sdk.util.promise
 import com.doordeck.multiplatform.sdk.util.toJsArray
-import kotlin.js.Promise
 import kotlin.js.collections.JsArray
 import kotlin.js.collections.toList
 
@@ -20,9 +18,8 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
-    fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Promise<Boolean> = promise {
-        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
-    }
+    suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean = Context
+        .isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
 
     fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
 
@@ -74,9 +71,9 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
-    fun getContextState(checkServerInvalidation: Boolean): Promise<String> = promise {
-        Context.getContextState(checkServerInvalidation).name
-    }
+    suspend fun getContextState(checkServerInvalidation: Boolean): String = Context
+        .getContextState(checkServerInvalidation)
+        .name
 
     fun clearContext() = Context.clearContext()
 }

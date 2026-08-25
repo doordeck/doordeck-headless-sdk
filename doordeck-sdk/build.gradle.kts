@@ -135,6 +135,7 @@ kotlin {
         compilerOptions {
             freeCompilerArgs.add("-Xes-long-as-bigint")
             freeCompilerArgs.add("-XXLanguage:+JsAllowLongInExportedDeclarations")
+            freeCompilerArgs.add("-XXLanguage:+JsAllowExportingSuspendFunctions")
         }
 
         // Add the necessary fields to the package.json file

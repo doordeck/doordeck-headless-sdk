@@ -11,7 +11,6 @@ import com.doordeck.multiplatform.sdk.contains
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,10 +22,10 @@ class TilesApiTest : IntegrationTest() {
     @Test
     fun shouldGetLocksBelongingToTile() = runTest {
         // Given
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        val locks = TilesApi.getLocksBelongingToTile(PLATFORM_TEST_MAIN_TILE_ID).await()
+        val locks = TilesApi.getLocksBelongingToTile(PLATFORM_TEST_MAIN_TILE_ID)
 
         // Then
         assertEquals(PLATFORM_TEST_MAIN_SITE_ID, locks.siteId)
@@ -37,21 +36,21 @@ class TilesApiTest : IntegrationTest() {
     @Test
     fun shouldAssociateAndDissociateLockFromTile() = runTest {
         // Given - associate
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        TilesApi.associateMultipleLocks(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, jsArrayOf(PLATFORM_TEST_MAIN_LOCK_ID)).await()
+        TilesApi.associateMultipleLocks(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, jsArrayOf(PLATFORM_TEST_MAIN_LOCK_ID))
 
         // Then
-        val locks = TilesApi.getLocksBelongingToTile(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID).await()
+        val locks = TilesApi.getLocksBelongingToTile(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID)
         assertTrue { locks.deviceIds.contains(PLATFORM_TEST_MAIN_LOCK_ID) }
 
         // Given - dissociate
-        TilesApi.associateMultipleLocks(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, emptyJsArray()).await()
+        TilesApi.associateMultipleLocks(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID, PLATFORM_TEST_MAIN_SITE_ID, emptyJsArray())
 
         // Then
         val exception = assertFailsWith<NotFoundException> {
-            TilesApi.getLocksBelongingToTile(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID).await()
+            TilesApi.getLocksBelongingToTile(PLATFORM_TEST_SUPPLEMENTARY_TILE_ID)
         }
         assertEquals("API call failed with: No devices associated with this tile", exception.message)
     }

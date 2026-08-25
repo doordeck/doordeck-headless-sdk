@@ -1,8 +1,6 @@
 package com.doordeck.multiplatform.sdk.util
 
-import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.size
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.JsArray
 import kotlin.js.collections.JsMap
@@ -77,33 +75,5 @@ class JsExtensionsTest {
         assertIs<JsMap<Int, String>>(result)
         assertEquals(pairs.size, result.toMutableMap().size)
         assertEquals(pairs, result.toMap().map { it.key to it.value }.toList())
-    }
-
-    @Test
-    fun shouldCreatePromise() = runTest {
-        // Given
-        val toReturn = "result"
-
-        // When
-        val result = promise {
-            toReturn
-        }.await()
-
-        // Then
-        assertEquals(toReturn, result)
-    }
-
-    @Test
-    fun shouldFailToProcessPromise() = runTest {
-        // Given
-        val exception = SdkException("Error")
-
-        // When
-        val result = promise {
-            exception
-        }.await()
-
-        // Then
-        assertIs<SdkException>(result)
     }
 }
