@@ -8,7 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.future.future
 import okhttp3.CertificatePinner
-import okhttp3.OkHttpClient
 import java.net.InetAddress
 import java.net.URI
 import java.net.URL
@@ -26,12 +25,11 @@ import java.util.concurrent.CompletableFuture
 internal actual fun HttpClientConfig<*>.installCertificatePinner() {
     engine {
         if (this is OkHttpConfig) {
-            val certificatePinner = CertificatePinner.Builder()
-                .add(CERTIFICATE_PINNER_DOMAIN_PATTERN, *TRUSTED_CERTIFICATES.toTypedArray())
-                .build()
-            preconfigured = OkHttpClient.Builder()
-                .certificatePinner(certificatePinner)
-                .build()
+            config {
+                certificatePinner(CertificatePinner.Builder()
+                    .add(CERTIFICATE_PINNER_DOMAIN_PATTERN, *TRUSTED_CERTIFICATES.toTypedArray())
+                    .build())
+            }
         }
     }
 }
