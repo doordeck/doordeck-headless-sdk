@@ -25,7 +25,7 @@ The SDK supports a range of targets for different platforms:
 | Windows  | `mingwX64`                              | `C#`, `Python`             |
 
 ## Getting started
-To start using the Doordeck Headless SDK, refer to the [documentation index](https://developer.doordeck.com/docs/category/kotlin-multiplatform-sdk) for detailed setup and usage instructions tailored to your platform.
+To start using the Doordeck Headless SDK, refer to the [documentation index](https://portal.sentryinteractive.com/docs/category/kotlin-multiplatform-sdk) for detailed setup and usage instructions tailored to your platform.
 
 ## Samples
-We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](https://developer.doordeck.com/docs/kotlin-multiplatform-sdk/samples). 
+We provide samples for different targets, where you can see how the SDK can be used in fully functional projects. For more information, please see the [samples page](https://portal.sentryinteractive.com/docs/kotlin-multiplatform-sdk/samples). 
