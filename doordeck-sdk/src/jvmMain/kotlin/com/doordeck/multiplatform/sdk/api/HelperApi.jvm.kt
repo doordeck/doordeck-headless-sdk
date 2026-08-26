@@ -8,6 +8,8 @@ import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.toServerTimeResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.security.KeyPair
 import java.util.UUID
@@ -21,12 +23,15 @@ actual object HelperApi {
      * @see HelperClient.uploadPlatformLogoRequest
      */
     @JvmSynthetic
-    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) = HelperClient
-        .uploadPlatformLogoRequest(
-            applicationId = applicationId.toString(),
-            contentType = contentType,
-            image = image.readBytes()
-        )
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) {
+        val imageBytes = withContext(Dispatchers.IO) { image.use { it.readBytes() } }
+        return HelperClient
+            .uploadPlatformLogoRequest(
+                applicationId = applicationId.toString(),
+                contentType = contentType,
+                image = imageBytes
+            )
+    }
 
     /**
      * Async variant of [HelperApi.uploadPlatformLogo] returning [CompletableFuture].
