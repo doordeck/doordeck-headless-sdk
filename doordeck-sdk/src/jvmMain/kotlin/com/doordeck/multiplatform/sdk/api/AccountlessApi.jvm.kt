@@ -35,7 +35,6 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.registrationRequest
      */
-    @JvmOverloads
     suspend fun registration(
         email: String,
         password: String,

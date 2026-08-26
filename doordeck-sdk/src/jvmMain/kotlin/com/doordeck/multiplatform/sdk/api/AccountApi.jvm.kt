@@ -24,7 +24,6 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
-    @JvmOverloads
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse = AccountClient
         .refreshTokenRequest(refreshToken)
         .toTokenResponse()
@@ -53,7 +52,6 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    @JvmOverloads
     suspend fun registerEphemeralKey(keyPair: KeyPair? = null): RegisterEphemeralKeyResponse = AccountClient
         .registerEphemeralKeyRequest(
             publicKey = keyPair?.public?.encoded,
@@ -74,7 +72,6 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
-    @JvmOverloads
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
@@ -102,7 +99,6 @@ actual object AccountApi {
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
-    @JvmOverloads
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
         keyPair: KeyPair? = null

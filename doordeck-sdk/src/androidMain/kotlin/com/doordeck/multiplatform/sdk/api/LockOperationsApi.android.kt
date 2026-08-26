@@ -52,7 +52,6 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
-    @JvmOverloads
     suspend fun getLockAuditTrail(
         lockId: UUID,
         start: Instant? = null,
@@ -84,7 +83,6 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
-    @JvmOverloads
     suspend fun getAuditForUser(
         userId: UUID,
         start: Instant? = null,
@@ -153,6 +151,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.updateLockName] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun updateLockNameAsync(lockId: UUID, name: String? = null): CompletableFuture<Unit> = completableFuture {
         updateLockName(
             lockId = lockId,
@@ -278,6 +277,7 @@ actual object LockOperationsApi {
     /**
      * Async variant of [LockOperationsApi.updateLockSettingLocationRestrictions] returning [CompletableFuture].
      */
+    @JvmOverloads
     fun updateLockSettingLocationRestrictionsAsync(
         lockId: UUID,
         location: LockOperations.LocationRequirement? = null
@@ -306,6 +306,7 @@ actual object LockOperationsApi {
      * Async variant of [LockOperationsApi.getUserPublicKey] returning [CompletableFuture].
      */
     @DoordeckOnly
+    @JvmOverloads
     fun getUserPublicKeyAsync(
         userEmail: String,
         visitor: Boolean = false

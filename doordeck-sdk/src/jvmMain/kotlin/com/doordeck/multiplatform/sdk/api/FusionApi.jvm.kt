@@ -73,10 +73,12 @@ actual object FusionApi {
      * Async variant of [FusionApi.getIntegrationConfiguration] returning [CompletableFuture].
      */
     @DoordeckOnly
+    @JvmOverloads
     fun getIntegrationConfigurationAsync(
-        type: String
+        type: String,
+        controller: FusionOperations.LockController? = null
     ): CompletableFuture<List<IntegrationConfigurationResponse>> = completableFuture {
-        getIntegrationConfiguration(type)
+        getIntegrationConfiguration(type, controller)
     }
 
     /**

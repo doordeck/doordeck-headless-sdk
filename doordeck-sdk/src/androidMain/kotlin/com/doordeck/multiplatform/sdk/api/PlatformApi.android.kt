@@ -491,6 +491,7 @@ actual object PlatformApi {
      * Async variant of [PlatformApi.getApplicationUsers] returning [CompletableFuture].
      */
     @DoordeckOnly
+    @JvmOverloads
     fun getApplicationUsersAsync(
         applicationId: UUID,
         pageSize: Int = 100,

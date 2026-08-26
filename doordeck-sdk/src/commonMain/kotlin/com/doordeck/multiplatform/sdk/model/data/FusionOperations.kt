@@ -89,7 +89,7 @@ internal data class BasicCCureVirtualCardController(
 @Serializable
 @SerialName("demo")
 internal data class BasicDemoController(
-    val port: UShort
+    val port: Short
 ) : BasicLockController
 
 @Serializable

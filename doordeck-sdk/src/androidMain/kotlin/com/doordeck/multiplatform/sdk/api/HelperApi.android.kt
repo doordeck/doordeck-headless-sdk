@@ -68,7 +68,6 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    @JvmOverloads
     suspend fun assistedRegisterEphemeralKey(
         keyPair: KeyPair? = null
     ): AssistedRegisterEphemeralKeyResponse = HelperClient
@@ -91,7 +90,6 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    @JvmOverloads
     suspend fun assistedRegister(
         email: String,
         password: String,
