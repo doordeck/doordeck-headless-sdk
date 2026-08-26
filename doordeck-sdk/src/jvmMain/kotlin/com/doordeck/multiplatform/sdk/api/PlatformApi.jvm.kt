@@ -29,6 +29,7 @@ actual object PlatformApi {
      * @see PlatformClient.createApplicationRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun createApplication(application: PlatformOperations.CreateApplication): UUID = PlatformClient
         .createApplicationRequest(application.toBasicCreateApplication())
         .toUuid()
@@ -47,6 +48,7 @@ actual object PlatformApi {
      * @see PlatformClient.listApplicationsRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun listApplications(): List<ApplicationResponse> = PlatformClient
         .listApplicationsRequest()
         .toApplicationResponse()
@@ -63,6 +65,7 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getApplication(applicationId: UUID): ApplicationResponse = PlatformClient
         .getApplicationRequest(applicationId.toString())
         .toApplicationResponse()
@@ -79,6 +82,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationName(applicationId: UUID, name: String) = PlatformClient
         .updateApplicationNameRequest(
             applicationId = applicationId.toString(),
@@ -100,6 +104,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationCompanyName(applicationId: UUID, companyName: String) = PlatformClient
         .updateApplicationCompanyNameRequest(
             applicationId = applicationId.toString(),
@@ -124,6 +129,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationMailingAddress(applicationId: UUID, mailingAddress: String) = PlatformClient
         .updateApplicationMailingAddressRequest(
             applicationId = applicationId.toString(),
@@ -148,6 +154,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationPrivacyPolicy(applicationId: UUID, privacyPolicy: URI) = PlatformClient
         .updateApplicationPrivacyPolicyRequest(
             applicationId = applicationId.toString(),
@@ -172,6 +179,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationSupportContact(applicationId: UUID, supportContact: URI) = PlatformClient
         .updateApplicationSupportContactRequest(
             applicationId = applicationId.toString(),
@@ -196,6 +204,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationAppLink(applicationId: UUID, appLink: URI) = PlatformClient
         .updateApplicationAppLinkRequest(
             applicationId = applicationId.toString(),
@@ -217,6 +226,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationEmailPreferencesRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationEmailPreferences(
         applicationId: UUID,
         emailPreferences: PlatformOperations.EmailPreferences
@@ -244,6 +254,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun updateApplicationLogoUrl(applicationId: UUID, logoUrl: URI) = PlatformClient
         .updateApplicationLogoUrlRequest(
             applicationId = applicationId.toString(),
@@ -265,6 +276,7 @@ actual object PlatformApi {
      * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun deleteApplication(applicationId: UUID) = PlatformClient
         .deleteApplicationRequest(applicationId.toString())
 
@@ -280,6 +292,7 @@ actual object PlatformApi {
      * @see PlatformClient.getLogoUploadUrlRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getLogoUploadUrl(
         applicationId: UUID,
         contentType: String
@@ -308,6 +321,7 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun addAuthKey(applicationId: UUID, key: JWK) = PlatformClient
         .addAuthKeyRequest(
             applicationId = applicationId.toString(),
@@ -329,6 +343,7 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun addAuthIssuer(applicationId: UUID, url: URI) = PlatformClient
         .addAuthIssuerRequest(
             applicationId = applicationId.toString(),
@@ -350,6 +365,7 @@ actual object PlatformApi {
      * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun deleteAuthIssuer(applicationId: UUID, url: URI) = PlatformClient
         .deleteAuthIssuerRequest(
             applicationId = applicationId.toString(),
@@ -371,6 +387,7 @@ actual object PlatformApi {
      * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun addCorsDomain(applicationId: UUID, url: URI) = PlatformClient
         .addCorsDomainRequest(
             applicationId = applicationId.toString(),
@@ -392,6 +409,7 @@ actual object PlatformApi {
      * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun removeCorsDomain(applicationId: UUID, url: URI) = PlatformClient
         .removeCorsDomainRequest(
             applicationId = applicationId.toString(),
@@ -413,6 +431,7 @@ actual object PlatformApi {
      * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun addApplicationOwner(applicationId: UUID, userId: UUID) = PlatformClient
         .addApplicationOwnerRequest(
             applicationId = applicationId.toString(),
@@ -434,6 +453,7 @@ actual object PlatformApi {
      * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun removeApplicationOwner(applicationId: UUID, userId: UUID) = PlatformClient
         .removeApplicationOwnerRequest(
             applicationId = applicationId.toString(),
@@ -455,6 +475,7 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationOwnersDetailsRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getApplicationOwnersDetails(
         applicationId: UUID
     ): List<ApplicationOwnerDetailsResponse> = PlatformClient
@@ -475,6 +496,7 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationUsersRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getApplicationUsers(
         applicationId: UUID,
         pageSize: Int = 100,

@@ -15,6 +15,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.loginRequest
      */
+    @JvmSynthetic
     suspend fun login(email: String, password: String): TokenResponse = AccountlessClient
         .loginRequest(
             email = email,
@@ -35,6 +36,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.registrationRequest
      */
+    @JvmSynthetic
     suspend fun registration(
         email: String,
         password: String,
@@ -74,6 +76,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.verifyEmailRequest
      */
+    @JvmSynthetic
     suspend fun verifyEmail(code: String) = AccountlessClient.verifyEmailRequest(code)
 
     /**
@@ -86,6 +89,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.passwordResetRequest
      */
+    @JvmSynthetic
     suspend fun passwordReset(email: String) = AccountlessClient.passwordResetRequest(email)
 
     /**
@@ -98,6 +102,7 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.passwordResetRequest
      */
+    @JvmSynthetic
     suspend fun passwordResetVerify(userId: UUID, token: String, password: String) = AccountlessClient
         .passwordResetVerifyRequest(
             userId = userId.toString(),

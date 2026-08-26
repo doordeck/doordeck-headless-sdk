@@ -20,6 +20,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
+    @JvmSynthetic
     suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) = HelperClient
         .uploadPlatformLogoRequest(
             applicationId = applicationId.toString(),
@@ -45,6 +46,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedLoginRequest
      */
+    @JvmSynthetic
     suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse = HelperClient
         .assistedLoginRequest(
             email = email,
@@ -68,6 +70,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
+    @JvmSynthetic
     suspend fun assistedRegisterEphemeralKey(
         keyPair: KeyPair? = null
     ): AssistedRegisterEphemeralKeyResponse = HelperClient
@@ -90,6 +93,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterRequest
      */
+    @JvmSynthetic
     suspend fun assistedRegister(
         email: String,
         password: String,
@@ -120,6 +124,7 @@ actual object HelperApi {
         )
     }
 
+    @JvmSynthetic
     suspend fun serverTime(): ServerTimeResponse = HelperClient
         .serverTimeRequest()
         .toServerTimeResponse()

@@ -38,6 +38,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getSingleLockRequest
      */
+    @JvmSynthetic
     suspend fun getSingleLock(lockId: UUID): LockResponse = LockOperationsClient
         .getSingleLockRequest(lockId.toString())
         .toLockResponse()
@@ -52,6 +53,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLockAuditTrailRequest
      */
+    @JvmSynthetic
     suspend fun getLockAuditTrail(
         lockId: UUID,
         start: Instant? = null,
@@ -83,6 +85,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getAuditForUserRequest
      */
+    @JvmSynthetic
     suspend fun getAuditForUser(
         userId: UUID,
         start: Instant? = null,
@@ -114,6 +117,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUsersForLockRequest
      */
+    @JvmSynthetic
     suspend fun getUsersForLock(lockId: UUID): List<UserLockResponse> = LockOperationsClient
         .getUsersForLockRequest(lockId.toString())
         .toUserLockResponse()
@@ -128,6 +132,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getLocksForUserRequest
      */
+    @JvmSynthetic
     suspend fun getLocksForUser(userId: UUID): LockUserResponse = LockOperationsClient
         .getLocksForUserRequest(userId.toString())
         .toLockUserResponse()
@@ -142,6 +147,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockNameRequest
      */
+    @JvmSynthetic
     suspend fun updateLockName(lockId: UUID, name: String? = null) = LockOperationsClient
         .updateLockNameRequest(
             lockId = lockId.toString(),
@@ -162,6 +168,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
+    @JvmSynthetic
     suspend fun updateLockFavourite(lockId: UUID, favourite: Boolean) = LockOperationsClient
         .updateLockFavouriteRequest(
             lockId = lockId.toString(),
@@ -181,6 +188,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
+    @JvmSynthetic
     suspend fun updateLockSettingDefaultName(lockId: UUID, name: String) = LockOperationsClient
         .updateLockSettingDefaultNameRequest(
             lockId = lockId.toString(),
@@ -200,6 +208,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.setLockSettingPermittedAddressesRequest
      */
+    @JvmSynthetic
     suspend fun setLockSettingPermittedAddresses(
         lockId: UUID,
         permittedAddresses: List<InetAddress>
@@ -224,6 +233,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
+    @JvmSynthetic
     suspend fun updateLockSettingHidden(lockId: UUID, hidden: Boolean) = LockOperationsClient
         .updateLockSettingHiddenRequest(
             lockId = lockId.toString(),
@@ -240,6 +250,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.setLockSettingTimeRestrictionsRequest
      */
+    @JvmSynthetic
     suspend fun setLockSettingTimeRestrictions(
         lockId: UUID,
         times: List<LockOperations.TimeRequirement>
@@ -265,6 +276,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingLocationRestrictionsRequest
      */
+    @JvmSynthetic
     suspend fun updateLockSettingLocationRestrictions(
         lockId: UUID,
         location: LockOperations.LocationRequirement? = null
@@ -292,6 +304,7 @@ actual object LockOperationsApi {
      * @see LockOperationsClient.getUserPublicKeyRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getUserPublicKey(
         userEmail: String,
         visitor: Boolean = false
@@ -317,6 +330,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByEmail(email: String): UserPublicKeyResponse = LockOperationsClient
         .getUserPublicKeyByEmailRequest(email)
         .toUserPublicKeyResponse()
@@ -331,6 +345,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephoneRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByTelephone(telephone: String): UserPublicKeyResponse = LockOperationsClient
         .getUserPublicKeyByTelephoneRequest(telephone)
         .toUserPublicKeyResponse()
@@ -347,6 +362,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeyRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByLocalKey(localKey: String): UserPublicKeyResponse = LockOperationsClient
         .getUserPublicKeyByLocalKeyRequest(localKey)
         .toUserPublicKeyResponse()
@@ -363,6 +379,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeyRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByForeignKey(foreignKey: String): UserPublicKeyResponse = LockOperationsClient
         .getUserPublicKeyByForeignKeyRequest(foreignKey)
         .toUserPublicKeyResponse()
@@ -379,6 +396,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByIdentityRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByIdentity(identity: String): UserPublicKeyResponse = LockOperationsClient
         .getUserPublicKeyByIdentityRequest(identity)
         .toUserPublicKeyResponse()
@@ -395,6 +413,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByEmailsRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByEmails(emails: List<String>): List<BatchUserPublicKeyResponse> = LockOperationsClient
         .getUserPublicKeyByEmailsRequest(emails)
         .toBatchUserPublicKeyResponse()
@@ -411,6 +430,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByTelephonesRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByTelephones(
         telephones: List<String>
     ): List<BatchUserPublicKeyResponse> = LockOperationsClient
@@ -429,6 +449,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByLocalKeysRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByLocalKeys(
         localKeys: List<String>
     ): List<BatchUserPublicKeyResponse> = LockOperationsClient
@@ -447,6 +468,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getUserPublicKeyByForeignKeysRequest
      */
+    @JvmSynthetic
     suspend fun getUserPublicKeyByForeignKeys(
         foreignKeys: List<String>
     ): List<BatchUserPublicKeyResponse> = LockOperationsClient
@@ -465,6 +487,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.unlockRequest
      */
+    @JvmSynthetic
     suspend fun unlock(unlockOperation: LockOperations.UnlockOperation) = LockOperationsClient
         .unlockRequest(unlockOperation.toBasicUnlockOperation())
 
@@ -478,6 +501,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.shareLockRequest
      */
+    @JvmSynthetic
     suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation) = LockOperationsClient
         .shareLockRequest(shareLockOperation.toBasicShareLockOperation())
 
@@ -493,6 +517,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.batchShareLockRequest
      */
+    @JvmSynthetic
     suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation) = LockOperationsClient
         .batchShareLockRequest(batchShareLockOperation.toBasicBatchShareLockOperation())
 
@@ -508,6 +533,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.revokeAccessToLockRequest
      */
+    @JvmSynthetic
     suspend fun revokeAccessToLock(
         revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation
     ) = LockOperationsClient
@@ -528,6 +554,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateSecureSettingUnlockDurationRequest
      */
+    @JvmSynthetic
     suspend fun updateSecureSettingUnlockDuration(
         updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration
     ) = LockOperationsClient
@@ -548,6 +575,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateSecureSettingUnlockBetweenRequest
      */
+    @JvmSynthetic
     suspend fun updateSecureSettingUnlockBetween(
         updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween
     ) = LockOperationsClient
@@ -568,6 +596,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getPinnedLocksRequest
      */
+    @JvmSynthetic
     suspend fun getPinnedLocks(): List<LockResponse> = LockOperationsClient
         .getPinnedLocksRequest()
         .toLockResponse()
@@ -582,6 +611,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.getShareableLocksRequest
      */
+    @JvmSynthetic
     suspend fun getShareableLocks(): List<ShareableLockResponse> = LockOperationsClient
         .getShareableLocksRequest()
         .toShareableLockResponse()

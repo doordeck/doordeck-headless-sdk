@@ -24,6 +24,7 @@ actual object FusionApi {
      * @see FusionClient.loginRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun login(email: String, password: String): FusionLoginResponse = FusionClient
         .loginRequest(
             email = email,
@@ -46,6 +47,7 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationTypeRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getIntegrationType(): IntegrationTypeResponse = FusionClient
         .getIntegrationTypeRequest()
         .toIntegrationTypeResponse()
@@ -62,6 +64,7 @@ actual object FusionApi {
      * @see FusionClient.getIntegrationConfigurationRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getIntegrationConfiguration(
         type: String,
         controller: FusionOperations.LockController? = null
@@ -85,6 +88,7 @@ actual object FusionApi {
      * @see FusionClient.enableDoorRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun enableDoor(name: String, siteId: UUID, controller: FusionOperations.LockController) = FusionClient
         .enableDoorRequest(
             name = name,
@@ -112,6 +116,7 @@ actual object FusionApi {
      * @see FusionClient.deleteDoorRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun deleteDoor(deviceId: UUID) = FusionClient.deleteDoorRequest(deviceId.toString())
 
     /**
@@ -126,6 +131,7 @@ actual object FusionApi {
      * @see FusionClient.getDoorStatusRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun getDoorStatus(deviceId: UUID): DoorStateResponse = FusionClient
         .getDoorStatusRequest(deviceId.toString())
         .toDoorStateResponse()
@@ -142,6 +148,7 @@ actual object FusionApi {
      * @see FusionClient.startDoorRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun startDoor(deviceId: UUID) = FusionClient.startDoorRequest(deviceId.toString())
 
     /**
@@ -156,6 +163,7 @@ actual object FusionApi {
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun stopDoor(deviceId: UUID) = FusionClient.stopDoorRequest(deviceId.toString())
 
     /**
