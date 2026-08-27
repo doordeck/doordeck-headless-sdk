@@ -37,6 +37,7 @@ object LockOperations {
             fun setTimezone(timezone: NSTimeZone) = apply { this.timezone = timezone }
             fun setDays(days: Set<DayOfWeek>) = apply { this.days = days }
 
+            @Throws(Exception::class)
             fun build(): TimeRequirement {
                 return TimeRequirement(
                     start = requireNotNull(start),
@@ -75,6 +76,7 @@ object LockOperations {
             fun setRadius(radius: Int): Builder = apply { this.radius = radius }
             fun setAccuracy(accuracy: Int): Builder = apply { this.accuracy = accuracy }
 
+            @Throws(Exception::class)
             fun build(): LocationRequirement {
                 return LocationRequirement(
                     latitude = requireNotNull(latitude),
@@ -107,6 +109,7 @@ object LockOperations {
             fun setDays(days: Set<DayOfWeek>): Builder = apply { this.days = days }
             fun setExceptions(exceptions: List<NSDateComponents>?): Builder = apply { this.exceptions = exceptions }
 
+            @Throws(Exception::class)
             fun build(): UnlockBetween {
                 return UnlockBetween(
                     start = requireNotNull(start),
@@ -131,6 +134,7 @@ object LockOperations {
             fun setDirectAccessEndpoints(directAccessEndpoints: List<String>?): Builder =
                 apply { this.directAccessEndpoints = directAccessEndpoints }
 
+            @Throws(Exception::class)
             fun build(): UnlockOperation {
                 return UnlockOperation(
                     baseOperation = requireNotNull(baseOperation),
@@ -151,6 +155,7 @@ object LockOperations {
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
             fun setShareLock(shareLock: ShareLock): Builder = apply { this.shareLock = shareLock }
 
+            @Throws(Exception::class)
             fun build(): ShareLockOperation {
                 return ShareLockOperation(
                     baseOperation = requireNotNull(baseOperation),
@@ -182,6 +187,7 @@ object LockOperations {
             fun setStart(start: NSDate?): Builder = apply { this.start = start }
             fun setEnd(end: NSDate?): Builder = apply { this.end = end }
 
+            @Throws(Exception::class)
             fun build(): ShareLock {
                 return ShareLock(
                     targetUserId = requireNotNull(targetUserId),
@@ -205,6 +211,7 @@ object LockOperations {
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
             fun setUsers(users: List<ShareLock>): Builder = apply { this.users = users }
 
+            @Throws(Exception::class)
             fun build(): BatchShareLockOperation {
                 return BatchShareLockOperation(
                     baseOperation = requireNotNull(baseOperation),
@@ -225,6 +232,7 @@ object LockOperations {
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
             fun setUsers(users: List<NSUUID>): Builder = apply { this.users = users }
 
+            @Throws(Exception::class)
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
                     baseOperation = requireNotNull(baseOperation),
@@ -246,6 +254,7 @@ object LockOperations {
             fun setUnlockDuration(unlockDuration: NSTimeInterval): Builder =
                 apply { this.unlockDuration = unlockDuration }
 
+            @Throws(Exception::class)
             fun build(): UpdateSecureSettingUnlockDuration {
                 return UpdateSecureSettingUnlockDuration(
                     baseOperation = requireNotNull(baseOperation),
@@ -266,6 +275,7 @@ object LockOperations {
             fun setBaseOperation(baseOperation: BaseOperation): Builder = apply { this.baseOperation = baseOperation }
             fun setUnlockBetween(unlockBetween: UnlockBetween?): Builder = apply { this.unlockBetween = unlockBetween }
 
+            @Throws(Exception::class)
             fun build(): UpdateSecureSettingUnlockBetween {
                 return UpdateSecureSettingUnlockBetween(
                     baseOperation = requireNotNull(baseOperation),
@@ -306,6 +316,7 @@ object LockOperations {
             fun setExpiresAt(expiresAt: NSDate): Builder = apply { this.expiresAt = expiresAt }
             fun setJti(jti: NSUUID): Builder = apply { this.jti = jti }
 
+            @Throws(Exception::class)
             fun build(): BaseOperation {
                 return BaseOperation(
                     userId = userId,

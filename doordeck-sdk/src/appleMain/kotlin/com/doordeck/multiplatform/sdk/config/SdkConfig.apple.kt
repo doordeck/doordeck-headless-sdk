@@ -71,6 +71,7 @@ data class SdkConfig(
          *
          * If no secure storage override is provided, a default secure storage is created.
          */
+        @Throws(Exception::class)
         fun build(): SdkConfig {
             val secureStorage = secureStorage ?: createSecureStorage(ApplicationContext)
             return SdkConfig(

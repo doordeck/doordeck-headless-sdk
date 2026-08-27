@@ -37,6 +37,7 @@ object PlatformOperations {
 
             fun setLogoUrl(logoUrl: NSURLComponents?) = apply { this.logoUrl = logoUrl }
 
+            @Throws(Exception::class)
             fun build(): CreateApplication {
                 return CreateApplication(
                     name = requireNotNull(name),
@@ -77,6 +78,7 @@ object PlatformOperations {
 
             fun setCallToAction(callToAction: EmailCallToAction?) = apply { this.callToAction = callToAction }
 
+            @Throws(Exception::class)
             fun build(): EmailPreferences {
                 return EmailPreferences(
                     senderEmail = senderEmail,
@@ -104,6 +106,7 @@ object PlatformOperations {
             fun setHeadline(headline: String) = apply { this.headline = headline }
             fun setActionText(actionText: String) = apply { this.actionText = actionText }
 
+            @Throws(Exception::class)
             fun build(): EmailCallToAction {
                 return EmailCallToAction(
                     actionTarget = requireNotNull(actionTarget),
@@ -144,6 +147,7 @@ object PlatformOperations {
             fun setE(e: String) = apply { this.e = e }
             fun setN(n: String) = apply { this.n = n }
 
+            @Throws(Exception::class)
             fun build(): RsaKey {
                 return RsaKey(
                     kty = kty,
@@ -183,6 +187,7 @@ object PlatformOperations {
             fun setX(x: String) = apply { this.x = x }
             fun setY(y: String) = apply { this.y = y }
 
+            @Throws(Exception::class)
             fun build(): EcKey {
                 return EcKey(
                     kty = kty,
@@ -220,6 +225,7 @@ object PlatformOperations {
             fun setCrv(crv: String) = apply { this.crv = crv }
             fun setX(x: String) = apply { this.x = x }
 
+            @Throws(Exception::class)
             fun build(): Ed25519Key {
                 return Ed25519Key(
                     kty = kty,

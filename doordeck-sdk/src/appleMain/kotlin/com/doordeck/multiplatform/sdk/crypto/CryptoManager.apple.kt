@@ -34,8 +34,10 @@ actual object CryptoManager {
         )
     }
 
+    @Throws(Exception::class)
     fun generateKeyPair(): Crypto.KeyPair = generateRawKeyPair()
 
+    @Throws(Exception::class)
     fun generateKeyPairFromBytes(publicKey: ByteArray, privateKey: ByteArray): Crypto.KeyPair =
         Crypto.KeyPair(privateKey.toPlatformPrivateKey(), publicKey.toPlatformPublicKey())
 

@@ -178,7 +178,7 @@ object FusionOperations {
     data class ZktecoController(
         val clientSecret: String,
         val doorId: String,
-        val baseUrl: String? = null,
+        val baseUrl: NSURLComponents? = null,
         val entityType: ZktecoEntityType
     ) : LockController
 }
@@ -355,6 +355,6 @@ internal fun TdsiGardisController.toBasicTdsiGardisController(): BasicTdsiGardis
 internal fun ZktecoController.toBasicZktecoController(): BasicZktecoController = BasicZktecoController(
     clientSecret = clientSecret,
     doorId = doorId,
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toUrlString(),
     entityType = entityType
 )
