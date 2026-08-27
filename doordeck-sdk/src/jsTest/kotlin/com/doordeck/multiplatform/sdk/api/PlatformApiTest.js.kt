@@ -27,6 +27,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
+import kotlin.js.collections.toMap
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -227,7 +228,7 @@ class PlatformApiTest : IntegrationTest() {
 
             // Then
             application = PlatformApi.getApplication(application.applicationId)
-            val actualEd25519Key = application.authKeys.entries.firstOrNull {
+            val actualEd25519Key = application.authKeys.toMap().entries.firstOrNull {
                 it.key == ed25519Key.kid
             }?.value as? Ed25519KeyResponse
             assertNotNull(actualEd25519Key)
@@ -251,7 +252,7 @@ class PlatformApiTest : IntegrationTest() {
 
             // Then
             application = PlatformApi.getApplication(application.applicationId)
-            val actualRsaKey = application.authKeys.entries.firstOrNull {
+            val actualRsaKey = application.authKeys.toMap().entries.firstOrNull {
                 it.key == rsaKey.kid
             }?.value as? RsaKeyResponse
             assertNotNull(actualRsaKey)
@@ -276,7 +277,7 @@ class PlatformApiTest : IntegrationTest() {
 
             // Then
             application = PlatformApi.getApplication(application.applicationId)
-            val actualKeyEcKey = application.authKeys.entries.firstOrNull {
+            val actualKeyEcKey = application.authKeys.toMap().entries.firstOrNull {
                 it.key == ecKey.kid
             }?.value as? EcKeyResponse
             assertNotNull(actualKeyEcKey)
