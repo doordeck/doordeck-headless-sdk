@@ -120,8 +120,8 @@ kotlin {
         }
         browser {
             testTask {
-                useMocha {
-                    timeout = "60s"
+                useKarma {
+                    useChromeHeadless()
                 }
             }
             webpackTask {
