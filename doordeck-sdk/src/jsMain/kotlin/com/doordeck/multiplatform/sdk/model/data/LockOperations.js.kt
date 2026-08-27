@@ -37,10 +37,10 @@ object LockOperations {
 
             fun build(): TimeRequirement {
                 return TimeRequirement(
-                    start = requireNotNull(start),
-                    end = requireNotNull(end),
-                    timezone = requireNotNull(timezone),
-                    days = requireNotNull(days)
+                    start = requireNotNull(start) { "start is required" },
+                    end = requireNotNull(end) { "end is required" },
+                    timezone = requireNotNull(timezone) { "timezone is required" },
+                    days = requireNotNull(days) { "days is required" }
                 )
             }
         }
@@ -75,8 +75,8 @@ object LockOperations {
 
             fun build(): LocationRequirement {
                 return LocationRequirement(
-                    latitude = requireNotNull(latitude),
-                    longitude = requireNotNull(longitude),
+                    latitude = requireNotNull(latitude) { "latitude is required" },
+                    longitude = requireNotNull(longitude) { "longitude is required" },
                     enabled = enabled,
                     radius = radius,
                     accuracy = accuracy
@@ -107,10 +107,10 @@ object LockOperations {
 
             fun build(): UnlockBetween {
                 return UnlockBetween(
-                    start = requireNotNull(start),
-                    end = requireNotNull(end),
-                    timezone = requireNotNull(timezone),
-                    days = requireNotNull(days),
+                    start = requireNotNull(start) { "start is required" },
+                    end = requireNotNull(end) { "end is required" },
+                    timezone = requireNotNull(timezone) { "timezone is required" },
+                    days = requireNotNull(days) { "days is required" },
                     exceptions = exceptions
                 )
             }
@@ -130,7 +130,7 @@ object LockOperations {
 
             fun build(): UnlockOperation {
                 return UnlockOperation(
-                    baseOperation = requireNotNull(baseOperation),
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
                     directAccessEndpoints = directAccessEndpoints
                 )
             }
@@ -150,8 +150,8 @@ object LockOperations {
 
             fun build(): ShareLockOperation {
                 return ShareLockOperation(
-                    baseOperation = requireNotNull(baseOperation),
-                    shareLock = requireNotNull(shareLock)
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
+                    shareLock = requireNotNull(shareLock) { "shareLock is required" }
                 )
             }
         }
@@ -179,9 +179,9 @@ object LockOperations {
 
             fun build(): ShareLock {
                 return ShareLock(
-                    targetUserId = requireNotNull(targetUserId),
-                    targetUserRole = requireNotNull(targetUserRole),
-                    targetUserPublicKey = requireNotNull(targetUserPublicKey),
+                    targetUserId = requireNotNull(targetUserId) { "targetUserId is required" },
+                    targetUserRole = requireNotNull(targetUserRole) { "targetUserRole is required" },
+                    targetUserPublicKey = requireNotNull(targetUserPublicKey) { "targetUserPublicKey is required" },
                     start = start,
                     end = end
                 )
@@ -202,8 +202,8 @@ object LockOperations {
 
             fun build(): BatchShareLockOperation {
                 return BatchShareLockOperation(
-                    baseOperation = requireNotNull(baseOperation),
-                    users = requireNotNull(users)
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
+                    users = requireNotNull(users) { "users is required" }
                 )
             }
         }
@@ -222,8 +222,8 @@ object LockOperations {
 
             fun build(): RevokeAccessToLockOperation {
                 return RevokeAccessToLockOperation(
-                    baseOperation = requireNotNull(baseOperation),
-                    users = requireNotNull(users)
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
+                    users = requireNotNull(users) { "users is required" }
                 )
             }
         }
@@ -242,8 +242,8 @@ object LockOperations {
 
             fun build(): UpdateSecureSettingUnlockDuration {
                 return UpdateSecureSettingUnlockDuration(
-                    baseOperation = requireNotNull(baseOperation),
-                    unlockDuration = requireNotNull(unlockDuration)
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
+                    unlockDuration = requireNotNull(unlockDuration) { "unlockDuration is required" }
                 )
             }
         }
@@ -262,7 +262,7 @@ object LockOperations {
 
             fun build(): UpdateSecureSettingUnlockBetween {
                 return UpdateSecureSettingUnlockBetween(
-                    baseOperation = requireNotNull(baseOperation),
+                    baseOperation = requireNotNull(baseOperation) { "baseOperation is required" },
                     unlockBetween = unlockBetween
                 )
             }
@@ -303,7 +303,7 @@ object LockOperations {
                     userId = userId,
                     userCertificateChain = userCertificateChain,
                     userPrivateKey = userPrivateKey,
-                    lockId = requireNotNull(lockId),
+                    lockId = requireNotNull(lockId) { "lockId is required" },
                     notBefore = notBefore,
                     issuedAt = issuedAt,
                     expiresAt = expiresAt,
