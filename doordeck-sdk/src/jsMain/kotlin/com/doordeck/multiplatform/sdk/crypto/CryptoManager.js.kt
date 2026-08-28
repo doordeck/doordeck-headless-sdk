@@ -115,7 +115,7 @@ actual object CryptoManager {
             message = message.toByteArray().toUint8Array(),
             publicKey = publicKey.toPlatformPublicKey().toUint8Array()
         )
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
