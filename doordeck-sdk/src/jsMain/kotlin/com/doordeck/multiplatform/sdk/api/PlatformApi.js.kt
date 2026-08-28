@@ -245,5 +245,4 @@ private val platform = PlatformApi
 /**
  * Defines the platform-specific implementation of [PlatformApi]
  */
-@JsExport
 actual fun platform(): PlatformApi = platform

@@ -306,5 +306,4 @@ private val lockOperations = LockOperationsApi
 /**
  * Defines the platform-specific implementation of [LockOperationsApi]
  */
-@JsExport
 actual fun lockOperations(): LockOperationsApi = lockOperations

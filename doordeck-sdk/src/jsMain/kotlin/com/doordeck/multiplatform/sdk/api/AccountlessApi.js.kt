@@ -64,5 +64,4 @@ private val accountless = AccountlessApi
 /**
  * Defines the platform-specific implementation of [AccountlessApi]
  */
-@JsExport
 actual fun accountless(): AccountlessApi = accountless

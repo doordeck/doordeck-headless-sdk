@@ -72,5 +72,4 @@ private val helper = HelperApi
 /**
  * Defines the platform-specific implementation of [HelperApi]
  */
-@JsExport
 actual fun helper(): HelperApi = helper

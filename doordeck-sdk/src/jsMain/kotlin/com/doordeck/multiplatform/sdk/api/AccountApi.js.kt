@@ -111,5 +111,4 @@ private val account = AccountApi
 /**
  * Defines the platform-specific implementation of [AccountApi]
  */
-@JsExport
 actual fun account(): AccountApi = account

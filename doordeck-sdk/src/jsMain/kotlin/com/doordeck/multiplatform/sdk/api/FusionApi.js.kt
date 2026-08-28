@@ -96,5 +96,4 @@ private val fusion = FusionApi
 /**
  * Defines the platform-specific implementation of [FusionApi]
  */
-@JsExport
 actual fun fusion(): FusionApi = fusion

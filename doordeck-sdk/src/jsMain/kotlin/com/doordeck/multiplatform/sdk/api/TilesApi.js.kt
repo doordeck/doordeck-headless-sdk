@@ -36,5 +36,4 @@ private val tiles = TilesApi
 /**
  * Defines the platform-specific implementation of [TilesApi]
  */
-@JsExport
 actual fun tiles(): TilesApi = tiles
