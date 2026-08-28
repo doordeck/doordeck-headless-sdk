@@ -297,7 +297,7 @@ internal fun HttpClient.addExceptionInterceptor() {
             throw exception // never swallow cancellation
         } catch (exception: SdkException) {
             throw exception
-        } catch (exception: Exception) {
+        } catch (exception: Throwable) {
             throw SdkException("Failed to perform API call", exception)
         }
     }
