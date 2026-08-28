@@ -16,7 +16,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): dynamic = HelperClient
+    suspend fun uploadPlatformLogo(applicationId: String, contentType: String, image: ByteArray): Unit = HelperClient
         .uploadPlatformLogoRequest(
             applicationId = applicationId,
             contentType = contentType,
@@ -54,7 +54,7 @@ actual object HelperApi {
         password: String,
         displayName: String? = null,
         force: Boolean = false
-    ): dynamic = HelperClient
+    ): Unit = HelperClient
         .assistedRegisterRequest(
             email = email,
             password = password,

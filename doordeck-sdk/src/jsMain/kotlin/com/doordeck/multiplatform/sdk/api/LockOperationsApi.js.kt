@@ -87,7 +87,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockNameRequest
      */
-    suspend fun updateLockName(lockId: String, name: String? = null): dynamic = LockOperationsClient
+    suspend fun updateLockName(lockId: String, name: String? = null): Unit = LockOperationsClient
         .updateLockNameRequest(
             lockId = lockId,
             name = name
@@ -96,7 +96,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockFavouriteRequest
      */
-    suspend fun updateLockFavourite(lockId: String, favourite: Boolean): dynamic = LockOperationsClient
+    suspend fun updateLockFavourite(lockId: String, favourite: Boolean): Unit = LockOperationsClient
         .updateLockFavouriteRequest(
             lockId = lockId,
             favourite = favourite
@@ -105,7 +105,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingDefaultNameRequest
      */
-    suspend fun updateLockSettingDefaultName(lockId: String, name: String): dynamic = LockOperationsClient
+    suspend fun updateLockSettingDefaultName(lockId: String, name: String): Unit = LockOperationsClient
         .updateLockSettingDefaultNameRequest(
             lockId = lockId,
             name = name
@@ -117,7 +117,7 @@ actual object LockOperationsApi {
     suspend fun setLockSettingPermittedAddresses(
         lockId: String,
         permittedAddresses: JsArray<String>
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .setLockSettingPermittedAddressesRequest(
             lockId = lockId,
             permittedAddresses = permittedAddresses.toList()
@@ -126,7 +126,7 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.updateLockSettingHiddenRequest
      */
-    suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean): dynamic = LockOperationsClient
+    suspend fun updateLockSettingHidden(lockId: String, hidden: Boolean): Unit = LockOperationsClient
         .updateLockSettingHiddenRequest(
             lockId = lockId,
             hidden = hidden
@@ -138,7 +138,7 @@ actual object LockOperationsApi {
     suspend fun setLockSettingTimeRestrictions(
         lockId: String,
         times: JsArray<LockOperations.TimeRequirement>
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .setLockSettingTimeRestrictionsRequest(
             lockId = lockId,
             times = times.toBasicTimeRequirement()
@@ -150,7 +150,7 @@ actual object LockOperationsApi {
     suspend fun updateLockSettingLocationRestrictions(
         lockId: String,
         location: LockOperations.LocationRequirement? = null
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .updateLockSettingLocationRestrictionsRequest(
             lockId = lockId,
             location = location?.toBasicLocationRequirement()
@@ -237,19 +237,19 @@ actual object LockOperationsApi {
     /**
      * @see LockOperationsClient.unlockRequest
      */
-    suspend fun unlock(unlockOperation: LockOperations.UnlockOperation): dynamic = LockOperationsClient
+    suspend fun unlock(unlockOperation: LockOperations.UnlockOperation): Unit = LockOperationsClient
         .unlockRequest(unlockOperation.toBasicUnlockOperation())
 
     /**
      * @see LockOperationsClient.shareLockRequest
      */
-    suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): dynamic = LockOperationsClient
+    suspend fun shareLock(shareLockOperation: LockOperations.ShareLockOperation): Unit = LockOperationsClient
         .shareLockRequest(shareLockOperation.toBasicShareLockOperation())
 
     /**
      * @see LockOperationsClient.batchShareLockRequest
      */
-    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): dynamic = LockOperationsClient
+    suspend fun batchShareLock(batchShareLockOperation: LockOperations.BatchShareLockOperation): Unit = LockOperationsClient
         .batchShareLockRequest(
             batchShareLockOperation = batchShareLockOperation.toBasicBatchShareLockOperation()
         )
@@ -259,7 +259,7 @@ actual object LockOperationsApi {
      */
     suspend fun revokeAccessToLock(
         revokeAccessToLockOperation: LockOperations.RevokeAccessToLockOperation
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .revokeAccessToLockRequest(
             revokeAccessToLockOperation = revokeAccessToLockOperation.toBasicRevokeAccessToLockOperation()
         )
@@ -269,7 +269,7 @@ actual object LockOperationsApi {
      */
     suspend fun updateSecureSettingUnlockDuration(
         updateSecureSettingUnlockDuration: LockOperations.UpdateSecureSettingUnlockDuration
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .updateSecureSettingUnlockDurationRequest(
             updateSecureSettingUnlockDuration = updateSecureSettingUnlockDuration
                 .toBasicUpdateSecureSettingUnlockDuration()
@@ -280,7 +280,7 @@ actual object LockOperationsApi {
      */
     suspend fun updateSecureSettingUnlockBetween(
         updateSecureSettingUnlockBetween: LockOperations.UpdateSecureSettingUnlockBetween
-    ): dynamic = LockOperationsClient
+    ): Unit = LockOperationsClient
         .updateSecureSettingUnlockBetweenRequest(
             updateSecureSettingUnlockBetween = updateSecureSettingUnlockBetween
                 .toBasicUpdateSecureSettingUnlockBetween()

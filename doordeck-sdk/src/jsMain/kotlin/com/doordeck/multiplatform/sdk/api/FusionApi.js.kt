@@ -57,7 +57,7 @@ actual object FusionApi {
         name: String,
         siteId: String,
         controller: FusionOperations.LockController
-    ): dynamic = FusionClient
+    ): Unit = FusionClient
         .enableDoorRequest(
             name = name,
             siteId = siteId,
@@ -68,7 +68,7 @@ actual object FusionApi {
      * @see FusionClient.deleteDoorRequest
      */
     @DoordeckOnly
-    suspend fun deleteDoor(deviceId: String): dynamic = FusionClient.deleteDoorRequest(deviceId)
+    suspend fun deleteDoor(deviceId: String): Unit = FusionClient.deleteDoorRequest(deviceId)
 
     /**
      * @see FusionClient.getDoorStatusRequest
@@ -82,13 +82,13 @@ actual object FusionApi {
      * @see FusionClient.startDoorRequest
      */
     @DoordeckOnly
-    suspend fun startDoor(deviceId: String): dynamic = FusionClient.startDoorRequest(deviceId)
+    suspend fun startDoor(deviceId: String): Unit = FusionClient.startDoorRequest(deviceId)
 
     /**
      * @see FusionClient.stopDoorRequest
      */
     @DoordeckOnly
-    suspend fun stopDoor(deviceId: String): dynamic = FusionClient.stopDoorRequest(deviceId)
+    suspend fun stopDoor(deviceId: String): Unit = FusionClient.stopDoorRequest(deviceId)
 }
 
 private val fusion = FusionApi

@@ -48,7 +48,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationNameRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationName(applicationId: String, name: String): dynamic = PlatformClient
+    suspend fun updateApplicationName(applicationId: String, name: String): Unit = PlatformClient
         .updateApplicationNameRequest(
             applicationId = applicationId,
             name = name
@@ -58,7 +58,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationCompanyNameRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String): dynamic = PlatformClient
+    suspend fun updateApplicationCompanyName(applicationId: String, companyName: String): Unit = PlatformClient
         .updateApplicationCompanyNameRequest(
             applicationId = applicationId,
             companyName = companyName
@@ -68,7 +68,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationMailingAddressRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String): dynamic = PlatformClient
+    suspend fun updateApplicationMailingAddress(applicationId: String, mailingAddress: String): Unit = PlatformClient
         .updateApplicationMailingAddressRequest(
             applicationId = applicationId,
             mailingAddress = mailingAddress
@@ -78,7 +78,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationPrivacyPolicyRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String): dynamic = PlatformClient
+    suspend fun updateApplicationPrivacyPolicy(applicationId: String, privacyPolicy: String): Unit = PlatformClient
         .updateApplicationPrivacyPolicyRequest(
             applicationId = applicationId,
             privacyPolicy = privacyPolicy
@@ -88,7 +88,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationSupportContactRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String): dynamic = PlatformClient
+    suspend fun updateApplicationSupportContact(applicationId: String, supportContact: String): Unit = PlatformClient
         .updateApplicationSupportContactRequest(
             applicationId = applicationId,
             supportContact = supportContact
@@ -98,7 +98,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationAppLinkRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationAppLink(applicationId: String, appLink: String): dynamic = PlatformClient
+    suspend fun updateApplicationAppLink(applicationId: String, appLink: String): Unit = PlatformClient
         .updateApplicationAppLinkRequest(
             applicationId = applicationId,
             appLink = appLink
@@ -111,7 +111,7 @@ actual object PlatformApi {
     suspend fun updateApplicationEmailPreferences(
         applicationId: String,
         emailPreferences: PlatformOperations.EmailPreferences
-    ): dynamic = PlatformClient
+    ): Unit = PlatformClient
         .updateApplicationEmailPreferencesRequest(
             applicationId = applicationId,
             emailPreferences = emailPreferences.toBasicEmailPreferences()
@@ -121,7 +121,7 @@ actual object PlatformApi {
      * @see PlatformClient.updateApplicationLogoUrlRequest
      */
     @DoordeckOnly
-    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String): dynamic = PlatformClient
+    suspend fun updateApplicationLogoUrl(applicationId: String, logoUrl: String): Unit = PlatformClient
         .updateApplicationLogoUrlRequest(
             applicationId = applicationId,
             logoUrl = logoUrl
@@ -131,7 +131,7 @@ actual object PlatformApi {
      * @see PlatformClient.deleteApplicationRequest
      */
     @DoordeckOnly
-    suspend fun deleteApplication(applicationId: String): dynamic = PlatformClient.deleteApplicationRequest(applicationId)
+    suspend fun deleteApplication(applicationId: String): Unit = PlatformClient.deleteApplicationRequest(applicationId)
 
     /**
      * @see PlatformClient.getLogoUploadUrlRequest
@@ -148,7 +148,7 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthKeyRequest
      */
     @DoordeckOnly
-    suspend fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey): dynamic = PlatformClient
+    suspend fun addAuthKey(applicationId: String, key: PlatformOperations.AuthKey): Unit = PlatformClient
         .addAuthKeyRequest(
             applicationId = applicationId,
             key = key.toBasicAuthKey()
@@ -158,7 +158,7 @@ actual object PlatformApi {
      * @see PlatformClient.addAuthIssuerRequest
      */
     @DoordeckOnly
-    suspend fun addAuthIssuer(applicationId: String, url: String): dynamic = PlatformClient
+    suspend fun addAuthIssuer(applicationId: String, url: String): Unit = PlatformClient
         .addAuthIssuerRequest(
             applicationId = applicationId,
             url = url
@@ -168,7 +168,7 @@ actual object PlatformApi {
      * @see PlatformClient.deleteAuthIssuerRequest
      */
     @DoordeckOnly
-    suspend fun deleteAuthIssuer(applicationId: String, url: String): dynamic = PlatformClient
+    suspend fun deleteAuthIssuer(applicationId: String, url: String): Unit = PlatformClient
         .deleteAuthIssuerRequest(
             applicationId = applicationId,
             url = url
@@ -178,7 +178,7 @@ actual object PlatformApi {
      * @see PlatformClient.addCorsDomainRequest
      */
     @DoordeckOnly
-    suspend fun addCorsDomain(applicationId: String, url: String): dynamic = PlatformClient
+    suspend fun addCorsDomain(applicationId: String, url: String): Unit = PlatformClient
         .addCorsDomainRequest(
             applicationId = applicationId,
             url = url
@@ -188,7 +188,7 @@ actual object PlatformApi {
      * @see PlatformClient.removeCorsDomainRequest
      */
     @DoordeckOnly
-    suspend fun removeCorsDomain(applicationId: String, url: String): dynamic = PlatformClient
+    suspend fun removeCorsDomain(applicationId: String, url: String): Unit = PlatformClient
         .removeCorsDomainRequest(
             applicationId = applicationId,
             url = url
@@ -198,7 +198,7 @@ actual object PlatformApi {
      * @see PlatformClient.addApplicationOwnerRequest
      */
     @DoordeckOnly
-    suspend fun addApplicationOwner(applicationId: String, userId: String): dynamic = PlatformClient
+    suspend fun addApplicationOwner(applicationId: String, userId: String): Unit = PlatformClient
         .addApplicationOwnerRequest(
             applicationId = applicationId,
             userId = userId
@@ -208,7 +208,7 @@ actual object PlatformApi {
      * @see PlatformClient.removeApplicationOwnerRequest
      */
     @DoordeckOnly
-    suspend fun removeApplicationOwner(applicationId: String, userId: String): dynamic = PlatformClient
+    suspend fun removeApplicationOwner(applicationId: String, userId: String): Unit = PlatformClient
         .removeApplicationOwnerRequest(
             applicationId = applicationId,
             userId = userId
