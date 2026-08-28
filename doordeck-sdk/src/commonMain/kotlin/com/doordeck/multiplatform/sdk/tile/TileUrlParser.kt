@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.exceptions.InvalidTileUrlException
 import io.ktor.http.URLProtocol
 import io.ktor.http.parseUrl
 import kotlin.js.JsExport
+import kotlin.native.HiddenFromObjC
 import kotlin.uuid.Uuid
 
 /**
@@ -40,6 +41,7 @@ object TileUrlParser {
      * @throws IllegalArgumentException if [source] is not a valid [TileUrlSource] name.
      * @throws InvalidTileUrlException if no tile ID can be extracted.
      */
+    @HiddenFromObjC
     fun parseTileUrl(input: String, source: String): ParsedTileUrl {
         return parseTileUrl(input, TileUrlSource.valueOf(source))
     }

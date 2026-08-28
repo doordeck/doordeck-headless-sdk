@@ -284,9 +284,9 @@ object LockOperations {
             private var userCertificateChain: JsArray<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: String? = null
-            private var notBefore: Long = Clock.System.now().toEpochMilliseconds()
-            private var issuedAt: Long = Clock.System.now().toEpochMilliseconds()
-            private var expiresAt: Long = (Clock.System.now() + 1.minutes).toEpochMilliseconds()
+            private var notBefore: Long? = null
+            private var issuedAt: Long? = null
+            private var expiresAt: Long? = null
             private var jti: String = Uuid.random().toString()
 
             fun setUserId(userId: String?): Builder = apply { this.userId = userId }
@@ -304,9 +304,9 @@ object LockOperations {
                     userCertificateChain = userCertificateChain,
                     userPrivateKey = userPrivateKey,
                     lockId = requireNotNull(lockId) { "lockId is required" },
-                    notBefore = notBefore,
-                    issuedAt = issuedAt,
-                    expiresAt = expiresAt,
+                    notBefore = notBefore ?: Clock.System.now().toEpochMilliseconds(),
+                    issuedAt = issuedAt ?: Clock.System.now().toEpochMilliseconds(),
+                    expiresAt = expiresAt ?: (Clock.System.now() + 1.minutes).toEpochMilliseconds(),
                     jti = jti
                 )
             }

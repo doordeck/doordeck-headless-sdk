@@ -266,7 +266,7 @@ internal fun CCureVirtualCardController.toBasicCCureVirtualCardController(): Bas
 )
 
 internal fun DemoController.toBasicDemoController(): BasicDemoController = BasicDemoController(
-    port = port.toUShort()
+    port = port.toShort()
 )
 
 internal fun GallagherController.toBasicGallagherController(): BasicGallagherController = BasicGallagherController(

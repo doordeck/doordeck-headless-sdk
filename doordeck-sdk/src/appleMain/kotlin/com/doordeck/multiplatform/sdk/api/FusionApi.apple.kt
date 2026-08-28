@@ -94,4 +94,5 @@ actual object FusionApi {
 /**
  * Defines the platform-specific implementation of [FusionApi]
  */
+@HiddenFromObjC
 actual fun fusion(): FusionApi = FusionApi

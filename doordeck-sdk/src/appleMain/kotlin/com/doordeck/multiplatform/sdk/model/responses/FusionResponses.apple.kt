@@ -294,6 +294,6 @@ internal fun BasicTdsiGardisController.toTdsiGardisController(): TdsiGardisContr
 internal fun BasicZktecoController.toZktecoController(): ZktecoController = ZktecoController(
     clientSecret = clientSecret,
     doorId = doorId,
-    baseUrl = baseUrl,
+    baseUrl = baseUrl?.toNsUrlComponents(),
     entityType = entityType
 )

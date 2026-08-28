@@ -51,7 +51,7 @@ data class SdkConfig(
             apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
-         * Sets the fusion host i.e: http://localhost:500
+         * Sets the fusion host i.e: http://localhost:27700
          */
         fun setFusionHost(fusionHost: NSURLComponents?): Builder = apply { this.fusionHost = fusionHost }
 
@@ -71,6 +71,7 @@ data class SdkConfig(
          *
          * If no secure storage override is provided, a default secure storage is created.
          */
+        @Throws(Exception::class)
         fun build(): SdkConfig {
             val secureStorage = secureStorage ?: createSecureStorage(ApplicationContext)
             return SdkConfig(
