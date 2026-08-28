@@ -60,6 +60,7 @@ import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.encodeToStringMap
+import kotlin.coroutines.cancellation.CancellationException
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -292,6 +293,8 @@ internal fun HttpClient.addExceptionInterceptor() {
             execute(request)
         } catch (exception: ContentConvertException) {
             throw SdkException("Failed to deserialize API response", exception)
+        } catch (exception: CancellationException) {
+            throw exception // never swallow cancellation
         } catch (exception: SdkException) {
             throw exception
         } catch (exception: Exception) {
