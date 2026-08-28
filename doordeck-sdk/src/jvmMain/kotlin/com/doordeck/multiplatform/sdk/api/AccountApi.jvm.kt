@@ -24,7 +24,7 @@ actual object AccountApi {
      * @see AccountClient.refreshTokenRequest
      */
     @DoordeckOnly
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun refreshToken(refreshToken: String? = null): TokenResponse = AccountClient
         .refreshTokenRequest(refreshToken)
         .toTokenResponse()
@@ -41,6 +41,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.logoutRequest
      */
+    @JvmSynthetic
     suspend fun logout() = AccountClient.logoutRequest()
 
     /**
@@ -53,7 +54,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyRequest
      */
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun registerEphemeralKey(keyPair: KeyPair? = null): RegisterEphemeralKeyResponse = AccountClient
         .registerEphemeralKeyRequest(
             publicKey = keyPair?.public?.encoded,
@@ -74,7 +75,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest
      */
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun registerEphemeralKeyWithSecondaryAuthentication(
         publicKey: PublicKey? = null,
         method: TwoFactorMethod? = null
@@ -102,7 +103,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.verifyEphemeralKeyRegistrationRequest
      */
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun verifyEphemeralKeyRegistration(
         code: String,
         keyPair: KeyPair? = null
@@ -132,6 +133,7 @@ actual object AccountApi {
      * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun reverifyEmail() = AccountClient.reverifyEmailRequest()
 
     /**
@@ -146,6 +148,7 @@ actual object AccountApi {
      * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
+    @JvmSynthetic
     suspend fun changePassword(oldPassword: String, newPassword: String) = AccountClient
         .changePasswordRequest(
             oldPassword = oldPassword,
@@ -166,6 +169,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.getUserDetailsRequest
      */
+    @JvmSynthetic
     suspend fun getUserDetails(): UserDetailsResponse = AccountClient
         .getUserDetailsRequest()
         .toUserDetailsResponse()
@@ -180,6 +184,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.updateUserDetailsRequest
      */
+    @JvmSynthetic
     suspend fun updateUserDetails(displayName: String) = AccountClient.updateUserDetailsRequest(displayName)
 
     /**
@@ -192,6 +197,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.deleteAccountRequest
      */
+    @JvmSynthetic
     suspend fun deleteAccount() = AccountClient.deleteAccountRequest()
 
     /**

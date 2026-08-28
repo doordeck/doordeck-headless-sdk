@@ -294,9 +294,9 @@ object LockOperations {
             private var userCertificateChain: List<X509Certificate>? = null
             private var userPrivateKey: PrivateKey? = null
             private var lockId: UUID? = null
-            private var notBefore: Instant = now()
-            private var issuedAt: Instant = now()
-            private var expiresAt: Instant = now().plus(1, ChronoUnit.MINUTES)
+            private var notBefore: Instant? = null
+            private var issuedAt: Instant? = null
+            private var expiresAt: Instant? = null
             private var jti: UUID = UUID.randomUUID()
 
             fun setUserId(userId: UUID?): Builder = apply { this.userId = userId }
@@ -314,9 +314,9 @@ object LockOperations {
                     userCertificateChain = userCertificateChain,
                     userPrivateKey = userPrivateKey,
                     lockId = requireNotNull(lockId),
-                    notBefore = notBefore,
-                    issuedAt = issuedAt,
-                    expiresAt = expiresAt,
+                    notBefore = notBefore ?: now(),
+                    issuedAt = issuedAt ?: now(),
+                    expiresAt = expiresAt ?: now().plus(1, ChronoUnit.MINUTES),
                     jti = jti
                 )
             }

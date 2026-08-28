@@ -26,6 +26,7 @@ actual object ContextManager {
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
+    @JvmSynthetic
     suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean =
         Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
 
@@ -95,6 +96,7 @@ actual object ContextManager {
         isKeyPairVerified = isKeyPairVerified
     )
 
+    @JvmSynthetic
     suspend fun getContextState(checkServerInvalidation: Boolean): ContextState = Context.getContextState(checkServerInvalidation)
 
     fun getContextStateAsync(checkServerInvalidation: Boolean): CompletableFuture<ContextState> = completableFuture {

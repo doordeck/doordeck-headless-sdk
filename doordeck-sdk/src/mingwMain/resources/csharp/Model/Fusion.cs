@@ -102,7 +102,7 @@ public class CCureVirtualCardController : LockController
 
 public class DemoController : LockController
 {
-    public required ushort Port { get; set; } = 8080;
+    public required short Port { get; set; } = 8080;
 }
 
 public class GallagherController : LockController

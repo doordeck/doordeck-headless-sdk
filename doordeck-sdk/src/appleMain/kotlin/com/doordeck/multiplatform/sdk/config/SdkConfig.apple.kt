@@ -51,7 +51,7 @@ data class SdkConfig(
             apply { this.cloudRefreshToken = cloudRefreshToken }
 
         /**
-         * Sets the fusion host i.e: http://localhost:500
+         * Sets the fusion host i.e: http://localhost:27700
          */
         fun setFusionHost(fusionHost: NSURLComponents?): Builder = apply { this.fusionHost = fusionHost }
 

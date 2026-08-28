@@ -300,9 +300,9 @@ object LockOperations {
             private var userCertificateChain: List<String>? = null
             private var userPrivateKey: ByteArray? = null
             private var lockId: NSUUID? = null
-            private var notBefore: NSDate = NSDate()
-            private var issuedAt: NSDate = NSDate()
-            private var expiresAt: NSDate = NSDate().dateByAddingTimeInterval(60.0)
+            private var notBefore: NSDate? = null
+            private var issuedAt: NSDate? = null
+            private var expiresAt: NSDate? = null
             private var jti: NSUUID = NSUUID.UUID()
 
             fun setUserId(userId: NSUUID?): Builder = apply { this.userId = userId }
@@ -323,9 +323,9 @@ object LockOperations {
                     userCertificateChain = userCertificateChain,
                     userPrivateKey = userPrivateKey,
                     lockId = requireNotNull(lockId),
-                    notBefore = notBefore,
-                    issuedAt = issuedAt,
-                    expiresAt = expiresAt,
+                    notBefore = notBefore ?: NSDate(),
+                    issuedAt = issuedAt ?: NSDate(),
+                    expiresAt = expiresAt ?: NSDate().dateByAddingTimeInterval(60.0),
                     jti = jti
                 )
             }
