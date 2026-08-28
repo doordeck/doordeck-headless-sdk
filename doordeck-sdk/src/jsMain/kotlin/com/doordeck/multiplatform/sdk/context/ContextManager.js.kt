@@ -77,6 +77,3 @@ actual object ContextManager {
 
     fun clearContext() = Context.clearContext()
 }
-
-@JsExport
-actual fun contextManager(): ContextManager = ContextManager

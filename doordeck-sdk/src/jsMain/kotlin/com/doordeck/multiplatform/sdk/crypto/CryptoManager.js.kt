@@ -101,7 +101,7 @@ actual object CryptoManager {
             message = toByteArray().toUint8Array(),
             privateKey = privateKey.toPlatformPrivateKey().toUint8Array()
         ).toByteArray()
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         throw SdkException("Failed to sign with private key", exception)
     }
 
@@ -120,6 +120,3 @@ actual object CryptoManager {
         false
     }
 }
-
-@JsExport
-fun crypto(): CryptoManager = CryptoManager

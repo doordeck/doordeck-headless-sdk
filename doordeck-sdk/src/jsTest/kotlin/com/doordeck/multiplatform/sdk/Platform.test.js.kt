@@ -8,8 +8,7 @@ import kotlin.js.collections.toList
 import kotlin.js.collections.toSet
 
 actual fun getEnvironmentVariable(name: String): String? =
-    js("(typeof process !== 'undefined' && process.env) ? (process.env[name] ?? null) : null")
-        .unsafeCast<String?>()
+    js("process.env[name]").unsafeCast<String?>()
 
 internal inline fun <reified T>JsArray<T>.isEmpty(): Boolean = toList().isEmpty()
 internal inline fun <reified T>JsArray<T>.isNotEmpty(): Boolean = !isEmpty()
