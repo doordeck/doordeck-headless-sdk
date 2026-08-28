@@ -77,3 +77,5 @@ actual object ContextManager {
 
     fun clearContext() = Context.clearContext()
 }
+
+actual fun contextManager(): ContextManager = ContextManager
