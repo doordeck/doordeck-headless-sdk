@@ -28,7 +28,7 @@ actual object AccountApi {
     /**
      * @see AccountClient.logoutRequest
      */
-    suspend fun logout(): dynamic = AccountClient.logoutRequest()
+    suspend fun logout(): Unit = AccountClient.logoutRequest()
 
     /**
      * @see AccountClient.registerEphemeralKeyRequest
@@ -75,13 +75,13 @@ actual object AccountApi {
      * @see AccountClient.reverifyEmailRequest
      */
     @DoordeckOnly
-    suspend fun reverifyEmail(): dynamic = AccountClient.reverifyEmailRequest()
+    suspend fun reverifyEmail(): Unit = AccountClient.reverifyEmailRequest()
 
     /**
      * @see AccountClient.changePasswordRequest
      */
     @DoordeckOnly
-    suspend fun changePassword(oldPassword: String, newPassword: String): dynamic = AccountClient
+    suspend fun changePassword(oldPassword: String, newPassword: String): Unit = AccountClient
         .changePasswordRequest(
             oldPassword = oldPassword,
             newPassword = newPassword
@@ -98,12 +98,12 @@ actual object AccountApi {
     /**
      * @see AccountClient.updateUserDetailsRequest
      */
-    suspend fun updateUserDetails(displayName: String): dynamic = AccountClient.updateUserDetailsRequest(displayName)
+    suspend fun updateUserDetails(displayName: String): Unit = AccountClient.updateUserDetailsRequest(displayName)
 
     /**
      * @see AccountClient.deleteAccountRequest
      */
-    suspend fun deleteAccount(): dynamic = AccountClient.deleteAccountRequest()
+    suspend fun deleteAccount(): Unit = AccountClient.deleteAccountRequest()
 }
 
 private val account = AccountApi
@@ -111,5 +111,4 @@ private val account = AccountApi
 /**
  * Defines the platform-specific implementation of [AccountApi]
  */
-@JsExport
 actual fun account(): AccountApi = account

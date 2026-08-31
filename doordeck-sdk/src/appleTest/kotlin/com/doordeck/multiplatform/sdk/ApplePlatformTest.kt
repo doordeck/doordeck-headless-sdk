@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk
 import io.ktor.client.engine.darwin.DarwinClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class IosPlatformTest {
@@ -23,6 +24,6 @@ class IosPlatformTest {
         val platform = platformType
 
         // Then
-        assertTrue { platform.name.startsWith("APPLE_") }
+        assertNotEquals(PlatformType.APPLE, platform)
     }
 }

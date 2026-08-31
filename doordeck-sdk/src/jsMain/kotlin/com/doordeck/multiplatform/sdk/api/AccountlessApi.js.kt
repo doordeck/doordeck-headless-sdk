@@ -41,17 +41,17 @@ actual object AccountlessApi {
     /**
      * @see AccountlessClient.verifyEmailRequest
      */
-    suspend fun verifyEmail(code: String): dynamic = AccountlessClient.verifyEmailRequest(code)
+    suspend fun verifyEmail(code: String): Unit = AccountlessClient.verifyEmailRequest(code)
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordReset(email: String): dynamic = AccountlessClient.passwordResetRequest(email)
+    suspend fun passwordReset(email: String): Unit = AccountlessClient.passwordResetRequest(email)
 
     /**
      * @see AccountlessClient.passwordResetRequest
      */
-    suspend fun passwordResetVerify(userId: String, token: String, password: String): dynamic = AccountlessClient
+    suspend fun passwordResetVerify(userId: String, token: String, password: String): Unit = AccountlessClient
         .passwordResetVerifyRequest(
             userId = userId,
             token = token,
@@ -64,5 +64,4 @@ private val accountless = AccountlessApi
 /**
  * Defines the platform-specific implementation of [AccountlessApi]
  */
-@JsExport
 actual fun accountless(): AccountlessApi = accountless

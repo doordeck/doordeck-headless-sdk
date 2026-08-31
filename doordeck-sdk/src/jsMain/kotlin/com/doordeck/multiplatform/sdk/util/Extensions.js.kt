@@ -17,4 +17,6 @@ internal inline fun <reified T>List<T>.toJsArray(): JsArray<T> = toMutableList()
 
 internal inline fun <reified T>Iterable<T>.toJsSet(): JsSet<T> = toMutableSet().asJsSetView()
 
-internal fun <K, V>Iterable<Pair<K, V>>.toJsMap(): JsMap<K, V> = toMap().toMutableMap().asJsMapView()
+internal fun <K, V> Map<K, V>.toJsMap(): JsMap<K, V> = toMutableMap().asJsMapView()
+
+internal fun <K, V> Iterable<Pair<K, V>>.toJsMap(): JsMap<K, V> = toMap(mutableMapOf()).asJsMapView()

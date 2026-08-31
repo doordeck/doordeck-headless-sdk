@@ -40,9 +40,9 @@ object PlatformOperations {
             @Throws(Exception::class)
             fun build(): CreateApplication {
                 return CreateApplication(
-                    name = requireNotNull(name),
-                    companyName = requireNotNull(companyName),
-                    mailingAddress = requireNotNull(mailingAddress),
+                    name = requireNotNull(name) { "name is required" },
+                    companyName = requireNotNull(companyName) { "companyName is required" },
+                    mailingAddress = requireNotNull(mailingAddress) { "mailingAddress is required" },
                     privacyPolicy = privacyPolicy,
                     supportContact = supportContact,
                     appLink = appLink,
@@ -109,9 +109,9 @@ object PlatformOperations {
             @Throws(Exception::class)
             fun build(): EmailCallToAction {
                 return EmailCallToAction(
-                    actionTarget = requireNotNull(actionTarget),
-                    headline = requireNotNull(headline),
-                    actionText = requireNotNull(actionText),
+                    actionTarget = requireNotNull(actionTarget) { "actionTarget is required" },
+                    headline = requireNotNull(headline) { "headline is required" },
+                    actionText = requireNotNull(actionText) { "actionText is required" },
                 )
             }
         }
@@ -151,11 +151,11 @@ object PlatformOperations {
             fun build(): RsaKey {
                 return RsaKey(
                     kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
+                    use = requireNotNull(use) { "use is required" },
+                    kid = requireNotNull(kid) { "kid is required" },
                     alg = alg,
-                    e = requireNotNull(e),
-                    n = requireNotNull(n)
+                    e = requireNotNull(e) { "e is required" },
+                    n = requireNotNull(n) { "n is required" }
                 )
             }
         }
@@ -191,12 +191,12 @@ object PlatformOperations {
             fun build(): EcKey {
                 return EcKey(
                     kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
+                    use = requireNotNull(use) { "use is required" },
+                    kid = requireNotNull(kid) { "kid is required" },
                     alg = alg,
-                    crv = requireNotNull(crv),
-                    x = requireNotNull(x),
-                    y = requireNotNull(y)
+                    crv = requireNotNull(crv) { "crv is required" },
+                    x = requireNotNull(x) { "x is required" },
+                    y = requireNotNull(y) { "y is required" }
                 )
             }
         }
@@ -229,11 +229,11 @@ object PlatformOperations {
             fun build(): Ed25519Key {
                 return Ed25519Key(
                     kty = kty,
-                    use = requireNotNull(use),
-                    kid = requireNotNull(kid),
+                    use = requireNotNull(use) { "use is required" },
+                    kid = requireNotNull(kid) { "kid is required" },
                     alg = alg,
-                    crv = requireNotNull(crv),
-                    x = requireNotNull(x)
+                    crv = requireNotNull(crv) { "crv is required" },
+                    x = requireNotNull(x) { "x is required" }
                 )
             }
         }

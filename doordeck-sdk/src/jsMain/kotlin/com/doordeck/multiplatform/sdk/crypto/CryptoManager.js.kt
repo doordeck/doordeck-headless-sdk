@@ -101,7 +101,7 @@ actual object CryptoManager {
             message = toByteArray().toUint8Array(),
             privateKey = privateKey.toPlatformPrivateKey().toUint8Array()
         ).toByteArray()
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         throw SdkException("Failed to sign with private key", exception)
     }
 
@@ -115,11 +115,8 @@ actual object CryptoManager {
             message = message.toByteArray().toUint8Array(),
             publicKey = publicKey.toPlatformPublicKey().toUint8Array()
         )
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }
-
-@JsExport
-fun crypto(): CryptoManager = CryptoManager

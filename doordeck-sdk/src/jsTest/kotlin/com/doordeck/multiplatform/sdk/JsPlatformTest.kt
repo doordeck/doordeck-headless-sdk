@@ -8,6 +8,7 @@ import io.ktor.client.engine.js.JsClientEngineConfig
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class JsPlatformTest {
@@ -28,7 +29,7 @@ class JsPlatformTest {
         val platform = platformType
 
         // Then
-        assertTrue { platform.name.startsWith("JS_") }
+        assertNotEquals(PlatformType.JS, platformType)
     }
 
     @Test

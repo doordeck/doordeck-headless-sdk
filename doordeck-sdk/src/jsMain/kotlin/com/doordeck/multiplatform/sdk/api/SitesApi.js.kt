@@ -41,5 +41,4 @@ private val sites = SitesApi
 /**
  * Defines the platform-specific implementation of [SitesApi]
  */
-@JsExport
 actual fun sites(): SitesApi = sites

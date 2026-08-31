@@ -23,7 +23,7 @@ actual object TilesApi {
      * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
-    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: JsArray<String>): dynamic = TilesClient
+    suspend fun associateMultipleLocks(tileId: String, siteId: String, lockIds: JsArray<String>): Unit = TilesClient
         .associateMultipleLocksRequest(
             tileId = tileId,
             siteId = siteId,
@@ -36,5 +36,4 @@ private val tiles = TilesApi
 /**
  * Defines the platform-specific implementation of [TilesApi]
  */
-@JsExport
 actual fun tiles(): TilesApi = tiles

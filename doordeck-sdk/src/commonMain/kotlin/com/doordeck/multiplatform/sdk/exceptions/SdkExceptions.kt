@@ -17,4 +17,4 @@ class MissingAndroidContextException(override val message: String) : SdkExceptio
 class InvalidTileUrlException(override val message: String) : SdkException(message)
 
 @JsExport
-class BatchShareFailedException(override val message: String, userIds: List<String>) : SdkException(message)
+class BatchShareFailedException(override val message: String, val userIds: List<String>) : SdkException(message)

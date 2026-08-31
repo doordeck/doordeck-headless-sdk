@@ -2,7 +2,9 @@ package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsMap
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsMap
 
 @JsExport
 data class ApplicationResponse(
@@ -20,7 +22,7 @@ data class ApplicationResponse(
     val appLink: String? = null,
     val slug: String? = null,
     val emailPreferences: EmailPreferencesResponse,
-    val authKeys: Map<String, AuthKeyResponse>,
+    val authKeys: JsMap<String, AuthKeyResponse>,
     val oauth: OauthResponse? = null,
     val isDoordeckApplication: Boolean? = null
 )
@@ -164,7 +166,7 @@ internal fun BasicApplicationResponse.toApplicationResponse(): ApplicationRespon
     appLink = appLink,
     slug = slug,
     emailPreferences = emailPreferences.toEmailPreferencesResponse(),
-    authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toMap(),
+    authKeys = authKeys.map { it.key to it.value.toAuthKeyResponse() }.toJsMap(),
     oauth = oauth?.toOauthResponse(),
     isDoordeckApplication = isDoordeckApplication
 )
