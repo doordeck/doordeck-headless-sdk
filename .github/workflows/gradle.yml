@@ -15,11 +15,6 @@ permissions:
 
 jobs:
   build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
     strategy:
       matrix:
         include:
@@ -87,6 +82,10 @@ jobs:
       - name: Tests
         env:
           DEVELOPER_DIR: ${{ matrix.xcode }}
+          TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+          TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+          TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+          FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
         run: ./gradlew ${{ matrix.test }}
 
   windows-binary:
