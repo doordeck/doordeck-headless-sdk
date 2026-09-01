@@ -39,14 +39,17 @@ jobs:
             test: macosArm64Test
             os: [self-hosted, macOS, ARM64]
             tunnel: false
+            xcode: /Applications/Xcode_16.4.app/Contents/Developer
           - name: Apple iOS
             test: iosSimulatorArm64Test
             os: [self-hosted, macOS, ARM64]
             tunnel: false
+            xcode: /Applications/Xcode_16.4.app/Contents/Developer
           - name: Apple watchOS
             test: watchosSimulatorArm64Test
             os: [self-hosted, macOS, ARM64]
             tunnel: false
+            xcode: /Applications/Xcode_16.4.app/Contents/Developer
           - name: Windows
             test: mingwX64Test
             os: windows-latest
@@ -82,6 +85,8 @@ jobs:
           WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
+        env:
+          DEVELOPER_DIR: ${{ matrix.xcode }}
         run: ./gradlew ${{ matrix.test }}
 
   windows-binary:
