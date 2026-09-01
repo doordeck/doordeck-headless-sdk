@@ -1,25 +1,19 @@
-// karma.config.d/env.js
-const fs = require("fs");
-const os = require("os");
-const path = require("path");
-
-const names = [
+// Passes the test environment variables to the browser that runs the Karma tests.
+const NAMES = [
     "TEST_MAIN_USER_PASSWORD",
     "TEST_MAIN_USER_PRIVATE_KEY",
     "FUSION_INTEGRATIONS",
     "TEST_ENV_VAR"
 ];
 
+// Unset variables are left out entirely so the tests fall back to their own defaults
 const env = {};
-for (const name of names) {
-    env[name] = process.env[name] ?? null;
+for (const name of NAMES) {
+    const value = process.env[name];
+    if (value !== undefined) {
+        env[name] = value;
+    }
 }
 
-const shim = path.join(os.tmpdir(), "kotlin-test-env.js");
-fs.writeFileSync(
-    shim,
-    `globalThis.process = globalThis.process || {};
-     globalThis.process.env = Object.assign(globalThis.process.env || {}, ${JSON.stringify(env)});`
-);
-
-config.files.unshift({ pattern: shim, included: true, served: true, watched: false });
+config.client = config.client || {};
+config.client.env = env;
