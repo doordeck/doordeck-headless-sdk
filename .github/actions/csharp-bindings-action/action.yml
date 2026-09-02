@@ -6,11 +6,11 @@ runs:
     - name: Setup NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.x
+        dotnet-version: 10.x
 
     - name: Setup ClangSharpPInvokeGenerator
       shell: bash
-      run: dotnet tool install --global ClangSharpPInvokeGenerator --version 20.1.2.1
+      run: dotnet tool install --global ClangSharpPInvokeGenerator --version 20.1.2.4
 
     - name: Generate bindings
       shell: bash
