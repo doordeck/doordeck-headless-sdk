@@ -15,35 +15,40 @@ permissions:
 
 jobs:
   build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
     strategy:
       matrix:
         include:
           - name: JVM
             test: jvmTest
             os: ubuntu-latest
+            tunnel: true
           - name: Android
             test: testAndroidHostTest
             os: ubuntu-latest
+            tunnel: true
           - name: JS
             test: kotlinUpgradeYarnLock jsTest
             os: ubuntu-latest
+            tunnel: true
           - name: Apple macOS
             test: macosArm64Test
-            os: macos-15
+            os: [self-hosted, macOS, ARM64]
+            tunnel: false
+            xcode: /Applications/Xcode-16.4.0.app/Contents/Developer
           - name: Apple iOS
             test: iosSimulatorArm64Test
-            os: macos-15
+            os: [self-hosted, macOS, ARM64]
+            tunnel: false
+            xcode: /Applications/Xcode-16.4.0.app/Contents/Developer
           - name: Apple watchOS
             test: watchosSimulatorArm64Test
-            os: macos-15
+            os: [self-hosted, macOS, ARM64]
+            tunnel: false
+            xcode: /Applications/Xcode-16.4.0.app/Contents/Developer
           - name: Windows
             test: mingwX64Test
             os: windows-latest
+            tunnel: true
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
 
@@ -64,6 +69,7 @@ jobs:
           cache-disabled: true
 
       - name: Setup WireGuard
+        if: matrix.tunnel
         uses: ./.github/actions/wireguard-action
         continue-on-error: true
         with:
@@ -74,6 +80,12 @@ jobs:
           WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
+        env:
+          DEVELOPER_DIR: ${{ matrix.xcode }}
+          TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+          TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+          TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+          FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
         run: ./gradlew ${{ matrix.test }}
 
   windows-binary:
