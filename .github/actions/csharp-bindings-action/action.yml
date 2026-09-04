@@ -6,11 +6,22 @@ runs:
     - name: Setup NET
       uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 9.x
+        dotnet-version: 10.x
 
     - name: Setup ClangSharpPInvokeGenerator
       shell: bash
-      run: dotnet tool install --global ClangSharpPInvokeGenerator --version 20.1.2.1
+      run: dotnet tool install --global ClangSharpPInvokeGenerator --version 20.1.2.4
+
+    - name: Setup libClang lookup
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        libClang="$(find "${HOME}/.dotnet/tools/.store" -name libclang.so -print -quit)"
+        if [ -z "${libClang}" ]; then
+          echo "::error::libclang.so was not found in the dotnet tool store"
+          exit 1
+        fi
+        echo "LD_LIBRARY_PATH=$(dirname "${libClang}")${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> "${GITHUB_ENV}"
 
     - name: Generate bindings
       shell: bash

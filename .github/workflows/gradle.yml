@@ -15,11 +15,6 @@ permissions:
 
 jobs:
   build:
-    env:
-      TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
-      TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
-      TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
-      FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
     strategy:
       matrix:
         include:
@@ -74,6 +69,11 @@ jobs:
           WIREGUARD_PEER_ENDPOINT: ${{ secrets.WIREGUARD_PEER_ENDPOINT }}
 
       - name: Tests
+        env:
+          TEST_MAIN_USER_PASSWORD: ${{ secrets.TEST_MAIN_USER_PASSWORD }}
+          TEST_MAIN_USER_PRIVATE_KEY: ${{ secrets.TEST_MAIN_USER_PRIVATE_KEY }}
+          TEST_ENV_VAR: 9f8e96ae-bed8-43a4-ac5e-2f55dc6a85cb
+          FUSION_INTEGRATIONS: ${{ secrets.FUSION_INTEGRATIONS }}
         run: ./gradlew ${{ matrix.test }}
 
   windows-binary:
@@ -158,7 +158,7 @@ jobs:
   csharp-build:
     name: CSharp build
     needs: [windows-binary]
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
