@@ -71,19 +71,19 @@ public abstract class AbstractWrapper
 
     internal static unsafe Task<TResponse> Process<TApi, TResponse>(
         TApi api,
-        delegate* unmanaged[Cdecl]<TApi, sbyte*, void*, void> processWithData,
+        delegate*<TApi, sbyte*, void*, void> processWithData,
         object data) where TApi : unmanaged =>
         Process<TApi, TResponse>(api, processWithData, null, data);
 
     internal static unsafe Task<TResponse> Process<TApi, TResponse>(
         TApi api,
-        delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData) where TApi : unmanaged =>
+        delegate*<TApi, void*, void> processWithoutData) where TApi : unmanaged =>
         Process<TApi, TResponse>(api, null, processWithoutData, null);
 
     private static unsafe Task<TResponse> Process<TApi, TResponse>(
         TApi api,
-        delegate* unmanaged[Cdecl]<TApi, sbyte*, void*, void> processWithData,
-        delegate* unmanaged[Cdecl]<TApi, void*, void> processWithoutData,
+        delegate*<TApi, sbyte*, void*, void> processWithData,
+        delegate*<TApi, void*, void> processWithoutData,
         object? data) where TApi : unmanaged
     {
         var tcs = new TaskCompletionSource<TResponse>(TaskCreationOptions.RunContinuationsAsynchronously);

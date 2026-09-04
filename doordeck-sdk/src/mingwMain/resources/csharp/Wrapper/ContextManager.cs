@@ -9,8 +9,6 @@ using ContextManagerApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_
 
 public unsafe class ContextManager(
     Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager context,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct contextManager,
     Doordeck_Headless_Sdk_ExportedSymbols* symbols) : AbstractWrapper
 {
     public ApiEnvironment GetApiEnvironment()
@@ -18,7 +16,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getApiEnvironment_(context);
+            result = Methods.getApiEnvironment(context);
             return Enum.Parse<ApiEnvironment>(Utils.SByteToString(result));
         }
         finally
@@ -32,7 +30,7 @@ public unsafe class ContextManager(
         var data = token.StringToSByte();
         try
         {
-            contextManager.setCloudAuthToken_(context, data);
+            Methods.setCloudAuthToken(context, data);
         }
         finally
         {
@@ -45,7 +43,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getCloudAuthToken_(context);
+            result = Methods.getCloudAuthToken(context);
             return Utils.SByteToString(result);
         }
         finally
@@ -55,14 +53,14 @@ public unsafe class ContextManager(
     }
 
     public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation) =>
-        Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_, checkServerInvalidation);
+        Process<ContextManagerApi, bool>(context, &Methods.isCloudAuthTokenInvalidOrExpired, checkServerInvalidation);
 
     public void SetCloudRefreshToken(string token)
     {
         var data = token.StringToSByte();
         try
         {
-            contextManager.setCloudRefreshToken_(context, data);
+            Methods.setCloudRefreshToken(context, data);
         }
         finally
         {
@@ -75,7 +73,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getCloudRefreshToken_(context);
+            result = Methods.getCloudRefreshToken(context);
             return Utils.SByteToString(result);
         }
         finally
@@ -89,7 +87,7 @@ public unsafe class ContextManager(
         var data = host.StringToSByte();
         try
         {
-            contextManager.setFusionHost_(context, data);
+            Methods.setFusionHost(context, data);
         }
         finally
         {
@@ -102,7 +100,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getFusionHost_(context);
+            result = Methods.getFusionHost(context);
             return Utils.SByteToString(result);
         }
         finally
@@ -116,7 +114,7 @@ public unsafe class ContextManager(
         var data = token.StringToSByte();
         try
         {
-            contextManager.setFusionAuthToken_(context, data);
+            Methods.setFusionAuthToken(context, data);
         }
         finally
         {
@@ -129,7 +127,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getFusionAuthToken_(context);
+            result = Methods.getFusionAuthToken(context);
             return Utils.SByteToString(result);
         }
         finally
@@ -143,7 +141,7 @@ public unsafe class ContextManager(
         var data = userId.ToString().StringToSByte();
         try
         {
-            contextManager.setUserId_(context, data);
+            Methods.setUserId(context, data);
         }
         finally
         {
@@ -156,7 +154,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getUserId_(context);
+            result = Methods.getUserId(context);
             return Guid.Parse(Utils.SByteToString(result));
         }
         finally
@@ -170,7 +168,7 @@ public unsafe class ContextManager(
         var data = email.StringToSByte();
         try
         {
-            contextManager.setUserEmail_(context, data);
+            Methods.setUserEmail(context, data);
         }
         finally
         {
@@ -183,7 +181,7 @@ public unsafe class ContextManager(
         sbyte* result = null;
         try
         {
-            result = contextManager.getUserEmail_(context);
+            result = Methods.getUserEmail(context);
             return Utils.SByteToString(result);
         }
         finally
@@ -198,7 +196,7 @@ public unsafe class ContextManager(
 
     public bool IsCertificateChainInvalidOrExpired()
     {
-        return contextManager.isCertificateChainInvalidOrExpired_(context).ByteToBoolean();
+        return Methods.isCertificateChainInvalidOrExpired(context).ByteToBoolean();
     }
 
     // SetKeyPair
@@ -209,12 +207,12 @@ public unsafe class ContextManager(
 
     public bool IsKeyPairVerified()
     {
-        return contextManager.isKeyPairVerified_(context).ByteToBoolean();
+        return Methods.isKeyPairVerified(context).ByteToBoolean();
     }
 
     public bool IsKeyPairValid()
     {
-        return contextManager.isKeyPairValid_(context).ByteToBoolean();
+        return Methods.isKeyPairValid(context).ByteToBoolean();
     }
 
     public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, byte[] publicKey, byte[] privateKey, bool isKeyPairVerified)
@@ -222,7 +220,7 @@ public unsafe class ContextManager(
         var sData = new { userId, certificateChain = certificateChain.CertificateChainToString(), publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
         try
         {
-            contextManager.setOperationContext_(context, sData);
+            Methods.setOperationContext(context, sData);
         }
         finally
         {
@@ -231,11 +229,11 @@ public unsafe class ContextManager(
     }
 
     public Task<ContextState> GetContextState(bool checkServerInvalidation) =>
-            Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_,  checkServerInvalidation);
+            Process<ContextManagerApi, ContextState>(context, &Methods.getContextState,  checkServerInvalidation);
 
     public void ClearContext()
     {
-        contextManager.clearContext_(context);
+        Methods.clearContext(context);
     }
 
     private void ReleaseMemory(sbyte* data, sbyte* result)
