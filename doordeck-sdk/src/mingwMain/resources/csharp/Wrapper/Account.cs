@@ -6,37 +6,35 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 using AccountApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi;
     
 public class Account(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi account,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountApi_e__Struct accountApi) : AbstractWrapper
+    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi account) : AbstractWrapper
 {
     public unsafe Task<TokenResponse> RefreshToken(string? refreshToken = null) =>
-        Process<AccountApi, TokenResponse>(account, accountApi.refreshToken_, new { refreshToken });
+        Process<AccountApi, TokenResponse>(account, &Methods.refreshToken, new { refreshToken });
 
     public unsafe Task<object> Logout() =>
-        Process<AccountApi, object>(account, accountApi.logout_); 
+        Process<AccountApi, object>(account, &Methods.logout); 
 
     public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(byte[]? publicKey = null, byte[]? privateKey = null) =>
-        Process<AccountApi, RegisterEphemeralKeyResponse>(account, accountApi.registerEphemeralKey_, new { publicKey, privateKey });
+        Process<AccountApi, RegisterEphemeralKeyResponse>(account, &Methods.registerEphemeralKey, new { publicKey, privateKey });
 
     public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(byte[]? publicKey = null, TwoFactorMethod? method = null) =>
-        Process<AccountApi, RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(account, accountApi.registerEphemeralKeyWithSecondaryAuthentication_, new { publicKey, method });
+        Process<AccountApi, RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(account, &Methods.registerEphemeralKeyWithSecondaryAuthentication, new { publicKey, method });
 
     public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, byte[]? publicKey = null, byte[]? privateKey = null) =>
-        Process<AccountApi, RegisterEphemeralKeyResponse>(account, accountApi.verifyEphemeralKeyRegistration_, new { code, publicKey, privateKey });
+        Process<AccountApi, RegisterEphemeralKeyResponse>(account, &Methods.verifyEphemeralKeyRegistration, new { code, publicKey, privateKey });
 
     public unsafe Task<object> ReverifyEmail() =>
-        Process<AccountApi, object>(account, accountApi.reverifyEmail_);
+        Process<AccountApi, object>(account, &Methods.reverifyEmail);
 
     public unsafe Task<object> ChangePassword(string oldPassword, string newPassword) =>
-        Process<AccountApi, object>(account, accountApi.changePassword_, new { oldPassword, newPassword });
+        Process<AccountApi, object>(account, &Methods.changePassword, new { oldPassword, newPassword });
 
     public unsafe Task<UserDetailsResponse> GetUserDetails() =>
-        Process<AccountApi, UserDetailsResponse>(account, accountApi.getUserDetails_);
+        Process<AccountApi, UserDetailsResponse>(account, &Methods.getUserDetails);
 
     public unsafe Task<object> UpdateUserDetails(string displayName) =>
-        Process<AccountApi, object>(account, accountApi.updateUserDetails_, new { displayName });
+        Process<AccountApi, object>(account, &Methods.updateUserDetails, new { displayName });
 
     public unsafe Task<object> DeleteAccount() =>
-        Process<AccountApi, object>(account, accountApi.deleteAccount_);
+        Process<AccountApi, object>(account, &Methods.deleteAccount);
 }

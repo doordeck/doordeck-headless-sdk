@@ -30,15 +30,8 @@ runs:
           -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
           -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
           -l Doordeck.Headless.Sdk.dll \
-          -n Doordeck.Headless.Sdk
-
-    - name: Adjust bindings
-      shell: bash
-      run: |
-        sed -i \
-          -e '/^\s*\[.*NativeTypeName.*\]\s*$/d' \
-          -e 's/\[.*NativeTypeName([^]]*)\]//g' \
-          "doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs"
+          -n Doordeck.Headless.Sdk \
+          --additional --target=x86_64-w64-windows-gnu
 
     - name: Pack csharp files
       shell: bash
