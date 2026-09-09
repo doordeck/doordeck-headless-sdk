@@ -97,5 +97,5 @@ internal inline fun <reified T> emit(id: Long, cb: ResultCallback?, outcome: Res
             ResultData(failure = FailedResultData(it.toString(), it.message ?: it.cause?.message ?: "Unknown error occurred"))
         }
     ).toJson()
-    cb?.let { memScoped { it.invoke(id, json.cstr.ptr) } }   // borrowed: freed when memScoped exits
+    cb?.let { memScoped { it.invoke(id, json.cstr.ptr) } }
 }

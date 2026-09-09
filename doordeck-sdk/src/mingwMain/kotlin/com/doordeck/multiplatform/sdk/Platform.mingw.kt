@@ -28,7 +28,7 @@ internal actual object ApplicationContext
 typealias CStringCallback = CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
 
 /**
- * Receives the outcome of a [ddCall], tagged with the request id it was invoked with. The string is
+ * Receives the outcome of a [call], tagged with the request id it was invoked with. The string is
  * only borrowed: it is released as soon as the callback returns, so it must be copied, not retained.
  */
 typealias ResultCallback = CPointer<CFunction<(Long, CPointer<ByteVar>) -> Unit>>
@@ -36,9 +36,8 @@ typealias ResultCallback = CPointer<CFunction<(Long, CPointer<ByteVar>) -> Unit>
 private fun requireArgs(args: String?, method: String): String =
     args ?: throw SdkException("Missing arguments for $method")
 
-
 /**
- * Configuration for [ddCreate]. Secure storage is not part of it: an implementation supplied by the
+ * Configuration for [initialize]. Secure storage is not part of it: an implementation supplied by the
  * host is registered separately through dd_set_secure_storage, since function pointers cannot be
  * carried in JSON.
  */
@@ -54,11 +53,11 @@ internal data class SdkConfigData(
 private var sdk: Doordeck? = null
 
 /**
- * Initialises the SDK. There is a single instance behind the boundary, so nothing is handed back to
+ * Initializes the SDK. There is a single instance behind the boundary, so nothing is handed back to
  * the caller; the outcome is reported through [callback] like any other call.
  */
-@CName("dd_create")
-fun ddCreate(configJson: String?, requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
+@CName("initialize")
+fun initialize(configJson: String?, requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
     callback.reply(requestId) {
         val config = configJson?.fromJson<SdkConfigData>() ?: SdkConfigData()
         sdk = KDoordeckFactory.initialize(
@@ -74,8 +73,8 @@ fun ddCreate(configJson: String?, requestId: Long, callback: ResultCallback) = c
     }
 }
 
-@CName("dd_release")
-fun ddRelease(requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
+@CName("release")
+fun release(requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
     callback.reply(requestId) {
         sdk?.release()
         sdk = null
@@ -91,8 +90,8 @@ private fun unknownMethod(method: String, requestId: Long, callback: ResultCallb
  * API grows. Synchronous operations invoke the callback before returning, asynchronous ones from a
  * worker thread.
  */
-@CName("dd_call")
-fun ddCall(method: String, args: String?, requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
+@CName("call")
+fun call(method: String, args: String?, requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
     when (method.substringBefore('.', "")) {
         "account" -> accountCall(method, args, requestId, callback)
         "accountless" -> accountlessCall(method, args, requestId, callback)

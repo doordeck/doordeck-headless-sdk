@@ -60,7 +60,7 @@ internal static class Dispatcher
     private static readonly unsafe nint Callback = (nint)(delegate* unmanaged[Cdecl]<long, nint, void>)&OnResult;
 
     internal static Task<TResponse> Call<TResponse>(string method, object? args = null) =>
-        Invoke<TResponse>((requestId, callback) => Native.dd_call(method, Serialize(args), requestId, callback));
+        Invoke<TResponse>((requestId, callback) => Native.call(method, Serialize(args), requestId, callback));
 
     /// <summary>
     /// Operations taking a single value receive it verbatim; everything else is serialised. Passing a
@@ -82,10 +82,10 @@ internal static class Dispatcher
         Call<TResponse>(method, args).GetAwaiter().GetResult();
 
     internal static Task<TResponse> Create<TResponse>(object config) =>
-        Invoke<TResponse>((requestId, callback) => Native.dd_create(config.ToJson(), requestId, callback));
+        Invoke<TResponse>((requestId, callback) => Native.initialize(config.ToJson(), requestId, callback));
 
     internal static Task<TResponse> Release<TResponse>() =>
-        Invoke<TResponse>(Native.dd_release);
+        Invoke<TResponse>(Native.release);
 
     private static Task<TResponse> Invoke<TResponse>(Action<long, nint> nativeCall)
     {
