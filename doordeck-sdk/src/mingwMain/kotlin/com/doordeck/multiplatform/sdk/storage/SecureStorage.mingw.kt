@@ -33,8 +33,11 @@ internal fun setNullableStringCallback.invokeNullableStringCallback(string: Stri
     invoke(cString)
 }
 
-@CName("createMingwSecureStorage")
-fun createMingwSecureStorage(
+internal var hostSecureStorage: SecureStorage? = null
+    private set
+
+@CName("dd_set_secure_storage")
+fun ddSetSecureStorage(
     setApiEnvironmentCp: setStringCallback,
     getApiEnvironmentCp: getStringCallback,
     addCloudAuthTokenCp: setStringCallback,
@@ -58,8 +61,8 @@ fun createMingwSecureStorage(
     addCertificateChainCp: setStringCallback,
     getCertificateChainCp: getStringCallback,
     clearCp: emptyCallback
-): SecureStorage {
-    return MingwSecureStorage(
+) {
+    hostSecureStorage = MingwSecureStorage(
         setApiEnvironmentCp = setApiEnvironmentCp,
         getApiEnvironmentCp = getApiEnvironmentCp,
         addCloudAuthTokenCp = addCloudAuthTokenCp,

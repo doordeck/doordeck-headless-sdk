@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Doordeck.Headless.Sdk.Converter;
 
@@ -22,21 +21,9 @@ public static class Utils
         }
     };
 
-    public static unsafe sbyte* ToJsonSByte<T>(this T input) => ToJson(input).StringToSByte();
-
-    public static unsafe T FromJsonSByte<T>(sbyte* input) => FromJson<T>(SByteToString(input));
-
-    private static string ToJson<T>(this T input) => JsonSerializer.Serialize(input, JsonSerializerOptions);
+    public static string ToJson<T>(this T input) => JsonSerializer.Serialize(input, JsonSerializerOptions);
 
     public static T FromJson<T>(string input) => JsonSerializer.Deserialize<T>(input, JsonSerializerOptions)!;
-
-    public static unsafe sbyte* StringToSByte(this string input) => (sbyte*)Marshal.StringToHGlobalAnsi(input);
-
-    public static unsafe string SByteToString(sbyte* input) => Marshal.PtrToStringAnsi((IntPtr)input)!;
-
-    public static bool ByteToBoolean(this byte input) => Convert.ToBoolean(input);
-
-    public static byte BooleanToByte(this bool input) => Convert.ToByte(input);
 
     public static byte[] DecodeBase64ToByteArray(this string input) => Convert.FromBase64String(input);
 

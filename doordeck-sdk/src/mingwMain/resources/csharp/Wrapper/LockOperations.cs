@@ -4,98 +4,96 @@ using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-using LockOperationsApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi;
 
-public class LockOperations(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_LockOperationsApi lockOperations) : AbstractWrapper
+public class LockOperations
 {
-    public unsafe Task<LockResponse> GetSingleLock(Guid lockId) =>
-        Process<LockOperationsApi, LockResponse>(lockOperations, &Methods.getSingleLock, new { lockId });
+    public Task<LockResponse> GetSingleLock(Guid lockId) =>
+        Dispatcher.Call<LockResponse>("lockOperations.getSingleLock", new { lockId });
 
-    public unsafe Task<List<AuditResponse>> GetLockAuditTrail(Guid lockId, DateTime? start = null, DateTime? end = null) =>
-        Process<LockOperationsApi, List<AuditResponse>>(lockOperations, &Methods.getLockAuditTrail, new { lockId, start, end });
+    public Task<List<AuditResponse>> GetLockAuditTrail(Guid lockId, DateTime? start = null, DateTime? end = null) =>
+        Dispatcher.Call<List<AuditResponse>>("lockOperations.getLockAuditTrail", new { lockId, start, end });
 
-    public unsafe Task<List<AuditResponse>> GetAuditForUser(Guid userId, DateTime? start = null, DateTime? end = null) =>
-        Process<LockOperationsApi, List<AuditResponse>>(lockOperations, &Methods.getAuditForUser, new { userId, start, end });
+    public Task<List<AuditResponse>> GetAuditForUser(Guid userId, DateTime? start = null, DateTime? end = null) =>
+        Dispatcher.Call<List<AuditResponse>>("lockOperations.getAuditForUser", new { userId, start, end });
 
-    public unsafe Task<List<UserLockResponse>> GetUsersForLock(Guid lockId) =>
-        Process<LockOperationsApi, List<UserLockResponse>>(lockOperations, &Methods.getUsersForLock, new { lockId });
+    public Task<List<UserLockResponse>> GetUsersForLock(Guid lockId) =>
+        Dispatcher.Call<List<UserLockResponse>>("lockOperations.getUsersForLock", new { lockId });
 
-    public unsafe Task<LockUserResponse> GetLocksForUser(Guid userId) =>
-        Process<LockOperationsApi, LockUserResponse>(lockOperations, &Methods.getLocksForUser, new { userId });
+    public Task<LockUserResponse> GetLocksForUser(Guid userId) =>
+        Dispatcher.Call<LockUserResponse>("lockOperations.getLocksForUser", new { userId });
 
-    public unsafe Task<object> UpdateLockName(Guid lockId, string? name = null) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateLockName, new { lockId, name });
+    public Task<object> UpdateLockName(Guid lockId, string? name = null) =>
+        Dispatcher.Call<object>("lockOperations.updateLockName", new { lockId, name });
 
-    public unsafe Task<object> UpdateLockFavourite(Guid lockId, bool favourite) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateLockFavourite, new { lockId, favourite });
+    public Task<object> UpdateLockFavourite(Guid lockId, bool favourite) =>
+        Dispatcher.Call<object>("lockOperations.updateLockFavourite", new { lockId, favourite });
 
-    public unsafe Task<object> UpdateLockSettingDefaultName(Guid lockId, string name) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateLockSettingDefaultName, new { lockId, name });
+    public Task<object> UpdateLockSettingDefaultName(Guid lockId, string name) =>
+        Dispatcher.Call<object>("lockOperations.updateLockSettingDefaultName", new { lockId, name });
 
-    public unsafe Task<object> SetLockSettingPermittedAddresses(Guid lockId, List<IPAddress> permittedAddresses) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.setLockSettingPermittedAddresses, new { lockId,  permittedAddresses });
+    public Task<object> SetLockSettingPermittedAddresses(Guid lockId, List<IPAddress> permittedAddresses) =>
+        Dispatcher.Call<object>("lockOperations.setLockSettingPermittedAddresses", new { lockId,  permittedAddresses });
 
-    public unsafe Task<object> UpdateLockSettingHidden(Guid lockId, bool hidden) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateLockSettingHidden, new { lockId, hidden });
+    public Task<object> UpdateLockSettingHidden(Guid lockId, bool hidden) =>
+        Dispatcher.Call<object>("lockOperations.updateLockSettingHidden", new { lockId, hidden });
 
-    public unsafe Task<object> SetLockSettingTimeRestrictions(Guid lockId, List<TimeRequirement> times) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.setLockSettingTimeRestrictions, new { lockId, times });
+    public Task<object> SetLockSettingTimeRestrictions(Guid lockId, List<TimeRequirement> times) =>
+        Dispatcher.Call<object>("lockOperations.setLockSettingTimeRestrictions", new { lockId, times });
 
-    public unsafe Task<object> UpdateLockSettingLocationRestrictions(Guid lockId, LocationRequirement? location = null) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateLockSettingLocationRestrictions, new { lockId, location });
+    public Task<object> UpdateLockSettingLocationRestrictions(Guid lockId, LocationRequirement? location = null) =>
+        Dispatcher.Call<object>("lockOperations.updateLockSettingLocationRestrictions", new { lockId, location });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKey(string userEmail, bool visitor = false) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKey, new { userEmail, visitor });
+    public Task<UserPublicKeyResponse> GetUserPublicKey(string userEmail, bool visitor = false) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKey", new { userEmail, visitor });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByEmail(string email) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKeyByEmail, new { email });
+    public Task<UserPublicKeyResponse> GetUserPublicKeyByEmail(string email) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKeyByEmail", new { email });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByTelephone(string telephone) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKeyByTelephone, new { telephone });
+    public Task<UserPublicKeyResponse> GetUserPublicKeyByTelephone(string telephone) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKeyByTelephone", new { telephone });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByLocalKey(string localKey) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKeyByLocalKey, new { localKey });
+    public Task<UserPublicKeyResponse> GetUserPublicKeyByLocalKey(string localKey) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKeyByLocalKey", new { localKey });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByForeignKey(string foreignKey) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKeyByForeignKey, new { foreignKey });
+    public Task<UserPublicKeyResponse> GetUserPublicKeyByForeignKey(string foreignKey) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKeyByForeignKey", new { foreignKey });
 
-    public unsafe Task<UserPublicKeyResponse> GetUserPublicKeyByIdentity(string identity) =>
-        Process<LockOperationsApi, UserPublicKeyResponse>(lockOperations, &Methods.getUserPublicKeyByIdentity, new { identity });
+    public Task<UserPublicKeyResponse> GetUserPublicKeyByIdentity(string identity) =>
+        Dispatcher.Call<UserPublicKeyResponse>("lockOperations.getUserPublicKeyByIdentity", new { identity });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByEmails(List<string> emails) =>
-        Process<LockOperationsApi, List<BatchUserPublicKeyResponse>>(lockOperations, &Methods.getUserPublicKeyByEmails, new { emails });
+    public Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByEmails(List<string> emails) =>
+        Dispatcher.Call<List<BatchUserPublicKeyResponse>>("lockOperations.getUserPublicKeyByEmails", new { emails });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByTelephones(List<string> telephones) =>
-        Process<LockOperationsApi, List<BatchUserPublicKeyResponse>>(lockOperations, &Methods.getUserPublicKeyByTelephones, new { telephones });
+    public Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByTelephones(List<string> telephones) =>
+        Dispatcher.Call<List<BatchUserPublicKeyResponse>>("lockOperations.getUserPublicKeyByTelephones", new { telephones });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByLocalKeys(List<string> localKeys) =>
-        Process<LockOperationsApi, List<BatchUserPublicKeyResponse>>(lockOperations, &Methods.getUserPublicKeyByLocalKeys, new { localKeys });
+    public Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByLocalKeys(List<string> localKeys) =>
+        Dispatcher.Call<List<BatchUserPublicKeyResponse>>("lockOperations.getUserPublicKeyByLocalKeys", new { localKeys });
 
-    public unsafe Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByForeignKeys(List<string> foreignKeys) =>
-        Process<LockOperationsApi, List<BatchUserPublicKeyResponse>>(lockOperations, &Methods.getUserPublicKeyByForeignKeys, new { foreignKeys });
+    public Task<List<BatchUserPublicKeyResponse>> GetUserPublicKeyByForeignKeys(List<string> foreignKeys) =>
+        Dispatcher.Call<List<BatchUserPublicKeyResponse>>("lockOperations.getUserPublicKeyByForeignKeys", new { foreignKeys });
     
-    public unsafe Task<object> Unlock(UnlockOperation data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.unlock, data);
+    public Task<object> Unlock(UnlockOperation data) =>
+        Dispatcher.Call<object>("lockOperations.unlock", data);
 
-    public unsafe Task<object> ShareLock(ShareLockOperation data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.shareLock, data);
+    public Task<object> ShareLock(ShareLockOperation data) =>
+        Dispatcher.Call<object>("lockOperations.shareLock", data);
 
-    public unsafe Task<object> BatchShareLock(BatchShareLockOperation data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.batchShareLock, data);
+    public Task<object> BatchShareLock(BatchShareLockOperation data) =>
+        Dispatcher.Call<object>("lockOperations.batchShareLock", data);
 
-    public unsafe Task<object> RevokeAccessToLock(RevokeAccessToLockOperation data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.revokeAccessToLock, data);
+    public Task<object> RevokeAccessToLock(RevokeAccessToLockOperation data) =>
+        Dispatcher.Call<object>("lockOperations.revokeAccessToLock", data);
 
-    public unsafe Task<object> UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDuration data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateSecureSettingUnlockDuration, data);
+    public Task<object> UpdateSecureSettingUnlockDuration(UpdateSecureSettingUnlockDuration data) =>
+        Dispatcher.Call<object>("lockOperations.updateSecureSettingUnlockDuration", data);
 
-    public unsafe Task<object> UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetween data) =>
-        Process<LockOperationsApi, object>(lockOperations, &Methods.updateSecureSettingUnlockBetween, data);
+    public Task<object> UpdateSecureSettingUnlockBetween(UpdateSecureSettingUnlockBetween data) =>
+        Dispatcher.Call<object>("lockOperations.updateSecureSettingUnlockBetween", data);
 
-    public unsafe Task<List<LockResponse>> GetPinnedLocks() =>
-        Process<LockOperationsApi, List<LockResponse>>(lockOperations, &Methods.getPinnedLocks);
+    public Task<List<LockResponse>> GetPinnedLocks() =>
+        Dispatcher.Call<List<LockResponse>>("lockOperations.getPinnedLocks");
 
-    public unsafe Task<List<ShareableLockResponse>> GetShareableLocks() =>
-        Process<LockOperationsApi, List<ShareableLockResponse>>(lockOperations, &Methods.getShareableLocks);
+    public Task<List<ShareableLockResponse>> GetShareableLocks() =>
+        Dispatcher.Call<List<ShareableLockResponse>>("lockOperations.getShareableLocks");
 }

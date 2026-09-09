@@ -80,6 +80,59 @@ internal static class SecureStorage
         public delegate void ClearDelegate();
     }
     
+
+    // Held in static fields for the lifetime of the process: the native side keeps these pointers,
+    // so the delegates they came from must stay reachable.
+    private static readonly Delegates.SetApiEnvironmentDelegate setApiEnvironmentDelegate = SetApiEnvironment;
+    private static readonly Delegates.GetApiEnvironmentDelegate getApiEnvironmentDelegate = GetApiEnvironment;
+    private static readonly Delegates.AddCloudAuthTokenDelegate addCloudAuthTokenDelegate = AddCloudAuthToken;
+    private static readonly Delegates.GetCloudAuthTokenDelegate getCloudAuthTokenDelegate = GetCloudAuthToken;
+    private static readonly Delegates.AddCloudRefreshTokenDelegate addCloudRefreshTokenDelegate = AddCloudRefreshToken;
+    private static readonly Delegates.GetCloudRefreshTokenDelegate getCloudRefreshTokenDelegate = GetCloudRefreshToken;
+    private static readonly Delegates.SetFusionHostDelegate setFusionHostDelegate = SetFusionHost;
+    private static readonly Delegates.GetFusionHostDelegate getFusionHostDelegate = GetFusionHost;
+    private static readonly Delegates.AddFusionAuthTokenDelegate addFusionAuthTokenDelegate = AddFusionAuthToken;
+    private static readonly Delegates.GetFusionAuthTokenDelegate getFusionAuthTokenDelegate = GetFusionAuthToken;
+    private static readonly Delegates.AddPublicKeyDelegate addPublicKeyDelegate = AddPublicKey;
+    private static readonly Delegates.GetPublicKeyDelegate getPublicKeyDelegate = GetPublicKey;
+    private static readonly Delegates.AddPrivateKeyDelegate addPrivateKeyDelegate = AddPrivateKey;
+    private static readonly Delegates.GetPrivateKeyDelegate getPrivateKeyDelegate = GetPrivateKey;
+    private static readonly Delegates.SetKeyPairVerifiedDelegate setKeyPairVerifiedDelegate = SetKeyPairVerified;
+    private static readonly Delegates.GetKeyPairVerifiedDelegate getKeyPairVerifiedDelegate = GetKeyPairVerified;
+    private static readonly Delegates.AddUserIdDelegate addUserIdDelegate = AddUserId;
+    private static readonly Delegates.GetUserIdDelegate getUserIdDelegate = GetUserId;
+    private static readonly Delegates.AddUserEmailDelegate addUserEmailDelegate = AddUserEmail;
+    private static readonly Delegates.GetUserEmailDelegate getUserEmailDelegate = GetUserEmail;
+    private static readonly Delegates.AddCertificateChainDelegate addCertificateChainDelegate = AddCertificateChain;
+    private static readonly Delegates.GetCertificateChainDelegate getCertificateChainDelegate = GetCertificateChain;
+    private static readonly Delegates.ClearDelegate clearDelegate = Clear;
+
+    internal static void Register() =>
+        Native.dd_set_secure_storage(
+            Marshal.GetFunctionPointerForDelegate(setApiEnvironmentDelegate),
+            Marshal.GetFunctionPointerForDelegate(getApiEnvironmentDelegate),
+            Marshal.GetFunctionPointerForDelegate(addCloudAuthTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(getCloudAuthTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(addCloudRefreshTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(getCloudRefreshTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(setFusionHostDelegate),
+            Marshal.GetFunctionPointerForDelegate(getFusionHostDelegate),
+            Marshal.GetFunctionPointerForDelegate(addFusionAuthTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(getFusionAuthTokenDelegate),
+            Marshal.GetFunctionPointerForDelegate(addPublicKeyDelegate),
+            Marshal.GetFunctionPointerForDelegate(getPublicKeyDelegate),
+            Marshal.GetFunctionPointerForDelegate(addPrivateKeyDelegate),
+            Marshal.GetFunctionPointerForDelegate(getPrivateKeyDelegate),
+            Marshal.GetFunctionPointerForDelegate(setKeyPairVerifiedDelegate),
+            Marshal.GetFunctionPointerForDelegate(getKeyPairVerifiedDelegate),
+            Marshal.GetFunctionPointerForDelegate(addUserIdDelegate),
+            Marshal.GetFunctionPointerForDelegate(getUserIdDelegate),
+            Marshal.GetFunctionPointerForDelegate(addUserEmailDelegate),
+            Marshal.GetFunctionPointerForDelegate(getUserEmailDelegate),
+            Marshal.GetFunctionPointerForDelegate(addCertificateChainDelegate),
+            Marshal.GetFunctionPointerForDelegate(getCertificateChainDelegate),
+            Marshal.GetFunctionPointerForDelegate(clearDelegate));
+
     public static void SetApiEnvironment(IntPtr c)
     { 
         if (GetStringFromPtr(c) is {} result)

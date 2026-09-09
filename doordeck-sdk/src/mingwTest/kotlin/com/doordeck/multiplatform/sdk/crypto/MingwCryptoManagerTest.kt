@@ -1,5 +1,11 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.model.data.ResultData
+import com.doordeck.multiplatform.sdk.unwrap
+import com.doordeck.multiplatform.sdk.CallbackTest
+import com.doordeck.multiplatform.sdk.TestCallback
+import com.doordeck.multiplatform.sdk.callbackApiCall
+import com.doordeck.multiplatform.sdk.util.toJson
 import com.doordeck.multiplatform.sdk.TestKeyConstants.BOUNCY_CASTLE_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.BOUNCY_CASTLE_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.CRYPTO_KIT_PRIVATE_KEY
@@ -18,7 +24,7 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class MingwCryptoManagerTest {
+class MingwCryptoManagerTest : CallbackTest() {
 
     @Test
     fun shouldInitializeLibsodium() = runTest {
@@ -29,7 +35,7 @@ class MingwCryptoManagerTest {
         val result = LibsodiumInitializer.isInitialized()
 
         // Then
-        assertTrue { result }
+        assertTrue { result == true }
     }
 
     @Test
@@ -38,10 +44,10 @@ class MingwCryptoManagerTest {
         val cryptoManager = CryptoManager // Initialize
 
         // When
-        val result = cryptoManager.generateEncodedKeyPair()
+        val result = callbackApiCall<ResultData<String?>> { cryptoManager.generateEncodedKeyPair(callback = TestCallback) }.unwrap()
 
         // Then
-        assertFalse(result.isEmpty())
+        assertFalse(result.isNullOrEmpty())
     }
 
     @Test
@@ -50,8 +56,12 @@ class MingwCryptoManagerTest {
         val cryptoManager = CryptoManager
 
         // When
-        val result = cryptoManager
-            .generateEncodedKeyPairFromEncodedBytes(JAVA_PUBLIC_KEY, JAVA_PRIVATE_KEY)
+        val result = callbackApiCall<ResultData<String?>> {
+            cryptoManager.generateEncodedKeyPairFromEncodedBytes(
+                EncodedKeyPair(publicKey = JAVA_PUBLIC_KEY, privateKey = JAVA_PRIVATE_KEY).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()!!
             .fromJson<EncodedKeyPair>()
 
         // Then
@@ -66,8 +76,12 @@ class MingwCryptoManagerTest {
         val cryptoManager = CryptoManager
 
         // When
-        val result = cryptoManager
-            .generateEncodedKeyPairFromEncodedBytes(SODIUM_PUBLIC_KEY, SODIUM_PRIVATE_KEY)
+        val result = callbackApiCall<ResultData<String?>> {
+            cryptoManager.generateEncodedKeyPairFromEncodedBytes(
+                EncodedKeyPair(publicKey = SODIUM_PUBLIC_KEY, privateKey = SODIUM_PRIVATE_KEY).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()!!
             .fromJson<EncodedKeyPair>()
 
         // Then
@@ -82,8 +96,12 @@ class MingwCryptoManagerTest {
         val cryptoManager = CryptoManager
 
         // When
-        val result = cryptoManager
-            .generateEncodedKeyPairFromEncodedBytes(CRYPTO_KIT_PUBLIC_KEY, CRYPTO_KIT_PRIVATE_KEY)
+        val result = callbackApiCall<ResultData<String?>> {
+            cryptoManager.generateEncodedKeyPairFromEncodedBytes(
+                EncodedKeyPair(publicKey = CRYPTO_KIT_PUBLIC_KEY, privateKey = CRYPTO_KIT_PRIVATE_KEY).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()!!
             .fromJson<EncodedKeyPair>()
 
         // Then
@@ -98,8 +116,12 @@ class MingwCryptoManagerTest {
         val cryptoManager = CryptoManager
 
         // When
-        val result = cryptoManager
-            .generateEncodedKeyPairFromEncodedBytes(BOUNCY_CASTLE_PUBLIC_KEY, BOUNCY_CASTLE_PRIVATE_KEY)
+        val result = callbackApiCall<ResultData<String?>> {
+            cryptoManager.generateEncodedKeyPairFromEncodedBytes(
+                EncodedKeyPair(publicKey = BOUNCY_CASTLE_PUBLIC_KEY, privateKey = BOUNCY_CASTLE_PRIVATE_KEY).toJson(),
+                callback = TestCallback
+            )
+        }.unwrap()!!
             .fromJson<EncodedKeyPair>()
 
         // Then

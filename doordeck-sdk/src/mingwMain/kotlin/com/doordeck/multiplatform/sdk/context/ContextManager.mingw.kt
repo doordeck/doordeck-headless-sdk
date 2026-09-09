@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
-import com.doordeck.multiplatform.sdk.CStringCallback
+import com.doordeck.multiplatform.sdk.ResultCallback
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.model.data.OperationContextData
@@ -8,115 +8,115 @@ import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
-import com.doordeck.multiplatform.sdk.util.handleCallback
 import com.doordeck.multiplatform.sdk.util.fromJson
+import com.doordeck.multiplatform.sdk.util.reply
+import com.doordeck.multiplatform.sdk.util.replyAsync
 import com.doordeck.multiplatform.sdk.util.toJson
 
 actual object ContextManager {
 
-    @CName("setApiEnvironment")
-    fun setApiEnvironment(apiEnvironment: String) =
-        Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
+    fun setApiEnvironment(apiEnvironment: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment)) }
 
-    @CName("getApiEnvironment")
-    fun getApiEnvironment(): String = Context.getApiEnvironment().name
+    fun getApiEnvironment(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getApiEnvironment().name }
 
-    @CName("setCloudAuthToken")
-    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
+    fun setCloudAuthToken(token: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setCloudAuthToken(token) }
 
-    @CName("getCloudAuthToken")
-    fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
+    fun getCloudAuthToken(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getCloudAuthToken() }
 
-    @CName("isCloudAuthTokenInvalidOrExpired")
-    fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: String, callback: CStringCallback) = callback.handleCallback {
-        Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation.toBoolean())
-    }
+    fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.replyAsync(requestId) { Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation.toBoolean()) }
 
-    @CName("setCloudRefreshToken")
-    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
+    fun setCloudRefreshToken(token: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setCloudRefreshToken(token) }
 
-    @CName("getCloudRefreshToken")
-    fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
+    fun getCloudRefreshToken(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getCloudRefreshToken() }
 
-    @CName("setFusionHost")
-    fun setFusionHost(host: String) = Context.setFusionHost(host)
+    fun setFusionHost(host: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setFusionHost(host) }
 
-    @CName("getFusionHost")
-    fun getFusionHost(): String = Context.getFusionHost()
+    fun getFusionHost(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getFusionHost() }
 
-    @CName("setFusionAuthToken")
-    fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
+    fun setFusionAuthToken(token: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setFusionAuthToken(token) }
 
-    @CName("getFusionAuthToken")
-    fun getFusionAuthToken(): String? = Context.getFusionAuthToken()
+    fun getFusionAuthToken(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getFusionAuthToken() }
 
-    @CName("setUserId")
-    fun setUserId(userId: String) = Context.setUserId(userId)
+    fun setUserId(userId: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setUserId(userId) }
 
-    @CName("getUserId")
-    fun getUserId(): String? = Context.getUserId()
+    fun getUserId(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getUserId() }
 
-    @CName("setUserEmail")
-    fun setUserEmail(email: String) = Context.setUserEmail(email)
+    fun setUserEmail(email: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setUserEmail(email) }
 
-    @CName("getUserEmail")
-    fun getUserEmail(): String? = Context.getUserEmail()
+    fun getUserEmail(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getUserEmail() }
 
-    @CName("setCertificateChain")
-    fun setCertificateChain(certificateChain: String) =
-        Context.setCertificateChain(certificateChain.stringToCertificateChain())
+    fun setCertificateChain(certificateChain: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setCertificateChain(certificateChain.stringToCertificateChain()) }
 
-    @CName("getCertificateChain")
-    fun getCertificateChain(): String? = Context.getCertificateChain()?.certificateChainToString()
+    fun getCertificateChain(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.getCertificateChain()?.certificateChainToString() }
 
-    @CName("isCertificateChainInvalidOrExpired")
-    fun isCertificateChainInvalidOrExpired(): Boolean = Context.isCertificateChainInvalidOrExpired()
+    fun isCertificateChainInvalidOrExpired(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.isCertificateChainInvalidOrExpired() }
 
-    @CName("setKeyPair")
-    fun setKeyPair(publicKey: String, privateKey: String) = Context.setKeyPair(
-        publicKey = publicKey.decodeBase64ToByteArray(),
-        privateKey = privateKey.decodeBase64ToByteArray()
-    )
+    fun setKeyPair(data: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) {
+            val keyPair = data.fromJson<EncodedKeyPair>()
+            Context.setKeyPair(
+                publicKey = keyPair.publicKey.decodeBase64ToByteArray(),
+                privateKey = keyPair.privateKey.decodeBase64ToByteArray()
+            )
+        }
 
-    @CName("getKeyPair")
-    fun getKeyPair(): String? = Context.getKeyPair()?.let {
-        EncodedKeyPair(
-            publicKey = it.public.encodeByteArrayToBase64(),
-            privateKey = it.private.encodeByteArrayToBase64()
-        )
-    }?.toJson()
+    fun getKeyPair(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) {
+            Context.getKeyPair()?.let {
+                EncodedKeyPair(
+                    publicKey = it.public.encodeByteArrayToBase64(),
+                    privateKey = it.private.encodeByteArrayToBase64()
+                )
+            }?.toJson()
+        }
 
-    @CName("setKeyPairVerified")
-    fun setKeyPairVerified(publicKey: String?) = Context.setKeyPairVerified(publicKey?.decodeBase64ToByteArray())
+    fun setKeyPairVerified(publicKey: String?, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.setKeyPairVerified(publicKey?.decodeBase64ToByteArray()) }
 
-    @CName("isKeyPairVerified")
-    fun isKeyPairVerified(): Boolean = Context.isKeyPairVerified()
+    fun isKeyPairVerified(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.isKeyPairVerified() }
 
-    @CName("isKeyPairValid")
-    fun isKeyPairValid(): Boolean = Context.isKeyPairValid()
+    fun isKeyPairValid(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.isKeyPairValid() }
 
     /**
      * Sets all necessary fields to perform secure operations in JSON format, the provided values will be automatically stored in secure storage.
      */
-    @CName("setOperationContext")
-    fun setOperationContext(data: String) {
-        val operationContextData = data.fromJson<OperationContextData>()
-        Context.setOperationContext(
-            userId = operationContextData.userId,
-            certificateChain = operationContextData.certificateChain.stringToCertificateChain(),
-            publicKey = operationContextData.publicKey.decodeBase64ToByteArray(),
-            privateKey = operationContextData.privateKey.decodeBase64ToByteArray(),
-            isKeyPairVerified = operationContextData.isKeyPairVerified
-        )
-    }
+    fun setOperationContext(data: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) {
+            val operationContextData = data.fromJson<OperationContextData>()
+            Context.setOperationContext(
+                userId = operationContextData.userId,
+                certificateChain = operationContextData.certificateChain.stringToCertificateChain(),
+                publicKey = operationContextData.publicKey.decodeBase64ToByteArray(),
+                privateKey = operationContextData.privateKey.decodeBase64ToByteArray(),
+                isKeyPairVerified = operationContextData.isKeyPairVerified
+            )
+        }
 
-    @CName("getContextState")
-    fun getContextState(checkServerInvalidation: String, callback: CStringCallback) = callback.handleCallback {
-        Context.getContextState(checkServerInvalidation.toBoolean())
-    }
+    fun getContextState(checkServerInvalidation: String, requestId: Long = 0, callback: ResultCallback) =
+        callback.replyAsync(requestId) { Context.getContextState(checkServerInvalidation.toBoolean()) }
 
-    @CName("clearContext")
-    fun clearContext() = Context.clearContext()
+    fun clearContext(requestId: Long = 0, callback: ResultCallback) =
+        callback.reply(requestId) { Context.clearContext() }
 }
 
 actual fun contextManager(): ContextManager = ContextManager

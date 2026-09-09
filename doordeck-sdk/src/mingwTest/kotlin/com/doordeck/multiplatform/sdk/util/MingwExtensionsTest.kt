@@ -52,7 +52,7 @@ class MingwExtensionsTest : CallbackTest() {
 
         // When
         val result = callbackApiCall<ResultData<String>> {
-            TestCallback.handleCallback {
+            TestCallback.replyAsync(0) {
                 expectedResult
             }
         }
@@ -67,7 +67,7 @@ class MingwExtensionsTest : CallbackTest() {
         val unit = Unit
 
         val result = callbackApiCall<ResultData<Unit>> {
-            TestCallback.handleCallback {
+            TestCallback.replyAsync(0) {
                 unit
             }
         }
@@ -77,13 +77,48 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
+    fun shouldFallBackToTheCauseMessageWhenTheExceptionHasNone() {
+        // Given
+        val causeMessage = "underlying cause"
+
+        // When
+        val result = callbackApiCall<ResultData<String>> {
+            TestCallback.replyAsync<String>(0) {
+                throw Exception(null, Exception(causeMessage))
+            }
+        }
+
+        // Then
+        val failure = result.unwrapFailure()
+        assertEquals(causeMessage, failure.exceptionMessage)
+    }
+
+    @Test
+    fun shouldReportSynchronousFailuresTheSameWayAsAsynchronousOnes() {
+        // Given
+        val errorMessage = "sync error"
+
+        // When
+        val result = callbackApiCall<ResultData<String>> {
+            TestCallback.reply<String>(0) {
+                throw Exception(errorMessage)
+            }
+        }
+
+        // Then
+        val failure = result.unwrapFailure()
+        assertContains(failure.exceptionType, Exception::class.simpleName!!)
+        assertEquals(errorMessage, failure.exceptionMessage)
+    }
+
+    @Test
     fun shouldHandleCallbackFailure() {
         // Given
         val errorMessage = "test error"
 
         // When
         val result = callbackApiCall<ResultData<String>> {
-            TestCallback.handleCallback<String> {
+            TestCallback.replyAsync<String>(0) {
                 throw Exception(errorMessage)
             }
         }
