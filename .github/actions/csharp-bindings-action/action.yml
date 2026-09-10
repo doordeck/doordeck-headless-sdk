@@ -26,7 +26,11 @@ runs:
     - name: Generate bindings
       shell: bash
       run: |
-        ClangSharpPInvokeGenerator \
+        generator=ClangSharpPInvokeGenerator
+        if [ "${RUNNER_OS}" = "Windows" ]; then
+          generator=ClangSharpPInvokeGenerator.cmd
+        fi
+        "${generator}" \
           -f doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h \
           -o doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk/DoordeckHeadlessBindings.cs \
           -l Doordeck.Headless.Sdk.dll \
