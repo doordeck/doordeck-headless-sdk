@@ -8,11 +8,11 @@ import com.doordeck.multiplatform.sdk.api.LockOperationsApi
 import com.doordeck.multiplatform.sdk.api.PlatformApi
 import com.doordeck.multiplatform.sdk.api.SitesApi
 import com.doordeck.multiplatform.sdk.api.TilesApi
+import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.hostSecureStorage
-import com.doordeck.multiplatform.sdk.util.buildSdkConfig
 import com.doordeck.multiplatform.sdk.util.fromJson
 import kotlinx.serialization.Serializable
 import com.doordeck.multiplatform.sdk.util.guard
@@ -24,8 +24,6 @@ import kotlinx.cinterop.CPointer
 actual val platformType: PlatformType = PlatformType.WINDOWS
 
 internal actual object ApplicationContext
-
-typealias CStringCallback = CPointer<CFunction<(CPointer<ByteVar>) -> CPointer<ByteVar>>>
 
 /**
  * Receives the outcome of a [call], tagged with the request id it was invoked with. The string is
@@ -61,14 +59,14 @@ fun initialize(configJson: String?, requestId: Long, callback: ResultCallback) =
     callback.reply(requestId) {
         val config = configJson?.fromJson<SdkConfigData>() ?: SdkConfigData()
         sdk = KDoordeckFactory.initialize(
-            buildSdkConfig(
-                apiEnvironment = config.apiEnvironment,
-                cloudAuthToken = config.cloudAuthToken,
-                cloudRefreshToken = config.cloudRefreshToken,
-                fusionHost = config.fusionHost,
-                secureStorage = hostSecureStorage,
-                debugLogging = config.debugLogging.toString()
-            )
+            sdkConfig = SdkConfig.Builder()
+                .setApiEnvironment(config.apiEnvironment)
+                .setCloudAuthToken(config.cloudAuthToken)
+                .setCloudRefreshToken(config.cloudRefreshToken)
+                .setFusionHost(config.fusionHost)
+                .setSecureStorageOverride(hostSecureStorage)
+                .setDebugLogging(config.debugLogging.toString())
+                .build()
         )
     }
 }

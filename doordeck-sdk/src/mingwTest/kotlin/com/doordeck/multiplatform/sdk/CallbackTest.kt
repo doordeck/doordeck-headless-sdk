@@ -50,8 +50,6 @@ internal inline fun <reified T> ResultData<T>.unwrap(): T {
     return when {
         result != null -> result
         T::class == Unit::class -> Unit as T
-        // Ask for a nullable type and a null result is a value; ask for a non-null one and it is a
-        // failure. That keeps every existing call site strict without needing a second helper.
         null is T -> null as T
         else -> fail("Expected ${T::class.simpleName} but success.result was null")
     }
