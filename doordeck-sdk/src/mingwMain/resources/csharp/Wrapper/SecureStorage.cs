@@ -41,7 +41,7 @@ internal static class SecureStorage
     private static readonly Delegates.ClearDelegate ClearDelegate = Clear;
 
     internal static void Register() =>
-        Native.dd_set_secure_storage(
+        Native.set_secure_storage(
             Marshal.GetFunctionPointerForDelegate(SetEntryDelegate),
             Marshal.GetFunctionPointerForDelegate(GetEntryDelegate),
             Marshal.GetFunctionPointerForDelegate(ClearDelegate));

@@ -66,8 +66,8 @@ internal typealias clearEntriesCallback = CPointer<CFunction<() -> Unit>>
 internal var hostSecureStorage: SecureStorage? = null
     private set
 
-@CName("dd_set_secure_storage")
-fun ddSetSecureStorage(
+@CName("set_secure_storage")
+fun setSecureStorage(
     setEntryCp: setEntryCallback,
     getEntryCp: getEntryCallback,
     clearEntriesCp: clearEntriesCallback

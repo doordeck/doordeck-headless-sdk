@@ -36,7 +36,7 @@ private fun requireArgs(args: String?, method: String): String =
 
 /**
  * Configuration for [initialize]. Secure storage is not part of it: an implementation supplied by the
- * host is registered separately through dd_set_secure_storage, since function pointers cannot be
+ * host is registered separately through set_secure_storage, since function pointers cannot be
  * carried in JSON.
  */
 @Serializable

@@ -33,17 +33,5 @@ internal static partial class Native
     /// </summary>
     [LibraryImport(Library)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void dd_set_secure_storage(
-        nint setApiEnvironment, nint getApiEnvironment,
-        nint addCloudAuthToken, nint getCloudAuthToken,
-        nint addCloudRefreshToken, nint getCloudRefreshToken,
-        nint setFusionHost, nint getFusionHost,
-        nint addFusionAuthToken, nint getFusionAuthToken,
-        nint addPublicKey, nint getPublicKey,
-        nint addPrivateKey, nint getPrivateKey,
-        nint setKeyPairVerified, nint getKeyPairVerified,
-        nint addUserId, nint getUserId,
-        nint addUserEmail, nint getUserEmail,
-        nint addCertificateChain, nint getCertificateChain,
-        nint clear);
+    internal static partial void set_secure_storage(nint setEntry, nint getEntry, nint clear);
 }
