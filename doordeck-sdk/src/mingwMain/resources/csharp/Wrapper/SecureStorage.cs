@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Text;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Utilities;
 
@@ -7,274 +8,129 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 internal static class SecureStorage
 {
     public static ISecureStorage? Implementation { get; set; }
-    
+
+    /// <summary>Entry names agreed with SecureStorageKeys on the Kotlin side.</summary>
+    private const string ApiEnvironmentKey = "apiEnvironment";
+    private const string CloudAuthTokenKey = "cloudAuthToken";
+    private const string CloudRefreshTokenKey = "cloudRefreshToken";
+    private const string FusionHostKey = "fusionHost";
+    private const string FusionAuthTokenKey = "fusionAuthToken";
+    private const string PublicKeyKey = "publicKey";
+    private const string PrivateKeyKey = "privateKey";
+    private const string KeyPairVerifiedKey = "keyPairVerified";
+    private const string UserIdKey = "userId";
+    private const string UserEmailKey = "userEmail";
+    private const string CertificateChainKey = "certificateChain";
+
     public static class Delegates
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SetApiEnvironmentDelegate(IntPtr ptr);
-        
+        public delegate void SetEntryDelegate(IntPtr key, IntPtr value);
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetApiEnvironmentDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddCloudAuthTokenDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetCloudAuthTokenDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddCloudRefreshTokenDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetCloudRefreshTokenDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SetFusionHostDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetFusionHostDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddFusionAuthTokenDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetFusionAuthTokenDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddPublicKeyDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetPublicKeyDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddPrivateKeyDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetPrivateKeyDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SetKeyPairVerifiedDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetKeyPairVerifiedDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddUserIdDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetUserIdDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddUserEmailDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetUserEmailDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void AddCertificateChainDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetCertificateChainDelegate();
-        
+        public delegate int GetEntryDelegate(IntPtr key, IntPtr buffer, int capacity);
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void ClearDelegate();
     }
-    
 
-    // Held in static fields for the lifetime of the process: the native side keeps these pointers,
-    // so the delegates they came from must stay reachable.
-    private static readonly Delegates.SetApiEnvironmentDelegate setApiEnvironmentDelegate = SetApiEnvironment;
-    private static readonly Delegates.GetApiEnvironmentDelegate getApiEnvironmentDelegate = GetApiEnvironment;
-    private static readonly Delegates.AddCloudAuthTokenDelegate addCloudAuthTokenDelegate = AddCloudAuthToken;
-    private static readonly Delegates.GetCloudAuthTokenDelegate getCloudAuthTokenDelegate = GetCloudAuthToken;
-    private static readonly Delegates.AddCloudRefreshTokenDelegate addCloudRefreshTokenDelegate = AddCloudRefreshToken;
-    private static readonly Delegates.GetCloudRefreshTokenDelegate getCloudRefreshTokenDelegate = GetCloudRefreshToken;
-    private static readonly Delegates.SetFusionHostDelegate setFusionHostDelegate = SetFusionHost;
-    private static readonly Delegates.GetFusionHostDelegate getFusionHostDelegate = GetFusionHost;
-    private static readonly Delegates.AddFusionAuthTokenDelegate addFusionAuthTokenDelegate = AddFusionAuthToken;
-    private static readonly Delegates.GetFusionAuthTokenDelegate getFusionAuthTokenDelegate = GetFusionAuthToken;
-    private static readonly Delegates.AddPublicKeyDelegate addPublicKeyDelegate = AddPublicKey;
-    private static readonly Delegates.GetPublicKeyDelegate getPublicKeyDelegate = GetPublicKey;
-    private static readonly Delegates.AddPrivateKeyDelegate addPrivateKeyDelegate = AddPrivateKey;
-    private static readonly Delegates.GetPrivateKeyDelegate getPrivateKeyDelegate = GetPrivateKey;
-    private static readonly Delegates.SetKeyPairVerifiedDelegate setKeyPairVerifiedDelegate = SetKeyPairVerified;
-    private static readonly Delegates.GetKeyPairVerifiedDelegate getKeyPairVerifiedDelegate = GetKeyPairVerified;
-    private static readonly Delegates.AddUserIdDelegate addUserIdDelegate = AddUserId;
-    private static readonly Delegates.GetUserIdDelegate getUserIdDelegate = GetUserId;
-    private static readonly Delegates.AddUserEmailDelegate addUserEmailDelegate = AddUserEmail;
-    private static readonly Delegates.GetUserEmailDelegate getUserEmailDelegate = GetUserEmail;
-    private static readonly Delegates.AddCertificateChainDelegate addCertificateChainDelegate = AddCertificateChain;
-    private static readonly Delegates.GetCertificateChainDelegate getCertificateChainDelegate = GetCertificateChain;
-    private static readonly Delegates.ClearDelegate clearDelegate = Clear;
+    // Held in static fields for the lifetime of the process: the SDK keeps these pointers, so the
+    // delegates they came from must stay reachable.
+    private static readonly Delegates.SetEntryDelegate SetEntryDelegate = SetEntry;
+    private static readonly Delegates.GetEntryDelegate GetEntryDelegate = GetEntry;
+    private static readonly Delegates.ClearDelegate ClearDelegate = Clear;
 
     internal static void Register() =>
         Native.dd_set_secure_storage(
-            Marshal.GetFunctionPointerForDelegate(setApiEnvironmentDelegate),
-            Marshal.GetFunctionPointerForDelegate(getApiEnvironmentDelegate),
-            Marshal.GetFunctionPointerForDelegate(addCloudAuthTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(getCloudAuthTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(addCloudRefreshTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(getCloudRefreshTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(setFusionHostDelegate),
-            Marshal.GetFunctionPointerForDelegate(getFusionHostDelegate),
-            Marshal.GetFunctionPointerForDelegate(addFusionAuthTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(getFusionAuthTokenDelegate),
-            Marshal.GetFunctionPointerForDelegate(addPublicKeyDelegate),
-            Marshal.GetFunctionPointerForDelegate(getPublicKeyDelegate),
-            Marshal.GetFunctionPointerForDelegate(addPrivateKeyDelegate),
-            Marshal.GetFunctionPointerForDelegate(getPrivateKeyDelegate),
-            Marshal.GetFunctionPointerForDelegate(setKeyPairVerifiedDelegate),
-            Marshal.GetFunctionPointerForDelegate(getKeyPairVerifiedDelegate),
-            Marshal.GetFunctionPointerForDelegate(addUserIdDelegate),
-            Marshal.GetFunctionPointerForDelegate(getUserIdDelegate),
-            Marshal.GetFunctionPointerForDelegate(addUserEmailDelegate),
-            Marshal.GetFunctionPointerForDelegate(getUserEmailDelegate),
-            Marshal.GetFunctionPointerForDelegate(addCertificateChainDelegate),
-            Marshal.GetFunctionPointerForDelegate(getCertificateChainDelegate),
-            Marshal.GetFunctionPointerForDelegate(clearDelegate));
+            Marshal.GetFunctionPointerForDelegate(SetEntryDelegate),
+            Marshal.GetFunctionPointerForDelegate(GetEntryDelegate),
+            Marshal.GetFunctionPointerForDelegate(ClearDelegate));
 
-    public static void SetApiEnvironment(IntPtr c)
-    { 
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.SetApiEnvironment(Enum.Parse<ApiEnvironment>(result));
-        }
-    }
-   
-    public static IntPtr GetApiEnvironment() =>
-        GetPtrFromString(Implementation?.GetApiEnvironment()?.ToString());
-    
-    public static void AddCloudAuthToken(IntPtr c)
+    private static void SetEntry(IntPtr key, IntPtr value)
     {
-        if (GetStringFromPtr(c) is {} result)
+        if (Implementation is not {} implementation) return;
+
+        var name = Marshal.PtrToStringUTF8(key);
+        if (name == null) return;
+
+        var entry = value == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(value);
+
+        switch (name)
         {
-            Implementation?.AddCloudAuthToken(result);
-        }
-    }
-    
-    public static IntPtr GetCloudAuthToken() =>
-        GetPtrFromString(Implementation?.GetCloudAuthToken());
-    
-    public static void AddCloudRefreshToken(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddCloudRefreshToken(result);
-        }
-    }
-    
-    public static IntPtr GetCloudRefreshToken() =>
-        GetPtrFromString(Implementation?.GetCloudRefreshToken());
-    
-    public static void SetFusionHost(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.SetFusionHost(result);
-        }
-    }
-    
-    public static IntPtr GetFusionHost() =>
-        GetPtrFromString(Implementation?.GetFusionHost());
-    
-    public static void AddFusionAuthToken(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddFusionAuthToken(result);
-        }
-    }
-    
-    public static IntPtr GetFusionAuthToken() =>
-        GetPtrFromString(Implementation?.GetFusionAuthToken());
-    
-    public static void AddPublicKey(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddPublicKey(result.DecodeBase64ToByteArray());
-        }
-    }
-    
-    public static IntPtr GetPublicKey() =>
-        GetPtrFromString(Implementation?.GetPublicKey()?.EncodeByteArrayToBase64());
-    
-    public static void AddPrivateKey(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddPrivateKey(result.DecodeBase64ToByteArray());
-        }
-    }
-    
-    public static IntPtr GetPrivateKey() =>
-        GetPtrFromString(Implementation?.GetPrivateKey()?.EncodeByteArrayToBase64());
-    
-    public static void SetKeyPairVerified(IntPtr c)
-    {
-        var result = GetStringFromPtr(c);
-        Implementation?.SetKeyPairVerified(result?.DecodeBase64ToByteArray());
-    }
-    
-    public static IntPtr GetKeyPairVerified() =>
-        GetPtrFromString(Implementation?.GetKeyPairVerified()?.ToString());
-    
-    public static void AddUserId(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddUserId(new Guid(result));
+            case ApiEnvironmentKey when entry != null:
+                implementation.SetApiEnvironment(Enum.Parse<ApiEnvironment>(entry));
+                break;
+            case CloudAuthTokenKey when entry != null:
+                implementation.AddCloudAuthToken(entry);
+                break;
+            case CloudRefreshTokenKey when entry != null:
+                implementation.AddCloudRefreshToken(entry);
+                break;
+            case FusionHostKey when entry != null:
+                implementation.SetFusionHost(entry);
+                break;
+            case FusionAuthTokenKey when entry != null:
+                implementation.AddFusionAuthToken(entry);
+                break;
+            case PublicKeyKey when entry != null:
+                implementation.AddPublicKey(entry.DecodeBase64ToByteArray());
+                break;
+            case PrivateKeyKey when entry != null:
+                implementation.AddPrivateKey(entry.DecodeBase64ToByteArray());
+                break;
+            // The only entry the SDK legitimately clears by storing a null value.
+            case KeyPairVerifiedKey:
+                implementation.SetKeyPairVerified(entry?.DecodeBase64ToByteArray());
+                break;
+            case UserIdKey when entry != null:
+                implementation.AddUserId(new Guid(entry));
+                break;
+            case UserEmailKey when entry != null:
+                implementation.AddUserEmail(entry);
+                break;
+            case CertificateChainKey when entry != null:
+                implementation.AddCertificateChain(entry.StringToCertificateChain());
+                break;
         }
     }
 
-    public static IntPtr GetUserId() =>
-        GetPtrFromString(Implementation?.GetUserId().ToString());
-    
-    public static void AddUserEmail(IntPtr c)
+    private static int GetEntry(IntPtr key, IntPtr buffer, int capacity)
     {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddUserEmail(result);
-        }
-    }
-    
-    public static IntPtr GetUserEmail() =>
-        GetPtrFromString(Implementation?.GetUserEmail());
-    
-    public static void AddCertificateChain(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.AddCertificateChain(result.StringToCertificateChain());
-        }
-    }
-    
-    public static IntPtr GetCertificateChain() =>
-        GetPtrFromString(Implementation?.GetCertificateChain()?.CertificateChainToString());
-    
-    public static void Clear() =>
-        Implementation?.Clear();
+        if (Implementation is not {} implementation) return -1;
 
-    private static string? GetStringFromPtr(IntPtr c)
-    {
-        if (c == IntPtr.Zero) return null;
-        var value = Marshal.PtrToStringAnsi(c);
-        return value ?? null;
-    }
-    
-    private static IntPtr GetPtrFromString(string? input)
-    {
-        if (input == null) return IntPtr.Zero;
-        var c = IntPtr.Zero;
-        try
+        var name = Marshal.PtrToStringUTF8(key);
+        if (name == null) return -1;
+
+        var entry = name switch
         {
-            c = Marshal.StringToHGlobalAnsi(input);
-            return c;
-        }
-        finally
+            ApiEnvironmentKey => implementation.GetApiEnvironment()?.ToString(),
+            CloudAuthTokenKey => implementation.GetCloudAuthToken(),
+            CloudRefreshTokenKey => implementation.GetCloudRefreshToken(),
+            FusionHostKey => implementation.GetFusionHost(),
+            FusionAuthTokenKey => implementation.GetFusionAuthToken(),
+            PublicKeyKey => implementation.GetPublicKey()?.EncodeByteArrayToBase64(),
+            PrivateKeyKey => implementation.GetPrivateKey()?.EncodeByteArrayToBase64(),
+            KeyPairVerifiedKey => implementation.GetKeyPairVerified()?.EncodeByteArrayToBase64(),
+            UserIdKey => implementation.GetUserId()?.ToString(),
+            UserEmailKey => implementation.GetUserEmail(),
+            CertificateChainKey => implementation.GetCertificateChain()?.CertificateChainToString(),
+            _ => null
+        };
+
+        if (entry == null) return -1;
+
+        // UTF-8 to match Kotlin/Native's toKString on the other side.
+        var bytes = Encoding.UTF8.GetBytes(entry);
+
+        // A null buffer, or one too small, is how the caller asks for the length before allocating.
+        if (buffer != IntPtr.Zero && capacity > bytes.Length)
         {
-            if (c != IntPtr.Zero) Marshal.FreeHGlobal(c);
+            Marshal.Copy(bytes, 0, buffer, bytes.Length);
+            Marshal.WriteByte(buffer, bytes.Length, 0);
         }
+
+        return bytes.Length;
     }
+
+    private static void Clear() => Implementation?.Clear();
 }
-    
