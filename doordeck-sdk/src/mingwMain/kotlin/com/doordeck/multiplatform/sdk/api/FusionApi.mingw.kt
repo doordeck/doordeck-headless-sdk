@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CStringCallback
+import com.doordeck.multiplatform.sdk.ResultCallback
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.FusionClient
 import com.doordeck.multiplatform.sdk.model.data.DeviceIdData
@@ -8,13 +8,12 @@ import com.doordeck.multiplatform.sdk.model.data.EnableDoorData
 import com.doordeck.multiplatform.sdk.model.data.FusionLoginData
 import com.doordeck.multiplatform.sdk.model.data.GetIntegrationConfigurationData
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.handleCallback
+import com.doordeck.multiplatform.sdk.util.replyAsync
 
 actual object FusionApi {
 
     @DoordeckOnly
-    @CName("loginFusion")
-    fun login(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun login(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val fusionLoginData = data.fromJson<FusionLoginData>()
         FusionClient.loginRequest(
             email = fusionLoginData.email,
@@ -23,14 +22,12 @@ actual object FusionApi {
     }
 
     @DoordeckOnly
-    @CName("getIntegrationType")
-    fun getIntegrationType(callback: CStringCallback) = callback.handleCallback {
+    fun getIntegrationType(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         FusionClient.getIntegrationTypeRequest()
     }
 
     @DoordeckOnly
-    @CName("getIntegrationConfiguration")
-    fun getIntegrationConfiguration(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getIntegrationConfiguration(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val getIntegrationConfigurationData = data.fromJson<GetIntegrationConfigurationData>()
         FusionClient.getIntegrationConfigurationRequest(
             type = getIntegrationConfigurationData.type,
@@ -39,8 +36,7 @@ actual object FusionApi {
     }
 
     @DoordeckOnly
-    @CName("enableDoor")
-    fun enableDoor(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun enableDoor(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val enableDoorData = data.fromJson<EnableDoorData>()
         FusionClient.enableDoorRequest(
             name = enableDoorData.name,
@@ -50,29 +46,25 @@ actual object FusionApi {
     }
 
     @DoordeckOnly
-    @CName("deleteDoor")
-    fun deleteDoor(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun deleteDoor(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val deviceIdData = data.fromJson<DeviceIdData>()
         FusionClient.deleteDoorRequest(deviceIdData.deviceId)
     }
 
     @DoordeckOnly
-    @CName("getDoorStatus")
-    fun getDoorStatus(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getDoorStatus(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val deviceIdData = data.fromJson<DeviceIdData>()
         FusionClient.getDoorStatusRequest(deviceIdData.deviceId)
     }
 
     @DoordeckOnly
-    @CName("startDoor")
-    fun startDoor(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun startDoor(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val deviceIdData = data.fromJson<DeviceIdData>()
         FusionClient.startDoorRequest(deviceIdData.deviceId)
     }
 
     @DoordeckOnly
-    @CName("stopDoor")
-    fun stopDoor(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun stopDoor(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val deviceIdData = data.fromJson<DeviceIdData>()
         FusionClient.stopDoorRequest(deviceIdData.deviceId)
     }

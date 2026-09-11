@@ -40,9 +40,9 @@ class AccountlessApiTest : CallbackTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManager.getCloudAuthToken())
-        assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
-        assertEquals(TEST_MAIN_USER_EMAIL, ContextManager.getUserEmail())
+        assertEquals(response.authToken, callbackApiCall<ResultData<String?>> { ContextManager.getCloudAuthToken(callback = TestCallback) }.unwrap())
+        assertEquals(response.refreshToken, callbackApiCall<ResultData<String?>> { ContextManager.getCloudRefreshToken(callback = TestCallback) }.unwrap())
+        assertEquals(TEST_MAIN_USER_EMAIL, callbackApiCall<ResultData<String?>> { ContextManager.getUserEmail(callback = TestCallback) }.unwrap())
     }
 
     @Test
@@ -68,24 +68,24 @@ class AccountlessApiTest : CallbackTest() {
         // When
         assertTrue { response.authToken.isNotEmpty() }
         assertTrue { response.refreshToken.isNotEmpty() }
-        assertEquals(response.authToken, ContextManager.getCloudAuthToken())
-        assertEquals(response.refreshToken, ContextManager.getCloudRefreshToken())
-        assertEquals(newUserEmail, ContextManager.getUserEmail())
+        assertEquals(response.authToken, callbackApiCall<ResultData<String?>> { ContextManager.getCloudAuthToken(callback = TestCallback) }.unwrap())
+        assertEquals(response.refreshToken, callbackApiCall<ResultData<String?>> { ContextManager.getCloudRefreshToken(callback = TestCallback) }.unwrap())
+        assertEquals(newUserEmail, callbackApiCall<ResultData<String?>> { ContextManager.getUserEmail(callback = TestCallback) }.unwrap())
 
         // Given - shouldDelete
         // When
         callbackApiCall<ResultData<Unit>> {
-            AccountApi.deleteAccount(TestCallback)
+            AccountApi.deleteAccount(callback = TestCallback)
         }.unwrap()
 
         // Then
-        assertNull(ContextManager.getCloudAuthToken())
-        assertNull(ContextManager.getCloudRefreshToken())
-        assertNull(ContextManager.getFusionAuthToken())
-        assertNull(ContextManager.getUserId())
-        assertNull(ContextManager.getUserEmail())
-        assertNull(ContextManager.getCertificateChain())
-        assertNull(ContextManager.getKeyPair())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCloudAuthToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCloudRefreshToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getFusionAuthToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getUserId(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getUserEmail(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCertificateChain(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getKeyPair(callback = TestCallback) }.unwrap())
         val loginResponse = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(newUserEmail, TEST_MAIN_USER_PASSWORD).toJson(),

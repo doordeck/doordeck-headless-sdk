@@ -1,247 +1,103 @@
-﻿using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using Doordeck.Headless.Sdk.Model;
 using Doordeck.Headless.Sdk.Utilities;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-using ContextManagerApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager;
-
-public unsafe class ContextManager(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager context,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._context_e__Struct._ContextManager_e__Struct contextManager,
-    Doordeck_Headless_Sdk_ExportedSymbols* symbols) : AbstractWrapper
+/// <summary>
+/// Context operations complete against local state, so the SDK invokes their callback before the
+/// native call returns and <see cref="Dispatcher.CallSync{T}"/> never actually waits. The two that
+/// reach the server stay asynchronous.
+/// </summary>
+public class ContextManager
 {
-    public ApiEnvironment GetApiEnvironment()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getApiEnvironment_(context);
-            return Enum.Parse<ApiEnvironment>(Utils.SByteToString(result));
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
+    public ApiEnvironment GetApiEnvironment() =>
+        Enum.Parse<ApiEnvironment>(Dispatcher.CallSync<string>("context.getApiEnvironment"));
 
-    public void SetCloudAuthToken(string token)
-    {
-        var data = token.StringToSByte();
-        try
-        {
-            contextManager.setCloudAuthToken_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public void SetApiEnvironment(ApiEnvironment apiEnvironment) =>
+        Dispatcher.CallSync<object>("context.setApiEnvironment", apiEnvironment.ToString());
 
-    public string GetCloudAuthToken()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getCloudAuthToken_(context);
-            return Utils.SByteToString(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
+    public void SetCloudAuthToken(string token) =>
+        Dispatcher.CallSync<object>("context.setCloudAuthToken", token);
+
+    public string GetCloudAuthToken() =>
+        Dispatcher.CallSync<string>("context.getCloudAuthToken");
 
     public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation) =>
-        Process<ContextManagerApi, bool>(context, contextManager.isCloudAuthTokenInvalidOrExpired_, checkServerInvalidation);
+        Dispatcher.Call<bool>("context.isCloudAuthTokenInvalidOrExpired", checkServerInvalidation.ToString());
 
-    public void SetCloudRefreshToken(string token)
-    {
-        var data = token.StringToSByte();
-        try
-        {
-            contextManager.setCloudRefreshToken_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public void SetCloudRefreshToken(string token) =>
+        Dispatcher.CallSync<object>("context.setCloudRefreshToken", token);
 
-    public string GetCloudRefreshToken()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getCloudRefreshToken_(context);
-            return Utils.SByteToString(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
+    public string GetCloudRefreshToken() =>
+        Dispatcher.CallSync<string>("context.getCloudRefreshToken");
 
-    public void SetFusionHost(string host)
-    {
-        var data = host.StringToSByte();
-        try
-        {
-            contextManager.setFusionHost_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public void SetFusionHost(string host) =>
+        Dispatcher.CallSync<object>("context.setFusionHost", host);
 
-    public string GetFusionHost()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getFusionHost_(context);
-            return Utils.SByteToString(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
+    public string GetFusionHost() =>
+        Dispatcher.CallSync<string>("context.getFusionHost");
 
-    public void SetFusionAuthToken(string token)
-    {
-        var data = token.StringToSByte();
-        try
-        {
-            contextManager.setFusionAuthToken_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
+    public void SetFusionAuthToken(string token) =>
+        Dispatcher.CallSync<object>("context.setFusionAuthToken", token);
 
-    public string GetFusionAuthToken()
-    {
-        sbyte* result = null;
-        try
+    public string GetFusionAuthToken() =>
+        Dispatcher.CallSync<string>("context.getFusionAuthToken");
+
+    public void SetUserId(Guid userId) =>
+        Dispatcher.CallSync<object>("context.setUserId", userId.ToString());
+
+    public Guid GetUserId() =>
+        Guid.Parse(Dispatcher.CallSync<string>("context.getUserId"));
+
+    public void SetUserEmail(string email) =>
+        Dispatcher.CallSync<object>("context.setUserEmail", email);
+
+    public string GetUserEmail() =>
+        Dispatcher.CallSync<string>("context.getUserEmail");
+
+    public void SetCertificateChain(List<X509Certificate> certificateChain) =>
+        Dispatcher.CallSync<object>("context.setCertificateChain", certificateChain.CertificateChainToString());
+
+    public List<X509Certificate> GetCertificateChain() =>
+        Dispatcher.CallSync<string>("context.getCertificateChain").StringToCertificateChain();
+
+    public bool IsCertificateChainInvalidOrExpired() =>
+        Dispatcher.CallSync<bool>("context.isCertificateChainInvalidOrExpired");
+
+    public void SetKeyPair(byte[] publicKey, byte[] privateKey) =>
+        Dispatcher.CallSync<object>("context.setKeyPair", new
         {
-            result = contextManager.getFusionAuthToken_(context);
-            return Utils.SByteToString(result);
-        }
-        finally
+            publicKey = publicKey.EncodeByteArrayToBase64(),
+            privateKey = privateKey.EncodeByteArrayToBase64()
+        });
+
+    public KeyPair GetKeyPair() =>
+        Utils.FromJson<KeyPair>(Dispatcher.CallSync<string>("context.getKeyPair"));
+
+    public void SetKeyPairVerified(byte[]? publicKey) =>
+        Dispatcher.CallSync<object>("context.setKeyPairVerified", publicKey?.EncodeByteArrayToBase64());
+
+    public bool IsKeyPairVerified() =>
+        Dispatcher.CallSync<bool>("context.isKeyPairVerified");
+
+    public bool IsKeyPairValid() =>
+        Dispatcher.CallSync<bool>("context.isKeyPairValid");
+
+    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, byte[] publicKey,
+        byte[] privateKey, bool isKeyPairVerified) =>
+        Dispatcher.CallSync<object>("context.setOperationContext", new
         {
-            ReleaseMemory(null, result);
-        }
-    }
-
-    public void SetUserId(Guid userId)
-    {
-        var data = userId.ToString().StringToSByte();
-        try
-        {
-            contextManager.setUserId_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
-
-    public Guid GetUserId()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getUserId_(context);
-            return Guid.Parse(Utils.SByteToString(result));
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
-
-    public void SetUserEmail(string email)
-    {
-        var data = email.StringToSByte();
-        try
-        {
-            contextManager.setUserEmail_(context, data);
-        }
-        finally
-        {
-            ReleaseMemory(data, null);
-        }
-    }
-
-    public string GetUserEmail()
-    {
-        sbyte* result = null;
-        try
-        {
-            result = contextManager.getUserEmail_(context);
-            return Utils.SByteToString(result);
-        }
-        finally
-        {
-            ReleaseMemory(null, result);
-        }
-    }
-
-    // SetCertificateChain
-
-    // GetCertificateChain
-
-    public bool IsCertificateChainInvalidOrExpired()
-    {
-        return contextManager.isCertificateChainInvalidOrExpired_(context).ByteToBoolean();
-    }
-
-    // SetKeyPair
-
-    // GetKeyPair
-
-    // SetKeyPairVerified
-
-    public bool IsKeyPairVerified()
-    {
-        return contextManager.isKeyPairVerified_(context).ByteToBoolean();
-    }
-
-    public bool IsKeyPairValid()
-    {
-        return contextManager.isKeyPairValid_(context).ByteToBoolean();
-    }
-
-    public void SetOperationContext(Guid userId, List<X509Certificate> certificateChain, byte[] publicKey, byte[] privateKey, bool isKeyPairVerified)
-    {
-        var sData = new { userId, certificateChain = certificateChain.CertificateChainToString(), publicKey, privateKey, isKeyPairVerified }.ToJsonSByte();
-        try
-        {
-            contextManager.setOperationContext_(context, sData);
-        }
-        finally
-        {
-            ReleaseMemory(sData, null);
-        }
-    }
+            userId,
+            certificateChain = certificateChain.CertificateChainToString(),
+            publicKey,
+            privateKey,
+            isKeyPairVerified
+        });
 
     public Task<ContextState> GetContextState(bool checkServerInvalidation) =>
-            Process<ContextManagerApi, ContextState>(context, contextManager.getContextState_,  checkServerInvalidation);
+        Dispatcher.Call<ContextState>("context.getContextState", checkServerInvalidation.ToString());
 
-    public void ClearContext()
-    {
-        contextManager.clearContext_(context);
-    }
-
-    private void ReleaseMemory(sbyte* data, sbyte* result)
-    {
-        if (data != null) Marshal.FreeHGlobal((IntPtr)data);
-
-        if (result != null) symbols->DisposeString(result);
-    }
+    public void ClearContext() =>
+        Dispatcher.CallSync<object>("context.clearContext");
 }
