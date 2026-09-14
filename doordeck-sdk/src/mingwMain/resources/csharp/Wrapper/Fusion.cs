@@ -3,34 +3,30 @@ using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-using FusionApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi;
 
-public class Fusion(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_FusionApi fusion,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._FusionApi_e__Struct fusionApi) : AbstractWrapper
+public class Fusion
 {
-    public unsafe Task<FusionLoginResponse> Login(string email, string password) =>
-        Process<FusionApi, FusionLoginResponse>(fusion, fusionApi.login, new { email, password });
+    public Task<FusionLoginResponse> Login(string email, string password) =>
+        Dispatcher.Call<FusionLoginResponse>("fusion.login", new { email, password });
 
-    public unsafe Task<IntegrationTypeResponse> GetIntegrationType() =>
-        Process<FusionApi, IntegrationTypeResponse>(fusion, fusionApi.getIntegrationType_);
+    public Task<IntegrationTypeResponse> GetIntegrationType() =>
+        Dispatcher.Call<IntegrationTypeResponse>("fusion.getIntegrationType");
 
-    public unsafe Task<List<IntegrationConfigurationResponse>> GetIntegrationConfiguration(string type, LockController? controller = null) =>
-        Process<FusionApi, List<IntegrationConfigurationResponse>>(fusion, fusionApi.getIntegrationConfiguration_, new { type, controller });
+    public Task<List<IntegrationConfigurationResponse>> GetIntegrationConfiguration(string type, LockController? controller = null) =>
+        Dispatcher.Call<List<IntegrationConfigurationResponse>>("fusion.getIntegrationConfiguration", new { type, controller });
 
-    public unsafe Task<object> EnableDoor(string name, Guid siteId, LockController controller) =>
-        Process<FusionApi, object>(fusion, fusionApi.enableDoor_, new { name, siteId, controller });
+    public Task<object> EnableDoor(string name, Guid siteId, LockController controller) =>
+        Dispatcher.Call<object>("fusion.enableDoor", new { name, siteId, controller });
 
-    public unsafe Task<object> DeleteDoor(Guid deviceId) =>
-        Process<FusionApi, object>(fusion, fusionApi.deleteDoor_, new { deviceId });
+    public Task<object> DeleteDoor(Guid deviceId) =>
+        Dispatcher.Call<object>("fusion.deleteDoor", new { deviceId });
 
-    public unsafe Task<DoorStateResponse> GetDoorStatus(Guid deviceId) =>
-        Process<FusionApi, DoorStateResponse>(fusion, fusionApi.getDoorStatus_, new { deviceId });
+    public Task<DoorStateResponse> GetDoorStatus(Guid deviceId) =>
+        Dispatcher.Call<DoorStateResponse>("fusion.getDoorStatus", new { deviceId });
 
-    public unsafe Task<object> StartDoor(Guid deviceId) =>
-        Process<FusionApi, object>(fusion, fusionApi.startDoor_, new { deviceId });
+    public Task<object> StartDoor(Guid deviceId) =>
+        Dispatcher.Call<object>("fusion.startDoor", new { deviceId });
 
-    public unsafe Task<object> StopDoor(Guid deviceId) =>
-        Process<FusionApi, object>(fusion, fusionApi.stopDoor_, new { deviceId });
+    public Task<object> StopDoor(Guid deviceId) =>
+        Dispatcher.Call<object>("fusion.stopDoor", new { deviceId });
 }

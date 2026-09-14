@@ -6,7 +6,6 @@ import kotlinx.coroutines.runBlocking
 
 object KDoordeckFactory {
 
-    @CName("initialize")
     fun initialize(sdkConfig: SdkConfig): Doordeck = runBlocking {
         DoordeckFactory.initialize(sdkConfig.toBasicSdkConfig())
     }
