@@ -26,11 +26,11 @@ actual object CryptoManager {
      */
     internal actual fun generateRawKeyPair(): Crypto.KeyPair {
         val key = KCryptoKit.generateKeyPair()
-        val privateKeyData = key["privateKey"] as NSData
-        val publicKeyData = key["publicKey"] as NSData
+        val privateKeyData = key.privateKey.toByteArray()
+        val publicKeyData = key.publicKey.toByteArray()
         return Crypto.KeyPair(
-            private = privateKeyData.toByteArray(),
-            public = publicKeyData.toByteArray()
+            private = privateKeyData,
+            public = publicKeyData
         )
     }
 
