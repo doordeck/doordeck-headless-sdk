@@ -2,7 +2,9 @@ package com.doordeck.multiplatform.sdk.clock
 
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 /**
  * A skew-aware clock used by the SDK to produce timestamps that are aligned with the
@@ -43,5 +45,26 @@ internal object SystemClock {
     @JvmSynthetic
     internal fun reset() {
         skew = Duration.ZERO
+        offset = Duration.ZERO
     }
+
+    /**
+     * A configured offset applied on top of [skew]. Kept separate so [ServerTimeSynchronizer] never
+     * overwrites it.
+     */
+    @Volatile
+    private var offset: Duration = Duration.ZERO
+
+    @JvmSynthetic
+    internal fun setOffset(offset: Duration) {
+        this.offset = offset
+    }
+
+    /**
+     * The current time as the SDK understands it: the device clock corrected by [skew]. Anything
+     * compared against a backend-issued timestamp should read the time from here, or a device whose
+     * clock is wrong will disagree with the backend about what has expired.
+     */
+    @JvmSynthetic
+    internal fun now(): Instant = Clock.System.now() + skew + offset
 }
