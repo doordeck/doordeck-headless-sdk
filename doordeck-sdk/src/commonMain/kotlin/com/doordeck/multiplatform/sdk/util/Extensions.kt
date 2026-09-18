@@ -50,6 +50,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -128,7 +129,7 @@ internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
         reAuthorizeOnResponse { response ->
             response.status == HttpStatusCode.Unauthorized ||
-                    Context.getCloudAuthToken()?.isJwtTokenInvalidOrExpired() == true
+                    response.request.headers[HttpHeaders.Authorization]?.isJwtTokenInvalidOrExpired() == true
         }
         bearer {
             refreshTokens {
