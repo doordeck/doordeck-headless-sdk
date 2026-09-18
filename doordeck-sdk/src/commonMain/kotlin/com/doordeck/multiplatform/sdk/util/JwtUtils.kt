@@ -1,12 +1,12 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.JSON
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.jvm.JvmSynthetic
-import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Instant
 
@@ -38,6 +38,6 @@ internal object JwtUtils {
             return true
         }
         SdkLogger.d { "JWT expiration date is $expiration" }
-        return Clock.System.now() >= expiration - MIN_TOKEN_LIFETIME_DAYS
+        return SystemClock.now() >= expiration - MIN_TOKEN_LIFETIME_DAYS
     }
 }
