@@ -26,6 +26,7 @@ import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
@@ -125,6 +126,10 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
 @JvmSynthetic
 internal fun HttpClientConfig<*>.installAuth() {
     install(Auth) {
+        reAuthorizeOnResponse { response ->
+            response.status == HttpStatusCode.Unauthorized ||
+                    Context.getCloudAuthToken()?.isJwtTokenInvalidOrExpired() == true
+        }
         bearer {
             refreshTokens {
                 Context.getCloudRefreshToken()?.let { currentRefreshToken ->
