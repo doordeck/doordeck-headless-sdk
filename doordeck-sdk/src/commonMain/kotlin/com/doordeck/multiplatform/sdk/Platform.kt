@@ -43,7 +43,7 @@ internal val JSON = Json {
 internal fun createCloudHttpClient(withTimeout: Boolean = true): HttpClient {
     return HttpClient {
         installContentNegotiation()
-        if (withTimeout) installTimeout()
+        installTimeout()
         installAuth()
         installCertificatePinner()
         installUserAgent()
