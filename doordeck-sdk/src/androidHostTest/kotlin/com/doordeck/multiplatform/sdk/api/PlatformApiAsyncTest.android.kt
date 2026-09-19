@@ -395,8 +395,10 @@ class PlatformApiAsyncTest : IntegrationTest() {
             val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
 
             // When
+            ContextManager.clearContext()
             ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
             AccountApi.getUserDetailsAsync().await() // Perform a request to create the new user and attach it to the application
+            ContextManager.clearContext()
             ContextManager.setCloudAuthToken(authToken) // Restore the context token
 
             // Then
@@ -406,8 +408,10 @@ class PlatformApiAsyncTest : IntegrationTest() {
             assertEquals(applicationJwtBody.name, applicationUsers.first().displayName)
             assertEquals(applicationUserId.toString(), applicationUsers.first().foreignKey)
 
+            ContextManager.clearContext()
             ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
             AccountApi.deleteAccountAsync().await() // Cleanup the application user
+            ContextManager.clearContext()
             ContextManager.setCloudAuthToken(authToken) // Restore the context token
         }
     }
