@@ -67,7 +67,7 @@ class TileUrlParserTest {
         // Malformed scheme
         TestCase("ht tp://doordeck.link/$testUuid", OTHER, FailureResult("Invalid URL format: ht tp://doordeck.link/$testUuid")),
         // Malformed encoding
-        TestCase("https://doordeck.link/$testUuid%3", OTHER, FailureResult("Invalid URL format: https://doordeck.link/$testUuid%3")),
+        TestCase("https://doordeck.link/$testUuid%3", OTHER, FailureResult("Last path segment: $testUuid%3, is not a valid tile UUID")),
         // URL with user info
         TestCase("https://user:pass@doordeck.link/$testUuid", OTHER, FailureResult("Invalid URL format: https://user:pass@doordeck.link/$testUuid")),
         // Base UUID
