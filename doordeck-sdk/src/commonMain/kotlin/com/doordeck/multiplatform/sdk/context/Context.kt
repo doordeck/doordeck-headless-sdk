@@ -172,6 +172,33 @@ internal object Context {
     }
 
     /**
+     * Hands the context over to [email] and, when that is not the user it was already holding,
+     * discards everything the previous one left behind.
+     *
+     * A device that has been through a verification once holds a key pair, the mark saying that
+     * pair was verified, a certificate chain and a user id. None of that belongs to the next person
+     * to sign in, and leaving it in place is what let a second user in with no verification at all:
+     * [getContextState] asks whether a verified, unexpired chain exists, never whose it is.
+     *
+     * Only what describes the installation rather than the user is carried across. The tokens are
+     * written by the caller the moment this returns, so clearing them here costs nothing.
+     *
+     * Any difference in the email counts as a different user, capitalisation included: being asked
+     * for a code once too often is the harmless way to be wrong.
+     */
+    @JvmSynthetic
+    internal fun startSessionFor(email: String) {
+        if (getUserEmail() != email) {
+            val apiEnvironment = getApiEnvironment()
+            val fusionHost = getFusionHost()
+            reset()
+            setApiEnvironment(apiEnvironment)
+            setFusionHost(fusionHost)
+        }
+        setUserEmail(email)
+    }
+
+    /**
      * Sets the certificate chain for the context, the provided value will be automatically stored in secure storage.
      */
     @JvmSynthetic

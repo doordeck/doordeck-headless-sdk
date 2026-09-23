@@ -27,7 +27,8 @@ import kotlin.jvm.JvmSynthetic
 internal object AccountlessClient {
     /**
      * Performs user login and stores both the access and refresh tokens in [Context].
-     * Also stores the user's email in [Context].
+     * Also hands the context to the user signing in, which empties it of the previous user's
+     * key material when they are not the same person — see [Context.startSessionFor].
      *
      * @param email The user's email.
      * @param password The user's password.
@@ -43,7 +44,7 @@ internal object AccountlessClient {
             setBody(LoginRequest(email, password))
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
-                context.setUserEmail(email)
+                context.startSessionFor(email)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
             }
@@ -52,7 +53,8 @@ internal object AccountlessClient {
 
     /**
      * Performs user registration and stores both the access and refresh tokens in [Context].
-     * Also stores the user's email in [Context].
+     * Also hands the context to the user registering, which empties it of the previous user's
+     * key material when they are not the same person — see [Context.startSessionFor].
      *
      * @param email The user's email address.
      * @param password The user's password.
@@ -85,7 +87,7 @@ internal object AccountlessClient {
             parameter(Params.FORCE, force)
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
-                context.setUserEmail(email)
+                context.startSessionFor(email)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
             }
