@@ -46,3 +46,45 @@ internal fun String.isCertificateInvalidOrExpired(): Boolean {
         true
     }
 }
+/**
+ * The DER encoding of the userId attribute (OID 0.9.2342.19200300.100.1.1), the one field the
+ * backend puts in a user's master certificate subject.
+ */
+private val USER_ID_ATTRIBUTE = byteArrayOf(
+    0x06, 0x0A, 0x09, 0x92.toByte(), 0x26, 0x89.toByte(), 0x93.toByte(), 0xF2.toByte(), 0x2C, 0x64, 0x01, 0x01
+)
+
+/**
+ * Reads the id of the user this certificate was issued to, or null when it does not say.
+ *
+ * An ephemeral certificate is issued by the user's master certificate, whose subject is that
+ * user's id and nothing else, so the issuer of the first certificate in a chain is who the chain
+ * belongs to. The issuer is the fourth field of the TBSCertificate — version, serial number,
+ * signature, issuer — and it is a sequence of sets of (attribute, value) pairs.
+ *
+ * @receiver A Base64-encoded string containing certificate data
+ */
+@JvmSynthetic
+internal fun String.getCertificateUserId(): String? {
+    return try {
+        val issuer = Asn1Element.parse(decodeBase64ToByteArray())
+            .asSequence().children.elementAtOrNull(0)?.asSequence() // Tabs
+            ?.children?.elementAtOrNull(3)?.asSequence() // Issuer
+        if (issuer == null) {
+            SdkLogger.d { "Unable to retrieve the issuer from the certificate" }
+            return null
+        }
+        issuer.children.firstNotNullOfOrNull { relativeName ->
+            relativeName.asSet().children.firstNotNullOfOrNull { attribute ->
+                val pair = attribute.asSequence().children
+                val value = pair.elementAtOrNull(1)
+                if (value != null && pair.elementAtOrNull(0)?.derEncoded.contentEquals(USER_ID_ATTRIBUTE)) {
+                    value.asPrimitive().content.decodeToString()
+                } else null
+            }
+        }
+    } catch (exception: Throwable) {
+        SdkLogger.e(exception) { "Failed to parse the certificate" }
+        null
+    }
+}

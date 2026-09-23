@@ -44,7 +44,7 @@ internal object AccountlessClient {
             setBody(LoginRequest(email, password))
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
-                context.startSessionFor(email)
+                context.startSessionFor(email = email, authToken = it.authToken)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
             }
@@ -87,7 +87,7 @@ internal object AccountlessClient {
             parameter(Params.FORCE, force)
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
-                context.startSessionFor(email)
+                context.startSessionFor(email = email, authToken = it.authToken)
                 context.setCloudAuthToken(it.authToken)
                 context.setCloudRefreshToken(it.refreshToken)
             }

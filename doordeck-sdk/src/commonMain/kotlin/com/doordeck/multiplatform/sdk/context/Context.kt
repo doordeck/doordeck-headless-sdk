@@ -11,7 +11,9 @@ import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
+import com.doordeck.multiplatform.sdk.util.JwtUtils.getJwtSubject
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
+import com.doordeck.multiplatform.sdk.util.getCertificateUserId
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import kotlin.jvm.JvmSynthetic
 
@@ -172,8 +174,8 @@ internal object Context {
     }
 
     /**
-     * Hands the context over to [email] and, when that is not the user it was already holding,
-     * discards everything the previous one left behind.
+     * Hands the context over to the user [authToken] was just issued to, discarding what the
+     * previous one left behind when the two are not the same person.
      *
      * A device that has been through a verification once holds a key pair, the mark saying that
      * pair was verified, a certificate chain and a user id. None of that belongs to the next person
@@ -182,13 +184,10 @@ internal object Context {
      *
      * Only what describes the installation rather than the user is carried across. The tokens are
      * written by the caller the moment this returns, so clearing them here costs nothing.
-     *
-     * Any difference in the email counts as a different user, capitalisation included: being asked
-     * for a code once too often is the harmless way to be wrong.
      */
     @JvmSynthetic
-    internal fun startSessionFor(email: String) {
-        if (getUserEmail() != email) {
+    internal fun startSessionFor(email: String, authToken: String) {
+        if (isSomebodyElses(email, authToken)) {
             val apiEnvironment = getApiEnvironment()
             val fusionHost = getFusionHost()
             reset()
@@ -196,6 +195,28 @@ internal object Context {
             setFusionHost(fusionHost)
         }
         setUserEmail(email)
+    }
+
+    /**
+     * Whether what the context is holding belongs to somebody other than the user this token was
+     * issued to.
+     *
+     * The certificate chain is the part that grants access, and it says whose it is: its first
+     * certificate is issued by the user's master certificate, whose subject is that user's id,
+     * and the token that just came back says which user the session is for. A chain issued to
+     * anybody else is not ours — and neither is one we cannot read, since an unreadable chain is
+     * no use to anybody. Asking the chain rather than the email also heals a device that is
+     * already carrying the wrong one.
+     *
+     * The email answers for the rest of the material: registering leaves a verified key pair and
+     * no chain at all, and then there is nothing to compare.
+     */
+    private fun isSomebodyElses(email: String, authToken: String): Boolean {
+        if (getUserEmail() != email) {
+            return true
+        }
+        val certificate = getCertificateChain()?.firstOrNull() ?: return false
+        return certificate.getCertificateUserId() != authToken.getJwtSubject()
     }
 
     /**

@@ -15,6 +15,7 @@ internal val MIN_TOKEN_LIFETIME_DAYS = 1.days
 
 internal object JwtUtils {
     private const val TOKEN_EXPIRE_AT_FIELD = "exp"
+    private const val TOKEN_SUBJECT_FIELD = "sub"
 
     private fun getClaims(token: String): Map<String, String> {
         return try {
@@ -26,6 +27,14 @@ internal object JwtUtils {
             SdkLogger.e(exception) { "Failed to parse JWT token" }
             emptyMap()
         }
+    }
+
+    /**
+     * Reads the id of the user this token was issued to, or null when it does not say.
+     */
+    @JvmSynthetic
+    internal fun String.getJwtSubject(): String? {
+        return getClaims(this)[TOKEN_SUBJECT_FIELD]
     }
 
     @JvmSynthetic
