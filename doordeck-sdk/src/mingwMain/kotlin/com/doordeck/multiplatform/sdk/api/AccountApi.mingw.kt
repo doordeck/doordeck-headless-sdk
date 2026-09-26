@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CStringCallback
+import com.doordeck.multiplatform.sdk.ResultCallback
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.model.data.ChangePasswordData
@@ -10,8 +10,8 @@ import com.doordeck.multiplatform.sdk.model.data.RegisterEphemeralKeyWithSeconda
 import com.doordeck.multiplatform.sdk.model.data.UpdateUserDetailsData
 import com.doordeck.multiplatform.sdk.model.data.VerifyEphemeralKeyRegistrationData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.handleCallback
 import com.doordeck.multiplatform.sdk.util.fromJson
+import com.doordeck.multiplatform.sdk.util.replyAsync
 
 actual object AccountApi {
     /**
@@ -20,8 +20,7 @@ actual object AccountApi {
      * @see <a href="https://developer.doordeck.com/docs/#refresh-token">API Doc</a>
      */
     @DoordeckOnly
-    @CName("refreshToken")
-    fun refreshToken(data: String? = null, callback: CStringCallback) = callback.handleCallback {
+    fun refreshToken(data: String? = null, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val refreshTokenData = data?.fromJson<RefreshTokenData>()
         AccountClient.refreshTokenRequest(refreshTokenData?.refreshToken)
     }
@@ -31,8 +30,7 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#logout">API Doc</a>
      */
-    @CName("logout")
-    fun logout(callback: CStringCallback) = callback.handleCallback {
+    fun logout(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         AccountClient.logoutRequest()
     }
 
@@ -41,8 +39,7 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key">API Doc</a>
      */
-    @CName("registerEphemeralKey")
-    fun registerEphemeralKey(data: String? = null, callback: CStringCallback) = callback.handleCallback {
+    fun registerEphemeralKey(data: String? = null, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val registerEphemeralKeyData = data?.fromJson<RegisterEphemeralKeyData>()
         AccountClient.registerEphemeralKeyRequest(
             publicKey = registerEphemeralKeyData?.publicKey?.decodeBase64ToByteArray(),
@@ -55,11 +52,11 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#register-ephemeral-key-with-secondary-authentication">API Doc</a>
      */
-    @CName("registerEphemeralKeyWithSecondaryAuthentication")
     fun registerEphemeralKeyWithSecondaryAuthentication(
         data: String? = null,
-        callback: CStringCallback
-    ) = callback.handleCallback {
+        requestId: Long = 0,
+        callback: ResultCallback
+    ) = callback.replyAsync(requestId) {
         val registerEphemeralKeyWithSecondaryAuthenticationData = data
             ?.fromJson<RegisterEphemeralKeyWithSecondaryAuthenticationData>()
         AccountClient.registerEphemeralKeyWithSecondaryAuthenticationRequest(
@@ -73,8 +70,7 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#verify-ephemeral-key-registration">API Doc</a>
      */
-    @CName("verifyEphemeralKeyRegistration")
-    fun verifyEphemeralKeyRegistration(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun verifyEphemeralKeyRegistration(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val verifyEphemeralKeyRegistrationData = data.fromJson<VerifyEphemeralKeyRegistrationData>()
         AccountClient.verifyEphemeralKeyRegistrationRequest(
             code = verifyEphemeralKeyRegistrationData.code,
@@ -89,8 +85,7 @@ actual object AccountApi {
      * @see <a href="https://developer.doordeck.com/docs/#reverify-email">API Doc</a>
      */
     @DoordeckOnly
-    @CName("reverifyEmail")
-    fun reverifyEmail(callback: CStringCallback) = callback.handleCallback {
+    fun reverifyEmail(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         AccountClient.reverifyEmailRequest()
     }
 
@@ -100,8 +95,7 @@ actual object AccountApi {
      * @see <a href="https://developer.doordeck.com/docs/#change-password">API Doc</a>
      */
     @DoordeckOnly
-    @CName("changePassword")
-    fun changePassword(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun changePassword(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val changePasswordData = data.fromJson<ChangePasswordData>()
         AccountClient.changePasswordRequest(
             oldPassword = changePasswordData.oldPassword,
@@ -114,8 +108,7 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#get-user-details">API Doc</a>
      */
-    @CName("getUserDetails")
-    fun getUserDetails(callback: CStringCallback) = callback.handleCallback {
+    fun getUserDetails(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         AccountClient.getUserDetailsRequest()
     }
 
@@ -124,9 +117,8 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#update-user-details">API Doc</a>
      */
-    @CName("updateUserDetails")
-    fun updateUserDetails(data: String, callback: CStringCallback) {
-        callback.handleCallback {
+    fun updateUserDetails(data: String, requestId: Long = 0, callback: ResultCallback) {
+        callback.replyAsync(requestId) {
             val updateUserDetailsData = data.fromJson<UpdateUserDetailsData>()
             AccountClient.updateUserDetailsRequest(updateUserDetailsData.displayName)
         }
@@ -137,8 +129,7 @@ actual object AccountApi {
      *
      * @see <a href="https://developer.doordeck.com/docs/#delete-account">API Doc</a>
      */
-    @CName("deleteAccount")
-    fun deleteAccount(callback: CStringCallback) = callback.handleCallback {
+    fun deleteAccount(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         AccountClient.deleteAccountRequest()
     }
 }

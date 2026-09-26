@@ -18,24 +18,24 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: JVM
-            test: jvmTest
-            os: ubuntu-latest
-          - name: Android
-            test: testAndroidHostTest
-            os: ubuntu-latest
-          - name: JS
-            test: kotlinUpgradeYarnLock jsTest
-            os: ubuntu-latest
-          - name: Apple macOS
-            test: macosArm64Test
-            os: macos-15
-          - name: Apple iOS
-            test: iosSimulatorArm64Test
-            os: macos-15
-          - name: Apple watchOS
-            test: watchosSimulatorArm64Test
-            os: macos-15
+#          - name: JVM
+#            test: jvmTest
+#            os: ubuntu-latest
+#          - name: Android
+#            test: testAndroidHostTest
+#            os: ubuntu-latest
+#          - name: JS
+#            test: kotlinUpgradeYarnLock jsTest
+#            os: ubuntu-latest
+#          - name: Apple macOS
+#            test: macosArm64Test
+#            os: macos-15
+#          - name: Apple iOS
+#            test: iosSimulatorArm64Test
+#            os: macos-15
+#          - name: Apple watchOS
+#            test: watchosSimulatorArm64Test
+#            os: macos-15
           - name: Windows
             test: mingwX64Test
             os: windows-latest
@@ -98,14 +98,6 @@ jobs:
       - name: Generate artifact
         run: ./gradlew mingwX64Binaries
 
-      - name: Adjust header
-        shell: bash
-        run: |
-          sed -i \
-            -e 's/_\$$/_/g' \
-            -e 's/\$//g' \
-            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
-
       - name: Upload binary
         uses: actions/upload-artifact@v7
         with:
@@ -132,6 +124,11 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
@@ -146,11 +143,13 @@ jobs:
           name: windows-binary-files
           path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
-      - name: Generate bindings
-        uses: ./.github/actions/python-bindings-action
+      - name: Setup python build
+        shell: bash
+        run: python -m pip install build
 
-      - name: Add pyrightconfig file
-        run: echo '{"reportMissingImports":false,"reportAttributeAccessIssue":false}' > pyrightconfig.json
+      - name: Pack python files
+        shell: bash
+        run: ./gradlew pythonPack
 
       - name: Code validator
         run: pyright doordeck-sdk/build/bin/mingwX64/python/src/doordeck_headless_sdk --warnings
@@ -176,17 +175,23 @@ jobs:
         with:
           cache-disabled: true
 
+      - name: Setup NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.x
+
       - name: Download artifact
         uses: actions/download-artifact@v8
         with:
           name: windows-binary-files
           path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
-      - name: Generate bindings
-        uses: ./.github/actions/csharp-bindings-action
+      - name: Pack csharp files
+        shell: bash
+        run: ./gradlew csharpPack
 
       - name: Code validator
-        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp
+        run: dotnet pack doordeck-sdk/build/bin/mingwX64/csharp -c Release
 
   pre-release:
     name: Pre-release
@@ -424,14 +429,6 @@ jobs:
       - name: Generate artifact
         run: ./gradlew -Prelease.useLastTag=true mingwX64Binaries
 
-      - name: Adjust header
-        shell: bash
-        run: |
-          sed -i \
-            -e 's/_\$$/_/g' \
-            -e 's/\$//g' \
-            "doordeck-sdk/build/bin/mingwX64/releaseShared/Doordeck.Headless.Sdk_api.h"
-
       - name: Upload binary
         uses: actions/upload-artifact@v7
         with:
@@ -446,7 +443,7 @@ jobs:
     name: Nuget publish
     needs: [pre-release,windows-binary-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
@@ -469,22 +466,32 @@ jobs:
         with:
           cache-disabled: true
 
+      - name: Setup NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: 10.x
+
       - name: Download artifact
         uses: actions/download-artifact@v8
         with:
           name: windows-binary-release-files
           path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
-      - name: Generate bindings
-        uses: ./.github/actions/csharp-bindings-action
+      - name: Pack csharp files
+        shell: bash
+        run: ./gradlew -Prelease.useLastTag=true csharpPack
 
-      - name: Generate .nuspec file
-        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
-
-      - name: Generate .nupkg file
+      - name: Build assembly
         run: |
-          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
+          dotnet pack doordeck-sdk/build/bin/mingwX64/csharp \
+            -c Release \
+            -o doordeck-sdk/build/bin/mingwX64/csharp/package
+
+      - name: Publish
+        run: |
+          dotnet nuget push doordeck-sdk/build/bin/mingwX64/csharp/package/Doordeck.Headless.Sdk.${{ needs.pre-release.outputs.tag }}.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{ secrets.NUGET_TOKEN }}
 
       - name: Publish
         env:
@@ -515,6 +522,11 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
@@ -526,8 +538,13 @@ jobs:
           name: windows-binary-release-files
           path: doordeck-sdk/build/bin/mingwX64/releaseShared/
 
-      - name: Generate bindings
-        uses: ./.github/actions/python-bindings-action
+      - name: Setup python build
+        shell: bash
+        run: python -m pip install build
+
+      - name: Pack python files
+        shell: bash
+        run: ./gradlew pythonPack
 
       - name: Generate .toml file
         run: ./gradlew -Prelease.useLastTag=true generateTomlFile

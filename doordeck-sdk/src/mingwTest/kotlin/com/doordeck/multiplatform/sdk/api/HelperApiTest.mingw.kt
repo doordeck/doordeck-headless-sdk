@@ -18,7 +18,7 @@ class HelperApiTest : CallbackTest() {
     fun shouldGetServerTime() = runTest {
         // When
         val result = callbackApiCall<ResultData<BasicServerTimeResponse>> {
-            HelperApi.serverTime(TestCallback)
+            HelperApi.serverTime(callback = TestCallback)
         }.unwrap()
 
         // Then

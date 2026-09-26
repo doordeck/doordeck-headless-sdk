@@ -391,6 +391,15 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp/Doordeck.Headless.Sdk.csproj"))
             into(outputDir)
+            filter { line ->
+                line.replace("VERSION_PLACEHOLDER", "${project.version}")
+                    .replace("AUTHORS_PLACEHOLDER", nugetPublish.author)
+                    .replace("DESCRIPTION_PLACEHOLDER", nugetPublish.description)
+                    .replace("PROJECT_URL_PLACEHOLDER", nugetPublish.authorHomepage)
+                    .replace("REPOSITORY_URL_PLACEHOLDER", nugetPublish.gitRepository)
+                    .replace("TAGS_PLACEHOLDER", nugetPublish.tags.joinToString(";"))
+                    .replace("LICENSE_PLACEHOLDER", nugetPublish.licenseType)
+            }
         }
         // Copy csharp resources
         copy {
@@ -398,20 +407,6 @@ tasks.register("csharpPack").configure {
             into(file("$outputDir/${nugetPublish.packageName}"))
             include("**/*.cs")
         }
-    }
-}
-
-/**
- * Generates the .nuspec file, which is required to create the .nupkg file
- * needed for publishing a package to the NuGet repository.
- */
-tasks.register("generateNuspecFile").configure {
-    doLast {
-        // Define the output folder
-        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
-        // Create nuspec file
-        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
-        nuspecFile.writeText(nuspecTemplate.trim())
     }
 }
 
@@ -426,19 +421,17 @@ tasks.register("pythonPack").configure {
             from(rootProject.layout.projectDirectory.file("README.md"))
             into(outputDir)
         }
-        // Copy python resources
+        // Copy the python package
         copy {
-            from(file("$projectDir/src/mingwMain/resources/python"))
-            into(outputDir)
-            include("**/*.i")
+            from(file("$projectDir/src/mingwMain/resources/python/${pypiPublish.packageName}"))
+            into(file("$outputDir/src/${pypiPublish.packageName}"))
+            include("**/*.py")
         }
         // Copy mingwX64 dll
         copy {
             from(file("$projectDir/build/bin/mingwX64/releaseShared/${nugetPublish.packageName}.dll"))
             into(file("$outputDir/src/${pypiPublish.packageName}"))
         }
-        // Create empty __init__.py file
-        file("$outputDir/src/${pypiPublish.packageName}/__init__.py").createNewFile()
     }
 }
 
@@ -455,32 +448,6 @@ tasks.register("generateTomlFile").configure {
     }
 }
 
-private val nuspecTemplate = """
-<?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
-  <metadata>
-    <id>${nugetPublish.packageName}</id>
-    <version>${project.version}</version>
-    <authors>${nugetPublish.author}</authors>
-    <owners>${nugetPublish.author}</owners>
-    <description>${nugetPublish.description}</description>
-    <projectUrl>${nugetPublish.authorHomepage}</projectUrl>
-    <repository type="git" url="${nugetPublish.gitRepository}" />
-    <tags>${nugetPublish.tags.joinToString(" ")}</tags>
-    <license type="expression">${nugetPublish.licenseType}</license>
-    <readme>README.md</readme>
-    <dependencies>
-      <group targetFramework="net9.0" />
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="README.md" target="\" />
-    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="lib\net9.0\" />
-    <file src="${nugetPublish.packageName}\**\*" target="contentFiles\cs\any\${nugetPublish.packageName}\" />
-  </files>
-</package>
-"""
-
 val pypiTemplate = """
 [build-system]
 requires = ["setuptools"]
@@ -490,13 +457,17 @@ name = "${pypiPublish.packageName}"
 version = "${project.version}"
 description = "${pypiPublish.description}"
 readme = "README.md"
-requires-python = "==3.13.2"
-license = { file = "LICENSE.txt" }
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
 keywords = [${pypiPublish.keywords.joinToString(separator = ", ") { "\"$it\"" }}]
 authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: Microsoft :: Windows",
 ]
 [project.urls]
@@ -504,5 +475,5 @@ classifiers = [
 "Source" = "${pypiPublish.gitRepository}"
 "Issue tracker" = "${pypiPublish.issues}"
 [tool.setuptools]
-package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
+package-data = { "${pypiPublish.packageName}" = ["${nugetPublish.packageName}.dll"] }
 """.trimIndent()

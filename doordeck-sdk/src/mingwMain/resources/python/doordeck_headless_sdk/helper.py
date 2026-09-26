@@ -1,8 +1,16 @@
-%pythoncode %{
-class Helper(object):
+"""Generated from the SDK's API surface: each method names the operation it dispatches to."""
 
-    def __init__(self, resource):
-        self.resource = resource
+from __future__ import annotations
+
+from typing import List, Optional
+import json
+import typing
+
+from ._transport import call_async, call_sync
+from .utils import object_hook
+
+
+class Helper:
 
     async def upload_platform_logo(self, applicationId: str, contentType: str, image: str):
         data = {
@@ -10,27 +18,18 @@ class Helper(object):
             "contentType": contentType,
             "image": image
         }
-        return await execute_async(
-            _doordeck_headless_sdk.uploadPlatformLogo,
-            [self.resource, json.dumps(data)]
-        )
+        return await call_async("helper.uploadPlatformLogo", data)
 
     async def assisted_login(self, email: str, password: str):
         data = {
             "email": email,
             "password": password
         }
-        return await execute_async(
-            _doordeck_headless_sdk.assistedLogin,
-            [self.resource, json.dumps(data)]
-        )
+        return await call_async("helper.assistedLogin", data)
 
     async def assisted_register_ephemeral_key(self, publicKey: str, privateKey: str):
         data = { "publicKey": publicKey, "privateKey": privateKey }
-        return await execute_async(
-            _doordeck_headless_sdk.assistedRegisterEphemeralKey,
-            [self.resource, json.dumps(data)]
-        )
+        return await call_async("helper.assistedRegisterEphemeralKey", data)
 
     async def assisted_register(self, email: str, password: str, force: bool = False, displayName: typing.Optional[str] = None):
         data = {
@@ -39,14 +38,7 @@ class Helper(object):
             "displayName": displayName,
             "force": force
         }
-        return await execute_async(
-            _doordeck_headless_sdk.assistedRegister,
-            [self.resource, json.dumps(data)]
-        )
+        return await call_async("helper.assistedRegister", data)
 
     async def server_time(self):
-        return await execute_async(
-            _doordeck_headless_sdk.serverTime,
-            [self.resource]
-        )
-%}
+        return await call_async("helper.serverTime")

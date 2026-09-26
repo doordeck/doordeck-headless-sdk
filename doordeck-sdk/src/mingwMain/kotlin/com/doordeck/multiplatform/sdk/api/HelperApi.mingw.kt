@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CStringCallback
+import com.doordeck.multiplatform.sdk.ResultCallback
 import com.doordeck.multiplatform.sdk.clients.HelperClient
 import com.doordeck.multiplatform.sdk.model.data.AssistedLoginData
 import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterData
@@ -8,12 +8,11 @@ import com.doordeck.multiplatform.sdk.model.data.AssistedRegisterEphemeralKeyDat
 import com.doordeck.multiplatform.sdk.model.data.UploadPlatformLogoData
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.handleCallback
+import com.doordeck.multiplatform.sdk.util.replyAsync
 
 actual object HelperApi {
 
-    @CName("uploadPlatformLogo")
-    fun uploadPlatformLogo(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun uploadPlatformLogo(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val uploadPlatformLogoData = data.fromJson<UploadPlatformLogoData>()
         HelperClient.uploadPlatformLogoRequest(
             applicationId = uploadPlatformLogoData.applicationId,
@@ -22,8 +21,7 @@ actual object HelperApi {
         )
     }
 
-    @CName("assistedLogin")
-    fun assistedLogin(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun assistedLogin(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val assistedLoginData = data.fromJson<AssistedLoginData>()
         HelperClient.assistedLoginRequest(
             email = assistedLoginData.email,
@@ -31,8 +29,7 @@ actual object HelperApi {
         )
     }
 
-    @CName("assistedRegisterEphemeralKey")
-    fun assistedRegisterEphemeralKey(data: String? = null, callback: CStringCallback) = callback.handleCallback {
+    fun assistedRegisterEphemeralKey(data: String? = null, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val assistedRegisterEphemeralKeyData = data?.fromJson<AssistedRegisterEphemeralKeyData>()
         HelperClient.assistedRegisterEphemeralKeyRequest(
             publicKey = assistedRegisterEphemeralKeyData?.publicKey?.decodeBase64ToByteArray(),
@@ -40,8 +37,7 @@ actual object HelperApi {
         )
     }
 
-    @CName("assistedRegister")
-    fun assistedRegister(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun assistedRegister(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val assistedRegisterData = data.fromJson<AssistedRegisterData>()
         HelperClient.assistedRegisterRequest(
             email = assistedRegisterData.email,
@@ -51,8 +47,7 @@ actual object HelperApi {
         )
     }
 
-    @CName("serverTime")
-    fun serverTime(callback: CStringCallback) = callback.handleCallback {
+    fun serverTime(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         HelperClient.serverTimeRequest()
     }
 }
