@@ -421,19 +421,17 @@ tasks.register("pythonPack").configure {
             from(rootProject.layout.projectDirectory.file("README.md"))
             into(outputDir)
         }
-        // Copy python resources
+        // Copy the python package
         copy {
-            from(file("$projectDir/src/mingwMain/resources/python"))
-            into(outputDir)
-            include("**/*.i")
+            from(file("$projectDir/src/mingwMain/resources/python/${pypiPublish.packageName}"))
+            into(file("$outputDir/src/${pypiPublish.packageName}"))
+            include("**/*.py")
         }
         // Copy mingwX64 dll
         copy {
             from(file("$projectDir/build/bin/mingwX64/releaseShared/${nugetPublish.packageName}.dll"))
             into(file("$outputDir/src/${pypiPublish.packageName}"))
         }
-        // Create empty __init__.py file
-        file("$outputDir/src/${pypiPublish.packageName}/__init__.py").createNewFile()
     }
 }
 
@@ -459,13 +457,17 @@ name = "${pypiPublish.packageName}"
 version = "${project.version}"
 description = "${pypiPublish.description}"
 readme = "README.md"
-requires-python = "==3.13.2"
-license = { file = "LICENSE.txt" }
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
 keywords = [${pypiPublish.keywords.joinToString(separator = ", ") { "\"$it\"" }}]
 authors = [{ name = "${pypiPublish.author}", email = "${pypiPublish.authorEmail}" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: Microsoft :: Windows",
 ]
 [project.urls]
@@ -473,5 +475,5 @@ classifiers = [
 "Source" = "${pypiPublish.gitRepository}"
 "Issue tracker" = "${pypiPublish.issues}"
 [tool.setuptools]
-package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
+package-data = { "${pypiPublish.packageName}" = ["${nugetPublish.packageName}.dll"] }
 """.trimIndent()
