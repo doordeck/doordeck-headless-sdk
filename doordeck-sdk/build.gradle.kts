@@ -391,7 +391,15 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp/Doordeck.Headless.Sdk.csproj"))
             into(outputDir)
-            filter { line -> line.replace("VERSION_PLACEHOLDER", "${project.version}") }
+            filter { line ->
+                line.replace("VERSION_PLACEHOLDER", "${project.version}")
+                    .replace("AUTHORS_PLACEHOLDER", nugetPublish.author)
+                    .replace("DESCRIPTION_PLACEHOLDER", nugetPublish.description)
+                    .replace("PROJECT_URL_PLACEHOLDER", nugetPublish.authorHomepage)
+                    .replace("REPOSITORY_URL_PLACEHOLDER", nugetPublish.gitRepository)
+                    .replace("TAGS_PLACEHOLDER", nugetPublish.tags.joinToString(";"))
+                    .replace("LICENSE_PLACEHOLDER", nugetPublish.licenseType)
+            }
         }
         // Copy csharp resources
         copy {
@@ -399,20 +407,6 @@ tasks.register("csharpPack").configure {
             into(file("$outputDir/${nugetPublish.packageName}"))
             include("**/*.cs")
         }
-    }
-}
-
-/**
- * Generates the .nuspec file, which is required to create the .nupkg file
- * needed for publishing a package to the NuGet repository.
- */
-tasks.register("generateNuspecFile").configure {
-    doLast {
-        // Define the output folder
-        val outputDir = file("$projectDir/build/bin/mingwX64/csharp")
-        // Create nuspec file
-        val nuspecFile = file("$outputDir/${nugetPublish.packageName}.nuspec")
-        nuspecFile.writeText(nuspecTemplate.trim())
     }
 }
 
@@ -455,32 +449,6 @@ tasks.register("generateTomlFile").configure {
         setupFile.writeText(pypiTemplate.trim())
     }
 }
-
-private val nuspecTemplate = """
-<?xml version="1.0"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/01/nuspec.xsd">
-  <metadata>
-    <id>${nugetPublish.packageName}</id>
-    <version>${project.version}</version>
-    <authors>${nugetPublish.author}</authors>
-    <owners>${nugetPublish.author}</owners>
-    <description>${nugetPublish.description}</description>
-    <projectUrl>${nugetPublish.authorHomepage}</projectUrl>
-    <repository type="git" url="${nugetPublish.gitRepository}" />
-    <tags>${nugetPublish.tags.joinToString(" ")}</tags>
-    <license type="expression">${nugetPublish.licenseType}</license>
-    <readme>README.md</readme>
-    <dependencies>
-      <group targetFramework="net10.0" />
-    </dependencies>
-  </metadata>
-  <files>
-    <file src="README.md" target="\" />
-    <file src="bin\Release\net10.0\${nugetPublish.packageName}.dll" target="lib\net10.0\" />
-    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="runtimes\win-x64\native\" />
-  </files>
-</package>
-"""
 
 val pypiTemplate = """
 [build-system]

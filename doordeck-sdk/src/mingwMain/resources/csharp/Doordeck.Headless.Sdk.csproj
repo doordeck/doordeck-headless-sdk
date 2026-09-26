@@ -4,9 +4,27 @@
         <PackageId>Doordeck.Headless.Sdk</PackageId>
         <AssemblyName>Doordeck.Headless.Sdk</AssemblyName>
         <RootNamespace>Doordeck.Headless.Sdk</RootNamespace>
-        <Version>VERSION_PLACEHOLDER</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <Version>VERSION_PLACEHOLDER</Version>
+        <Authors>AUTHORS_PLACEHOLDER</Authors>
+        <Description>DESCRIPTION_PLACEHOLDER</Description>
+        <PackageProjectUrl>PROJECT_URL_PLACEHOLDER</PackageProjectUrl>
+        <RepositoryUrl>REPOSITORY_URL_PLACEHOLDER</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>TAGS_PLACEHOLDER</PackageTags>
+        <PackageLicenseExpression>LICENSE_PLACEHOLDER</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+        <None Include="..\releaseShared\Doordeck.Headless.Sdk.dll"
+              Pack="true"
+              PackagePath="runtimes\win-x64\native\" />
+    </ItemGroup>
 </Project>

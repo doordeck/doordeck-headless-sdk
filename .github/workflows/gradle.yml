@@ -184,7 +184,7 @@ jobs:
         run: ./gradlew csharpPack
 
       - name: Code validator
-        run: dotnet build doordeck-sdk/build/bin/mingwX64/csharp -c Release
+        run: dotnet pack doordeck-sdk/build/bin/mingwX64/csharp -c Release
 
   pre-release:
     name: Pre-release
@@ -474,13 +474,17 @@ jobs:
         shell: bash
         run: ./gradlew -Prelease.useLastTag=true csharpPack
 
-      - name: Generate .nuspec file
-        run: ./gradlew -Prelease.useLastTag=true generateNuspecFile
-
-      - name: Generate .nupkg file
+      - name: Build assembly
         run: |
-          nuget pack doordeck-sdk/build/bin/mingwX64/csharp/Doordeck.Headless.Sdk.nuspec \
-            -OutputDirectory doordeck-sdk/build/bin/mingwX64/csharp/
+          dotnet pack doordeck-sdk/build/bin/mingwX64/csharp \
+            -c Release \
+            -o doordeck-sdk/build/bin/mingwX64/csharp/package
+
+      - name: Publish
+        run: |
+          dotnet nuget push doordeck-sdk/build/bin/mingwX64/csharp/package/Doordeck.Headless.Sdk.${{ needs.pre-release.outputs.tag }}.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{ secrets.NUGET_TOKEN }}
 
       - name: Publish
         env:
