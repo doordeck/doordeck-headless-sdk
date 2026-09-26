@@ -472,7 +472,7 @@ jobs:
 
       - name: Pack csharp files
         shell: bash
-        run: ./gradlew csharpPack
+        run: ./gradlew -Prelease.useLastTag=true csharpPack
 
       - name: Generate .nuspec file
         run: ./gradlew -Prelease.useLastTag=true generateNuspecFile

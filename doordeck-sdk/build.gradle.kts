@@ -391,6 +391,7 @@ tasks.register("csharpPack").configure {
         copy {
             from(file("$projectDir/src/mingwMain/resources/csharp/Doordeck.Headless.Sdk.csproj"))
             into(outputDir)
+            filter { line -> line.replace("VERSION_PLACEHOLDER", "${project.version}") }
         }
         // Copy csharp resources
         copy {
@@ -470,13 +471,13 @@ private val nuspecTemplate = """
     <license type="expression">${nugetPublish.licenseType}</license>
     <readme>README.md</readme>
     <dependencies>
-      <group targetFramework="net9.0" />
+      <group targetFramework="net10.0" />
     </dependencies>
   </metadata>
   <files>
     <file src="README.md" target="\" />
-    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="lib\net9.0\" />
-    <file src="${nugetPublish.packageName}\**\*" target="contentFiles\cs\any\${nugetPublish.packageName}\" />
+    <file src="bin\Release\net10.0\${nugetPublish.packageName}.dll" target="lib\net10.0\" />
+    <file src="..\releaseShared\${nugetPublish.packageName}.dll" target="runtimes\win-x64\native\" />
   </files>
 </package>
 """
