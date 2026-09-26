@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import typing
+
 
 class ISecureStorage:
     def set_api_environment(self, api_environment: str) -> None:

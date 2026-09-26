@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import typing
+import uuid
 from dataclasses import dataclass, field
 
 from .utils import current_epoch_millis

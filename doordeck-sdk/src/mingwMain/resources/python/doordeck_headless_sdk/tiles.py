@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
+from typing import List, Optional
 import json
-import typing
 
 from ._transport import call_async, call_sync
 from .utils import object_hook

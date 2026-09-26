@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+from typing import List, Optional
+import dataclasses
 import json
 import typing
 
 from ._transport import call_async, call_sync
 from .utils import object_hook
+from .models import AuthKey, CreateApplication, EmailPreferences
 
 
 class Platform:

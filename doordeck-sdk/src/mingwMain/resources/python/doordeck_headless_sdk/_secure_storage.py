@@ -11,6 +11,7 @@ import ctypes
 from typing import Any
 
 from . import _transport
+from .errors import SdkException
 
 # Entry names agreed with SecureStorageKeys on the Kotlin side.
 API_ENVIRONMENT = "apiEnvironment"
@@ -129,13 +130,20 @@ _get_entry_callback = _GET_ENTRY(_get_entry)
 _clear_entries_callback = _CLEAR_ENTRIES(_clear_entries)
 
 
+def _address_of(callback: Any) -> int:
+    address = ctypes.cast(callback, ctypes.c_void_p).value
+    if address is None:
+        raise SdkException("Could not take the address of a secure storage callback")
+    return address
+
+
 def register(implementation: Any) -> None:
     """Hands `implementation` to the SDK. Must be called before initialising it, because
     initialisation reads the storage to restore any previously stored context."""
     global _implementation
     _implementation = implementation
     _transport.register_secure_storage(
-        ctypes.cast(_set_entry_callback, ctypes.c_void_p).value,
-        ctypes.cast(_get_entry_callback, ctypes.c_void_p).value,
-        ctypes.cast(_clear_entries_callback, ctypes.c_void_p).value,
+        _address_of(_set_entry_callback),
+        _address_of(_get_entry_callback),
+        _address_of(_clear_entries_callback),
     )
