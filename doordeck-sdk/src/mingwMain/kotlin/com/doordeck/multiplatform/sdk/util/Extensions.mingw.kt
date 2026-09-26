@@ -40,9 +40,10 @@ internal inline fun <reified T> emit(id: Long, cb: ResultCallback?, outcome: Res
     val json = outcome.fold(
         onSuccess = { ResultData(SuccessResultData(it.takeIf { v -> v != Unit })) },
         onFailure = {
-            // Same fallback chain handleCallback used: a wrapped exception often carries its
-            // detail on the cause rather than on itself.
-            ResultData(failure = FailedResultData(it.toString(), it.message ?: it.cause?.message ?: "Unknown error occurred"))
+            ResultData(failure = FailedResultData(
+                exceptionType = it.toString(),
+                exceptionMessage = it.message ?: it.cause?.message ?: "Unknown error occurred"
+            ))
         }
     ).toJson()
     cb?.let { memScoped { it.invoke(id, json.cstr.ptr) } }

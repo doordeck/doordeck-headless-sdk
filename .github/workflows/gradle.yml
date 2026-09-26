@@ -436,7 +436,7 @@ jobs:
     name: Nuget publish
     needs: [pre-release,windows-binary-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash

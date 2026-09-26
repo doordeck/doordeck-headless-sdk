@@ -23,7 +23,7 @@ internal actual fun createSecureStorage(applicationContext: ApplicationContext?)
  * Names of the entries exchanged with a host provided secure storage. The host stores opaque strings
  * against these names; all typing, encoding and validation stays on this side.
  */
-object SecureStorageKeys {
+internal object SecureStorageKeys {
     const val API_ENVIRONMENT = "apiEnvironment"
     const val CLOUD_AUTH_TOKEN = "cloudAuthToken"
     const val CLOUD_REFRESH_TOKEN = "cloudRefreshToken"
