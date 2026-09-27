@@ -74,4 +74,5 @@ actual object HelperApi {
 /**
  * Defines the platform-specific implementation of [HelperApi]
  */
+@HiddenFromObjC
 actual fun helper(): HelperApi = HelperApi

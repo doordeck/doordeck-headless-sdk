@@ -131,8 +131,8 @@ kotlin {
         }
         browser {
             testTask {
-                useMocha {
-                    timeout = "60s"
+                useKarma {
+                    useChromeHeadless()
                 }
             }
             webpackTask {
@@ -146,6 +146,7 @@ kotlin {
         compilerOptions {
             freeCompilerArgs.add("-Xes-long-as-bigint")
             freeCompilerArgs.add("-XXLanguage:+JsAllowLongInExportedDeclarations")
+            freeCompilerArgs.add("-XXLanguage:+JsAllowExportingSuspendFunctions")
         }
 
         // Add the necessary fields to the package.json file
@@ -182,6 +183,7 @@ kotlin {
                 optIn("kotlin.time.ExperimentalTime")
                 optIn("kotlin.js.ExperimentalJsCollectionsApi")
                 optIn("kotlin.js.ExperimentalWasmJsInterop")
+                optIn("kotlin.experimental.ExperimentalObjCRefinement")
             }
         }
 

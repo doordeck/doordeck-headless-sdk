@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture
 
 object KDoordeckFactory {
 
+    @JvmSynthetic
     suspend fun initialize(sdkConfig: SdkConfig): Doordeck =
         DoordeckFactory.initialize(sdkConfig.toBasicSdkConfig())
 

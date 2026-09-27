@@ -18,6 +18,7 @@ actual object SitesApi {
     /**
      * @see SitesClient.listSitesRequest
      */
+    @JvmSynthetic
     suspend fun listSites(): List<SiteResponse> = SitesClient
         .listSitesRequest()
         .toSiteResponse()
@@ -32,6 +33,7 @@ actual object SitesApi {
     /**
      * @see SitesClient.getLocksForSiteRequest
      */
+    @JvmSynthetic
     suspend fun getLocksForSite(siteId: UUID): List<SiteLocksResponse> = SitesClient
         .getLocksForSiteRequest(siteId.toString())
         .toLockResponse()
@@ -46,6 +48,7 @@ actual object SitesApi {
     /**
      * @see SitesClient.getUsersForSiteRequest
      */
+    @JvmSynthetic
     suspend fun getUsersForSite(siteId: UUID): List<UserForSiteResponse> = SitesClient
         .getUsersForSiteRequest(siteId.toString())
         .toUserForSiteResponse()

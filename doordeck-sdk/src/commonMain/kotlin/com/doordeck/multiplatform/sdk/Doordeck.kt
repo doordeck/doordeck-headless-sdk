@@ -19,39 +19,30 @@ interface Doordeck {
     @CName("contextManager")
     fun contextManager(): ContextManager
 
-    @JsExport.Ignore
     @CName("accountless")
     fun accountless(): AccountlessApi
 
-    @JsExport.Ignore
     @CName("account")
     fun account(): AccountApi
 
-    @JsExport.Ignore
     @CName("sites")
     fun sites(): SitesApi
 
-    @JsExport.Ignore
     @CName("tiles")
     fun tiles(): TilesApi
 
-    @JsExport.Ignore
     @CName("lockOperations")
     fun lockOperations(): LockOperationsApi
 
-    @JsExport.Ignore
     @CName("platform")
     fun platform(): PlatformApi
 
-    @JsExport.Ignore
     @CName("fusion")
     fun fusion(): FusionApi
 
-    @JsExport.Ignore
     @CName("helper")
     fun helper(): HelperApi
 
-    @JsExport.Ignore
     @CName("crypto")
     fun crypto(): CryptoManager
 

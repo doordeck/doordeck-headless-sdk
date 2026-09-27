@@ -67,4 +67,5 @@ actual object AccountlessApi {
 /**
  * Defines the platform-specific implementation of [AccountlessApi]
  */
+@HiddenFromObjC
 actual fun accountless(): AccountlessApi = AccountlessApi

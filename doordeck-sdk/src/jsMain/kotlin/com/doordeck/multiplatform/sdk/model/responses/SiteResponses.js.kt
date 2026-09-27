@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.model.responses
 
 import com.doordeck.multiplatform.sdk.util.toJsArray
 import kotlin.js.collections.JsArray
-import kotlin.js.collections.JsReadonlyArray
 
 @JsExport
 data class SiteResponse(

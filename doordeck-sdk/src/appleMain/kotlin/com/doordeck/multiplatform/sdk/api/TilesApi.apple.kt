@@ -34,4 +34,5 @@ actual object TilesApi {
 /**
  * Defines the platform-specific implementation of [TilesApi]
  */
+@HiddenFromObjC
 actual fun tiles(): TilesApi = TilesApi

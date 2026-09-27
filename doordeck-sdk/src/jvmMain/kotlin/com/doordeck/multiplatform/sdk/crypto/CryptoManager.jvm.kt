@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPrivateKey
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager.toPlatformPublicKey
@@ -18,7 +19,6 @@ import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.spec.X509EncodedKeySpec
-import kotlin.time.Clock
 import kotlin.time.toKotlinInstant
 
 /**
@@ -104,7 +104,7 @@ actual object CryptoManager {
                 return true
             }
             SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
-            return Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+            return SystemClock.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
         } catch (exception: Exception) {
             SdkLogger.e(exception) { "Failed to parse the certificate" }
             true

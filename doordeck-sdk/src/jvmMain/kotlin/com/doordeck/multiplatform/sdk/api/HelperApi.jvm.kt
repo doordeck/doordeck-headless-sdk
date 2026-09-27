@@ -8,6 +8,8 @@ import com.doordeck.multiplatform.sdk.model.responses.toAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.toAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.toServerTimeResponse
 import com.doordeck.multiplatform.sdk.util.completableFuture
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.InputStream
 import java.security.KeyPair
 import java.util.UUID
@@ -20,12 +22,16 @@ actual object HelperApi {
     /**
      * @see HelperClient.uploadPlatformLogoRequest
      */
-    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) = HelperClient
-        .uploadPlatformLogoRequest(
-            applicationId = applicationId.toString(),
-            contentType = contentType,
-            image = image.readBytes()
-        )
+    @JvmSynthetic
+    suspend fun uploadPlatformLogo(applicationId: UUID, contentType: String, image: InputStream) {
+        val imageBytes = withContext(Dispatchers.IO) { image.use { it.readBytes() } }
+        return HelperClient
+            .uploadPlatformLogoRequest(
+                applicationId = applicationId.toString(),
+                contentType = contentType,
+                image = imageBytes
+            )
+    }
 
     /**
      * Async variant of [HelperApi.uploadPlatformLogo] returning [CompletableFuture].
@@ -45,6 +51,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedLoginRequest
      */
+    @JvmSynthetic
     suspend fun assistedLogin(email: String, password: String): AssistedLoginResponse = HelperClient
         .assistedLoginRequest(
             email = email,
@@ -68,7 +75,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterEphemeralKeyRequest
      */
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun assistedRegisterEphemeralKey(
         keyPair: KeyPair? = null
     ): AssistedRegisterEphemeralKeyResponse = HelperClient
@@ -91,7 +98,7 @@ actual object HelperApi {
     /**
      * @see HelperClient.assistedRegisterRequest
      */
-    @JvmOverloads
+    @JvmSynthetic
     suspend fun assistedRegister(
         email: String,
         password: String,
@@ -122,6 +129,7 @@ actual object HelperApi {
         )
     }
 
+    @JvmSynthetic
     suspend fun serverTime(): ServerTimeResponse = HelperClient
         .serverTimeRequest()
         .toServerTimeResponse()

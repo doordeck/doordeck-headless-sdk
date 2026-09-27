@@ -43,7 +43,9 @@ import com.doordeck.multiplatform.sdk.model.data.FusionOperations.PaxtonNet2Cont
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.TdsiGardisController
 import com.doordeck.multiplatform.sdk.model.data.FusionOperations.ZktecoController
 import com.doordeck.multiplatform.sdk.util.toJsArray
+import com.doordeck.multiplatform.sdk.util.toJsMap
 import kotlin.js.collections.JsArray
+import kotlin.js.collections.JsMap
 
 typealias LockControllerResponse = FusionOperations.LockController
 
@@ -84,7 +86,7 @@ data class ServiceStateResponse(
 @JsExport
 data class DiscoveredDeviceResponse(
     val key: LockControllerResponse,
-    val metadata: Map<String, String>
+    val metadata: JsMap<String, String>
 )
 
 internal fun BasicFusionLoginResponse.toFusionLoginResponse(): FusionLoginResponse = FusionLoginResponse(
@@ -119,7 +121,7 @@ internal fun BasicServiceStateResponse.toServiceStateResponse(): ServiceStateRes
 
 internal fun BasicDiscoveredDeviceResponse.toDiscoveredDeviceResponse(): DiscoveredDeviceResponse = DiscoveredDeviceResponse(
     key = key.toLockControllerResponse(),
-    metadata = metadata
+    metadata = metadata.toJsMap()
 )
 
 internal fun BasicLockController.toLockControllerResponse(): LockControllerResponse = when(this) {

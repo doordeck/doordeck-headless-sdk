@@ -263,9 +263,9 @@ actual object PlatformApi {
         lastUserRetrieved: NSUUID? = null
     ): List<ApplicationUserResponse> = PlatformClient
         .getApplicationUsersRequest(
-            applicationId = applicationId.toString(),
+            applicationId = applicationId.UUIDString,
             pageSize = pageSize,
-            lastUserRetrieved = lastUserRetrieved?.toString()
+            lastUserRetrieved = lastUserRetrieved?.UUIDString
         )
         .toApplicationUserResponse()
 }
@@ -273,4 +273,5 @@ actual object PlatformApi {
 /**
  * Defines the platform-specific implementation of [PlatformApi]
  */
+@HiddenFromObjC
 actual fun platform(): PlatformApi = PlatformApi

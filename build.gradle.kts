@@ -6,8 +6,8 @@ plugins {
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.buildkonfig).apply(false)
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
-    id("com.netflix.nebula.release") version "21.0.1"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
+    id("com.netflix.nebula.release") version "21.1.3"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.2"
 }
 
 group = "com.doordeck"
@@ -30,10 +30,7 @@ nexusPublishing {
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
         resolution("ws", "8.21.0")
-        resolution("uuid", "11.1.1")
         resolution("serialize-javascript", "7.0.5")
         resolution("diff", "8.0.3")
-        resolution("webpack", "5.104.0")
-        resolution("webpack-dev-server", "5.2.4")
     }
 }

@@ -8,13 +8,16 @@ import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.JAVA_PUBLIC_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PRIVATE_KEY
 import com.doordeck.multiplatform.sdk.TestKeyConstants.SODIUM_PUBLIC_KEY
+import com.doordeck.multiplatform.sdk.crypto.CryptoManager.verifySignature
 import com.doordeck.multiplatform.sdk.jsmodule.Sodium
+import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class JsCryptoManagerTest {
@@ -89,5 +92,19 @@ class JsCryptoManagerTest {
         assertTrue {
             KeyPairUtils.isKeyPairValid(result.public, result.private)
         }
+    }
+
+    @Test
+    fun verifySignatureShouldReturnFalseOnLibsodiumError() = runTest {
+        // Given
+        val cryptoManager = CryptoManager
+        val publicKey = cryptoManager.generateKeyPair().public
+        val malformedSignature = ByteArray(SODIUM_PRIVATE_KEY_SIZE - 1)
+
+        // When
+        val result = malformedSignature.verifySignature(publicKey, randomString())
+
+        // Then
+        assertFalse { result }
     }
 }

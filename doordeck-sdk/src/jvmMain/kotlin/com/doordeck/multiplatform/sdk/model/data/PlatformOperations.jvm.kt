@@ -41,9 +41,9 @@ object PlatformOperations {
 
             fun build(): CreateApplication {
                 return CreateApplication(
-                    name = requireNotNull(name),
-                    companyName = requireNotNull(companyName),
-                    mailingAddress = requireNotNull(mailingAddress),
+                    name = requireNotNull(name) { "name is required" },
+                    companyName = requireNotNull(companyName) { "companyName is required" },
+                    mailingAddress = requireNotNull(mailingAddress) { "mailingAddress is required" },
                     privacyPolicy = privacyPolicy,
                     supportContact = supportContact,
                     appLink = appLink,
@@ -106,9 +106,9 @@ object PlatformOperations {
 
             fun build(): EmailCallToAction {
                 return EmailCallToAction(
-                    actionTarget = requireNotNull(actionTarget),
-                    headline = requireNotNull(headline),
-                    actionText = requireNotNull(actionText),
+                    actionTarget = requireNotNull(actionTarget) { "actionTarget is required" },
+                    headline = requireNotNull(headline) { "headline is required" },
+                    actionText = requireNotNull(actionText) { "actionText is required" },
                 )
             }
         }

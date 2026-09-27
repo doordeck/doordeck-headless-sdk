@@ -15,6 +15,7 @@ actual object TilesApi {
     /**
      * @see TilesClient.getLocksBelongingToTileRequest
      */
+    @JvmSynthetic
     suspend fun getLocksBelongingToTile(tileId: UUID): TileLocksResponse = TilesClient
         .getLocksBelongingToTileRequest(tileId.toString())
         .toTileLocksResponse()
@@ -30,6 +31,7 @@ actual object TilesApi {
      * @see TilesClient.associateMultipleLocksRequest
      */
     @SiteAdmin
+    @JvmSynthetic
     suspend fun associateMultipleLocks(tileId: UUID, siteId: UUID, lockIds: List<UUID>) = TilesClient
         .associateMultipleLocksRequest(
             tileId = tileId.toString(),

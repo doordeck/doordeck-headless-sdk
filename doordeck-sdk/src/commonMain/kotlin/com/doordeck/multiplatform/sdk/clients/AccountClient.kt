@@ -255,10 +255,11 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun deleteAccountRequest() {
-        try {
-            CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
-        } finally {
-            Context.reset()
-        }
+        // Reset ONLY on success, unlike logoutRequest: a failed DELETE means the account still
+        // exists, and wiping the local context there leaves the caller signed out of an account
+        // it still has, with no tokens to retry the delete with. Logout wants the opposite —
+        // local sign-out has to happen whether or not the server was reachable.
+        CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
+        Context.reset()
     }
 }

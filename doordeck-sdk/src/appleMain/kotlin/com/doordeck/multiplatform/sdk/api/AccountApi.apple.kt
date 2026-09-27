@@ -117,4 +117,5 @@ actual object AccountApi {
 /**
  * Defines the platform-specific implementation of [AccountApi]
  */
+@HiddenFromObjC
 actual fun account(): AccountApi = AccountApi

@@ -8,7 +8,6 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomUuidString
-import kotlinx.coroutines.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -21,7 +20,7 @@ class AccountlessApiTest : IntegrationTest() {
     @Test
     fun shouldLogin() = runTest {
         // When
-        val response = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+        val response = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
         assertTrue { response.authToken.isNotEmpty() }
@@ -38,7 +37,7 @@ class AccountlessApiTest : IntegrationTest() {
         val keyPair = CryptoManager.generateKeyPair()
 
         // When
-        val response = AccountlessApi.registration(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false, keyPair.public).await()
+        val response = AccountlessApi.registration(newUserEmail, TEST_MAIN_USER_PASSWORD, null, false, keyPair.public)
 
         // When
         assertTrue { response.authToken.isNotEmpty() }
@@ -49,7 +48,7 @@ class AccountlessApiTest : IntegrationTest() {
 
         // Given - shouldDelete
         // When
-        AccountApi.deleteAccount().await()
+        AccountApi.deleteAccount()
 
         // Then
         assertNull(ContextManager.getCloudAuthToken())
@@ -60,7 +59,7 @@ class AccountlessApiTest : IntegrationTest() {
         assertNull(ContextManager.getCertificateChain())
         assertNull(ContextManager.getKeyPair())
         val exception = assertFailsWith<UnauthorizedException> {
-            AccountlessApi.login(newUserEmail, TEST_MAIN_USER_PASSWORD).await()
+            AccountlessApi.login(newUserEmail, TEST_MAIN_USER_PASSWORD)
         }
         assertEquals("API call failed with: HTTP 401 Unauthorized", exception.message)
     }

@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.jsmodule.ASN1
 import com.doordeck.multiplatform.sdk.jsmodule.PKI
@@ -14,7 +15,6 @@ import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.await
 import org.khronos.webgl.Uint8Array
 import kotlin.js.Date
-import kotlin.time.Clock
 import kotlin.time.Instant
 
 /**
@@ -55,7 +55,7 @@ actual object CryptoManager {
         certificate.fromSchema(asn1.result)
         val notAfterInstant = Instant.parse(Date(certificate.notAfter.value.toString()).toISOString())
         SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
-        Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+        SystemClock.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
     } catch (exception: Throwable) {
         SdkLogger.e(exception) { "Failed to parse the certificate" }
         true
@@ -101,7 +101,7 @@ actual object CryptoManager {
             message = toByteArray().toUint8Array(),
             privateKey = privateKey.toPlatformPrivateKey().toUint8Array()
         ).toByteArray()
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         throw SdkException("Failed to sign with private key", exception)
     }
 
@@ -115,11 +115,8 @@ actual object CryptoManager {
             message = message.toByteArray().toUint8Array(),
             publicKey = publicKey.toPlatformPublicKey().toUint8Array()
         )
-    } catch (exception: Exception) {
+    } catch (exception: Throwable) {
         SdkLogger.e(exception) { "Failed to verify signature" }
         false
     }
 }
-
-@JsExport
-fun crypto(): CryptoManager = CryptoManager

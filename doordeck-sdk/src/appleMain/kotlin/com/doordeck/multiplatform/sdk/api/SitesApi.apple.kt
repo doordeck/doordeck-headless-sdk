@@ -41,4 +41,5 @@ actual object SitesApi {
 /**
  * Defines the platform-specific implementation of [SitesApi]
  */
+@HiddenFromObjC
 actual fun sites(): SitesApi = SitesApi
