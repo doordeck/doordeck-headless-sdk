@@ -90,7 +90,6 @@ kotlin {
         watchos = libs.versions.watchos.min.sdk.get().toInt(),
     )
 
-
     val xcf = XCFramework(spmPublish.packageName)
     val appleTargets = listOf(
         iosArm64(), iosSimulatorArm64(),                                // iOS
@@ -505,156 +504,64 @@ classifiers = [
 package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
 """.trimIndent()
 
-private data class AppleTargetSpec(
-    val sdk: String,
-    val triple: String,
-    val platformDir: String
-)
+private data class SwiftTarget(val sdk: String, val triple: String)
 
-private fun specFor(target: KotlinNativeTarget, v: AppleMinVersions): AppleTargetSpec =
-    when (target.konanTarget) {
-        KonanTarget.IOS_ARM64 ->
-            AppleTargetSpec("iphoneos", "arm64-apple-ios${v.ios}.0", "iphoneos")
-        KonanTarget.IOS_SIMULATOR_ARM64 ->
-            AppleTargetSpec("iphonesimulator", "arm64-apple-ios${v.ios}.0-simulator", "iphonesimulator")
-        KonanTarget.MACOS_ARM64 ->
-            AppleTargetSpec("macosx", "arm64-apple-macos${v.macos}.0", "macosx")
-        KonanTarget.WATCHOS_ARM64 -> // ARM64_32, Series 4–8
-            AppleTargetSpec("watchos", "arm64_32-apple-watchos${v.watchos}.0", "watchos")
-        KonanTarget.WATCHOS_DEVICE_ARM64 -> { // true ARM64 needs watchOS ≥ 10
-            val w = maxOf(v.watchos, 10)
-            AppleTargetSpec("watchos", "arm64-apple-watchos${w}.0", "watchos")
-        }
-        KonanTarget.WATCHOS_SIMULATOR_ARM64 ->
-            AppleTargetSpec("watchsimulator", "arm64-apple-watchos${v.watchos}.0-simulator", "watchsimulator")
-        else -> error("Unsupported Apple target: ${target.konanTarget}")
-    }
+private fun swiftTargetFor(t: KotlinNativeTarget, v: AppleMinVersions) = when (t.konanTarget) {
+    KonanTarget.IOS_ARM64               -> SwiftTarget("iphoneos",       "arm64-apple-ios${v.ios}.0")
+    KonanTarget.IOS_SIMULATOR_ARM64     -> SwiftTarget("iphonesimulator","arm64-apple-ios${v.ios}.0-simulator")
+    KonanTarget.MACOS_ARM64             -> SwiftTarget("macosx",         "arm64-apple-macos${v.macos}.0")
+    KonanTarget.WATCHOS_ARM64           -> SwiftTarget("watchos",        "arm64_32-apple-watchos${v.watchos}.0")
+    KonanTarget.WATCHOS_DEVICE_ARM64    -> SwiftTarget("watchos",        "arm64-apple-watchos${maxOf(v.watchos,10)}.0")
+    KonanTarget.WATCHOS_SIMULATOR_ARM64 -> SwiftTarget("watchsimulator", "arm64-apple-watchos${v.watchos}.0-simulator")
+    else -> error("Unsupported Apple target: ${t.konanTarget}")
+}
 
-private fun Project.runCommand(vararg cmd: String): String =
-    providers.exec {
-        commandLine(*cmd)
-    }.standardOutput.asText.get().trim()
+private fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions) {
+    val spec   = swiftTargetFor(target, v)
+    val module = "KCryptoKit"
+    val src    = layout.projectDirectory.file("native/$module/$module.swift")
+    val outDir = layout.buildDirectory.dir("kcryptokit/${target.name}")
 
-fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions) {
-    println("Configuring swift bridge for ${target.konanTarget.name}")
-    val spec = specFor(target, v)
+    val compile = tasks.register<Exec>("compileSwift${target.name.replaceFirstChar(Char::titlecase)}") {
+        val out       = outDir.get().asFile
+        val header    = File(out, "$module-Swift.h")
+        val lib       = File(out, "lib$module.a")
+        val modulemap = File(out, "module.modulemap")
+        val def       = File(out, "$module.def")
 
-    val swiftBin = runCommand("xcrun", "--find", "swift")
-    val swiftLibsRoot = swiftBin.removeSuffix("/usr/bin/swift") + "/usr/lib/swift"
-    val swiftRuntime = "$swiftLibsRoot/${spec.platformDir}"
-    val sdkPath = runCommand("xcrun", "--sdk", spec.sdk, "--show-sdk-path")
-    val sdkVersion = runCommand("xcrun", "--sdk", spec.sdk, "--show-sdk-version")
+        inputs.file(src)
+        inputs.property("triple", spec.triple)
+        outputs.files(header, lib, modulemap, def)
 
-    // Package the generated cinterop bindings land in; must match the Kotlin import
-    val cinteropPackage = "com.doordeck.multiplatform.sdk.kcryptokit"
-
-    // Deployment target + ld64 platform name for the -platform_version load command
-    val minOs = when (target.konanTarget) {
-        KonanTarget.MACOS_ARM64, KonanTarget.MACOS_X64 -> v.macos
-        KonanTarget.WATCHOS_DEVICE_ARM64 -> maxOf(v.watchos, 10)
-        KonanTarget.WATCHOS_ARM64, KonanTarget.WATCHOS_SIMULATOR_ARM64, KonanTarget.WATCHOS_X64 -> v.watchos
-        else -> v.ios
-    }
-    val linkerPlatform = when (target.konanTarget) {
-        KonanTarget.MACOS_ARM64, KonanTarget.MACOS_X64 -> "macos"
-        KonanTarget.IOS_ARM64 -> "ios"
-        KonanTarget.IOS_SIMULATOR_ARM64, KonanTarget.IOS_X64 -> "ios-simulator"
-        KonanTarget.WATCHOS_ARM64, KonanTarget.WATCHOS_DEVICE_ARM64 -> "watchos"
-        KonanTarget.WATCHOS_SIMULATOR_ARM64, KonanTarget.WATCHOS_X64 -> "watchos-simulator"
-        else -> error("Unsupported Apple target: ${target.konanTarget}")
-    }
-
-    val moduleName = "KCryptoKit"
-    val swiftSrc = layout.projectDirectory.file("src/nativeInterop/swift/$moduleName.swift")
-    val outDirProv = layout.buildDirectory.dir("swift/${target.name}")
-
-    val buildSwift = tasks.register<Exec>(
-        "buildSwift${target.name.replaceFirstChar(Char::titlecase)}"
-    ) {
+        doFirst { out.mkdirs() }
         standardInput = ByteArrayInputStream(ByteArray(0))
-
-        group = "build"
-        description = "Compile $moduleName for ${target.name}"
-
-        val outDir = outDirProv.get().asFile
-        val header = File(outDir, "$moduleName-Swift.h")
-        val staticLib = File(outDir, "lib$moduleName.a")
-        val moduleCache = File(outDir, "moduleCache")
-        val swiftModule = File(outDir, "$moduleName.swiftmodule")
-        val moduleMap = File(outDir, "module.modulemap")
-        val defFile = File(outDir, "$moduleName.def")
-
-        inputs.file(swiftSrc)
-        outputs.files(header, staticLib, swiftModule, moduleMap, defFile)
-        doFirst {
-            outDir.mkdirs()
-            moduleCache.mkdirs()
-        }
-
-        val logFile = File(outDir, "$moduleName-build.log")
-        val swiftcArgs = listOf(
+        commandLine(
             "xcrun", "--sdk", spec.sdk, "swiftc",
             "-emit-library", "-static",
-            "-emit-module",
-            "-emit-module-path", swiftModule.absolutePath,
-            "-module-name", moduleName,
-            "-emit-objc-header",
-            "-emit-objc-header-path", header.absolutePath,
-            "-parse-as-library",
-            "-swift-version", "5",
+            "-emit-module", "-emit-module-path", File(out, "$module.swiftmodule").absolutePath,
+            "-emit-objc-header", "-emit-objc-header-path", header.absolutePath,
+            "-parse-as-library", "-swift-version", "5",
+            "-runtime-compatibility-version", "none",
             "-target", spec.triple,
-            "-sdk", sdkPath,
-            "-module-cache-path", moduleCache.absolutePath,
-            "-o", staticLib.absolutePath,
-            swiftSrc.asFile.absolutePath
-        ).joinToString(" ") { "'" + it.replace("'", "'\\''") + "'" }
-
-        commandLine("/bin/sh", "-c", "$swiftcArgs < /dev/null > '${logFile.absolutePath}' 2>&1")
-
-        // After swiftc runs, drop a module map next to the generated header, then
-        // generate the cinterop def file: bundle the static Swift
-        // library INTO the klib (staticLibraries/libraryPaths) and carry the Swift
-        // runtime search paths + CryptoKit as the klib's linkerOpts
+            "-o", lib.absolutePath,
+            src.asFile.absolutePath,
+        )
         doLast {
-            moduleMap.writeText("""
-                module $moduleName {
-                header "$moduleName-Swift.h"
-                export *
-                }
-            """.trimIndent()
-            )
-
-            val linkerOpts = listOf(
-                // Prefer the OS, ABI-stable Swift runtime (absolute install names)
-                // over the toolchain copy so the host binary resolves swift at launch.
-                "-L/usr/lib/swift",
-                "-L$swiftRuntime",
-                "-platform_version", linkerPlatform, "$minOs.0", sdkVersion,
-                "-framework", "CryptoKit"
-            ).joinToString(" ")
-
-            defFile.writeText("""
-                package = $cinteropPackage
-                language = Objective-C
-                modules = $moduleName
-                staticLibraries = lib$moduleName.a
-                libraryPaths = "${outDir.absolutePath}"
-                compilerOpts = -fmodules -I"${outDir.absolutePath}"
-                linkerOpts = $linkerOpts
-            """.trimIndent()
-            )
+            modulemap.writeText("module $module {\n    header \"$module-Swift.h\"\n    export *\n}\n")
+            def.writeText("""
+                  language = Objective-C
+                  package = com.doordeck.multiplatform.sdk.kcryptokit
+                  modules = $module
+                  staticLibraries = lib$module.a
+                  libraryPaths = "${out.absolutePath}"
+                  compilerOpts = -fmodules -I"${out.absolutePath}"
+                  linkerOpts = -L/usr/lib/swift -framework CryptoKit
+              """.trimIndent())
         }
     }
 
     target.compilations.getByName("main") {
-        val interop = cinterops.create(moduleName) {
-            // Generated by buildSwift: carries staticLibraries/libraryPaths so the
-            // Swift static lib is bundled into the klib, plus the Swift runtime
-            // search paths and CryptoKit.
-            defFile(outDirProv.get().file("$moduleName.def").asFile)
-        }
-        tasks.named<CInteropProcess>(interop.interopProcessingTaskName) {
-            dependsOn(buildSwift)
-        }
+        val interop = cinterops.create(module) { defFile(outDir.get().file("$module.def").asFile) }
+        tasks.named<CInteropProcess>(interop.interopProcessingTaskName) { dependsOn(compile) }
     }
 }
