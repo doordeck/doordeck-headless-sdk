@@ -20,7 +20,7 @@ swift-klib = "1.1.0"
 asn1js = "3.0.6"
 pkijs = "3.3.3"
 kermit = "2.2.0"
-buildkonfig = "0.22.0"
+buildkonfig = "0.23.0"
 kotlinx-serialization = "1.11.0"
 
 [libraries]
