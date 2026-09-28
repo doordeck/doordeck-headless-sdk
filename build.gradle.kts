@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform.library).apply(false)
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
-    alias(libs.plugins.swift.klib).apply(false)
     alias(libs.plugins.buildkonfig).apply(false)
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
     id("com.netflix.nebula.release") version "21.1.3"
@@ -31,10 +30,7 @@ nexusPublishing {
 rootProject.plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
     rootProject.the<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnRootExtension>().apply {
         resolution("ws", "8.21.0")
-        resolution("uuid", "11.1.1")
         resolution("serialize-javascript", "7.0.5")
         resolution("diff", "8.0.3")
-        resolution("webpack", "5.104.0")
-        resolution("webpack-dev-server", "5.2.4")
     }
 }

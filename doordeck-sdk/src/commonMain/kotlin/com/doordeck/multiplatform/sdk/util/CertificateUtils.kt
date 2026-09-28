@@ -3,11 +3,11 @@ package com.doordeck.multiplatform.sdk.util
 import at.asitplus.signum.indispensable.asn1.Asn1Element
 import at.asitplus.signum.indispensable.asn1.Asn1Time
 import at.asitplus.signum.indispensable.asn1.encoding.parse
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.crypto.MIN_CERTIFICATE_LIFETIME_DAYS
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import kotlin.jvm.JvmSynthetic
-import kotlin.time.Clock
 
 /**
  * Checks whether the certificate represented by this Base64-encoded string is invalid or expired
@@ -40,7 +40,7 @@ internal fun String.isCertificateInvalidOrExpired(): Boolean {
         val notAfterInstant = Asn1Time.decodeFromDer(notAfterElement.derEncoded)
             .instant
         SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
-        return Clock.System.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+        return SystemClock.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
     } catch (exception: Throwable) {
         SdkLogger.e(exception) { "Failed to parse the certificate" }
         true
