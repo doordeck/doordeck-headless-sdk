@@ -29,13 +29,13 @@ jobs:
             os: ubuntu-latest
           - name: Apple macOS
             test: macosArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Apple iOS
             test: iosSimulatorArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Apple watchOS
             test: watchosSimulatorArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Windows
             test: mingwX64Test
             os: windows-latest
@@ -220,7 +220,7 @@ jobs:
   spm:
     name: SPM publish
     needs: [pre-release]
-    runs-on: macos-15
+    runs-on: macos-latest
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     permissions:
       id-token: write
@@ -299,7 +299,7 @@ jobs:
     name: Maven publish
     needs: [pre-release]
     if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: macos-15
+    runs-on: macos-latest
 
     steps:
       - name: Checkout

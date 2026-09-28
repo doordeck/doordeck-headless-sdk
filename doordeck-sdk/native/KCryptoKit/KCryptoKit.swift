@@ -1,41 +1,36 @@
 import Foundation
 import CryptoKit
-import Security
 
-@objc public class KCryptoKit : NSObject {
+@objc(KKeyPair) public class KKeyPair: NSObject {
+    @objc public let publicKey: Data
+    @objc public let privateKey: Data
+    @objc public init(publicKey: Data, privateKey: Data) {
+        self.publicKey = publicKey
+        self.privateKey = privateKey
+        super.init()
+    }
+}
 
-    @objc public class func generateKeyPair() -> [String: Data] {
-        let privateKey = Curve25519.Signing.PrivateKey()
-        let publicKey = privateKey.publicKey
-        return [
-            "privateKey": privateKey.rawRepresentation,
-            "publicKey": publicKey.rawRepresentation
-        ]
+@objc(KCryptoKit) public class KCryptoKit: NSObject {
+
+    @objc public class func generateKeyPair() -> KKeyPair {
+        let priv = Curve25519.Signing.PrivateKey()
+        return KKeyPair(
+            publicKey: priv.publicKey.rawRepresentation,
+            privateKey: priv.rawRepresentation
+        )
     }
 
-    @objc(signWithPrivateKey::) public class func signWithPrivateKey(message: String, privateKeyData: Data) -> Data? {
-        do {
-            // Convert the data into a private key object
-            let privateKey = try Curve25519.Signing.PrivateKey(rawRepresentation: privateKeyData)
-            // Convert the message to Data
-            let messageData = Data(message.utf8)
-            // Sign the message
-            let signature = try privateKey.signature(for: messageData)
-            return signature
-        } catch {
-           return nil
-        }
+    @objc(signWithPrivateKey::) public class func signWithPrivateKey(message: String, privateKey: Data) -> Data? {
+        guard let key = try? Curve25519.Signing.PrivateKey(rawRepresentation: privateKey),
+              let sig = try? key.signature(for: Data(message.utf8))
+        else { return nil }
+        return sig
     }
 
-    @objc(verifySignature:::) public class func verifySignature(publicKeyData: Data, message: String, signatureData: Data) -> Bool {
-        do {
-            let signingPublicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
-            let messageData = Data(message.utf8)
-            let result = signingPublicKey.isValidSignature(signatureData, for: messageData)
-            return result
-        }
-        catch {
-            return false
-        }
+    @objc(verifySignature:::) public class func verifySignature(publicKey: Data, message: String, signature: Data) -> Bool {
+        guard let key = try? Curve25519.Signing.PublicKey(rawRepresentation: publicKey)
+        else { return false }
+        return key.isValidSignature(signature, for: Data(message.utf8))
     }
 }

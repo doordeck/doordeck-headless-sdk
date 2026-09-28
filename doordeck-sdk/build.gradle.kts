@@ -6,12 +6,14 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.kotlin.gradle.tasks.CInteropProcess
+import org.jetbrains.kotlin.konan.target.KonanTarget
+import java.io.ByteArrayInputStream
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.multiplatform.library)
     alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.swift.klib)
     alias(libs.plugins.buildkonfig)
     `maven-publish`
     signing
@@ -62,6 +64,12 @@ private val mavenPublish = MavenPublishData()
 private val nugetPublish = NugetPublishData()
 private val pypiPublish = PyPiPublishData()
 
+data class AppleMinVersions(
+    val ios: Int,
+    val macos: Int,
+    val watchos: Int,
+)
+
 kotlin {
     applyDefaultHierarchyTemplate()
     jvm()
@@ -76,6 +84,12 @@ kotlin {
         }
     }
 
+    val minVersions = AppleMinVersions(
+        ios = libs.versions.ios.min.sdk.get().toInt(),
+        macos = libs.versions.macos.min.sdk.get().toInt(),
+        watchos = libs.versions.watchos.min.sdk.get().toInt(),
+    )
+
     val xcf = XCFramework(spmPublish.packageName)
     val appleTargets = listOf(
         iosArm64(), iosSimulatorArm64(),                                // iOS
@@ -83,19 +97,15 @@ kotlin {
         watchosArm64(), watchosDeviceArm64(), watchosSimulatorArm64()   // watchOS
     )
 
+    val isMacHost = System.getProperty("os.name").startsWith("Mac", ignoreCase = true)
     appleTargets.forEach {
         it.binaries.framework {
             baseName = spmPublish.packageName
             binaryOption("bundleId", spmPublish.bundleId)
             xcf.add(this)
         }
-
-        it.compilations {
-            val main by getting {
-                cinterops {
-                    create("KCryptoKit")
-                }
-            }
+        if (isMacHost) {
+            configureSwiftBridge(it, minVersions)
         }
     }
 
@@ -230,18 +240,15 @@ kotlin {
     targets.withType<KotlinNativeTarget> {
         compilations["main"].compileTaskProvider.configure {
             compilerOptions {
-                val iosVersion = libs.versions.ios.min.sdk.get().toInt()
-                val macosVersion = libs.versions.macos.min.sdk.get().toInt()
-                val watchosVersion = libs.versions.watchos.min.sdk.get().toInt()
-                val arguments = "-Xoverride-konan-properties=" + listOf(
-                    "osVersionMin.ios_arm64=$iosVersion.0",
-                    "osVersionMin.ios_simulator_arm64=$iosVersion.0",
-                    "osVersionMin.macos_arm64=$macosVersion.0",
-                    "osVersionMin.watchos_arm64=$watchosVersion.0",
-                    "osVersionMin.watchos_device_arm64=$watchosVersion.0",
-                    "osVersionMin.watchos_simulator_arm64=$watchosVersion.0"
+                val overrides = listOf(
+                    "osVersionMin.ios_arm64=${minVersions.ios}.0",
+                    "osVersionMin.ios_simulator_arm64=${minVersions.ios}.0",
+                    "osVersionMin.macos_arm64=${minVersions.macos}.0",
+                    "osVersionMin.watchos_arm64=${minVersions.watchos}.0",
+                    "osVersionMin.watchos_device_arm64=${maxOf(minVersions.watchos, 10)}.0",
+                    "osVersionMin.watchos_simulator_arm64=${minVersions.watchos}.0",
                 ).joinToString(";")
-                freeCompilerArgs.addAll(arguments)
+                freeCompilerArgs.add("-Xoverride-konan-properties=$overrides")
             }
         }
     }
@@ -314,16 +321,6 @@ signing {
 
     useInMemoryPgpKeys(null, signingKey, signingPassword)
     sign(publishing.publications)
-}
-
-swiftklib {
-    create("KCryptoKit") {
-        path = file("native/KCryptoKit")
-        packageName("com.doordeck.multiplatform.sdk.kcryptokit")
-        minMacos = libs.versions.macos.min.sdk.get().toInt()
-        minIos = libs.versions.ios.min.sdk.get().toInt()
-        minWatchos = libs.versions.watchos.min.sdk.get().toInt()
-    }
 }
 
 // Display the test log events at all the platforms
@@ -506,3 +503,65 @@ classifiers = [
 [tool.setuptools]
 package-data = { "${pypiPublish.packageName}" = ["_doordeck_headless_sdk.pyd", "${nugetPublish.packageName}.dll"] }
 """.trimIndent()
+
+private data class SwiftTarget(val sdk: String, val triple: String)
+
+private fun swiftTargetFor(t: KotlinNativeTarget, v: AppleMinVersions) = when (t.konanTarget) {
+    KonanTarget.IOS_ARM64               -> SwiftTarget("iphoneos",       "arm64-apple-ios${v.ios}.0")
+    KonanTarget.IOS_SIMULATOR_ARM64     -> SwiftTarget("iphonesimulator","arm64-apple-ios${v.ios}.0-simulator")
+    KonanTarget.MACOS_ARM64             -> SwiftTarget("macosx",         "arm64-apple-macos${v.macos}.0")
+    KonanTarget.WATCHOS_ARM64           -> SwiftTarget("watchos",        "arm64_32-apple-watchos${v.watchos}.0")
+    KonanTarget.WATCHOS_DEVICE_ARM64    -> SwiftTarget("watchos",        "arm64-apple-watchos${maxOf(v.watchos,10)}.0")
+    KonanTarget.WATCHOS_SIMULATOR_ARM64 -> SwiftTarget("watchsimulator", "arm64-apple-watchos${v.watchos}.0-simulator")
+    else -> error("Unsupported Apple target: ${t.konanTarget}")
+}
+
+private fun Project.configureSwiftBridge(target: KotlinNativeTarget, v: AppleMinVersions) {
+    val spec   = swiftTargetFor(target, v)
+    val module = "KCryptoKit"
+    val src    = layout.projectDirectory.file("native/$module/$module.swift")
+    val outDir = layout.buildDirectory.dir("kcryptokit/${target.name}")
+
+    val compile = tasks.register<Exec>("compileSwift${target.name.replaceFirstChar(Char::titlecase)}") {
+        val out       = outDir.get().asFile
+        val header    = File(out, "$module-Swift.h")
+        val lib       = File(out, "lib$module.a")
+        val modulemap = File(out, "module.modulemap")
+        val def       = File(out, "$module.def")
+
+        inputs.file(src)
+        inputs.property("triple", spec.triple)
+        outputs.files(header, lib, modulemap, def)
+
+        doFirst { out.mkdirs() }
+        standardInput = ByteArrayInputStream(ByteArray(0))
+        commandLine(
+            "xcrun", "--sdk", spec.sdk, "swiftc",
+            "-emit-library", "-static",
+            "-emit-module", "-emit-module-path", File(out, "$module.swiftmodule").absolutePath,
+            "-emit-objc-header", "-emit-objc-header-path", header.absolutePath,
+            "-parse-as-library", "-swift-version", "5",
+            "-runtime-compatibility-version", "none",
+            "-target", spec.triple,
+            "-o", lib.absolutePath,
+            src.asFile.absolutePath,
+        )
+        doLast {
+            modulemap.writeText("module $module {\n    header \"$module-Swift.h\"\n    export *\n}\n")
+            def.writeText("""
+                  language = Objective-C
+                  package = com.doordeck.multiplatform.sdk.kcryptokit
+                  modules = $module
+                  staticLibraries = lib$module.a
+                  libraryPaths = "${out.absolutePath}"
+                  compilerOpts = -fmodules -I"${out.absolutePath}"
+                  linkerOpts = -L/usr/lib/swift -framework CryptoKit
+              """.trimIndent())
+        }
+    }
+
+    target.compilations.getByName("main") {
+        val interop = cinterops.create(module) { defFile(outDir.get().file("$module.def").asFile) }
+        tasks.named<CInteropProcess>(interop.interopProcessingTaskName) { dependsOn(compile) }
+    }
+}
