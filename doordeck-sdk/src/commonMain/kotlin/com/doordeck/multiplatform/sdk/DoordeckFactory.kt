@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.clock.ServerTimeSynchronizer
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
@@ -23,6 +24,7 @@ internal object DoordeckFactory {
             sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
             sdkConfig.fusionHost?.let { context.setFusionHost(it) }
         }
+        SystemClock.setOffset(sdkConfig.clockOffset)
         CryptoManager.initialize()
         ServerTimeSynchronizer.initialize()
         Context.attemptToRefreshAuthTokens()

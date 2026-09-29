@@ -5,7 +5,10 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
 import com.doordeck.multiplatform.sdk.util.toUrlString
+import platform.Foundation.NSProcessInfo
 import platform.Foundation.NSURLComponents
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Configuration settings for the SDK.
@@ -86,11 +89,24 @@ data class SdkConfig(
     }
 }
 
+/**
+ * Moves the SDK's notion of "now", read from the process environment rather than exposed as API:
+ * only a debugger or an XCUITest harness (`launchEnvironment`) can set a variable on an iOS
+ * process, so a shipped app can never be in this state. It exists so that a client's own tests can
+ * reach a session in its last hours, or a certificate inside its renewal window, without waiting
+ * days or moving the device clock.
+ */
+private fun configuredClockOffset(): Duration {
+    val seconds = NSProcessInfo.processInfo.environment["DOORDECK_CLOCK_OFFSET_SECONDS"] as? String
+    return seconds?.toDoubleOrNull()?.seconds ?: Duration.ZERO
+}
+
 internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
     apiEnvironment = apiEnvironment,
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
     fusionHost = fusionHost?.toUrlString(),
     secureStorage = secureStorage,
-    debugLogging = debugLogging
+    debugLogging = debugLogging,
+    clockOffset = configuredClockOffset()
 )
