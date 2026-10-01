@@ -272,35 +272,35 @@ mavenPublishing {
     signAllPublications()
     coordinates(groupId = mavenPublish.groupId, artifactId = mavenPublish.artifactId, version = "${project.version}")
     pom {
-        name.set(mavenPublish.title)
-        inceptionYear.set("2024")
-        description.set(mavenPublish.description)
-        url.set(mavenPublish.repository)
+        name = mavenPublish.title
+        inceptionYear = "2024"
+        description = mavenPublish.description
+        url = mavenPublish.repository
         licenses {
             license {
-                name.set(mavenPublish.licenseType)
-                url.set(mavenPublish.licenseUrl)
+                name = mavenPublish.licenseType
+                url = mavenPublish.licenseUrl
             }
         }
         issueManagement {
-            system.set("Github")
-            url.set(mavenPublish.issues)
+            system = "Github"
+            url = mavenPublish.issues
         }
         developers {
             developer {
-                id.set("doordeck")
-                name.set(mavenPublish.author)
-                url.set(mavenPublish.authorRepository)
+                id = "doordeck"
+                name = mavenPublish.author
+                url = mavenPublish.authorRepository
             }
             organization {
-                name.set(mavenPublish.author)
-                url.set(mavenPublish.authorRepository)
+                name = mavenPublish.author
+                url = mavenPublish.authorRepository
             }
         }
         scm {
-            url.set(mavenPublish.repository)
-            connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
-            developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
+            url = mavenPublish.repository
+            connection = "scm:git:git://github.com/doordeck/doordeck-headless-sdk.git"
+            developerConnection = "scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git"
         }
     }
 }
