@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import com.vanniktech.maven.publish.DeploymentValidation
 import org.jetbrains.kotlin.gradle.tasks.CInteropProcess
 import org.jetbrains.kotlin.konan.target.KonanTarget
 import java.io.ByteArrayInputStream
@@ -15,8 +16,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform.library)
     alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.buildkonfig)
-    `maven-publish`
-    signing
+    alias(libs.plugins.vanniktech.maven.publish)
 }
 
 private sealed class PublishData(
@@ -263,64 +263,45 @@ buildkonfig {
     }
 }
 
-// Generates empty Javadoc JARs, which are required for publishing to Maven Central
-val javadocJar = tasks.register<Jar>("javadocJar") {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles java doc to jar"
-    archiveClassifier.set("javadoc")
-}
-
-publishing {
-    publications.withType<MavenPublication>().configureEach {
-        artifact(javadocJar)
-        groupId = mavenPublish.groupId
-        version = "${project.version}"
-        pom {
-            name.set(mavenPublish.title)
-            inceptionYear.set("2024")
-            description.set(mavenPublish.description)
-            url.set(mavenPublish.repository)
-            licenses {
-                license {
-                    name.set(mavenPublish.licenseType)
-                    url.set(mavenPublish.licenseUrl)
-                }
-            }
-            issueManagement {
-                system.set("Github")
-                url.set(mavenPublish.issues)
-            }
-            developers {
-                developer {
-                    id.set("doordeck")
-                    name.set(mavenPublish.author)
-                    url.set(mavenPublish.authorRepository)
-                }
-                organization {
-                    name.set(mavenPublish.author)
-                    url.set(mavenPublish.authorRepository)
-                }
-            }
-            scm {
-                url.set(mavenPublish.repository)
-                connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
-                developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
+mavenPublishing {
+    publishToMavenCentral(
+        automaticRelease = true,
+        validateDeployment = DeploymentValidation.VALIDATED,
+    )
+    signAllPublications()
+    coordinates(groupId = mavenPublish.groupId, version = "${project.version}")
+    pom {
+        name.set(mavenPublish.title)
+        inceptionYear.set("2024")
+        description.set(mavenPublish.description)
+        url.set(mavenPublish.repository)
+        licenses {
+            license {
+                name.set(mavenPublish.licenseType)
+                url.set(mavenPublish.licenseUrl)
             }
         }
+        issueManagement {
+            system.set("Github")
+            url.set(mavenPublish.issues)
+        }
+        developers {
+            developer {
+                id.set("doordeck")
+                name.set(mavenPublish.author)
+                url.set(mavenPublish.authorRepository)
+            }
+            organization {
+                name.set(mavenPublish.author)
+                url.set(mavenPublish.authorRepository)
+            }
+        }
+        scm {
+            url.set(mavenPublish.repository)
+            connection.set("scm:git:git://github.com/doordeck/doordeck-headless-sdk.git")
+            developerConnection.set("scm:git:ssh://git@github.com/doordeck/doordeck-headless-sdk.git")
+        }
     }
-
-    val signingTasks = tasks.withType<Sign>()
-    tasks.withType<AbstractPublishToMaven>().configureEach {
-        mustRunAfter(signingTasks)
-    }
-}
-
-signing {
-    val signingKey = System.getenv("MAVEN_SIGN_KEY")
-    val signingPassword = System.getenv("MAVEN_SIGN_PASSWORD")
-
-    useInMemoryPgpKeys(null, signingKey, signingPassword)
-    sign(publishing.publications)
 }
 
 // Display the test log events at all the platforms
