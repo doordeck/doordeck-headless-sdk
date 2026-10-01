@@ -45,7 +45,8 @@ private data class SpmPublishData(
 ): PublishData()
 
 private data class MavenPublishData(
-    val groupId: String = "com.doordeck.headless.sdk"
+    val groupId: String = "com.doordeck.headless.sdk",
+    val artifactId: String = "doordeck-sdk"
 ) : PublishData()
 
 private data class NugetPublishData(
@@ -269,7 +270,7 @@ mavenPublishing {
         validateDeployment = DeploymentValidation.VALIDATED,
     )
     signAllPublications()
-    coordinates(groupId = mavenPublish.groupId, version = "${project.version}")
+    coordinates(groupId = mavenPublish.groupId, artifactId = mavenPublish.artifactId, version = "${project.version}")
     pom {
         name.set(mavenPublish.title)
         inceptionYear.set("2024")
