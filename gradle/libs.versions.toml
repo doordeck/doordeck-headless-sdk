@@ -21,6 +21,7 @@ pkijs = "3.3.3"
 kermit = "2.2.0"
 buildkonfig = "0.23.0"
 kotlinx-serialization = "1.11.0"
+vanniktech-maven-publish = "0.37.0"
 
 [libraries]
 bouncy-castle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
@@ -57,3 +58,4 @@ kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library"
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }
