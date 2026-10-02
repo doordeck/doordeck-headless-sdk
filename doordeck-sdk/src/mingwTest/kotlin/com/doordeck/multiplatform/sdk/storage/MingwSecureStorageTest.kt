@@ -8,9 +8,7 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
-import kotlinx.cinterop.allocArray
-import kotlinx.cinterop.cstr
-import kotlinx.cinterop.nativeHeap
+import kotlinx.cinterop.set
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.test.runTest
@@ -23,79 +21,28 @@ import kotlin.test.assertTrue
 
 private val backingStore = mutableMapOf<String, String>()
 
-private val setApiEnvironmentCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["apiEnvironment"] = ptr.toKString()
+private val setEntryCb = staticCFunction<CPointer<ByteVar>, CPointer<ByteVar>?, Unit> { key, value ->
+    val name = key.toKString()
+    if (value == null) backingStore.remove(name) else backingStore[name] = value.toKString()
 }
-private val setCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["cloudAuthToken"] = ptr.toKString()
-}
-private val setCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["cloudRefreshToken"] = ptr.toKString()
-}
-private val setFusionHostCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["fusionHost"] = ptr.toKString()
-}
-private val setFusionAuthTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["fusionAuthToken"] = ptr.toKString()
-}
-private val setPublicKeyCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["publicKey"] = ptr.toKString()
-}
-private val setPrivateKeyCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["privateKey"] = ptr.toKString()
-}
-private val setKeyPairVerifiedCb = staticCFunction<CPointer<ByteVar>?, Unit> { ptr ->
-    if (ptr != null) {
-        backingStore["keyPairVerified"] = ptr.toKString()
+
+// Writes into the caller's buffer and reports the length, so the harness allocates nothing that the
+// implementation under test would then have to free.
+private val getEntryCb = staticCFunction<CPointer<ByteVar>, CPointer<ByteVar>?, Int, Int> { key, buffer, capacity ->
+    val entry = backingStore[key.toKString()]
+    if (entry == null) {
+        -1
     } else {
-        backingStore.remove("keyPairVerified")
+        val bytes = entry.encodeToByteArray()
+        if (buffer != null && capacity > bytes.size) {
+            bytes.forEachIndexed { index, byte -> buffer[index] = byte }
+            buffer[bytes.size] = 0
+        }
+        bytes.size
     }
 }
-private val setUserIdCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["userId"] = ptr.toKString()
-}
-private val setUserEmailCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["userEmail"] = ptr.toKString()
-}
-private val setCertificateChainCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["certificateChain"] = ptr.toKString()
-}
 
-private val getApiEnvironmentCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["apiEnvironment"]?.cstr?.place(nativeHeap.allocArray(backingStore["apiEnvironment"]!!.length + 1))
-}
-private val getCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["cloudAuthToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["cloudAuthToken"]!!.length + 1))
-}
-private val getCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["cloudRefreshToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["cloudRefreshToken"]!!.length + 1))
-}
-private val getFusionHostCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["fusionHost"]?.cstr?.place(nativeHeap.allocArray(backingStore["fusionHost"]!!.length + 1))
-}
-private val getFusionAuthTokenCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["fusionAuthToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["fusionAuthToken"]!!.length + 1))
-}
-private val getPublicKeyCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["publicKey"]?.cstr?.place(nativeHeap.allocArray(backingStore["publicKey"]!!.length + 1))
-}
-private val getPrivateKeyCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["privateKey"]?.cstr?.place(nativeHeap.allocArray(backingStore["privateKey"]!!.length + 1))
-}
-private val getKeyPairVerifiedCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["keyPairVerified"]?.cstr?.place(nativeHeap.allocArray(backingStore["keyPairVerified"]!!.length + 1))
-}
-private val getUserIdCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["userId"]?.cstr?.place(nativeHeap.allocArray(backingStore["userId"]!!.length + 1))
-}
-private val getUserEmailCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["userEmail"]?.cstr?.place(nativeHeap.allocArray(backingStore["userEmail"]!!.length + 1))
-}
-private val getCertificateChainCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["certificateChain"]?.cstr?.place(nativeHeap.allocArray(backingStore["certificateChain"]!!.length + 1))
-}
-
-private val clearCb = staticCFunction<Unit> {
+private val clearEntriesCb = staticCFunction<Unit> {
     backingStore.clear()
 }
 
@@ -107,29 +54,9 @@ class MingwSecureStorageTest {
     fun setUp() {
         backingStore.clear()
         storage = MingwSecureStorage(
-            setApiEnvironmentCp = setApiEnvironmentCb,
-            getApiEnvironmentCp = getApiEnvironmentCb,
-            addCloudAuthTokenCp = setCloudAuthTokenCb,
-            getCloudAuthTokenCp = getCloudAuthTokenCb,
-            addCloudRefreshTokenCp = setCloudRefreshTokenCb,
-            getCloudRefreshTokenCp = getCloudRefreshTokenCb,
-            setFusionHostCp = setFusionHostCb,
-            getFusionHostCp = getFusionHostCb,
-            addFusionAuthTokenCp = setFusionAuthTokenCb,
-            getFusionAuthTokenCp = getFusionAuthTokenCb,
-            addPublicKeyCp = setPublicKeyCb,
-            getPublicKeyCp = getPublicKeyCb,
-            addPrivateKeyCp = setPrivateKeyCb,
-            getPrivateKeyCp = getPrivateKeyCb,
-            setKeyPairVerifiedCp = setKeyPairVerifiedCb,
-            getKeyPairVerifiedCp = getKeyPairVerifiedCb,
-            addUserIdCp = setUserIdCb,
-            getUserIdCp = getUserIdCb,
-            addUserEmailCp = setUserEmailCb,
-            getUserEmailCp = getUserEmailCb,
-            addCertificateChainCp = setCertificateChainCb,
-            getCertificateChainCp = getCertificateChainCb,
-            clearCp = clearCb
+            setEntryCp = setEntryCb,
+            getEntryCp = getEntryCb,
+            clearEntriesCp = clearEntriesCb
         )
     }
 

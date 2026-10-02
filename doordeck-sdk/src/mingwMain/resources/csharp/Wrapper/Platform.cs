@@ -3,76 +3,72 @@ using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-using PlatformApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi;
 
-public class Platform(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_PlatformApi platform,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._PlatformApi_e__Struct platformApi) : AbstractWrapper
+public class Platform
 {
-    public unsafe Task<Guid> CreateApplication(CreateApplication data) =>
-        Process<PlatformApi, Guid>(platform, platformApi.createApplication_, data);
+    public Task<Guid> CreateApplication(CreateApplication data) =>
+        Dispatcher.Call<Guid>("platform.createApplication", data);
 
-    public unsafe Task<List<ApplicationResponse>> ListApplications() =>
-        Process<PlatformApi, List<ApplicationResponse>>(platform, platformApi.listApplications_);
+    public Task<List<ApplicationResponse>> ListApplications() =>
+        Dispatcher.Call<List<ApplicationResponse>>("platform.listApplications");
 
-    public unsafe Task<ApplicationResponse> GetApplication(Guid applicationId) =>
-        Process<PlatformApi, ApplicationResponse>(platform, platformApi.getApplication_, new { applicationId });
+    public Task<ApplicationResponse> GetApplication(Guid applicationId) =>
+        Dispatcher.Call<ApplicationResponse>("platform.getApplication", new { applicationId });
 
-    public unsafe Task<object> UpdateApplicationName(Guid applicationId, string name) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationName_, new { applicationId, name });
+    public Task<object> UpdateApplicationName(Guid applicationId, string name) =>
+        Dispatcher.Call<object>("platform.updateApplicationName", new { applicationId, name });
 
-    public unsafe Task<object> UpdateApplicationCompanyName(Guid applicationId, string companyName) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationCompanyName_, new { applicationId, companyName });
+    public Task<object> UpdateApplicationCompanyName(Guid applicationId, string companyName) =>
+        Dispatcher.Call<object>("platform.updateApplicationCompanyName", new { applicationId, companyName });
 
-    public unsafe Task<object> UpdateApplicationMailingAddress(Guid applicationId, string mailingAddress) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationMailingAddress_, new { applicationId, mailingAddress });
+    public Task<object> UpdateApplicationMailingAddress(Guid applicationId, string mailingAddress) =>
+        Dispatcher.Call<object>("platform.updateApplicationMailingAddress", new { applicationId, mailingAddress });
 
-    public unsafe Task<object> UpdateApplicationPrivacyPolicy(Guid applicationId, Uri privacyPolicy) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationPrivacyPolicy_, new { applicationId, privacyPolicy });
+    public Task<object> UpdateApplicationPrivacyPolicy(Guid applicationId, Uri privacyPolicy) =>
+        Dispatcher.Call<object>("platform.updateApplicationPrivacyPolicy", new { applicationId, privacyPolicy });
 
-    public unsafe Task<object> UpdateApplicationSupportContact(Guid applicationId, Uri supportContact) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationSupportContact_, new { applicationId, supportContact });
+    public Task<object> UpdateApplicationSupportContact(Guid applicationId, Uri supportContact) =>
+        Dispatcher.Call<object>("platform.updateApplicationSupportContact", new { applicationId, supportContact });
 
-    public unsafe Task<object> UpdateApplicationAppLink(Guid applicationId, Uri appLink) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationAppLink_, new { applicationId, appLink });
+    public Task<object> UpdateApplicationAppLink(Guid applicationId, Uri appLink) =>
+        Dispatcher.Call<object>("platform.updateApplicationAppLink", new { applicationId, appLink });
 
-    public unsafe Task<object> UpdateApplicationEmailPreferences(Guid applicationId, EmailPreferences emailPreferences) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationEmailPreferences_, new { applicationId, emailPreferences });
+    public Task<object> UpdateApplicationEmailPreferences(Guid applicationId, EmailPreferences emailPreferences) =>
+        Dispatcher.Call<object>("platform.updateApplicationEmailPreferences", new { applicationId, emailPreferences });
 
-    public unsafe Task<object> UpdateApplicationLogoUrl(Guid applicationId, Uri logoUrl) =>
-        Process<PlatformApi, object>(platform, platformApi.updateApplicationLogoUrl_, new { applicationId, logoUrl });
+    public Task<object> UpdateApplicationLogoUrl(Guid applicationId, Uri logoUrl) =>
+        Dispatcher.Call<object>("platform.updateApplicationLogoUrl", new { applicationId, logoUrl });
 
-    public unsafe Task<object> DeleteApplication(Guid applicationId) =>
-        Process<PlatformApi, object>(platform, platformApi.deleteApplication_, new { applicationId });
+    public Task<object> DeleteApplication(Guid applicationId) =>
+        Dispatcher.Call<object>("platform.deleteApplication", new { applicationId });
 
-    public unsafe Task<GetLogoUploadUrlResponse> GetLogoUploadUrl(Guid applicationId, string contentType) =>
-        Process<PlatformApi, GetLogoUploadUrlResponse>(platform, platformApi.getLogoUploadUrl_, new { applicationId, contentType });
+    public Task<GetLogoUploadUrlResponse> GetLogoUploadUrl(Guid applicationId, string contentType) =>
+        Dispatcher.Call<GetLogoUploadUrlResponse>("platform.getLogoUploadUrl", new { applicationId, contentType });
 
-    public unsafe Task<object> AddAuthKey(Guid applicationId, IAuthKey key) =>
-        Process<PlatformApi, object>(platform, platformApi.addAuthKey_, new { applicationId, key });
+    public Task<object> AddAuthKey(Guid applicationId, IAuthKey key) =>
+        Dispatcher.Call<object>("platform.addAuthKey", new { applicationId, key });
 
-    public unsafe Task<object> AddAuthIssuer(Guid applicationId, Uri url) =>
-        Process<PlatformApi, object>(platform, platformApi.addAuthIssuer_, new { applicationId, url });
+    public Task<object> AddAuthIssuer(Guid applicationId, Uri url) =>
+        Dispatcher.Call<object>("platform.addAuthIssuer", new { applicationId, url });
 
-    public unsafe Task<object> DeleteAuthIssuer(Guid applicationId, Uri url) =>
-        Process<PlatformApi, object>(platform, platformApi.deleteAuthIssuer_, new { applicationId, url });
+    public Task<object> DeleteAuthIssuer(Guid applicationId, Uri url) =>
+        Dispatcher.Call<object>("platform.deleteAuthIssuer", new { applicationId, url });
 
-    public unsafe Task<object> AddCorsDomain(Guid applicationId, Uri url) =>
-        Process<PlatformApi, object>(platform, platformApi.addCorsDomain_, new { applicationId, url });
+    public Task<object> AddCorsDomain(Guid applicationId, Uri url) =>
+        Dispatcher.Call<object>("platform.addCorsDomain", new { applicationId, url });
 
-    public unsafe Task<object> RemoveCorsDomain(Guid applicationId, Uri url) =>
-        Process<PlatformApi, object>(platform, platformApi.removeCorsDomain_, new { applicationId, url });
+    public Task<object> RemoveCorsDomain(Guid applicationId, Uri url) =>
+        Dispatcher.Call<object>("platform.removeCorsDomain", new { applicationId, url });
 
-    public unsafe Task<object> AddApplicationOwner(Guid applicationId, Guid userId) =>
-        Process<PlatformApi, object>(platform, platformApi.addApplicationOwner_, new { applicationId, userId });
+    public Task<object> AddApplicationOwner(Guid applicationId, Guid userId) =>
+        Dispatcher.Call<object>("platform.addApplicationOwner", new { applicationId, userId });
 
-    public unsafe Task<object> RemoveApplicationOwner(Guid applicationId, Guid userId) =>
-        Process<PlatformApi, object>(platform, platformApi.removeApplicationOwner_, new { applicationId, userId });
+    public Task<object> RemoveApplicationOwner(Guid applicationId, Guid userId) =>
+        Dispatcher.Call<object>("platform.removeApplicationOwner", new { applicationId, userId });
 
-    public unsafe Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(Guid applicationId, Guid userId) =>
-        Process<PlatformApi, List<ApplicationOwnerDetailsResponse>>(platform, platformApi.getApplicationOwnersDetails_, new { applicationId, userId });
+    public Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(Guid applicationId, Guid userId) =>
+        Dispatcher.Call<List<ApplicationOwnerDetailsResponse>>("platform.getApplicationOwnersDetails", new { applicationId, userId });
 
-    public unsafe Task<List<ApplicationUserResponse>> GetApplicationUsers(Guid applicationId, int pageSize = 100, Guid? lastUserRetrieved = null) =>
-        Process<PlatformApi, List<ApplicationUserResponse>>(platform, platformApi.getApplicationUsers_, new { applicationId, pageSize, lastUserRetrieved });
+    public Task<List<ApplicationUserResponse>> GetApplicationUsers(Guid applicationId, int pageSize = 100, Guid? lastUserRetrieved = null) =>
+        Dispatcher.Call<List<ApplicationUserResponse>>("platform.getApplicationUsers", new { applicationId, pageSize, lastUserRetrieved });
 }

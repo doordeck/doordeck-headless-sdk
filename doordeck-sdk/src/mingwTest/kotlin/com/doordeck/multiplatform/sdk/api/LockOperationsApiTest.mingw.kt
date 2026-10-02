@@ -599,7 +599,7 @@ class LockOperationsApiTest : CallbackTest() {
 
         // When
         val pinnedLocks = callbackApiCall<ResultData<List<BasicLockResponse>>> {
-            LockOperationsApi.getPinnedLocks(TestCallback)
+            LockOperationsApi.getPinnedLocks(callback = TestCallback)
         }.unwrap()
 
         // Then
@@ -618,7 +618,7 @@ class LockOperationsApiTest : CallbackTest() {
 
         // When
         val shareableLocks = callbackApiCall<ResultData<List<BasicShareableLockResponse>>> {
-            LockOperationsApi.getShareableLocks(TestCallback)
+            LockOperationsApi.getShareableLocks(callback = TestCallback)
         }.unwrap()
 
         // Then
@@ -685,7 +685,7 @@ class LockOperationsApiTest : CallbackTest() {
                 privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
                 isKeyPairVerified = true
             ).toJson()
-        )
+        , callback = TestCallback)
 
         // When
         callbackApiCall<ResultData<Unit>> {
@@ -911,7 +911,7 @@ class LockOperationsApiTest : CallbackTest() {
                 privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
                 isKeyPairVerified = true
             ).toJson()
-        )
+        , callback = TestCallback)
         val shareLock = ShareLockData(
             targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
             targetUserRole = UserRole.USER,
@@ -986,7 +986,7 @@ class LockOperationsApiTest : CallbackTest() {
                 privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
                 isKeyPairVerified = true
             ).toJson()
-        )
+        , callback = TestCallback)
         val batchShareLock = listOf(
             ShareLockData(
                 targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
@@ -1142,7 +1142,7 @@ class LockOperationsApiTest : CallbackTest() {
                 privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
                 isKeyPairVerified = true
             ).toJson()
-        )
+        , callback = TestCallback)
 
         // When
         callbackApiCall<ResultData<Unit>> {
@@ -1286,7 +1286,7 @@ class LockOperationsApiTest : CallbackTest() {
                 privateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
                 isKeyPairVerified = true
             ).toJson()
-        )
+        , callback = TestCallback)
 
         // When
         callbackApiCall<ResultData<Unit>> {

@@ -3,40 +3,36 @@ using Doordeck.Headless.Sdk.Model.Responses;
 
 namespace Doordeck.Headless.Sdk.Wrapper;
 
-using AccountApi = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi;
     
-public class Account(
-    Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_api_AccountApi account,
-    Doordeck_Headless_Sdk_ExportedSymbols._kotlin_e__Struct._root_e__Struct._com_e__Struct._doordeck_e__Struct.
-        _multiplatform_e__Struct._sdk_e__Struct._api_e__Struct._AccountApi_e__Struct accountApi) : AbstractWrapper
+public class Account
 {
-    public unsafe Task<TokenResponse> RefreshToken(string? refreshToken = null) =>
-        Process<AccountApi, TokenResponse>(account, accountApi.refreshToken_, new { refreshToken });
+    public Task<TokenResponse> RefreshToken(string? refreshToken = null) =>
+        Dispatcher.Call<TokenResponse>("account.refreshToken", new { refreshToken });
 
-    public unsafe Task<object> Logout() =>
-        Process<AccountApi, object>(account, accountApi.logout_); 
+    public Task<object> Logout() =>
+        Dispatcher.Call<object>("account.logout"); 
 
-    public unsafe Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(byte[]? publicKey = null, byte[]? privateKey = null) =>
-        Process<AccountApi, RegisterEphemeralKeyResponse>(account, accountApi.registerEphemeralKey_, new { publicKey, privateKey });
+    public Task<RegisterEphemeralKeyResponse> RegisterEphemeralKey(byte[]? publicKey = null, byte[]? privateKey = null) =>
+        Dispatcher.Call<RegisterEphemeralKeyResponse>("account.registerEphemeralKey", new { publicKey, privateKey });
 
-    public unsafe Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(byte[]? publicKey = null, TwoFactorMethod? method = null) =>
-        Process<AccountApi, RegisterEphemeralKeyWithSecondaryAuthenticationResponse>(account, accountApi.registerEphemeralKeyWithSecondaryAuthentication_, new { publicKey, method });
+    public Task<RegisterEphemeralKeyWithSecondaryAuthenticationResponse> RegisterEphemeralKeyWithSecondaryAuthentication(byte[]? publicKey = null, TwoFactorMethod? method = null) =>
+        Dispatcher.Call<RegisterEphemeralKeyWithSecondaryAuthenticationResponse>("account.registerEphemeralKeyWithSecondaryAuthentication", new { publicKey, method });
 
-    public unsafe Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, byte[]? publicKey = null, byte[]? privateKey = null) =>
-        Process<AccountApi, RegisterEphemeralKeyResponse>(account, accountApi.verifyEphemeralKeyRegistration_, new { code, publicKey, privateKey });
+    public Task<RegisterEphemeralKeyResponse> VerifyEphemeralKeyRegistration(string code, byte[]? publicKey = null, byte[]? privateKey = null) =>
+        Dispatcher.Call<RegisterEphemeralKeyResponse>("account.verifyEphemeralKeyRegistration", new { code, publicKey, privateKey });
 
-    public unsafe Task<object> ReverifyEmail() =>
-        Process<AccountApi, object>(account, accountApi.reverifyEmail_);
+    public Task<object> ReverifyEmail() =>
+        Dispatcher.Call<object>("account.reverifyEmail");
 
-    public unsafe Task<object> ChangePassword(string oldPassword, string newPassword) =>
-        Process<AccountApi, object>(account, accountApi.changePassword_, new { oldPassword, newPassword });
+    public Task<object> ChangePassword(string oldPassword, string newPassword) =>
+        Dispatcher.Call<object>("account.changePassword", new { oldPassword, newPassword });
 
-    public unsafe Task<UserDetailsResponse> GetUserDetails() =>
-        Process<AccountApi, UserDetailsResponse>(account, accountApi.getUserDetails_);
+    public Task<UserDetailsResponse> GetUserDetails() =>
+        Dispatcher.Call<UserDetailsResponse>("account.getUserDetails");
 
-    public unsafe Task<object> UpdateUserDetails(string displayName) =>
-        Process<AccountApi, object>(account, accountApi.updateUserDetails_, new { displayName });
+    public Task<object> UpdateUserDetails(string displayName) =>
+        Dispatcher.Call<object>("account.updateUserDetails", new { displayName });
 
-    public unsafe Task<object> DeleteAccount() =>
-        Process<AccountApi, object>(account, accountApi.deleteAccount_);
+    public Task<object> DeleteAccount() =>
+        Dispatcher.Call<object>("account.deleteAccount");
 }

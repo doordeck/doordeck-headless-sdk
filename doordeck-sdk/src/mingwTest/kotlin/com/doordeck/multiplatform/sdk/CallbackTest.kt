@@ -14,13 +14,12 @@ import kotlin.test.BeforeTest
 import kotlin.test.fail
 import kotlin.time.Duration.Companion.seconds
 
-internal val TestCallback: CStringCallback = staticCFunction(::testCallback)
+internal val TestCallback: ResultCallback = staticCFunction(::testCallback)
 
 private var pendingCallback: CompletableDeferred<String>? = null
 
-internal fun testCallback(data: CPointer<ByteVar>): CPointer<ByteVar> {
+internal fun testCallback(requestId: Long, data: CPointer<ByteVar>) {
     pendingCallback?.complete(data.toKString())
-    return data
 }
 
 internal inline fun <reified T> callbackApiCall(
@@ -46,11 +45,12 @@ open class BasicCallbackTest {
 internal inline fun <reified T> ResultData<T>.unwrap(): T {
     failure?.let { fail("API error [${it.exceptionType}]: ${it.exceptionMessage}") }
     val success = checkNotNull(success) { "Both success and failure were null" }
-    return success.result ?: when {
-        T::class == Unit::class -> {
-            @Suppress("UNCHECKED_CAST")
-            Unit as T
-        }
+    val result = success.result
+    @Suppress("UNCHECKED_CAST")
+    return when {
+        result != null -> result
+        T::class == Unit::class -> Unit as T
+        null is T -> null as T
         else -> fail("Expected ${T::class.simpleName} but success.result was null")
     }
 }
