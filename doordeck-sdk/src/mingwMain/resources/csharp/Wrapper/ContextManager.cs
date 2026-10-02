@@ -20,8 +20,8 @@ public class ContextManager
     public void SetCloudAuthToken(string token) =>
         Dispatcher.CallSync<object>("context.setCloudAuthToken", token);
 
-    public string GetCloudAuthToken() =>
-        Dispatcher.CallSync<string>("context.getCloudAuthToken");
+    public string? GetCloudAuthToken() =>
+        Dispatcher.CallSync<string?>("context.getCloudAuthToken");
 
     public Task<bool> IsCloudAuthTokenInvalidOrExpired(bool checkServerInvalidation) =>
         Dispatcher.Call<bool>("context.isCloudAuthTokenInvalidOrExpired", checkServerInvalidation.ToString());
@@ -29,8 +29,8 @@ public class ContextManager
     public void SetCloudRefreshToken(string token) =>
         Dispatcher.CallSync<object>("context.setCloudRefreshToken", token);
 
-    public string GetCloudRefreshToken() =>
-        Dispatcher.CallSync<string>("context.getCloudRefreshToken");
+    public string? GetCloudRefreshToken() =>
+        Dispatcher.CallSync<string?>("context.getCloudRefreshToken");
 
     public void SetFusionHost(string host) =>
         Dispatcher.CallSync<object>("context.setFusionHost", host);
@@ -41,26 +41,26 @@ public class ContextManager
     public void SetFusionAuthToken(string token) =>
         Dispatcher.CallSync<object>("context.setFusionAuthToken", token);
 
-    public string GetFusionAuthToken() =>
-        Dispatcher.CallSync<string>("context.getFusionAuthToken");
+    public string? GetFusionAuthToken() =>
+        Dispatcher.CallSync<string?>("context.getFusionAuthToken");
 
     public void SetUserId(Guid userId) =>
         Dispatcher.CallSync<object>("context.setUserId", userId.ToString());
 
-    public Guid GetUserId() =>
-        Guid.Parse(Dispatcher.CallSync<string>("context.getUserId"));
+    public Guid? GetUserId() =>
+        Dispatcher.CallSync<string?>("context.getUserId") is {} userId ? Guid.Parse(userId) : null;
 
     public void SetUserEmail(string email) =>
         Dispatcher.CallSync<object>("context.setUserEmail", email);
 
-    public string GetUserEmail() =>
-        Dispatcher.CallSync<string>("context.getUserEmail");
+    public string? GetUserEmail() =>
+        Dispatcher.CallSync<string?>("context.getUserEmail");
 
     public void SetCertificateChain(List<X509Certificate> certificateChain) =>
         Dispatcher.CallSync<object>("context.setCertificateChain", certificateChain.CertificateChainToString());
 
-    public List<X509Certificate> GetCertificateChain() =>
-        Dispatcher.CallSync<string>("context.getCertificateChain").StringToCertificateChain();
+    public List<X509Certificate>? GetCertificateChain() =>
+        Dispatcher.CallSync<string?>("context.getCertificateChain")?.StringToCertificateChain();
 
     public bool IsCertificateChainInvalidOrExpired() =>
         Dispatcher.CallSync<bool>("context.isCertificateChainInvalidOrExpired");
@@ -72,8 +72,8 @@ public class ContextManager
             privateKey = privateKey.EncodeByteArrayToBase64()
         });
 
-    public KeyPair GetKeyPair() =>
-        Utils.FromJson<KeyPair>(Dispatcher.CallSync<string>("context.getKeyPair"));
+    public KeyPair? GetKeyPair() =>
+        Dispatcher.CallSync<string?>("context.getKeyPair") is {} keyPair ? Utils.FromJson<KeyPair>(keyPair) : null;
 
     public void SetKeyPairVerified(byte[]? publicKey) =>
         Dispatcher.CallSync<object>("context.setKeyPairVerified", publicKey?.EncodeByteArrayToBase64());
