@@ -17,8 +17,8 @@ internal data class AssistedLoginData(
 
 @Serializable
 internal data class AssistedRegisterEphemeralKeyData(
-    val publicKey: String,
-    val privateKey: String
+    val publicKey: String? = null,
+    val privateKey: String? = null
 )
 
 @Serializable
