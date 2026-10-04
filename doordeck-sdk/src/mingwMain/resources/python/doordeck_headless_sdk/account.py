@@ -12,18 +12,18 @@ from .utils import object_hook
 
 class Account:
 
-    async def refresh_token(self, refreshToken: str):
+    async def refresh_token(self, refreshToken: typing.Optional[str] = None):
         data = { "refreshToken": refreshToken }
         return await call_async("account.refreshToken", data)
 
     async def logout(self):
         return await call_async("account.logout")
 
-    async def register_ephemeral_key(self, publicKey: str, privateKey: str):
+    async def register_ephemeral_key(self, publicKey: typing.Optional[str] = None, privateKey: typing.Optional[str] = None):
         data = { "publicKey": publicKey, "privateKey": privateKey }
         return await call_async("account.registerEphemeralKey", data)
 
-    async def register_ephemeral_key_with_secondary_authentication(self, publicKey: str, method: typing.Optional[typing.Literal["EMAIL", "TELEPHONE", "SMS"]] = None):
+    async def register_ephemeral_key_with_secondary_authentication(self, publicKey: typing.Optional[str] = None, method: typing.Optional[typing.Literal["EMAIL", "TELEPHONE", "SMS"]] = None):
         data = {
             "publicKey": publicKey,
             "method": method

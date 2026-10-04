@@ -27,7 +27,7 @@ class Helper:
         }
         return await call_async("helper.assistedLogin", data)
 
-    async def assisted_register_ephemeral_key(self, publicKey: str, privateKey: str):
+    async def assisted_register_ephemeral_key(self, publicKey: typing.Optional[str] = None, privateKey: typing.Optional[str] = None):
         data = { "publicKey": publicKey, "privateKey": privateKey }
         return await call_async("helper.assistedRegisterEphemeralKey", data)
 

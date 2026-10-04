@@ -66,8 +66,8 @@ public class Platform
     public Task<object> RemoveApplicationOwner(Guid applicationId, Guid userId) =>
         Dispatcher.Call<object>("platform.removeApplicationOwner", new { applicationId, userId });
 
-    public Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(Guid applicationId, Guid userId) =>
-        Dispatcher.Call<List<ApplicationOwnerDetailsResponse>>("platform.getApplicationOwnersDetails", new { applicationId, userId });
+    public Task<List<ApplicationOwnerDetailsResponse>> GetApplicationOwnersDetails(Guid applicationId) =>
+        Dispatcher.Call<List<ApplicationOwnerDetailsResponse>>("platform.getApplicationOwnersDetails", new { applicationId });
 
     public Task<List<ApplicationUserResponse>> GetApplicationUsers(Guid applicationId, int pageSize = 100, Guid? lastUserRetrieved = null) =>
         Dispatcher.Call<List<ApplicationUserResponse>>("platform.getApplicationUsers", new { applicationId, pageSize, lastUserRetrieved });
