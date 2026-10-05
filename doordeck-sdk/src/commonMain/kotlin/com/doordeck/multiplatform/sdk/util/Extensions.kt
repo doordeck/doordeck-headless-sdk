@@ -58,6 +58,9 @@ import io.ktor.http.encodedPath
 import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.encodeToStringMap
 import kotlin.jvm.JvmSynthetic
@@ -290,6 +293,9 @@ internal fun HttpClient.addExceptionInterceptor() {
     plugin(HttpSend).intercept { request ->
         try {
             execute(request)
+        } catch (exception: CancellationException) {
+            currentCoroutineContext().ensureActive()
+            throw SdkException("API call was cancelled", exception)
         } catch (exception: ContentConvertException) {
             throw SdkException("Failed to deserialize API response", exception)
         } catch (exception: SdkException) {
