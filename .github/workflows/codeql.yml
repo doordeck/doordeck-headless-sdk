@@ -70,9 +70,9 @@ jobs:
       # The compile process must actually run under the CodeQL tracer: bypass the build
       # cache (enabled in gradle.properties), the Gradle daemon and the Kotlin
       # daemon.
-      - name: Build (JVM)
+      - name: Build (JVM + Android)
         run: >
-          ./gradlew :doordeck-sdk:compileKotlinJvm
+          ./gradlew :doordeck-sdk:compileKotlinJvm :doordeck-sdk:compileAndroidMain
           --no-daemon --no-build-cache --rerun-tasks
           -Pkotlin.compiler.execution.strategy=in-process
 
