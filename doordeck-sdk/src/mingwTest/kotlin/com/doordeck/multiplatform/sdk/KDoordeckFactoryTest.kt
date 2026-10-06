@@ -64,6 +64,6 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             )
         }.unwrapFailure()
         assertContains(response.exceptionType, SdkException::class.simpleName!!)
-        assertEquals("Failed to perform API call", response.exceptionMessage)
+        assertEquals("API call was cancelled", response.exceptionMessage)
     }
 }
