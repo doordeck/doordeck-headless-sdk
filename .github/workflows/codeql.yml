@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ actions, csharp, javascript-typescript ]
+        language: [ actions, csharp ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -32,8 +32,51 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: none
           queries: +security-extended
+          config: |
+            paths-ignore:
+              - samples
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
         with:
           category: "/language:${{ matrix.language }}"
+
+  analyze-kotlin:
+    name: "Analyze (java-kotlin)"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Java
+        uses: actions/setup-java@v6
+        with:
+          distribution: corretto
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-disabled: true
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: java-kotlin
+          build-mode: manual
+          queries: +security-extended
+
+      # The compile process must actually run under the CodeQL tracer: bypass the build
+      # cache (enabled in gradle.properties), the Gradle daemon and the Kotlin
+      # daemon.
+      - name: Build (JVM)
+        run: >
+          ./gradlew :doordeck-sdk:compileKotlinJvm
+          --no-daemon --no-build-cache --rerun-tasks
+          -Pkotlin.compiler.execution.strategy=in-process
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:java-kotlin"
