@@ -50,6 +50,6 @@ class KDoordeckFactoryTest {
         val exception = assertFailsWith<SdkException> {
             sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         }
-        assertEquals("Failed to perform API call", exception.message)
+        assertEquals("API call was cancelled", exception.message)
     }
 }

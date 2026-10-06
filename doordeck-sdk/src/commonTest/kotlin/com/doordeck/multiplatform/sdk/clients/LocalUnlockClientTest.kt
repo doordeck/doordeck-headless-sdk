@@ -332,7 +332,7 @@ class LocalUnlockClientTest {
                 }
 
                 // Then
-                assertEquals("Failed to perform API call", exception.message)
+                assertEquals("API call was cancelled", exception.message)
             }
         } finally {
             cloudClient.close()
