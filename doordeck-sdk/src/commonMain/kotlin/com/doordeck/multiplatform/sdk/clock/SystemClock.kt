@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.clock
 
 import com.doordeck.multiplatform.sdk.getEnvironmentVariable
-import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 import kotlin.time.Clock
@@ -29,16 +28,9 @@ internal object SystemClock {
     private var skew: Duration = Duration.ZERO
 
     @Volatile
-    private var debugOffset: Duration = Duration.ZERO
-
-    init {
-        getEnvironmentVariable(DEBUG_OFFSET_ENV_VAR)
-            ?.let(Duration::parseOrNull)
-            ?.let { offset ->
-                this.debugOffset = offset
-                SdkLogger.i { "Loaded system clock debug offset: $offset" }
-        }
-    }
+    private var debugOffset: Duration = getEnvironmentVariable(DEBUG_OFFSET_ENV_VAR)
+        ?.let(Duration::parseOrNull)
+        ?: Duration.ZERO
 
     /**
      * Returns the currently applied clock [skew].
@@ -63,5 +55,6 @@ internal object SystemClock {
     @JvmSynthetic
     internal fun reset() {
         skew = Duration.ZERO
+        debugOffset = Duration.ZERO
     }
 }
