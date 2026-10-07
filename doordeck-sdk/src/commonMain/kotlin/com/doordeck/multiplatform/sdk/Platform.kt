@@ -138,4 +138,6 @@ internal object HttpClient : BaseHttpClient(::createHttpClient)
 
 expect val platformType: PlatformType
 
+internal expect fun getEnvironmentVariable(name: String): String?
+
 internal expect object ApplicationContext
