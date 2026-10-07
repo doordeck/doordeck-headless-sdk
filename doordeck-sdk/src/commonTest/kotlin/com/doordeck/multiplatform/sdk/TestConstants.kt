@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.env.getEnvironmentVariable
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.BasicLockController
 import com.doordeck.multiplatform.sdk.util.fromJson

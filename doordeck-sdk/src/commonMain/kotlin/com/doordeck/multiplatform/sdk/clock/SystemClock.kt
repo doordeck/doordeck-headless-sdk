@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.clock
 
-import com.doordeck.multiplatform.sdk.getEnvironmentVariable
+import com.doordeck.multiplatform.sdk.env.getEnvironmentVariable
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 import kotlin.time.Clock
