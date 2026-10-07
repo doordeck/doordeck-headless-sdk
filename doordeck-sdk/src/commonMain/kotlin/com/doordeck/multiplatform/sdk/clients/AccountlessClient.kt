@@ -4,8 +4,8 @@ import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Params
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.QueryParams
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.model.requests.PasswordResetRequest
 import com.doordeck.multiplatform.sdk.model.requests.PasswordResetVerifyRequest
@@ -38,7 +38,7 @@ internal object AccountlessClient {
      */
     @JvmSynthetic
     internal suspend fun loginRequest(email: String, password: String): BasicTokenResponse {
-        return CloudHttpClient.client.post(Paths.getLoginPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getLoginPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(LoginRequest(email, password))
         }.body<BasicTokenResponse>().also {
@@ -72,7 +72,7 @@ internal object AccountlessClient {
         force: Boolean,
         publicKey: ByteArray?
     ): BasicTokenResponse {
-        return CloudHttpClient.client.post(Paths.getRegistrationPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getRegistrationPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_3)
             setBody(
                 RegisterRequest(
@@ -82,7 +82,7 @@ internal object AccountlessClient {
                     ephemeralKey = publicKey?.encodeByteArrayToBase64()
                 )
             )
-            parameter(Params.FORCE, force)
+            parameter(QueryParams.FORCE, force)
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
                 context.setUserEmail(email)
@@ -102,9 +102,9 @@ internal object AccountlessClient {
      */
     @JvmSynthetic
     internal suspend fun verifyEmailRequest(code: String) {
-        return CloudHttpClient.client.put(Paths.getVerifyEmailPath()) {
+        return CloudHttpClient.client.put(CloudPaths.getVerifyEmailPath()) {
             addRequestHeaders()
-            parameter(Params.CODE, code)
+            parameter(QueryParams.CODE, code)
         }.body()
     }
 
@@ -116,7 +116,7 @@ internal object AccountlessClient {
      */
     @JvmSynthetic
     internal suspend fun passwordResetRequest(email: String) {
-        return CloudHttpClient.client.post(Paths.getPasswordResetPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getPasswordResetPath()) {
             addRequestHeaders()
             setBody(PasswordResetRequest(email))
         }.body()
@@ -132,7 +132,7 @@ internal object AccountlessClient {
      */
     @JvmSynthetic
     internal suspend fun passwordResetVerifyRequest(userId: String, token: String, password: String) {
-        return CloudHttpClient.client.post(Paths.getPasswordResetVerifyPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getPasswordResetVerifyPath()) {
             addRequestHeaders()
             setBody(PasswordResetVerifyRequest(userId, token, password))
         }.body()

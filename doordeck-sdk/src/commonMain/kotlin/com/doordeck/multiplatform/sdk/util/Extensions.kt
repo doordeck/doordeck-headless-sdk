@@ -22,7 +22,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
@@ -133,7 +133,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                 Context.getCloudRefreshToken()?.let { currentRefreshToken ->
                     val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
-                            path(Paths.getRefreshTokenPath())
+                            path(CloudPaths.getRefreshTokenPath())
                         }
                         headers {
                             append(HttpHeaders.ContentType, ContentType.Application.Json)
