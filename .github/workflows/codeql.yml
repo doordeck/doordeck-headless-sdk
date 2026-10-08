@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ actions, csharp ]
+        language: [ actions, csharp, python ]
     steps:
       - name: Checkout
         uses: actions/checkout@v7

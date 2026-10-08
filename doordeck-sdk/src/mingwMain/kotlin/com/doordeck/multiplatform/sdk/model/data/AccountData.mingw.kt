@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class RefreshTokenData(
-    val refreshToken: String
+    val refreshToken: String? = null
 )
 
 @Serializable
 internal data class RegisterEphemeralKeyData(
-    val publicKey: String,
-    val privateKey: String
+    val publicKey: String? = null,
+    val privateKey: String? = null
 )
 
 @Serializable

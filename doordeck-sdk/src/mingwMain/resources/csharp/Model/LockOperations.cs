@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Serialization;
 using Doordeck.Headless.Sdk.Converter;
 
 namespace Doordeck.Headless.Sdk.Model;
@@ -34,8 +35,8 @@ public class UnlockOperation(BaseOperation baseOperation, List<Uri>? directAcces
 public class BaseOperation
 {
     public Guid? UserId { get; set; }
-    public List<string>? UserCertificateChain { get; set; }
-    public string? UserPrivateKey { get; set; }
+    public List<X509Certificate>? UserCertificateChain { get; set; }
+    public byte[]? UserPrivateKey { get; set; }
     public Guid LockId { get; set; }
     [JsonConverter(typeof(DateTimeMillisecondsJsonConverter))]
     public DateTime NotBefore { get; set; }
@@ -45,7 +46,7 @@ public class BaseOperation
     public DateTime ExpiresAt { get; set; }
     public Guid Jti { get; set; }
 
-    public BaseOperation(Guid userId, List<string> userCertificateChain, string userPrivateKey, Guid lockId, DateTime notBefore, DateTime issuedAt, DateTime expiresAt, Guid jti)
+    public BaseOperation(Guid userId, List<X509Certificate> userCertificateChain, byte[] userPrivateKey, Guid lockId, DateTime notBefore, DateTime issuedAt, DateTime expiresAt, Guid jti)
     {
         UserId = userId;
         UserCertificateChain = userCertificateChain;
