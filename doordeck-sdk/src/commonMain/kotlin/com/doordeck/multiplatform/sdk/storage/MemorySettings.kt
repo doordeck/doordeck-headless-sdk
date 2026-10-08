@@ -1,96 +1,102 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.russhwolf.settings.Settings
+import io.ktor.utils.io.locks.SynchronizedObject
+import io.ktor.utils.io.locks.synchronized
 
 /**
- * In-memory storage implementation
+ * Thread-safe in-memory storage implementation
  */
-internal class MemorySettings(private val delegate: MutableMap<String, Any> = mutableMapOf()) : Settings {
+internal class MemorySettings(
+    private val delegate: MutableMap<String, Any> = mutableMapOf()
+) : Settings {
 
-    override val keys: Set<String> get() = delegate.keys
-    override val size: Int get() = delegate.size
+    private val lock = SynchronizedObject()
 
-    override fun clear() {
+    override val keys: Set<String> get() = synchronized(lock) { delegate.keys.toSet() }
+    override val size: Int get() = synchronized(lock) { delegate.size }
+
+    override fun clear() = synchronized(lock) {
         delegate.clear()
     }
 
-    override fun getBoolean(key: String, defaultValue: Boolean): Boolean {
-        return delegate[key] as? Boolean ?: defaultValue
+    override fun getBoolean(key: String, defaultValue: Boolean): Boolean = synchronized(lock) {
+        delegate[key] as? Boolean ?: defaultValue
     }
 
-    override fun getBooleanOrNull(key: String): Boolean? {
-        return delegate[key] as? Boolean
+    override fun getBooleanOrNull(key: String): Boolean? = synchronized(lock) {
+        delegate[key] as? Boolean
     }
 
-    override fun getDouble(key: String, defaultValue: Double): Double {
-        return delegate[key] as? Double ?: defaultValue
+    override fun getDouble(key: String, defaultValue: Double): Double = synchronized(lock) {
+        delegate[key] as? Double ?: defaultValue
     }
 
-    override fun getDoubleOrNull(key: String): Double? {
-        return delegate[key] as? Double
+    override fun getDoubleOrNull(key: String): Double? = synchronized(lock) {
+        delegate[key] as? Double
     }
 
-    override fun getFloat(key: String, defaultValue: Float): Float {
-        return delegate[key] as? Float ?: defaultValue
+    override fun getFloat(key: String, defaultValue: Float): Float = synchronized(lock) {
+        delegate[key] as? Float ?: defaultValue
     }
 
-    override fun getFloatOrNull(key: String): Float? {
-        return delegate[key] as? Float
+    override fun getFloatOrNull(key: String): Float? = synchronized(lock) {
+        delegate[key] as? Float
     }
 
-    override fun getInt(key: String, defaultValue: Int): Int {
-        return delegate[key] as? Int ?: defaultValue
+    override fun getInt(key: String, defaultValue: Int): Int = synchronized(lock) {
+        delegate[key] as? Int ?: defaultValue
     }
 
-    override fun getIntOrNull(key: String): Int? {
-        return delegate[key] as? Int
+    override fun getIntOrNull(key: String): Int? = synchronized(lock) {
+        delegate[key] as? Int
     }
 
-    override fun getLong(key: String, defaultValue: Long): Long {
-        return delegate[key] as? Long ?: defaultValue
+    override fun getLong(key: String, defaultValue: Long): Long = synchronized(lock) {
+        delegate[key] as? Long ?: defaultValue
     }
 
-    override fun getLongOrNull(key: String): Long? {
-        return delegate[key] as? Long
+    override fun getLongOrNull(key: String): Long? = synchronized(lock) {
+        delegate[key] as? Long
     }
 
-    override fun getString(key: String, defaultValue: String): String {
-        return delegate[key] as? String ?: defaultValue
+    override fun getString(key: String, defaultValue: String): String = synchronized(lock) {
+        delegate[key] as? String ?: defaultValue
     }
 
-    override fun getStringOrNull(key: String): String? {
-        return delegate[key] as? String
+    override fun getStringOrNull(key: String): String? = synchronized(lock) {
+        delegate[key] as? String
     }
 
-    override fun hasKey(key: String): Boolean {
-        return key in delegate
+    override fun hasKey(key: String): Boolean = synchronized(lock) {
+        key in delegate
     }
 
-    override fun putBoolean(key: String, value: Boolean) {
+    override fun putBoolean(key: String, value: Boolean) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun putDouble(key: String, value: Double) {
+    override fun putDouble(key: String, value: Double) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun putFloat(key: String, value: Float) {
+    override fun putFloat(key: String, value: Float) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun putInt(key: String, value: Int) {
+    override fun putInt(key: String, value: Int) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun putLong(key: String, value: Long) {
+    override fun putLong(key: String, value: Long) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun putString(key: String, value: String) {
+    override fun putString(key: String, value: String) = synchronized(lock) {
         delegate[key] = value
     }
 
-    override fun remove(key: String) {
+    override fun remove(key: String) = synchronized(lock) {
         delegate -= key
     }
 }
