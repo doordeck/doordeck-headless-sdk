@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.clock
 
+import com.doordeck.multiplatform.sdk.env.getEnvironmentVariable
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 import kotlin.time.Clock
@@ -17,6 +18,7 @@ import kotlin.time.Instant
  * this clock.
  */
 internal object SystemClock {
+    private const val DEBUG_OFFSET_ENV_VAR = "KMP_SDK_CLOCK_DEBUG_OFFSET"
 
     /**
      * The offset between the backend clock and the device clock (`server - device`).
@@ -25,6 +27,11 @@ internal object SystemClock {
     @Volatile
     private var skew: Duration = Duration.ZERO
 
+    @Volatile
+    private var debugOffset: Duration = getEnvironmentVariable(DEBUG_OFFSET_ENV_VAR)
+        ?.let(Duration::parseOrNull)
+        ?: Duration.ZERO
+
     /**
      * Returns the currently applied clock [skew].
      */
@@ -32,7 +39,7 @@ internal object SystemClock {
     internal fun getSkew(): Duration = skew
 
     @JvmSynthetic
-    internal fun now(): Instant = Clock.System.now() + skew
+    internal fun now(): Instant = Clock.System.now() + skew + debugOffset
 
     /**
      * Updates the clock [skew]. Called by [ServerTimeSynchronizer] after each successful sync.
@@ -48,5 +55,6 @@ internal object SystemClock {
     @JvmSynthetic
     internal fun reset() {
         skew = Duration.ZERO
+        debugOffset = Duration.ZERO
     }
 }
