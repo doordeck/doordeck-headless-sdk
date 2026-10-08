@@ -11,7 +11,7 @@ import io.ktor.utils.io.locks.synchronized
  * Writes go to the [delegate] first and then update the in-memory copy (write-through), so the
  * [delegate] must not be modified by anything other than this instance.
  */
-internal class CachedSecureStorage(
+internal class CachedStorage(
     private val delegate: SecureStorage
 ) : SecureStorage {
 

@@ -20,99 +20,99 @@ internal class DefaultSecureStorage(
     }
 
     fun setStorageVersion(version: Int) {
-        storeIntValue(StorageKey.STORAGE_VERSION_KEY, version)
+        storeValue(StorageKey.STORAGE_VERSION_KEY, version)
     }
 
     fun getStorageVersion(): Int? {
-        return retrieveIntValue(StorageKey.STORAGE_VERSION_KEY)
+        return retrieveValue(StorageKey.STORAGE_VERSION_KEY)
     }
 
     override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        storeStringValue(StorageKey.API_ENVIRONMENT_KEY, apiEnvironment.name)
+        storeValue(StorageKey.API_ENVIRONMENT_KEY, apiEnvironment.name)
     }
 
     override fun getApiEnvironment(): ApiEnvironment? {
-        return retrieveStringValue(StorageKey.API_ENVIRONMENT_KEY)?.let { ApiEnvironment.valueOf(it) }
+        return retrieveValue<String>(StorageKey.API_ENVIRONMENT_KEY)?.let { ApiEnvironment.valueOf(it) }
     }
 
     override fun addCloudAuthToken(token: String) {
-        storeStringValue(StorageKey.CLOUD_AUTH_TOKEN_KEY, token, true)
+        storeValue(StorageKey.CLOUD_AUTH_TOKEN_KEY, token, true)
     }
 
     override fun getCloudAuthToken(): String? {
-        return retrieveStringValue(StorageKey.CLOUD_AUTH_TOKEN_KEY, true)
+        return retrieveValue(StorageKey.CLOUD_AUTH_TOKEN_KEY, true)
     }
 
     override fun addCloudRefreshToken(token: String) {
-        storeStringValue(StorageKey.CLOUD_REFRESH_TOKEN_KEY, token, true)
+        storeValue(StorageKey.CLOUD_REFRESH_TOKEN_KEY, token, true)
     }
 
     override fun getCloudRefreshToken(): String? {
-        return retrieveStringValue(StorageKey.CLOUD_REFRESH_TOKEN_KEY, true)
+        return retrieveValue(StorageKey.CLOUD_REFRESH_TOKEN_KEY, true)
     }
 
     override fun setFusionHost(host: String) {
-        storeStringValue(StorageKey.FUSION_HOST_KEY, host)
+        storeValue(StorageKey.FUSION_HOST_KEY, host)
     }
 
     override fun getFusionHost(): String? {
-        return retrieveStringValue(StorageKey.FUSION_HOST_KEY)
+        return retrieveValue(StorageKey.FUSION_HOST_KEY)
     }
 
     override fun addFusionAuthToken(token: String) {
-        storeStringValue(StorageKey.FUSION_AUTH_TOKEN_KEY, token, true)
+        storeValue(StorageKey.FUSION_AUTH_TOKEN_KEY, token, true)
     }
 
     override fun getFusionAuthToken(): String? {
-        return retrieveStringValue(StorageKey.FUSION_AUTH_TOKEN_KEY, true)
+        return retrieveValue(StorageKey.FUSION_AUTH_TOKEN_KEY, true)
     }
 
     override fun addPublicKey(publicKey: ByteArray) {
-        storeStringValue(StorageKey.PUBLIC_KEY_KEY, publicKey.encodeByteArrayToBase64(), true)
+        storeValue(StorageKey.PUBLIC_KEY_KEY, publicKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPublicKey(): ByteArray? {
-        return retrieveStringValue(StorageKey.PUBLIC_KEY_KEY, true)?.decodeBase64ToByteArray()
+        return retrieveValue<String>(StorageKey.PUBLIC_KEY_KEY, true)?.decodeBase64ToByteArray()
     }
 
     override fun addPrivateKey(privateKey: ByteArray) {
-        storeStringValue(StorageKey.PRIVATE_KEY_KEY, privateKey.encodeByteArrayToBase64(), true)
+        storeValue(StorageKey.PRIVATE_KEY_KEY, privateKey.encodeByteArrayToBase64(), true)
     }
 
     override fun getPrivateKey(): ByteArray? {
-        return retrieveStringValue(StorageKey.PRIVATE_KEY_KEY, true)?.decodeBase64ToByteArray()
+        return retrieveValue<String>(StorageKey.PRIVATE_KEY_KEY, true)?.decodeBase64ToByteArray()
     }
 
     override fun setKeyPairVerified(publicKey: ByteArray?) {
-        storeStringValue(StorageKey.VERIFIED_KEY_PAIR_KEY, publicKey?.encodeByteArrayToBase64(), true)
+        storeValue(StorageKey.VERIFIED_KEY_PAIR_KEY, publicKey?.encodeByteArrayToBase64(), true)
     }
 
     override fun getKeyPairVerified(): ByteArray? {
-        return retrieveStringValue(StorageKey.VERIFIED_KEY_PAIR_KEY, true)?.decodeBase64ToByteArray()
+        return retrieveValue<String>(StorageKey.VERIFIED_KEY_PAIR_KEY, true)?.decodeBase64ToByteArray()
     }
 
     override fun addUserId(userId: String) {
-        storeStringValue(StorageKey.USER_ID_KEY, userId)
+        storeValue(StorageKey.USER_ID_KEY, userId)
     }
 
     override fun getUserId(): String? {
-        return retrieveStringValue(StorageKey.USER_ID_KEY)
+        return retrieveValue(StorageKey.USER_ID_KEY)
     }
 
     override fun addUserEmail(email: String) {
-        storeStringValue(StorageKey.USER_EMAIL_KEY, email)
+        storeValue(StorageKey.USER_EMAIL_KEY, email)
     }
 
     override fun getUserEmail(): String? {
-        return retrieveStringValue(StorageKey.USER_EMAIL_KEY)
+        return retrieveValue(StorageKey.USER_EMAIL_KEY)
     }
 
     override fun addCertificateChain(certificateChain: List<String>) {
-        storeStringValue(StorageKey.CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString(), true)
+        storeValue(StorageKey.CERTIFICATE_CHAIN_KEY, certificateChain.certificateChainToString(), true)
     }
 
     override fun getCertificateChain(): List<String>? {
-        return retrieveStringValue(StorageKey.CERTIFICATE_CHAIN_KEY, true)?.stringToCertificateChain()
+        return retrieveValue<String>(StorageKey.CERTIFICATE_CHAIN_KEY, true)?.stringToCertificateChain()
     }
 
     override fun clear() {
@@ -138,32 +138,27 @@ internal class DefaultSecureStorage(
         }
     }
 
-    private fun storeStringValue(key: StorageKey, value: String?, maskValue: Boolean = false) {
+    private inline fun <reified T : Any> storeValue(key: StorageKey, value: T?, maskValue: Boolean = false) {
         if (value == null) {
             settings.remove(key.name)
-            SdkLogger.d { "Removed key $key" }
-        } else {
-            settings.putString(key.name, value)
-            SdkLogger.d("Stored value: ${if (maskValue) value.mask() else value} for key: $key")
+            SdkLogger.d { "Removed stored value for key: $key" }
+            return
         }
+        when (value) {
+            is String -> settings.putString(key.name, value)
+            is Int -> settings.putInt(key.name, value)
+            else -> throw SdkException("Unsupported type ${T::class} for key $key")
+        }
+        SdkLogger.d { "Stored value: ${if (maskValue) value.toString().mask() else value} for key: $key" }
     }
 
-    private fun retrieveStringValue(key: StorageKey, maskValue: Boolean = false): String? {
-        val value = settings.getStringOrNull(key.name)
-        SdkLogger.d("Retrieved value: ${if (maskValue) value?.mask() else value} for key: $key")
-        return value
-    }
-
-    @Suppress("SameParameterValue")
-    private fun storeIntValue(key: StorageKey, value: Int) {
-        settings.putInt(key.name, value)
-        SdkLogger.d("Stored value: $value for key: $key")
-    }
-
-    @Suppress("SameParameterValue")
-    private fun retrieveIntValue(key: StorageKey): Int? {
-        val value = settings.getIntOrNull(key.name)
-        SdkLogger.d("Retrieved value: $value for key: $key")
-        return value
+    private inline fun <reified T : Any> retrieveValue(key: StorageKey, maskValue: Boolean = false): T? {
+        val value: Any? = when (T::class) {
+            String::class -> settings.getStringOrNull(key.name)
+            Int::class -> settings.getIntOrNull(key.name)
+            else -> throw SdkException("Unsupported type ${T::class} for key $key")
+        }
+        SdkLogger.d { "Retrieved value: ${if (maskValue) value?.toString()?.mask() else value} for key: $key" }
+        return value as T?
     }
 }
