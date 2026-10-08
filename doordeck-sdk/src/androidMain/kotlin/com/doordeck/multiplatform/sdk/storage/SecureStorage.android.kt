@@ -22,5 +22,5 @@ internal actual fun createSecureStorage(applicationContext: ApplicationContext?)
         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
-    return DefaultSecureStorage(SharedPreferencesSettings(encryptedPreferences))
+    return CachedSecureStorage(DefaultSecureStorage(SharedPreferencesSettings(encryptedPreferences)))
 }

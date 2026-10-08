@@ -1,0 +1,16 @@
+package com.doordeck.multiplatform.sdk.storage
+
+internal enum class StorageKey {
+    API_ENVIRONMENT_KEY,
+    CLOUD_AUTH_TOKEN_KEY,
+    CLOUD_REFRESH_TOKEN_KEY,
+    FUSION_HOST_KEY,
+    FUSION_AUTH_TOKEN_KEY,
+    PUBLIC_KEY_KEY,
+    PRIVATE_KEY_KEY,
+    VERIFIED_KEY_PAIR_KEY,
+    USER_ID_KEY,
+    USER_EMAIL_KEY,
+    CERTIFICATE_CHAIN_KEY,
+    STORAGE_VERSION_KEY
+}

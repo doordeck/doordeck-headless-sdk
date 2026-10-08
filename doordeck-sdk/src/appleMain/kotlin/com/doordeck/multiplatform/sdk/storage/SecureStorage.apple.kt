@@ -4,4 +4,4 @@ import com.doordeck.multiplatform.sdk.ApplicationContext
 import com.russhwolf.settings.KeychainSettings
 
 internal actual fun createSecureStorage(applicationContext: ApplicationContext?): SecureStorage =
-    DefaultSecureStorage(KeychainSettings("doordeck-sdk"))
+    CachedSecureStorage(DefaultSecureStorage(KeychainSettings("doordeck-sdk")))
