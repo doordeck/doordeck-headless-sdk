@@ -195,7 +195,7 @@ class CachedStorageTest {
 
         companion object {
 
-            const val KEYS = 11
+            val KEYS = StorageKey.entries.size - 1
 
             fun random() = StoredValues(
                 apiEnvironment = ApiEnvironment.entries.random(),
