@@ -2,11 +2,10 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
-import com.doordeck.multiplatform.sdk.model.network.FusionPaths
-import com.doordeck.multiplatform.sdk.model.network.CloudPaths
-import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
+import com.doordeck.multiplatform.sdk.util.addCloudAuthInterceptor
 import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
-import com.doordeck.multiplatform.sdk.util.installAuth
+import com.doordeck.multiplatform.sdk.util.addFusionAuthInterceptor
+import com.doordeck.multiplatform.sdk.util.installCloudAuth
 import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
@@ -44,22 +43,15 @@ internal fun createCloudHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
         installTimeout()
-        installAuth()
+        installCloudAuth()
         installCertificatePinner()
         installUserAgent()
         installLogging()
         installResponseValidator()
-        installDefaultRequest(
-            determineHost = {
-                Context.getApiEnvironment().cloudHost
-            }
-        )
+        installDefaultRequest { Context.getApiEnvironment().cloudHost }
     }.also {
         it.addExceptionInterceptor()
-        it.addAuthInterceptor(
-            requiresAuth = CloudPaths::requiresAuth,
-            getAuthToken = Context::getCloudAuthToken
-        )
+        it.addCloudAuthInterceptor()
     }
 }
 
@@ -71,15 +63,10 @@ internal fun createFusionHttpClient(): HttpClient {
         installUserAgent()
         installLogging()
         installResponseValidator()
-        installDefaultRequest(determineHost = {
-            Context.getFusionHost()
-        })
+        installDefaultRequest { Context.getFusionHost() }
     }.also {
         it.addExceptionInterceptor()
-        it.addAuthInterceptor(
-            requiresAuth = FusionPaths::requiresAuth,
-            getAuthToken = Context::getFusionAuthToken
-        )
+        it.addFusionAuthInterceptor()
     }
 }
 
