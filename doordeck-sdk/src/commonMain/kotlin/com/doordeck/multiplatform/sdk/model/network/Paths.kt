@@ -5,7 +5,7 @@ import kotlin.jvm.JvmSynthetic
 /**
  * Contains all API endpoint paths for the Doordeck cloud service.
  */
-internal object Paths {
+internal object CloudPaths {
     /**
      * Account
      */
@@ -91,13 +91,21 @@ internal object Paths {
  */
 internal object FusionPaths {
     /**
-     * Fusion
+     * Login
      */
     @JvmSynthetic internal fun getLoginPath() = "/api/auth/token"
+
+    /**
+     * Configuration
+     */
     @JvmSynthetic internal fun getConfigurationTypePath() = "/api/configuration/type"
     @JvmSynthetic internal fun getIntegrationConfiguration() = "/api/configuration"
     @JvmSynthetic internal fun getEnableDoorPath() = "/api/configuration/enable"
     @JvmSynthetic internal fun getDeleteDoorPath(deviceId: String) = "/api/configuration/$deviceId"
+
+    /**
+     * Controller
+     */
     @JvmSynthetic internal fun getDoorStatusPath(deviceId: String) = "/api/controller/state/$deviceId"
     @JvmSynthetic internal fun startDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/start"
     @JvmSynthetic internal fun stopDoorPathPath(deviceId: String) = "/api/controller/state/$deviceId/stop"

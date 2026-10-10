@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
 import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
 import com.doordeck.multiplatform.sdk.util.installAuth
@@ -57,7 +57,7 @@ internal fun createCloudHttpClient(): HttpClient {
     }.also {
         it.addExceptionInterceptor()
         it.addAuthInterceptor(
-            requiresAuth = Paths::requiresAuth,
+            requiresAuth = CloudPaths::requiresAuth,
             getAuthToken = Context::getCloudAuthToken
         )
     }

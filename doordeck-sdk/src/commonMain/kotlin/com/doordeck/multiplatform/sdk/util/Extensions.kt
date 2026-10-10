@@ -22,7 +22,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
@@ -60,6 +60,9 @@ import io.ktor.http.encodedPath
 import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.utils.io.CancellationException
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.encodeToStringMap
 import kotlin.jvm.JvmSynthetic
@@ -136,7 +139,7 @@ internal fun HttpClientConfig<*>.installAuth() {
                 Context.getCloudRefreshToken()?.let { currentRefreshToken ->
                     val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
                         url {
-                            path(Paths.getRefreshTokenPath())
+                            path(CloudPaths.getRefreshTokenPath())
                         }
                         headers {
                             append(HttpHeaders.ContentType, ContentType.Application.Json)
@@ -296,6 +299,9 @@ internal fun HttpClient.addExceptionInterceptor() {
     plugin(HttpSend).intercept { request ->
         try {
             execute(request)
+        } catch (exception: CancellationException) {
+            currentCoroutineContext().ensureActive()
+            throw SdkException("API call was cancelled", exception)
         } catch (exception: ContentConvertException) {
             throw SdkException("Failed to deserialize API response", exception)
         } catch (exception: SdkException) {

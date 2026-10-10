@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - 'main'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -29,13 +30,13 @@ jobs:
             os: ubuntu-latest
           - name: Apple macOS
             test: macosArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Apple iOS
             test: iosSimulatorArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Apple watchOS
             test: watchosSimulatorArm64Test
-            os: macos-15
+            os: macos-latest
           - name: Windows
             test: mingwX64Test
             os: windows-latest
@@ -54,7 +55,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -91,7 +92,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -133,7 +134,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -172,7 +173,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -191,7 +192,7 @@ jobs:
   pre-release:
     name: Pre-release
     needs: [build, python-build, csharp-build]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    if: (success() && ((github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')))
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.pre-release-tag.outputs.tag }}
@@ -220,8 +221,7 @@ jobs:
   spm:
     name: SPM publish
     needs: [pre-release]
-    runs-on: macos-15
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    runs-on: macos-latest
     permissions:
       id-token: write
 
@@ -239,12 +239,12 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@cbe3b392738ccf3f987d68400dafcf4b0624a56c # v6.2.4
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           role-to-assume: arn:aws:iam::135184807345:role/GitHubAction-HeadlessSDKRelease
           aws-region: eu-west-1
@@ -258,7 +258,6 @@ jobs:
   npm:
     name: NPM publish
     needs: [pre-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -278,7 +277,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -298,8 +297,7 @@ jobs:
   maven-publish:
     name: Maven publish
     needs: [pre-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: macos-15
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
@@ -315,89 +313,17 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
       - name: Publish
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-          MAVEN_SIGN_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          MAVEN_SIGN_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
-        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishToSonatype
-
-  maven-close:
-    name: Maven close staging repository
-    needs: [pre-release, maven-publish]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-          sparse-checkout: |
-            gradle
-            build.gradle.kts
-            gradle.properties
-            gradlew
-            gradlew.bat
-
-      - name: Setup Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: corretto
-          java-version: 21
-          cache: gradle
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-        with:
-          cache-disabled: true
-
-      - name: Close staging repository
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-        run: ./gradlew -Prelease.useLastTag=true findSonatypeStagingRepository closeSonatypeStagingRepository
-
-  maven-release:
-    name: Maven release repository
-    needs: [pre-release, maven-close]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          ref: 'v${{ needs.pre-release.outputs.tag }}'
-          sparse-checkout: |
-            gradle
-            build.gradle.kts
-            gradle.properties
-            gradlew
-            gradlew.bat
-
-      - name: Setup Java
-        uses: actions/setup-java@v6
-        with:
-          distribution: corretto
-          java-version: 21
-          cache: gradle
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
-        with:
-          cache-disabled: true
-
-      - name: Release repository
-        env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_TOKEN: ${{ secrets.MAVEN_TOKEN }}
-        run: ./gradlew -Prelease.useLastTag=true findSonatypeStagingRepository releaseSonatypeStagingRepository
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_TOKEN }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
+        run: ./gradlew -Prelease.useLastTag=true kotlinUpgradeYarnLock doordeck-sdk:publishAndReleaseToMavenCentral --no-configuration-cache
 
   windows-binary-release:
     name: Generate Windows binary release
@@ -417,7 +343,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -445,7 +371,6 @@ jobs:
   nuget:
     name: Nuget publish
     needs: [pre-release,windows-binary-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: windows-latest
     defaults:
       run:
@@ -465,7 +390,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -497,7 +422,6 @@ jobs:
   pypi:
     name: PyPi publish
     needs: [pre-release,windows-binary-release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -516,7 +440,7 @@ jobs:
           cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-disabled: true
 
@@ -542,8 +466,7 @@ jobs:
 
   release:
     name: GitHub Release
-    needs: [pre-release, spm, npm, maven-release, nuget, pypi]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
+    needs: [pre-release, spm, npm, maven-publish, nuget, pypi]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -568,7 +491,6 @@ jobs:
   spm-release:
     name: SPM release
     needs: [pre-release, release]
-    if: (success() && github.ref == 'refs/heads/main') || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     continue-on-error: true
 

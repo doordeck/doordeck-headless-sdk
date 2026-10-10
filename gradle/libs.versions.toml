@@ -1,27 +1,27 @@
 [versions]
-kgp = "9.4.0"
+kgp = "9.4.1"
 bouncy-castle = "1.86"
 indispensable-asn1 = "3.26.0"
 kotlin = "2.4.20"
 multiplatform-settings = "1.3.0"
 android-min-sdk = "26"
-android-compile-sdk = "34"
+android-compile-sdk = "37"
 ios-min-sdk = "14"
 macos-min-sdk = "14"
 watchos-min-sdk = "11"
-nimbus-jose-jwt = "10.9.1"
-ktor-client = "3.5.2"
+nimbus-jose-jwt = "10.10"
+ktor-client = "3.6.0"
 libsodium = "0.9.5"
 libsodium-sumo = "0.8.2"
 security-crypto = "1.1.0"
 kotlinx-datetime = "0.8.0"
 kotlin-coroutines-test = "1.11.0"
-swift-klib = "1.1.0"
 asn1js = "3.0.6"
 pkijs = "3.3.3"
-kermit = "2.1.0"
-buildkonfig = "0.22.0"
+kermit = "2.2.0"
+buildkonfig = "0.23.0"
 kotlinx-serialization = "1.11.0"
+vanniktech-maven-publish = "0.37.0"
 
 [libraries]
 bouncy-castle = { module = "org.bouncycastle:bcprov-jdk18on", version.ref = "bouncy-castle" }
@@ -57,5 +57,5 @@ kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "kgp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-swift-klib = { id = "io.github.bernatcarbo.swiftklibfork", version.ref = "swift-klib" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
+vanniktech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "vanniktech-maven-publish" }

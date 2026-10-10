@@ -19,8 +19,8 @@ import com.doordeck.multiplatform.sdk.model.data.BasicUnlockOperation
 import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockBetween
 import com.doordeck.multiplatform.sdk.model.data.BasicUpdateSecureSettingUnlockDuration
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Params
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.QueryParams
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.BaseOperationRequest
 import com.doordeck.multiplatform.sdk.model.requests.BatchShareLockOperationRequest
 import com.doordeck.multiplatform.sdk.model.requests.BatchUserPublicKeyRequest
@@ -82,7 +82,7 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getSingleLockRequest(lockId: String): BasicLockResponse {
-        return CloudHttpClient.client.get(Paths.getSingleLockPath(lockId)) {
+        return CloudHttpClient.client.get(CloudPaths.getSingleLockPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
     }
@@ -104,10 +104,10 @@ internal object LockOperationsClient {
         start: Long? = now().minus(7.days).epochSeconds,
         end: Long? = now().epochSeconds
     ): List<BasicAuditResponse> {
-        return CloudHttpClient.client.get(Paths.getLockAuditTrailPath(lockId)) {
+        return CloudHttpClient.client.get(CloudPaths.getLockAuditTrailPath(lockId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-            parameter(Params.START, start)
-            parameter(Params.END, end)
+            parameter(QueryParams.START, start)
+            parameter(QueryParams.END, end)
         }.body()
     }
 
@@ -128,10 +128,10 @@ internal object LockOperationsClient {
         start: Long? = now().minus(7.days).epochSeconds,
         end: Long? = now().epochSeconds
     ): List<BasicAuditResponse> {
-        return CloudHttpClient.client.get(Paths.getAuditForUserPath(userId)) {
+        return CloudHttpClient.client.get(CloudPaths.getAuditForUserPath(userId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_2)
-            parameter(Params.START, start)
-            parameter(Params.END, end)
+            parameter(QueryParams.START, start)
+            parameter(QueryParams.END, end)
         }.body()
     }
 
@@ -146,7 +146,7 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getUsersForLockRequest(lockId: String): List<BasicUserLockResponse> {
-        return CloudHttpClient.client.get(Paths.getUsersForLockPath(lockId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getUsersForLockPath(lockId)).body()
     }
 
     /**
@@ -161,7 +161,7 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getLocksForUserRequest(userId: String): BasicLockUserResponse {
-        return CloudHttpClient.client.get(Paths.getLocksForUserPath(userId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getLocksForUserPath(userId)).body()
     }
 
     /**
@@ -309,7 +309,7 @@ internal object LockOperationsClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     private suspend fun updateLockProperties(lockId: String, request: UpdateLockPropertiesRequest) {
-        CloudHttpClient.client.put(Paths.getUpdateLockPropertiesPath(lockId)) {
+        CloudHttpClient.client.put(CloudPaths.getUpdateLockPropertiesPath(lockId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -327,9 +327,9 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getUserPublicKeyRequest(userEmail: String, visitor: Boolean): BasicUserPublicKeyResponse {
-        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath(userEmail)) {
+        return CloudHttpClient.client.post(CloudPaths.getUserPublicKeyPath(userEmail)) {
             addRequestHeaders()
-            parameter(Params.VISITOR, visitor)
+            parameter(QueryParams.VISITOR, visitor)
         }.body()
     }
 
@@ -405,7 +405,7 @@ internal object LockOperationsClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     private suspend fun getUserPublicKey(request: UserPublicKeyRequest): BasicUserPublicKeyResponse {
-        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getUserPublicKeyPath()) {
             addRequestHeaders()
             setBody(request)
         }.body()
@@ -471,7 +471,7 @@ internal object LockOperationsClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     private suspend fun batchGetUserPublicKey(request: BatchUserPublicKeyRequest): List<BasicBatchUserPublicKeyResponse> {
-        return CloudHttpClient.client.post(Paths.getUserPublicKeyPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getUserPublicKeyPath()) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(request)
         }.body()
@@ -654,12 +654,12 @@ internal object LockOperationsClient {
         if (operationRequest is LockOperationRequest && !directAccessEndpoints.isNullOrEmpty()) {
             // Launch the calls to the direct access endpoints + cloud endpoint
             LocalUnlockClient.unlock(
-                cloudEndpoint = Paths.getOperationPath(baseOperationRequest.lockId),
+                cloudEndpoint = CloudPaths.getOperationPath(baseOperationRequest.lockId),
                 directAccessEndpoints = directAccessEndpoints,
                 body = body
             )
         } else {
-            CloudHttpClient.client.post(Paths.getOperationPath(baseOperationRequest.lockId)) {
+            CloudHttpClient.client.post(CloudPaths.getOperationPath(baseOperationRequest.lockId)) {
                 addRequestHeaders(true)
                 setBody(body)
             }
@@ -676,7 +676,7 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getPinnedLocksRequest(): List<BasicLockResponse> {
-        return CloudHttpClient.client.get(Paths.getPinnedLocksPath()).body()
+        return CloudHttpClient.client.get(CloudPaths.getPinnedLocksPath()).body()
     }
 
     /**
@@ -688,7 +688,7 @@ internal object LockOperationsClient {
      */
     @JvmSynthetic
     internal suspend fun getShareableLocksRequest(): List<BasicShareableLockResponse> {
-        return CloudHttpClient.client.get(Paths.getShareableLocksPath()).body()
+        return CloudHttpClient.client.get(CloudPaths.getShareableLocksPath()).body()
     }
 
     /**

@@ -7,17 +7,6 @@ import kotlin.js.collections.JsSet
 import kotlin.js.collections.toList
 import kotlin.js.collections.toSet
 
-actual fun getEnvironmentVariable(name: String): String? =
-    processEnv(name) ?: karmaEnv(name)
-
-private fun processEnv(name: String): String? =
-    js("typeof process !== 'undefined' && process.env ? process.env[name] : null")
-        .unsafeCast<String?>()
-
-private fun karmaEnv(name: String): String? =
-    js("typeof __karma__ !== 'undefined' && __karma__.config && __karma__.config.env ? __karma__.config.env[name] : null")
-        .unsafeCast<String?>()
-
 internal inline fun <reified T>JsArray<T>.isEmpty(): Boolean = toList().isEmpty()
 internal inline fun <reified T>JsArray<T>.isNotEmpty(): Boolean = !isEmpty()
 internal inline fun <reified T>JsArray<T>.first(): T = toList().first()

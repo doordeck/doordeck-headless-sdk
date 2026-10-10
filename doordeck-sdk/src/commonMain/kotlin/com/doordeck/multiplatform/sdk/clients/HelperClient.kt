@@ -8,7 +8,7 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.TooManyRequestsException
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedLoginResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicAssistedRegisterEphemeralKeyResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicServerTimeResponse
@@ -140,7 +140,7 @@ internal object HelperClient {
 
     @JvmSynthetic
     internal suspend fun serverTimeRequest(): BasicServerTimeResponse {
-        return CloudHttpClient.client.get(Paths.getServerTimePath()) {
+        return CloudHttpClient.client.get(CloudPaths.getServerTimePath()) {
             addRequestHeaders()
         }.body()
     }
