@@ -64,7 +64,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
@@ -102,7 +102,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
@@ -135,7 +135,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 

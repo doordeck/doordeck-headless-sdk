@@ -23,9 +23,11 @@ import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
+import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
@@ -37,6 +39,7 @@ import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.UserAgent
 import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.AuthCircuitBreaker
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -126,27 +129,15 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
  * Attempts to request a new auth token whenever any API call returns an unauthorized response.
  */
 @JvmSynthetic
-internal fun HttpClientConfig<*>.installAuth() {
+internal fun HttpClientConfig<*>.installCloudAuth() {
     install(Auth) {
         bearer {
+            cacheTokens = false
+
             refreshTokens {
-                Context.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
-                        url {
-                            path(CloudPaths.getRefreshTokenPath())
-                        }
-                        headers {
-                            append(HttpHeaders.ContentType, ContentType.Application.Json)
-                            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
-                        }
-                        markAsRefreshTokenRequest()
-                    }.body()
-                    Context.also { context ->
-                        context.setCloudAuthToken(refreshTokens.authToken)
-                        context.setCloudRefreshToken(refreshTokens.refreshToken)
-                    }
+                client.refreshCloudAuthTokens()?.let { refreshedTokens ->
                     SdkLogger.i { "Auth tokens were automatically refreshed" }
-                    BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
+                    BearerTokens(refreshedTokens.authToken, refreshedTokens.refreshToken)
                 }
             }
         }
@@ -154,8 +145,83 @@ internal fun HttpClientConfig<*>.installAuth() {
 }
 
 /**
+ * Adds an authentication interceptor to the HTTP client.
+ * This interceptor automatically adds an Authorization header to requests that require authentication.
+ */
+@JvmSynthetic
+internal fun HttpClient.addCloudAuthInterceptor() {
+    plugin(HttpSend).intercept { request ->
+        if (CloudPaths.requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
+            val currentAuthToken = Context.getCloudAuthToken()
+            val authToken = if (currentAuthToken?.isJwtTokenInvalidOrExpired() == true) {
+                refreshCloudAuthTokens()?.authToken
+                    ?.also { SdkLogger.i { "Auth tokens were actively refreshed" } }
+                    ?: currentAuthToken
+            } else {
+                currentAuthToken
+            }
+            if (authToken != null) {
+                request.headers {
+                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $authToken")
+                }
+            }
+        }
+        execute(request)
+    }
+}
+
+@JvmSynthetic
+internal fun HttpClient.addFusionAuthInterceptor() {
+    plugin(HttpSend).intercept { request ->
+        if (FusionPaths.requiresAuth(request.url.encodedPath)) {
+            val fusionToken = Context.getFusionAuthToken()
+            if (fusionToken != null) {
+                request.headers {
+                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $fusionToken")
+                }
+            }
+        }
+        execute(request)
+    }
+}
+
+@JvmSynthetic
+internal suspend fun HttpClient.refreshCloudAuthTokens(): BasicTokenResponse? {
+    val currentRefreshToken = Context.getCloudRefreshToken() ?: return null
+
+    val refreshedTokens: BasicTokenResponse = post(Context.getApiEnvironment().cloudHost) {
+        url {
+            path(CloudPaths.getRefreshTokenPath())
+        }
+        headers {
+            append(HttpHeaders.ContentType, ContentType.Application.Json)
+            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
+        }
+        markAsRefreshTokenRequest()
+    }.body()
+
+    Context.also { context ->
+        context.setCloudAuthToken(refreshedTokens.authToken)
+        context.setCloudRefreshToken(refreshedTokens.refreshToken)
+    }
+
+    return refreshedTokens
+}
+
+/**
+ * Marks that this request is for refreshing auth tokens, resulting in a special handling of it.
+ *
+ * When a request is marked, no additional Authorization headers are included, and any custom
+ * Authorization headers are kept.
+ */
+@JvmSynthetic
+internal fun HttpRequestBuilder.markAsRefreshTokenRequest() {
+    attributes.put(AuthCircuitBreaker, Unit)
+}
+
+/**
  * Installs default request configuration with the specified host.
- * 
+ *
  * @param determineHost Function that returns the host URL to use for requests.
  */
 @JvmSynthetic
@@ -256,30 +322,6 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
                 else -> SdkException(message)
             }
         }
-    }
-}
-
-/**
- * Adds an authentication interceptor to the HTTP client.
- * This interceptor automatically adds an Authorization header to requests that require authentication.
- * 
- * @param requiresAuth Function that determines if a path requires authentication.
- * @param getAuthToken Function that provides the authentication token.
- */
-@JvmSynthetic
-internal fun HttpClient.addAuthInterceptor(
-    requiresAuth: (String) -> Boolean,
-    getAuthToken: () -> String?
-) {
-    plugin(HttpSend).intercept { request ->
-        if (requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
-            getAuthToken()?.let {
-                request.headers {
-                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $it")
-                }
-            }
-        }
-        execute(request)
     }
 }
 

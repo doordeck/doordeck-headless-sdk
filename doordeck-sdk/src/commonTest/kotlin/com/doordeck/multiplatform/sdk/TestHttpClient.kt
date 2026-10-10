@@ -1,7 +1,7 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
-import com.doordeck.multiplatform.sdk.util.installAuth
+import com.doordeck.multiplatform.sdk.util.installCloudAuth
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installResponseValidator
 import com.doordeck.multiplatform.sdk.util.toJson
@@ -32,7 +32,7 @@ internal inline fun <reified T>CloudHttpClient.setupMockClient(content: T): Http
     val client = HttpClient(mockEngine) {
         installResponseValidator()
         installContentNegotiation()
-        installAuth()
+        installCloudAuth()
     }.also { it.addExceptionInterceptor() }
     overrideClient(client)
     return client

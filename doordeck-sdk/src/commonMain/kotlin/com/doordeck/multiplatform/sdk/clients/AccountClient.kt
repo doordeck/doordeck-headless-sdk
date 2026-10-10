@@ -18,6 +18,7 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
+import com.doordeck.multiplatform.sdk.util.markAsRefreshTokenRequest
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -48,6 +49,7 @@ internal object AccountClient {
             ?: throw MissingContextFieldException("Refresh token is missing")
         return CloudHttpClient.client.post(CloudPaths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
+            markAsRefreshTokenRequest()
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
                 context.setCloudAuthToken(it.authToken)
