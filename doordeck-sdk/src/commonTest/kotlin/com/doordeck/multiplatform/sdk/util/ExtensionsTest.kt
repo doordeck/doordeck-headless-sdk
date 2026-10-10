@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -22,7 +21,6 @@ import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
 import com.doordeck.multiplatform.sdk.model.data.BasicDataSource
 import com.doordeck.multiplatform.sdk.model.data.BasicPacController
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomDouble
@@ -194,6 +192,19 @@ class ExtensionsTest {
         // Given
         val httpClient = HttpClient().also {
             it.addCloudAuthInterceptor()
+        }
+
+        httpClient.use { client ->
+            // Then
+            assertNotNull(client.pluginOrNull(HttpSend))
+        }
+    }
+
+    @Test
+    fun shouldInstallFusionAuthInterceptor() = runTest {
+        // Given
+        val httpClient = HttpClient().also {
+            it.addFusionAuthInterceptor()
         }
 
         httpClient.use { client ->
