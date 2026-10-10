@@ -179,10 +179,10 @@ class ExtensionsTest {
     }
 
     @Test
-    fun shouldInstallAuth() = runTest {
+    fun shouldInstallCloudAuth() = runTest {
         // Given
         val httpClient = HttpClient {
-            installAuth()
+            installCloudAuth()
         }
 
         // Then
@@ -190,13 +190,10 @@ class ExtensionsTest {
     }
 
     @Test
-    fun shouldInstallInterceptor() = runTest {
+    fun shouldInstallCloudAuthInterceptor() = runTest {
         // Given
         val httpClient = HttpClient().also {
-            it.addAuthInterceptor(
-                requiresAuth = CloudPaths::requiresAuth,
-                getAuthToken = Context::getCloudAuthToken
-            )
+            it.addCloudAuthInterceptor()
         }
 
         httpClient.use { client ->

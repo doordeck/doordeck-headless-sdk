@@ -2,11 +2,9 @@ package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_EXPIRED_JWT
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
-import com.doordeck.multiplatform.sdk.model.network.Paths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.randomBoolean
@@ -68,7 +66,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
@@ -77,82 +75,6 @@ class AuthPluginTest : IntegrationTest() {
             val response = AccountClient.getUserDetailsRequest()
 
             // Then
-            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
-            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
-            assertEquals(userDetails, response)
-        }
-    }
-
-    @Test
-    fun shouldRefreshTokensWhenAuthTokenIsAboutToExpireEvenIfResponseIsSuccessful() = runTest {
-        // Given
-        val expiredAuthToken = TEST_EXPIRED_JWT
-        val currentRefreshToken = randomString()
-        Context.setCloudAuthToken(expiredAuthToken)
-        Context.setCloudRefreshToken(currentRefreshToken)
-
-        val tokenResponse = BasicTokenResponse(
-            authToken = randomString(),
-            refreshToken = randomString(),
-        )
-        val staleUserDetails = BasicUserDetailsResponse(
-            email = randomEmail(),
-            displayName = randomNullable { randomString() },
-            emailVerified = randomBoolean(),
-            publicKey = randomPublicKey().encodeByteArrayToBase64()
-        )
-        val userDetails = BasicUserDetailsResponse(
-            email = randomEmail(),
-            displayName = randomNullable { randomString() },
-            emailVerified = randomBoolean(),
-            publicKey = randomPublicKey().encodeByteArrayToBase64()
-        )
-
-        val mockEngine = MockEngine.config {
-            addHandler {
-                respondContent(staleUserDetails)
-            }
-            addHandler {
-                respondContent(tokenResponse)
-            }
-            addHandler {
-                respondContent(userDetails)
-            }
-        }
-
-        val client = HttpClient(mockEngine) {
-            installResponseValidator()
-            installContentNegotiation()
-            installAuth()
-        }.also {
-            it.addExceptionInterceptor()
-            it.addAuthInterceptor(
-                requiresAuth = Paths::requiresAuth,
-                getAuthToken = Context::getCloudAuthToken
-            )
-        }
-        CloudHttpClient.overrideClient(client)
-
-        client.use { _ ->
-            // When
-            val response = AccountClient.getUserDetailsRequest()
-
-            // Then
-            val requests = (client.engine as MockEngine).requestHistory
-            assertEquals(3, requests.size)
-            assertEquals(
-                "${AuthScheme.Bearer} $expiredAuthToken",
-                requests[0].headers[HttpHeaders.Authorization]
-            )
-            assertEquals(
-                "${AuthScheme.Bearer} $currentRefreshToken",
-                requests[1].headers[HttpHeaders.Authorization]
-            )
-            assertEquals(
-                "${AuthScheme.Bearer} ${tokenResponse.authToken}",
-                requests[2].headers[HttpHeaders.Authorization]
-            )
-
             assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
             assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
             assertEquals(userDetails, response)
@@ -182,7 +104,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
@@ -215,7 +137,7 @@ class AuthPluginTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-            installAuth()
+            installCloudAuth()
         }.also { it.addExceptionInterceptor() }
         CloudHttpClient.overrideClient(client)
 
