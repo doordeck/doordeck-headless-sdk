@@ -5,7 +5,6 @@ import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_EXPIRED_CERTIFICATE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_VALID_CERTIFICATE
-import com.doordeck.multiplatform.sdk.TestConstants.TEST_VALID_JWT
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.model.common.ContextState
@@ -17,6 +16,7 @@ import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUrlString
 import com.doordeck.multiplatform.sdk.randomUuidString
+import com.doordeck.multiplatform.sdk.randomValidJwt
 import com.doordeck.multiplatform.sdk.requestHistory
 import com.doordeck.multiplatform.sdk.responseHistory
 import com.doordeck.multiplatform.sdk.setupMockClient
@@ -148,13 +148,14 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldCheckAuthTokenValidity() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
             email = randomEmail(),
             displayName = randomString(),
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
 
         client.use {
             // When
@@ -170,7 +171,8 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldCheckAuthTokenValidityWithoutServerCheck() = runTest {
         // Given
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        val validJwt = randomValidJwt()
+        ContextManager.setCloudAuthToken(validJwt)
         val client = CloudHttpClient.setupMockClient(null)
 
         client.use {
@@ -366,13 +368,14 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsInvalid() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
             email = randomEmail(),
             displayName = randomString(),
             emailVerified = randomBoolean(),
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
 
         client.use {
             // When
@@ -388,8 +391,9 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsInvalidWithoutServerCheck() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(null)
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
 
         client.use {
             // When
@@ -405,6 +409,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsNotVerified() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
             email = randomEmail(),
             displayName = randomString(),
@@ -412,7 +417,7 @@ class ContextManagerTest : IntegrationTest() {
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
         val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
 
         client.use {
@@ -429,9 +434,10 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateKeyPairIsNotVerifiedWithoutServerCheck() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(null)
         val keyPair = CryptoManager.generateKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
 
         client.use {
@@ -448,6 +454,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateCertificateChainIsInvalid() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
             email = randomEmail(),
             displayName = randomString(),
@@ -455,7 +462,7 @@ class ContextManagerTest : IntegrationTest() {
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
         val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
@@ -474,9 +481,10 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateCertificateChainIsInvalidWithoutServerCheck() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(null)
         val keyPair = CryptoManager.generateKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_EXPIRED_CERTIFICATE))
@@ -495,6 +503,7 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateReady() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(BasicUserDetailsResponse(
             email = randomEmail(),
             displayName = randomString(),
@@ -502,7 +511,7 @@ class ContextManagerTest : IntegrationTest() {
             publicKey = randomPublicKey().encodeByteArrayToBase64()
         ))
         val keyPair = CryptoManager.generateRawKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE))
@@ -521,9 +530,10 @@ class ContextManagerTest : IntegrationTest() {
     @Test
     fun shouldGetContextStateReadyWithoutServerCheck() = runTest {
         // Given
+        val validJwt = randomValidJwt()
         val client = CloudHttpClient.setupMockClient(null)
         val keyPair = CryptoManager.generateKeyPair()
-        ContextManager.setCloudAuthToken(TEST_VALID_JWT)
+        ContextManager.setCloudAuthToken(validJwt)
         ContextManager.setKeyPair(keyPair.public, keyPair.private)
         ContextManager.setKeyPairVerified(keyPair.public)
         ContextManager.setCertificateChain(jsArrayOf(PLATFORM_TEST_VALID_CERTIFICATE))

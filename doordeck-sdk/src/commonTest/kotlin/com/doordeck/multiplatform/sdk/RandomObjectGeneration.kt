@@ -1,7 +1,11 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
 /**
@@ -39,3 +43,11 @@ internal fun randomString(
 internal fun randomByteArray(): ByteArray = Random.nextBytes(ByteArray(randomInt(1, 20)))
 
 internal inline fun <T> randomNullable(supplier: () -> T): T? = if (randomBoolean()) supplier() else null
+
+internal fun randomJwt(expiration: Instant): String {
+    val header = """{"alg":"none","typ":"JWT","jti":"${randomUuidString()}"}""".encodeToByteArray().encodeByteArrayToBase64()
+    val payload = """{"exp":${expiration.epochSeconds}}""".encodeToByteArray().encodeByteArrayToBase64()
+    return "$header.$payload.${randomUuidString()}"
+}
+
+internal fun randomValidJwt(): String = randomJwt(expiration = Clock.System.now() + 30.days)
