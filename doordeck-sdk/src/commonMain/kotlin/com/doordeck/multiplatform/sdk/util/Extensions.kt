@@ -145,13 +145,16 @@ internal fun HttpClientConfig<*>.installCloudAuth() {
 }
 
 /**
- * Adds an authentication interceptor to the HTTP client.
- * This interceptor automatically adds an Authorization header to requests that require authentication.
+ * Installs an [HttpSend] interceptor that adds a Bearer `Authorization` header to requests
+ * whose path requires cloud authentication, unless one is already set.
+ *
+ * If the current auth token is invalid or expired (`isJwtTokenInvalidOrExpired()`), it tries to refresh it first
+ * and falls back to the existing token if the refresh fails. No header is added when no token is available.
  */
 @JvmSynthetic
 internal fun HttpClient.addCloudAuthInterceptor() {
     plugin(HttpSend).intercept { request ->
-        if (CloudPaths.requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
+        if (CloudPaths.requiresAuth(request.url.encodedPath)) {
             val currentAuthToken = Context.getCloudAuthToken()
             val authToken = if (currentAuthToken?.isJwtTokenInvalidOrExpired() == true) {
                 refreshCloudAuthTokens()?.authToken
@@ -170,6 +173,10 @@ internal fun HttpClient.addCloudAuthInterceptor() {
     }
 }
 
+/**
+ * Installs an [HttpSend] interceptor that adds a Bearer `Authorization` header to requests
+ * whose path requires fusion authentication.
+ */
 @JvmSynthetic
 internal fun HttpClient.addFusionAuthInterceptor() {
     plugin(HttpSend).intercept { request ->
@@ -185,6 +192,11 @@ internal fun HttpClient.addFusionAuthInterceptor() {
     }
 }
 
+/**
+ * Requests new cloud auth tokens using the stored refresh token and saves them in [Context].
+ *
+ * @return the refreshed tokens, or `null` if no refresh token is stored.
+ */
 @JvmSynthetic
 internal suspend fun HttpClient.refreshCloudAuthTokens(): BasicTokenResponse? {
     val currentRefreshToken = Context.getCloudRefreshToken() ?: return null
