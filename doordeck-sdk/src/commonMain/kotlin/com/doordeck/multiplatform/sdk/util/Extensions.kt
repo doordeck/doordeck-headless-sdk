@@ -52,6 +52,7 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -127,7 +128,9 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
 
 /**
  * Installs authentication handling with automatic token refresh.
- * Attempts to request a new auth token whenever any API call returns an unauthorized response.
+ * Attempts to request a new auth token whenever an API call that requires authentication returns an unauthorized
+ * response. Unauthorized responses from the other calls (e.g. a login with wrong credentials) are not caused by the
+ * auth token, so they are left untouched.
  */
 @JvmSynthetic
 internal fun HttpClientConfig<*>.installCloudAuth() {
@@ -136,6 +139,7 @@ internal fun HttpClientConfig<*>.installCloudAuth() {
             cacheTokens = false
 
             refreshTokens {
+                if (!CloudPaths.requiresAuth(response.request.url.encodedPath)) return@refreshTokens null
                 client.refreshCloudAuthTokens()?.let { refreshedTokens ->
                     SdkLogger.i { "Auth tokens were automatically refreshed" }
                     BearerTokens(refreshedTokens.authToken, refreshedTokens.refreshToken)
