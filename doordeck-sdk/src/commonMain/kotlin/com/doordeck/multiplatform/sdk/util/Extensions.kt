@@ -173,11 +173,8 @@ internal fun HttpClient.addCloudAuthInterceptor() {
 internal fun HttpClient.addFusionAuthInterceptor() {
     plugin(HttpSend).intercept { request ->
         if (FusionPaths.requiresAuth(request.url.encodedPath)) {
-            val fusionToken = Context.getFusionAuthToken()
-            if (fusionToken != null) {
-                request.headers {
-                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $fusionToken")
-                }
+            Context.getFusionAuthToken()?.let { authToken ->
+                request.headers[HttpHeaders.Authorization] = "${AuthScheme.Bearer} $authToken"
             }
         }
         execute(request)
