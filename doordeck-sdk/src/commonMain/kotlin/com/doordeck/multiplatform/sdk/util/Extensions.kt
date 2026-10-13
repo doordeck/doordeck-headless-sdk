@@ -226,7 +226,8 @@ private suspend fun HttpClient.resolveCloudAuthToken(): String? {
  *
  * @return the new auth token, or `null` if no refresh token is stored or the refresh failed.
  */
-private suspend fun HttpClient.refreshExpiredCloudAuthToken(expiredToken: String): String? {
+@JvmSynthetic
+internal suspend fun HttpClient.refreshExpiredCloudAuthToken(expiredToken: String): String? {
     return cloudAuthTokensRefreshMutex.withLock {
         val storedToken = Context.getCloudAuthToken()
         if (storedToken != expiredToken) {

@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clients.AccountClient
@@ -13,6 +14,7 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
+import com.doordeck.multiplatform.sdk.util.refreshExpiredCloudAuthToken
 import kotlin.jvm.JvmSynthetic
 
 internal object Context {
@@ -64,15 +66,17 @@ internal object Context {
     /**
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
+     * Such a token is first refreshed when a refresh token is stored, so it only counts as invalid or expired when it
+     * cannot be refreshed without user interaction.
      *
      * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
-     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true). Otherwise, returns false.
+     * @return true if the token is null, or if it is malformed, expired, or invalidated (when checkServerInvalidation is true) and it could not be refreshed. Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
         val token = getCloudAuthToken() ?: return true
         if (token.isJwtTokenInvalidOrExpired()) {
-            return true
+            return CloudHttpClient.client.refreshExpiredCloudAuthToken(expiredToken = token) == null
         }
         return if (checkServerInvalidation) {
             try {
