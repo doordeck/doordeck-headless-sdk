@@ -22,11 +22,9 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.mask
 import com.russhwolf.settings.Settings
-import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.locks.SynchronizedObject
 import io.ktor.utils.io.locks.synchronized
 
-@file:OptIn(InternalAPI::class)
 internal class DefaultSecureStorage(
     private val settings: Settings
 ) : SecureStorage {
@@ -156,18 +154,20 @@ internal class DefaultSecureStorage(
         }
     }
 
-    private inline fun <reified T : Any> storeValue(key: StorageKey, value: T?, maskValue: Boolean = false) = synchronized(lock) {
-        if (value == null) {
-            settings.remove(key.name)
-            SdkLogger.d { "Removed stored value for key: $key" }
-            return
+    private inline fun <reified T : Any> storeValue(key: StorageKey, value: T?, maskValue: Boolean = false) {
+        synchronized(lock) {
+            if (value == null) {
+                settings.remove(key.name)
+                SdkLogger.d { "Removed stored value for key: $key" }
+                return
+            }
+            when (value) {
+                is String -> settings.putString(key.name, value)
+                is Int -> settings.putInt(key.name, value)
+                else -> throw SdkException("Unsupported type ${T::class} for key $key")
+            }
+            SdkLogger.d { "Stored value: ${if (maskValue) value.toString().mask() else value} for key: $key" }
         }
-        when (value) {
-            is String -> settings.putString(key.name, value)
-            is Int -> settings.putInt(key.name, value)
-            else -> throw SdkException("Unsupported type ${T::class} for key $key")
-        }
-        SdkLogger.d { "Stored value: ${if (maskValue) value.toString().mask() else value} for key: $key" }
     }
 
     private inline fun <reified T : Any> retrieveValue(key: StorageKey, maskValue: Boolean = false): T? = synchronized(lock) {

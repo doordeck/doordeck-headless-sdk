@@ -1,14 +1,12 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.russhwolf.settings.Settings
-import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.locks.SynchronizedObject
 import io.ktor.utils.io.locks.synchronized
 
 /**
  * Thread-safe in-memory storage implementation
  */
-@file:OptIn(InternalAPI::class)
 internal class MemorySettings(
     initValues: Map<String, Any> = emptyMap()
 ) : Settings {
