@@ -3,6 +3,7 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.clients.AccountClient
+import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.clock.SystemClock.now
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
@@ -164,10 +165,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * The auth interceptor refreshes an expired auth token before the request is sent, so the request goes out
-     * with the new token and no unauthorized round trip is needed.
-     */
     @Test
     fun shouldRefreshExpiredTokenBeforeSendingRequest() = runTest {
         // Given
@@ -257,10 +254,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * A failed refresh of an expired token must not fail the request: it is still sent with the stored token,
-     * leaving the unauthorized-response handling of the plugin as the fallback.
-     */
     @Test
     fun shouldSendRequestWithStoredTokenWhenRefreshBeforeSendingFails() = runTest {
         // Given
@@ -294,10 +287,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * The request retried by the plugin after an unauthorized response must carry the refreshed token only,
-     * not the rejected one next to it.
-     */
     @Test
     fun shouldRetryWithRefreshedTokenOnlyAfterUnauthorizedResponse() = runTest {
         // Given
@@ -338,10 +327,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * Concurrent requests with an expired token share a single refresh: the first one refreshes and the others
-     * wait for it and reuse the new token.
-     */
     @Test
     fun shouldRefreshExpiredTokenOnceForConcurrentRequests() = runTest {
         // Given
@@ -379,10 +364,35 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * During the SDK initialization, a throwaway authenticated request is sent so the interceptor refreshes an
-     * expired auth token, and the request goes out with the new token.
-     */
+    @Test
+    fun shouldNotRefreshTokensOnUnauthorizedResponseFromPathWithoutAuth() = runTest {
+        // Given
+        val currentAuthToken = randomValidJwt()
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            assertFailsWith<UnauthorizedException> {
+                AccountlessClient.loginRequest(randomEmail(), randomString())
+            }
+
+            // Then
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            assertEquals(CloudPaths.getLoginPath(), requests[0].url.encodedPath)
+        }
+    }
+
     @Test
     fun shouldRefreshExpiredTokenOnInitialization() = runTest {
         // Given
@@ -440,9 +450,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * Without a refresh token there is nothing to refresh, so no request is sent during the SDK initialization.
-     */
     @Test
     fun shouldNotSendRequestWithoutRefreshTokenOnInitialization() = runTest {
         // Given
@@ -459,9 +466,6 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
-    /**
-     * A failed refresh during the SDK initialization is swallowed and leaves the stored tokens untouched.
-     */
     @Test
     fun shouldIgnoreFailedRefreshOnInitialization() = runTest {
         // Given
@@ -496,9 +500,6 @@ class AuthPluginTest : IntegrationTest() {
         publicKey = randomPublicKey().encodeByteArrayToBase64()
     )
 
-    /**
-     * Asserts the request was sent to [path] with exactly one Bearer `Authorization` header holding [token].
-     */
     private fun HttpRequestData.assertSentTo(path: String, token: String) {
         assertEquals(path, url.encodedPath)
         assertEquals(listOf("${AuthScheme.Bearer} $token"), headers.getAll(HttpHeaders.Authorization))
