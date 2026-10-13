@@ -5,7 +5,6 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.util.addCloudAuthInterceptor
 import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
 import com.doordeck.multiplatform.sdk.util.addFusionAuthInterceptor
-import com.doordeck.multiplatform.sdk.util.installCloudAuth
 import com.doordeck.multiplatform.sdk.util.installCertificatePinner
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installDefaultRequest
@@ -43,7 +42,6 @@ internal fun createCloudHttpClient(): HttpClient {
     return HttpClient {
         installContentNegotiation()
         installTimeout()
-        installCloudAuth()
         installCertificatePinner()
         installUserAgent()
         installLogging()

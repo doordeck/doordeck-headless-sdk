@@ -14,7 +14,7 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
-import com.doordeck.multiplatform.sdk.util.refreshExpiredCloudAuthToken
+import com.doordeck.multiplatform.sdk.util.refreshCloudAuthTokensOrNull
 import kotlin.jvm.JvmSynthetic
 
 internal object Context {
@@ -66,17 +66,17 @@ internal object Context {
     /**
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
-     * Such a token is first refreshed when a refresh token is stored, so it only counts as invalid or expired when it
-     * cannot be refreshed without user interaction.
+     * Such a token is first refreshed when a usable refresh token is stored, so it only counts as invalid or expired
+     * when it cannot be refreshed without user interaction.
      *
      * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
-     * @return true if the token is null, or if it is malformed, expired, or invalidated (when checkServerInvalidation is true) and it could not be refreshed. Otherwise, returns false.
+     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true) and it could not be refreshed. Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
-        val token = getCloudAuthToken() ?: return true
-        if (token.isJwtTokenInvalidOrExpired()) {
-            return CloudHttpClient.client.refreshExpiredCloudAuthToken(expiredToken = token) == null
+        val token = getCloudAuthToken()
+        if (token == null || token.isJwtTokenInvalidOrExpired()) {
+            return CloudHttpClient.client.refreshCloudAuthTokensOrNull(rejectedToken = token) == null
         }
         return if (checkServerInvalidation) {
             try {
@@ -306,7 +306,7 @@ internal object Context {
     /**
      * Refreshes the cloud auth tokens if they are no longer valid.
      *
-     * The refresh is done by the Ktor auth plugin, which intercepts outgoing requests; this function
+     * The refresh is done by the cloud auth interceptor, which intercepts outgoing requests; this function
      * just issues a throwaway authenticated request to trigger it. Failures are ignored, so a
      * successful return does not guarantee valid tokens.
      *
@@ -314,7 +314,7 @@ internal object Context {
      */
     @JvmSynthetic
     internal suspend fun attemptToRefreshAuthTokens() {
-        if (getCloudAuthToken() != null && getCloudRefreshToken() != null) {
+        if (getCloudRefreshToken() != null) {
             runCatching {
                 AccountClient.getUserDetailsRequest()
             }

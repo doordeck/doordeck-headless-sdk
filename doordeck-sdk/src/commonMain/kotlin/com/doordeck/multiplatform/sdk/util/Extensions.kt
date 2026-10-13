@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.ProjectVersion
-import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -22,12 +21,8 @@ import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.CloudPaths
-import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
-import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
@@ -38,10 +33,6 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.UserAgent
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.AuthCircuitBreaker
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -50,22 +41,16 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
-import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.append
 import io.ktor.http.auth.AuthScheme
-import io.ktor.http.encodedPath
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.CancellationException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.properties.Properties
 import kotlinx.serialization.properties.encodeToStringMap
 import kotlin.jvm.JvmSynthetic
@@ -124,155 +109,6 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
     install(ContentNegotiation) {
         json(JSON)
     }
-}
-
-/**
- * Installs authentication handling with automatic token refresh.
- * Attempts to request a new auth token whenever an API call that requires authentication returns an unauthorized
- * response. Unauthorized responses from the other calls (e.g. a login with wrong credentials) are not caused by the
- * auth token, so they are left untouched.
- */
-@JvmSynthetic
-internal fun HttpClientConfig<*>.installCloudAuth() {
-    install(Auth) {
-        bearer {
-            cacheTokens = false
-
-            refreshTokens {
-                if (!CloudPaths.requiresAuth(response.request.url.encodedPath)) return@refreshTokens null
-                client.refreshCloudAuthTokens()?.let { refreshedTokens ->
-                    SdkLogger.i { "Auth tokens were automatically refreshed" }
-                    BearerTokens(refreshedTokens.authToken, refreshedTokens.refreshToken)
-                }
-            }
-        }
-    }
-}
-
-/**
- * Installs an [HttpSend] interceptor that sets a Bearer `Authorization` header on requests
- * whose path requires cloud authentication, replacing the one attached to a previous attempt of the
- * same request (e.g. a retry after a token refresh).
- *
- * The token is resolved by [resolveCloudAuthToken], which refreshes it first when it is invalid or expired.
- * No header is set when no token is available.
- */
-@JvmSynthetic
-internal fun HttpClient.addCloudAuthInterceptor() {
-    plugin(HttpSend).intercept { request ->
-        if (CloudPaths.requiresAuth(request.url.encodedPath)) {
-            resolveCloudAuthToken()?.let { authToken ->
-                request.headers[HttpHeaders.Authorization] = "${AuthScheme.Bearer} $authToken"
-            }
-        }
-        execute(request)
-    }
-}
-
-/**
- * Installs an [HttpSend] interceptor that adds a Bearer `Authorization` header to requests
- * whose path requires fusion authentication.
- */
-@JvmSynthetic
-internal fun HttpClient.addFusionAuthInterceptor() {
-    plugin(HttpSend).intercept { request ->
-        if (FusionPaths.requiresAuth(request.url.encodedPath)) {
-            Context.getFusionAuthToken()?.let { authToken ->
-                request.headers[HttpHeaders.Authorization] = "${AuthScheme.Bearer} $authToken"
-            }
-        }
-        execute(request)
-    }
-}
-
-/**
- * Serializes the cloud token refreshes: the backend rotates the refresh token on every use, so concurrent
- * refreshes would invalidate each other.
- */
-private val cloudAuthTokensRefreshMutex = Mutex()
-
-/**
- * Requests new cloud auth tokens using the stored refresh token and saves them in [Context].
- * Concurrent callers wait for the in-flight refresh to complete.
- *
- * @return the refreshed tokens, or `null` if no refresh token is stored.
- */
-@JvmSynthetic
-internal suspend fun HttpClient.refreshCloudAuthTokens(): BasicTokenResponse? = cloudAuthTokensRefreshMutex.withLock {
-    exchangeCloudRefreshToken()
-}
-
-/**
- * Resolves the cloud auth token to authenticate with, reading the stored one only once.
- *
- * When the stored token is invalid or expired (`isJwtTokenInvalidOrExpired()`) and a refresh token is stored, it is
- * refreshed first (see [refreshExpiredCloudAuthToken]). This is the best effort: a failed refresh is logged and
- * swallowed so the request can still be sent with the stored token, leaving the unauthorized-response handling of
- * the auth plugin as the fallback.
- *
- * @return the auth token to use, or `null` if none is stored.
- */
-private suspend fun HttpClient.resolveCloudAuthToken(): String? {
-    val storedToken = Context.getCloudAuthToken() ?: return null
-    if (!storedToken.isJwtTokenInvalidOrExpired()) {
-        return storedToken
-    }
-    return refreshExpiredCloudAuthToken(expiredToken = storedToken) ?: storedToken
-}
-
-/**
- * Refreshes the cloud auth tokens, given that [expiredToken] is the stored auth token. Concurrent callers wait for
- * the in-flight refresh and reuse its result instead of refreshing again.
- *
- * @return the new auth token, or `null` if no refresh token is stored or the refresh failed.
- */
-@JvmSynthetic
-internal suspend fun HttpClient.refreshExpiredCloudAuthToken(expiredToken: String): String? {
-    return cloudAuthTokensRefreshMutex.withLock {
-        val storedToken = Context.getCloudAuthToken()
-        if (storedToken != expiredToken) {
-            return storedToken // Refreshed by a concurrent caller while waiting for the lock
-        }
-        try {
-            exchangeCloudRefreshToken()?.authToken?.also {
-                SdkLogger.i { "Auth tokens were actively refreshed" }
-            }
-        } catch (exception: Exception) {
-            currentCoroutineContext().ensureActive()
-            SdkLogger.w(exception) { "Failed to actively refresh the auth tokens, the stored auth token will be used" }
-            null
-        }
-    }
-}
-
-private suspend fun HttpClient.exchangeCloudRefreshToken(): BasicTokenResponse? {
-    val currentRefreshToken = Context.getCloudRefreshToken() ?: return null
-
-    val refreshedTokens: BasicTokenResponse = post(CloudPaths.getRefreshTokenPath()) {
-        headers {
-            append(HttpHeaders.ContentType, ContentType.Application.Json)
-            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
-        }
-        markAsRefreshTokenRequest()
-    }.body()
-
-    Context.also { context ->
-        context.setCloudAuthToken(refreshedTokens.authToken)
-        context.setCloudRefreshToken(refreshedTokens.refreshToken)
-    }
-
-    return refreshedTokens
-}
-
-/**
- * Marks that this request is for refreshing auth tokens, resulting in a special handling of it.
- *
- * When a request is marked, no additional Authorization headers are included, and any custom
- * Authorization headers are kept.
- */
-@JvmSynthetic
-internal fun HttpRequestBuilder.markAsRefreshTokenRequest() {
-    attributes.put(AuthCircuitBreaker, Unit)
 }
 
 /**

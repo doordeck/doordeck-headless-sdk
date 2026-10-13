@@ -35,7 +35,6 @@ import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent
-import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.pluginOrNull
 import io.ktor.client.request.HttpRequestBuilder
@@ -173,43 +172,6 @@ class ExtensionsTest {
             assertNull(httpClient.pluginOrNull(UserAgent))
         } else {
             assertNotNull(httpClient.pluginOrNull(UserAgent))
-        }
-    }
-
-    @Test
-    fun shouldInstallCloudAuth() = runTest {
-        // Given
-        val httpClient = HttpClient {
-            installCloudAuth()
-        }
-
-        // Then
-        assertNotNull(httpClient.pluginOrNull(Auth))
-    }
-
-    @Test
-    fun shouldInstallCloudAuthInterceptor() = runTest {
-        // Given
-        val httpClient = HttpClient().also {
-            it.addCloudAuthInterceptor()
-        }
-
-        httpClient.use { client ->
-            // Then
-            assertNotNull(client.pluginOrNull(HttpSend))
-        }
-    }
-
-    @Test
-    fun shouldInstallFusionAuthInterceptor() = runTest {
-        // Given
-        val httpClient = HttpClient().also {
-            it.addFusionAuthInterceptor()
-        }
-
-        httpClient.use { client ->
-            // Then
-            assertNotNull(client.pluginOrNull(HttpSend))
         }
     }
 

@@ -32,7 +32,6 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor-client" }
-ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor-client" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor-client" }
 ktor-client-encoding = { module = "io.ktor:ktor-client-encoding", version.ref = "ktor-client" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor-client" }

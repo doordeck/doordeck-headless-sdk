@@ -82,6 +82,56 @@ class ContextTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldRefreshMissingTokenWhenCheckingItsValidity() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        )
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(tokenResponse)
+
+        client.use { _ ->
+            // When
+            val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+
+            // Then
+            assertFalse(result)
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldNotSendRejectedRefreshTokenAgainWhenCheckingValidity() = runTest {
+        // Given
+        Context.setCloudAuthToken(randomJwt(now().minus(1.hours)))
+        Context.setCloudRefreshToken(randomString())
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val firstResult = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+            val secondResult = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+
+            // Then
+            assertTrue(firstResult)
+            assertTrue(secondResult)
+            assertEquals(1, client.requestHistory().size)
+        }
+    }
+
+    @Test
     fun shouldBeInvalidOrExpiredWhenExpiredTokenHasNoRefreshToken() = runTest {
         // Given
         val expiredJwt = randomJwt(now().minus(1.hours))
