@@ -184,7 +184,6 @@ kotlin {
                 optIn("kotlin.js.ExperimentalJsCollectionsApi")
                 optIn("kotlin.js.ExperimentalWasmJsInterop")
                 optIn("kotlin.experimental.ExperimentalObjCRefinement")
-                optIn("io.ktor.utils.io.InternalAPI")
             }
         }
 

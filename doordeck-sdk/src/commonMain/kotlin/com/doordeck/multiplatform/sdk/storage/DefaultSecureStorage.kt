@@ -22,9 +22,11 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.mask
 import com.russhwolf.settings.Settings
+import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.locks.SynchronizedObject
 import io.ktor.utils.io.locks.synchronized
 
+@file:OptIn(InternalAPI::class)
 internal class DefaultSecureStorage(
     private val settings: Settings
 ) : SecureStorage {
@@ -146,7 +148,7 @@ internal class DefaultSecureStorage(
                     .filter { it.fromVersion >= storedVersion }
                     .forEach { migration ->
                         migration.migrate(settings)
-                        setStorageVersion(migration.toVersion)
+                        settings.putInt(STORAGE_VERSION_KEY.name, migration.toVersion)
                     }
             } catch (exception: Exception) {
                 throw SdkException("Failed to perform storage migrations", exception)
