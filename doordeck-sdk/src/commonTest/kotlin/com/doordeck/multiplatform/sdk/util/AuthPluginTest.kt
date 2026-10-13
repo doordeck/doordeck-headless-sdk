@@ -379,6 +379,116 @@ class AuthPluginTest : IntegrationTest() {
         }
     }
 
+    /**
+     * During the SDK initialization, a throwaway authenticated request is sent so the interceptor refreshes an
+     * expired auth token, and the request goes out with the new token.
+     */
+    @Test
+    fun shouldRefreshExpiredTokenOnInitialization() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        )
+        Context.setCloudAuthToken(randomJwt(now().minus(1.hours)))
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondContent(tokenResponse)
+            }
+            addHandler {
+                respondContent(randomUserDetails())
+            }
+        })
+
+        client.use { _ ->
+            // When
+            Context.attemptToRefreshAuthTokens()
+
+            // Then
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(2, requests.size)
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = tokenResponse.authToken)
+        }
+    }
+
+    @Test
+    fun shouldNotRefreshValidTokenOnInitialization() = runTest {
+        // Given
+        val currentAuthToken = randomValidJwt()
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(randomUserDetails())
+
+        client.use { _ ->
+            // When
+            Context.attemptToRefreshAuthTokens()
+
+            // Then
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
+        }
+    }
+
+    /**
+     * Without a refresh token there is nothing to refresh, so no request is sent during the SDK initialization.
+     */
+    @Test
+    fun shouldNotSendRequestWithoutRefreshTokenOnInitialization() = runTest {
+        // Given
+        Context.setCloudAuthToken(randomJwt(now().minus(1.hours)))
+
+        val client = CloudHttpClient.setupMockClient(randomUserDetails())
+
+        client.use { _ ->
+            // When
+            Context.attemptToRefreshAuthTokens()
+
+            // Then
+            assertEquals(0, client.requestHistory().size)
+        }
+    }
+
+    /**
+     * A failed refresh during the SDK initialization is swallowed and leaves the stored tokens untouched.
+     */
+    @Test
+    fun shouldIgnoreFailedRefreshOnInitialization() = runTest {
+        // Given
+        val expiredJwt = randomJwt(now().minus(1.hours))
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(expiredJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            Context.attemptToRefreshAuthTokens()
+
+            // Then
+            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+        }
+    }
+
     private fun randomUserDetails() = BasicUserDetailsResponse(
         email = randomEmail(),
         displayName = randomNullable { randomString() },

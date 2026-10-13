@@ -58,7 +58,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.append
 import io.ktor.http.auth.AuthScheme
 import io.ktor.http.encodedPath
-import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.CancellationException
@@ -151,16 +150,14 @@ internal fun HttpClientConfig<*>.installCloudAuth() {
  * whose path requires cloud authentication, replacing the one attached to a previous attempt of the
  * same request (e.g. a retry after a token refresh).
  *
- * If the current auth token is invalid or expired (`isJwtTokenInvalidOrExpired()`), it tries to refresh it first
- * (see [refreshCloudAuthTokensIfInvalidOrExpired]) and falls back to the existing token if the refresh fails.
+ * The token is resolved by [resolveCloudAuthToken], which refreshes it first when it is invalid or expired.
  * No header is set when no token is available.
  */
 @JvmSynthetic
 internal fun HttpClient.addCloudAuthInterceptor() {
     plugin(HttpSend).intercept { request ->
         if (CloudPaths.requiresAuth(request.url.encodedPath)) {
-            refreshCloudAuthTokensIfInvalidOrExpired()
-            Context.getCloudAuthToken()?.let { authToken ->
+            resolveCloudAuthToken()?.let { authToken ->
                 request.headers[HttpHeaders.Authorization] = "${AuthScheme.Bearer} $authToken"
             }
         }
@@ -205,42 +202,51 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(): BasicTokenResponse? = 
 }
 
 /**
- * Refreshes the cloud auth tokens when the stored auth token is invalid or expired (`isJwtTokenInvalidOrExpired()`)
- * and a refresh token is stored. Concurrent callers wait for the in-flight refresh and reuse its result instead of
- * refreshing again.
+ * Resolves the cloud auth token to authenticate with, reading the stored one only once.
  *
- * This is the best effort: a failed refresh is logged and swallowed so the request can still be sent with the stored
- * token, leaving the unauthorized-response handling of the auth plugin as the fallback.
+ * When the stored token is invalid or expired (`isJwtTokenInvalidOrExpired()`) and a refresh token is stored, it is
+ * refreshed first (see [refreshExpiredCloudAuthToken]). This is the best effort: a failed refresh is logged and
+ * swallowed so the request can still be sent with the stored token, leaving the unauthorized-response handling of
+ * the auth plugin as the fallback.
+ *
+ * @return the auth token to use, or `null` if none is stored.
  */
-private suspend fun HttpClient.refreshCloudAuthTokensIfInvalidOrExpired() {
-    if (!isCloudAuthTokenRefreshRequired()) {
-        return
+private suspend fun HttpClient.resolveCloudAuthToken(): String? {
+    val storedToken = Context.getCloudAuthToken() ?: return null
+    if (!storedToken.isJwtTokenInvalidOrExpired()) {
+        return storedToken
     }
-    cloudAuthTokensRefreshMutex.withLock {
-        if (!isCloudAuthTokenRefreshRequired()) {
-            return // Refreshed by a concurrent caller while waiting for the lock
+    return refreshExpiredCloudAuthToken(expiredToken = storedToken) ?: storedToken
+}
+
+/**
+ * Refreshes the cloud auth tokens, given that [expiredToken] is the stored auth token. Concurrent callers wait for
+ * the in-flight refresh and reuse its result instead of refreshing again.
+ *
+ * @return the new auth token, or `null` if no refresh token is stored or the refresh failed.
+ */
+private suspend fun HttpClient.refreshExpiredCloudAuthToken(expiredToken: String): String? {
+    return cloudAuthTokensRefreshMutex.withLock {
+        val storedToken = Context.getCloudAuthToken()
+        if (storedToken != expiredToken) {
+            return storedToken // Refreshed by a concurrent caller while waiting for the lock
         }
         try {
-            exchangeCloudRefreshToken()?.let {
+            exchangeCloudRefreshToken()?.authToken?.also {
                 SdkLogger.i { "Auth tokens were actively refreshed" }
             }
         } catch (exception: Exception) {
             currentCoroutineContext().ensureActive()
             SdkLogger.w(exception) { "Failed to actively refresh the auth tokens, the stored auth token will be used" }
+            null
         }
     }
 }
 
-private fun isCloudAuthTokenRefreshRequired(): Boolean =
-    Context.getCloudRefreshToken() != null && Context.getCloudAuthToken()?.isJwtTokenInvalidOrExpired() == true
-
 private suspend fun HttpClient.exchangeCloudRefreshToken(): BasicTokenResponse? {
     val currentRefreshToken = Context.getCloudRefreshToken() ?: return null
 
-    val refreshedTokens: BasicTokenResponse = post(Context.getApiEnvironment().cloudHost) {
-        url {
-            path(CloudPaths.getRefreshTokenPath())
-        }
+    val refreshedTokens: BasicTokenResponse = post(CloudPaths.getRefreshTokenPath()) {
         headers {
             append(HttpHeaders.ContentType, ContentType.Application.Json)
             append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
