@@ -15,7 +15,7 @@ actual object ContextManager {
 
     fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
 
-    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
+    fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
@@ -23,7 +23,7 @@ actual object ContextManager {
     suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean =
         Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
 
-    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
+    fun setCloudRefreshToken(token: String?) = Context.setCloudRefreshToken(token)
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
