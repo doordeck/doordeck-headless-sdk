@@ -550,6 +550,52 @@ class AuthExtensionsTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldKeepTokensOfConcurrentManualRefreshWhenAutomaticRefreshIsRejected() = runTest {
+        // Given
+        val expiredJwt = randomJwt(now().minus(1.hours))
+        val currentRefreshToken = randomString()
+        val manualRefreshToken = randomString()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        )
+        val userDetails = randomUserDetails()
+        Context.setCloudAuthToken(expiredJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler { request ->
+                when (request.headers[HttpHeaders.Authorization]) {
+                    "${AuthScheme.Bearer} $currentRefreshToken" -> {
+                        // A manual refresh completes while the automatic one is in flight
+                        AccountClient.refreshTokenRequest(manualRefreshToken)
+                        respondError(HttpStatusCode.Unauthorized)
+                    }
+                    "${AuthScheme.Bearer} $manualRefreshToken" -> respondContent(tokenResponse)
+                    "${AuthScheme.Bearer} ${tokenResponse.authToken}" -> respondContent(userDetails)
+                    else -> respondError(HttpStatusCode.Unauthorized)
+                }
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val response = AccountClient.getUserDetailsRequest()
+
+            // Then
+            assertEquals(userDetails, response)
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(4, requests.size)
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = manualRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[2].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+            requests[3].assertSentTo(CloudPaths.getUserDetailsPath(), token = tokenResponse.authToken)
+        }
+    }
+
+    @Test
     fun shouldRefreshExpiredTokenOnceForConcurrentRequests() = runTest {
         // Given
         val currentRefreshToken = randomString()

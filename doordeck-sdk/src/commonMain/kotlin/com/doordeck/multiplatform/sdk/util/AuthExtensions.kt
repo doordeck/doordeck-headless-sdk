@@ -127,7 +127,9 @@ internal suspend fun HttpClient.refreshCloudAuthTokensOrNull(rejectedToken: Stri
 }
 
 /**
- * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context].
+ * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context]. When the
+ * backend rejects [refreshToken], the stored tokens are removed, unless a concurrent manual refresh has already
+ * replaced them.
  */
 private suspend fun HttpClient.exchangeCloudRefreshToken(refreshToken: String): BasicTokenResponse {
     val refreshedTokens: BasicTokenResponse = try {
@@ -135,8 +137,10 @@ private suspend fun HttpClient.exchangeCloudRefreshToken(refreshToken: String): 
             addRequestHeaders(token = refreshToken)
         }.body()
     } catch (exception: UnauthorizedException) {
-        Context.setCloudAuthToken(null)
-        Context.setCloudRefreshToken(null)
+        if (Context.getCloudRefreshToken() == refreshToken) {
+            Context.setCloudAuthToken(null)
+            Context.setCloudRefreshToken(null)
+        }
         throw exception
     }
 
