@@ -8,10 +8,11 @@ import io.ktor.utils.io.locks.synchronized
  * Thread-safe in-memory storage implementation
  */
 internal class MemorySettings(
-    private val delegate: MutableMap<String, Any> = mutableMapOf()
+    initValues: Map<String, Any> = emptyMap()
 ) : Settings {
 
     private val lock = SynchronizedObject()
+    private val delegate: MutableMap<String, Any> = initValues.toMutableMap()
 
     override val keys: Set<String> get() = synchronized(lock) { delegate.keys.toSet() }
     override val size: Int get() = synchronized(lock) { delegate.size }
