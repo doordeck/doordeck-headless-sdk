@@ -22,7 +22,6 @@ import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -30,12 +29,6 @@ import kotlin.jvm.JvmSynthetic
  * refreshes would invalidate each other.
  */
 private val cloudAuthTokensRefreshMutex = Mutex()
-
-/**
- * The cloud refresh token last rejected by the backend, kept in memory only so it is not exchanged again.
- */
-@Volatile
-private var rejectedCloudRefreshToken: String? = null
 
 /**
  * Installs an [HttpSend] interceptor that authenticates the requests whose path requires cloud authentication
@@ -97,9 +90,9 @@ internal fun HttpClient.addFusionAuthInterceptor() {
 /**
  * Refreshes the cloud auth tokens, given that [rejectedToken] is the stored auth token found missing, invalid,
  * expired or rejected by the backend. Concurrent callers wait for the in-flight refresh and reuse its result
- * instead of refreshing again, and a refresh token already rejected by the backend is not sent again.
+ * instead of refreshing again.
  *
- * @return the auth token to use, or `null` if no usable refresh token is stored.
+ * @return the auth token to use, or `null` if no refresh token is stored.
  * @throws SdkException if the refresh request fails.
  */
 @JvmSynthetic
@@ -111,7 +104,6 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): 
         }
 
         val refreshToken = Context.getCloudRefreshToken()
-            ?.takeUnless { it == rejectedCloudRefreshToken }
             ?: return null
 
         exchangeCloudRefreshToken(refreshToken).authToken.also {
@@ -135,8 +127,7 @@ internal suspend fun HttpClient.refreshCloudAuthTokensOrNull(rejectedToken: Stri
 }
 
 /**
- * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context]. A refresh
- * token rejected by the backend is marked as such, so it is not sent again.
+ * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context].
  */
 private suspend fun HttpClient.exchangeCloudRefreshToken(refreshToken: String): BasicTokenResponse {
     val refreshedTokens: BasicTokenResponse = try {
@@ -144,7 +135,8 @@ private suspend fun HttpClient.exchangeCloudRefreshToken(refreshToken: String): 
             addRequestHeaders(token = refreshToken)
         }.body()
     } catch (exception: UnauthorizedException) {
-        rejectedCloudRefreshToken = refreshToken
+        Context.setCloudAuthToken(null)
+        Context.setCloudRefreshToken(null)
         throw exception
     }
 

@@ -495,7 +495,7 @@ class AuthExtensionsTest : IntegrationTest() {
 
             // Then
             assertEquals(expiredJwt, Context.getCloudAuthToken())
-            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(3, requests.size)
             requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
@@ -712,7 +712,7 @@ class AuthExtensionsTest : IntegrationTest() {
 
             // Then
             assertEquals(expiredJwt, Context.getCloudAuthToken())
-            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(2, requests.size)
             requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
