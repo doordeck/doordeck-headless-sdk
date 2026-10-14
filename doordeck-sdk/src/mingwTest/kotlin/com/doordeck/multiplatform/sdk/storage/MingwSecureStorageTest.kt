@@ -26,11 +26,13 @@ private val backingStore = mutableMapOf<String, String>()
 private val setApiEnvironmentCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
     backingStore["apiEnvironment"] = ptr.toKString()
 }
-private val setCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["cloudAuthToken"] = ptr.toKString()
+private val setCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>?, Unit> { ptr ->
+    ptr?.let { backingStore["cloudAuthToken"] = it.toKString() }
+        ?: backingStore.remove("cloudAuthToken")
 }
-private val setCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["cloudRefreshToken"] = ptr.toKString()
+private val setCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>?, Unit> { ptr ->
+    ptr?.let { backingStore["cloudRefreshToken"] = it.toKString() }
+        ?: backingStore.remove("cloudRefreshToken")
 }
 private val setFusionHostCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
     backingStore["fusionHost"] = ptr.toKString()
@@ -163,6 +165,19 @@ class MingwSecureStorageTest {
     }
 
     @Test
+    fun shouldRemoveCloudAuthToken() = runTest {
+        // Given
+        val token = randomString()
+        storage.addCloudAuthToken(token)
+
+        // When
+        storage.addCloudAuthToken(null)
+
+        // Then
+        assertNull(storage.getCloudAuthToken())
+    }
+
+    @Test
     fun shouldReturnNullForMissingCloudAuthToken() = runTest {
         assertNull(storage.getCloudAuthToken())
     }
@@ -177,6 +192,19 @@ class MingwSecureStorageTest {
 
         // Then
         assertEquals(token, storage.getCloudRefreshToken())
+    }
+
+    @Test
+    fun shouldRemoveCloudRefreshToken() = runTest {
+        // Given
+        val token = randomString()
+        storage.addCloudRefreshToken(token)
+
+        // When
+        storage.addCloudRefreshToken(null)
+
+        // Then
+        assertNull(storage.getCloudRefreshToken())
     }
 
     @Test

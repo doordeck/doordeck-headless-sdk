@@ -22,7 +22,7 @@ actual object ContextManager {
     fun getApiEnvironment(): String = Context.getApiEnvironment().name
 
     @CName("setCloudAuthToken")
-    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
+    fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
     @CName("getCloudAuthToken")
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
@@ -33,7 +33,7 @@ actual object ContextManager {
     }
 
     @CName("setCloudRefreshToken")
-    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
+    fun setCloudRefreshToken(token: String?) = Context.setCloudRefreshToken(token)
 
     @CName("getCloudRefreshToken")
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()

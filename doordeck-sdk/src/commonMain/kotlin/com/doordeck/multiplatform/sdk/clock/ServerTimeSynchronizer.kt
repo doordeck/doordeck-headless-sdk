@@ -39,7 +39,7 @@ internal object ServerTimeSynchronizer {
     /**
      * The maximum time [initialize] waits for the first synchronization to complete.
      */
-    private val FIRST_SYNC_TIMEOUT: Duration = 5.seconds
+    private val FIRST_SYNC_TIMEOUT: Duration = 10.seconds
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
