@@ -37,9 +37,9 @@ internal fun setNullableStringCallback.invokeNullableStringCallback(string: Stri
 fun createMingwSecureStorage(
     setApiEnvironmentCp: setStringCallback,
     getApiEnvironmentCp: getStringCallback,
-    addCloudAuthTokenCp: setStringCallback,
+    addCloudAuthTokenCp: setNullableStringCallback,
     getCloudAuthTokenCp: getStringCallback,
-    addCloudRefreshTokenCp: setStringCallback,
+    addCloudRefreshTokenCp: setNullableStringCallback,
     getCloudRefreshTokenCp: getStringCallback,
     setFusionHostCp: setStringCallback,
     getFusionHostCp: getStringCallback,
@@ -89,9 +89,9 @@ fun createMingwSecureStorage(
 class MingwSecureStorage(
     private val setApiEnvironmentCp: setStringCallback,
     private val getApiEnvironmentCp: getStringCallback,
-    private val addCloudAuthTokenCp: setStringCallback,
+    private val addCloudAuthTokenCp: setNullableStringCallback,
     private val getCloudAuthTokenCp: getStringCallback,
-    private val addCloudRefreshTokenCp: setStringCallback,
+    private val addCloudRefreshTokenCp: setNullableStringCallback,
     private val getCloudRefreshTokenCp: getStringCallback,
     private val setFusionHostCp: setStringCallback,
     private val getFusionHostCp: getStringCallback,
@@ -122,16 +122,16 @@ class MingwSecureStorage(
         }
     }
 
-    override fun addCloudAuthToken(token: String) {
-        addCloudAuthTokenCp.invokeStringCallback(token)
+    override fun addCloudAuthToken(token: String?) {
+        addCloudAuthTokenCp.invokeNullableStringCallback(token)
     }
 
     override fun getCloudAuthToken(): String? {
         return getCloudAuthTokenCp()?.toKString()
     }
 
-    override fun addCloudRefreshToken(token: String) {
-        addCloudRefreshTokenCp.invokeStringCallback(token)
+    override fun addCloudRefreshToken(token: String?) {
+        addCloudRefreshTokenCp.invokeNullableStringCallback(token)
     }
 
     override fun getCloudRefreshToken(): String? {

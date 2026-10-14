@@ -14,14 +14,14 @@ actual object ContextManager {
 
     fun getApiEnvironment(): String = Context.getApiEnvironment().name
 
-    fun setCloudAuthToken(token: String) = Context.setCloudAuthToken(token)
+    fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
     fun getCloudAuthToken(): String? = Context.getCloudAuthToken()
 
     suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean = Context
         .isCloudAuthTokenInvalidOrExpired(checkServerInvalidation)
 
-    fun setCloudRefreshToken(token: String) = Context.setCloudRefreshToken(token)
+    fun setCloudRefreshToken(token: String?) = Context.setCloudRefreshToken(token)
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 

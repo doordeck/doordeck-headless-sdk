@@ -44,12 +44,13 @@ internal object Context {
     }
 
     /**
-     * Sets the cloud authentication token, the provided value will be automatically stored in secure storage.
+     * Sets the cloud authentication token, the provided value will be automatically stored in secure storage,
+     * passing `null` removes the existing entry.
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
     @JvmSynthetic
-    internal fun setCloudAuthToken(token: String) {
+    internal fun setCloudAuthToken(token: String?) {
         secureStorage.addCloudAuthToken(token)
     }
 
@@ -87,12 +88,13 @@ internal object Context {
     }
 
     /**
-     * Sets the cloud refresh token, the provided value will be automatically stored in secure storage.
+     * Sets the cloud refresh token, the provided value will be automatically stored in secure storage,
+     * passing `null` removes the existing entry.
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
     @JvmSynthetic
-    internal fun setCloudRefreshToken(token: String) {
+    internal fun setCloudRefreshToken(token: String?) {
         secureStorage.addCloudRefreshToken(token)
     }
 

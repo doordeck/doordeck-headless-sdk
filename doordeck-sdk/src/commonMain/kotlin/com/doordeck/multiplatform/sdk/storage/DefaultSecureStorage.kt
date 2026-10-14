@@ -47,7 +47,7 @@ internal class DefaultSecureStorage(
         return retrieveValue<String>(API_ENVIRONMENT_KEY)?.let { ApiEnvironment.valueOf(it) }
     }
 
-    override fun addCloudAuthToken(token: String) {
+    override fun addCloudAuthToken(token: String?) {
         storeValue(CLOUD_AUTH_TOKEN_KEY, token, true)
     }
 
@@ -55,7 +55,7 @@ internal class DefaultSecureStorage(
         return retrieveValue(CLOUD_AUTH_TOKEN_KEY, true)
     }
 
-    override fun addCloudRefreshToken(token: String) {
+    override fun addCloudRefreshToken(token: String?) {
         storeValue(CLOUD_REFRESH_TOKEN_KEY, token, true)
     }
 
