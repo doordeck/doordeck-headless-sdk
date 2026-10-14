@@ -25,7 +25,6 @@ internal object DoordeckFactory {
         }
         CryptoManager.initialize()
         ServerTimeSynchronizer.initialize()
-        Context.attemptToRefreshAuthTokens()
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
     }

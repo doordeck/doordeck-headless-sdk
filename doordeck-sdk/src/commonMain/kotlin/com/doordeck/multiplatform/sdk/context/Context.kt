@@ -305,24 +305,6 @@ internal object Context {
         return ContextState.READY
     }
 
-    /**
-     * Refreshes the cloud auth tokens if they are no longer valid.
-     *
-     * The refresh is done by the cloud auth interceptor, which intercepts outgoing requests; this function
-     * just issues a throwaway authenticated request to trigger it. Failures are ignored, so a
-     * successful return does not guarantee valid tokens.
-     *
-     * Only meant to be called during SDK initialization.
-     */
-    @JvmSynthetic
-    internal suspend fun attemptToRefreshAuthTokens() {
-        if (getCloudRefreshToken() != null) {
-            runCatching {
-                AccountClient.getUserDetailsRequest()
-            }
-        }
-    }
-
     @JvmSynthetic
     internal fun setSecureStorageImpl(secureStorage: SecureStorage) {
         this.secureStorage = secureStorage
