@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk.clock
 
 import com.doordeck.multiplatform.sdk.clients.HelperClient
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -9,18 +10,21 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlin.time.measureTimedValue
 
 /**
  * Background task that keeps [SystemClock] aligned with the backend.
  *
- * On [initialize] it launches a coroutine that queries the server `/time` endpoint immediately and then
+ * On [initialize] it launches a coroutine that queries the server `/time` endpoint immediately (waiting for
+ * that first query to complete, up to [FIRST_SYNC_TIMEOUT]) and then
  * on every [DEFAULT_SYNC_INTERVAL], measuring the difference between the server clock and the device clock and
  * publishing it to [SystemClock] as the current skew. The `/time` endpoint does not require
  * authentication, so synchronization also works before the user has logged in.
@@ -32,27 +36,45 @@ internal object ServerTimeSynchronizer {
      */
     private val DEFAULT_SYNC_INTERVAL: Duration = 15.minutes
 
+    /**
+     * The maximum time [initialize] waits for the first synchronization to complete.
+     */
+    private val FIRST_SYNC_TIMEOUT: Duration = 10.seconds
+
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     @Volatile
     private var job: Job? = null
 
     /**
-     * Initializes the periodic synchronization loop. Subsequent calls are ignored while a loop is
-     * already running, so this is safe to invoke on every SDK initialization.
+     * Starts the periodic synchronization loop and waits for its first synchronization to complete, so the caller
+     * can rely on an aligned [SystemClock] right away. It stops waiting after [firstSyncTimeout], leaving the loop to
+     * keep synchronizing in the background. Subsequent calls are ignored while a loop is already running, so this is
+     * safe to invoke on every SDK initialization.
      *
      * @param interval How often the server time should be re-checked.
+     * @param firstSyncTimeout How long to wait for the first synchronization to complete.
      */
     @JvmSynthetic
-    internal fun initialize(interval: Duration = DEFAULT_SYNC_INTERVAL) {
+    internal suspend fun initialize(
+        interval: Duration = DEFAULT_SYNC_INTERVAL,
+        firstSyncTimeout: Duration = FIRST_SYNC_TIMEOUT
+    ) {
         if (job?.isActive == true) {
             return
         }
+        val firstSynchronization = CompletableDeferred<Unit>()
         job = scope.launch {
+            synchronize()
+            firstSynchronization.complete(Unit)
             while (isActive) {
-                synchronize()
                 delay(interval)
+                synchronize()
             }
+        }
+        val completed = withTimeoutOrNull(firstSyncTimeout) { firstSynchronization.await() } != null
+        if (!completed) {
+            SdkLogger.w { "Stopped waiting for the first server time synchronization after $firstSyncTimeout" }
         }
     }
 
