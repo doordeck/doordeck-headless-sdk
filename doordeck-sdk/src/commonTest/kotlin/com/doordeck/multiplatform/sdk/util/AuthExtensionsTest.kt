@@ -177,13 +177,13 @@ class AuthExtensionsTest : IntegrationTest() {
 
             // Then
             assertEquals("API call failed with: 401 (Unauthorized) - Unauthorized", exception.message)
-            assertEquals(currentAuthToken, Context.getCloudAuthToken())
-            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertNull(Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(3, requests.size)
             requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
             requests[1].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
-            requests[2].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
+            requests[2].assertSentWithoutToken(CloudPaths.getUserDetailsPath())
         }
     }
 
@@ -461,8 +461,8 @@ class AuthExtensionsTest : IntegrationTest() {
 
             // Then
             assertEquals(userDetails, response)
-            assertEquals(expiredJwt, Context.getCloudAuthToken())
-            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertNull(Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(2, requests.size)
             requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
@@ -494,13 +494,13 @@ class AuthExtensionsTest : IntegrationTest() {
             }
 
             // Then
-            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudAuthToken())
             assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(3, requests.size)
             requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
             requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
-            requests[2].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+            requests[2].assertSentWithoutToken(CloudPaths.getUserDetailsPath())
         }
     }
 
@@ -711,7 +711,7 @@ class AuthExtensionsTest : IntegrationTest() {
             Context.attemptToRefreshAuthTokens()
 
             // Then
-            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudAuthToken())
             assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(2, requests.size)
