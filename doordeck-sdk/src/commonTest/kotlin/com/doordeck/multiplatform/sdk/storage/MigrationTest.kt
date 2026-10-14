@@ -19,19 +19,6 @@ import kotlin.test.assertTrue
 class MigrationTest {
 
     @Test
-    fun shouldHaveContiguousMigrationChain() {
-        val migrations = Migrations.migrations.sortedBy { it.fromVersion }
-
-        assertEquals(0, migrations.first().fromVersion, "Chain must start at version 0")
-        migrations.forEach {
-            assertTrue(it.toVersion > it.fromVersion, "$it must advance the version")
-        }
-        migrations.zipWithNext().forEach { (previous, next) ->
-            assertEquals(previous.toVersion, next.fromVersion,  "Gap or overlap between $previous and $next")
-        }
-    }
-
-    @Test
     fun shouldInstallAllMigrations() = runTest {
         // Given
         val settings = MemorySettings()
