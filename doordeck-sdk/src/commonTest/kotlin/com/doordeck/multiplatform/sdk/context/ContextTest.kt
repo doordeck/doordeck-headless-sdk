@@ -21,6 +21,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.hours
 
@@ -73,8 +74,8 @@ class ContextTest : IntegrationTest() {
 
             // Then
             assertTrue(result)
-            assertEquals(expiredJwt, Context.getCloudAuthToken())
-            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertNull(Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
             val requests = client.requestHistory()
             assertEquals(1, requests.size)
             assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
