@@ -18,10 +18,12 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.auth.AuthScheme
 import io.ktor.http.encodedPath
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import kotlin.jvm.JvmSynthetic
 
 /**
@@ -36,9 +38,9 @@ private val cloudAuthTokensRefreshMutex = Mutex()
  * - Before sending, the stored auth token is refreshed when it is missing, invalid or expired
  *   (`isJwtTokenInvalidOrExpired()`). This is the best effort: a failed refresh is logged and swallowed, so the
  *   request is still sent with the stored token.
- * - After an unauthorized response, the tokens are refreshed and the request is retried once with the new auth
- *   token, replacing the one attached to the first attempt. The unauthorized response is returned as is when the
- *   tokens cannot be refreshed.
+ * - After an unauthorized response, that response is released, the tokens are refreshed and the request is
+ *   retried once with the new auth token, replacing the one attached to the first attempt. The unauthorized
+ *   response is returned as is when the tokens cannot be refreshed.
  *
  * Both refreshes go through [refreshCloudAuthTokens], so concurrent requests share a single refresh. No header is
  * set when no token is available.
@@ -65,9 +67,10 @@ internal fun HttpClient.addCloudAuthInterceptor() {
         val refreshedToken = refreshCloudAuthTokensOrNull(rejectedToken = authToken)
             ?: return@intercept call
 
-        request.setBearerToken(refreshedToken)
-
-        execute(request)
+        // Recreate the request
+        val retryRequest = HttpRequestBuilder().takeFromWithExecutionContext(request)
+        retryRequest.setBearerToken(refreshedToken)
+        execute(retryRequest)
     }
 }
 
@@ -106,8 +109,10 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): 
         val refreshToken = Context.getCloudRefreshToken()
             ?: return null
 
-        exchangeCloudRefreshToken(refreshToken).authToken.also {
-            SdkLogger.i { "Auth tokens were automatically refreshed" }
+        withContext(NonCancellable) {
+            exchangeCloudRefreshToken(refreshToken).authToken.also {
+                SdkLogger.i { "Auth tokens were automatically refreshed" }
+            }
         }
     }
 }

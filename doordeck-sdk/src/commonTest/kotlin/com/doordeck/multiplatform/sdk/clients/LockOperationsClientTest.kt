@@ -24,6 +24,7 @@ import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.respondContent
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
+import com.doordeck.multiplatform.sdk.util.addCloudAuthInterceptor
 import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
 import com.doordeck.multiplatform.sdk.util.installContentNegotiation
 import com.doordeck.multiplatform.sdk.util.installResponseValidator
@@ -156,7 +157,10 @@ class LockOperationsClientTest : IntegrationTest() {
         val client = HttpClient(mockEngine) {
             installResponseValidator()
             installContentNegotiation()
-        }.also { it.addExceptionInterceptor() }
+        }.also {
+            it.addExceptionInterceptor()
+            it.addCloudAuthInterceptor()
+        }
         CloudHttpClient.overrideClient(client)
 
         client.use { _ ->
