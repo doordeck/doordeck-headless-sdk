@@ -22,14 +22,10 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.Utils.stringToCertificateChain
 import com.doordeck.multiplatform.sdk.util.mask
 import com.russhwolf.settings.Settings
-import io.ktor.utils.io.locks.SynchronizedObject
-import io.ktor.utils.io.locks.synchronized
 
 internal class DefaultSecureStorage(
     private val settings: Settings
 ) : SecureStorage {
-
-    private val lock = SynchronizedObject()
 
     init {
         migrate()
@@ -146,7 +142,7 @@ internal class DefaultSecureStorage(
                     .filter { it.fromVersion >= storedVersion }
                     .forEach { migration ->
                         migration.migrate(settings)
-                        settings.putInt(STORAGE_VERSION_KEY.name, migration.toVersion)
+                        setStorageVersion(migration.toVersion)
                     }
             } catch (exception: Exception) {
                 throw SdkException("Failed to perform storage migrations", exception)
@@ -155,22 +151,20 @@ internal class DefaultSecureStorage(
     }
 
     private inline fun <reified T : Any> storeValue(key: StorageKey, value: T?, maskValue: Boolean = false) {
-        synchronized(lock) {
-            if (value == null) {
-                settings.remove(key.name)
-                SdkLogger.d { "Removed stored value for key: $key" }
-                return
-            }
-            when (value) {
-                is String -> settings.putString(key.name, value)
-                is Int -> settings.putInt(key.name, value)
-                else -> throw SdkException("Unsupported type ${T::class} for key $key")
-            }
-            SdkLogger.d { "Stored value: ${if (maskValue) value.toString().mask() else value} for key: $key" }
+        if (value == null) {
+            settings.remove(key.name)
+            SdkLogger.d { "Removed stored value for key: $key" }
+            return
         }
+        when (value) {
+            is String -> settings.putString(key.name, value)
+            is Int -> settings.putInt(key.name, value)
+            else -> throw SdkException("Unsupported type ${T::class} for key $key")
+        }
+        SdkLogger.d { "Stored value: ${if (maskValue) value.toString().mask() else value} for key: $key" }
     }
 
-    private inline fun <reified T : Any> retrieveValue(key: StorageKey, maskValue: Boolean = false): T? = synchronized(lock) {
+    private inline fun <reified T : Any> retrieveValue(key: StorageKey, maskValue: Boolean = false): T? {
         val value: Any? = when (T::class) {
             String::class -> settings.getStringOrNull(key.name)
             Int::class -> settings.getIntOrNull(key.name)
