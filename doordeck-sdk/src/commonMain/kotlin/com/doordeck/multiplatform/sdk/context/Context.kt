@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
+import com.doordeck.multiplatform.sdk.util.JwtUtils.getJwtSubject
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import kotlin.jvm.JvmSynthetic
@@ -269,6 +270,67 @@ internal object Context {
     internal fun reset() {
         CapabilityCache.reset()
         clearContext()
+    }
+
+    /**
+     * Hands the context over to the user [authToken] was just issued to, discarding what the
+     * previous one left behind when the two are not the same person.
+     *
+     * A device that has been through a verification once holds a key pair, the mark saying that
+     * pair was verified, a certificate chain and a user id. None of that belongs to the next person
+     * to sign in, and leaving it in place let a second user in with no verification at all:
+     * [getContextState] asks whether a verified, unexpired chain exists, never whose it is.
+     *
+     * Only what describes the installation rather than the user is carried across. The tokens are
+     * written by the caller the moment this returns, so clearing them here costs nothing. A key
+     * pair is replaced rather than dropped: integrators set one before signing in and register it
+     * straight after, and the new user should not be registering the previous one's key.
+     *
+     * Only meant for tokens the login and registration endpoints issue, whose subject is the
+     * Doordeck user id. An application token carries the application's own id for the user in its
+     * subject, so this must not be called from [setCloudAuthToken].
+     */
+    @JvmSynthetic
+    internal fun startSessionFor(email: String, authToken: String) {
+        if (belongsToSomebodyElse(email, authToken)) {
+            val apiEnvironment = getApiEnvironment()
+            val fusionHost = getFusionHost()
+            val hadKeyPair = getKeyPair() != null
+            reset()
+            setApiEnvironment(apiEnvironment)
+            setFusionHost(fusionHost)
+            if (hadKeyPair) {
+                val keyPair = CryptoManager.generateRawKeyPair()
+                setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
+            }
+        }
+        setUserEmail(email)
+    }
+
+    /**
+     * Whether what the context is holding belongs to somebody other than the user [authToken] was
+     * issued to.
+     *
+     * Only a user id, a certificate chain or a verified key can let somebody in, so with none of
+     * them there is nothing to inherit — a key pair an integrator set just before signing in is
+     * left alone. The user id is stored together with the certificate chain every time one is, so
+     * it says whose the chain is, and the token says whose the session is. Comparing the two rather
+     * than trusting the email also heals a device that is already carrying somebody else's chain.
+     * The email answers for what a registration leaves behind: a verified key pair and no chain at
+     * all. Material nobody can vouch for is treated as somebody else's.
+     */
+    private fun belongsToSomebodyElse(email: String, authToken: String): Boolean {
+        val holdsUserMaterial = getUserId() != null || getCertificateChain() != null ||
+            secureStorage.getKeyPairVerified() != null
+        if (!holdsUserMaterial) {
+            return false
+        }
+        if (getUserEmail()?.equals(email, ignoreCase = true) != true) {
+            return true
+        }
+        val subject = authToken.getJwtSubject() ?: return false
+        val userId = getUserId() ?: return getCertificateChain() != null
+        return !userId.equals(subject, ignoreCase = true)
     }
 
     /**

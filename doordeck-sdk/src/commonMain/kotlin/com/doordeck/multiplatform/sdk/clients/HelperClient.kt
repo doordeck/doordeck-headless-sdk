@@ -39,20 +39,26 @@ internal object HelperClient {
     /**
      * Performs the standard login process in a single function. This function performs the following steps:
      *
+     *  * Performs the login request using the provided credentials.
      *  * Reads the certificate chain from the context and checks if it is invalid or expired. If so, we will register the key pair again.
      *  * Retrieves the key pair from the context or generates a new one if no key is found.
      *  * When a new key is generated, it's added to the context manager.
-     *  * Performs the login request using the provided credentials.
      *  * Attempts to register the key pair with context.
      *  * If the previous step fails with a <code>LockedException</code>, retries registration with the secondary authentication endpoint.
      *
      * Notes:
+     *  * The login comes first because it decides what there is to read: signing in as somebody
+     *      other than the user the context was holding empties it of their key material
+     *      ([Context.startSessionFor]), and a key pair read before that belongs to the wrong person.
      *  * If the response indicates that verification is required
      *      (`AssistedLoginResponse.requiresVerification` is true),
      *      the caller must invoke `verifyEphemeralKeyRegistration` from the account resource to complete the process.
      */
     @JvmSynthetic
     internal suspend fun assistedLoginRequest(email: String, password: String): BasicAssistedLoginResponse {
+        // Perform the login
+        AccountlessClient.loginRequest(email, password)
+
         val currentKeyPair = Context.getKeyPair()
         val currentKeyPairVerified = Context.isKeyPairVerified()
         val requiresKeyRegister =
@@ -67,9 +73,6 @@ internal object HelperClient {
             Context.setKeyPair(publicKey = keyPair.public, privateKey = keyPair.private)
             Context.setKeyPairVerified(null)
         }
-
-        // Perform the login
-        AccountlessClient.loginRequest(email, password)
 
         val registerKeyResult = if (requiresKeyRegister) {
             // Register the key pair
