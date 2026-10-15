@@ -37,7 +37,6 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
-
         // When
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
