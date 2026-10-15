@@ -8,19 +8,11 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlinx.coroutines.test.runTest
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class KDoordeckFactoryTest {
-
-    @AfterTest
-    fun tearDown() {
-         runTest {
-             KDoordeckFactory.release()
-         }
-    }
 
     @Test
     fun shouldInitialize() = runTest {
@@ -32,14 +24,17 @@ class KDoordeckFactoryTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
+        try {
+            // When
+            val sdk = KDoordeckFactory.initialize(sdkConfig)
 
-        // When
-        val sdk = KDoordeckFactory.initialize(sdkConfig)
-
-        // Then
-        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
-        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+            // Then
+            assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+            assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
+            assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+        } finally {
+            KDoordeckFactory.release()
+        }
     }
 
     @Test
@@ -50,15 +45,20 @@ class KDoordeckFactoryTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
         val sdk = KDoordeckFactory.initialize(config)
-        sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
-        // When
-        KDoordeckFactory.release()
-
-        // Then
-        val exception = assertFailsWith<SdkException> {
+        try {
             sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+
+            // When
+            KDoordeckFactory.release()
+
+            // Then
+            val exception = assertFailsWith<SdkException> {
+                sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+            }
+            assertEquals("Http client is not initialized", exception.message)
+        } finally {
+            KDoordeckFactory.release()
         }
-        assertEquals("Http client is not initialized", exception.message)
     }
 }

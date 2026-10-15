@@ -20,7 +20,7 @@ class KDoordeckFactoryAsyncTest {
     @AfterTest
     fun tearDown() {
         runBlocking {
-            KDoordeckFactory.releaseAsync()
+            KDoordeckFactory.releaseAsync().await()
         }
     }
 
