@@ -46,7 +46,7 @@ class KDoordeckFactoryAsyncTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
         val sdk = KDoordeckFactory.initializeAsync(config).await()
-        sdk.accountless().loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        sdk.accountless().loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
         KDoordeckFactory.releaseAsync().await()
