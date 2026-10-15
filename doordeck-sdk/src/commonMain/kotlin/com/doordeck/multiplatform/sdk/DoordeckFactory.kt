@@ -7,6 +7,10 @@ import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.jvm.JvmSynthetic
 
 internal object DoordeckFactory {
@@ -14,7 +18,6 @@ internal object DoordeckFactory {
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
         SdkLogger.d { "Initializing..." }
-
         try {
             HttpClient.initialize()
             CloudHttpClient.initialize()
@@ -35,20 +38,21 @@ internal object DoordeckFactory {
             release()
             throw exception
         }
-
         SdkLogger.d { "Successfully initialized SDK" }
-
         return DoordeckImpl
     }
 
     @JvmSynthetic
-    internal suspend fun release() {
+    internal suspend fun release(): Unit = withContext(NonCancellable) {
         SdkLogger.d { "Releasing..." }
         ServerTimeSynchronizer.stop()
         SystemClock.reset()
-        CloudHttpClient.close()
-        FusionHttpClient.close()
-        HttpClient.close()
+        // Close http clients concurrently
+        coroutineScope {
+            listOf(CloudHttpClient, FusionHttpClient, HttpClient).forEach { client ->
+                launch { client.close() }
+            }
+        }
         CapabilityCache.reset()
         SdkLogger.d { "Successfully released SDK resources" }
     }

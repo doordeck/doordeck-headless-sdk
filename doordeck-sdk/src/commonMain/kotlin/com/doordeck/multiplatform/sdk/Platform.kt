@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
@@ -124,14 +125,25 @@ internal abstract class BaseHttpClient(
         val client = _client ?: return
         _client = null
 
-        client.close()
+        val closed = try {
+            client.close()
+            true
+        } catch (exception: Exception) {
+            SdkLogger.e(exception) { "Failed to close the HTTP client" }
+            false
+        }
 
-        val finished = withTimeoutOrNull(5.seconds) {
+        // Only wait for in-flight requests if the close went through; otherwise the client job never completes
+        val finished = closed && withTimeoutOrNull(5.seconds) {
             client.coroutineContext.job.join()
         } != null
 
         if (!finished) {
-            client.coroutineContext.cancel()
+            try {
+                client.coroutineContext.cancel()
+            } catch (exception: Exception) {
+                SdkLogger.e(exception) { "Failed to cancel the HTTP client" }
+            }
         }
     }
 
@@ -140,7 +152,7 @@ internal abstract class BaseHttpClient(
      */
     @JvmSynthetic
     internal fun initialize() {
-        _client?.close()
+        runCatching { _client?.close() }
         _client = clientProvider()
     }
 }

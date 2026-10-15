@@ -45,7 +45,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             .setApiEnvironment(TEST_ENVIRONMENT.name)
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
-        val sdk = KDoordeckFactory.initialize(config)
+        KDoordeckFactory.initialize(config)
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
