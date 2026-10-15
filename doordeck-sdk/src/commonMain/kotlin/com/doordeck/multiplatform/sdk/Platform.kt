@@ -16,8 +16,11 @@ import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.job
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Duration.Companion.seconds
 
 enum class PlatformType {
     JVM,
@@ -117,9 +120,19 @@ internal abstract class BaseHttpClient(
      * Closes the underlying HTTP client, releasing connection pools, threads and native resources.
      */
     @JvmSynthetic
-    internal fun close() {
-        _client?.close()
-        _client?.coroutineContext?.cancel()
+    internal suspend fun close() {
+        val client = _client ?: return
+        _client = null
+
+        client.close()
+
+        val finished = withTimeoutOrNull(10.seconds) {
+            client.coroutineContext.job.join()
+        } != null
+
+        if (!finished) {
+            client.coroutineContext.cancel()
+        }
     }
 
     /**

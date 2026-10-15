@@ -45,7 +45,4 @@ interface Doordeck {
 
     @CName("crypto")
     fun crypto(): CryptoManager
-
-    @CName("release")
-    fun release()
 }

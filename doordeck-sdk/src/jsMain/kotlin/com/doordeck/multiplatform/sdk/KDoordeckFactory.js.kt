@@ -8,4 +8,6 @@ import kotlin.js.JsExport
 object KDoordeckFactory {
 
     suspend fun initialize(sdkConfig: SdkConfig): Doordeck = DoordeckFactory.initialize(sdkConfig.toBasicSdkConfig())
+
+    suspend fun release(): Unit = DoordeckFactory.release()
 }

@@ -40,14 +40,4 @@ internal object DoordeckImpl : Doordeck {
     override fun fusion(): FusionApi = fusion
     override fun helper(): HelperApi = helper
     override fun crypto(): CryptoManager = CryptoManager
-
-    override fun release() {
-        ServerTimeSynchronizer.stop()
-        SystemClock.reset()
-        CloudHttpClient.close()
-        FusionHttpClient.close()
-        HttpClient.close()
-        CapabilityCache.reset()
-        SdkLogger.d { "Successfully released SDK resources" }
-    }
 }
