@@ -119,6 +119,9 @@ internal abstract class BaseHttpClient(
 
     /**
      * Closes the underlying HTTP client, releasing connection pools, threads and native resources.
+     *
+     * Never throws, as long as it's called from a non-cancellable context (as [DoordeckFactory.release] does):
+     * otherwise waiting for the in-flight requests can throw a cancellation exception and skip the cancel fallback.
      */
     @JvmSynthetic
     internal suspend fun close() {

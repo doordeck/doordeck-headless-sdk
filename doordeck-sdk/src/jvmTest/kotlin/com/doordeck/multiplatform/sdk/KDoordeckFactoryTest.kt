@@ -35,7 +35,7 @@ class KDoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseHttpResources() = runBlocking {
+    fun shouldReleaseHttpResources() = runTest {
         // Given
         val config = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)

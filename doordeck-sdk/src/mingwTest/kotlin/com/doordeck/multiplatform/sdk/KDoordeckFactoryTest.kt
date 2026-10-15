@@ -29,13 +29,17 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
-        // When
-        val sdk = KDoordeckFactory.initialize(sdkConfig)
+        try {
+            // When
+            val sdk = KDoordeckFactory.initialize(sdkConfig)
 
-        // Then
-        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
-        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+            // Then
+            assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+            assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
+            assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+        } finally {
+            KDoordeckFactory.release()
+        }
     }
 
     @Test
