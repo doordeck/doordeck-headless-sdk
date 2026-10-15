@@ -44,12 +44,12 @@ class KDoordeckFactoryTest {
         sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        sdk.release()
+        KDoordeckFactory.release()
 
         // Then
         val exception = assertFailsWith<SdkException> {
             sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         }
-        assertEquals("API call was cancelled", exception.message)
+        assertEquals("Http client is not initialized", exception.message)
     }
 }

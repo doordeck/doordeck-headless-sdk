@@ -54,7 +54,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         }.unwrap()
 
         // When
-        sdk.release()
+        KDoordeckFactory.release()
 
         // Then
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {
@@ -64,6 +64,6 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             )
         }.unwrapFailure()
         assertContains(response.exceptionType, SdkException::class.simpleName!!)
-        assertEquals("API call was cancelled", response.exceptionMessage)
+        assertEquals("Http client is not initialized", response.exceptionMessage)
     }
 }

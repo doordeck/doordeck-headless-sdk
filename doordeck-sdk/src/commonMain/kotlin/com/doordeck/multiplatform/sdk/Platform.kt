@@ -126,7 +126,7 @@ internal abstract class BaseHttpClient(
 
         client.close()
 
-        val finished = withTimeoutOrNull(10.seconds) {
+        val finished = withTimeoutOrNull(5.seconds) {
             client.coroutineContext.job.join()
         } != null
 
