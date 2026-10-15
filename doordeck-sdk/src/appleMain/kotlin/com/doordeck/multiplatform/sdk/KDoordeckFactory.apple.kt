@@ -9,6 +9,7 @@ object KDoordeckFactory {
     suspend fun initialize(sdkConfig: SdkConfig): Doordeck =
         DoordeckFactory.initialize(sdkConfig.toBasicSdkConfig())
 
+    @Throws(Exception::class)
     suspend fun release(): Unit =
         DoordeckFactory.release()
 }

@@ -22,9 +22,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
 
     @AfterTest
     fun tearDown() {
-        runTest {
-            KDoordeckFactory.release()
-        }
+        KDoordeckFactory.release()
     }
 
     @Test
