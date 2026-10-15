@@ -89,7 +89,7 @@ class InitializeSdk(object):
         self.cryptoManager = CryptoManager(crypto(self.sdk))
 
     def release(self):
-        release(self.sdk)
+        release(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory())
 %}
 
 %{
