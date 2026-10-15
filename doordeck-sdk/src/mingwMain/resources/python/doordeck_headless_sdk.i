@@ -31,6 +31,7 @@ class InitializeSdk(object):
         fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None,
         debug_logging: typing.Optional[bool] = None):
 
+        self.kDoordeckFactory = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory()
         self.secureStorage = Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_storage_SecureStorage()
         if secure_storage_impl is not None:
             SecureStorage.Implementation = secure_storage_impl
@@ -76,7 +77,7 @@ class InitializeSdk(object):
 
         self.debugLogging = 'False' if debug_logging is None else str(debug_logging)
         self.sdkConfig = _doordeck_headless_sdk.buildSdkConfig(api_environment, cloud_auth_token, cloud_refresh_token, fusion_host, self.secureStorage, self.debugLogging)
-        self.sdk = initialize(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory(), self.sdkConfig)
+        self.sdk = initialize(self.kDoordeckFactory, self.sdkConfig)
         self.accountless = Accountless(accountless(self.sdk))
         self.account = Account(account(self.sdk))
         self.fusion = Fusion(fusion(self.sdk))
@@ -89,7 +90,7 @@ class InitializeSdk(object):
         self.cryptoManager = CryptoManager(crypto(self.sdk))
 
     def release(self):
-        release(Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_KDoordeckFactory())
+        release(self.kDoordeckFactory)
 %}
 
 %{
