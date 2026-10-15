@@ -8,7 +8,6 @@ import kotlinx.coroutines.future.await
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 class KDoordeckFactoryAsyncTest {
 
@@ -26,8 +25,8 @@ class KDoordeckFactoryAsyncTest {
         val sdk = KDoordeckFactory.initializeAsync(sdkConfig).await()
 
         // Then
-        assertNull(sdk.contextManager().getCloudAuthToken())
-        assertNull(sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }

@@ -9,7 +9,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class JsPlatformTest {
@@ -47,8 +46,8 @@ class JsPlatformTest {
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
-        assertNull(sdk.contextManager().getCloudAuthToken())
-        assertNull(sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 }

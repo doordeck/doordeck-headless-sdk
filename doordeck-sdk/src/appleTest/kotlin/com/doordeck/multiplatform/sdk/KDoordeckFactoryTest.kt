@@ -12,7 +12,6 @@ import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNull
 
 class KDoordeckFactoryTest {
 
@@ -30,8 +29,8 @@ class KDoordeckFactoryTest {
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
-        assertNull(sdk.contextManager().getCloudAuthToken())
-        assertNull(sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 
