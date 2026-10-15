@@ -13,11 +13,19 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
 import kotlinx.coroutines.test.runTest
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class KDoordeckFactoryTest : BasicCallbackTest() {
+
+    @AfterTest
+    fun tearDown() {
+        runTest {
+            KDoordeckFactory.release()
+        }
+    }
 
     @Test
     fun shouldInitialize() = runTest {
@@ -29,17 +37,14 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
-        try {
-            // When
-            val sdk = KDoordeckFactory.initialize(sdkConfig)
 
-            // Then
-            assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
-            assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-            assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
-        } finally {
-            KDoordeckFactory.release()
-        }
+        // When
+        val sdk = KDoordeckFactory.initialize(sdkConfig)
+
+        // Then
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 
     @Test

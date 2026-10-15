@@ -8,15 +8,24 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import kotlinx.coroutines.future.await
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class KDoordeckFactoryAsyncTest {
 
+    @AfterTest
+    fun tearDown() {
+        runBlocking {
+            KDoordeckFactory.releaseAsync()
+        }
+    }
+
     @Test
-    fun shouldInitialize() = runTest {
+    fun shouldInitializeAsync() = runTest {
         // Given
         val sdkConfig = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)
@@ -25,17 +34,13 @@ class KDoordeckFactoryAsyncTest {
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
 
-        try {
-            // When
-            val sdk = KDoordeckFactory.initializeAsync(sdkConfig).await()
+        // When
+        val sdk = KDoordeckFactory.initializeAsync(sdkConfig).await()
 
-            // Then
-            assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
-            assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-            assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
-        } finally {
-            KDoordeckFactory.releaseAsync().await()
-        }
+        // Then
+        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
+        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
+        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
     }
 
     @Test
