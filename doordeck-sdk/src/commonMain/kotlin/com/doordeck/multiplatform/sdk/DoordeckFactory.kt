@@ -13,10 +13,19 @@ import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlin.jvm.JvmSynthetic
 
 internal object DoordeckFactory {
+
+    /**
+     * Serializes [initialize] and [release], so an overlapping call waits for the running one to complete instead of
+     * failing. As a result, the [Lifecycle] state is always [LifecycleState.STOPPED] or [LifecycleState.STARTED]
+     * once the lock is acquired.
+     */
+    private val lifecycleMutex = Mutex()
 
     /**
      * Initializes the SDK with the provided [sdkConfig]. If the initialization fails,
@@ -24,13 +33,14 @@ internal object DoordeckFactory {
      *
      * The SDK must be released via [release] before it can be initialized again.
      *
-     * @throws SdkException if the SDK is not in the [LifecycleState.STOPPED] state.
+     * @throws SdkException if the SDK has already been initialized.
      */
     @JvmSynthetic
-    internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
-        if (!Lifecycle.transition(LifecycleState.STOPPED, LifecycleState.STARTING)) {
-            throw SdkException("Unable to initialize, the SDK is ${Lifecycle.state}")
+    internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck = lifecycleMutex.withLock {
+        if (Lifecycle.state != LifecycleState.STOPPED) {
+            throw SdkException("Unable to initialize, the SDK has already been initialized")
         }
+        Lifecycle.set(LifecycleState.STARTING)
         SdkLogger.enableDebugLogging(sdkConfig.debugLogging ?: false)
 
         SdkLogger.i { "Initializing..." }
@@ -61,23 +71,23 @@ internal object DoordeckFactory {
         }
         Lifecycle.set(LifecycleState.STARTED)
         SdkLogger.i { "Successfully initialized" }
-        return DoordeckImpl
+        DoordeckImpl
     }
 
     /**
      * Releases the resources held by the SDK (background tasks and HTTP clients). The stored context
      * (tokens, keys, user details) is kept: releasing the SDK does not log the user out.
      *
-     * Releasing an SDK that is already released does nothing.
+     * Releasing an SDK that has not been initialized, or has already been released, does nothing.
      *
      * @throws SdkException if the SDK is being initialized or released.
      */
     @JvmSynthetic
-    internal suspend fun release() {
-        if (!Lifecycle.transition(LifecycleState.STARTED, LifecycleState.STOPPING)) {
-            if (Lifecycle.state == LifecycleState.STOPPED) return
-            throw SdkException("Unable to release, the SDK is ${Lifecycle.state}")
+    internal suspend fun release() = lifecycleMutex.withLock {
+        if (Lifecycle.state != LifecycleState.STARTED) {
+            return@withLock
         }
+        Lifecycle.set(LifecycleState.STOPPING)
         SdkLogger.i { "Releasing resources..." }
         try {
             releaseResources()
