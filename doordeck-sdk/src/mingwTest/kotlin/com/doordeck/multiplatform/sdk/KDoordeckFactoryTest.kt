@@ -12,7 +12,9 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContains
@@ -60,7 +62,9 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         }.unwrap()
 
         // When
-        KDoordeckFactory.release()
+        withContext(Dispatchers.Default) {
+            KDoordeckFactory.release()
+        }
 
         // Then
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {

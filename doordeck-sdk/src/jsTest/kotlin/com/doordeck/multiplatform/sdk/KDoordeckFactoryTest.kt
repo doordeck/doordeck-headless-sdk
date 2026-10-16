@@ -7,7 +7,9 @@ import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -50,7 +52,9 @@ class KDoordeckFactoryTest {
             sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
             // When
-            KDoordeckFactory.release()
+            withContext(Dispatchers.Default) {
+                KDoordeckFactory.release()
+            }
 
             // Then
             val exception = assertFailsWith<SdkException> {
