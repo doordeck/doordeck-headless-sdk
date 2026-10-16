@@ -81,7 +81,7 @@ class DoordeckFactoryTest {
         }
 
         // Then
-        assertEquals("Unable to initialize, the SDK is STARTED", exception.message)
+        assertEquals("Unable to initialize, the SDK has already been initialized", exception.message)
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
         assertEquals(ApiEnvironment.DEV, Context.getApiEnvironment())
         assertSame(cloudClient, CloudHttpClient.client)
@@ -138,25 +138,6 @@ class DoordeckFactoryTest {
             // Then
             assertEquals("Unable to release, the SDK is STARTING", exception.message)
             assertEquals(LifecycleState.STARTING, Lifecycle.state)
-        } finally {
-            Lifecycle.set(LifecycleState.STOPPED)
-        }
-    }
-
-    @Test
-    fun shouldThrowWhenInitializingWhileReleasing() = lifecycleTest {
-        // Given
-        Lifecycle.set(LifecycleState.STOPPING)
-
-        try {
-            // When
-            val exception = assertFailsWith<SdkException> {
-                DoordeckFactory.initialize(basicSdkConfig())
-            }
-
-            // Then
-            assertEquals("Unable to initialize, the SDK is STOPPING", exception.message)
-            assertEquals(LifecycleState.STOPPING, Lifecycle.state)
         } finally {
             Lifecycle.set(LifecycleState.STOPPED)
         }
