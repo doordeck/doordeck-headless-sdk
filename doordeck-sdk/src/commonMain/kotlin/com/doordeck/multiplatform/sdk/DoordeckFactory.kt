@@ -49,10 +49,10 @@ internal object DoordeckFactory {
             CryptoManager.initialize()
             ServerTimeSynchronizer.initialize()
             Context.attemptToRefreshAuthTokens()
-        } catch (exception: Exception) {
+        } catch (exception: Throwable) {
             try {
                 releaseResources()
-            } catch (releaseException: Exception) {
+            } catch (releaseException: Throwable) {
                 exception.addSuppressed(releaseException)
             } finally {
                 Lifecycle.set(LifecycleState.STOPPED)
