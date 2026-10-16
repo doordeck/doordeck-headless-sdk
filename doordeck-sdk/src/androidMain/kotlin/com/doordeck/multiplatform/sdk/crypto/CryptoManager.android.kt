@@ -101,7 +101,7 @@ actual object CryptoManager {
             val certificate = base64Certificate.toCertificate()
             val notAfterInstant = certificate.notAfter?.toInstant()?.toKotlinInstant()
             if (notAfterInstant == null) {
-                SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
+                SdkLogger.w { "Unable to retrieve the expiration date from the certificate" }
                 return true
             }
             SdkLogger.d { "Certificate expiration date is $notAfterInstant" }

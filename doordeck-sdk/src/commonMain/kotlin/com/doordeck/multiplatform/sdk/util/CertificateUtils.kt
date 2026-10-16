@@ -33,7 +33,7 @@ internal fun String.isCertificateInvalidOrExpired(): Boolean {
             ?.children?.elementAtOrNull(1) // Not after
         // If no element is found, we will treat the certificate as expired
         if (notAfterElement == null) {
-            SdkLogger.d { "Unable to retrieve the expiration date from the certificate" }
+            SdkLogger.w { "Unable to retrieve the expiration date from the certificate" }
             return true
         }
         // Decode the time value

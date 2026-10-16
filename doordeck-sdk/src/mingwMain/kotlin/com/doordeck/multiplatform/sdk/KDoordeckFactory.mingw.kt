@@ -10,4 +10,9 @@ object KDoordeckFactory {
     fun initialize(sdkConfig: SdkConfig): Doordeck = runBlocking {
         DoordeckFactory.initialize(sdkConfig.toBasicSdkConfig())
     }
+
+    @CName("release")
+    fun release(): Unit = runBlocking {
+        DoordeckFactory.release()
+    }
 }
