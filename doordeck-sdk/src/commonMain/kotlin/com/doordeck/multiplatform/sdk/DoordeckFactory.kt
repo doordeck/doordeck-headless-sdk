@@ -75,9 +75,7 @@ internal object DoordeckFactory {
     @JvmSynthetic
     internal suspend fun release() {
         if (!Lifecycle.transition(LifecycleState.STARTED, LifecycleState.STOPPING)) {
-            if (Lifecycle.state == LifecycleState.STOPPED) {
-                return
-            }
+            if (Lifecycle.state == LifecycleState.STOPPED) return
             throw SdkException("Unable to release, the SDK is ${Lifecycle.state}")
         }
         SdkLogger.i { "Releasing resources..." }
