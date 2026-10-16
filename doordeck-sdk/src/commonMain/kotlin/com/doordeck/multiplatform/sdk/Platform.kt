@@ -119,34 +119,22 @@ internal abstract class BaseHttpClient(
 
     /**
      * Closes the underlying HTTP client, releasing connection pools, threads and native resources.
-     *
-     * Never throws, as long as it's called from a non-cancellable context (as [DoordeckFactory.release] does):
-     * otherwise waiting for the in-flight requests can throw a cancellation exception and skip the cancel fallback.
+     * In-flight requests are given up to 5 seconds to finish before being canceled.
      */
     @JvmSynthetic
     internal suspend fun close() {
         val client = _client ?: return
         _client = null
-
-        val closed = try {
+        try {
             client.close()
-            true
+            withTimeoutOrNull(5.seconds) {
+                client.coroutineContext.job.join()
+            }
         } catch (exception: Exception) {
             SdkLogger.e(exception) { "Failed to close the HTTP client" }
-            false
-        }
-
-        // Only wait for in-flight requests if the close went through; otherwise the client job never completes
-        val finished = closed && withTimeoutOrNull(5.seconds) {
-            client.coroutineContext.job.join()
-        } != null
-
-        if (!finished) {
-            try {
-                client.coroutineContext.cancel()
-            } catch (exception: Exception) {
-                SdkLogger.e(exception) { "Failed to cancel the HTTP client" }
-            }
+        } finally {
+            // Aborts whatever is still running, no-op if the client has already completed
+            client.coroutineContext.cancel()
         }
     }
 

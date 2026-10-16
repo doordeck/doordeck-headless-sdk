@@ -8,13 +8,17 @@ import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.withContext
 import kotlin.jvm.JvmSynthetic
 
 internal object DoordeckFactory {
 
+    /**
+     * Initializes the SDK with the provided [sdkConfig]. If the initialization fails,
+     * the acquired resources are released and the original exception is rethrown.
+     */
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
         SdkLogger.d { "Initializing..." }
@@ -35,25 +39,40 @@ internal object DoordeckFactory {
             ServerTimeSynchronizer.initialize()
             Context.attemptToRefreshAuthTokens()
         } catch (exception: Exception) {
-            release()
+            try {
+                releaseResources()
+            } catch (releaseException: Exception) {
+                exception.addSuppressed(releaseException)
+            }
             throw exception
         }
         SdkLogger.d { "Successfully initialized SDK" }
         return DoordeckImpl
     }
 
+    /**
+     * Releases the resources held by the SDK (background tasks and HTTP clients). The stored context
+     * (tokens, keys, user details) is kept: releasing the SDK does not log the user out.
+     */
     @JvmSynthetic
-    internal suspend fun release(): Unit = withContext(NonCancellable) {
-        SdkLogger.d { "Releasing..." }
+    internal suspend fun release() {
+        SdkLogger.d { "Releasing resources..." }
+        releaseResources()
+        SdkLogger.d { "Finished releasing resources" }
+    }
+
+    /**
+     * Always runs to completion, even if the caller is canceled.
+     */
+    private suspend fun releaseResources() = withContext(NonCancellable) {
         ServerTimeSynchronizer.stop()
         SystemClock.reset()
+        CapabilityCache.reset()
         // Close http clients concurrently
-        coroutineScope {
+        supervisorScope {
             listOf(CloudHttpClient, FusionHttpClient, HttpClient).forEach { client ->
                 launch { client.close() }
             }
         }
-        CapabilityCache.reset()
-        SdkLogger.d { "Successfully released SDK resources" }
     }
 }
