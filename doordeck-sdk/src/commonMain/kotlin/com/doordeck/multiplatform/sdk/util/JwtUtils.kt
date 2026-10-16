@@ -34,7 +34,7 @@ internal object JwtUtils {
             Instant.fromEpochSeconds(it.toLong())
         }
         if (expiration == null) {
-            SdkLogger.d { "Unable to retrieve the expiration claim from the JWT" }
+            SdkLogger.w { "Unable to retrieve the expiration claim from the JWT" }
             return true
         }
         SdkLogger.d { "JWT expiration date is $expiration" }

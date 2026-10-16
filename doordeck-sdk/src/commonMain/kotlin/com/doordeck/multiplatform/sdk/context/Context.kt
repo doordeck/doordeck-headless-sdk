@@ -4,7 +4,6 @@ import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
-import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
@@ -18,11 +17,6 @@ import kotlin.jvm.JvmSynthetic
 internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
-
-    @JvmSynthetic
-    internal fun setDebugLogging(enabled: Boolean) {
-        SdkLogger.enableDebugLogging(enabled)
-    }
 
     /**
      * Sets the API environment on which the SDK will operate, the provided value will be automatically stored in secure storage.
