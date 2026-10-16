@@ -6,6 +6,8 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.api.AccountlessApi
 import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.model.data.LoginData
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
@@ -41,6 +43,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
+        assertEquals(LifecycleState.STARTED, Lifecycle.state)
         assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
         assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
         assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
@@ -75,5 +78,6 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         }.unwrapFailure()
         assertContains(response.exceptionType, SdkException::class.simpleName!!)
         assertEquals("Http client is not initialized", response.exceptionMessage)
+        assertEquals(LifecycleState.STOPPED, Lifecycle.state)
     }
 }
