@@ -21,7 +21,9 @@ internal object DoordeckFactory {
      */
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
-        SdkLogger.d { "Initializing..." }
+        SdkLogger.enableDebugLogging(sdkConfig.debugLogging ?: false)
+
+        SdkLogger.i { "Initializing..." }
         try {
             HttpClient.initialize()
             CloudHttpClient.initialize()
@@ -29,7 +31,6 @@ internal object DoordeckFactory {
             // Add the provided values into the context
             Context.also { context ->
                 context.setSecureStorageImpl(sdkConfig.secureStorage)
-                context.setDebugLogging(sdkConfig.debugLogging ?: false)
                 sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
                 sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
                 sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
@@ -46,7 +47,7 @@ internal object DoordeckFactory {
             }
             throw exception
         }
-        SdkLogger.d { "Successfully initialized SDK" }
+        SdkLogger.i { "Successfully initialized" }
         return DoordeckImpl
     }
 
@@ -56,9 +57,9 @@ internal object DoordeckFactory {
      */
     @JvmSynthetic
     internal suspend fun release() {
-        SdkLogger.d { "Releasing resources..." }
+        SdkLogger.i { "Releasing resources..." }
         releaseResources()
-        SdkLogger.d { "Finished releasing resources" }
+        SdkLogger.i { "Finished releasing resources" }
     }
 
     /**

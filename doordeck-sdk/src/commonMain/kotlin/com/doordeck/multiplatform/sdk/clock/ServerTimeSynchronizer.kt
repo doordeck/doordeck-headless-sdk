@@ -113,7 +113,7 @@ internal object ServerTimeSynchronizer {
 
             SystemClock.setSkew(skew)
         } catch (exception: Exception) {
-            SdkLogger.d { "Failed to synchronize server time: ${exception.message}" }
+            SdkLogger.e(exception) { "Failed to synchronize server time: ${exception.message}" }
         }
     }
 }
