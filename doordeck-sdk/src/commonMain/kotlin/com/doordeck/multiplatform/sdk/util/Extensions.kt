@@ -3,7 +3,6 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.JSON
 import com.doordeck.multiplatform.sdk.PlatformType
 import com.doordeck.multiplatform.sdk.ProjectVersion
-import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -22,9 +21,7 @@ import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.exceptions.UnprocessableEntityException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.ResponseError
-import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.platformType
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -36,9 +33,6 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.RedirectResponseException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.UserAgent
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
@@ -47,15 +41,11 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
-import io.ktor.client.request.post
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.append
 import io.ktor.http.auth.AuthScheme
-import io.ktor.http.encodedPath
-import io.ktor.http.path
 import io.ktor.serialization.ContentConvertException
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.CancellationException
@@ -122,40 +112,8 @@ internal fun HttpClientConfig<*>.installContentNegotiation() {
 }
 
 /**
- * Installs authentication handling with automatic token refresh.
- * Attempts to request a new auth token whenever any API call returns an unauthorized response.
- */
-@JvmSynthetic
-internal fun HttpClientConfig<*>.installAuth() {
-    install(Auth) {
-        bearer {
-            refreshTokens {
-                Context.getCloudRefreshToken()?.let { currentRefreshToken ->
-                    val refreshTokens: BasicTokenResponse = client.post(Context.getApiEnvironment().cloudHost) {
-                        url {
-                            path(CloudPaths.getRefreshTokenPath())
-                        }
-                        headers {
-                            append(HttpHeaders.ContentType, ContentType.Application.Json)
-                            append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $currentRefreshToken")
-                        }
-                        markAsRefreshTokenRequest()
-                    }.body()
-                    Context.also { context ->
-                        context.setCloudAuthToken(refreshTokens.authToken)
-                        context.setCloudRefreshToken(refreshTokens.refreshToken)
-                    }
-                    SdkLogger.i { "Auth tokens were automatically refreshed" }
-                    BearerTokens(refreshTokens.authToken, refreshTokens.refreshToken)
-                }
-            }
-        }
-    }
-}
-
-/**
  * Installs default request configuration with the specified host.
- * 
+ *
  * @param determineHost Function that returns the host URL to use for requests.
  */
 @JvmSynthetic
@@ -256,30 +214,6 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
                 else -> SdkException(message)
             }
         }
-    }
-}
-
-/**
- * Adds an authentication interceptor to the HTTP client.
- * This interceptor automatically adds an Authorization header to requests that require authentication.
- * 
- * @param requiresAuth Function that determines if a path requires authentication.
- * @param getAuthToken Function that provides the authentication token.
- */
-@JvmSynthetic
-internal fun HttpClient.addAuthInterceptor(
-    requiresAuth: (String) -> Boolean,
-    getAuthToken: () -> String?
-) {
-    plugin(HttpSend).intercept { request ->
-        if (requiresAuth(request.url.encodedPath) && !request.headers.contains(HttpHeaders.Authorization)) {
-            getAuthToken()?.let {
-                request.headers {
-                    append(HttpHeaders.Authorization, "${AuthScheme.Bearer} $it")
-                }
-            }
-        }
-        execute(request)
     }
 }
 
