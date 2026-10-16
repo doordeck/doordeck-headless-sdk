@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.lifecycle
 
-internal enum class LifeCycleType {
+internal enum class LifecycleState {
 
     /**
      * The SDK is being initialized.

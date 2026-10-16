@@ -7,8 +7,8 @@ import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
-import com.doordeck.multiplatform.sdk.lifecycle.LifeCycle
-import com.doordeck.multiplatform.sdk.lifecycle.LifeCycleType
+import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
@@ -21,11 +21,15 @@ internal object DoordeckFactory {
     /**
      * Initializes the SDK with the provided [sdkConfig]. If the initialization fails,
      * the acquired resources are released and the original exception is rethrown.
+     *
+     * The SDK must be released via [release] before it can be initialized again.
+     *
+     * @throws SdkException if the SDK is not in the [LifecycleState.STOPPED] state.
      */
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
-        if (!LifeCycle.setState(LifeCycleType.STOPPED, LifeCycleType.STARTING)) {
-            throw SdkException("Unable to initialize, it has been already initialized")
+        if (!Lifecycle.transition(LifecycleState.STOPPED, LifecycleState.STARTING)) {
+            throw SdkException("Unable to initialize, the SDK is ${Lifecycle.state}")
         }
         SdkLogger.enableDebugLogging(sdkConfig.debugLogging ?: false)
 
@@ -48,13 +52,14 @@ internal object DoordeckFactory {
         } catch (exception: Exception) {
             try {
                 releaseResources()
-                LifeCycle.setState(LifeCycleType.STOPPED)
             } catch (releaseException: Exception) {
                 exception.addSuppressed(releaseException)
+            } finally {
+                Lifecycle.set(LifecycleState.STOPPED)
             }
             throw exception
         }
-        LifeCycle.setState(LifeCycleType.STARTED)
+        Lifecycle.set(LifecycleState.STARTED)
         SdkLogger.i { "Successfully initialized" }
         return DoordeckImpl
     }
@@ -62,15 +67,25 @@ internal object DoordeckFactory {
     /**
      * Releases the resources held by the SDK (background tasks and HTTP clients). The stored context
      * (tokens, keys, user details) is kept: releasing the SDK does not log the user out.
+     *
+     * Releasing an SDK that is already released does nothing.
+     *
+     * @throws SdkException if the SDK is being initialized or released.
      */
     @JvmSynthetic
     internal suspend fun release() {
-        if (LifeCycle.setState(LifeCycleType.STARTED, LifeCycleType.STOPPING)) {
-            throw SdkException("Unable to release, it has not been initialized")
+        if (!Lifecycle.transition(LifecycleState.STARTED, LifecycleState.STOPPING)) {
+            if (Lifecycle.state == LifecycleState.STOPPED) {
+                return
+            }
+            throw SdkException("Unable to release, the SDK is ${Lifecycle.state}")
         }
         SdkLogger.i { "Releasing resources..." }
-        releaseResources()
-        LifeCycle.setState(LifeCycleType.STOPPED)
+        try {
+            releaseResources()
+        } finally {
+            Lifecycle.set(LifecycleState.STOPPED)
+        }
         SdkLogger.i { "Finished releasing resources" }
     }
 
