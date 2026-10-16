@@ -6,6 +6,9 @@ import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.lifecycle.LifeCycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifeCycleType
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
@@ -21,6 +24,9 @@ internal object DoordeckFactory {
      */
     @JvmSynthetic
     internal suspend fun initialize(sdkConfig: BasicSdkConfig): Doordeck {
+        if (!LifeCycle.setState(LifeCycleType.STOPPED, LifeCycleType.STARTING)) {
+            throw SdkException("Unable to initialize, it has been already initialized")
+        }
         SdkLogger.enableDebugLogging(sdkConfig.debugLogging ?: false)
 
         SdkLogger.i { "Initializing..." }
@@ -42,11 +48,13 @@ internal object DoordeckFactory {
         } catch (exception: Exception) {
             try {
                 releaseResources()
+                LifeCycle.setState(LifeCycleType.STOPPED)
             } catch (releaseException: Exception) {
                 exception.addSuppressed(releaseException)
             }
             throw exception
         }
+        LifeCycle.setState(LifeCycleType.STARTED)
         SdkLogger.i { "Successfully initialized" }
         return DoordeckImpl
     }
@@ -57,8 +65,12 @@ internal object DoordeckFactory {
      */
     @JvmSynthetic
     internal suspend fun release() {
+        if (LifeCycle.setState(LifeCycleType.STARTED, LifeCycleType.STOPPING)) {
+            throw SdkException("Unable to release, it has not been initialized")
+        }
         SdkLogger.i { "Releasing resources..." }
         releaseResources()
+        LifeCycle.setState(LifeCycleType.STOPPED)
         SdkLogger.i { "Finished releasing resources" }
     }
 
