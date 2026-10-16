@@ -7,13 +7,23 @@ import com.doordeck.multiplatform.sdk.config.SdkConfig
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class KDoordeckFactoryTest {
+
+    @AfterTest
+    fun tearDown() {
+        runBlocking {
+            KDoordeckFactory.release()
+        }
+    }
 
     @Test
     fun shouldInitialize() = runTest {
@@ -35,7 +45,7 @@ class KDoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseHttpResources() = runBlocking {
+    fun shouldReleaseHttpResources() = runTest {
         // Given
         val config = SdkConfig.Builder()
             .setApiEnvironment(TEST_ENVIRONMENT)
@@ -45,12 +55,14 @@ class KDoordeckFactoryTest {
         sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
 
         // When
-        sdk.release()
+        withContext(Dispatchers.Default) {
+            KDoordeckFactory.release()
+        }
 
         // Then
         val exception = assertFailsWith<SdkException> {
             sdk.accountless().login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
         }
-        assertEquals("API call was cancelled", exception.message)
+        assertEquals("Http client is not initialized", exception.message)
     }
 }

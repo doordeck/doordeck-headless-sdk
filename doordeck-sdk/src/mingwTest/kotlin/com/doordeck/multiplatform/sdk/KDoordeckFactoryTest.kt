@@ -12,12 +12,20 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withContext
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class KDoordeckFactoryTest : BasicCallbackTest() {
+
+    @AfterTest
+    fun tearDown() {
+        KDoordeckFactory.release()
+    }
 
     @Test
     fun shouldInitialize() = runTest {
@@ -45,7 +53,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             .setApiEnvironment(TEST_ENVIRONMENT.name)
             .setSecureStorageOverride(DefaultSecureStorage(MemorySettings()))
             .build()
-        val sdk = KDoordeckFactory.initialize(config)
+        KDoordeckFactory.initialize(config)
         callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
@@ -54,7 +62,9 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         }.unwrap()
 
         // When
-        sdk.release()
+        withContext(Dispatchers.Default) {
+            KDoordeckFactory.release()
+        }
 
         // Then
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {
@@ -64,6 +74,6 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
             )
         }.unwrapFailure()
         assertContains(response.exceptionType, SdkException::class.simpleName!!)
-        assertEquals("API call was cancelled", response.exceptionMessage)
+        assertEquals("Http client is not initialized", response.exceptionMessage)
     }
 }

@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
+import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.util.addAuthInterceptor
@@ -16,8 +17,11 @@ import com.doordeck.multiplatform.sdk.util.installTimeout
 import com.doordeck.multiplatform.sdk.util.installUserAgent
 import io.ktor.client.HttpClient
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.job
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.serialization.json.Json
 import kotlin.jvm.JvmSynthetic
+import kotlin.time.Duration.Companion.seconds
 
 enum class PlatformType {
     JVM,
@@ -115,11 +119,23 @@ internal abstract class BaseHttpClient(
 
     /**
      * Closes the underlying HTTP client, releasing connection pools, threads and native resources.
+     * In-flight requests are given up to 5 seconds to finish before being canceled.
      */
     @JvmSynthetic
-    internal fun close() {
-        _client?.close()
-        _client?.coroutineContext?.cancel()
+    internal suspend fun close() {
+        val client = _client ?: return
+        _client = null
+        try {
+            client.close()
+            withTimeoutOrNull(5.seconds) {
+                client.coroutineContext.job.join()
+            }
+        } catch (exception: Exception) {
+            SdkLogger.e(exception) { "Failed to close the HTTP client" }
+        } finally {
+            // Aborts whatever is still running, no-op if the client has already completed
+            client.coroutineContext.cancel()
+        }
     }
 
     /**
@@ -127,7 +143,7 @@ internal abstract class BaseHttpClient(
      */
     @JvmSynthetic
     internal fun initialize() {
-        _client?.close()
+        runCatching { _client?.close() }
         _client = clientProvider()
     }
 }

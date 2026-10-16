@@ -14,4 +14,12 @@ object KDoordeckFactory {
     fun initializeAsync(sdkConfig: SdkConfig): CompletableFuture<Doordeck> = completableFuture {
         initialize(sdkConfig)
     }
+
+    @JvmSynthetic
+    suspend fun release(): Unit =
+        DoordeckFactory.release()
+
+    fun releaseAsync(): CompletableFuture<Unit> = completableFuture {
+        release()
+    }
 }
