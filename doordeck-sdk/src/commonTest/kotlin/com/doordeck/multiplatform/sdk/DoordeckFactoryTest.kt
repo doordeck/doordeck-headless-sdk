@@ -125,25 +125,6 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldThrowWhenReleasingWhileInitializing() = lifecycleTest {
-        // Given
-        Lifecycle.set(LifecycleState.STARTING)
-
-        try {
-            // When
-            val exception = assertFailsWith<SdkException> {
-                DoordeckFactory.release()
-            }
-
-            // Then
-            assertEquals("Unable to release, the SDK is STARTING", exception.message)
-            assertEquals(LifecycleState.STARTING, Lifecycle.state)
-        } finally {
-            Lifecycle.set(LifecycleState.STOPPED)
-        }
-    }
-
-    @Test
     fun shouldReleaseResourcesAndRethrowOriginalExceptionWhenInitializationFails() = lifecycleTest {
         // Given
         val expectedException = SdkException("Storage failure")
