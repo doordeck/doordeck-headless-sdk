@@ -60,10 +60,10 @@ internal static class SecureStorage
             case ApiEnvironmentKey when entry != null:
                 implementation.SetApiEnvironment(Enum.Parse<ApiEnvironment>(entry));
                 break;
-            case CloudAuthTokenKey when entry != null:
+            case CloudAuthTokenKey:
                 implementation.AddCloudAuthToken(entry);
                 break;
-            case CloudRefreshTokenKey when entry != null:
+            case CloudRefreshTokenKey:
                 implementation.AddCloudRefreshToken(entry);
                 break;
             case FusionHostKey when entry != null:
@@ -78,7 +78,6 @@ internal static class SecureStorage
             case PrivateKeyKey when entry != null:
                 implementation.AddPrivateKey(entry.DecodeBase64ToByteArray());
                 break;
-            // The only entry the SDK legitimately clears by storing a null value.
             case KeyPairVerifiedKey:
                 implementation.SetKeyPairVerified(entry?.DecodeBase64ToByteArray());
                 break;

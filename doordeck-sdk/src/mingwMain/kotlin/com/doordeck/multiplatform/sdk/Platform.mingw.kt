@@ -48,8 +48,6 @@ internal data class SdkConfigData(
     val debugLogging: Boolean = false
 )
 
-private var sdk: Doordeck? = null
-
 /**
  * Initializes the SDK. There is a single instance behind the boundary, so nothing is handed back to
  * the caller; the outcome is reported through [callback] like any other call.
@@ -58,7 +56,7 @@ private var sdk: Doordeck? = null
 fun initialize(configJson: String?, requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
     callback.reply(requestId) {
         val config = configJson?.fromJson<SdkConfigData>() ?: SdkConfigData()
-        sdk = KDoordeckFactory.initialize(
+        KDoordeckFactory.initialize(
             sdkConfig = SdkConfig.Builder()
                 .setApiEnvironment(config.apiEnvironment)
                 .setCloudAuthToken(config.cloudAuthToken)
@@ -74,8 +72,7 @@ fun initialize(configJson: String?, requestId: Long, callback: ResultCallback) =
 @CName("release")
 fun release(requestId: Long, callback: ResultCallback) = callback.guard(requestId) {
     callback.reply(requestId) {
-        sdk?.release()
-        sdk = null
+        KDoordeckFactory.release()
     }
 }
 

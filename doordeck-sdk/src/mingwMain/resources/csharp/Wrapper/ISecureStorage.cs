@@ -9,11 +9,11 @@ public interface ISecureStorage
 
     public ApiEnvironment? GetApiEnvironment();
 
-    public void AddCloudAuthToken(string token);
+    public void AddCloudAuthToken(string? token);
 
     public string? GetCloudAuthToken();
 
-    public void AddCloudRefreshToken(string token);
+    public void AddCloudRefreshToken(string? token);
 
     public string? GetCloudRefreshToken();
 
