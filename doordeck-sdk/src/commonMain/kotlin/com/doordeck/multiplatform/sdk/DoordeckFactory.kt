@@ -79,8 +79,6 @@ internal object DoordeckFactory {
      * (tokens, keys, user details) is kept: releasing the SDK does not log the user out.
      *
      * Releasing an SDK that has not been initialized, or has already been released, does nothing.
-     *
-     * @throws SdkException if the SDK is being initialized or released.
      */
     @JvmSynthetic
     internal suspend fun release() = lifecycleMutex.withLock {

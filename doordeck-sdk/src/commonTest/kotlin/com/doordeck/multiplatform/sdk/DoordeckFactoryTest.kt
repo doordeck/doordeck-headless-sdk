@@ -141,6 +141,22 @@ class DoordeckFactoryTest {
     }
 
     @Test
+    fun shouldReleaseResourcesAndRethrowOriginalErrorWhenInitializationFails() = lifecycleTest {
+        // Given
+        val expectedError = Error("Storage failure")
+
+        // When
+        val error = assertFailsWith<Error> {
+            DoordeckFactory.initialize(basicSdkConfig(secureStorage = failingStorage(expectedError)))
+        }
+
+        // Then
+        assertSame(expectedError, error)
+        assertEquals(LifecycleState.STOPPED, Lifecycle.state)
+        assertClientsNotInitialized()
+    }
+
+    @Test
     fun shouldInitializeAgainAfterInitializationFails() = lifecycleTest {
         // Given
         assertFailsWith<SdkException> {
@@ -167,9 +183,9 @@ class DoordeckFactoryTest {
     /**
      * Fails once the HTTP clients have been created, while checking the stored tokens.
      */
-    private fun failingStorage(exception: Exception): SecureStorage =
+    private fun failingStorage(throwable: Throwable): SecureStorage =
         object : SecureStorage by DefaultSecureStorage(MemorySettings()) {
-            override fun getCloudAuthToken(): String = throw exception
+            override fun getCloudAuthToken(): String = throw throwable
         }
 
     private fun assertClientsInitialized() {
