@@ -23,11 +23,11 @@ interface SecureStorage {
     fun getApiEnvironment(): ApiEnvironment?
 
     /**
-     * Stores the cloud authentication token.
+     * Stores the cloud authentication token, or null to remove the existing entry.
      *
      * @param token The cloud authentication token to be stored.
      */
-    fun addCloudAuthToken(token: String)
+    fun addCloudAuthToken(token: String?)
 
     /**
      * Retrieves the cloud authentication token.
@@ -37,11 +37,11 @@ interface SecureStorage {
     fun getCloudAuthToken(): String?
 
     /**
-     * Stores the cloud refresh token.
+     * Stores the cloud refresh token, or null to remove the existing entry.
      *
      * @param token The cloud refresh token to be stored.
      */
-    fun addCloudRefreshToken(token: String)
+    fun addCloudRefreshToken(token: String?)
 
     /**
      * Retrieves the cloud refresh token.
@@ -107,7 +107,7 @@ interface SecureStorage {
     fun getPrivateKey(): ByteArray?
 
     /**
-     * Stores the public key that has been verified via two-factor authentication.
+     * Stores the public key that has been verified via two-factor authentication, or null to remove the existing entry.
      *
      * @param publicKey The key pair verification status
      */

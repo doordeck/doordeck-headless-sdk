@@ -34,6 +34,4 @@ interface Doordeck {
     fun helper(): HelperApi
 
     fun crypto(): CryptoManager
-
-    fun release()
 }

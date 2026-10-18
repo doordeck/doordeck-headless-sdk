@@ -23,7 +23,7 @@ actual object CryptoManager {
 
     internal actual suspend fun initialize() {
         LibsodiumInitializer.initializeWithCallback {
-            SdkLogger.d("Successfully initialized Libsodium")
+            SdkLogger.i("Successfully initialized Libsodium")
         }
     }
 

@@ -6,8 +6,8 @@ import com.doordeck.multiplatform.sdk.crypto.CryptoManager.signWithPrivateKey
 import com.doordeck.multiplatform.sdk.exceptions.MissingContextFieldException
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.common.TwoFactorMethod
-import com.doordeck.multiplatform.sdk.model.network.Params
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.QueryParams
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.ChangePasswordRequest
 import com.doordeck.multiplatform.sdk.model.requests.RegisterEphemeralKeyRequest
 import com.doordeck.multiplatform.sdk.model.requests.UpdateUserDetailsRequest
@@ -46,7 +46,7 @@ internal object AccountClient {
         val token = refreshToken
             ?: Context.getCloudRefreshToken()
             ?: throw MissingContextFieldException("Refresh token is missing")
-        return CloudHttpClient.client.post(Paths.getRefreshTokenPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getRefreshTokenPath()) {
             addRequestHeaders(token = token)
         }.body<BasicTokenResponse>().also {
             Context.also { context ->
@@ -66,7 +66,7 @@ internal object AccountClient {
     @JvmSynthetic
     internal suspend fun logoutRequest() {
         try {
-            CloudHttpClient.client.post(Paths.getLogoutPath()) {
+            CloudHttpClient.client.post(CloudPaths.getLogoutPath()) {
                 addRequestHeaders()
             }
         } finally {
@@ -99,7 +99,7 @@ internal object AccountClient {
         val privateKey = privateKey
             ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
-        return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getRegisterEphemeralKeyPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
         }.body<BasicRegisterEphemeralKeyResponse>().also {
@@ -131,10 +131,10 @@ internal object AccountClient {
         val publicKey = publicKey
             ?: Context.getPublicKey()
             ?: throw MissingContextFieldException("Public key is missing")
-        return CloudHttpClient.client.post(Paths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getRegisterEphemeralKeyWithSecondaryAuthenticationPath()) {
             addRequestHeaders()
             setBody(RegisterEphemeralKeyRequest(publicKey.encodeByteArrayToBase64()))
-            method?.let { parameter(Params.METHOD, it.name) }
+            method?.let { parameter(QueryParams.METHOD, it.name) }
         }.body<BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse>().also {
             Context.also { context ->
                 context.setKeyPairVerified(null)
@@ -169,7 +169,7 @@ internal object AccountClient {
             ?: Context.getPrivateKey()
             ?: throw MissingContextFieldException("Private key is missing")
         val codeSignature = code.signWithPrivateKey(privateKey).encodeByteArrayToBase64()
-        return CloudHttpClient.client.post(Paths.getVerifyEphemeralKeyRegistrationPath()) {
+        return CloudHttpClient.client.post(CloudPaths.getVerifyEphemeralKeyRegistrationPath()) {
             addRequestHeaders()
             setBody(VerifyEphemeralKeyRegistrationRequest(codeSignature))
         }.body<BasicRegisterEphemeralKeyResponse>().also {
@@ -191,7 +191,7 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun reverifyEmailRequest() {
-        CloudHttpClient.client.post(Paths.getReverifyEmailPath())
+        CloudHttpClient.client.post(CloudPaths.getReverifyEmailPath())
     }
 
     /**
@@ -205,7 +205,7 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun changePasswordRequest(oldPassword: String, newPassword: String) {
-        CloudHttpClient.client.post(Paths.getChangePasswordPath()) {
+        CloudHttpClient.client.post(CloudPaths.getChangePasswordPath()) {
             addRequestHeaders()
             setBody(
                 ChangePasswordRequest(
@@ -226,7 +226,7 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun getUserDetailsRequest(): BasicUserDetailsResponse {
-        return CloudHttpClient.client.get(Paths.getUserDetailsPath()).body()
+        return CloudHttpClient.client.get(CloudPaths.getUserDetailsPath()).body()
     }
 
     /**
@@ -239,7 +239,7 @@ internal object AccountClient {
      */
     @JvmSynthetic
     internal suspend fun updateUserDetailsRequest(displayName: String) {
-        CloudHttpClient.client.post(Paths.getUpdateUserDetailsPath()) {
+        CloudHttpClient.client.post(CloudPaths.getUpdateUserDetailsPath()) {
             addRequestHeaders()
             setBody(UpdateUserDetailsRequest(displayName))
         }
@@ -259,7 +259,7 @@ internal object AccountClient {
         // exists, and wiping the local context there leaves the caller signed out of an account
         // it still has, with no tokens to retry the delete with. Logout wants the opposite —
         // local sign-out has to happen whether or not the server was reachable.
-        CloudHttpClient.client.delete(Paths.getDeleteAccountPath())
+        CloudHttpClient.client.delete(CloudPaths.getDeleteAccountPath())
         Context.reset()
     }
 }

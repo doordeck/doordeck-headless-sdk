@@ -73,6 +73,19 @@ class MingwSecureStorageTest {
     }
 
     @Test
+    fun shouldRemoveCloudAuthToken() = runTest {
+        // Given
+        val token = randomString()
+        storage.addCloudAuthToken(token)
+
+        // When
+        storage.addCloudAuthToken(null)
+
+        // Then
+        assertNull(storage.getCloudAuthToken())
+    }
+
+    @Test
     fun shouldReturnNullForMissingApiEnvironment() = runTest {
         assertNull(storage.getApiEnvironment())
     }
@@ -104,6 +117,19 @@ class MingwSecureStorageTest {
 
         // Then
         assertEquals(token, storage.getCloudRefreshToken())
+    }
+
+    @Test
+    fun shouldRemoveCloudRefreshToken() = runTest {
+        // Given
+        val token = randomString()
+        storage.addCloudRefreshToken(token)
+
+        // When
+        storage.addCloudRefreshToken(null)
+
+        // Then
+        assertNull(storage.getCloudRefreshToken())
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.doordeck.multiplatform.sdk.clients
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicSiteLocksResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicSiteResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserForSiteResponse
@@ -25,7 +25,7 @@ internal object SitesClient {
      */
     @JvmSynthetic
     internal suspend fun listSitesRequest(): List<BasicSiteResponse> {
-        return CloudHttpClient.client.get(Paths.getListSites()).body()
+        return CloudHttpClient.client.get(CloudPaths.getListSites()).body()
     }
 
     /**
@@ -39,7 +39,7 @@ internal object SitesClient {
      */
     @JvmSynthetic
     internal suspend fun getLocksForSiteRequest(siteId: String): List<BasicSiteLocksResponse> {
-        return CloudHttpClient.client.get(Paths.getLocksForSitePath(siteId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getLocksForSitePath(siteId)).body()
     }
 
     /**
@@ -54,6 +54,6 @@ internal object SitesClient {
      */
     @JvmSynthetic
     internal suspend fun getUsersForSiteRequest(siteId: String): List<BasicUserForSiteResponse> {
-        return CloudHttpClient.client.get(Paths.getUsersForSitePath(siteId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getUsersForSitePath(siteId)).body()
     }
 }

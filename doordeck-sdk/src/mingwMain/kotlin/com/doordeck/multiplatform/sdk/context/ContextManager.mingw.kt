@@ -21,7 +21,7 @@ actual object ContextManager {
     fun getApiEnvironment(requestId: Long = 0, callback: ResultCallback) =
         callback.reply(requestId) { Context.getApiEnvironment().name }
 
-    fun setCloudAuthToken(token: String, requestId: Long = 0, callback: ResultCallback) =
+    fun setCloudAuthToken(token: String?, requestId: Long = 0, callback: ResultCallback) =
         callback.reply(requestId) { Context.setCloudAuthToken(token) }
 
     fun getCloudAuthToken(requestId: Long = 0, callback: ResultCallback) =
@@ -30,7 +30,7 @@ actual object ContextManager {
     fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: String, requestId: Long = 0, callback: ResultCallback) =
         callback.replyAsync(requestId) { Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation.toBoolean()) }
 
-    fun setCloudRefreshToken(token: String, requestId: Long = 0, callback: ResultCallback) =
+    fun setCloudRefreshToken(token: String?, requestId: Long = 0, callback: ResultCallback) =
         callback.reply(requestId) { Context.setCloudRefreshToken(token) }
 
     fun getCloudRefreshToken(requestId: Long = 0, callback: ResultCallback) =

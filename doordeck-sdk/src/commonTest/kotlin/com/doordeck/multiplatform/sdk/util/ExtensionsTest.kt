@@ -22,7 +22,7 @@ import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
 import com.doordeck.multiplatform.sdk.model.data.BasicDataSource
 import com.doordeck.multiplatform.sdk.model.data.BasicPacController
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomDouble
@@ -194,7 +194,7 @@ class ExtensionsTest {
         // Given
         val httpClient = HttpClient().also {
             it.addAuthInterceptor(
-                requiresAuth = Paths::requiresAuth,
+                requiresAuth = CloudPaths::requiresAuth,
                 getAuthToken = Context::getCloudAuthToken
             )
         }

@@ -3,7 +3,7 @@ package com.doordeck.multiplatform.sdk.clients
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.AssociateMultipleLocksRequest
 import com.doordeck.multiplatform.sdk.model.responses.BasicTileLocksResponse
 import com.doordeck.multiplatform.sdk.util.addRequestHeaders
@@ -29,7 +29,7 @@ internal object TilesClient {
      */
     @JvmSynthetic
     internal suspend fun getLocksBelongingToTileRequest(tileId: String): BasicTileLocksResponse {
-        return CloudHttpClient.client.get(Paths.getLocksBelongingToTilePath(tileId)) {
+        return CloudHttpClient.client.get(CloudPaths.getLocksBelongingToTilePath(tileId)) {
             addRequestHeaders(contentType = null, apiVersion = ApiVersion.VERSION_3)
         }.body()
     }
@@ -46,7 +46,7 @@ internal object TilesClient {
      */
     @JvmSynthetic
     internal suspend fun associateMultipleLocksRequest(tileId: String, siteId: String, lockIds: List<String>) {
-        CloudHttpClient.client.put(Paths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
+        CloudHttpClient.client.put(CloudPaths.getAssociateMultipleLocksToASingleTilePath(tileId)) {
             addRequestHeaders(apiVersion = ApiVersion.VERSION_2)
             setBody(AssociateMultipleLocksRequest(siteId, lockIds))
         }

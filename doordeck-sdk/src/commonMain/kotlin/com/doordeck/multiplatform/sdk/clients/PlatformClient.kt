@@ -5,9 +5,9 @@ import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.BasicAuthKey
 import com.doordeck.multiplatform.sdk.model.data.BasicCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.BasicEmailPreferences
-import com.doordeck.multiplatform.sdk.model.network.Params.LAST_USER_RETRIEVED
-import com.doordeck.multiplatform.sdk.model.network.Params.PAGE_SIZE
-import com.doordeck.multiplatform.sdk.model.network.Paths
+import com.doordeck.multiplatform.sdk.model.network.QueryParams.LAST_USER_RETRIEVED
+import com.doordeck.multiplatform.sdk.model.network.QueryParams.PAGE_SIZE
+import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.AddApplicationOwnerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddAuthIssuerRequest
 import com.doordeck.multiplatform.sdk.model.requests.AddCorsDomainRequest
@@ -61,7 +61,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun createApplicationRequest(application: BasicCreateApplication): String {
-        val response = CloudHttpClient.client.post(Paths.getCreateApplicationPath()) {
+        val response = CloudHttpClient.client.post(CloudPaths.getCreateApplicationPath()) {
             addRequestHeaders()
             setBody(application.toCreateApplicationRequest())
         }
@@ -78,7 +78,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun listApplicationsRequest(): List<BasicApplicationResponse> {
-        return CloudHttpClient.client.get(Paths.getListApplicationsPath()).body()
+        return CloudHttpClient.client.get(CloudPaths.getListApplicationsPath()).body()
     }
 
     /**
@@ -92,7 +92,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun getApplicationRequest(applicationId: String): BasicApplicationResponse {
-        return CloudHttpClient.client.get(Paths.getApplicationPath(applicationId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getApplicationPath(applicationId)).body()
     }
 
     /**
@@ -236,7 +236,7 @@ internal object PlatformClient {
      * @throws SdkException if an unexpected error occurs while processing the request.
      */
     private suspend fun updateApplication(applicationId: String, request: UpdateApplicationRequest) {
-        CloudHttpClient.client.post(Paths.getUpdateApplicationPath(applicationId)) {
+        CloudHttpClient.client.post(CloudPaths.getUpdateApplicationPath(applicationId)) {
             addRequestHeaders()
             setBody(request)
         }
@@ -252,7 +252,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun deleteApplicationRequest(applicationId: String) {
-        CloudHttpClient.client.delete(Paths.getDeleteApplicationPath(applicationId))
+        CloudHttpClient.client.delete(CloudPaths.getDeleteApplicationPath(applicationId))
     }
 
     /**
@@ -266,7 +266,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun getLogoUploadUrlRequest(applicationId: String, contentType: String): BasicGetLogoUploadUrlResponse {
-        return CloudHttpClient.client.post(Paths.getLogoUploadUrlPath(applicationId)) {
+        return CloudHttpClient.client.post(CloudPaths.getLogoUploadUrlPath(applicationId)) {
             addRequestHeaders()
             setBody(GetLogoUploadUrlRequest(contentType))
         }.body()
@@ -283,7 +283,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun addAuthKeyRequest(applicationId: String, key: BasicAuthKey) {
-        CloudHttpClient.client.post(Paths.getAddAuthKeyPath(applicationId)) {
+        CloudHttpClient.client.post(CloudPaths.getAddAuthKeyPath(applicationId)) {
             addRequestHeaders()
             setBody(key.toAddAuthKeyRequest())
         }
@@ -303,7 +303,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun addAuthIssuerRequest(applicationId: String, url: String) {
-        CloudHttpClient.client.post(Paths.getAddAuthIssuerPath(applicationId)) {
+        CloudHttpClient.client.post(CloudPaths.getAddAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddAuthIssuerRequest(url))
         }
@@ -320,7 +320,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun deleteAuthIssuerRequest(applicationId: String, url: String) {
-        CloudHttpClient.client.delete(Paths.getDeleteAuthIssuerPath(applicationId)) {
+        CloudHttpClient.client.delete(CloudPaths.getDeleteAuthIssuerPath(applicationId)) {
             addRequestHeaders()
             setBody(DeleteAuthIssuerRequest(url))
         }
@@ -337,7 +337,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun addCorsDomainRequest(applicationId: String, url: String) {
-        CloudHttpClient.client.post(Paths.getAddCorsDomainPath(applicationId)) {
+        CloudHttpClient.client.post(CloudPaths.getAddCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(AddCorsDomainRequest(url))
         }
@@ -354,7 +354,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun removeCorsDomainRequest(applicationId: String, url: String) {
-        CloudHttpClient.client.delete(Paths.getRemoveCorsDomainPath(applicationId)) {
+        CloudHttpClient.client.delete(CloudPaths.getRemoveCorsDomainPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveCorsDomainRequest(url))
         }
@@ -371,7 +371,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun addApplicationOwnerRequest(applicationId: String, userId: String) {
-        CloudHttpClient.client.post(Paths.getAddApplicationOwnerPath(applicationId)) {
+        CloudHttpClient.client.post(CloudPaths.getAddApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(AddApplicationOwnerRequest(userId))
         }
@@ -388,7 +388,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun removeApplicationOwnerRequest(applicationId: String, userId: String) {
-        CloudHttpClient.client.delete(Paths.getRemoveApplicationOwnerPath(applicationId)) {
+        CloudHttpClient.client.delete(CloudPaths.getRemoveApplicationOwnerPath(applicationId)) {
             addRequestHeaders()
             setBody(RemoveApplicationOwnerRequest(userId))
         }
@@ -405,7 +405,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun getApplicationOwnersDetailsRequest(applicationId: String): List<BasicApplicationOwnerDetailsResponse> {
-        return CloudHttpClient.client.get(Paths.getApplicationOwnersDetailsPath(applicationId)).body()
+        return CloudHttpClient.client.get(CloudPaths.getApplicationOwnersDetailsPath(applicationId)).body()
     }
 
     /**
@@ -421,7 +421,7 @@ internal object PlatformClient {
      */
     @JvmSynthetic
     internal suspend fun getApplicationUsersRequest(applicationId: String, pageSize: Int, lastUserRetrieved: String?): List<BasicApplicationUserResponse> {
-        return CloudHttpClient.client.get(Paths.getApplicationUsersPath(applicationId)) {
+        return CloudHttpClient.client.get(CloudPaths.getApplicationUsersPath(applicationId)) {
             parameter(PAGE_SIZE, pageSize)
             lastUserRetrieved?.let { parameter(LAST_USER_RETRIEVED, it) }
         }.body()

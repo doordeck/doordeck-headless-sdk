@@ -3,9 +3,9 @@ package com.doordeck.multiplatform.sdk.model.network
 import kotlin.jvm.JvmSynthetic
 
 /**
- * Contains all API endpoint path parameters for the Doordeck cloud service.
+ * Contains all API endpoint query parameters for the Doordeck cloud service.
  */
-internal object Params {
+internal object QueryParams {
 
     @JvmSynthetic internal const val CODE = "code"
     @JvmSynthetic internal const val METHOD = "method"

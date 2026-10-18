@@ -104,13 +104,13 @@ class MingwSecureStorage(
     override fun getApiEnvironment(): ApiEnvironment? =
         read(SecureStorageKeys.API_ENVIRONMENT)?.let { ApiEnvironment.valueOf(it) }
 
-    override fun addCloudAuthToken(token: String) =
+    override fun addCloudAuthToken(token: String?) =
         write(SecureStorageKeys.CLOUD_AUTH_TOKEN, token)
 
     override fun getCloudAuthToken(): String? =
         read(SecureStorageKeys.CLOUD_AUTH_TOKEN)
 
-    override fun addCloudRefreshToken(token: String) =
+    override fun addCloudRefreshToken(token: String?) =
         write(SecureStorageKeys.CLOUD_REFRESH_TOKEN, token)
 
     override fun getCloudRefreshToken(): String? =
