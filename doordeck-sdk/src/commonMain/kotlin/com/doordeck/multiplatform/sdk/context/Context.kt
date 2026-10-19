@@ -64,8 +64,16 @@ internal object Context {
      * Such a token is first refreshed when a usable refresh token is stored, so it only counts as invalid or expired
      * when it cannot be refreshed without user interaction.
      *
-     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
-     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true) and it could not be refreshed. Otherwise, returns false.
+     * A network request may be performed regardless of [checkServerInvalidation]: a null, malformed or expired token
+     * is refreshed through the backend whenever a refresh token is stored and the SDK is not being released.
+     * [checkServerInvalidation] only applies to a token that passes the local checks, which is then verified with
+     * the backend to make sure it has not been invalidated. No request is made for such a token when
+     * [checkServerInvalidation] is false.
+     *
+     * @param checkServerInvalidation Whether a token that passes the local checks should also be verified with the
+     *  backend (by performing a network request)
+     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true)
+     *  and it could not be refreshed. Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {

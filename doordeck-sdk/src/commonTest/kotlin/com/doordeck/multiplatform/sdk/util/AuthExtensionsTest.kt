@@ -5,6 +5,7 @@ import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.context.Context
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
 import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
 import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
@@ -35,9 +36,11 @@ import io.ktor.http.auth.AuthScheme
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.test.runTest
+import kotlinx.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.time.Clock.System.now
@@ -224,6 +227,45 @@ class AuthExtensionsTest : IntegrationTest() {
             requests[1].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
             requests[2].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
             requests[3].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+        }
+    }
+
+    @Test
+    fun shouldKeepTokensWhenRefreshAfterUnauthorizedResponseFailsWithoutNetwork() = runTest {
+        // Given
+        val currentAuthToken = randomValidJwt()
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
+        
+        val refreshAttempts = mutableListOf<HttpRequestData>()
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler { request ->
+                when (request.url.encodedPath) {
+                    CloudPaths.getRefreshTokenPath() -> {
+                        refreshAttempts += request
+                        throw IOException("No network")
+                    }
+                    else -> respondError(HttpStatusCode.Unauthorized)
+                }
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val exception = assertFailsWith<UnauthorizedException> {
+                AccountClient.getUserDetailsRequest()
+            }
+
+            // Then
+            assertEquals("API call failed with: 401 (Unauthorized) - Unauthorized", exception.message)
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
+            assertEquals(1, refreshAttempts.size)
+            refreshAttempts[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
         }
     }
 
@@ -535,6 +577,39 @@ class AuthExtensionsTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldSendRequestWithStoredTokenWhenRefreshBeforeSendingFailsWithoutNetwork() = runTest {
+        // Given
+        val expiredJwt = randomJwt(now().minus(1.hours))
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(expiredJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val attempts = mutableListOf<HttpRequestData>()
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler { request ->
+                attempts += request
+                throw IOException("No network")
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val exception = assertFailsWith<SdkException> {
+                AccountClient.getUserDetailsRequest()
+            }
+
+            // Then
+            assertEquals("Failed to perform API call", exception.message)
+            assertIs<IOException>(exception.cause)
+            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertEquals(2, attempts.size)
+            attempts[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            attempts[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+        }
+    }
+
+    @Test
     fun shouldNotSendRejectedRefreshTokenAgain() = runTest {
         // Given
         val expiredJwt = randomJwt(now().minus(1.hours))
@@ -721,6 +796,38 @@ class AuthExtensionsTest : IntegrationTest() {
             val requests = client.requestHistory()
             assertEquals(1, requests.size)
             requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = givenRefreshToken)
+        }
+    }
+
+    @Test
+    fun shouldKeepTokensWhenManualRefreshFailsWithoutNetwork() = runTest {
+        // Given
+        val currentAuthToken = randomValidJwt()
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val attempts = mutableListOf<HttpRequestData>()
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler { request ->
+                attempts += request
+                throw IOException("No network")
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val exception = assertFailsWith<SdkException> {
+                AccountClient.refreshTokenRequest()
+            }
+
+            // Then
+            assertEquals("Failed to perform API call", exception.message)
+            assertIs<IOException>(exception.cause)
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertEquals(1, attempts.size)
+            attempts[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
         }
     }
 
