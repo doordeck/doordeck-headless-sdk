@@ -3,6 +3,8 @@ package com.doordeck.multiplatform.sdk.util
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
@@ -42,8 +44,8 @@ private val cloudAuthTokensRefreshMutex = Mutex()
  *   retried once with the new auth token, replacing the one attached to the first attempt. The unauthorized
  *   response is returned as is when the tokens cannot be refreshed.
  *
- * Both refreshes go through [refreshCloudAuthTokens], so concurrent requests share a single refresh. No header is
- * set when no token is available.
+ * Both refreshes go through [refreshCloudAuthTokens], so concurrent requests share a single refresh and none is
+ * started while the SDK is being released. No header is set when no token is available.
  */
 @JvmSynthetic
 internal fun HttpClient.addCloudAuthInterceptor() {
@@ -95,7 +97,10 @@ internal fun HttpClient.addFusionAuthInterceptor() {
  * expired or rejected by the backend. Concurrent callers wait for the in-flight refresh and reuse its result
  * instead of refreshing again.
  *
- * @return the auth token to use, or `null` if no refresh token is stored.
+ * No refresh is started while the SDK is being released: the closing HTTP client could cut it off after the
+ * backend has already rotated the tokens, leaving unusable tokens in storage.
+ *
+ * @return the auth token to use, or `null` if no refresh token is stored or the SDK is being released.
  * @throws SdkException if the refresh request fails.
  */
 @JvmSynthetic
@@ -104,6 +109,11 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): 
         val storedToken = Context.getCloudAuthToken()
         if (storedToken != null && storedToken != rejectedToken) {
             return storedToken // Refreshed by a concurrent caller while waiting for the lock
+        }
+
+        if (Lifecycle.state == LifecycleState.STOPPING) {
+            SdkLogger.d { "The auth tokens are not refreshed while the SDK is being released" }
+            return null
         }
 
         val refreshToken = Context.getCloudRefreshToken()

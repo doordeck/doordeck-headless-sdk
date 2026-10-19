@@ -6,6 +6,8 @@ import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.clients.AccountlessClient
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.UnauthorizedException
+import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
@@ -251,6 +253,40 @@ class AuthExtensionsTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldNotRefreshTokensAfterUnauthorizedResponseWhileReleasing() = runTest {
+        // Given
+        val currentAuthToken = randomValidJwt()
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(currentAuthToken)
+        Context.setCloudRefreshToken(currentRefreshToken)
+        Lifecycle.set(LifecycleState.STOPPING)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        try {
+            client.use { _ ->
+                // When
+                assertFailsWith<UnauthorizedException> {
+                    AccountClient.getUserDetailsRequest()
+                }
+
+                // Then
+                assertEquals(currentAuthToken, Context.getCloudAuthToken())
+                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+                val requests = client.requestHistory()
+                assertEquals(1, requests.size)
+                requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
+            }
+        } finally {
+            Lifecycle.set(LifecycleState.STOPPED)
+        }
+    }
+
+    @Test
     fun shouldRefreshTokensOnceForConcurrentUnauthorizedResponses() = runTest {
         // Given
         val rejectedAuthToken = randomValidJwt()
@@ -434,6 +470,34 @@ class AuthExtensionsTest : IntegrationTest() {
             val requests = client.requestHistory()
             assertEquals(1, requests.size)
             requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+        }
+    }
+
+    @Test
+    fun shouldNotRefreshExpiredTokenBeforeSendingRequestWhileReleasing() = runTest {
+        // Given
+        val expiredJwt = randomJwt(now().minus(1.hours))
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(expiredJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+        Lifecycle.set(LifecycleState.STOPPING)
+
+        val client = CloudHttpClient.setupMockClient(randomUserDetails())
+
+        try {
+            client.use { _ ->
+                // When
+                AccountClient.getUserDetailsRequest()
+
+                // Then
+                assertEquals(expiredJwt, Context.getCloudAuthToken())
+                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+                val requests = client.requestHistory()
+                assertEquals(1, requests.size)
+                requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
+            }
+        } finally {
+            Lifecycle.set(LifecycleState.STOPPED)
         }
     }
 
