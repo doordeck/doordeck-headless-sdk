@@ -124,11 +124,11 @@ internal abstract class BaseHttpClient(
     }
 
     /**
-     * Closes the current HTTP client and creates a new one, allowing the SDK to be reused after [close].
+     * Creates a new HTTP client, allowing the SDK to be reused after [close]. The SDK lifecycle only initializes
+     * after a release, so there is no previous client to close; a client installed via [overrideClient] is left open.
      */
     @JvmSynthetic
     internal fun initialize() {
-        runCatching { _client?.close() }
         _client = clientProvider()
     }
 }
