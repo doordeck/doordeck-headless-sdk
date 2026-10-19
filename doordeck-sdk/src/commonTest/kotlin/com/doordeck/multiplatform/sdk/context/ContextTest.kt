@@ -2,6 +2,8 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
+import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
@@ -79,6 +81,36 @@ class ContextTest : IntegrationTest() {
             val requests = client.requestHistory()
             assertEquals(1, requests.size)
             assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldBeInvalidOrExpiredWhileReleasing() = runTest {
+        // Given
+        val expiredJwt = randomJwt(now().minus(1.hours))
+        val currentRefreshToken = randomString()
+        Context.setCloudAuthToken(expiredJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+        Lifecycle.set(LifecycleState.STOPPING)
+
+        val client = CloudHttpClient.setupMockClient(BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        ))
+
+        try {
+            client.use { _ ->
+                // When
+                val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+
+                // Then
+                assertTrue(result)
+                assertEquals(expiredJwt, Context.getCloudAuthToken())
+                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+                assertEquals(0, client.requestHistory().size)
+            }
+        } finally {
+            Lifecycle.set(LifecycleState.STOPPED)
         }
     }
 
