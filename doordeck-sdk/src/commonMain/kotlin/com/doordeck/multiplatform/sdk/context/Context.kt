@@ -12,6 +12,7 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrPastExpiration
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.refreshCloudAuthTokensOrNull
 import kotlin.jvm.JvmSynthetic
@@ -59,27 +60,36 @@ internal object Context {
     }
 
     /**
-     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
-     * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
-     * Such a token is first refreshed when a usable refresh token is stored, so it only counts as invalid or expired
-     * when it cannot be refreshed without user interaction.
+     * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or expired.
+     * A token that is null, malformed or about to expire (within
+     * [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]) is first refreshed when a usable refresh token
+     * is stored. When it cannot be refreshed without user interaction, a token that is not yet past its expiration
+     * still counts as valid, since the backend accepts it until then.
      *
-     * A network request may be performed regardless of [checkServerInvalidation]: a null, malformed or expired token
-     * is refreshed through the backend whenever a refresh token is stored and the SDK is not being released.
-     * [checkServerInvalidation] only applies to a token that passes the local checks, which is then verified with
-     * the backend to make sure it has not been invalidated. No request is made for such a token when
-     * [checkServerInvalidation] is false.
+     * A network request may be performed regardless of [checkServerInvalidation]: the refresh goes through the
+     * backend whenever a refresh token is stored and the SDK is not being released. [checkServerInvalidation] only
+     * applies to a token that passes the local checks, including one that could not be refreshed but is not past its
+     * expiration, which is then verified with the backend to make sure it has not been invalidated. No request is
+     * made for such a token when [checkServerInvalidation] is false.
      *
      * @param checkServerInvalidation Whether a token that passes the local checks should also be verified with the
      *  backend (by performing a network request)
-     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true)
-     *  and it could not be refreshed. Otherwise, returns false.
+     * @return true if the token is null, malformed, past its expiration, or invalidated (when checkServerInvalidation
+     *  is true) and it could not be refreshed. Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
         val token = getCloudAuthToken()
         if (token == null || token.isJwtTokenInvalidOrExpired()) {
-            return CloudHttpClient.client.refreshCloudAuthTokensOrNull(rejectedToken = token) == null
+            val refreshedToken = CloudHttpClient.client
+                .refreshCloudAuthTokensOrNull(staleToken = token, alreadyRejectedByBackend = false)
+            if (refreshedToken != null) {
+                return false
+            }
+            // Not refreshed: the stored token remains usable until it is past its expiration
+            if (token == null || token.isJwtTokenInvalidOrPastExpiration()) {
+                return true
+            }
         }
         return if (checkServerInvalidation) {
             try {

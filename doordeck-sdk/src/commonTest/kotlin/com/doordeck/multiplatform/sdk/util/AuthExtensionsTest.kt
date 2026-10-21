@@ -577,6 +577,111 @@ class AuthExtensionsTest : IntegrationTest() {
     }
 
     @Test
+    fun shouldRefreshTokenAboutToExpireBeforeSendingRequest() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        )
+        val userDetails = randomUserDetails()
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondContent(tokenResponse)
+            }
+            addHandler {
+                respondContent(userDetails)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val response = AccountClient.getUserDetailsRequest()
+
+            // Then
+            assertEquals(userDetails, response)
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(2, requests.size)
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = tokenResponse.authToken)
+        }
+    }
+
+    @Test
+    fun shouldKeepTokenAboutToExpireWhenRefreshBeforeSendingIsRejected() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val userDetails = randomUserDetails()
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+            addHandler {
+                respondContent(userDetails)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val response = AccountClient.getUserDetailsRequest()
+
+            // Then
+            assertEquals(userDetails, response)
+            assertEquals(expiringJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(2, requests.size)
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiringJwt)
+        }
+    }
+
+    @Test
+    fun shouldKeepSendingTokenAboutToExpireAfterRejectedRefresh() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val userDetails = randomUserDetails()
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler { request ->
+                when (request.url.encodedPath) {
+                    CloudPaths.getRefreshTokenPath() -> respondError(HttpStatusCode.Unauthorized)
+                    else -> respondContent(userDetails)
+                }
+            }
+        })
+
+        client.use { _ ->
+            // When
+            AccountClient.getUserDetailsRequest()
+            val response = AccountClient.getUserDetailsRequest()
+
+            // Then
+            assertEquals(userDetails, response)
+            assertEquals(expiringJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(3, requests.size)
+            requests[0].assertSentTo(CloudPaths.getRefreshTokenPath(), token = currentRefreshToken)
+            requests[1].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiringJwt)
+            requests[2].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiringJwt)
+        }
+    }
+
+    @Test
     fun shouldSendRequestWithStoredTokenWhenRefreshBeforeSendingFailsWithoutNetwork() = runTest {
         // Given
         val expiredJwt = randomJwt(now().minus(1.hours))

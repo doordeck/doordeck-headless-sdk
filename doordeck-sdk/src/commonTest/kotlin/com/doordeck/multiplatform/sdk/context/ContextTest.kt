@@ -7,12 +7,18 @@ import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.model.common.ContextState
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
+import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
 import com.doordeck.multiplatform.sdk.randomBoolean
+import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomJwt
+import com.doordeck.multiplatform.sdk.randomNullable
+import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomValidJwt
 import com.doordeck.multiplatform.sdk.requestHistory
+import com.doordeck.multiplatform.sdk.respondContent
 import com.doordeck.multiplatform.sdk.setupMockClient
+import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondError
@@ -204,4 +210,148 @@ class ContextTest : IntegrationTest() {
             assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
         }
     }
+
+    @Test
+    fun shouldRefreshTokenAboutToExpireWhenCheckingItsValidity() = runTest {
+        // Given
+        val currentRefreshToken = randomString()
+        val tokenResponse = BasicTokenResponse(
+            authToken = randomValidJwt(),
+            refreshToken = randomString(),
+        )
+        Context.setCloudAuthToken(randomJwt(now().plus(1.hours)))
+        Context.setCloudRefreshToken(currentRefreshToken)
+
+        val client = CloudHttpClient.setupMockClient(tokenResponse)
+
+        client.use { _ ->
+            // When
+            val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+
+            // Then
+            assertFalse(result)
+            assertEquals(tokenResponse.authToken, Context.getCloudAuthToken())
+            assertEquals(tokenResponse.refreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldKeepTokenAboutToExpireWhenItCannotBeRefreshed() = runTest {
+        // Given
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(randomString())
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val firstResult = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = false)
+            // The rejected refresh token is not sent again
+            val secondResult = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = false)
+
+            // Then
+            assertFalse(firstResult)
+            assertFalse(secondResult)
+            assertEquals(expiringJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldVerifyTokenAboutToExpireWithServerWhenItCannotBeRefreshed() = runTest {
+        // Given
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(randomString())
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+            addHandler {
+                respondContent(randomUserDetails())
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = true)
+
+            // Then
+            assertFalse(result)
+            assertEquals(expiringJwt, Context.getCloudAuthToken())
+            assertNull(Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(2, requests.size)
+            assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+            assertEquals(CloudPaths.getUserDetailsPath(), requests[1].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldBeInvalidOrExpiredWhenTokenAboutToExpireCannotBeRefreshedAndIsRejectedByServer() = runTest {
+        // Given
+        Context.setCloudAuthToken(randomJwt(now().plus(1.hours)))
+        Context.setCloudRefreshToken(randomString())
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = true)
+
+            // Then
+            assertTrue(result)
+            assertNull(Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(2, requests.size)
+            assertEquals(CloudPaths.getRefreshTokenPath(), requests[0].url.encodedPath)
+            assertEquals(CloudPaths.getUserDetailsPath(), requests[1].url.encodedPath)
+        }
+    }
+
+    @Test
+    fun shouldNotReportExpiredCloudTokenStateWhenTokenAboutToExpireCannotBeRefreshed() = runTest {
+        // Given
+        val expiringJwt = randomJwt(now().plus(1.hours))
+        Context.setCloudAuthToken(expiringJwt)
+        Context.setCloudRefreshToken(randomString())
+
+        val client = CloudHttpClient.setupMockClient(MockEngine.config {
+            addHandler {
+                respondError(HttpStatusCode.Unauthorized)
+            }
+        })
+
+        client.use { _ ->
+            // When
+            val state = Context.getContextState(checkServerInvalidation = false)
+
+            // Then
+            assertNotEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, state)
+            assertEquals(expiringJwt, Context.getCloudAuthToken())
+        }
+    }
+
+    private fun randomUserDetails() = BasicUserDetailsResponse(
+        email = randomEmail(),
+        displayName = randomNullable { randomString() },
+        emailVerified = randomBoolean(),
+        publicKey = randomPublicKey().encodeByteArrayToBase64()
+    )
 }

@@ -10,6 +10,7 @@ import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.network.FusionPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
+import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrPastExpiration
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpSend
@@ -37,9 +38,9 @@ private val cloudAuthTokensRefreshMutex = Mutex()
 /**
  * Installs an [HttpSend] interceptor that authenticates the requests whose path requires cloud authentication
  * and keeps the cloud auth tokens fresh without user interaction:
- * - Before sending, the stored auth token is refreshed when it is missing, invalid or expired
+ * - Before sending, the stored auth token is refreshed when it is missing, invalid or about to expire
  *   (`isJwtTokenInvalidOrExpired()`). This is the best effort: a failed refresh is logged and swallowed, so the
- *   request is still sent with the stored token.
+ *   request is still sent with the stored token, which the backend accepts until its expiration.
  * - After an unauthorized response, that response is released, the tokens are refreshed and the request is
  *   retried once with the new auth token, replacing the one attached to the first attempt. The unauthorized
  *   response is returned as is when the tokens cannot be refreshed.
@@ -56,7 +57,7 @@ internal fun HttpClient.addCloudAuthInterceptor() {
 
         var authToken = Context.getCloudAuthToken()
         if (authToken == null || authToken.isJwtTokenInvalidOrExpired()) {
-            authToken = refreshCloudAuthTokensOrNull(rejectedToken = authToken)
+            authToken = refreshCloudAuthTokensOrNull(staleToken = authToken, alreadyRejectedByBackend = false)
                 ?: authToken
         }
         authToken?.let { request.setBearerToken(it) }
@@ -66,7 +67,7 @@ internal fun HttpClient.addCloudAuthInterceptor() {
             return@intercept call
         }
 
-        val refreshedToken = refreshCloudAuthTokensOrNull(rejectedToken = authToken)
+        val refreshedToken = refreshCloudAuthTokensOrNull(staleToken = authToken, alreadyRejectedByBackend = true)
             ?: return@intercept call
 
         // Recreate the request
@@ -93,21 +94,25 @@ internal fun HttpClient.addFusionAuthInterceptor() {
 }
 
 /**
- * Refreshes the cloud auth tokens, given that [rejectedToken] is the stored auth token found missing, invalid,
- * expired or rejected by the backend. Concurrent callers wait for the in-flight refresh and reuse its result
- * instead of refreshing again.
+ * Refreshes the cloud auth tokens, given that [staleToken] is the stored auth token found missing, invalid or about
+ * to expire or, when [alreadyRejectedByBackend] is `true`, already rejected by the backend with an unauthorized
+ * response. Concurrent callers wait for the in-flight refresh and reuse its result instead of refreshing again.
  *
  * No refresh is started while the SDK is being released: the closing HTTP client could cut it off after the
  * backend has already rotated the tokens, leaving unusable tokens in storage.
  *
  * @return the auth token to use, or `null` if no refresh token is stored or the SDK is being released.
- * @throws SdkException if the refresh request fails.
+ * @throws SdkException if the refresh request fails. A rejected refresh token is removed from the storage, along
+ * with the auth token when the backend no longer accepts it (see [exchangeCloudRefreshToken]).
  */
 @JvmSynthetic
-internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): String? {
+internal suspend fun HttpClient.refreshCloudAuthTokens(
+    staleToken: String?,
+    alreadyRejectedByBackend: Boolean
+): String? {
     return cloudAuthTokensRefreshMutex.withLock {
         val storedToken = Context.getCloudAuthToken()
-        if (storedToken != null && storedToken != rejectedToken) {
+        if (storedToken != null && storedToken != staleToken) {
             return storedToken // Refreshed by a concurrent caller while waiting for the lock
         }
 
@@ -120,7 +125,7 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): 
             ?: return null
 
         withContext(NonCancellable) {
-            exchangeCloudRefreshToken(refreshToken).authToken.also {
+            exchangeCloudRefreshToken(refreshToken, authTokenAlreadyRejected = alreadyRejectedByBackend).authToken.also {
                 SdkLogger.i { "Auth tokens were automatically refreshed" }
             }
         }
@@ -131,9 +136,12 @@ internal suspend fun HttpClient.refreshCloudAuthTokens(rejectedToken: String?): 
  * [refreshCloudAuthTokens] as the best effort: a failed refresh is logged and swallowed.
  */
 @JvmSynthetic
-internal suspend fun HttpClient.refreshCloudAuthTokensOrNull(rejectedToken: String?): String? {
+internal suspend fun HttpClient.refreshCloudAuthTokensOrNull(
+    staleToken: String?,
+    alreadyRejectedByBackend: Boolean
+): String? {
     return try {
-        refreshCloudAuthTokens(rejectedToken)
+        refreshCloudAuthTokens(staleToken, alreadyRejectedByBackend)
     } catch (exception: Exception) {
         currentCoroutineContext().ensureActive()
         SdkLogger.w(exception) { "Failed to refresh the auth tokens" }
@@ -142,19 +150,32 @@ internal suspend fun HttpClient.refreshCloudAuthTokensOrNull(rejectedToken: Stri
 }
 
 /**
- * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context]. When the
- * backend rejects [refreshToken], the stored tokens are removed, unless a concurrent manual refresh has already
- * replaced them.
+ * Posts [refreshToken] to the refresh token endpoint and stores the tokens of the response in [Context].
+ *
+ * When the backend rejects [refreshToken], it is removed from the storage so it is not sent again. The stored auth
+ * token is kept while the backend still accepts it: it is removed only when it is past its expiration or
+ * [authTokenAlreadyRejected] is `true`. Nothing is removed when a concurrent manual refresh has already replaced the
+ * stored tokens.
  */
-private suspend fun HttpClient.exchangeCloudRefreshToken(refreshToken: String): BasicTokenResponse {
+private suspend fun HttpClient.exchangeCloudRefreshToken(
+    refreshToken: String,
+    authTokenAlreadyRejected: Boolean
+): BasicTokenResponse {
     val refreshedTokens: BasicTokenResponse = try {
         post(CloudPaths.getRefreshTokenPath()) {
             addRequestHeaders(token = refreshToken)
         }.body()
     } catch (exception: UnauthorizedException) {
         if (Context.getCloudRefreshToken() == refreshToken) {
-            Context.setCloudAuthToken(null)
             Context.setCloudRefreshToken(null)
+            val authToken = Context.getCloudAuthToken()
+            val authTokenUsable = !authTokenAlreadyRejected && authToken != null &&
+                !authToken.isJwtTokenInvalidOrPastExpiration()
+            if (authTokenUsable) {
+                SdkLogger.i { "The refresh token was rejected, the auth token is kept until its expiration" }
+            } else {
+                Context.setCloudAuthToken(null)
+            }
         }
         throw exception
     }
