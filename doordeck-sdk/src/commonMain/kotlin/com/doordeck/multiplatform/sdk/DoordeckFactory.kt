@@ -58,7 +58,6 @@ internal object DoordeckFactory {
             }
             CryptoManager.initialize()
             ServerTimeSynchronizer.initialize()
-            Context.attemptToRefreshAuthTokens()
         } catch (exception: Throwable) {
             try {
                 releaseResources()

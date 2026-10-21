@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.context
 
+import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clients.AccountClient
@@ -12,6 +13,7 @@ import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
+import com.doordeck.multiplatform.sdk.util.refreshCloudAuthTokensOrNull
 import kotlin.jvm.JvmSynthetic
 
 internal object Context {
@@ -59,15 +61,25 @@ internal object Context {
     /**
      * Checks whether the cloud authentication token is invalid (e.g., null, malformed) or
      * expired (considering a minimum lifetime of [com.doordeck.multiplatform.sdk.util.MIN_TOKEN_LIFETIME_DAYS]).
+     * Such a token is first refreshed when a usable refresh token is stored, so it only counts as invalid or expired
+     * when it cannot be refreshed without user interaction.
      *
-     * @param checkServerInvalidation Whether it should verify with the backend if the token has been invalidated (by performing a network request)
-     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true). Otherwise, returns false.
+     * A network request may be performed regardless of [checkServerInvalidation]: a null, malformed or expired token
+     * is refreshed through the backend whenever a refresh token is stored and the SDK is not being released.
+     * [checkServerInvalidation] only applies to a token that passes the local checks, which is then verified with
+     * the backend to make sure it has not been invalidated. No request is made for such a token when
+     * [checkServerInvalidation] is false.
+     *
+     * @param checkServerInvalidation Whether a token that passes the local checks should also be verified with the
+     *  backend (by performing a network request)
+     * @return true if the token is null, malformed, expired, or invalidated (when checkServerInvalidation is true)
+     *  and it could not be refreshed. Otherwise, returns false.
      */
     @JvmSynthetic
     internal suspend fun isCloudAuthTokenInvalidOrExpired(checkServerInvalidation: Boolean): Boolean {
-        val token = getCloudAuthToken() ?: return true
-        if (token.isJwtTokenInvalidOrExpired()) {
-            return true
+        val token = getCloudAuthToken()
+        if (token == null || token.isJwtTokenInvalidOrExpired()) {
+            return CloudHttpClient.client.refreshCloudAuthTokensOrNull(rejectedToken = token) == null
         }
         return if (checkServerInvalidation) {
             try {
@@ -293,24 +305,6 @@ internal object Context {
         if (!isKeyPairVerified()) { return ContextState.KEY_PAIR_IS_NOT_VERIFIED }
         if (isCertificateChainInvalidOrExpired()) { return ContextState.CERTIFICATE_CHAIN_IS_INVALID_OR_EXPIRED }
         return ContextState.READY
-    }
-
-    /**
-     * Refreshes the cloud auth tokens if they are no longer valid.
-     *
-     * The refresh is done by the Ktor auth plugin, which intercepts outgoing requests; this function
-     * just issues a throwaway authenticated request to trigger it. Failures are ignored, so a
-     * successful return does not guarantee valid tokens.
-     *
-     * Only meant to be called during SDK initialization.
-     */
-    @JvmSynthetic
-    internal suspend fun attemptToRefreshAuthTokens() {
-        if (getCloudAuthToken() != null && getCloudRefreshToken() != null) {
-            runCatching {
-                AccountClient.getUserDetailsRequest()
-            }
-        }
     }
 
     @JvmSynthetic

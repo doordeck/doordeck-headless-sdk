@@ -83,7 +83,7 @@ internal object CloudPaths {
     @JvmSynthetic
     internal fun requiresAuth(path: String) = path != getLoginPath() && path != getRegistrationPath() &&
             path != getVerifyEmailPath() && path != getPasswordResetPath() && path != getPasswordResetVerifyPath() &&
-            path != getServerTimePath()
+            path != getServerTimePath() && path != getRefreshTokenPath()
 }
 
 /**

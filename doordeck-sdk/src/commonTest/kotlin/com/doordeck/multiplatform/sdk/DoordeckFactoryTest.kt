@@ -181,11 +181,13 @@ class DoordeckFactoryTest {
     )
 
     /**
-     * Fails once the HTTP clients have been created, while checking the stored tokens.
+     * Fails once the HTTP clients have been created.
      */
     private fun failingStorage(throwable: Throwable): SecureStorage =
         object : SecureStorage by DefaultSecureStorage(MemorySettings()) {
-            override fun getCloudAuthToken(): String = throw throwable
+            override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+                throw throwable
+            }
         }
 
     private fun assertClientsInitialized() {

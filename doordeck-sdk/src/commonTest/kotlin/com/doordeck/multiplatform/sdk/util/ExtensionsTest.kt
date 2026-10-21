@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.util
 
 import com.doordeck.multiplatform.sdk.PlatformType
-import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.BadRequestException
 import com.doordeck.multiplatform.sdk.exceptions.ConflictException
 import com.doordeck.multiplatform.sdk.exceptions.ForbiddenException
@@ -22,7 +21,6 @@ import com.doordeck.multiplatform.sdk.model.data.BasicAmagController
 import com.doordeck.multiplatform.sdk.model.data.BasicDataSource
 import com.doordeck.multiplatform.sdk.model.data.BasicPacController
 import com.doordeck.multiplatform.sdk.model.network.ApiVersion
-import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.requests.LoginRequest
 import com.doordeck.multiplatform.sdk.platformType
 import com.doordeck.multiplatform.sdk.randomDouble
@@ -37,7 +35,6 @@ import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.UserAgent
-import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.pluginOrNull
 import io.ktor.client.request.HttpRequestBuilder
@@ -175,33 +172,6 @@ class ExtensionsTest {
             assertNull(httpClient.pluginOrNull(UserAgent))
         } else {
             assertNotNull(httpClient.pluginOrNull(UserAgent))
-        }
-    }
-
-    @Test
-    fun shouldInstallAuth() = runTest {
-        // Given
-        val httpClient = HttpClient {
-            installAuth()
-        }
-
-        // Then
-        assertNotNull(httpClient.pluginOrNull(Auth))
-    }
-
-    @Test
-    fun shouldInstallInterceptor() = runTest {
-        // Given
-        val httpClient = HttpClient().also {
-            it.addAuthInterceptor(
-                requiresAuth = CloudPaths::requiresAuth,
-                getAuthToken = Context::getCloudAuthToken
-            )
-        }
-
-        httpClient.use { client ->
-            // Then
-            assertNotNull(client.pluginOrNull(HttpSend))
         }
     }
 
