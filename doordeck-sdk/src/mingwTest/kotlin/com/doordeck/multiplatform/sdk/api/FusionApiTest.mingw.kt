@@ -173,7 +173,7 @@ class FusionApiTest : CallbackTest() {
                 }
 
                 // Given - shouldLogin
-                ContextManager.setFusionHost(testController.uri)
+                ContextManager.setFusionHost(testController.uri, callback = TestCallback)
 
                 // When
                 val fusionLoginResponse = callbackApiCall<ResultData<BasicFusionLoginResponse>> {
@@ -195,7 +195,7 @@ class FusionApiTest : CallbackTest() {
 
                 // Skip the test if it's not targeting the expected integration
                 val integrationType = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
-                    FusionApi.getIntegrationType(TestCallback)
+                    FusionApi.getIntegrationType(callback = TestCallback)
                 }.unwrap()
 
                 if (integrationType.status != null && integrationType.status != testController.type) {
@@ -261,7 +261,7 @@ class FusionApiTest : CallbackTest() {
                 // Given - shouldGetIntegrationType
                 // When
                 val integrationTypeResponse = callbackApiCall<ResultData<BasicIntegrationTypeResponse>> {
-                    FusionApi.getIntegrationType(TestCallback)
+                    FusionApi.getIntegrationType(callback = TestCallback)
                 }.unwrap()
 
                 // Then

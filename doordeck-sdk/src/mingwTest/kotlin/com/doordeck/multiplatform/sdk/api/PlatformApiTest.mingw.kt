@@ -69,7 +69,7 @@ class PlatformApiTest : CallbackTest() {
     @AfterTest
     fun cleanUp() {
         val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
-            PlatformApi.listApplications(TestCallback)
+            PlatformApi.listApplications(callback = TestCallback)
         }
         applicationsResponse.success?.result?.filter { application ->
             application.name.startsWith(TEST_MAIN_APPLICATION_NAME) &&
@@ -138,7 +138,7 @@ class PlatformApiTest : CallbackTest() {
 
     private fun listApplications(): List<BasicApplicationResponse> =
         callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
-            PlatformApi.listApplications(TestCallback)
+            PlatformApi.listApplications(callback = TestCallback)
         }.unwrap()
 
     @Test
@@ -570,14 +570,14 @@ class PlatformApiTest : CallbackTest() {
             val applicationAuthToken = "$headerB64.$bodyB64.$signatureB64"
 
             // When
-            ContextManager.clearContext()
-            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+            callbackApiCall<ResultData<Unit>> { ContextManager.clearContext(callback = TestCallback)}.unwrap()
+            callbackApiCall<ResultData<Unit>> { ContextManager.setCloudAuthToken(applicationAuthToken, callback = TestCallback) }.unwrap() // Override the context auth token with the application auth token
             // Perform a request to create the new user and attach it to the application
             callbackApiCall<ResultData<BasicUserDetailsResponse>> {
-                AccountApi.getUserDetails(TestCallback)
+                AccountApi.getUserDetails(callback = TestCallback)
             }.unwrap()
-            ContextManager.clearContext()
-            ContextManager.setCloudAuthToken(authToken) // Restore the context token
+            callbackApiCall<ResultData<Unit>> { ContextManager.clearContext(callback = TestCallback)}.unwrap()
+            callbackApiCall<ResultData<Unit>> { ContextManager.setCloudAuthToken(authToken, callback = TestCallback) }.unwrap() // Restore the context token
 
             // Then
             val applicationUsersResponse = callbackApiCall<ResultData<List<BasicApplicationUserResponse>>> {
@@ -591,14 +591,14 @@ class PlatformApiTest : CallbackTest() {
             assertEquals(applicationJwtBody.name, applicationUsersResponse.first().displayName)
             assertEquals(applicationUserId, applicationUsersResponse.first().foreignKey)
 
-            ContextManager.clearContext()
-            ContextManager.setCloudAuthToken(applicationAuthToken) // Override the context auth token with the application auth token
+            callbackApiCall<ResultData<Unit>> { ContextManager.clearContext(callback = TestCallback)}.unwrap()
+            callbackApiCall<ResultData<Unit>> { ContextManager.setCloudAuthToken(applicationAuthToken, callback = TestCallback) }.unwrap() // Override the context auth token with the application auth token
             // Cleanup the application user
             callbackApiCall<ResultData<Unit>> {
-                AccountApi.deleteAccount(TestCallback)
+                AccountApi.deleteAccount(callback = TestCallback)
             }.unwrap()
-            ContextManager.clearContext()
-            ContextManager.setCloudAuthToken(authToken) // Restore the context token
+            callbackApiCall<ResultData<Unit>> { ContextManager.clearContext(callback = TestCallback)}.unwrap()
+            callbackApiCall<ResultData<Unit>> { ContextManager.setCloudAuthToken(authToken, callback = TestCallback) }.unwrap() // Restore the context token
         }
     }
 

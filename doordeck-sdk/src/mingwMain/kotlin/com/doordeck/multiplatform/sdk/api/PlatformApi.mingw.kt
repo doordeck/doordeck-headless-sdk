@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
-import com.doordeck.multiplatform.sdk.CStringCallback
+import com.doordeck.multiplatform.sdk.ResultCallback
 import com.doordeck.multiplatform.sdk.annotations.DoordeckOnly
 import com.doordeck.multiplatform.sdk.clients.PlatformClient
 import com.doordeck.multiplatform.sdk.model.data.AddAuthKeyData
@@ -23,7 +23,7 @@ import com.doordeck.multiplatform.sdk.model.data.toAuthKey
 import com.doordeck.multiplatform.sdk.model.data.toCreateApplication
 import com.doordeck.multiplatform.sdk.model.data.toEmailPreferences
 import com.doordeck.multiplatform.sdk.util.fromJson
-import com.doordeck.multiplatform.sdk.util.handleCallback
+import com.doordeck.multiplatform.sdk.util.replyAsync
 
 actual object PlatformApi {
     /**
@@ -32,8 +32,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#create-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("createApplication")
-    fun createApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun createApplication(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val createApplicationData = data.fromJson<CreateApplicationData>()
         PlatformClient.createApplicationRequest(createApplicationData.toCreateApplication())
     }
@@ -44,8 +43,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#list-applications">API Doc</a>
      */
     @DoordeckOnly
-    @CName("listApplications")
-    fun listApplications(callback: CStringCallback) = callback.handleCallback {
+    fun listApplications(requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         PlatformClient.listApplicationsRequest()
     }
 
@@ -55,8 +53,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("getApplication")
-    fun getApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getApplication(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationIdData = data.fromJson<ApplicationIdData>()
         PlatformClient.getApplicationRequest(applicationIdData.applicationId)
     }
@@ -67,8 +64,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationName")
-    fun updateApplicationName(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationName(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationName = data.fromJson<UpdateApplicationNameData>()
         PlatformClient.updateApplicationNameRequest(
             applicationId = updateApplicationName.applicationId,
@@ -82,8 +78,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationCompanyName")
-    fun updateApplicationCompanyName(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationCompanyName(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationCompanyName = data.fromJson<UpdateApplicationCompanyNameData>()
         PlatformClient.updateApplicationCompanyNameRequest(
             applicationId = updateApplicationCompanyName.applicationId,
@@ -97,8 +92,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationMailingAddress")
-    fun updateApplicationMailingAddress(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationMailingAddress(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationMailingAddressData = data.fromJson<UpdateApplicationMailingAddressData>()
         PlatformClient.updateApplicationMailingAddressRequest(
             applicationId = updateApplicationMailingAddressData.applicationId,
@@ -112,8 +106,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationPrivacyPolicy")
-    fun updateApplicationPrivacyPolicy(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationPrivacyPolicy(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationPrivacyPolicyData = data.fromJson<UpdateApplicationPrivacyPolicyData>()
         PlatformClient.updateApplicationPrivacyPolicyRequest(
             applicationId = updateApplicationPrivacyPolicyData.applicationId,
@@ -127,8 +120,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationSupportContact")
-    fun updateApplicationSupportContact(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationSupportContact(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationSupportContactData = data.fromJson<UpdateApplicationSupportContactData>()
         PlatformClient.updateApplicationSupportContactRequest(
             applicationId = updateApplicationSupportContactData.applicationId,
@@ -142,8 +134,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationAppLink")
-    fun updateApplicationAppLink(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationAppLink(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationAppLinkData = data.fromJson<UpdateApplicationAppLinkData>()
         PlatformClient.updateApplicationAppLinkRequest(
             applicationId = updateApplicationAppLinkData.applicationId,
@@ -157,8 +148,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationEmailPreferences")
-    fun updateApplicationEmailPreferences(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationEmailPreferences(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationEmailPreferencesData = data.fromJson<UpdateApplicationEmailPreferencesData>()
         PlatformClient.updateApplicationEmailPreferencesRequest(
             applicationId = updateApplicationEmailPreferencesData.applicationId,
@@ -172,8 +162,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#update-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("updateApplicationLogoUrl")
-    fun updateApplicationLogoUrl(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun updateApplicationLogoUrl(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val updateApplicationLogoUrlData = data.fromJson<UpdateApplicationLogoUrlData>()
         PlatformClient.updateApplicationLogoUrlRequest(
             applicationId = updateApplicationLogoUrlData.applicationId,
@@ -187,8 +176,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#delete-application">API Doc</a>
      */
     @DoordeckOnly
-    @CName("deleteApplication")
-    fun deleteApplication(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun deleteApplication(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationIdData = data.fromJson<ApplicationIdData>()
         PlatformClient.deleteApplicationRequest(applicationIdData.applicationId)
     }
@@ -199,8 +187,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-logo-upload-url">API Doc</a>
      */
     @DoordeckOnly
-    @CName("getLogoUploadUrl")
-    fun getLogoUploadUrl(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getLogoUploadUrl(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val getLogoUploadUrlData = data.fromJson<GetLogoUploadUrlData>()
         PlatformClient.getLogoUploadUrlRequest(
             applicationId = getLogoUploadUrlData.applicationId,
@@ -214,8 +201,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-key">API Doc</a>
      */
     @DoordeckOnly
-    @CName("addAuthKey")
-    fun addAuthKey(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun addAuthKey(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val addAuthKeyData = data.fromJson<AddAuthKeyData>()
         PlatformClient.addAuthKeyRequest(
             applicationId = addAuthKeyData.applicationId,
@@ -229,8 +215,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    @CName("addAuthIssuer")
-    fun addAuthIssuer(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun addAuthIssuer(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val authIssuerData = data.fromJson<AuthIssuerData>()
         PlatformClient.addAuthIssuerRequest(
             applicationId = authIssuerData.applicationId,
@@ -244,8 +229,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#delete-auth-issuer">API Doc</a>
      */
     @DoordeckOnly
-    @CName("deleteAuthIssuer")
-    fun deleteAuthIssuer(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun deleteAuthIssuer(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val authIssuerData = data.fromJson<AuthIssuerData>()
         PlatformClient.deleteAuthIssuerRequest(
             applicationId = authIssuerData.applicationId,
@@ -259,8 +243,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    @CName("addCorsDomain")
-    fun addCorsDomain(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun addCorsDomain(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val corsDomainData = data.fromJson<CorsDomainData>()
         PlatformClient.addCorsDomainRequest(
             applicationId = corsDomainData.applicationId,
@@ -274,8 +257,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#remove-cors-domain">API Doc</a>
      */
     @DoordeckOnly
-    @CName("removeCorsDomain")
-    fun removeCorsDomain(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun removeCorsDomain(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val corsDomainData = data.fromJson<CorsDomainData>()
         PlatformClient.removeCorsDomainRequest(
             applicationId = corsDomainData.applicationId,
@@ -289,8 +271,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#add-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    @CName("addApplicationOwner")
-    fun addApplicationOwner(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun addApplicationOwner(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
         PlatformClient.addApplicationOwnerRequest(
             applicationId = applicationOwnerData.applicationId,
@@ -304,8 +285,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#remove-application-owner">API Doc</a>
      */
     @DoordeckOnly
-    @CName("removeApplicationOwner")
-    fun removeApplicationOwner(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun removeApplicationOwner(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationOwnerData = data.fromJson<ApplicationOwnerData>()
         PlatformClient.removeApplicationOwnerRequest(
             applicationId = applicationOwnerData.applicationId,
@@ -319,8 +299,7 @@ actual object PlatformApi {
      * @see <a href="https://developer.doordeck.com/docs/#get-application-owners-details">API Doc</a>
      */
     @DoordeckOnly
-    @CName("getApplicationOwnersDetails")
-    fun getApplicationOwnersDetails(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getApplicationOwnersDetails(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationIdData = data.fromJson<ApplicationIdData>()
         PlatformClient.getApplicationOwnersDetailsRequest(applicationIdData.applicationId)
     }
@@ -329,8 +308,7 @@ actual object PlatformApi {
      * @see PlatformClient.getApplicationUsersRequest
      */
     @DoordeckOnly
-    @CName("getApplicationUsers")
-    fun getApplicationUsers(data: String, callback: CStringCallback) = callback.handleCallback {
+    fun getApplicationUsers(data: String, requestId: Long = 0, callback: ResultCallback) = callback.replyAsync(requestId) {
         val applicationUserData = data.fromJson<ApplicationUserData>()
         PlatformClient.getApplicationUsersRequest(
             applicationId = applicationUserData.applicationId,

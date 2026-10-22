@@ -35,7 +35,7 @@ class SitesApiTest : CallbackTest() {
 
         // When
         val response = callbackApiCall<ResultData<List<BasicSiteResponse>>> {
-            SitesApi.listSites(TestCallback)
+            SitesApi.listSites(callback = TestCallback)
         }.unwrap()
 
         // Then

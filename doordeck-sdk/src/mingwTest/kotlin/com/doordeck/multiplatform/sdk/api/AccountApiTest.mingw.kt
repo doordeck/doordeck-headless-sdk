@@ -43,7 +43,7 @@ class AccountApiTest : CallbackTest() {
 
         // When
         val response = callbackApiCall<ResultData<BasicUserDetailsResponse>> {
-            AccountApi.getUserDetails(TestCallback)
+            AccountApi.getUserDetails(callback = TestCallback)
         }.unwrap()
 
         // Then
@@ -73,16 +73,16 @@ class AccountApiTest : CallbackTest() {
         // Then
         assertTrue { result.certificateChain.isNotEmpty() }
         assertEquals(PLATFORM_TEST_MAIN_USER_ID, result.userId)
-        assertEquals(PLATFORM_TEST_MAIN_USER_ID, ContextManager.getUserId())
+        assertEquals(PLATFORM_TEST_MAIN_USER_ID, callbackApiCall<ResultData<String?>> { ContextManager.getUserId(callback = TestCallback) }.unwrap())
         assertEquals(
             result.certificateChain.certificateChainToString(),
-            ContextManager.getCertificateChain()
+            callbackApiCall<ResultData<String?>> { ContextManager.getCertificateChain(callback = TestCallback) }.unwrap()
         )
-        val contextKeyPair = ContextManager.getKeyPair()?.fromJson<EncodedKeyPair>()
+        val contextKeyPair = callbackApiCall<ResultData<String?>> { ContextManager.getKeyPair(callback = TestCallback) }.unwrap()?.fromJson<EncodedKeyPair>()
         assertEquals(publicKey, contextKeyPair?.publicKey)
         assertEquals(privateKey, contextKeyPair?.privateKey)
-        assertFalse { ContextManager.isCertificateChainInvalidOrExpired() }
-        assertTrue { ContextManager.isKeyPairVerified() }
+        assertFalse { callbackApiCall<ResultData<Boolean?>> { ContextManager.isCertificateChainInvalidOrExpired(callback = TestCallback) }.unwrap() == true }
+        assertTrue { callbackApiCall<ResultData<Boolean?>> { ContextManager.isKeyPairVerified(callback = TestCallback) }.unwrap() == true }
     }
 
     @Test
@@ -133,8 +133,8 @@ class AccountApiTest : CallbackTest() {
         // Then
         assertTrue { refreshResult.authToken.isNotEmpty() }
         assertTrue { refreshResult.refreshToken.isNotEmpty() }
-        assertEquals(ContextManager.getCloudAuthToken(), refreshResult.authToken)
-        assertEquals(ContextManager.getCloudRefreshToken(), refreshResult.refreshToken)
+        assertEquals(callbackApiCall<ResultData<String?>> { ContextManager.getCloudAuthToken(callback = TestCallback) }.unwrap(), refreshResult.authToken)
+        assertEquals(callbackApiCall<ResultData<String?>> { ContextManager.getCloudRefreshToken(callback = TestCallback) }.unwrap(), refreshResult.refreshToken)
     }
 
     @Test
@@ -149,16 +149,16 @@ class AccountApiTest : CallbackTest() {
 
         // When
         callbackApiCall<ResultData<Unit>> {
-            AccountApi.logout(TestCallback)
+            AccountApi.logout(callback = TestCallback)
         }.unwrap()
 
         // Then
-        assertNull(ContextManager.getCloudAuthToken())
-        assertNull(ContextManager.getCloudRefreshToken())
-        assertNull(ContextManager.getFusionAuthToken())
-        assertNull(ContextManager.getUserId())
-        assertNull(ContextManager.getUserEmail())
-        assertNull(ContextManager.getCertificateChain())
-        assertNull(ContextManager.getKeyPair())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCloudAuthToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCloudRefreshToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getFusionAuthToken(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getUserId(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getUserEmail(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getCertificateChain(callback = TestCallback) }.unwrap())
+        assertNull(callbackApiCall<ResultData<String?>> { ContextManager.getKeyPair(callback = TestCallback) }.unwrap())
     }
 }

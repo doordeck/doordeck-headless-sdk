@@ -43,10 +43,11 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         val sdk = KDoordeckFactory.initialize(sdkConfig)
 
         // Then
+
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(sdkConfig.cloudAuthToken, sdk.contextManager().getCloudAuthToken())
-        assertEquals(sdkConfig.cloudRefreshToken, sdk.contextManager().getCloudRefreshToken())
-        assertEquals(sdkConfig.apiEnvironment, sdk.contextManager().getApiEnvironment())
+        assertEquals(sdkConfig.cloudAuthToken, callbackApiCall<ResultData<String?>> { sdk.contextManager().getCloudAuthToken(callback = TestCallback) }.unwrap())
+        assertEquals(sdkConfig.cloudRefreshToken, callbackApiCall<ResultData<String?>> { sdk.contextManager().getCloudRefreshToken(callback = TestCallback) }.unwrap())
+        assertEquals(sdkConfig.apiEnvironment, callbackApiCall<ResultData<String?>> { sdk.contextManager().getApiEnvironment(callback = TestCallback) }.unwrap())
     }
 
     @Test
