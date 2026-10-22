@@ -620,7 +620,7 @@ class ContextManagerTest : CallbackTest() {
         ContextManager.setCloudAuthToken(validJwt, callback = TestCallback)
         ContextManager.setKeyPair(EncodedKeyPair(publicKey = publicKey, privateKey = privateKey).toJson(), callback = TestCallback)
         ContextManager.setKeyPairVerified(publicKey, callback = TestCallback)
-        ContextManager.setCertificateChain(PLATFORM_TEST_EXPIRED_CERTIFICATE, callback = TestCallback)
+        ContextManager.setCertificateChain(PLATFORM_TEST_VALID_CERTIFICATE, callback = TestCallback)
 
         client.use {
             // When
@@ -649,7 +649,7 @@ class ContextManagerTest : CallbackTest() {
         ContextManager.setCloudAuthToken(validJwt, callback = TestCallback)
         ContextManager.setKeyPair(EncodedKeyPair(publicKey = publicKey, privateKey = privateKey).toJson(), callback = TestCallback)
         ContextManager.setKeyPairVerified(publicKey, callback = TestCallback)
-        ContextManager.setCertificateChain(PLATFORM_TEST_EXPIRED_CERTIFICATE, callback = TestCallback)
+        ContextManager.setCertificateChain(PLATFORM_TEST_VALID_CERTIFICATE, callback = TestCallback)
 
         client.use {
             // When
