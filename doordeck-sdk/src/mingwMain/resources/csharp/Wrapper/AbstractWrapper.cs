@@ -117,6 +117,7 @@ public abstract class AbstractWrapper
         if (exceptionType.Contains("BatchShareFailedException")) return new BatchShareFailedException(input.Failure.ExceptionMessage, []);
         if (exceptionType.Contains("BadRequestException")) return new BadRequestException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("UnauthorizedException")) return new UnauthorizedException(input.Failure.ExceptionMessage);
+        if (exceptionType.Contains("PaymentRequiredException")) return new PaymentRequiredException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("ForbiddenException")) return new ForbiddenException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("NotFoundException")) return new NotFoundException(input.Failure.ExceptionMessage);
         if (exceptionType.Contains("MethodNotAllowedException")) return new MethodNotAllowedException(input.Failure.ExceptionMessage);
