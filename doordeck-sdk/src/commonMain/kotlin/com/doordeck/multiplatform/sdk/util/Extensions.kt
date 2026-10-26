@@ -13,6 +13,7 @@ import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MethodNotAllowedException
 import com.doordeck.multiplatform.sdk.exceptions.NotAcceptableException
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
+import com.doordeck.multiplatform.sdk.exceptions.PaymentRequiredException
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
@@ -198,6 +199,7 @@ internal fun HttpClientConfig<*>.installResponseValidator() {
             throw when (responseException.response.status) {
                 HttpStatusCode.BadRequest -> BadRequestException(message)
                 HttpStatusCode.Unauthorized -> UnauthorizedException(message)
+                HttpStatusCode.PaymentRequired -> PaymentRequiredException(message)
                 HttpStatusCode.Forbidden -> ForbiddenException(message)
                 HttpStatusCode.NotFound -> NotFoundException(message)
                 HttpStatusCode.MethodNotAllowed -> MethodNotAllowedException(message)

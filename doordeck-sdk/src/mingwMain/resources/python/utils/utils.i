@@ -29,6 +29,8 @@ def handle_exception(response):
         raise BadRequestException(exception_message)
     if "UnauthorizedException" in exception_type:
         raise UnauthorizedException(exception_message)
+    if "PaymentRequiredException" in exception_type:
+        raise PaymentRequiredException(exception_message)
     if "ForbiddenException" in exception_type:
         raise ForbiddenException(exception_message)
     if "NotFoundException" in exception_type:

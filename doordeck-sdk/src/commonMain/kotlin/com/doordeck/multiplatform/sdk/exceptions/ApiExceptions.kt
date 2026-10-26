@@ -12,6 +12,9 @@ class BadRequestException(override val message: String) : SdkException(message)
 class UnauthorizedException(override val message: String) : SdkException(message)
 
 @JsExport
+class PaymentRequiredException(override val message: String) : SdkException(message)
+
+@JsExport
 class ForbiddenException(override val message: String) : SdkException(message)
 
 @JsExport

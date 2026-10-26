@@ -31,6 +31,11 @@ class UnauthorizedException(SdkException):
         super().__init__(message)
 
 
+class PaymentRequiredException(SdkException):
+    def __init__(self, message: str):
+        super().__init__(message)
+
+
 class ForbiddenException(SdkException):
     def __init__(self, message: str):
         super().__init__(message)

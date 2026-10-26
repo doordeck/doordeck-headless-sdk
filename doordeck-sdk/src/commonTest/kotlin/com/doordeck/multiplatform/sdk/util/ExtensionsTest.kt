@@ -11,6 +11,7 @@ import com.doordeck.multiplatform.sdk.exceptions.LockedException
 import com.doordeck.multiplatform.sdk.exceptions.MethodNotAllowedException
 import com.doordeck.multiplatform.sdk.exceptions.NotAcceptableException
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
+import com.doordeck.multiplatform.sdk.exceptions.PaymentRequiredException
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.exceptions.ServiceUnavailableException
 import com.doordeck.multiplatform.sdk.exceptions.TooEarlyException
@@ -51,6 +52,7 @@ import io.ktor.http.HttpStatusCode.Companion.Locked
 import io.ktor.http.HttpStatusCode.Companion.MethodNotAllowed
 import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
 import io.ktor.http.HttpStatusCode.Companion.NotFound
+import io.ktor.http.HttpStatusCode.Companion.PaymentRequired
 import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
 import io.ktor.http.HttpStatusCode.Companion.TooEarly
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
@@ -178,7 +180,7 @@ class ExtensionsTest {
     @Test
     fun shouldInstallResponseValidator() = runTest {
         // Given
-        val status = listOf(BadRequest, Unauthorized, Forbidden, NotFound, MethodNotAllowed, NotAcceptable, Conflict,
+        val status = listOf(BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, MethodNotAllowed, NotAcceptable, Conflict,
             Gone, UnprocessableEntity, Locked, TooEarly, TooManyRequests, InternalServerError, ServiceUnavailable, GatewayTimeout
         )
         status.forEach { responseStatus ->
@@ -196,6 +198,7 @@ class ExtensionsTest {
                 val type = when (responseStatus) {
                     BadRequest -> BadRequestException::class
                     Unauthorized -> UnauthorizedException::class
+                    PaymentRequired -> PaymentRequiredException::class
                     Forbidden -> ForbiddenException::class
                     NotFound -> NotFoundException::class
                     MethodNotAllowed -> MethodNotAllowedException::class

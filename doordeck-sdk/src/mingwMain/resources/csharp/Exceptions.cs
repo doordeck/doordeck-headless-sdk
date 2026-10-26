@@ -19,6 +19,8 @@ public class BadRequestException(string message) : SdkException(message);
 
 public class UnauthorizedException(string message) : SdkException(message);
 
+public class PaymentRequiredException(string message) : SdkException(message);
+
 public class ForbiddenException(string message) : SdkException(message);
 
 public class NotFoundException(string message) : SdkException(message);
