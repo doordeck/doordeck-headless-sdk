@@ -53,8 +53,6 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.coroutines.test.runTest
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -66,8 +64,11 @@ import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : CallbackTest() {
 
-    @AfterTest
-    fun cleanUp() {
+    /**
+     * Deletes the test applications left behind by earlier runs. This runs inside the test body, once logged in,
+     * rather than in `@AfterTest`, where the harness has already cleared the context.
+     */
+    private fun deleteLeftoverApplications() {
         val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
             PlatformApi.listApplications(TestCallback)
         }
@@ -93,6 +94,7 @@ class PlatformApiTest : CallbackTest() {
                 callback = TestCallback
             )
         }.unwrap()
+        deleteLeftoverApplications()
 
         val newApplication = CreateApplicationData(
             name = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",

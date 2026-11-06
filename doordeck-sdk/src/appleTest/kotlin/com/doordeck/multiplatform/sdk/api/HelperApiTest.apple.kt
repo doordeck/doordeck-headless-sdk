@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
-import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.toNSDate
 import platform.Foundation.timeIntervalSinceDate
 import kotlin.math.abs

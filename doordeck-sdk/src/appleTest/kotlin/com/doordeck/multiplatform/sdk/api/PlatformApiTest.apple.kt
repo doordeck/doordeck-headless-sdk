@@ -24,10 +24,7 @@ import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import com.doordeck.multiplatform.sdk.util.toUrlString
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import platform.Foundation.NSUUID
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -39,9 +36,11 @@ import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : IntegrationTest() {
 
-    @AfterTest
-    fun cleanUp() = runBlocking {
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+    /**
+     * Deletes the test applications left behind by earlier runs. This runs inside the test body, where the
+     * harness has already set the SDK state up, rather than in `@AfterTest`.
+     */
+    private suspend fun deleteLeftoverApplications() {
         PlatformApi.listApplications().filter { application ->
             application.name.startsWith(TEST_MAIN_APPLICATION_NAME) &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
@@ -54,6 +53,7 @@ class PlatformApiTest : IntegrationTest() {
 
     private suspend fun withApplication(block: suspend (TestApplication) -> Unit) {
         val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        deleteLeftoverApplications()
         val newApplication = PlatformOperations.CreateApplication(
             name = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
             companyName = randomString(),

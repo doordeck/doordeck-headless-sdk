@@ -30,7 +30,6 @@ import com.doordeck.multiplatform.sdk.util.toLocalTime
 import com.doordeck.multiplatform.sdk.util.toLocalTimeString
 import com.doordeck.multiplatform.sdk.util.toZoneId
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.TimeZone
 import java.net.InetAddress
 import java.security.KeyPair

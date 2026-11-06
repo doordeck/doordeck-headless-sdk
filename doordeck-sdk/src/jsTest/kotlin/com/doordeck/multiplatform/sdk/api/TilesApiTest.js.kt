@@ -11,7 +11,6 @@ import com.doordeck.multiplatform.sdk.contains
 import com.doordeck.multiplatform.sdk.exceptions.NotFoundException
 import com.doordeck.multiplatform.sdk.jsArrayOf
 import com.doordeck.multiplatform.sdk.util.emptyJsArray
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

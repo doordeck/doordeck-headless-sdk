@@ -23,7 +23,6 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toUri
-import kotlinx.coroutines.test.runTest
 import java.security.KeyPair
 import kotlin.test.Test
 import kotlin.test.assertContentEquals

@@ -39,10 +39,6 @@ open class CallbackTest : IntegrationTest() {
     @BeforeTest fun resetCallback() { pendingCallback = null }
 }
 
-open class BasicCallbackTest {
-    @BeforeTest fun resetCallback() { pendingCallback = null }
-}
-
 internal inline fun <reified T> ResultData<T>.unwrap(): T {
     failure?.let { fail("API error [${it.exceptionType}]: ${it.exceptionMessage}") }
     val success = checkNotNull(success) { "Both success and failure were null" }

@@ -23,7 +23,6 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.test.runTest
 import java.security.KeyPair
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
@@ -38,253 +37,221 @@ import kotlin.time.toJavaDuration
 class FusionApiAsyncTest : IntegrationTest() {
 
     @Test
-    fun shouldTestAlpetaAsync() {
-        runFusionTest(FusionOperations.AlpetaController::class)
-    }
+    fun shouldTestAlpetaAsync() = runFusionTest(FusionOperations.AlpetaController::class)
 
     @Test
-    fun shouldTestAmagAsync() {
-        runFusionTest(FusionOperations.AmagController::class)
-    }
+    fun shouldTestAmagAsync() = runFusionTest(FusionOperations.AmagController::class)
 
     @Test
-    fun shouldTestAxisAsync() {
-        runFusionTest(FusionOperations.AxisController::class)
-    }
+    fun shouldTestAxisAsync() = runFusionTest(FusionOperations.AxisController::class)
 
     @Test
-    fun shouldTestAzureAsync() {
-        runFusionTest(FusionOperations.AzureController::class)
-    }
+    fun shouldTestAzureAsync() = runFusionTest(FusionOperations.AzureController::class)
 
     @Test
-    fun shouldTestCcureAsync() {
-        runFusionTest(FusionOperations.CCureController::class)
-    }
+    fun shouldTestCcureAsync() = runFusionTest(FusionOperations.CCureController::class)
 
     @Test
-    fun shouldTestCcureVirtualCardAsync() {
-        runFusionTest(FusionOperations.CCureVirtualCardController::class)
-    }
+    fun shouldTestCcureVirtualCardAsync() = runFusionTest(FusionOperations.CCureVirtualCardController::class)
 
     @Test
-    fun shouldTestDemoAsync() {
-        runFusionTest(FusionOperations.DemoController::class)
-    }
+    fun shouldTestDemoAsync() = runFusionTest(FusionOperations.DemoController::class)
 
     @Ignore
     @Test
-    fun shouldTestGenetecAsync() {
-        runFusionTest(FusionOperations.GenetecController::class)
-    }
+    fun shouldTestGenetecAsync() = runFusionTest(FusionOperations.GenetecController::class)
 
     @Ignore
     @Test
-    fun shouldTestLenelAsync() {
-        runFusionTest(FusionOperations.LenelController::class)
-    }
+    fun shouldTestLenelAsync() = runFusionTest(FusionOperations.LenelController::class)
 
     @Test
-    fun shouldTestNet2Async() {
-        runFusionTest(FusionOperations.PaxtonNet2Controller::class)
-    }
+    fun shouldTestNet2Async() = runFusionTest(FusionOperations.PaxtonNet2Controller::class)
 
     @Ignore
     @Test
-    fun shouldTestPaxton10Async() {
-        runFusionTest(FusionOperations.Paxton10Controller::class)
-    }
+    fun shouldTestPaxton10Async() = runFusionTest(FusionOperations.Paxton10Controller::class)
 
     @Test
-    fun shouldTestIntegraAsync() {
-        runFusionTest(FusionOperations.IntegraV2Controller::class)
-    }
+    fun shouldTestIntegraAsync() = runFusionTest(FusionOperations.IntegraV2Controller::class)
 
     @Test
-    fun shouldTestExgardeAsync() {
-        runFusionTest(FusionOperations.TdsiExgardeController::class)
-    }
+    fun shouldTestExgardeAsync() = runFusionTest(FusionOperations.TdsiExgardeController::class)
 
     @Test
-    fun shouldTestGardisAsync() {
-        runFusionTest(FusionOperations.TdsiGardisController::class)
-    }
+    fun shouldTestGardisAsync() = runFusionTest(FusionOperations.TdsiGardisController::class)
 
     @Ignore
     @Test
-    fun shouldTestZktecoAsync() {
-        runFusionTest(FusionOperations.ZktecoController::class)
-    }
+    fun shouldTestZktecoAsync() = runFusionTest(FusionOperations.ZktecoController::class)
 
-    private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) {
+    private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = runTest {
         try {
-            runTest {
-                val testController = PLATFORM_FUSION_INTEGRATIONS.firstOrNull {
-                    controllerType.isInstance(it.controller)
-                } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
+            val testController = PLATFORM_FUSION_INTEGRATIONS.firstOrNull {
+                controllerType.isInstance(it.controller)
+            } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")
 
-                try {
-                    TEST_HTTP_CLIENT.options(testController.uri.toString()) {
-                        timeout {
-                            connectTimeoutMillis = 5_000
-                            socketTimeoutMillis = 5_000
-                            requestTimeoutMillis = 5_000
-                        }
-                    }
-                } catch (_: Exception) {
-                    error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
-                }
-
-                // Given - shouldLogin
-                ContextManager.setFusionHost(testController.uri)
-
-                // When
-                val fusionLogin = FusionApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-                val cloudLogin = AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
-
-                // Then
-                assertTrue { fusionLogin.authToken.isNotEmpty() }
-
-                // Skip the test if it's not targeting the expected integration
-                val integrationType = FusionApi.getIntegrationTypeAsync().await()
-                if (integrationType.status != null && integrationType.status != testController.type) {
-                    error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
-                }
-
-                // Cleanup process, delete any remaining test devices
-                val integrationsToDelete = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
-                    .filter { integration ->
-                        integration.doordeck?.name?.startsWith(TEST_MAIN_FUSION_DOOR_NAME) == true }
-                integrationsToDelete.forEach { integration ->
-                    integration.doordeck?.id?.let { integrationId ->
-                        try {
-                            FusionApi.stopDoorAsync(integrationId).await()
-                            FusionApi.deleteDoorAsync(integrationId).await()
-                        } catch (_: Exception) { /* Ignored */ }
+            try {
+                TEST_HTTP_CLIENT.options(testController.uri.toString()) {
+                    timeout {
+                        connectTimeoutMillis = 5_000
+                        socketTimeoutMillis = 5_000
+                        requestTimeoutMillis = 5_000
                     }
                 }
-
-                // Given - shouldEnableDoor
-                val name = "$TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
-
-                // When
-                FusionApi.enableDoorAsync(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller).await()
-
-                // Then
-                val integrations = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
-                val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
-                assertNotNull(actualDoor?.doordeck)
-
-                // Given - shouldGetIntegrationType
-                // When
-                val integrationTypeResponse = FusionApi.getIntegrationTypeAsync().await()
-
-                // Then
-                assertNotNull(integrationTypeResponse.status)
-                assertEquals(testController.type, integrationTypeResponse.status)
-
-                // Given - shouldStartDoor
-                // When
-                FusionApi.startDoorAsync(actualDoor.doordeck.id).await()
-
-                // Then
-                var doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
-                assertEquals(ServiceStateType.RUNNING, doorState.state)
-
-                // Given - shouldUpdateUnlockDuration
-                val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
-                    KeyPair(
-                        PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
-                        PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
-                    )
-                ).await().certificateChain
-                val baseOperation = LockOperations.BaseOperation(
-                    userId = PLATFORM_TEST_MAIN_USER_ID,
-                    userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
-                    userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
-                    lockId = actualDoor.doordeck.id
-                )
-
-                // When
-                val newDuration = 9.seconds.toJavaDuration()
-                LockOperationsApi.updateSecureSettingUnlockDurationAsync(
-                    LockOperations.UpdateSecureSettingUnlockDuration.Builder()
-                        .setUnlockDuration(newDuration)
-                        .setBaseOperation(baseOperation)
-                        .build()
-                ).await()
-
-                // Then
-                var lockResponse = LockOperationsApi.getSingleLockAsync(actualDoor.doordeck.id).await()
-                assertEquals(newDuration, lockResponse.settings.unlockTime)
-
-                // Given - Unlock
-                LockOperationsApi.unlockAsync(LockOperations.UnlockOperation.Builder()
-                    .setBaseOperation(baseOperation.copy(jti = randomUuid()))
-                    .build())
-                    .await()
-
-                // Given - Share and revoke lock
-                LockOperationsApi.shareLockAsync(
-                    shareLockOperation = LockOperations.ShareLockOperation(
-                        baseOperation = baseOperation.copy(jti = randomUuid()),
-                        shareLock = LockOperations.ShareLock(
-                            targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
-                            targetUserRole = UserRole.USER,
-                            targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
-                        )
-                    )).await()
-
-                // Then
-                var locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
-                assertTrue { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
-
-                // When
-                LockOperationsApi.revokeAccessToLockAsync(
-                    LockOperations.RevokeAccessToLockOperation(
-                        baseOperation = baseOperation.copy(jti = randomUuid()),
-                        users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
-                    )).await()
-
-                // Then
-                locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
-                assertFalse { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
-
-                // Given - shouldUpdateUnlockBetween
-                val newUnlockBetween = randomUnlockBetween()
-
-                // When
-                LockOperationsApi.updateSecureSettingUnlockBetweenAsync(
-                    LockOperations.UpdateSecureSettingUnlockBetween.Builder()
-                        .setUnlockBetween(newUnlockBetween)
-                        .setBaseOperation(baseOperation.copy(jti = randomUuid()))
-                        .build()
-                ).await()
-
-                // Then
-                lockResponse = LockOperationsApi.getSingleLockAsync(actualDoor.doordeck.id).await()
-                assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
-                assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
-                assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
-                assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
-                assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sorted(), newUnlockBetween.exceptions?.sorted())
-
-                // Given - shouldStopDoor
-                // When
-                FusionApi.stopDoorAsync(actualDoor.doordeck.id).await()
-
-                // Then
-                doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
-                assertEquals(ServiceStateType.STOPPED, doorState.state)
-
-                // Given - shouldDeleteDoor
-                // When
-                FusionApi.deleteDoorAsync(actualDoor.doordeck.id).await()
-
-                // Then
-                doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
-                assertEquals(ServiceStateType.UNDEFINED, doorState.state)
+            } catch (_: Exception) {
+                error("Controller of type ${controllerType.simpleName} is not accessible, skipping test...")
             }
+
+            // Given - shouldLogin
+            ContextManager.setFusionHost(testController.uri)
+
+            // When
+            val fusionLogin = FusionApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+            val cloudLogin = AccountlessApi.loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
+
+            // Then
+            assertTrue { fusionLogin.authToken.isNotEmpty() }
+
+            // Skip the test if it's not targeting the expected integration
+            val integrationType = FusionApi.getIntegrationTypeAsync().await()
+            if (integrationType.status != null && integrationType.status != testController.type) {
+                error("Running integration is ${integrationType.status} instead of ${testController.type}, skipping test...")
+            }
+
+            // Cleanup process, delete any remaining test devices
+            val integrationsToDelete = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
+                .filter { integration ->
+                    integration.doordeck?.name?.startsWith(TEST_MAIN_FUSION_DOOR_NAME) == true }
+            integrationsToDelete.forEach { integration ->
+                integration.doordeck?.id?.let { integrationId ->
+                    try {
+                        FusionApi.stopDoorAsync(integrationId).await()
+                        FusionApi.deleteDoorAsync(integrationId).await()
+                    } catch (_: Exception) { /* Ignored */ }
+                }
+            }
+
+            // Given - shouldEnableDoor
+            val name = "$TEST_MAIN_FUSION_DOOR_NAME - ${randomUuidString()}"
+
+            // When
+            FusionApi.enableDoorAsync(name, PLATFORM_TEST_MAIN_SITE_ID, testController.controller).await()
+
+            // Then
+            val integrations = FusionApi.getIntegrationConfigurationAsync(testController.type).await()
+            val actualDoor = integrations.firstOrNull { it.doordeck?.name == name }
+            assertNotNull(actualDoor?.doordeck)
+
+            // Given - shouldGetIntegrationType
+            // When
+            val integrationTypeResponse = FusionApi.getIntegrationTypeAsync().await()
+
+            // Then
+            assertNotNull(integrationTypeResponse.status)
+            assertEquals(testController.type, integrationTypeResponse.status)
+
+            // Given - shouldStartDoor
+            // When
+            FusionApi.startDoorAsync(actualDoor.doordeck.id).await()
+
+            // Then
+            var doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
+            assertEquals(ServiceStateType.RUNNING, doorState.state)
+
+            // Given - shouldUpdateUnlockDuration
+            val TEST_MAIN_USER_CERTIFICATE_CHAIN = AccountApi.registerEphemeralKeyAsync(
+                KeyPair(
+                    PLATFORM_TEST_MAIN_USER_PUBLIC_KEY,
+                    PLATFORM_TEST_MAIN_USER_PRIVATE_KEY
+                )
+            ).await().certificateChain
+            val baseOperation = LockOperations.BaseOperation(
+                userId = PLATFORM_TEST_MAIN_USER_ID,
+                userCertificateChain = TEST_MAIN_USER_CERTIFICATE_CHAIN,
+                userPrivateKey = PLATFORM_TEST_MAIN_USER_PRIVATE_KEY,
+                lockId = actualDoor.doordeck.id
+            )
+
+            // When
+            val newDuration = 9.seconds.toJavaDuration()
+            LockOperationsApi.updateSecureSettingUnlockDurationAsync(
+                LockOperations.UpdateSecureSettingUnlockDuration.Builder()
+                    .setUnlockDuration(newDuration)
+                    .setBaseOperation(baseOperation)
+                    .build()
+            ).await()
+
+            // Then
+            var lockResponse = LockOperationsApi.getSingleLockAsync(actualDoor.doordeck.id).await()
+            assertEquals(newDuration, lockResponse.settings.unlockTime)
+
+            // Given - Unlock
+            LockOperationsApi.unlockAsync(LockOperations.UnlockOperation.Builder()
+                .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+                .build())
+                .await()
+
+            // Given - Share and revoke lock
+            LockOperationsApi.shareLockAsync(
+                shareLockOperation = LockOperations.ShareLockOperation(
+                    baseOperation = baseOperation.copy(jti = randomUuid()),
+                    shareLock = LockOperations.ShareLock(
+                        targetUserId = PLATFORM_TEST_SUPPLEMENTARY_USER_ID,
+                        targetUserRole = UserRole.USER,
+                        targetUserPublicKey = PLATFORM_TEST_SUPPLEMENTARY_USER_PUBLIC_KEY
+                    )
+                )).await()
+
+            // Then
+            var locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+            assertTrue { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+            // When
+            LockOperationsApi.revokeAccessToLockAsync(
+                LockOperations.RevokeAccessToLockOperation(
+                    baseOperation = baseOperation.copy(jti = randomUuid()),
+                    users = listOf(PLATFORM_TEST_SUPPLEMENTARY_USER_ID)
+                )).await()
+
+            // Then
+            locks = LockOperationsApi.getLocksForUserAsync(PLATFORM_TEST_SUPPLEMENTARY_USER_ID).await()
+            assertFalse { locks.devices.any { it.deviceId == actualDoor.doordeck.id } }
+
+            // Given - shouldUpdateUnlockBetween
+            val newUnlockBetween = randomUnlockBetween()
+
+            // When
+            LockOperationsApi.updateSecureSettingUnlockBetweenAsync(
+                LockOperations.UpdateSecureSettingUnlockBetween.Builder()
+                    .setUnlockBetween(newUnlockBetween)
+                    .setBaseOperation(baseOperation.copy(jti = randomUuid()))
+                    .build()
+            ).await()
+
+            // Then
+            lockResponse = LockOperationsApi.getSingleLockAsync(actualDoor.doordeck.id).await()
+            assertEquals(lockResponse.settings.unlockBetweenWindow?.start, newUnlockBetween.start)
+            assertEquals(lockResponse.settings.unlockBetweenWindow?.end, newUnlockBetween.end)
+            assertEquals(lockResponse.settings.unlockBetweenWindow?.timezone, newUnlockBetween.timezone)
+            assertEquals(lockResponse.settings.unlockBetweenWindow?.days?.sorted(), newUnlockBetween.days.sorted())
+            assertEquals(lockResponse.settings.unlockBetweenWindow?.exceptions?.sorted(), newUnlockBetween.exceptions?.sorted())
+
+            // Given - shouldStopDoor
+            // When
+            FusionApi.stopDoorAsync(actualDoor.doordeck.id).await()
+
+            // Then
+            doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
+            assertEquals(ServiceStateType.STOPPED, doorState.state)
+
+            // Given - shouldDeleteDoor
+            // When
+            FusionApi.deleteDoorAsync(actualDoor.doordeck.id).await()
+
+            // Then
+            doorState = FusionApi.getDoorStatusAsync(actualDoor.doordeck.id).await()
+            assertEquals(ServiceStateType.UNDEFINED, doorState.state)
         } catch (exception: Throwable) {
             println("Failed to test $controllerType: ${exception.message}")
         }
