@@ -83,7 +83,7 @@ actual object CryptoManager {
                 )
             }
             if (context == null) {
-                SdkLogger.e { "Failed to parse the certificate: ${GetLastError()})" }
+                SdkLogger.e { "Failed to parse the certificate: ${GetLastError()}" }
                 return true
             }
             try {
