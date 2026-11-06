@@ -45,7 +45,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackSuccess() {
+    fun shouldHandleCallbackSuccess() = runTest {
         // Given
         val expectedResult = "success"
 
@@ -61,7 +61,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackSuccessUnit() {
+    fun shouldHandleCallbackSuccessUnit() = runTest {
         // Given
         val unit = Unit
 
@@ -76,7 +76,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackFailure() {
+    fun shouldHandleCallbackFailure() = runTest {
         // Given
         val errorMessage = "test error"
 
