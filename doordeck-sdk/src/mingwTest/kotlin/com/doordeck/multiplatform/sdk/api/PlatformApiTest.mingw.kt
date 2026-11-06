@@ -68,7 +68,7 @@ class PlatformApiTest : CallbackTest() {
      * Deletes the test applications left behind by earlier runs. This runs inside the test body, once logged in,
      * rather than in `@AfterTest`, where the harness has already cleared the context.
      */
-    private fun deleteLeftoverApplications() {
+    private suspend fun deleteLeftoverApplications() {
         val applicationsResponse = callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
             PlatformApi.listApplications(TestCallback)
         }
@@ -87,7 +87,7 @@ class PlatformApiTest : CallbackTest() {
         }
     }
 
-    private fun withApplication(block: (TestApplication) -> Unit) {
+    private suspend fun withApplication(block: suspend (TestApplication) -> Unit) {
         val authTokens = callbackApiCall<ResultData<BasicTokenResponse>> {
             AccountlessApi.login(
                 data = LoginData(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).toJson(),
@@ -130,7 +130,7 @@ class PlatformApiTest : CallbackTest() {
         val authToken: String
     )
 
-    private fun getApplication(applicationId: String): BasicApplicationResponse =
+    private suspend fun getApplication(applicationId: String): BasicApplicationResponse =
         callbackApiCall<ResultData<BasicApplicationResponse>> {
             PlatformApi.getApplication(
                 data = ApplicationIdData(applicationId).toJson(),
@@ -138,7 +138,7 @@ class PlatformApiTest : CallbackTest() {
             )
         }.unwrap()
 
-    private fun listApplications(): List<BasicApplicationResponse> =
+    private suspend fun listApplications(): List<BasicApplicationResponse> =
         callbackApiCall<ResultData<List<BasicApplicationResponse>>> {
             PlatformApi.listApplications(TestCallback)
         }.unwrap()

@@ -8,11 +8,8 @@ import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.staticCFunction
 import kotlinx.cinterop.toKString
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
 import kotlin.test.BeforeTest
 import kotlin.test.fail
-import kotlin.time.Duration.Companion.seconds
 
 internal val TestCallback: CStringCallback = staticCFunction(::testCallback)
 
@@ -23,13 +20,20 @@ internal fun testCallback(data: CPointer<ByteVar>): CPointer<ByteVar> {
     return data
 }
 
-internal inline fun <reified T> callbackApiCall(
+/**
+ * Runs [apiCall] and suspends until [TestCallback] delivers its result.
+ *
+ * It suspends rather than blocking the thread, so that the timeouts of the enclosing test (`withTimeout`, `runTest`)
+ * can cancel the wait when a callback never arrives. A blocking wait would hide the hang from them and the test
+ * would only end with `runTest`'s uncancellable `UncompletedCoroutinesError`.
+ */
+internal suspend inline fun <reified T> callbackApiCall(
     crossinline apiCall: () -> Unit
-): T = runBlocking {
+): T {
     val deferred = CompletableDeferred<String>().also { pendingCallback = it }
     try {
         apiCall()
-        withTimeout(60.seconds) { deferred.await() }.fromJson<T>()
+        return deferred.await().fromJson<T>()
     } finally {
         pendingCallback = null
     }
