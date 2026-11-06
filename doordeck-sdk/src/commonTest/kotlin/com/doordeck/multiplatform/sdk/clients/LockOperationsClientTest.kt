@@ -23,18 +23,13 @@ import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.respondContent
+import com.doordeck.multiplatform.sdk.setupMockClient
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
-import com.doordeck.multiplatform.sdk.util.addCloudAuthInterceptor
-import com.doordeck.multiplatform.sdk.util.addExceptionInterceptor
-import com.doordeck.multiplatform.sdk.util.installContentNegotiation
-import com.doordeck.multiplatform.sdk.util.installResponseValidator
-import io.ktor.client.HttpClient
 import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondError
 import io.ktor.client.engine.mock.respondOk
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -138,8 +133,7 @@ class LockOperationsClientTest : IntegrationTest() {
             state = BasicLockStateResponse(connected = true),
             favourite = false
         )
-
-        val mockEngine = MockEngine.config {
+        CloudHttpClient.setupMockClient(MockEngine.config {
             addHandler {
                 respondContent(lockResponse)
             }
@@ -152,26 +146,15 @@ class LockOperationsClientTest : IntegrationTest() {
             addHandler {
                 respondError(HttpStatusCode.Forbidden)
             }
+        })
+
+        // When
+        val exception = assertFailsWith<BatchShareFailedException> {
+            LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
         }
 
-        val client = HttpClient(mockEngine) {
-            installResponseValidator()
-            installContentNegotiation()
-        }.also {
-            it.addExceptionInterceptor()
-            it.addCloudAuthInterceptor()
-        }
-        CloudHttpClient.overrideClient(client)
-
-        client.use { _ ->
-            // When
-            val exception = assertFailsWith<BatchShareFailedException> {
-                LockOperationsClient.batchShareLockRequest(batchShareLockOperation)
-            }
-
-            // Then
-            assertEquals("Batch share failed", exception.message)
-            assertEquals(batchShareLockOperation.users.drop(1).map { it.targetUserId }, exception.userIds)
-        }
+        // Then
+        assertEquals("Batch share failed", exception.message)
+        assertEquals(batchShareLockOperation.users.drop(1).map { it.targetUserId }, exception.userIds)
     }
 }

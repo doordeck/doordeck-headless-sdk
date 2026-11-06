@@ -8,7 +8,6 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_EMAIL
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_MAIN_USER_PASSWORD
 import com.doordeck.multiplatform.sdk.context.ContextManager
 import com.doordeck.multiplatform.sdk.isNotEmpty
-import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
 import kotlin.test.Ignore
 import kotlin.test.Test

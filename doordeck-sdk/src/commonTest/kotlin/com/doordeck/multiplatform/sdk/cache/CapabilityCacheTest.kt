@@ -1,10 +1,9 @@
 package com.doordeck.multiplatform.sdk.cache
 
+import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.model.common.CapabilityStatus
 import com.doordeck.multiplatform.sdk.model.common.CapabilityType
 import com.doordeck.multiplatform.sdk.randomUuidString
-import kotlinx.coroutines.test.runTest
-import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -12,12 +11,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-class CapabilityCacheTest {
-
-    @BeforeTest
-    fun setup() = runTest {
-        CapabilityCache.reset()
-    }
+class CapabilityCacheTest : IntegrationTest() {
 
     @Test
     fun shouldAddCapabilities() = runTest {

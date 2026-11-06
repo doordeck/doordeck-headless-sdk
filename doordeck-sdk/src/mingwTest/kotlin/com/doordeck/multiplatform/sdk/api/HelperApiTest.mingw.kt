@@ -6,7 +6,6 @@ import com.doordeck.multiplatform.sdk.callbackApiCall
 import com.doordeck.multiplatform.sdk.model.data.ResultData
 import com.doordeck.multiplatform.sdk.model.responses.BasicServerTimeResponse
 import com.doordeck.multiplatform.sdk.unwrap
-import kotlinx.coroutines.test.runTest
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertTrue

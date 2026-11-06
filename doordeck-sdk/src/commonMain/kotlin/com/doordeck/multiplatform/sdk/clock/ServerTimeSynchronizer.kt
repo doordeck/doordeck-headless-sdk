@@ -7,7 +7,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -79,12 +82,13 @@ internal object ServerTimeSynchronizer {
     }
 
     /**
-     * Stops the synchronization loop. The measured skew stored in [SystemClock] is left untouched;
-     * reset it explicitly via [SystemClock.reset] if required.
+     * Stops the synchronization loop and waits for it to finish, so no synchronization can publish a skew after
+     * this function returns. The measured skew stored in [SystemClock] is left untouched; reset it explicitly via
+     * [SystemClock.reset] if required.
      */
     @JvmSynthetic
-    internal fun stop() {
-        job?.cancel()
+    internal suspend fun stop() {
+        job?.cancelAndJoin()
         job = null
     }
 
@@ -94,7 +98,8 @@ internal object ServerTimeSynchronizer {
      * compensate for network latency), and stores the resulting skew in [SystemClock].
      *
      * Any failure is swallowed and logged so that a transient network error never crashes the loop
-     * or the host application; the previously measured skew simply remains in effect.
+     * or the host application; the previously measured skew simply remains in effect. Cancellation is never
+     * swallowed, so a stopped loop cannot publish a stale skew.
      */
     @JvmSynthetic
     internal suspend fun synchronize() {
@@ -111,8 +116,10 @@ internal object ServerTimeSynchronizer {
             val serverTime = Instant.fromEpochMilliseconds(serverEpochMilliseconds)
             val skew = serverTime - deviceAtServer
 
+            currentCoroutineContext().ensureActive()
             SystemClock.setSkew(skew)
         } catch (exception: Exception) {
+            currentCoroutineContext().ensureActive()
             SdkLogger.e(exception) { "Failed to synchronize server time: ${exception.message}" }
         }
     }

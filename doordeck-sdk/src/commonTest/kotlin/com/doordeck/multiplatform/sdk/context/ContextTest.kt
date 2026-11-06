@@ -23,7 +23,6 @@ import io.ktor.client.engine.config
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respondError
 import io.ktor.http.HttpStatusCode
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -104,19 +103,15 @@ class ContextTest : IntegrationTest() {
             refreshToken = randomString(),
         ))
 
-        try {
-            client.use { _ ->
-                // When
-                val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
+        client.use { _ ->
+            // When
+            val result = Context.isCloudAuthTokenInvalidOrExpired(checkServerInvalidation = randomBoolean())
 
-                // Then
-                assertTrue(result)
-                assertEquals(expiredJwt, Context.getCloudAuthToken())
-                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
-                assertEquals(0, client.requestHistory().size)
-            }
-        } finally {
-            Lifecycle.set(LifecycleState.STOPPED)
+            // Then
+            assertTrue(result)
+            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            assertEquals(0, client.requestHistory().size)
         }
     }
 

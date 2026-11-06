@@ -10,7 +10,6 @@ import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.unwrapFailure
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
@@ -46,7 +45,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackSuccess() {
+    fun shouldHandleCallbackSuccess() = runTest {
         // Given
         val expectedResult = "success"
 
@@ -62,7 +61,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackSuccessUnit() {
+    fun shouldHandleCallbackSuccessUnit() = runTest {
         // Given
         val unit = Unit
 
@@ -77,7 +76,7 @@ class MingwExtensionsTest : CallbackTest() {
     }
 
     @Test
-    fun shouldHandleCallbackFailure() {
+    fun shouldHandleCallbackFailure() = runTest {
         // Given
         val errorMessage = "test error"
 

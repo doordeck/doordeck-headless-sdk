@@ -17,7 +17,6 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserForSiteResponse
 import com.doordeck.multiplatform.sdk.unwrap
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 

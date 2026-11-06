@@ -25,10 +25,8 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.size
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.coroutines.test.runTest
 import kotlin.js.collections.toList
 import kotlin.js.collections.toMap
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -40,9 +38,11 @@ import kotlin.time.Duration.Companion.days
 
 class PlatformApiTest : IntegrationTest() {
 
-    @AfterTest
-    fun cleanUp() = runTest {
-        AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+    /**
+     * Deletes the test applications left behind by earlier runs. This runs inside the test body: a suspending
+     * `@AfterTest` is not awaited on JS and would overlap with the next test.
+     */
+    private suspend fun deleteLeftoverApplications() {
         PlatformApi.listApplications().toList().filter { application ->
             application.name.startsWith(TEST_MAIN_APPLICATION_NAME) &&
                     application.owners.any { it == PLATFORM_TEST_MAIN_USER_ID }
@@ -55,6 +55,7 @@ class PlatformApiTest : IntegrationTest() {
 
     private suspend fun withApplication(block: suspend (TestApplication) -> Unit) {
         val authTokens = AccountlessApi.login(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD)
+        deleteLeftoverApplications()
         val newApplication = PlatformOperations.CreateApplication(
             name = "$TEST_MAIN_APPLICATION_NAME - ${randomUuidString()}",
             companyName = randomString(),
