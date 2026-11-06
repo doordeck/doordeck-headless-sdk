@@ -1,16 +1,28 @@
 package com.doordeck.multiplatform.sdk.crypto
 
+import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.model.data.EncodedKeyPair
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
-import com.doordeck.multiplatform.sdk.util.isCertificateInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.toJson
 import com.ionspin.kotlin.crypto.LibsodiumInitializer
 import com.ionspin.kotlin.crypto.signature.Signature
 import io.ktor.utils.io.core.toByteArray
+import kotlinx.cinterop.addressOf
+import kotlinx.cinterop.pointed
+import kotlinx.cinterop.reinterpret
+import kotlinx.cinterop.usePinned
+import platform.windows.CertCreateCertificateContext
+import platform.windows.CertFreeCertificateContext
+import platform.windows.FILETIME
+import platform.windows.GetLastError
+import platform.windows.PKCS_7_ASN_ENCODING
+import platform.windows.X509_ASN_ENCODING
+import kotlin.time.Duration.Companion.microseconds
+import kotlin.time.Instant
 
 /**
  * Platform-specific implementation of [CryptoManager].
@@ -61,7 +73,41 @@ actual object CryptoManager {
      * @see [CryptoManager.isCertificateInvalidOrExpired]
      */
     actual fun isCertificateInvalidOrExpired(base64Certificate: String): Boolean {
-        return base64Certificate.isCertificateInvalidOrExpired() // Fallback
+        return try {
+            val der = base64Certificate.decodeBase64ToByteArray()
+            val context = der.usePinned { pinned ->
+                CertCreateCertificateContext(
+                    (X509_ASN_ENCODING or PKCS_7_ASN_ENCODING).toUInt(),
+                    pinned.addressOf(0).reinterpret(),
+                    der.size.toUInt()
+                )
+            }
+            if (context == null) {
+                SdkLogger.e { "Failed to parse the certificate: ${GetLastError()})" }
+                return true
+            }
+            try {
+                val notAfterInstant = context.pointed.pCertInfo?.pointed?.NotAfter?.toInstant()
+                if (notAfterInstant == null) {
+                    SdkLogger.w { "Unable to retrieve the expiration date from the certificate" }
+                    return true
+                }
+                SdkLogger.d { "Certificate expiration date is $notAfterInstant" }
+                SystemClock.now() >= notAfterInstant - MIN_CERTIFICATE_LIFETIME_DAYS
+            } finally {
+                CertFreeCertificateContext(context)
+            }
+        } catch (exception: Throwable) {
+            SdkLogger.e(exception) { "Failed to parse the certificate" }
+            true
+        }
+    }
+
+    private val WINDOWS_EPOCH = Instant.parse("1601-01-01T00:00:00Z")
+
+    private fun FILETIME.toInstant(): Instant {
+        val ticks = (dwHighDateTime.toLong() shl 32) or dwLowDateTime.toLong()
+        return WINDOWS_EPOCH + (ticks / 10).microseconds
     }
 
     /**
