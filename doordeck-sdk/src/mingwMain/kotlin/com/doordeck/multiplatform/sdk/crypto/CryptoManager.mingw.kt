@@ -77,9 +77,9 @@ actual object CryptoManager {
             val der = base64Certificate.decodeBase64ToByteArray()
             val context = der.usePinned { pinned ->
                 CertCreateCertificateContext(
-                    (X509_ASN_ENCODING or PKCS_7_ASN_ENCODING).toUInt(),
-                    pinned.addressOf(0).reinterpret(),
-                    der.size.toUInt()
+                    dwCertEncodingType = (X509_ASN_ENCODING or PKCS_7_ASN_ENCODING).toUInt(),
+                    pbCertEncoded = pinned.addressOf(0).reinterpret(),
+                    cbCertEncoded = der.size.toUInt()
                 )
             }
             if (context == null) {
