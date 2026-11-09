@@ -52,20 +52,32 @@ import io.ktor.http.HttpStatusCode.Companion.Locked
 import io.ktor.http.HttpStatusCode.Companion.MethodNotAllowed
 import io.ktor.http.HttpStatusCode.Companion.NotAcceptable
 import io.ktor.http.HttpStatusCode.Companion.NotFound
+import io.ktor.http.HttpStatusCode.Companion.NotImplemented
 import io.ktor.http.HttpStatusCode.Companion.PaymentRequired
+import io.ktor.http.HttpStatusCode.Companion.RequestTimeout
 import io.ktor.http.HttpStatusCode.Companion.ServiceUnavailable
 import io.ktor.http.HttpStatusCode.Companion.TooEarly
 import io.ktor.http.HttpStatusCode.Companion.TooManyRequests
 import io.ktor.http.HttpStatusCode.Companion.Unauthorized
 import io.ktor.http.HttpStatusCode.Companion.UnprocessableEntity
 import io.ktor.http.auth.AuthScheme
+import io.ktor.http.headersOf
 import io.ktor.serialization.ContentConvertException
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 import kotlin.uuid.Uuid
 
 class ExtensionsTest {
@@ -214,7 +226,7 @@ class ExtensionsTest {
                     GatewayTimeout -> GatewayTimeoutException::class
                     else -> error("Unhandled status: $responseStatus")
                 }
-                val exception = assertFailsWith(type) {
+                assertFailsWith(type) {
                     client.get("")
                 }
 
@@ -226,10 +238,115 @@ class ExtensionsTest {
     }
 
     @Test
+    fun shouldInstallResponseValidatorWithUnmappedStatus() = runTest {
+        // Given
+        val status = listOf(RequestTimeout, NotImplemented)
+        status.forEach { responseStatus ->
+            val httpClient = HttpClient(MockEngine {
+                respond(
+                    content = "",
+                    status = responseStatus
+                )
+            }) {
+                installResponseValidator()
+            }
+
+            httpClient.use { client ->
+                // When
+                val exception = assertFailsWith<SdkException> {
+                    client.get("")
+                }
+
+                // Then
+                assertEquals(SdkException::class, exception::class)
+            }
+        }
+    }
+
+    @Test
+    fun shouldInstallResponseValidatorWithErrorResponseMessage() = runTest {
+        // Given
+        val httpClient = HttpClient(MockEngine {
+            respond(
+                content = """{"code":400.1,"message":"Invalid email"}""",
+                status = BadRequest,
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            )
+        }) {
+            installResponseValidator()
+            installContentNegotiation()
+        }
+
+        httpClient.use { client ->
+            // When
+            val exception = assertFailsWith<BadRequestException> {
+                client.get("")
+            }
+
+            // Then
+            assertEquals("API call failed with: Invalid email", exception.message)
+        }
+    }
+
+    @Test
+    fun shouldInstallResponseValidatorWithErrorResponseWithoutMessage() = runTest {
+        // Given
+        val content = """{"code":400.1}"""
+        val httpClient = HttpClient(MockEngine {
+            respond(
+                content = content,
+                status = BadRequest,
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            )
+        }) {
+            installResponseValidator()
+            installContentNegotiation()
+        }
+
+        httpClient.use { client ->
+            // When
+            val exception = assertFailsWith<BadRequestException> {
+                client.get("")
+            }
+
+            // Then
+            assertEquals("API call failed with: 400 (Bad Request) - $content", exception.message)
+        }
+    }
+
+    @Test
+    fun shouldInstallResponseValidatorWithPlainBody() = runTest {
+        // Given
+        val content = "Service down"
+        val httpClient = HttpClient(MockEngine {
+            respond(
+                content = content,
+                status = ServiceUnavailable
+            )
+        }) {
+            installResponseValidator()
+            installContentNegotiation()
+        }
+
+        httpClient.use { client ->
+            // When
+            val exception = assertFailsWith<ServiceUnavailableException> {
+                client.get("")
+            }
+
+            // Then
+            assertEquals("API call failed with: 503 (Service Unavailable) - $content", exception.message)
+        }
+    }
+
+    @Test
     fun shouldInstallExceptionInterceptor() = runTest {
         // Given
-        val exceptions = listOf(ContentConvertException(""), SdkException(""), Exception(""))
-        exceptions.forEach { exception ->
+        val exceptions = mapOf(
+            ContentConvertException("") to "Failed to deserialize API response",
+            Exception("") to "Failed to perform API call"
+        )
+        exceptions.forEach { (exception, expectedMessage) ->
             val httpClient = HttpClient(
                 MockEngine {
                     throw exception
@@ -240,13 +357,93 @@ class ExtensionsTest {
 
             httpClient.use { client ->
                 // When
-                val exception = assertFailsWith<SdkException> {
+                val result = assertFailsWith<SdkException> {
                     client.get("")
                 }
 
                 // Then
+                assertEquals(expectedMessage, result.message)
+                assertEquals(exception::class, result.cause?.let { it::class })
                 assertNotNull(client.pluginOrNull(HttpSend))
             }
+        }
+    }
+
+    @Test
+    fun shouldInstallExceptionInterceptorWithSdkException() = runTest {
+        // Given
+        val exception = SdkException("Already an SDK exception")
+        val httpClient = HttpClient(
+            MockEngine {
+                throw exception
+            }
+        ).also {
+            it.addExceptionInterceptor()
+        }
+
+        httpClient.use { client ->
+            // When
+            val result = assertFailsWith<SdkException> {
+                client.get("")
+            }
+
+            // Then
+            assertSame(exception, result)
+        }
+    }
+
+    @Test
+    fun shouldInstallExceptionInterceptorWithCancelledCall() = runTest {
+        // Given
+        val httpClient = HttpClient(
+            MockEngine {
+                throw CancellationException("Engine cancelled")
+            }
+        ).also {
+            it.addExceptionInterceptor()
+        }
+
+        httpClient.use { client ->
+            // When
+            val result = assertFailsWith<SdkException> {
+                client.get("")
+            }
+
+            // Then
+            assertEquals("API call was cancelled", result.message)
+            assertIs<CancellationException>(result.cause)
+        }
+    }
+
+    @Test
+    fun shouldInstallExceptionInterceptorWithCancelledCaller() = runTest {
+        // Given
+        val callStarted = CompletableDeferred<Unit>()
+        val httpClient = HttpClient(
+            MockEngine {
+                callStarted.complete(Unit)
+                awaitCancellation()
+            }
+        ).also {
+            it.addExceptionInterceptor()
+        }
+
+        httpClient.use { client ->
+            // When
+            var result: Throwable? = null
+            val caller: Job = launch {
+                try {
+                    client.get("")
+                } catch (exception: Throwable) {
+                    result = exception
+                }
+            }
+            callStarted.await()
+            caller.cancelAndJoin()
+
+            // Then
+            assertTrue(caller.isCancelled)
+            assertIs<CancellationException>(result)
         }
     }
 
