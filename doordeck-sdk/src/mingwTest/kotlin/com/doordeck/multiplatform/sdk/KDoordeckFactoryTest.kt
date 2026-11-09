@@ -14,20 +14,11 @@ import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.util.toJson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-class KDoordeckFactoryTest : BasicCallbackTest() {
-
-    @AfterTest
-    fun tearDown() {
-        KDoordeckFactory.release()
-    }
+class KDoordeckFactoryTest : CallbackTest() {
 
     @Test
     fun shouldInitialize() = runTest {
@@ -65,9 +56,7 @@ class KDoordeckFactoryTest : BasicCallbackTest() {
         }.unwrap()
 
         // When
-        withContext(Dispatchers.Default) {
-            KDoordeckFactory.release()
-        }
+        KDoordeckFactory.release()
 
         // Then
         val response = callbackApiCall<ResultData<BasicTokenResponse>> {

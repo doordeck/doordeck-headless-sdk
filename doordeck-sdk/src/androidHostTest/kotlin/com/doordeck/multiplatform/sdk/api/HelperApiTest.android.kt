@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.api
 
 import com.doordeck.multiplatform.sdk.IntegrationTest
 import com.doordeck.multiplatform.sdk.util.now
-import kotlinx.coroutines.test.runTest
 import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertTrue

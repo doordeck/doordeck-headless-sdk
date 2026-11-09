@@ -23,7 +23,7 @@ import com.doordeck.multiplatform.sdk.randomUuidString
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.options
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeout
 import java.security.KeyPair
 import kotlin.reflect.KClass
 import kotlin.test.Ignore
@@ -35,90 +35,66 @@ import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
+/**
+ * Upper bound for a single Fusion test. Kept below the 60 s timeouts of `runTest` and of the JS test runner so that
+ * a hanging controller is logged like any other Fusion failure instead of failing the test.
+ */
+private val FUSION_TEST_TIMEOUT = 50.seconds
+
 class FusionApiAsyncTest : IntegrationTest() {
 
     @Test
-    fun shouldTestAlpetaAsync() {
-        runFusionTest(FusionOperations.AlpetaController::class)
-    }
+    fun shouldTestAlpetaAsync() = runFusionTest(FusionOperations.AlpetaController::class)
 
     @Test
-    fun shouldTestAmagAsync() {
-        runFusionTest(FusionOperations.AmagController::class)
-    }
+    fun shouldTestAmagAsync() = runFusionTest(FusionOperations.AmagController::class)
 
     @Test
-    fun shouldTestAxisAsync() {
-        runFusionTest(FusionOperations.AxisController::class)
-    }
+    fun shouldTestAxisAsync() = runFusionTest(FusionOperations.AxisController::class)
 
     @Test
-    fun shouldTestAzureAsync() {
-        runFusionTest(FusionOperations.AzureController::class)
-    }
+    fun shouldTestAzureAsync() = runFusionTest(FusionOperations.AzureController::class)
 
     @Test
-    fun shouldTestCcureAsync() {
-        runFusionTest(FusionOperations.CCureController::class)
-    }
+    fun shouldTestCcureAsync() = runFusionTest(FusionOperations.CCureController::class)
 
     @Test
-    fun shouldTestCcureVirtualCardAsync() {
-        runFusionTest(FusionOperations.CCureVirtualCardController::class)
-    }
+    fun shouldTestCcureVirtualCardAsync() = runFusionTest(FusionOperations.CCureVirtualCardController::class)
 
     @Test
-    fun shouldTestDemoAsync() {
-        runFusionTest(FusionOperations.DemoController::class)
-    }
+    fun shouldTestDemoAsync() = runFusionTest(FusionOperations.DemoController::class)
 
     @Ignore
     @Test
-    fun shouldTestGenetecAsync() {
-        runFusionTest(FusionOperations.GenetecController::class)
-    }
+    fun shouldTestGenetecAsync() = runFusionTest(FusionOperations.GenetecController::class)
 
     @Ignore
     @Test
-    fun shouldTestLenelAsync() {
-        runFusionTest(FusionOperations.LenelController::class)
-    }
+    fun shouldTestLenelAsync() = runFusionTest(FusionOperations.LenelController::class)
 
     @Test
-    fun shouldTestNet2Async() {
-        runFusionTest(FusionOperations.PaxtonNet2Controller::class)
-    }
+    fun shouldTestNet2Async() = runFusionTest(FusionOperations.PaxtonNet2Controller::class)
 
     @Ignore
     @Test
-    fun shouldTestPaxton10Async() {
-        runFusionTest(FusionOperations.Paxton10Controller::class)
-    }
+    fun shouldTestPaxton10Async() = runFusionTest(FusionOperations.Paxton10Controller::class)
 
     @Test
-    fun shouldTestIntegraAsync() {
-        runFusionTest(FusionOperations.IntegraV2Controller::class)
-    }
+    fun shouldTestIntegraAsync() = runFusionTest(FusionOperations.IntegraV2Controller::class)
 
     @Test
-    fun shouldTestExgardeAsync() {
-        runFusionTest(FusionOperations.TdsiExgardeController::class)
-    }
+    fun shouldTestExgardeAsync() = runFusionTest(FusionOperations.TdsiExgardeController::class)
 
     @Test
-    fun shouldTestGardisAsync() {
-        runFusionTest(FusionOperations.TdsiGardisController::class)
-    }
+    fun shouldTestGardisAsync() = runFusionTest(FusionOperations.TdsiGardisController::class)
 
     @Ignore
     @Test
-    fun shouldTestZktecoAsync() {
-        runFusionTest(FusionOperations.ZktecoController::class)
-    }
+    fun shouldTestZktecoAsync() = runFusionTest(FusionOperations.ZktecoController::class)
 
-    private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) {
+    private fun runFusionTest(controllerType: KClass<out FusionOperations.LockController>) = runTest {
         try {
-            runTest {
+            withTimeout(FUSION_TEST_TIMEOUT) {
                 val testController = PLATFORM_FUSION_INTEGRATIONS.firstOrNull {
                     controllerType.isInstance(it.controller)
                 } ?: error("Controller of type ${controllerType.simpleName} not found, skipping test...")

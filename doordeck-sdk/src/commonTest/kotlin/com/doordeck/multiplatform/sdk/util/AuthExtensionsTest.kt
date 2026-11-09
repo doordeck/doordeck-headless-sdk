@@ -35,7 +35,6 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.auth.AuthScheme
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.test.runTest
 import kotlinx.io.IOException
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -309,22 +308,18 @@ class AuthExtensionsTest : IntegrationTest() {
             }
         })
 
-        try {
-            client.use { _ ->
-                // When
-                assertFailsWith<UnauthorizedException> {
-                    AccountClient.getUserDetailsRequest()
-                }
-
-                // Then
-                assertEquals(currentAuthToken, Context.getCloudAuthToken())
-                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
-                val requests = client.requestHistory()
-                assertEquals(1, requests.size)
-                requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
+        client.use { _ ->
+            // When
+            assertFailsWith<UnauthorizedException> {
+                AccountClient.getUserDetailsRequest()
             }
-        } finally {
-            Lifecycle.set(LifecycleState.STOPPED)
+
+            // Then
+            assertEquals(currentAuthToken, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = currentAuthToken)
         }
     }
 
@@ -526,20 +521,16 @@ class AuthExtensionsTest : IntegrationTest() {
 
         val client = CloudHttpClient.setupMockClient(randomUserDetails())
 
-        try {
-            client.use { _ ->
-                // When
-                AccountClient.getUserDetailsRequest()
+        client.use { _ ->
+            // When
+            AccountClient.getUserDetailsRequest()
 
-                // Then
-                assertEquals(expiredJwt, Context.getCloudAuthToken())
-                assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
-                val requests = client.requestHistory()
-                assertEquals(1, requests.size)
-                requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
-            }
-        } finally {
-            Lifecycle.set(LifecycleState.STOPPED)
+            // Then
+            assertEquals(expiredJwt, Context.getCloudAuthToken())
+            assertEquals(currentRefreshToken, Context.getCloudRefreshToken())
+            val requests = client.requestHistory()
+            assertEquals(1, requests.size)
+            requests[0].assertSentTo(CloudPaths.getUserDetailsPath(), token = expiredJwt)
         }
     }
 

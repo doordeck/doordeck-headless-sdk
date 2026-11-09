@@ -9,24 +9,12 @@ import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
 import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.future.await
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
-import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class KDoordeckFactoryAsyncTest {
-
-    @AfterTest
-    fun tearDown() {
-        runBlocking {
-            KDoordeckFactory.releaseAsync().await()
-        }
-    }
+class KDoordeckFactoryAsyncTest : IntegrationTest() {
 
     @Test
     fun shouldInitializeAsync() = runTest {
@@ -59,9 +47,7 @@ class KDoordeckFactoryAsyncTest {
         sdk.accountless().loginAsync(TEST_MAIN_USER_EMAIL, TEST_MAIN_USER_PASSWORD).await()
 
         // When
-        withContext(Dispatchers.Default) {
-            KDoordeckFactory.releaseAsync().await()
-        }
+        KDoordeckFactory.releaseAsync().await()
 
         // Then
         val exception = assertFailsWith<SdkException> {

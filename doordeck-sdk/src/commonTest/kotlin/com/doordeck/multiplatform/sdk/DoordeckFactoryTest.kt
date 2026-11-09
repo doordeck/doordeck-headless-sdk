@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
-import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
@@ -11,21 +10,17 @@ import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.job
-import kotlinx.coroutines.test.TestResult
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.withContext
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 
-class DoordeckFactoryTest {
+class DoordeckFactoryTest : IntegrationTest() {
 
     @Test
-    fun shouldStoreConfigInContextWhenInitializing() = lifecycleTest {
+    fun shouldStoreConfigInContextWhenInitializing() = runTest {
         // Given
         val sdkConfig = BasicSdkConfig(
             apiEnvironment = ApiEnvironment.STAGING,
@@ -46,7 +41,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldCreateHttpClientsWhenInitializing() = lifecycleTest {
+    fun shouldCreateHttpClientsWhenInitializing() = runTest {
         // When
         DoordeckFactory.initialize(basicSdkConfig())
 
@@ -55,7 +50,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseHttpClientsWhenReleasing() = lifecycleTest {
+    fun shouldReleaseHttpClientsWhenReleasing() = runTest {
         // Given
         DoordeckFactory.initialize(basicSdkConfig())
         val cloudClient = CloudHttpClient.client
@@ -70,7 +65,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldThrowAndKeepCurrentClientsWhenInitializingTwice() = lifecycleTest {
+    fun shouldThrowAndKeepCurrentClientsWhenInitializingTwice() = runTest {
         // Given
         DoordeckFactory.initialize(basicSdkConfig(apiEnvironment = ApiEnvironment.DEV))
         val cloudClient = CloudHttpClient.client
@@ -88,7 +83,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldInitializeAgainAfterReleasing() = lifecycleTest {
+    fun shouldInitializeAgainAfterReleasing() = runTest {
         // Given
         DoordeckFactory.initialize(basicSdkConfig(apiEnvironment = ApiEnvironment.DEV))
         DoordeckFactory.release()
@@ -103,7 +98,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldDoNothingWhenReleasingWithoutInitializing() = lifecycleTest {
+    fun shouldDoNothingWhenReleasingWithoutInitializing() = runTest {
         // When
         DoordeckFactory.release()
 
@@ -112,7 +107,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldDoNothingWhenReleasingTwice() = lifecycleTest {
+    fun shouldDoNothingWhenReleasingTwice() = runTest {
         // Given
         DoordeckFactory.initialize(basicSdkConfig())
         DoordeckFactory.release()
@@ -125,7 +120,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseResourcesAndRethrowOriginalExceptionWhenInitializationFails() = lifecycleTest {
+    fun shouldReleaseResourcesAndRethrowOriginalExceptionWhenInitializationFails() = runTest {
         // Given
         val expectedException = SdkException("Storage failure")
 
@@ -141,7 +136,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldReleaseResourcesAndRethrowOriginalErrorWhenInitializationFails() = lifecycleTest {
+    fun shouldReleaseResourcesAndRethrowOriginalErrorWhenInitializationFails() = runTest {
         // Given
         val expectedError = Error("Storage failure")
 
@@ -157,7 +152,7 @@ class DoordeckFactoryTest {
     }
 
     @Test
-    fun shouldInitializeAgainAfterInitializationFails() = lifecycleTest {
+    fun shouldInitializeAgainAfterInitializationFails() = runTest {
         // Given
         assertFailsWith<SdkException> {
             DoordeckFactory.initialize(basicSdkConfig(secureStorage = failingStorage(SdkException("Storage failure"))))
@@ -199,30 +194,6 @@ class DoordeckFactoryTest {
         listOf(CloudHttpClient, FusionHttpClient, HttpClient).forEach { client ->
             val exception = assertFailsWith<SdkException> { client.client }
             assertEquals("Http client is not initialized", exception.message)
-        }
-    }
-
-    /**
-     * Runs a test that initializes or releases the SDK.
-     *
-     * - Installs throwaway clients first: initializing the SDK closes the installed clients, which must not be the
-     *   shared ones reused by the integration tests.
-     * - Runs on [Dispatchers.Default], otherwise the virtual time of [runTest] skips the first server time
-     *   synchronization timeout.
-     * - Always releases the SDK, closes the clients and resets the global state afterward, without relying on `@AfterTest`, which
-     *   cannot await suspend functions on every platform.
-     */
-    private fun lifecycleTest(block: suspend () -> Unit): TestResult = runTest {
-        CloudHttpClient.overrideClient(createCloudHttpClient())
-        FusionHttpClient.overrideClient(createFusionHttpClient())
-        HttpClient.overrideClient(createHttpClient())
-        try {
-            withContext(Dispatchers.Default) { block() }
-        } finally {
-            DoordeckFactory.release()
-            listOf(CloudHttpClient, FusionHttpClient, HttpClient).forEach { client -> client.close() }
-            Context.setSecureStorageImpl(DefaultSecureStorage(MemorySettings()))
-            SystemClock.reset()
         }
     }
 }
