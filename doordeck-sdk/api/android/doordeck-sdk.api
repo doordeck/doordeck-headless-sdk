@@ -514,8 +514,6 @@ public final class com/doordeck/multiplatform/sdk/model/common/CapabilityType$Co
 public final class com/doordeck/multiplatform/sdk/model/common/TwoFactorMethod : java/lang/Enum {
 	public static final field Companion Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod$Companion;
 	public static final field EMAIL Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod;
-	public static final field SMS Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod;
-	public static final field TELEPHONE Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod;
 	public static fun values ()[Lcom/doordeck/multiplatform/sdk/model/common/TwoFactorMethod;

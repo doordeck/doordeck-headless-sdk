@@ -6,7 +6,5 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 enum class TwoFactorMethod {
-    EMAIL,
-    TELEPHONE,
-    SMS
+    EMAIL
 }
