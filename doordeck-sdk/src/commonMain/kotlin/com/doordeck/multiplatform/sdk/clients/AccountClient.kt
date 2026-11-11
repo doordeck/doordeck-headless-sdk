@@ -116,7 +116,8 @@ internal object AccountClient {
      * Registers an ephemeral key with secondary authentication
      *
      * @param publicKey The public key to use for the request. If null, uses the public key from [Context].
-     * @param method The preferred two factor method. If null the server will decide the best method.
+     * @param method The two factor method. Email is the only supported method, so leaving it null or setting it to
+     * [TwoFactorMethod.EMAIL] behaves the same.
      * @return [BasicRegisterEphemeralKeyWithSecondaryAuthenticationResponse].
      * @throws MissingContextFieldException if no public key is available (when [publicKey] is null and [Context] has none).
      * @throws SdkException if an unexpected error occurs while processing the request.
