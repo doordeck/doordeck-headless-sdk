@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform).apply(false)
     alias(libs.plugins.kotlinx.serialization).apply(false)
     alias(libs.plugins.buildkonfig).apply(false)
-    id("com.netflix.nebula.release") version "21.1.4"
+    id("com.netflix.nebula.release") version "21.2.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.2"
 }
 
