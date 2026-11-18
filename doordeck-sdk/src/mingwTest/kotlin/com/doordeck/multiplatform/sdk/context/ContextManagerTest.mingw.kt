@@ -2,7 +2,6 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CallbackTest
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_EXPIRED_CERTIFICATE
 import com.doordeck.multiplatform.sdk.PlatformTestConstants.PLATFORM_TEST_VALID_CERTIFICATE
 import com.doordeck.multiplatform.sdk.TestCallback
@@ -123,7 +122,7 @@ class ContextManagerTest : CallbackTest() {
         ContextManager.clearContext()
 
         // Then
-        assertEquals(ApiEnvironment.PROD.name, ContextManager.getApiEnvironment())
+        assertEquals(apiEnvironment, ContextManager.getApiEnvironment())
         assertNull(ContextManager.getUserId())
         assertNull(ContextManager.getUserEmail())
         assertNull(ContextManager.getCertificateChain())
@@ -132,7 +131,7 @@ class ContextManagerTest : CallbackTest() {
         assertNull(ContextManager.getCloudAuthToken())
         assertNull(ContextManager.getCloudRefreshToken())
         assertNull(ContextManager.getFusionAuthToken())
-        assertEquals(DEFAULT_FUSION_HOST, ContextManager.getFusionHost())
+        assertEquals(fusionHost, ContextManager.getFusionHost())
     }
 
     @Test
