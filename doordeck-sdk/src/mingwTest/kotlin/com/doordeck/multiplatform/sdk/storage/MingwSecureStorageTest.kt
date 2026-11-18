@@ -1,11 +1,9 @@
 package com.doordeck.multiplatform.sdk.storage
 
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomByteArray
 import com.doordeck.multiplatform.sdk.randomEmail
 import com.doordeck.multiplatform.sdk.randomString
 import com.doordeck.multiplatform.sdk.randomUuidString
-import com.doordeck.multiplatform.sdk.randomUrlString
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.allocArray
@@ -23,9 +21,6 @@ import kotlin.test.assertTrue
 
 private val backingStore = mutableMapOf<String, String>()
 
-private val setApiEnvironmentCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["apiEnvironment"] = ptr.toKString()
-}
 private val setCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>?, Unit> { ptr ->
     ptr?.let { backingStore["cloudAuthToken"] = it.toKString() }
         ?: backingStore.remove("cloudAuthToken")
@@ -33,9 +28,6 @@ private val setCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>?, Unit> { pt
 private val setCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>?, Unit> { ptr ->
     ptr?.let { backingStore["cloudRefreshToken"] = it.toKString() }
         ?: backingStore.remove("cloudRefreshToken")
-}
-private val setFusionHostCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
-    backingStore["fusionHost"] = ptr.toKString()
 }
 private val setFusionAuthTokenCb = staticCFunction<CPointer<ByteVar>, Unit> { ptr ->
     backingStore["fusionAuthToken"] = ptr.toKString()
@@ -63,17 +55,11 @@ private val setCertificateChainCb = staticCFunction<CPointer<ByteVar>, Unit> { p
     backingStore["certificateChain"] = ptr.toKString()
 }
 
-private val getApiEnvironmentCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["apiEnvironment"]?.cstr?.place(nativeHeap.allocArray(backingStore["apiEnvironment"]!!.length + 1))
-}
 private val getCloudAuthTokenCb = staticCFunction<CPointer<ByteVar>?> {
     backingStore["cloudAuthToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["cloudAuthToken"]!!.length + 1))
 }
 private val getCloudRefreshTokenCb = staticCFunction<CPointer<ByteVar>?> {
     backingStore["cloudRefreshToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["cloudRefreshToken"]!!.length + 1))
-}
-private val getFusionHostCb = staticCFunction<CPointer<ByteVar>?> {
-    backingStore["fusionHost"]?.cstr?.place(nativeHeap.allocArray(backingStore["fusionHost"]!!.length + 1))
 }
 private val getFusionAuthTokenCb = staticCFunction<CPointer<ByteVar>?> {
     backingStore["fusionAuthToken"]?.cstr?.place(nativeHeap.allocArray(backingStore["fusionAuthToken"]!!.length + 1))
@@ -109,14 +95,10 @@ class MingwSecureStorageTest {
     fun setUp() {
         backingStore.clear()
         storage = MingwSecureStorage(
-            setApiEnvironmentCp = setApiEnvironmentCb,
-            getApiEnvironmentCp = getApiEnvironmentCb,
             addCloudAuthTokenCp = setCloudAuthTokenCb,
             getCloudAuthTokenCp = getCloudAuthTokenCb,
             addCloudRefreshTokenCp = setCloudRefreshTokenCb,
             getCloudRefreshTokenCp = getCloudRefreshTokenCb,
-            setFusionHostCp = setFusionHostCb,
-            getFusionHostCp = getFusionHostCb,
             addFusionAuthTokenCp = setFusionAuthTokenCb,
             getFusionAuthTokenCp = getFusionAuthTokenCb,
             addPublicKeyCp = setPublicKeyCb,
@@ -133,23 +115,6 @@ class MingwSecureStorageTest {
             getCertificateChainCp = getCertificateChainCb,
             clearCp = clearCb
         )
-    }
-
-    @Test
-    fun shouldStoreAndRetrieveApiEnvironment() = runTest {
-        // Given
-        val environment = ApiEnvironment.entries.random()
-
-        // When
-        storage.setApiEnvironment(environment)
-
-        // Then
-        assertEquals(environment, storage.getApiEnvironment())
-    }
-
-    @Test
-    fun shouldReturnNullForMissingApiEnvironment() = runTest {
-        assertNull(storage.getApiEnvironment())
     }
 
     @Test
@@ -210,23 +175,6 @@ class MingwSecureStorageTest {
     @Test
     fun shouldReturnNullForMissingCloudRefreshToken() = runTest {
         assertNull(storage.getCloudRefreshToken())
-    }
-
-    @Test
-    fun shouldStoreAndRetrieveFusionHost() = runTest {
-        // Given
-        val host = randomUrlString()
-
-        // When
-        storage.setFusionHost(host)
-
-        // Then
-        assertEquals(host, storage.getFusionHost())
-    }
-
-    @Test
-    fun shouldReturnNullForMissingFusionHost() = runTest {
-        assertNull(storage.getFusionHost())
     }
 
     @Test
@@ -366,7 +314,6 @@ class MingwSecureStorageTest {
         // Given
         storage.addCloudAuthToken(randomString())
         storage.addCloudRefreshToken(randomString())
-        storage.setFusionHost(randomUrlString())
         storage.addFusionAuthToken(randomString())
         storage.addPublicKey(randomByteArray())
         storage.addPrivateKey(randomByteArray())
@@ -381,7 +328,6 @@ class MingwSecureStorageTest {
         // Then
         assertNull(storage.getCloudAuthToken())
         assertNull(storage.getCloudRefreshToken())
-        assertNull(storage.getFusionHost())
         assertNull(storage.getFusionAuthToken())
         assertNull(storage.getPublicKey())
         assertNull(storage.getPrivateKey())
@@ -424,16 +370,5 @@ class MingwSecureStorageTest {
         assertContentEquals(publicKey, storage.getPublicKey())
         assertContentEquals(privateKey, storage.getPrivateKey())
         assertContentEquals(verifiedKey, storage.getKeyPairVerified())
-    }
-
-    @Test
-    fun shouldStoreAllApiEnvironments() = runTest {
-        for (env in ApiEnvironment.entries) {
-            // When
-            storage.setApiEnvironment(env)
-
-            // Then
-            assertEquals(env, storage.getApiEnvironment())
-        }
     }
 }
