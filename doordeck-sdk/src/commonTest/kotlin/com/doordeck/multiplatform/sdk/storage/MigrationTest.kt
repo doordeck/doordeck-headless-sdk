@@ -92,7 +92,7 @@ class MigrationTest {
 
         // Then
         assertEquals(3, storage.getStorageVersion())
-        assertFalse (settings.contains(fusionHostKey))
+        assertFalse(settings.contains(fusionHostKey))
     }
 
     @Test

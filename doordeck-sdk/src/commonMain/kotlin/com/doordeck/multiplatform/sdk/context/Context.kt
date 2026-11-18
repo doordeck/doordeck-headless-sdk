@@ -22,9 +22,17 @@ internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
+    /**
+     * In-memory variable for the API environment. This variable is not changed upon context cleanup;
+     * it retains whatever value is set during the initialization process, or defaults to `ApiEnvironment.PROD` if not set.
+     */
     @Volatile
     private var API_ENVIRONMENT = ApiEnvironment.PROD
 
+    /**
+     * In-memory variable for the Fusion host. This variable is not changed upon context cleanup;
+     * it retains whatever value is set during the initialization process, or defaults to `DEFAULT_FUSION_HOST` if not set.
+     */
     @Volatile
     private var FUSION_HOST = DEFAULT_FUSION_HOST
 
