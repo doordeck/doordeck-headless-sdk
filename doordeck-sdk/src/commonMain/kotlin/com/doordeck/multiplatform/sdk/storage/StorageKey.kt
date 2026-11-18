@@ -11,9 +11,11 @@ package com.doordeck.multiplatform.sdk.storage
  * that moves the value from the old key (referenced by its literal string) to the new one.
  */
 internal enum class StorageKey {
+    @Deprecated("API environment is no longer stored")
     API_ENVIRONMENT_KEY,
     CLOUD_AUTH_TOKEN_KEY,
     CLOUD_REFRESH_TOKEN_KEY,
+    @Deprecated("Fusion host is no longer stored")
     FUSION_HOST_KEY,
     FUSION_AUTH_TOKEN_KEY,
     PUBLIC_KEY_KEY,

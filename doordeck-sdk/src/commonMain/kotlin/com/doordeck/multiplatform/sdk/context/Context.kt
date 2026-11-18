@@ -15,20 +15,27 @@ import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrPastExpiration
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.refreshCloudAuthTokensOrNull
+import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 
 internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
 
+    @Volatile
+    private var API_ENVIRONMENT = ApiEnvironment.PROD
+
+    @Volatile
+    private var FUSION_HOST = DEFAULT_FUSION_HOST
+
     /**
-     * Sets the API environment on which the SDK will operate, the provided value will be automatically stored in secure storage.
+     * Sets the API environment on which the SDK will operate.
      *
      * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
      */
     @JvmSynthetic
     internal fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        secureStorage.setApiEnvironment(apiEnvironment)
+        API_ENVIRONMENT = apiEnvironment
     }
 
     /**
@@ -36,8 +43,7 @@ internal object Context {
      */
     @JvmSynthetic
     internal fun getApiEnvironment(): ApiEnvironment {
-        return secureStorage.getApiEnvironment()
-            ?: ApiEnvironment.PROD
+        return API_ENVIRONMENT
     }
 
     /**
@@ -123,13 +129,13 @@ internal object Context {
     }
 
     /**
-     * Sets the fusion host, the provided value will be automatically stored in secure storage.
+     * Sets the fusion host.
      *
      * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
      */
     @JvmSynthetic
     internal fun setFusionHost(host: String) {
-        secureStorage.setFusionHost(host)
+        FUSION_HOST = host
     }
 
     /**
@@ -137,8 +143,7 @@ internal object Context {
      */
     @JvmSynthetic
     internal fun getFusionHost(): String {
-        return secureStorage.getFusionHost()
-            ?: DEFAULT_FUSION_HOST
+        return FUSION_HOST
     }
 
     /**

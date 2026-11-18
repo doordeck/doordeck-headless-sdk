@@ -168,9 +168,11 @@ class DoordeckFactoryTest : IntegrationTest() {
 
     private fun basicSdkConfig(
         apiEnvironment: ApiEnvironment = TEST_ENVIRONMENT,
+        authToken: String = randomString(),
         secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
     ) = BasicSdkConfig(
         apiEnvironment = apiEnvironment,
+        cloudAuthToken = authToken,
         fusionHost = null,
         secureStorage = secureStorage
     )
@@ -180,7 +182,7 @@ class DoordeckFactoryTest : IntegrationTest() {
      */
     private fun failingStorage(throwable: Throwable): SecureStorage =
         object : SecureStorage by DefaultSecureStorage(MemorySettings()) {
-            override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+            override fun addCloudAuthToken(token: String?) {
                 throw throwable
             }
         }

@@ -1,10 +1,12 @@
 package com.doordeck.multiplatform.sdk.storage
 
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomByteArray
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrate0To1
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrate1To2
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrate2To3
+import com.doordeck.multiplatform.sdk.storage.migrations.Migrate3To4
 import com.doordeck.multiplatform.sdk.storage.migrations.Migrations
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
 import com.russhwolf.settings.contains
@@ -89,7 +91,28 @@ class MigrationTest {
         val storage = DefaultSecureStorage(settings)
 
         // Then
-        assertNull(storage.getFusionHost())
+        assertEquals(3, storage.getStorageVersion())
+        assertFalse (settings.contains(fusionHostKey))
+    }
+
+    @Test
+    fun shouldMigrate3To4Test() = runTest {
+        // Given
+        Migrations.overrideMigrations(listOf(Migrate3To4))
+        val apiEnvironmentKey = "API_ENVIRONMENT_KEY"
+        val fusionHostKey = "FUSION_HOST_KEY"
+        val settings = MemorySettings().apply {
+            putString(apiEnvironmentKey, ApiEnvironment.PROD.name)
+            putString(fusionHostKey, "http://localhost:27700")
+        }
+
+        // When
+        val storage = DefaultSecureStorage(settings)
+
+        // Then
+        assertEquals(4, storage.getStorageVersion())
+        assertFalse(settings.contains(apiEnvironmentKey))
+        assertFalse(settings.contains(fusionHostKey))
     }
 
     @Test
