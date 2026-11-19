@@ -1,6 +1,6 @@
 package com.doordeck.multiplatform.sdk
 
-import com.doordeck.multiplatform.sdk.context.Context
+import com.doordeck.multiplatform.sdk.context.ConfigContext
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
 import com.doordeck.multiplatform.sdk.util.addCloudAuthInterceptor
@@ -50,7 +50,7 @@ internal fun createCloudHttpClient(): HttpClient {
         installUserAgent()
         installLogging()
         installResponseValidator()
-        installDefaultRequest { Context.getApiEnvironment().cloudHost }
+        installDefaultRequest { ConfigContext.getApiEnvironment().cloudHost }
     }.also {
         it.addExceptionInterceptor()
         it.addCloudAuthInterceptor()
@@ -65,7 +65,7 @@ internal fun createFusionHttpClient(): HttpClient {
         installUserAgent()
         installLogging()
         installResponseValidator()
-        installDefaultRequest { Context.getFusionHost() }
+        installDefaultRequest { ConfigContext.getFusionHost() }
     }.also {
         it.addExceptionInterceptor()
         it.addFusionAuthInterceptor()

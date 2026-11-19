@@ -2,6 +2,7 @@ package com.doordeck.multiplatform.sdk
 
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
+import com.doordeck.multiplatform.sdk.context.ConfigContext
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
@@ -35,9 +36,9 @@ class DoordeckFactoryTest : IntegrationTest() {
         // Then
         assertSame(DoordeckImpl, sdk)
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(sdkConfig.apiEnvironment, Context.getApiEnvironment())
+        assertEquals(sdkConfig.apiEnvironment, ConfigContext.getApiEnvironment())
         assertEquals(sdkConfig.cloudAuthToken, Context.getCloudAuthToken())
-        assertEquals(sdkConfig.fusionHost, Context.getFusionHost())
+        assertEquals(sdkConfig.fusionHost, ConfigContext.getFusionHost())
     }
 
     @Test
@@ -78,7 +79,7 @@ class DoordeckFactoryTest : IntegrationTest() {
         // Then
         assertEquals("Unable to initialize, the SDK has already been initialized", exception.message)
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(ApiEnvironment.DEV, Context.getApiEnvironment())
+        assertEquals(ApiEnvironment.DEV, ConfigContext.getApiEnvironment())
         assertSame(cloudClient, CloudHttpClient.client)
     }
 
@@ -93,7 +94,7 @@ class DoordeckFactoryTest : IntegrationTest() {
 
         // Then
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(ApiEnvironment.STAGING, Context.getApiEnvironment())
+        assertEquals(ApiEnvironment.STAGING, ConfigContext.getApiEnvironment())
         assertClientsInitialized()
     }
 

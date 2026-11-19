@@ -1,12 +1,10 @@
 package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
@@ -15,44 +13,11 @@ import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrExpired
 import com.doordeck.multiplatform.sdk.util.JwtUtils.isJwtTokenInvalidOrPastExpiration
 import com.doordeck.multiplatform.sdk.util.KeyPairUtils
 import com.doordeck.multiplatform.sdk.util.refreshCloudAuthTokensOrNull
-import kotlin.concurrent.Volatile
 import kotlin.jvm.JvmSynthetic
 
 internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
-
-    /**
-     * In-memory variable for the API environment. This variable is not changed upon context cleanup;
-     * it retains whatever value is set during the initialization process, or defaults to `ApiEnvironment.PROD` if not set.
-     */
-    @Volatile
-    private var API_ENVIRONMENT = ApiEnvironment.PROD
-
-    /**
-     * In-memory variable for the Fusion host. This variable is not changed upon context cleanup;
-     * it retains whatever value is set during the initialization process, or defaults to `DEFAULT_FUSION_HOST` if not set.
-     */
-    @Volatile
-    private var FUSION_HOST = DEFAULT_FUSION_HOST
-
-    /**
-     * Sets the API environment on which the SDK will operate.
-     *
-     * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
-     */
-    @JvmSynthetic
-    internal fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        API_ENVIRONMENT = apiEnvironment
-    }
-
-    /**
-     * Retrieves the current API environment.
-     */
-    @JvmSynthetic
-    internal fun getApiEnvironment(): ApiEnvironment {
-        return API_ENVIRONMENT
-    }
 
     /**
      * Sets the cloud authentication token, the provided value will be automatically stored in secure storage,
@@ -134,24 +99,6 @@ internal object Context {
     @JvmSynthetic
     internal fun getCloudRefreshToken(): String? {
         return secureStorage.getCloudRefreshToken()
-    }
-
-    /**
-     * Sets the fusion host.
-     *
-     * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
-     */
-    @JvmSynthetic
-    internal fun setFusionHost(host: String) {
-        FUSION_HOST = host
-    }
-
-    /**
-     * Retrieves the fusion host.
-     */
-    @JvmSynthetic
-    internal fun getFusionHost(): String {
-        return FUSION_HOST
     }
 
     /**

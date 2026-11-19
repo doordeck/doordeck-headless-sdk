@@ -11,9 +11,9 @@ import platform.Foundation.NSUUID
 
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = Context.setApiEnvironment(apiEnvironment)
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = ConfigContext.setApiEnvironment(apiEnvironment)
 
-    fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
+    fun getApiEnvironment(): ApiEnvironment = ConfigContext.getApiEnvironment()
 
     fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
@@ -27,9 +27,9 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: NSURLComponents) = Context.setFusionHost(host.toUrlString())
+    fun setFusionHost(host: NSURLComponents) = ConfigContext.setFusionHost(host.toUrlString())
 
-    fun getFusionHost(): NSURLComponents = Context.getFusionHost().toNsUrlComponents()
+    fun getFusionHost(): NSURLComponents = ConfigContext.getFusionHost().toNsUrlComponents()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 

@@ -10,9 +10,9 @@ import kotlin.js.collections.toList
 actual object ContextManager {
 
     fun setApiEnvironment(apiEnvironment: String) =
-        Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
+        ConfigContext.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
 
-    fun getApiEnvironment(): String = Context.getApiEnvironment().name
+    fun getApiEnvironment(): String = ConfigContext.getApiEnvironment().name
 
     fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
@@ -25,9 +25,9 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: String) = Context.setFusionHost(host)
+    fun setFusionHost(host: String) = ConfigContext.setFusionHost(host)
 
-    fun getFusionHost(): String = Context.getFusionHost()
+    fun getFusionHost(): String = ConfigContext.getFusionHost()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 

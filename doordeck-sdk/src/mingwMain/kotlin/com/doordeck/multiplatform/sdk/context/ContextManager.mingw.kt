@@ -16,10 +16,10 @@ actual object ContextManager {
 
     @CName("setApiEnvironment")
     fun setApiEnvironment(apiEnvironment: String) =
-        Context.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
+        ConfigContext.setApiEnvironment(ApiEnvironment.valueOf(apiEnvironment))
 
     @CName("getApiEnvironment")
-    fun getApiEnvironment(): String = Context.getApiEnvironment().name
+    fun getApiEnvironment(): String = ConfigContext.getApiEnvironment().name
 
     @CName("setCloudAuthToken")
     fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
@@ -39,10 +39,10 @@ actual object ContextManager {
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
     @CName("setFusionHost")
-    fun setFusionHost(host: String) = Context.setFusionHost(host)
+    fun setFusionHost(host: String) = ConfigContext.setFusionHost(host)
 
     @CName("getFusionHost")
-    fun getFusionHost(): String = Context.getFusionHost()
+    fun getFusionHost(): String = ConfigContext.getFusionHost()
 
     @CName("setFusionAuthToken")
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
