@@ -112,7 +112,9 @@ internal class DefaultSecureStorage(
     }
 
     override fun clear() {
-        settings.clear()
+        StorageKey.entries
+            .filter { it != STORAGE_VERSION_KEY }
+            .forEach { settings.remove(it.name) }
         SdkLogger.d("Successfully cleared storage")
     }
 

@@ -61,6 +61,9 @@ internal object ConfigContext {
         return FUSION_HOST
     }
 
+    /**
+     * Restore the default values from the SDK configuration.
+     */
     @JvmSynthetic
     internal fun reset() {
         API_ENVIRONMENT = ApiEnvironment.PROD
