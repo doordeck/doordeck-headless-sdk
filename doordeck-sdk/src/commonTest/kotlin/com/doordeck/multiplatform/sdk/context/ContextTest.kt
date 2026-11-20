@@ -2,9 +2,11 @@ package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
 import com.doordeck.multiplatform.sdk.IntegrationTest
+import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
 import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
 import com.doordeck.multiplatform.sdk.model.common.ContextState
+import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.network.CloudPaths
 import com.doordeck.multiplatform.sdk.model.responses.BasicTokenResponse
 import com.doordeck.multiplatform.sdk.model.responses.BasicUserDetailsResponse
@@ -14,6 +16,8 @@ import com.doordeck.multiplatform.sdk.randomJwt
 import com.doordeck.multiplatform.sdk.randomNullable
 import com.doordeck.multiplatform.sdk.randomPublicKey
 import com.doordeck.multiplatform.sdk.randomString
+import com.doordeck.multiplatform.sdk.randomUrlString
+import com.doordeck.multiplatform.sdk.randomUuidString
 import com.doordeck.multiplatform.sdk.randomValidJwt
 import com.doordeck.multiplatform.sdk.requestHistory
 import com.doordeck.multiplatform.sdk.respondContent
@@ -341,6 +345,41 @@ class ContextTest : IntegrationTest() {
             assertNotEquals(ContextState.CLOUD_TOKEN_IS_INVALID_OR_EXPIRED, state)
             assertEquals(expiringJwt, Context.getCloudAuthToken())
         }
+    }
+
+    @Test
+    fun shouldKeepConfigurationWhenResetting() = runTest {
+        // Given
+        val apiEnvironment = ApiEnvironment.STAGING
+        val fusionHost = randomUrlString()
+        ConfigContext.setApiEnvironment(apiEnvironment)
+        ConfigContext.setFusionHost(fusionHost)
+        Context.setCloudAuthToken(randomValidJwt())
+        Context.setCloudRefreshToken(randomString())
+        Context.setUserId(randomUuidString())
+
+        // When
+        Context.reset()
+
+        // Then
+        assertNull(Context.getCloudAuthToken())
+        assertNull(Context.getCloudRefreshToken())
+        assertNull(Context.getUserId())
+        assertEquals(apiEnvironment, ConfigContext.getApiEnvironment())
+        assertEquals(fusionHost, ConfigContext.getFusionHost())
+    }
+
+    @Test
+    fun shouldNotFailWhenClearingAnEmptyContext() = runTest {
+        // Given
+        assertNull(Context.getCloudAuthToken())
+
+        // When
+        Context.clearContext()
+
+        // Then
+        assertNull(Context.getCloudAuthToken())
+        assertEquals(TEST_ENVIRONMENT, ConfigContext.getApiEnvironment())
     }
 
     private fun randomUserDetails() = BasicUserDetailsResponse(

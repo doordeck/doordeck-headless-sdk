@@ -77,6 +77,7 @@ internal suspend fun resetSdkState() {
     Lifecycle.set(LifecycleState.STOPPED)
     SdkLogger.enableDebugLogging(false)
     Context.setSecureStorageImpl(DefaultSecureStorage(MemorySettings()))
+    ConfigContext.reset()
     ConfigContext.setApiEnvironment(TEST_ENVIRONMENT)
     CloudHttpClient.installSharedClient(TEST_CLOUD_CLIENT)
     FusionHttpClient.installSharedClient(TEST_FUSION_CLIENT)
