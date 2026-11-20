@@ -11,12 +11,6 @@ internal static class SecureStorage
     public static class Delegates
     {
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SetApiEnvironmentDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetApiEnvironmentDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void AddCloudAuthTokenDelegate(IntPtr ptr);
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -27,12 +21,6 @@ internal static class SecureStorage
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate IntPtr GetCloudRefreshTokenDelegate();
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SetFusionHostDelegate(IntPtr ptr);
-        
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate IntPtr GetFusionHostDelegate();
         
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void AddFusionAuthTokenDelegate(IntPtr ptr);
@@ -79,18 +67,7 @@ internal static class SecureStorage
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void ClearDelegate();
     }
-    
-    public static void SetApiEnvironment(IntPtr c)
-    { 
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.SetApiEnvironment(Enum.Parse<ApiEnvironment>(result));
-        }
-    }
-   
-    public static IntPtr GetApiEnvironment() =>
-        GetPtrFromString(Implementation?.GetApiEnvironment()?.ToString());
-    
+
     public static void AddCloudAuthToken(IntPtr c)
     {
         if (GetStringFromPtr(c) is {} result)
@@ -112,17 +89,6 @@ internal static class SecureStorage
     
     public static IntPtr GetCloudRefreshToken() =>
         GetPtrFromString(Implementation?.GetCloudRefreshToken());
-    
-    public static void SetFusionHost(IntPtr c)
-    {
-        if (GetStringFromPtr(c) is {} result)
-        {
-            Implementation?.SetFusionHost(result);
-        }
-    }
-    
-    public static IntPtr GetFusionHost() =>
-        GetPtrFromString(Implementation?.GetFusionHost());
     
     public static void AddFusionAuthToken(IntPtr c)
     {

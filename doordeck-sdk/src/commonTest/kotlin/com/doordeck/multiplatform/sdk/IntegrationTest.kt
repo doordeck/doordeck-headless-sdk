@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clock.ServerTimeSynchronizer
 import com.doordeck.multiplatform.sdk.clock.SystemClock
+import com.doordeck.multiplatform.sdk.context.ConfigContext
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
 import com.doordeck.multiplatform.sdk.lifecycle.LifecycleState
@@ -76,7 +77,8 @@ internal suspend fun resetSdkState() {
     Lifecycle.set(LifecycleState.STOPPED)
     SdkLogger.enableDebugLogging(false)
     Context.setSecureStorageImpl(DefaultSecureStorage(MemorySettings()))
-    Context.setApiEnvironment(TEST_ENVIRONMENT)
+    ConfigContext.reset()
+    ConfigContext.setApiEnvironment(TEST_ENVIRONMENT)
     CloudHttpClient.installSharedClient(TEST_CLOUD_CLIENT)
     FusionHttpClient.installSharedClient(TEST_FUSION_CLIENT)
     HttpClient.installSharedClient(TEST_HTTP_CLIENT)

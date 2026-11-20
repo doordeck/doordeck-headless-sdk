@@ -1,7 +1,9 @@
 package com.doordeck.multiplatform.sdk
 
+import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.TestConstants.TEST_ENVIRONMENT
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
+import com.doordeck.multiplatform.sdk.context.ConfigContext
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.lifecycle.Lifecycle
@@ -15,6 +17,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertSame
 
 class DoordeckFactoryTest : IntegrationTest() {
@@ -35,9 +38,9 @@ class DoordeckFactoryTest : IntegrationTest() {
         // Then
         assertSame(DoordeckImpl, sdk)
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(sdkConfig.apiEnvironment, Context.getApiEnvironment())
+        assertEquals(sdkConfig.apiEnvironment, ConfigContext.getApiEnvironment())
         assertEquals(sdkConfig.cloudAuthToken, Context.getCloudAuthToken())
-        assertEquals(sdkConfig.fusionHost, Context.getFusionHost())
+        assertEquals(sdkConfig.fusionHost, ConfigContext.getFusionHost())
     }
 
     @Test
@@ -78,7 +81,7 @@ class DoordeckFactoryTest : IntegrationTest() {
         // Then
         assertEquals("Unable to initialize, the SDK has already been initialized", exception.message)
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(ApiEnvironment.DEV, Context.getApiEnvironment())
+        assertEquals(ApiEnvironment.DEV, ConfigContext.getApiEnvironment())
         assertSame(cloudClient, CloudHttpClient.client)
     }
 
@@ -93,7 +96,7 @@ class DoordeckFactoryTest : IntegrationTest() {
 
         // Then
         assertEquals(LifecycleState.STARTED, Lifecycle.state)
-        assertEquals(ApiEnvironment.STAGING, Context.getApiEnvironment())
+        assertEquals(ApiEnvironment.STAGING, ConfigContext.getApiEnvironment())
         assertClientsInitialized()
     }
 
@@ -166,11 +169,64 @@ class DoordeckFactoryTest : IntegrationTest() {
         assertClientsInitialized()
     }
 
+    @Test
+    fun shouldKeepConfigurationWhenClearingContextAfterInitializing() = runTest {
+        // Given
+        val sdkConfig = BasicSdkConfig(
+            apiEnvironment = ApiEnvironment.STAGING,
+            cloudAuthToken = randomString(),
+            fusionHost = randomUrlString(),
+            secureStorage = DefaultSecureStorage(MemorySettings())
+        )
+        DoordeckFactory.initialize(sdkConfig)
+
+        // When
+        Context.clearContext()
+
+        // Then
+        assertNull(Context.getCloudAuthToken())
+        assertEquals(sdkConfig.apiEnvironment, ConfigContext.getApiEnvironment())
+        assertEquals(sdkConfig.fusionHost, ConfigContext.getFusionHost())
+    }
+
+    @Test
+    fun shouldRestoreDefaultConfigurationWhenReleasing() = runTest {
+        // Given
+        DoordeckFactory.initialize(
+            BasicSdkConfig(
+                apiEnvironment = ApiEnvironment.STAGING,
+                fusionHost = randomUrlString(),
+                secureStorage = DefaultSecureStorage(MemorySettings())
+            )
+        )
+
+        // When
+        DoordeckFactory.release()
+
+        // Then
+        assertEquals(ApiEnvironment.PROD, ConfigContext.getApiEnvironment())
+        assertEquals(DEFAULT_FUSION_HOST, ConfigContext.getFusionHost())
+    }
+
+    @Test
+    fun shouldKeepCurrentEnvironmentWhenInitializingWithoutOne() = runTest {
+        // Given
+        ConfigContext.setApiEnvironment(ApiEnvironment.STAGING)
+
+        // When
+        DoordeckFactory.initialize(basicSdkConfig(apiEnvironment = null))
+
+        // Then
+        assertEquals(ApiEnvironment.STAGING, ConfigContext.getApiEnvironment())
+    }
+
     private fun basicSdkConfig(
-        apiEnvironment: ApiEnvironment = TEST_ENVIRONMENT,
+        apiEnvironment: ApiEnvironment? = TEST_ENVIRONMENT,
+        authToken: String = randomString(),
         secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
     ) = BasicSdkConfig(
         apiEnvironment = apiEnvironment,
+        cloudAuthToken = authToken,
         fusionHost = null,
         secureStorage = secureStorage
     )
@@ -180,7 +236,7 @@ class DoordeckFactoryTest : IntegrationTest() {
      */
     private fun failingStorage(throwable: Throwable): SecureStorage =
         object : SecureStorage by DefaultSecureStorage(MemorySettings()) {
-            override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
+            override fun addCloudAuthToken(token: String?) {
                 throw throwable
             }
         }

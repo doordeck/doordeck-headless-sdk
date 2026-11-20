@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.util.Utils.certificateChainToString
 import com.doordeck.multiplatform.sdk.util.Utils.decodeBase64ToByteArray
 import com.doordeck.multiplatform.sdk.util.Utils.encodeByteArrayToBase64
@@ -35,14 +34,10 @@ internal fun setNullableStringCallback.invokeNullableStringCallback(string: Stri
 
 @CName("createMingwSecureStorage")
 fun createMingwSecureStorage(
-    setApiEnvironmentCp: setStringCallback,
-    getApiEnvironmentCp: getStringCallback,
     addCloudAuthTokenCp: setNullableStringCallback,
     getCloudAuthTokenCp: getStringCallback,
     addCloudRefreshTokenCp: setNullableStringCallback,
     getCloudRefreshTokenCp: getStringCallback,
-    setFusionHostCp: setStringCallback,
-    getFusionHostCp: getStringCallback,
     addFusionAuthTokenCp: setStringCallback,
     getFusionAuthTokenCp: getStringCallback,
     addPublicKeyCp: setStringCallback,
@@ -60,14 +55,10 @@ fun createMingwSecureStorage(
     clearCp: emptyCallback
 ): SecureStorage {
     return MingwSecureStorage(
-        setApiEnvironmentCp = setApiEnvironmentCp,
-        getApiEnvironmentCp = getApiEnvironmentCp,
         addCloudAuthTokenCp = addCloudAuthTokenCp,
         getCloudAuthTokenCp = getCloudAuthTokenCp,
         addCloudRefreshTokenCp = addCloudRefreshTokenCp,
         getCloudRefreshTokenCp = getCloudRefreshTokenCp,
-        setFusionHostCp = setFusionHostCp,
-        getFusionHostCp = getFusionHostCp,
         addFusionAuthTokenCp = addFusionAuthTokenCp,
         getFusionAuthTokenCp = getFusionAuthTokenCp,
         addPublicKeyCp = addPublicKeyCp,
@@ -87,14 +78,10 @@ fun createMingwSecureStorage(
 }
 
 class MingwSecureStorage(
-    private val setApiEnvironmentCp: setStringCallback,
-    private val getApiEnvironmentCp: getStringCallback,
     private val addCloudAuthTokenCp: setNullableStringCallback,
     private val getCloudAuthTokenCp: getStringCallback,
     private val addCloudRefreshTokenCp: setNullableStringCallback,
     private val getCloudRefreshTokenCp: getStringCallback,
-    private val setFusionHostCp: setStringCallback,
-    private val getFusionHostCp: getStringCallback,
     private val addFusionAuthTokenCp: setStringCallback,
     private val getFusionAuthTokenCp: getStringCallback,
     private val addPublicKeyCp: setStringCallback,
@@ -112,16 +99,6 @@ class MingwSecureStorage(
     private val clearCp: emptyCallback
 ) : SecureStorage {
 
-    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        setApiEnvironmentCp.invokeStringCallback(apiEnvironment.name)
-    }
-
-    override fun getApiEnvironment(): ApiEnvironment? {
-        return getApiEnvironmentCp()?.toKString()?.let {
-            ApiEnvironment.valueOf(it)
-        }
-    }
-
     override fun addCloudAuthToken(token: String?) {
         addCloudAuthTokenCp.invokeNullableStringCallback(token)
     }
@@ -136,14 +113,6 @@ class MingwSecureStorage(
 
     override fun getCloudRefreshToken(): String? {
         return getCloudRefreshTokenCp()?.toKString()
-    }
-
-    override fun setFusionHost(host: String) {
-        setFusionHostCp.invokeStringCallback(host)
-    }
-
-    override fun getFusionHost(): String? {
-        return getFusionHostCp()?.toKString()
     }
 
     override fun addFusionAuthToken(token: String) {

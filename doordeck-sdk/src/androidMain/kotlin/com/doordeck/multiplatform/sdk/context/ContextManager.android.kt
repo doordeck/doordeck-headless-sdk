@@ -18,9 +18,9 @@ import java.util.concurrent.CompletableFuture
 
 actual object ContextManager {
 
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = Context.setApiEnvironment(apiEnvironment)
+    fun setApiEnvironment(apiEnvironment: ApiEnvironment) = ConfigContext.setApiEnvironment(apiEnvironment)
 
-    fun getApiEnvironment(): ApiEnvironment = Context.getApiEnvironment()
+    fun getApiEnvironment(): ApiEnvironment = ConfigContext.getApiEnvironment()
 
     fun setCloudAuthToken(token: String?) = Context.setCloudAuthToken(token)
 
@@ -38,9 +38,9 @@ actual object ContextManager {
 
     fun getCloudRefreshToken(): String? = Context.getCloudRefreshToken()
 
-    fun setFusionHost(host: URI) = Context.setFusionHost(host.toString())
+    fun setFusionHost(host: URI) = ConfigContext.setFusionHost(host.toString())
 
-    fun getFusionHost(): URI = Context.getFusionHost().toUri()
+    fun getFusionHost(): URI = ConfigContext.getFusionHost().toUri()
 
     fun setFusionAuthToken(token: String) = Context.setFusionAuthToken(token)
 

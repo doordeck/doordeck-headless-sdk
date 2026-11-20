@@ -39,14 +39,6 @@ internal class DefaultSecureStorage(
         return retrieveValue(STORAGE_VERSION_KEY)
     }
 
-    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        storeValue(API_ENVIRONMENT_KEY, apiEnvironment.name)
-    }
-
-    override fun getApiEnvironment(): ApiEnvironment? {
-        return retrieveValue<String>(API_ENVIRONMENT_KEY)?.let { ApiEnvironment.valueOf(it) }
-    }
-
     override fun addCloudAuthToken(token: String?) {
         storeValue(CLOUD_AUTH_TOKEN_KEY, token, true)
     }
@@ -61,14 +53,6 @@ internal class DefaultSecureStorage(
 
     override fun getCloudRefreshToken(): String? {
         return retrieveValue(CLOUD_REFRESH_TOKEN_KEY, true)
-    }
-
-    override fun setFusionHost(host: String) {
-        storeValue(FUSION_HOST_KEY, host)
-    }
-
-    override fun getFusionHost(): String? {
-        return retrieveValue(FUSION_HOST_KEY)
     }
 
     override fun addFusionAuthToken(token: String) {
@@ -128,7 +112,9 @@ internal class DefaultSecureStorage(
     }
 
     override fun clear() {
-        settings.clear()
+        StorageKey.entries
+            .filter { it != STORAGE_VERSION_KEY }
+            .forEach { settings.remove(it.name) }
         SdkLogger.d("Successfully cleared storage")
     }
 

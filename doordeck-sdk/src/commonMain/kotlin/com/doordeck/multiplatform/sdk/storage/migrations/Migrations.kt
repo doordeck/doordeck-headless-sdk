@@ -9,7 +9,8 @@ internal object Migrations {
     private var _migrations: List<StorageMigration> = listOf(
         Migrate0To1,
         Migrate1To2,
-        Migrate2To3
+        Migrate2To3,
+        Migrate3To4
     )
 
     @get:JvmSynthetic
