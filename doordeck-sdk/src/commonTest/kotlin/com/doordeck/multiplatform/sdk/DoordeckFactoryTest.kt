@@ -208,20 +208,8 @@ class DoordeckFactoryTest : IntegrationTest() {
         assertEquals(DEFAULT_FUSION_HOST, ConfigContext.getFusionHost())
     }
 
-    @Test
-    fun shouldKeepCurrentEnvironmentWhenInitializingWithoutOne() = runTest {
-        // Given
-        ConfigContext.setApiEnvironment(ApiEnvironment.STAGING)
-
-        // When
-        DoordeckFactory.initialize(basicSdkConfig(apiEnvironment = null))
-
-        // Then
-        assertEquals(ApiEnvironment.STAGING, ConfigContext.getApiEnvironment())
-    }
-
     private fun basicSdkConfig(
-        apiEnvironment: ApiEnvironment? = TEST_ENVIRONMENT,
+        apiEnvironment: ApiEnvironment = TEST_ENVIRONMENT,
         authToken: String = randomString(),
         secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
     ) = BasicSdkConfig(
