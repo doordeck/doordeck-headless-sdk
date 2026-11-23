@@ -1,5 +1,5 @@
 [versions]
-kgp = "9.5.1"
+kgp = "9.5.2"
 bouncy-castle = "1.87"
 indispensable-asn1 = "3.26.0"
 kotlin = "2.4.21"
@@ -19,7 +19,7 @@ kotlin-coroutines-test = "1.11.0"
 asn1js = "3.0.6"
 pkijs = "3.3.3"
 kermit = "2.2.0"
-buildkonfig = "0.24.0"
+buildkonfig = "0.24.1"
 kotlinx-serialization = "1.13.0"
 vanniktech-maven-publish = "0.37.0"
 
