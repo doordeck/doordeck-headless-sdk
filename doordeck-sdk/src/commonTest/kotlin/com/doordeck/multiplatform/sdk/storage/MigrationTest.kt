@@ -101,9 +101,13 @@ class MigrationTest {
         Migrations.overrideMigrations(listOf(Migrate3To4))
         val apiEnvironmentKey = "API_ENVIRONMENT_KEY"
         val fusionHostKey = "FUSION_HOST_KEY"
+        val legacyApiEnvironmentKey = "API_ENVIRONMENT"
+        val legacyFusionHostKey = "FUSION_HOST"
         val settings = MemorySettings().apply {
             putString(apiEnvironmentKey, ApiEnvironment.PROD.name)
             putString(fusionHostKey, "http://localhost:27700")
+            putString(legacyApiEnvironmentKey, ApiEnvironment.PROD.name)
+            putString(legacyFusionHostKey, "http://localhost:27700")
         }
 
         // When
@@ -113,6 +117,9 @@ class MigrationTest {
         assertEquals(4, storage.getStorageVersion())
         assertFalse(settings.contains(apiEnvironmentKey))
         assertFalse(settings.contains(fusionHostKey))
+        assertFalse(settings.contains(legacyApiEnvironmentKey))
+        assertFalse(settings.contains(legacyFusionHostKey))
+
     }
 
     @Test
