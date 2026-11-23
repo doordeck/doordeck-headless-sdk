@@ -18,7 +18,7 @@ class SdkConfigTest {
     fun shouldBuildSdkConfig() = runTest {
         // Given
         val sdkConfig = SdkConfig(
-            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            apiEnvironment = ApiEnvironment.entries.random(),
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUri() },
@@ -44,7 +44,7 @@ class SdkConfigTest {
     fun shouldMapToBasicConfig() = runTest {
         // Given
         val sdkConfig = SdkConfig(
-            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            apiEnvironment = ApiEnvironment.entries.random(),
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUri() },

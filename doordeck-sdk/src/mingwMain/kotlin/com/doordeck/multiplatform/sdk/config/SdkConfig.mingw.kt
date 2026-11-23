@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.config
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
@@ -11,10 +12,10 @@ import com.doordeck.multiplatform.sdk.storage.createSecureStorage
  * This class holds various configuration options for initializing and operating the SDK.
  */
 data class SdkConfig(
-    val apiEnvironment: String? = null,
+    val apiEnvironment: String,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
-    val fusionHost: String?,
+    val fusionHost: String? = null,
     val secureStorage: SecureStorage,
     val debugLogging: String? = null
 ) {
@@ -35,7 +36,7 @@ data class SdkConfig(
         /**
          * Sets the API environment for the SDK.
          */
-        fun setApiEnvironment(apiEnvironment: String?): Builder = apply { this.apiEnvironment = apiEnvironment }
+        fun setApiEnvironment(apiEnvironment: String): Builder = apply { this.apiEnvironment = apiEnvironment }
 
         /**
          * Sets the cloud authentication token.
@@ -68,6 +69,7 @@ data class SdkConfig(
          * If no secure storage override is provided, a default secure storage is created.
          */
         fun build(): SdkConfig {
+            val apiEnvironment = apiEnvironment ?: throw SdkException("API environment is required")
             val secureStorage = secureStorage ?: createSecureStorage(ApplicationContext)
             return SdkConfig(
                 apiEnvironment = apiEnvironment,
@@ -82,7 +84,7 @@ data class SdkConfig(
 }
 
 internal fun SdkConfig.toBasicSdkConfig(): BasicSdkConfig = BasicSdkConfig(
-    apiEnvironment = apiEnvironment?.let { ApiEnvironment.valueOf(it) },
+    apiEnvironment = ApiEnvironment.valueOf(apiEnvironment),
     cloudAuthToken = cloudAuthToken,
     cloudRefreshToken = cloudRefreshToken,
     fusionHost = fusionHost,
