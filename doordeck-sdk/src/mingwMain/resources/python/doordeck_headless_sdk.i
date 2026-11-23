@@ -26,7 +26,7 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD",
+    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"],
         cloud_auth_token: typing.Optional[str] = None, cloud_refresh_token: typing.Optional[str] = None,
         fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None,
         debug_logging: typing.Optional[bool] = None):
