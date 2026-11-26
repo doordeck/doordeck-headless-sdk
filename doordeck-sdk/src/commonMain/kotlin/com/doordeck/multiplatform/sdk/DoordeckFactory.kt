@@ -4,6 +4,7 @@ import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clock.ServerTimeSynchronizer
 import com.doordeck.multiplatform.sdk.clock.SystemClock
 import com.doordeck.multiplatform.sdk.config.BasicSdkConfig
+import com.doordeck.multiplatform.sdk.context.ConfigContext
 import com.doordeck.multiplatform.sdk.context.Context
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
@@ -49,12 +50,14 @@ internal object DoordeckFactory {
             CloudHttpClient.initialize()
             FusionHttpClient.initialize()
             // Add the provided values into the context
+            ConfigContext.also { context ->
+                sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
+                sdkConfig.fusionHost?.let { context.setFusionHost(it) }
+            }
             Context.also { context ->
                 context.setSecureStorageImpl(sdkConfig.secureStorage)
-                sdkConfig.apiEnvironment?.let { context.setApiEnvironment(it) }
                 sdkConfig.cloudAuthToken?.let { context.setCloudAuthToken(it) }
                 sdkConfig.cloudRefreshToken?.let { context.setCloudRefreshToken(it) }
-                sdkConfig.fusionHost?.let { context.setFusionHost(it) }
             }
             CryptoManager.initialize()
             ServerTimeSynchronizer.initialize()
@@ -107,5 +110,6 @@ internal object DoordeckFactory {
                 launch { client.close() }
             }
         }
+        ConfigContext.reset()
     }
 }

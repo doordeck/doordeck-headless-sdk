@@ -1,6 +1,7 @@
 package com.doordeck.multiplatform.sdk.config
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.storage.SecureStorage
 import com.doordeck.multiplatform.sdk.storage.createSecureStorage
@@ -13,10 +14,10 @@ import platform.Foundation.NSURLComponents
  * This class holds various configuration options for initializing and operating the SDK.
  */
 data class SdkConfig(
-    val apiEnvironment: ApiEnvironment? = null,
+    val apiEnvironment: ApiEnvironment,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
-    val fusionHost: NSURLComponents?,
+    val fusionHost: NSURLComponents? = null,
     val secureStorage: SecureStorage,
     val debugLogging: Boolean? = null
 ) {
@@ -37,7 +38,7 @@ data class SdkConfig(
         /**
          * Sets the API environment for the SDK.
          */
-        fun setApiEnvironment(apiEnvironment: ApiEnvironment?): Builder = apply { this.apiEnvironment = apiEnvironment }
+        fun setApiEnvironment(apiEnvironment: ApiEnvironment): Builder = apply { this.apiEnvironment = apiEnvironment }
 
         /**
          * Sets the cloud authentication token.
@@ -73,6 +74,7 @@ data class SdkConfig(
          */
         @Throws(Exception::class)
         fun build(): SdkConfig {
+            val apiEnvironment = apiEnvironment ?: throw SdkException("API environment is required")
             val secureStorage = secureStorage ?: createSecureStorage(ApplicationContext)
             return SdkConfig(
                 apiEnvironment = apiEnvironment,

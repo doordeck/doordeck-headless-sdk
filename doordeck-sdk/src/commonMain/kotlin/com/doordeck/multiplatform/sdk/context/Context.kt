@@ -1,12 +1,10 @@
 package com.doordeck.multiplatform.sdk.context
 
 import com.doordeck.multiplatform.sdk.CloudHttpClient
-import com.doordeck.multiplatform.sdk.Constants.DEFAULT_FUSION_HOST
 import com.doordeck.multiplatform.sdk.cache.CapabilityCache
 import com.doordeck.multiplatform.sdk.clients.AccountClient
 import com.doordeck.multiplatform.sdk.crypto.CryptoManager
 import com.doordeck.multiplatform.sdk.model.common.ContextState
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.model.data.Crypto
 import com.doordeck.multiplatform.sdk.storage.DefaultSecureStorage
 import com.doordeck.multiplatform.sdk.storage.MemorySettings
@@ -20,25 +18,6 @@ import kotlin.jvm.JvmSynthetic
 internal object Context {
 
     private var secureStorage: SecureStorage = DefaultSecureStorage(MemorySettings())
-
-    /**
-     * Sets the API environment on which the SDK will operate, the provided value will be automatically stored in secure storage.
-     *
-     * It can be changed anytime, although it is recommended to set it up through the `SdkConfig` builder.
-     */
-    @JvmSynthetic
-    internal fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        secureStorage.setApiEnvironment(apiEnvironment)
-    }
-
-    /**
-     * Retrieves the current API environment.
-     */
-    @JvmSynthetic
-    internal fun getApiEnvironment(): ApiEnvironment {
-        return secureStorage.getApiEnvironment()
-            ?: ApiEnvironment.PROD
-    }
 
     /**
      * Sets the cloud authentication token, the provided value will be automatically stored in secure storage,
@@ -120,25 +99,6 @@ internal object Context {
     @JvmSynthetic
     internal fun getCloudRefreshToken(): String? {
         return secureStorage.getCloudRefreshToken()
-    }
-
-    /**
-     * Sets the fusion host, the provided value will be automatically stored in secure storage.
-     *
-     * It can be changed anytime, although it is recommended to set it up through the SdkConfig builder.
-     */
-    @JvmSynthetic
-    internal fun setFusionHost(host: String) {
-        secureStorage.setFusionHost(host)
-    }
-
-    /**
-     * Retrieves the fusion host.
-     */
-    @JvmSynthetic
-    internal fun getFusionHost(): String {
-        return secureStorage.getFusionHost()
-            ?: DEFAULT_FUSION_HOST
     }
 
     /**

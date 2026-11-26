@@ -7,10 +7,10 @@ import com.doordeck.multiplatform.sdk.storage.SecureStorage
  * Configuration settings for the SDK.
  */
 internal data class BasicSdkConfig(
-    val apiEnvironment: ApiEnvironment? = null,
+    val apiEnvironment: ApiEnvironment,
     val cloudAuthToken: String? = null,
     val cloudRefreshToken: String? = null,
-    val fusionHost: String?,
+    val fusionHost: String? = null,
     val secureStorage: SecureStorage,
     val debugLogging: Boolean? = null
 )

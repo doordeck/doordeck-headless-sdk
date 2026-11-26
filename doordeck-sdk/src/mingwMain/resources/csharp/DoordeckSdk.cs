@@ -34,7 +34,7 @@ public class DoordeckSdk
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_context_ContextManager _contextApi;
     private readonly Doordeck_Headless_Sdk_kref_com_doordeck_multiplatform_sdk_crypto_CryptoManager _cryptoApi;
 
-    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment = ApiEnvironment.PROD, string? cloudAuthToken = null,
+    public unsafe DoordeckSdk(ApiEnvironment apiEnvironment, string? cloudAuthToken = null,
         string? cloudRefreshToken = null, string? fusionHost = null, ISecureStorage? secureStorageImpl = null,
         bool? debugLogging = null)
     {
@@ -59,10 +59,6 @@ public class DoordeckSdk
         {
             SecureStorage.Implementation = secureStorageImpl;
 
-            SecureStorage.Delegates.SetApiEnvironmentDelegate setApiEnvironmentDelegate =
-                SecureStorage.SetApiEnvironment;
-            SecureStorage.Delegates.GetApiEnvironmentDelegate getApiEnvironmentDelegate =
-                SecureStorage.GetApiEnvironment;
             SecureStorage.Delegates.AddCloudAuthTokenDelegate addCloudAuthTokenDelegate =
                 SecureStorage.AddCloudAuthToken;
             SecureStorage.Delegates.GetCloudAuthTokenDelegate getCloudAuthTokenDelegate =
@@ -71,10 +67,6 @@ public class DoordeckSdk
                 SecureStorage.AddCloudRefreshToken;
             SecureStorage.Delegates.GetCloudRefreshTokenDelegate getCloudRefreshTokenDelegate =
                 SecureStorage.GetCloudRefreshToken;
-            SecureStorage.Delegates.SetFusionHostDelegate setFusionHostDelegate =
-                SecureStorage.SetFusionHost;
-            SecureStorage.Delegates.GetFusionHostDelegate getFusionHostDelegate =
-                SecureStorage.GetFusionHost;
             SecureStorage.Delegates.AddFusionAuthTokenDelegate addFusionAuthTokenDelegate =
                 SecureStorage.AddFusionAuthToken;
             SecureStorage.Delegates.GetFusionAuthTokenDelegate getFusionAuthTokenDelegate =
@@ -106,14 +98,10 @@ public class DoordeckSdk
             SecureStorage.Delegates.ClearDelegate clearDelegate =
                 SecureStorage.Clear;
 
-            var setApiEnvironment = Marshal.GetFunctionPointerForDelegate(setApiEnvironmentDelegate);
-            var getApiEnvironment = Marshal.GetFunctionPointerForDelegate(getApiEnvironmentDelegate);
             var addCloudAuthToken = Marshal.GetFunctionPointerForDelegate(addCloudAuthTokenDelegate);
             var getCloudAuthToken = Marshal.GetFunctionPointerForDelegate(getCloudAuthTokenDelegate);
             var addCloudRefreshToken = Marshal.GetFunctionPointerForDelegate(addCloudRefreshTokenDelegate);
             var getCloudRefreshToken = Marshal.GetFunctionPointerForDelegate(getCloudRefreshTokenDelegate);
-            var setFusionHost = Marshal.GetFunctionPointerForDelegate(setFusionHostDelegate);
-            var getFusionHost = Marshal.GetFunctionPointerForDelegate(getFusionHostDelegate);
             var addFusionAuthToken = Marshal.GetFunctionPointerForDelegate(addFusionAuthTokenDelegate);
             var getFusionAuthToken = Marshal.GetFunctionPointerForDelegate(getFusionAuthTokenDelegate);
             var addPublicKey = Marshal.GetFunctionPointerForDelegate(addPublicKeyDelegate);
@@ -131,14 +119,10 @@ public class DoordeckSdk
             var clear = Marshal.GetFunctionPointerForDelegate(clearDelegate);
 
             var secureStorage = _symbols->kotlin.root.com.doordeck.multiplatform.sdk.storage.createMingwSecureStorage_(
-                setApiEnvironment.ToPointer(),
-                getApiEnvironment.ToPointer(),
                 addCloudAuthToken.ToPointer(),
                 getCloudAuthToken.ToPointer(),
                 addCloudRefreshToken.ToPointer(),
                 getCloudRefreshToken.ToPointer(),
-                setFusionHost.ToPointer(),
-                getFusionHost.ToPointer(),
                 addFusionAuthToken.ToPointer(),
                 getFusionAuthToken.ToPointer(),
                 addPublicKey.ToPointer(),

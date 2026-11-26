@@ -2,13 +2,10 @@ package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.logger.SdkLogger
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
-import com.doordeck.multiplatform.sdk.storage.StorageKey.API_ENVIRONMENT_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.CERTIFICATE_CHAIN_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.CLOUD_AUTH_TOKEN_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.CLOUD_REFRESH_TOKEN_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.FUSION_AUTH_TOKEN_KEY
-import com.doordeck.multiplatform.sdk.storage.StorageKey.FUSION_HOST_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.PRIVATE_KEY_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.PUBLIC_KEY_KEY
 import com.doordeck.multiplatform.sdk.storage.StorageKey.STORAGE_VERSION_KEY
@@ -39,14 +36,6 @@ internal class DefaultSecureStorage(
         return retrieveValue(STORAGE_VERSION_KEY)
     }
 
-    override fun setApiEnvironment(apiEnvironment: ApiEnvironment) {
-        storeValue(API_ENVIRONMENT_KEY, apiEnvironment.name)
-    }
-
-    override fun getApiEnvironment(): ApiEnvironment? {
-        return retrieveValue<String>(API_ENVIRONMENT_KEY)?.let { ApiEnvironment.valueOf(it) }
-    }
-
     override fun addCloudAuthToken(token: String?) {
         storeValue(CLOUD_AUTH_TOKEN_KEY, token, true)
     }
@@ -61,14 +50,6 @@ internal class DefaultSecureStorage(
 
     override fun getCloudRefreshToken(): String? {
         return retrieveValue(CLOUD_REFRESH_TOKEN_KEY, true)
-    }
-
-    override fun setFusionHost(host: String) {
-        storeValue(FUSION_HOST_KEY, host)
-    }
-
-    override fun getFusionHost(): String? {
-        return retrieveValue(FUSION_HOST_KEY)
     }
 
     override fun addFusionAuthToken(token: String) {
@@ -128,7 +109,9 @@ internal class DefaultSecureStorage(
     }
 
     override fun clear() {
-        settings.clear()
+        StorageKey.entries
+            .filter { it != STORAGE_VERSION_KEY }
+            .forEach { settings.remove(it.name) }
         SdkLogger.d("Successfully cleared storage")
     }
 

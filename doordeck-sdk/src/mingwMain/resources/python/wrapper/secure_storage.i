@@ -1,11 +1,5 @@
 %pythoncode %{
 class ISecureStorage:
-    def set_api_environment(self, api_environment: str) -> None:
-        raise NotImplementedError
-
-    def get_api_environment(self) -> str | None:
-        raise NotImplementedError
-
     def add_cloud_auth_token(self, token: str) -> None:
         raise NotImplementedError
 
@@ -16,12 +10,6 @@ class ISecureStorage:
         raise NotImplementedError
 
     def get_cloud_refresh_token(self) -> str | None:
-        raise NotImplementedError
-
-    def set_fusion_host(self, host: str) -> None:
-        raise NotImplementedError
-
-    def get_fusion_host(self) -> str | None:
         raise NotImplementedError
 
     def add_fusion_auth_token(self, token: str) -> None:
@@ -78,18 +66,6 @@ class SecureStorage:
     py_get_data_type = ctypes.CFUNCTYPE(ctypes.c_char_p)
 
     @staticmethod
-    def set_api_environment(result) -> None:
-        if SecureStorage.Implementation is not None and result is not None:
-            SecureStorage.Implementation.set_api_environment(ctypes.string_at(result).decode())
-
-    @staticmethod
-    def get_api_environment() -> int | None:
-        if r := SecureStorage.Implementation and SecureStorage.Implementation.get_api_environment():
-            SecureStorage.static_buffer.value = r.encode()
-            return ctypes.addressof(SecureStorage.static_buffer)
-        return None
-
-    @staticmethod
     def add_cloud_auth_token(result) -> None:
         if SecureStorage.Implementation is not None and result is not None:
             SecureStorage.Implementation.add_cloud_auth_token(ctypes.string_at(result).decode())
@@ -109,18 +85,6 @@ class SecureStorage:
     @staticmethod
     def get_cloud_refresh_token() -> int | None:
         if r := SecureStorage.Implementation and SecureStorage.Implementation.get_cloud_refresh_token():
-            SecureStorage.static_buffer.value = r.encode()
-            return ctypes.addressof(SecureStorage.static_buffer)
-        return None
-
-    @staticmethod
-    def set_fusion_host(result) -> None:
-        if SecureStorage.Implementation is not None and result is not None:
-            SecureStorage.Implementation.set_fusion_host(ctypes.string_at(result).decode())
-
-    @staticmethod
-    def get_fusion_host() -> int | None:
-        if r := SecureStorage.Implementation and SecureStorage.Implementation.get_fusion_host():
             SecureStorage.static_buffer.value = r.encode()
             return ctypes.addressof(SecureStorage.static_buffer)
         return None

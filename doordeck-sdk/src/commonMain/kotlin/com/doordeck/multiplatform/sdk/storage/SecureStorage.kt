@@ -1,7 +1,6 @@
 package com.doordeck.multiplatform.sdk.storage
 
 import com.doordeck.multiplatform.sdk.ApplicationContext
-import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import kotlin.js.JsExport
 
 /**
@@ -9,18 +8,6 @@ import kotlin.js.JsExport
  */
 @JsExport
 interface SecureStorage {
-
-    /**
-     * Stores the API environment on which the SDK will operate.
-     *
-     * @param apiEnvironment The api environment to be stored.
-     */
-    fun setApiEnvironment(apiEnvironment: ApiEnvironment)
-
-    /**
-     * Retrieves the API environment
-     */
-    fun getApiEnvironment(): ApiEnvironment?
 
     /**
      * Stores the cloud authentication token, or null to remove the existing entry.
@@ -49,20 +36,6 @@ interface SecureStorage {
      * @return The stored cloud refresh token, or null if not found.
      */
     fun getCloudRefreshToken(): String?
-
-    /**
-     * Stores the fusion host.
-     *
-     * @param host The fusion host to be stored.
-     */
-    fun setFusionHost(host: String)
-
-    /**
-     * Retrieves the fusion host.
-     *
-     * @return The stored fusion host, or null if not found.
-     */
-    fun getFusionHost(): String?
 
     /**
      * Stores the Fusion authentication token.

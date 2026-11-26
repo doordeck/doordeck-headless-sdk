@@ -1,5 +1,6 @@
 package com.doordeck.multiplatform.sdk.config
 
+import com.doordeck.multiplatform.sdk.exceptions.SdkException
 import com.doordeck.multiplatform.sdk.model.data.ApiEnvironment
 import com.doordeck.multiplatform.sdk.randomBoolean
 import com.doordeck.multiplatform.sdk.randomNullable
@@ -11,6 +12,7 @@ import com.doordeck.multiplatform.sdk.util.toNsUrlComponents
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class SdkConfigTest {
 
@@ -18,7 +20,7 @@ class SdkConfigTest {
     fun shouldBuildSdkConfig() = runTest {
         // Given
         val sdkConfig = SdkConfig(
-            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            apiEnvironment = ApiEnvironment.entries.random(),
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUri() },
@@ -41,10 +43,21 @@ class SdkConfigTest {
     }
 
     @Test
+    fun shouldRequireApiEnvironment () = runTest {
+        // When
+        val exception = assertFailsWith<SdkException> {
+            SdkConfig.Builder().build()
+        }
+
+        // Then
+        assertEquals(exception.message, "API environment is required")
+    }
+
+    @Test
     fun shouldMapToBasicConfig() = runTest {
         // Given
         val sdkConfig = SdkConfig(
-            apiEnvironment = randomNullable { ApiEnvironment.entries.random() },
+            apiEnvironment = ApiEnvironment.entries.random(),
             cloudAuthToken = randomNullable { randomString() },
             cloudRefreshToken = randomNullable { randomString() },
             fusionHost = randomNullable { randomUri() },

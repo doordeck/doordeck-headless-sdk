@@ -26,7 +26,7 @@
 %pythoncode %{
 class InitializeSdk(object):
 
-    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"] = "PROD",
+    def __init__(self, api_environment: typing.Literal["DEV", "STAGING", "PROD"],
         cloud_auth_token: typing.Optional[str] = None, cloud_refresh_token: typing.Optional[str] = None,
         fusion_host: typing.Optional[str] = None, secure_storage_impl: typing.Optional[ISecureStorage] = None,
         debug_logging: typing.Optional[bool] = None):
@@ -36,14 +36,10 @@ class InitializeSdk(object):
         if secure_storage_impl is not None:
             SecureStorage.Implementation = secure_storage_impl
 
-            setApiEnvironmentCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.set_api_environment), ctypes.c_void_p).value
-            getApiEnvironmentCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.get_api_environment), ctypes.c_void_p).value
             addCloudAuthTokenCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.add_cloud_auth_token), ctypes.c_void_p).value
             getCloudAuthTokenCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.get_cloud_auth_token), ctypes.c_void_p).value
             addCloudRefreshTokenCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.add_cloud_refresh_auth_token), ctypes.c_void_p).value
             getCloudRefreshTokenCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.get_cloud_refresh_token), ctypes.c_void_p).value
-            setFusionHostCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.set_fusion_host), ctypes.c_void_p).value
-            getFusionHostCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.get_fusion_host), ctypes.c_void_p).value
             addFusionAuthTokenCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.add_fusion_auth_token), ctypes.c_void_p).value
             getFusionAuthTokenCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.get_fusion_auth_token), ctypes.c_void_p).value
             addPublicKeyCp = ctypes.cast(SecureStorage.py_set_data_type(SecureStorage.add_public_key), ctypes.c_void_p).value
@@ -61,10 +57,8 @@ class InitializeSdk(object):
             clearCp = ctypes.cast(SecureStorage.py_get_data_type(SecureStorage.clear), ctypes.c_void_p).value
 
             self.secureStorage = _doordeck_headless_sdk.createMingwSecureStorage(
-                setApiEnvironmentCp, getApiEnvironmentCp,
                 addCloudAuthTokenCp, getCloudAuthTokenCp,
                 addCloudRefreshTokenCp, getCloudRefreshTokenCp,
-                setFusionHostCp, getFusionHostCp,
                 addFusionAuthTokenCp, getFusionAuthTokenCp,
                 addPublicKeyCp, getPublicKeyCp,
                 addPrivateKeyCp, getPrivateKeyCp,
@@ -126,8 +120,8 @@ typedef void (*callback_empty)(void);
 }
 
 %apply callback_t { void* callback };
-%apply callback_send { void* setApiEnvironmentCp, void* addCloudAuthTokenCp, void* addCloudRefreshTokenCp, void* setFusionHostCp, void* addFusionAuthTokenCp, void* addPublicKeyCp, void* addPrivateKeyCp, void* setKeyPairVerifiedCp, void* addUserIdCp, void* addUserEmailCp, void* addCertificateChainCp };
-%apply callback_get { void* getApiEnvironmentCp, void* getCloudAuthTokenCp, void* getCloudRefreshTokenCp, void* getFusionHostCp,  void* getFusionAuthTokenCp, void* getPublicKeyCp, void* getPrivateKeyCp, void* getKeyPairVerifiedCp, void* getUserIdCp, void* getUserEmailCp, void* getCertificateChainCp };
+%apply callback_send { void* addCloudAuthTokenCp, void* addCloudRefreshTokenCp, void* addFusionAuthTokenCp, void* addPublicKeyCp, void* addPrivateKeyCp, void* setKeyPairVerifiedCp, void* addUserIdCp, void* addUserEmailCp, void* addCertificateChainCp };
+%apply callback_get { void* getCloudAuthTokenCp, void* getCloudRefreshTokenCp, void* getFusionAuthTokenCp, void* getPublicKeyCp, void* getPrivateKeyCp, void* getKeyPairVerifiedCp, void* getUserIdCp, void* getUserEmailCp, void* getCertificateChainCp };
 %apply callback_empty { void* clearCp };
 
 %include "../releaseShared/Doordeck.Headless.Sdk_api.h"

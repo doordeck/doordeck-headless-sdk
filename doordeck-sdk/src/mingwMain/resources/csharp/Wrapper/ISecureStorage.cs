@@ -5,10 +5,6 @@ namespace Doordeck.Headless.Sdk.Wrapper;
 
 public interface ISecureStorage
 {
-    public void SetApiEnvironment(ApiEnvironment apiEnvironment);
-
-    public ApiEnvironment? GetApiEnvironment();
-
     public void AddCloudAuthToken(string token);
 
     public string? GetCloudAuthToken();
@@ -16,10 +12,6 @@ public interface ISecureStorage
     public void AddCloudRefreshToken(string token);
 
     public string? GetCloudRefreshToken();
-
-    public void SetFusionHost(string host);
-
-    public string? GetFusionHost();
 
     public void AddFusionAuthToken(string token);
 
