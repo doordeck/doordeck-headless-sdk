@@ -1,5 +1,5 @@
 [versions]
-kgp = "9.5.2"
+agp = "9.5.3"
 bouncy-castle = "1.87"
 indispensable-asn1 = "3.26.0"
 kotlin = "2.4.21"
@@ -10,7 +10,7 @@ ios-min-sdk = "14"
 macos-min-sdk = "14"
 watchos-min-sdk = "11"
 nimbus-jose-jwt = "10.10"
-ktor-client = "3.6.1"
+ktor-client = "3.6.2"
 libsodium = "0.9.6"
 libsodium-sumo = "0.8.2"
 security-crypto = "1.1.0"
@@ -53,7 +53,7 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 kermit-logger = { module = "co.touchlab:kermit", version.ref = "kermit" }
 
 [plugins]
-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "kgp" }
+kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
